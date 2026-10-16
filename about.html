@@ -1,0 +1,303 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>L'ARCHIVE — About</title>
+<script>(function(){var s=localStorage.getItem('larchive-theme');if(s==='dark')document.documentElement.removeAttribute('data-theme');else if(s==='light')document.documentElement.setAttribute('data-theme','light');})();</script>
+<style>
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  :root{
+    /* ===== DARK ("흑") — base ===== */
+    --paper:#0d0d0d;
+    --tx:#f0efe9;
+    --tx2:#8f8b81;
+    --red:#7a2226;
+    --pad:clamp(16px,3vw,58px);
+    --sans:"Helvetica Neue",Helvetica,Arial,sans-serif;
+    --mono:"SF Mono",ui-monospace,"Cascadia Mono","Courier New",monospace;
+  }
+  html,body{height:100%}
+  body{
+    background:var(--paper);color:var(--tx);font-family:var(--sans);
+    -webkit-font-smoothing:antialiased;position:relative;
+    min-height:100dvh;overflow-x:hidden;
+  }
+
+  /* ===== global gradient + grain overlay ===== */
+  body::before{content:"";position:absolute;inset:0;z-index:9998;pointer-events:none;mix-blend-mode:screen;
+    background:
+      radial-gradient(112% 1450px at 50% 0%,rgba(255,255,255,.11) 0%,rgba(255,255,255,.042) 36%,rgba(255,255,255,.012) 55%,transparent 73%),
+      radial-gradient(74% 1270px at 0% 0%,rgba(255,255,255,.10) 0%,rgba(255,255,255,.03) 42%,transparent 71%),
+      radial-gradient(74% 1270px at 100% 0%,rgba(255,255,255,.08) 0%,rgba(255,255,255,.026) 42%,transparent 71%),
+      radial-gradient(100% 1570px at 100% 100%,rgba(255,255,255,.07) 0%,rgba(255,255,255,.02) 45%,transparent 72%),
+      radial-gradient(100% 1570px at 0% 100%,rgba(255,255,255,.07) 0%,rgba(255,255,255,.02) 45%,transparent 72%)}
+  body::after{content:"";position:absolute;inset:0;z-index:9999;pointer-events:none;opacity:.45;
+    -webkit-mask-image:radial-gradient(85% 72% at 50% 44%,rgba(0,0,0,.14) 0%,rgba(0,0,0,.42) 48%,#000 100%);
+    mask-image:radial-gradient(85% 72% at 50% 44%,rgba(0,0,0,.14) 0%,rgba(0,0,0,.42) 48%,#000 100%);
+    background-size:420px 420px,260px 260px,190px 190px;
+    background:
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='420' height='420'%3E%3Cfilter id='d1'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.08' numOctaves='2' seed='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='matrix' values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 20 -17'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23d1)'/%3E%3C/svg%3E"),
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='260' height='260'%3E%3Cfilter id='d2'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.35' numOctaves='2' seed='19' stitchTiles='stitch'/%3E%3CfeColorMatrix type='matrix' values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 22 -19'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23d2)'/%3E%3C/svg%3E"),
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='190' height='190'%3E%3Cfilter id='gg'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.72' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='matrix' values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0.5 0.5 0.5 0 -0.66'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23gg)'/%3E%3C/svg%3E")}
+  .tex{position:absolute;inset:0;z-index:-1;pointer-events:none;mix-blend-mode:screen;
+    opacity:.08;background:url("assets/tex/grunge.jpg") top center/100% auto repeat-y}
+
+  /* ===== LIGHT (white) theme ===== */
+  [data-theme="light"]{
+    --paper:#ffffff;
+    --tx:#16150f;
+    --tx2:#6d6a62;
+    --red:#501518;
+  }
+  [data-theme="light"] body::before{
+    mix-blend-mode:multiply;
+    background:
+      radial-gradient(112% 1450px at 50% 0%,rgba(0,0,0,.055) 0%,rgba(0,0,0,.02) 40%,transparent 70%),
+      radial-gradient(100% 1570px at 100% 100%,rgba(0,0,0,.05) 0%,transparent 66%),
+      radial-gradient(100% 1570px at 0% 100%,rgba(0,0,0,.05) 0%,transparent 66%);
+  }
+  [data-theme="light"] body::after{filter:invert(1);mix-blend-mode:multiply;opacity:.30}
+  [data-theme="light"] .tex{mix-blend-mode:multiply;filter:invert(1);opacity:.06}
+
+  .sheet{
+    width:100%;
+    min-height:100dvh;
+    background:transparent;
+    position:relative;
+    container-type:inline-size;
+    display:flex;flex-direction:column;
+    padding:clamp(16px,2.2vw,42px) var(--pad);
+  }
+
+  /* top nav */
+  .sh__nav{
+    display:flex;gap:clamp(14px,1.8vw,35px);
+    font-family:var(--mono);
+    font-size:0.82cqw;font-weight:700;letter-spacing:0.12em;
+    text-transform:uppercase;
+    position:relative;z-index:1;
+  }
+  .sh__nav a{color:var(--tx);text-decoration:none;transition:color .3s ease}
+  .sh__nav a:hover,.sh__nav a.active{color:var(--red)}
+
+  /* ===== ABOUT — "process" cards ===== */
+  .about-stage{flex:1;display:flex;flex-direction:column;justify-content:center;
+    min-height:0;position:relative;z-index:1;padding:clamp(18px,2vw,40px) 0}
+  .ab{width:100%;container-type:inline-size}
+
+
+  /* card field — positions in % so the whole cluster scales with width */
+  .ab__field{position:relative;width:100%;height:25cqw;}
+
+  .card{position:absolute;z-index:1;width:21cqw;height:6.6cqw;
+    left:var(--x);top:var(--y);
+    background:none;border:0;
+    padding:1.05cqw 1.4cqw;display:flex;flex-direction:column;justify-content:space-between;
+    text-align:left;color:var(--tx);font:inherit;cursor:pointer}
+  .card .card__w{transition:color .3s ease}
+  .card:hover .card__w{color:var(--red)}
+  .card--wide{width:29cqw}
+  .card__lab{font-family:var(--mono);font-weight:700;font-size:0.6cqw;letter-spacing:0.08em;text-transform:uppercase;color:var(--red)}
+  .card__w{font-family:var(--mono);font-weight:700;font-size:1.3cqw;letter-spacing:0.08em;text-transform:uppercase;
+    line-height:1.2;white-space:nowrap}
+
+
+  /* ===== reader (same behaviour as PHOTOGRAPHY lightbox) ===== */
+  .ab__lb{position:fixed;inset:0;z-index:5000;display:none;overflow-y:auto;
+    cursor:pointer;padding:clamp(60px,7vw,130px) var(--pad)}
+  .ab__lb.open{display:flex}
+  .ab__lb .lb__close{position:fixed;top:clamp(15px,2.1vw,40px);left:var(--pad);
+    font-family:var(--mono);font-size:clamp(10px,0.8vw,13px);letter-spacing:0.12em;
+    color:var(--tx);opacity:.55;background:none;border:0;cursor:pointer;
+    text-transform:uppercase;transition:opacity .2s ease}
+  .ab__lb .lb__close:hover{opacity:1}
+  body.lb-open .sheet,body.lb-open .theme-tog{visibility:hidden}
+  body.lb-open{overflow:hidden}
+
+  .rd{display:none;margin:auto;width:100%;max-width:clamp(320px,44vw,860px);cursor:auto;
+    font-family:var(--mono);color:var(--tx)}
+  .rd.on{display:block}
+  .rd__no{font-size:clamp(10px,0.7vw,13px);font-weight:700;letter-spacing:0.12em;color:var(--red)}
+  .rd__sub{margin-top:clamp(18px,1.8vw,34px);font-size:clamp(10px,0.7vw,13px);font-weight:700;
+    letter-spacing:0.08em;text-transform:uppercase;color:var(--red)}
+  .rd__t{margin-top:clamp(6px,0.5vw,10px);font-size:clamp(20px,2.1vw,40px);font-weight:700;
+    letter-spacing:0.08em;text-transform:uppercase;line-height:1.15}
+  .rd p{margin-top:clamp(14px,1.3vw,24px);font-size:clamp(12.5px,0.9vw,17px);line-height:1.85;
+    letter-spacing:0.01em;color:var(--tx)}
+  .rd__t + p{margin-top:clamp(22px,2.2vw,42px)}
+  .rd p .r{color:var(--red);font-weight:700}
+
+  /* footer */
+  .sh__foot{display:flex;justify-content:space-between;align-items:flex-end;
+    font-family:var(--mono);font-size:0.6cqw;letter-spacing:0.08em;
+    color:var(--tx2);text-transform:uppercase;line-height:1.5;
+    position:relative;z-index:1;margin-top:2.4cqw}
+  .sh__foot .col span{display:block}
+  .sh__foot .col span:first-child{color:var(--red)}
+  .sh__foot .right{text-align:right}
+
+  /* theme toggle */
+  .theme-tog{position:fixed;top:clamp(15px,2.1vw,40px);right:var(--pad);z-index:10000;
+    background:none;border:0;padding:0;cursor:pointer;user-select:none;
+    display:flex;gap:0.55em;align-items:center;
+    font-family:var(--mono);font-size:clamp(10px,0.8vw,13px);
+    font-weight:700;letter-spacing:0.12em;text-transform:uppercase}
+  .theme-tog .opt{color:var(--tx2);transition:color .3s ease;
+    border-bottom:1.5px solid transparent;padding-bottom:2px;line-height:1}
+  .theme-tog .opt.on{color:var(--red);border-bottom-color:var(--red)}
+  .theme-tog .sep{color:var(--tx2);opacity:.5;font-weight:400}
+</style>
+</head>
+<body>
+  <div class="tex" aria-hidden="true"></div>
+
+  <button class="theme-tog" id="themeTog" aria-label="Toggle positive / negative theme">
+    <span class="opt" data-v="light">POSITIVE</span>
+    <span class="sep">/</span>
+    <span class="opt" data-v="dark">NEGATIVE</span>
+  </button>
+
+  <section class="sheet">
+    <nav class="sh__nav">
+      <a href="index.html">HOME</a>
+      <a href="projects.html">PROJECTS</a>
+      <a href="about.html" class="active">ABOUT</a>
+      <a href="cv.html">CV</a>
+      <a href="contact.html">CONTACT</a>
+    </nav>
+
+    <div class="about-stage">
+    <div class="ab">
+
+      <div class="ab__field" id="abField">
+        <button class="card" data-step="1" style="--x:1%;--y:6%">
+          <span class="card__lab">A boy with a deck of cards</span><span class="card__w">Where it began</span></button>
+        <button class="card" data-step="2" style="--x:17%;--y:52%">
+          <span class="card__lab">To London, England</span><span class="card__w">Far from home</span></button>
+        <button class="card card--wide" data-step="3" style="--x:32%;--y:4%">
+          <span class="card__lab">To Georgia, USA</span><span class="card__w">Encore</span></button>
+        <button class="card" data-step="4" style="--x:50%;--y:55%">
+          <span class="card__lab">The thread that holds it all</span><span class="card__w">Persistence</span></button>
+        <button class="card" data-step="5" style="--x:64%;--y:8%">
+          <span class="card__lab">In praise of the slow</span><span class="card__w">Shot on film</span></button>
+        <button class="card" data-step="6" style="--x:78%;--y:50%">
+          <span class="card__lab">Not yet in full bloom</span><span class="card__w">L'Archive</span></button>
+      </div>
+    </div>
+    </div>
+
+    <div class="sh__foot">
+      <div class="col left">
+        <span>[LA.01]</span>
+        <span>Dongwoo Kim — L'ARCHIVE</span>
+      </div>
+      <div class="col right">
+        <span>[AB.00]</span>
+        <span>About — Profile</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- reader: same behaviour as the PHOTOGRAPHY lightbox (page hides, background stays) -->
+  <div class="ab__lb" id="abLb" aria-hidden="true">
+    <button class="lb__close" id="abLbClose" aria-label="Close">&times; Close</button>
+
+    <article class="rd" data-step="1">
+      <div class="rd__no">01 / 06</div>
+      <div class="rd__sub">A boy with a deck of cards</div>
+      <h2 class="rd__t">Where it began</h2>
+      <p>Seoul, 1998. Before I could truly call anywhere home, my father's work carried us across the sea to Japan &mdash; and then, just as quietly, back again. Seoul International School became the first place I belonged, from junior kindergarten through the eighth grade.</p>
+      <p>It was a childhood full of sound. A music teacher placed a guitar in my hands, then a bass, then a pair of drumsticks; soon there was a band, a stage, and that strange, wonderful silence just before the first note. After school, the playground turned into a ballpark, and we played until the sky ran out of light.</p>
+      <p>Then, in the fifth grade, <span class="r">a deck of cards</span>. I wandered from one magic shop to the next on my own, practicing the same card and coin sleights until they seemed to vanish into my hands. I taught them to friends. I carried them onto a stage. And somewhere in those hours, I learned something I still believe: that practice no one sees can become a wonder someone remembers.</p>
+    </article>
+
+    <article class="rd" data-step="2">
+      <div class="rd__no">02 / 06</div>
+      <div class="rd__sub">To London, England</div>
+      <h2 class="rd__t">Far from home</h2>
+      <p>England arrived like winter. In a place where few had heard of Korea, I was the stranger in every room; I met racism before I met friends. There were nights I cried until sleep simply gave in. And every time home called, I told my mother I was fine &mdash; so that at least one of us could rest.</p>
+      <p>But seasons turn. Slowly, the magic I had practiced, the baseball I played and the music I made began to speak where my words could not. They became <span class="r">bridges</span> &mdash; to people, to cultures, to a version of myself I had not yet met. The last three years were warm in a way the first could never have promised.</p>
+      <p>I left England with a quiet certainty that I could take root anywhere. Of all I have been given, that chapter remains among the most precious.</p>
+    </article>
+
+    <article class="rd" data-step="3">
+      <div class="rd__no">03 / 06</div>
+      <div class="rd__sub">To Georgia, USA</div>
+      <h2 class="rd__t">Encore</h2>
+      <p>Another ocean, another beginning &mdash; and the same three companions. In Georgia, I played baseball with American friends and learned their culture not from books but from the dugout. I built a band with friends from the Korean student community, and for four years we filled rooms with sound. And whenever a stage appeared, magic followed me onto it.</p>
+      <p>Everything I loved was, in a sense, a gift for someone else &mdash; a laugh, a song, a moment of disbelief. Yet each time, something returned to me as well: <span class="r">a sense of accomplishment</span>, a quiet pride, the feeling of having given something real.</p>
+    </article>
+
+    <article class="rd" data-step="4">
+      <div class="rd__no">04 / 06</div>
+      <div class="rd__sub">The thread that holds it all</div>
+      <h2 class="rd__t">Persistence</h2>
+      <p>If I had to name the one thing that runs through all of it, it would be <span class="r">persistence</span>.</p>
+      <p>Not the loud kind &mdash; the quiet, daily kind. Returning to the same chord, the same swing, the same sleight, long after the novelty fades. That habit, and a simple conviction that what I make should bring someone joy, is what eventually placed a camera in my hands. It led me to become a marketer who tells stories for others and builds campaigns meant to succeed &mdash; years of photographs, films, ads and designs, most of them made for someone else.</p>
+      <p>I still work that way. But this place is different. Here, I wanted to keep the things I love, the work I am proud of and the moments I hold dear &mdash; an honest record of the life I have lived so far.</p>
+    </article>
+
+    <article class="rd" data-step="5">
+      <div class="rd__no">05 / 06</div>
+      <div class="rd__sub">In praise of the slow</div>
+      <h2 class="rd__t">Shot on film</h2>
+      <p>This site was made the way film is made: <span class="r">slowly</span>.</p>
+      <p>Film belongs to another time. It asks for patience to shoot, patience to develop, and here it gives back no color at all. But I have always believed that what feels old is often what is essential. A footballer is built on dribbling, passing and shooting; everything I create is built on its fundamentals &mdash; and those are what I hope you see first.</p>
+      <p>So there is no glossy, modern sheen here. It begins in black and white, where I began. And like me, it is still developing &mdash; slowly gathering color, sharpening its grain, finding its way toward the present.</p>
+    </article>
+
+    <article class="rd" data-step="6">
+      <div class="rd__no">06 / 06</div>
+      <div class="rd__sub">Not yet in full bloom</div>
+      <h2 class="rd__t">L'Archive</h2>
+      <p>L'ARCHIVE is a keepsake box. Nearly ten years of work, gathered and kept &mdash; the pieces I most wanted to share, and within them, traces of what I love and what I am still reaching for.</p>
+      <p>On the home page there is a rose that has not yet opened. It is said to carry <span class="r">hope and possibility, youth and beauty, shyness and confession</span>. I recognize myself in it &mdash; standing at the edge of something, in that quiet, unguarded moment just before the bloom, and hopeful about everything still to come.</p>
+      <p>Thank you for finding your way here. May you leave with a little of that feeling, too.</p>
+    </article>
+  </div>
+
+<script>
+(function(){
+  var root=document.documentElement, tog=document.getElementById('themeTog');
+  function render(){
+    var light=root.getAttribute('data-theme')==='light';
+    tog.querySelectorAll('.opt').forEach(function(o){
+      o.classList.toggle('on', o.getAttribute('data-v')===(light?'light':'dark'));
+    });
+  }
+  render();
+  tog.addEventListener('click',function(){
+    if(root.getAttribute('data-theme')==='light'){
+      root.removeAttribute('data-theme'); localStorage.setItem('larchive-theme','dark');
+    }else{
+      root.setAttribute('data-theme','light'); localStorage.setItem('larchive-theme','light');
+    }
+    render();
+  });
+})();
+
+(function(){
+  var field=document.getElementById('abField'), lb=document.getElementById('abLb');
+  function open(n){
+    lb.querySelectorAll('.rd').forEach(function(r){ r.classList.toggle('on', r.getAttribute('data-step')===n); });
+    lb.scrollTop=0;
+    lb.classList.add('open'); lb.setAttribute('aria-hidden','false');
+    document.body.classList.add('lb-open');
+  }
+  function close(){
+    lb.classList.remove('open'); lb.setAttribute('aria-hidden','true');
+    document.body.classList.remove('lb-open');
+  }
+  field.addEventListener('click',function(e){
+    var c=e.target.closest('.card'); if(c) open(c.getAttribute('data-step'));
+  });
+  /* click anywhere outside the text closes; the text itself stays selectable */
+  lb.addEventListener('click',function(e){ if(!e.target.closest('.rd')) close(); });
+  document.addEventListener('keydown',function(e){
+    if(e.key==='Escape'&&lb.classList.contains('open')) close();
+  });
+})();
+</script>
+</body>
+</html>

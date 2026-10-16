@@ -1,0 +1,322 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>L'ARCHIVE — Production</title>
+<script>(function(){var s=localStorage.getItem('larchive-theme');if(s==='dark')document.documentElement.removeAttribute('data-theme');else if(s==='light')document.documentElement.setAttribute('data-theme','light');})();</script>
+<style>
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  :root{
+    /* ===== DARK ("흑") — base ===== */
+    --paper:#0d0d0d;         /* black bg */
+    --tx:#f0efe9;            /* off-white text */
+    --tx2:#8f8b81;           /* muted grey: toc / caption / footer */
+    --red:#7a2226;           /* burgundy accent (lifted for black bg) */
+    --pad:clamp(16px,3vw,58px);   /* same gutter as home / projects */
+    --sans:"Helvetica Neue",Helvetica,Arial,sans-serif;
+    --mono:"SF Mono",ui-monospace,"Cascadia Mono","Courier New",monospace;
+  }
+  html,body{height:100%}
+  body{
+    background:var(--paper);color:var(--tx);font-family:var(--sans);
+    -webkit-font-smoothing:antialiased;position:relative;
+    min-height:100dvh;overflow-x:hidden;
+  }
+
+  /* ===== global gradient + grain overlay (over text AND images) ===== */
+  body::before{content:"";position:absolute;inset:0;z-index:9998;pointer-events:none;mix-blend-mode:screen;
+    background:
+      radial-gradient(112% 1450px at 50% 0%,rgba(255,255,255,.11) 0%,rgba(255,255,255,.042) 36%,rgba(255,255,255,.012) 55%,transparent 73%),
+      radial-gradient(74% 1270px at 0% 0%,rgba(255,255,255,.10) 0%,rgba(255,255,255,.03) 42%,transparent 71%),
+      radial-gradient(74% 1270px at 100% 0%,rgba(255,255,255,.08) 0%,rgba(255,255,255,.026) 42%,transparent 71%),
+      radial-gradient(100% 1570px at 100% 100%,rgba(255,255,255,.07) 0%,rgba(255,255,255,.02) 45%,transparent 72%),
+      radial-gradient(100% 1570px at 0% 100%,rgba(255,255,255,.07) 0%,rgba(255,255,255,.02) 45%,transparent 72%)}
+  body::after{content:"";position:absolute;inset:0;z-index:9999;pointer-events:none;opacity:.45;
+    -webkit-mask-image:radial-gradient(85% 72% at 50% 44%,rgba(0,0,0,.14) 0%,rgba(0,0,0,.42) 48%,#000 100%);
+    mask-image:radial-gradient(85% 72% at 50% 44%,rgba(0,0,0,.14) 0%,rgba(0,0,0,.42) 48%,#000 100%);
+    background-size:420px 420px,260px 260px,190px 190px;
+    background:
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='420' height='420'%3E%3Cfilter id='d1'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.08' numOctaves='2' seed='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='matrix' values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 20 -17'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23d1)'/%3E%3C/svg%3E"),
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='260' height='260'%3E%3Cfilter id='d2'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.35' numOctaves='2' seed='19' stitchTiles='stitch'/%3E%3CfeColorMatrix type='matrix' values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 22 -19'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23d2)'/%3E%3C/svg%3E"),
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='190' height='190'%3E%3Cfilter id='gg'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.72' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='matrix' values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0.5 0.5 0.5 0 -0.66'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23gg)'/%3E%3C/svg%3E")}
+  /* real grunge scan texture overlay (screen blend — only light scratches/blotches show) */
+  .tex{position:absolute;inset:0;z-index:-1;pointer-events:none;mix-blend-mode:screen;
+    opacity:.08;background:url("assets/tex/grunge.jpg") top center/100% auto repeat-y}
+
+  /* ===== LIGHT (white) theme ===== */
+  [data-theme="light"]{
+    --paper:#ffffff;
+    --tx:#16150f;
+    --tx2:#6d6a62;
+    --red:#501518;          /* deep burgundy on white */
+  }
+  [data-theme="light"] body::before{
+    mix-blend-mode:multiply;
+    background:
+      radial-gradient(112% 1450px at 50% 0%,rgba(0,0,0,.055) 0%,rgba(0,0,0,.02) 40%,transparent 70%),
+      radial-gradient(100% 1570px at 100% 100%,rgba(0,0,0,.05) 0%,transparent 66%),
+      radial-gradient(100% 1570px at 0% 100%,rgba(0,0,0,.05) 0%,transparent 66%);
+  }
+  [data-theme="light"] body::after{filter:invert(1);mix-blend-mode:multiply;opacity:.30}
+  [data-theme="light"] .tex{mix-blend-mode:multiply;filter:invert(1);opacity:.06}
+
+  /* 16:9 sheet, scales to fit either dimension; cqw = 1% of sheet width */
+  .sheet{
+    width:100%;
+    min-height:100dvh;
+    background:transparent;
+    position:relative;
+    container-type:inline-size;
+    display:flex;flex-direction:column;
+    padding:clamp(16px,2.2vw,42px) var(--pad);
+  }
+
+  /* top brand label */
+  .sh__nav{
+    display:flex;gap:clamp(14px,1.8vw,35px);
+    font-family:var(--mono);
+    font-size:0.82cqw;font-weight:700;letter-spacing:0.12em;
+    text-transform:uppercase;
+    position:relative;z-index:1;
+  }
+  .sh__nav a{color:var(--tx);text-decoration:none;transition:color .3s ease}
+  .sh__nav a:hover,.sh__nav a.active{color:var(--red)}
+
+  /* main = left column (title + toc) / right grid */
+  .sh__main{flex:1;display:flex;padding-top:2.1cqw;min-height:0;position:relative;z-index:1}
+
+  .sh__left{flex:1 1 auto;min-width:0;display:flex;flex-direction:column;padding-right:2.2cqw}
+  .sh__title{
+    font-family:var(--sans);font-weight:800;
+    font-size:4.6cqw;letter-spacing:-.03em;line-height:.8;
+    text-transform:uppercase;margin-left:-0.03em;
+    color:var(--red);                 /* dark(흑): burgundy */
+  }
+  [data-theme="light"] .sh__title{color:var(--tx)}   /* light(백): black */
+  .toc{margin-top:3.0cqw;display:grid;
+    grid-template-columns:5.8cqw auto;
+    row-gap:1.8cqw;
+    font-size:0.86cqw;letter-spacing:0.02em;color:var(--tx2)}
+  .toc .n{color:var(--red);font-family:var(--mono);padding-top:0.14cqw;white-space:nowrap}
+  .toc b{font-weight:800;color:var(--tx);letter-spacing:0.04em;
+    text-transform:uppercase;font-size:1.02cqw}
+  .toc i{font-style:normal;color:var(--red);font-family:var(--mono);
+    font-size:0.62cqw;letter-spacing:0.1em;text-transform:uppercase;
+    margin-left:0.5cqw;vertical-align:0.12em}
+  .toc em{display:block;font-style:normal;color:var(--tx2);
+    margin-top:0.32cqw;font-size:0.8cqw;letter-spacing:0.01em}
+
+  /* right 3x3 grid (landscape 3:2 cells) */
+  .sh__grid{flex:0 0 auto;width:60cqw;margin-left:auto;margin-right:0;
+    position:relative;
+    display:grid;grid-template-columns:repeat(3,18.7cqw);
+    justify-content:space-between;row-gap:2.6cqw;align-content:space-between}
+  .cell{display:flex;flex-direction:column;cursor:pointer}
+  .cell video{width:100%;aspect-ratio:16/9;object-fit:cover;display:block;
+    background:#2a2a2a;transition:filter .25s ease}
+  .cell:hover video{filter:brightness(1.06)}
+  .cell figcaption{margin-top:0.66cqw;font-size:0.6cqw;
+    letter-spacing:0.14em;color:var(--tx2)}
+
+  /* footer */
+  .sh__foot{display:flex;justify-content:space-between;align-items:flex-end;
+    font-family:var(--mono);font-size:0.6cqw;letter-spacing:0.08em;
+    color:var(--tx2);text-transform:uppercase;line-height:1.5;position:relative;z-index:1}
+  .sh__foot .foot__right{flex:0 0 auto;width:60cqw;display:flex;
+    justify-content:space-between;align-items:flex-end}
+  .sh__foot .mid{display:flex;gap:2.4cqw}
+  .sh__foot .col span{display:block}
+  .sh__foot .col span:first-child{color:var(--red)}
+  .sh__foot .right{margin-right:0;text-align:right}
+
+  /* ===== in-grid lightbox — fills only the right-half grid area ===== */
+  /* transparent: the 9 tiles are hidden while open, so the real page background
+     (paper + grunge tex + gradient + grain) shows through unchanged — no seam */
+  .gb{position:absolute;inset:0;z-index:20;display:none;
+    flex-direction:column;align-items:center;justify-content:center;
+    gap:1.3cqw;background:transparent;cursor:pointer}
+  .gb.open{display:flex}
+  .sh__grid.lb-open .cell{visibility:hidden}
+  /* .gb is a size container so the 16:9 YouTube frame can fit 100% wide / 80% high.
+     Inside it 1cqw = 1% of the grid (= 0.6 sheet-cqw), so the sizes below are the
+     old sheet-cqw values divided by 0.6 */
+  .gb{container-type:size}
+  .gb__vid{width:min(100cqw,142.22cqh);aspect-ratio:16/9;height:auto;
+    display:block;border:0;background:#000}
+  .gb__cap{font-family:var(--mono);color:var(--tx2);
+    font-size:1.2cqw;letter-spacing:0.14em;text-transform:uppercase;text-align:center}
+  .gb__close{position:absolute;top:-0.667cqw;right:-0.667cqw;
+    font-family:var(--mono);font-size:2.5cqw;line-height:1;
+    color:var(--tx);opacity:.55;background:none;border:0;cursor:pointer;
+    padding:0.667cqw 0.917cqw;transition:opacity .2s ease}
+  .gb__close:hover{opacity:1}
+
+  /* ===== black/white theme toggle (POSITIVE / NEGATIVE) — fixed top-right ===== */
+  .theme-tog{position:fixed;top:clamp(15px,2.1vw,40px);right:var(--pad);z-index:10000;
+    background:none;border:0;padding:0;cursor:pointer;user-select:none;
+    display:flex;gap:0.55em;align-items:center;
+    font-family:var(--mono);font-size:clamp(10px,0.8vw,13px);
+    font-weight:700;letter-spacing:0.12em;text-transform:uppercase}
+  .theme-tog .opt{color:var(--tx2);transition:color .3s ease;
+    border-bottom:1.5px solid transparent;padding-bottom:2px;line-height:1}
+  .theme-tog .opt.on{color:var(--red);border-bottom-color:var(--red)}
+  .theme-tog .sep{color:var(--tx2);opacity:.5;font-weight:400}
+</style>
+</head>
+<body>
+  <div class="tex" aria-hidden="true"></div>
+
+  <button class="theme-tog" id="themeTog" aria-label="Toggle positive / negative theme">
+    <span class="opt" data-v="light">POSITIVE</span>
+    <span class="sep">/</span>
+    <span class="opt" data-v="dark">NEGATIVE</span>
+  </button>
+
+  <section class="sheet">
+    <nav class="sh__nav">
+      <a href="index.html">HOME</a>
+      <a href="projects.html" class="active">PROJECTS</a>
+      <a href="about.html">ABOUT</a>
+      <a href="cv.html">CV</a>
+      <a href="contact.html">CONTACT</a>
+    </nav>
+
+    <div class="sh__main">
+      <div class="sh__left">
+        <h1 class="sh__title">PRODUCTION</h1>
+        <div class="toc">
+          <span class="n">1.1–1.6</span><span><b>LG STYLER</b> <i>Global TVC · LG Electronics</i><em>1st assistant director &amp; media planner — story ideation, English copywriting &amp; script translation, on-set production, edit support and post scheduling</em></span>
+          <span class="n">1.7</span><span><b>SAMSUNG</b> <i>The Frame · TVC</i><em>Copywriter &amp; translator — English scripts for global social-media content</em></span>
+          <span class="n">1.8</span><span><b>KRAFTON</b> <i>PUBG · Dev Interview</i><em>1st assistant director &amp; media planner — led planning, filming &amp; editing; directed the new-map teaser concept</em></span>
+          <span class="n">1.9</span><span><b>MINDSOS</b> <i>Public Campaign</i><em>Media planner, videographer &amp; editor — full process from concept to filming and edit, under MORF</em></span>
+        </div>
+      </div>
+
+      <div class="sh__grid">
+        <figure class="cell"><video data-src="assets/production/pv3.mp4" data-yt="TLdSEMKo11s" poster="assets/production/p3.jpg" muted loop playsinline preload="none"></video><figcaption>1.1 &nbsp;LG STYLER · S01</figcaption></figure>
+        <figure class="cell"><video data-src="assets/production/pv4.mp4" data-yt="EclJz21fZis" poster="assets/production/p4.jpg" muted loop playsinline preload="none"></video><figcaption>1.2 &nbsp;LG STYLER · S02</figcaption></figure>
+        <figure class="cell"><video data-src="assets/production/pv5.mp4" data-yt="r1yJCdHXKiM" poster="assets/production/p5.jpg" muted loop playsinline preload="none"></video><figcaption>1.3 &nbsp;LG STYLER · S03</figcaption></figure>
+        <figure class="cell"><video data-src="assets/production/pv6.mp4" data-yt="yXlwpIUUamQ" poster="assets/production/p6.jpg" muted loop playsinline preload="none"></video><figcaption>1.4 &nbsp;LG STYLER · S04</figcaption></figure>
+        <figure class="cell"><video data-src="assets/production/pv7.mp4" data-yt="43RDhx6Te7M" poster="assets/production/p7.jpg" muted loop playsinline preload="none"></video><figcaption>1.5 &nbsp;LG STYLER · S05</figcaption></figure>
+        <figure class="cell"><video data-src="assets/production/pv8.mp4" data-yt="BeJY4fOoK7k" poster="assets/production/p8.jpg" muted loop playsinline preload="none"></video><figcaption>1.6 &nbsp;LG STYLER · S06</figcaption></figure>
+        <figure class="cell"><video data-src="assets/production/pv2.mp4" data-yt="EEC4-7XSIsQ" poster="assets/production/poster_samsung.jpg" muted loop playsinline preload="none"></video><figcaption>1.7 &nbsp;SAMSUNG</figcaption></figure>
+        <figure class="cell"><video data-src="assets/production/pv1.mp4" data-yt="KIrD6Hn2Hv0" poster="assets/production/poster_krafton.jpg" muted loop playsinline preload="none"></video><figcaption>1.8 &nbsp;KRAFTON</figcaption></figure>
+        <figure class="cell"><video data-src="assets/production/pv9.mp4" data-yt="d32I9OjkOpg" poster="assets/production/poster_mindsos.jpg" muted loop playsinline preload="none"></video><figcaption>1.9 &nbsp;MINDSOS</figcaption></figure>
+
+        <div class="gb" id="gb" aria-hidden="true">
+          <button class="gb__close" id="gbClose" aria-label="Close">&times;</button>
+          <iframe class="gb__vid" id="gbVid" title="Video player"
+            allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen></iframe>
+          <figcaption class="gb__cap" id="gbCap"></figcaption>
+        </div>
+      </div>
+    </div>
+
+    <div class="sh__foot">
+      <div class="col left">
+        <span>[LA.01]</span>
+        <span>Dongwoo Kim — L'ARCHIVE</span>
+      </div>
+      <div class="foot__right">
+        <div class="mid">
+          <span>01</span>
+          <span>09</span>
+        </div>
+        <div class="col right">
+          <span>[PR.09]</span>
+          <span>Film &amp; Production</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+<script>
+(function(){
+  var root=document.documentElement, tog=document.getElementById('themeTog');
+  function render(){
+    var light=root.getAttribute('data-theme')==='light';
+    tog.querySelectorAll('.opt').forEach(function(o){
+      o.classList.toggle('on', o.getAttribute('data-v')===(light?'light':'dark'));
+    });
+  }
+  render();
+  tog.addEventListener('click',function(){
+    if(root.getAttribute('data-theme')==='light'){
+      root.removeAttribute('data-theme'); localStorage.setItem('larchive-theme','dark');
+    }else{
+      root.setAttribute('data-theme','light'); localStorage.setItem('larchive-theme','light');
+    }
+    render();
+  });
+})();
+(function(){
+  var gb=document.getElementById('gb'),
+      gbVid=document.getElementById('gbVid'),
+      gbCap=document.getElementById('gbCap'),
+      grid=gb.parentNode;
+
+  // Load videos via fetch->blob so playback works on servers that don't
+  // support HTTP Range requests (e.g. Python http.server). Cached per path.
+  var cache={};
+  function getBlob(path){
+    if(!cache[path]){
+      cache[path]=fetch(path).then(function(r){return r.blob();})
+        .then(function(b){return URL.createObjectURL(b);});
+    }
+    return cache[path];
+  }
+
+  // enlarged player = unlisted YouTube video (loop=1+playlist keeps it looping,
+  // so YouTube's end-screen suggestions never appear)
+  function open(id,cap){
+    gbCap.textContent=cap;
+    gb.classList.add('open'); gb.setAttribute('aria-hidden','false');
+    grid.classList.add('lb-open');
+    gbVid.src='https://www.youtube-nocookie.com/embed/'+id+
+      '?autoplay=1&loop=1&playlist='+id+'&rel=0&playsinline=1';
+  }
+  function close(){
+    gb.classList.remove('open'); gb.setAttribute('aria-hidden','true');
+    grid.classList.remove('lb-open');
+    gbVid.removeAttribute('src');
+  }
+
+  // hover-to-play on the 9 thumbnails (muted preview, same size)
+  document.querySelectorAll('.cell').forEach(function(fig){
+    var v=fig.querySelector('video');
+    var path=v.getAttribute('data-src');
+    fig.addEventListener('mouseenter',function(){
+      if(gb.classList.contains('open')) return;
+      fig._hover=true;
+      getBlob(path).then(function(u){
+        if(!fig._hover) return;
+        if(v.src!==u) v.src=u;
+        v.play().catch(function(){});
+      });
+    });
+    fig.addEventListener('mouseleave',function(){
+      fig._hover=false; v.pause();
+      // reset the element so its poster (thumbnail) shows again
+      if(v.src){ v.removeAttribute('src'); v.load(); }
+    });
+  });
+
+  // click delegation: closed -> a tile opens the enlarged player;
+  // open -> a click anywhere (video, close btn, elsewhere) closes it
+  document.addEventListener('click',function(e){
+    if(gb.classList.contains('open')){ close(); return; }
+    var cell=e.target.closest('.cell');
+    if(cell){
+      var v=cell.querySelector('video');
+      var cap=cell.querySelector('figcaption');
+      open(v.getAttribute('data-yt'), cap?cap.textContent.trim():'');
+    }
+  });
+  document.addEventListener('keydown',function(e){
+    if(e.key==='Escape'&&gb.classList.contains('open')) close();
+  });
+})();
+</script>
+</body>
+</html>

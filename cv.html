@@ -1,0 +1,286 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>L'ARCHIVE — CV</title>
+<script>(function(){var s=localStorage.getItem('larchive-theme');if(s==='dark')document.documentElement.removeAttribute('data-theme');else if(s==='light')document.documentElement.setAttribute('data-theme','light');})();</script>
+<style>
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  :root{
+    /* ===== DARK ("흑") — base ===== */
+    --paper:#0d0d0d;
+    --tx:#f0efe9;
+    --tx2:#8f8b81;
+    --red:#7a2226;
+    --pad:clamp(16px,3vw,58px);
+    --sans:"Helvetica Neue",Helvetica,Arial,sans-serif;
+    --mono:"SF Mono",ui-monospace,"Cascadia Mono","Courier New",monospace;
+  }
+  html,body{height:100%}
+  body{
+    background:var(--paper);color:var(--tx);font-family:var(--sans);
+    -webkit-font-smoothing:antialiased;position:relative;
+    min-height:100dvh;overflow-x:hidden;
+  }
+
+  /* ===== global gradient + grain overlay ===== */
+  body::before{content:"";position:absolute;inset:0;z-index:9998;pointer-events:none;mix-blend-mode:screen;
+    background:
+      radial-gradient(112% 1450px at 50% 0%,rgba(255,255,255,.11) 0%,rgba(255,255,255,.042) 36%,rgba(255,255,255,.012) 55%,transparent 73%),
+      radial-gradient(74% 1270px at 0% 0%,rgba(255,255,255,.10) 0%,rgba(255,255,255,.03) 42%,transparent 71%),
+      radial-gradient(74% 1270px at 100% 0%,rgba(255,255,255,.08) 0%,rgba(255,255,255,.026) 42%,transparent 71%),
+      radial-gradient(100% 1570px at 100% 100%,rgba(255,255,255,.07) 0%,rgba(255,255,255,.02) 45%,transparent 72%),
+      radial-gradient(100% 1570px at 0% 100%,rgba(255,255,255,.07) 0%,rgba(255,255,255,.02) 45%,transparent 72%)}
+  body::after{content:"";position:absolute;inset:0;z-index:9999;pointer-events:none;opacity:.45;
+    -webkit-mask-image:radial-gradient(85% 72% at 50% 44%,rgba(0,0,0,.14) 0%,rgba(0,0,0,.42) 48%,#000 100%);
+    mask-image:radial-gradient(85% 72% at 50% 44%,rgba(0,0,0,.14) 0%,rgba(0,0,0,.42) 48%,#000 100%);
+    background-size:420px 420px,260px 260px,190px 190px;
+    background:
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='420' height='420'%3E%3Cfilter id='d1'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.08' numOctaves='2' seed='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='matrix' values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 20 -17'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23d1)'/%3E%3C/svg%3E"),
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='260' height='260'%3E%3Cfilter id='d2'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.35' numOctaves='2' seed='19' stitchTiles='stitch'/%3E%3CfeColorMatrix type='matrix' values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 22 -19'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23d2)'/%3E%3C/svg%3E"),
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='190' height='190'%3E%3Cfilter id='gg'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.72' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='matrix' values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0.5 0.5 0.5 0 -0.66'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23gg)'/%3E%3C/svg%3E")}
+  .tex{position:absolute;inset:0;z-index:-1;pointer-events:none;mix-blend-mode:screen;
+    opacity:.08;background:url("assets/tex/grunge.jpg") top center/100% auto repeat-y}
+
+  /* ===== LIGHT (white) theme ===== */
+  [data-theme="light"]{
+    --paper:#ffffff;
+    --tx:#16150f;
+    --tx2:#6d6a62;
+    --red:#501518;
+  }
+  [data-theme="light"] body::before{
+    mix-blend-mode:multiply;
+    background:
+      radial-gradient(112% 1450px at 50% 0%,rgba(0,0,0,.055) 0%,rgba(0,0,0,.02) 40%,transparent 70%),
+      radial-gradient(100% 1570px at 100% 100%,rgba(0,0,0,.05) 0%,transparent 66%),
+      radial-gradient(100% 1570px at 0% 100%,rgba(0,0,0,.05) 0%,transparent 66%);
+  }
+  [data-theme="light"] body::after{filter:invert(1);mix-blend-mode:multiply;opacity:.30}
+  [data-theme="light"] .tex{mix-blend-mode:multiply;filter:invert(1);opacity:.06}
+
+  .sheet{
+    width:100%;
+    min-height:100dvh;
+    background:transparent;
+    position:relative;
+    container-type:inline-size;
+    display:flex;flex-direction:column;
+    padding:clamp(16px,2.2vw,42px) var(--pad);
+  }
+
+  /* top nav */
+  .sh__nav{
+    display:flex;gap:clamp(14px,1.8vw,35px);
+    font-family:var(--mono);
+    font-size:0.82cqw;font-weight:700;letter-spacing:0.12em;
+    text-transform:uppercase;
+    position:relative;z-index:1;
+  }
+  .sh__nav a{color:var(--tx);text-decoration:none;transition:color .3s ease}
+  .sh__nav a:hover,.sh__nav a.active{color:var(--red)}
+
+  /* stage fills the vertical space; content inside is capped so it stops
+     growing on very wide screens (leaving top/bottom margin) while the
+     nav / footer keep scaling with the viewport */
+  .about-stage{flex:1;display:flex;align-items:center;justify-content:center;
+    min-height:0;position:relative;z-index:1;padding:clamp(20px,2.4vw,48px) 0}
+
+  /* main split: photo | info | experiences */
+  .about{width:100%;max-width:1750px;container-type:inline-size;
+    display:flex;gap:clamp(30px,4.6vw,108px);align-items:center}
+
+  .about__photo{flex:0 0 22cqw;display:flex;align-items:center;justify-content:flex-start}
+  .about__photo img{width:100%;height:auto;display:block}
+
+  .about__body{flex:1;display:grid;grid-template-columns:0.92fr 1.18fr;
+    column-gap:5.5cqw;align-content:center;align-items:start}
+  .about__info{align-self:center}
+
+  .grp{margin-bottom:2.6cqw}
+  .grp:last-child{margin-bottom:0}
+  .grp__h{font-weight:800;font-size:1.02cqw;letter-spacing:0.05em;
+    text-transform:uppercase;color:var(--tx);margin-bottom:1.5cqw}
+
+  /* generic entry */
+  .ent{margin-bottom:2.5cqw}
+  .ent:last-child{margin-bottom:0}
+  .ent b{display:block;font-weight:800;font-size:0.9cqw;letter-spacing:0.01em;
+    color:var(--tx)}
+  .ent .meta{font-size:0.72cqw;letter-spacing:0.02em;color:var(--tx2);
+    margin-top:0.18cqw}
+  .ent .meta .r{color:var(--red)}
+  .ent p{font-size:0.72cqw;line-height:1.45;letter-spacing:0.01em;
+    color:var(--tx2);margin-top:0.3cqw;max-width:27cqw}
+  .ent p .r{color:var(--red);font-weight:700}
+  .ent .sub{list-style:none;margin:0.8cqw 0 0;padding:0}
+  .ent .sub li{font-size:0.68cqw;line-height:1.42;letter-spacing:0.01em;
+    color:var(--tx2);margin-top:0.62cqw;position:relative;max-width:27cqw}
+  .ent .sub .pj{color:var(--red);font-weight:700;letter-spacing:0.02em}
+
+  /* contact + plain lists */
+  .lines{font-size:0.78cqw;line-height:1.7;letter-spacing:0.02em;color:var(--tx2)}
+  .lines .em{color:var(--tx)}
+  .lines a{color:var(--tx);text-decoration:none;transition:color .3s ease}
+  .lines a:hover{color:var(--red)}
+  .skills{font-size:0.78cqw;line-height:1.62;letter-spacing:0.02em;color:var(--tx2)}
+  .skills .lab{color:var(--tx)}
+  .skills .gap{display:block;height:0.7cqw}
+  .skills .lang .r{color:var(--red)}
+
+  /* footer */
+  .sh__foot{display:flex;justify-content:space-between;align-items:flex-end;
+    font-family:var(--mono);font-size:0.6cqw;letter-spacing:0.08em;
+    color:var(--tx2);text-transform:uppercase;line-height:1.5;
+    position:relative;z-index:1;margin-top:2.4cqw}
+  .sh__foot .col span{display:block}
+  .sh__foot .col span:first-child{color:var(--red)}
+  .sh__foot .right{text-align:right}
+
+  /* theme toggle */
+  .theme-tog{position:fixed;top:clamp(15px,2.1vw,40px);right:var(--pad);z-index:10000;
+    background:none;border:0;padding:0;cursor:pointer;user-select:none;
+    display:flex;gap:0.55em;align-items:center;
+    font-family:var(--mono);font-size:clamp(10px,0.8vw,13px);
+    font-weight:700;letter-spacing:0.12em;text-transform:uppercase}
+  .theme-tog .opt{color:var(--tx2);transition:color .3s ease;
+    border-bottom:1.5px solid transparent;padding-bottom:2px;line-height:1}
+  .theme-tog .opt.on{color:var(--red);border-bottom-color:var(--red)}
+  .theme-tog .sep{color:var(--tx2);opacity:.5;font-weight:400}
+</style>
+</head>
+<body>
+  <div class="tex" aria-hidden="true"></div>
+
+  <button class="theme-tog" id="themeTog" aria-label="Toggle positive / negative theme">
+    <span class="opt" data-v="light">POSITIVE</span>
+    <span class="sep">/</span>
+    <span class="opt" data-v="dark">NEGATIVE</span>
+  </button>
+
+  <section class="sheet">
+    <nav class="sh__nav">
+      <a href="index.html">HOME</a>
+      <a href="projects.html">PROJECTS</a>
+      <a href="about.html">ABOUT</a>
+      <a href="cv.html" class="active">CV</a>
+      <a href="contact.html">CONTACT</a>
+    </nav>
+
+    <div class="about-stage">
+    <div class="about">
+      <div class="about__photo">
+        <img src="assets/about/about-photo.jpg" alt="Dongwoo Kim">
+      </div>
+
+      <div class="about__body">
+        <!-- LEFT COLUMN: contact / education / skills -->
+        <div class="about__info">
+          <div class="grp">
+            <div class="grp__h">Contact</div>
+            <div class="lines">
+              <span class="em">dongwookim33@naver.com</span><br>
+              Need something? <a href="assets/files/DONGWOO-KIM-RESUME.pdf" download="Dongwoo Kim - Resume.pdf">Resume</a> | <a href="assets/files/DONGWOO-KIM-PORTFOLIO.pptx" download="Dongwoo Kim - Portfolio.pptx">Portfolio</a> | <a href="https://www.linkedin.com/in/dongwookimed1a/" target="_blank" rel="noopener">LinkedIn</a> | <a href="https://www.instagram.com/photo_graph_magic/" target="_blank" rel="noopener">Instagram</a>
+            </div>
+          </div>
+
+          <div class="grp">
+            <div class="grp__h">Education</div>
+            <div class="ent">
+              <b>Emory University</b>
+              <div class="meta">2017 – 2022 <span class="r">|</span> Film &amp; Media, GPA 3.5</div>
+            </div>
+            <div class="ent">
+              <b>TASIS The American School in England</b>
+              <div class="meta">2013 – 2017 <span class="r">|</span> Boarding, UK</div>
+            </div>
+          </div>
+
+          <div class="grp">
+            <div class="grp__h">Skills</div>
+            <div class="skills">
+              <span class="lab">Adobe:</span> Pr | Ae | Ps | Lr<br>
+              Meta · Google · TikTok Ads<br>
+              GA4 · Shopify Analytics<br>
+              Klaviyo · WordPress<br>
+              MS Office · Slack
+              <span class="gap"></span>
+              <span class="lang">Korean <span class="r">[ native ]</span></span><br>
+              <span class="lang">English <span class="r">[ native ]</span></span>
+            </div>
+          </div>
+        </div>
+
+        <!-- RIGHT COLUMN: experiences -->
+        <div class="about__exp">
+          <div class="grp">
+            <div class="grp__h">Experiences</div>
+
+            <div class="ent">
+              <b>MORF</b>
+              <div class="meta">Founder &amp; Creative Director <span class="r">|</span> 2021 – 2026</div>
+              <p>Founded and ran a one-person brand content studio — visual concept, film, photography and design, tied to data-driven performance marketing.</p>
+              <ul class="sub">
+                <li><span class="pj">3BIOTICS</span> — Visual branding, product photography &amp; online-store design</li>
+                <li><span class="pj">Panacell Biotech</span> — Brand identity &amp; packaging for a beauty-market launch</li>
+                <li><span class="pj">MINDSOS</span> — Suicide-prevention campaign film, directed end to end</li>
+                <li><span class="pj">Moon Ho Jun</span> — Ran the KartRider pro's YouTube channel for a year, growing owned media past 500K subscribers</li>
+              </ul>
+            </div>
+
+            <div class="ent">
+              <b>You've Got Pictures</b>
+              <div class="meta">Media Planner / Assistant Director <span class="r">|</span> 2023 – 2024</div>
+              <p>Planned, shot and post-produced digital campaigns for major brands as planner, assistant director and copywriter.</p>
+              <ul class="sub">
+                <li><span class="pj">LG Styler</span> — Global TVC for LG Electronics; story planning, English copy &amp; on-set direction</li>
+                <li><span class="pj">PUBG: BATTLEGROUNDS</span> — Developer-interview film for KRAFTON's new-map launch</li>
+              </ul>
+            </div>
+
+            <div class="ent">
+              <b>Evan Alexander Grooming — Atlanta, USA</b>
+              <div class="meta">Content Strategist / Marketer <span class="r">|</span> 2022 – 2023</div>
+              <p>Led marketing for a premium men's grooming D2C brand. Planned and ran Meta · Google · TikTok · YouTube ad campaigns with weekly performance analysis and budget re-allocation, and personally shot and edited 100+ social videos in-house for fast creative testing. Built and ran 10+ US influencer collaborations end to end — sourcing, briefing, review and results tracking. Outcome: traffic <span class="r">+13–18% MoM</span>, conversion <span class="r">1.4% → 3.0%</span>, AOV <span class="r">+18%</span> and 30-day repeat purchase <span class="r">+30%</span>.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    </div>
+
+    <div class="sh__foot">
+      <div class="col left">
+        <span>[LA.01]</span>
+        <span>Dongwoo Kim — L'ARCHIVE</span>
+      </div>
+      <div class="col right">
+        <span>[CV.00]</span>
+        <span>CV — Profile</span>
+      </div>
+    </div>
+  </section>
+
+<script>
+(function(){
+  var root=document.documentElement, tog=document.getElementById('themeTog');
+  function render(){
+    var light=root.getAttribute('data-theme')==='light';
+    tog.querySelectorAll('.opt').forEach(function(o){
+      o.classList.toggle('on', o.getAttribute('data-v')===(light?'light':'dark'));
+    });
+  }
+  render();
+  tog.addEventListener('click',function(){
+    if(root.getAttribute('data-theme')==='light'){
+      root.removeAttribute('data-theme'); localStorage.setItem('larchive-theme','dark');
+    }else{
+      root.setAttribute('data-theme','light'); localStorage.setItem('larchive-theme','light');
+    }
+    render();
+  });
+})();
+</script>
+</body>
+</html>

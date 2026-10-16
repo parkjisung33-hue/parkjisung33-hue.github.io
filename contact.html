@@ -1,0 +1,212 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>L'ARCHIVE — Contact</title>
+<script>(function(){var s=localStorage.getItem('larchive-theme');if(s==='dark')document.documentElement.removeAttribute('data-theme');else if(s==='light')document.documentElement.setAttribute('data-theme','light');})();</script>
+<style>
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  :root{
+    /* ===== DARK ("흑") — base ===== */
+    --paper:#0d0d0d;
+    --tx:#f0efe9;
+    --tx2:#8f8b81;
+    --red:#7a2226;
+    --pad:clamp(16px,3vw,58px);
+    --sans:"Helvetica Neue",Helvetica,Arial,sans-serif;
+    --mono:"SF Mono",ui-monospace,"Cascadia Mono","Courier New",monospace;
+  }
+  html,body{height:100%}
+  body{
+    background:var(--paper);color:var(--tx);font-family:var(--sans);
+    -webkit-font-smoothing:antialiased;position:relative;
+    min-height:100dvh;overflow-x:hidden;
+  }
+
+  /* ===== global gradient + grain overlay ===== */
+  body::before{content:"";position:absolute;inset:0;z-index:9998;pointer-events:none;mix-blend-mode:screen;
+    background:
+      radial-gradient(112% 1450px at 50% 0%,rgba(255,255,255,.11) 0%,rgba(255,255,255,.042) 36%,rgba(255,255,255,.012) 55%,transparent 73%),
+      radial-gradient(74% 1270px at 0% 0%,rgba(255,255,255,.10) 0%,rgba(255,255,255,.03) 42%,transparent 71%),
+      radial-gradient(74% 1270px at 100% 0%,rgba(255,255,255,.08) 0%,rgba(255,255,255,.026) 42%,transparent 71%),
+      radial-gradient(100% 1570px at 100% 100%,rgba(255,255,255,.07) 0%,rgba(255,255,255,.02) 45%,transparent 72%),
+      radial-gradient(100% 1570px at 0% 100%,rgba(255,255,255,.07) 0%,rgba(255,255,255,.02) 45%,transparent 72%)}
+  body::after{content:"";position:absolute;inset:0;z-index:9999;pointer-events:none;opacity:.45;
+    -webkit-mask-image:radial-gradient(85% 72% at 50% 44%,rgba(0,0,0,.14) 0%,rgba(0,0,0,.42) 48%,#000 100%);
+    mask-image:radial-gradient(85% 72% at 50% 44%,rgba(0,0,0,.14) 0%,rgba(0,0,0,.42) 48%,#000 100%);
+    background-size:420px 420px,260px 260px,190px 190px;
+    background:
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='420' height='420'%3E%3Cfilter id='d1'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.08' numOctaves='2' seed='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='matrix' values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 20 -17'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23d1)'/%3E%3C/svg%3E"),
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='260' height='260'%3E%3Cfilter id='d2'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.35' numOctaves='2' seed='19' stitchTiles='stitch'/%3E%3CfeColorMatrix type='matrix' values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 22 -19'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23d2)'/%3E%3C/svg%3E"),
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='190' height='190'%3E%3Cfilter id='gg'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.72' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='matrix' values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0.5 0.5 0.5 0 -0.66'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23gg)'/%3E%3C/svg%3E")}
+  .tex{position:absolute;inset:0;z-index:-1;pointer-events:none;mix-blend-mode:screen;
+    opacity:.08;background:url("assets/tex/grunge.jpg") top center/100% auto repeat-y}
+
+  /* ===== LIGHT (white) theme ===== */
+  [data-theme="light"]{
+    --paper:#ffffff;
+    --tx:#16150f;
+    --tx2:#6d6a62;
+    --red:#501518;
+  }
+  [data-theme="light"] body::before{
+    mix-blend-mode:multiply;
+    background:
+      radial-gradient(112% 1450px at 50% 0%,rgba(0,0,0,.055) 0%,rgba(0,0,0,.02) 40%,transparent 70%),
+      radial-gradient(100% 1570px at 100% 100%,rgba(0,0,0,.05) 0%,transparent 66%),
+      radial-gradient(100% 1570px at 0% 100%,rgba(0,0,0,.05) 0%,transparent 66%);
+  }
+  [data-theme="light"] body::after{filter:invert(1);mix-blend-mode:multiply;opacity:.30}
+  [data-theme="light"] .tex{mix-blend-mode:multiply;filter:invert(1);opacity:.06}
+
+  .sheet{
+    width:100%;
+    min-height:100dvh;
+    background:transparent;
+    position:relative;
+    container-type:inline-size;
+    display:flex;flex-direction:column;
+    padding:clamp(16px,2.2vw,42px) var(--pad);
+  }
+
+  /* top nav */
+  .sh__nav{
+    display:flex;gap:clamp(14px,1.8vw,35px);
+    font-family:var(--mono);
+    font-size:0.82cqw;font-weight:700;letter-spacing:0.12em;
+    text-transform:uppercase;
+    position:relative;z-index:1;
+  }
+  .sh__nav a{color:var(--tx);text-decoration:none;transition:color .3s ease}
+  .sh__nav a:hover,.sh__nav a.active{color:var(--red)}
+
+  /* ===== CONTACT — swiss "dictionary" poster =====
+     The whole composition lives in one box whose width follows the viewport
+     (capped by height so it always fits). Every size/position inside is in
+     that box's cqw, so the layout scales as one piece. */
+  .ct-stage{flex:1;display:flex;align-items:center;justify-content:center;
+    min-height:0;position:relative;z-index:1;padding:clamp(18px,2vw,40px) 0}
+  /* --u = type/spacing unit (smaller than 1% of the box), so the box can be
+     wide (corner texts spread out) while the type stays compact. Horizontal
+     anchors are % of the box; sizes and vertical positions are in --u. */
+  .ct{--u:0.52cqw;position:relative;container-type:inline-size;
+    width:min(68cqw, calc((100dvh - 17cqw) * 1.6));height:auto;aspect-ratio:100/53.6;
+    font-family:var(--mono);font-weight:700;color:var(--tx);letter-spacing:0.08em}
+  .ct a{color:inherit;text-decoration:none;transition:color .3s ease}
+  .ct a:hover{color:var(--red)}
+  .ct .el{position:absolute;line-height:1;white-space:nowrap}
+  .ct .up{text-transform:uppercase}
+
+  .ct .meta{top:calc(var(--u)*5.6);font-size:calc(var(--u)*1.55)}
+  .ct .meta--l{left:29cqw}
+  .ct .meta--c{left:50%;transform:translateX(-50%)}
+  .ct .meta--r{right:28.5cqw}
+
+  /* centre block: word + definition, centred in the box */
+  .ct .no{right:34.65cqw;top:calc(var(--u)*25.6);font-size:calc(var(--u)*2.6)}
+  .ct .word{left:34.65cqw;top:calc(var(--u)*34.2);font-family:var(--sans);font-weight:800;
+    font-size:calc(var(--u)*10.91);letter-spacing:-0.03em;line-height:1;display:flex;align-items:flex-end}
+  .ct .word .pre{padding-bottom:0.1em;padding-right:0.02em}
+  .ct .word .box{background:var(--red);color:#f0efe9;
+    padding:0.3em 0.04em 0.16em 0.03em;line-height:1}
+  .ct .pos{left:34.65cqw;top:calc(var(--u)*53.6);font-size:calc(var(--u)*2.6);font-style:italic}
+  .ct .def{left:34.65cqw;top:calc(var(--u)*60.2);font-size:calc(var(--u)*2.4);line-height:1.45;letter-spacing:0.01em}
+
+  .ct .foot-s{top:calc(var(--u)*94.2);font-size:calc(var(--u)*1.55)}
+  .ct .foot-s--l{left:17cqw}
+  .ct .foot-s--r{right:16.5cqw}
+  .ct .foot-b{left:15.1cqw;top:calc(var(--u)*98.3);font-size:calc(var(--u)*2.6);letter-spacing:0.04em}
+
+  /* footer */
+  .sh__foot{display:flex;justify-content:space-between;align-items:flex-end;
+    font-family:var(--mono);font-size:0.6cqw;letter-spacing:0.08em;
+    color:var(--tx2);text-transform:uppercase;line-height:1.5;
+    position:relative;z-index:1;margin-top:2.4cqw}
+  .sh__foot .col span{display:block}
+  .sh__foot .col span:first-child{color:var(--red)}
+  .sh__foot .right{text-align:right}
+
+  /* theme toggle */
+  .theme-tog{position:fixed;top:clamp(15px,2.1vw,40px);right:var(--pad);z-index:10000;
+    background:none;border:0;padding:0;cursor:pointer;user-select:none;
+    display:flex;gap:0.55em;align-items:center;
+    font-family:var(--mono);font-size:clamp(10px,0.8vw,13px);
+    font-weight:700;letter-spacing:0.12em;text-transform:uppercase}
+  .theme-tog .opt{color:var(--tx2);transition:color .3s ease;
+    border-bottom:1.5px solid transparent;padding-bottom:2px;line-height:1}
+  .theme-tog .opt.on{color:var(--red);border-bottom-color:var(--red)}
+  .theme-tog .sep{color:var(--tx2);opacity:.5;font-weight:400}
+</style>
+</head>
+<body>
+  <div class="tex" aria-hidden="true"></div>
+
+  <button class="theme-tog" id="themeTog" aria-label="Toggle positive / negative theme">
+    <span class="opt" data-v="light">POSITIVE</span>
+    <span class="sep">/</span>
+    <span class="opt" data-v="dark">NEGATIVE</span>
+  </button>
+
+  <section class="sheet">
+    <nav class="sh__nav">
+      <a href="index.html">HOME</a>
+      <a href="projects.html">PROJECTS</a>
+      <a href="about.html">ABOUT</a>
+      <a href="cv.html">CV</a>
+      <a href="contact.html" class="active">CONTACT</a>
+    </nav>
+
+    <div class="ct-stage">
+    <div class="ct">
+      <a class="el meta meta--l up" href="https://www.instagram.com/photo_graph_magic/" target="_blank" rel="noopener">@photo_graph_magic</a>
+      <a class="el meta meta--c" href="mailto:dongwookim33@naver.com">dongwookim33@naver.com</a>
+      <div class="el meta meta--r up">Seoul, Korea</div>
+
+      <div class="el no up">Contact</div>
+      <div class="el word"><span class="pre">L'</span><span class="box">ARCHIVE</span></div>
+      <div class="el pos">noun</div>
+      <div class="el def">a place in which public records or<br>historical materials (such as documents)<br>are preserved.</div>
+
+      <a class="el foot-s foot-s--l up" href="https://www.linkedin.com/in/dongwookimed1a/" target="_blank" rel="noopener">LinkedIn / Dongwoo Kim</a>
+      <div class="el foot-s foot-s--r up"><a href="assets/files/DONGWOO-KIM-RESUME.pdf" download="Dongwoo Kim - Resume.pdf">Resume</a>, <a href="assets/files/DONGWOO-KIM-PORTFOLIO.pptx" download="Dongwoo Kim - Portfolio.pptx">Portfolio</a></div>
+      <a class="el foot-b" href="mailto:dongwookim33@naver.com">dongwookim33@naver.com</a>
+    </div>
+    </div>
+
+    <div class="sh__foot">
+      <div class="col left">
+        <span>[LA.01]</span>
+        <span>Dongwoo Kim — L'ARCHIVE</span>
+      </div>
+      <div class="col right">
+        <span>[CT.00]</span>
+        <span>Contact — Say hello</span>
+      </div>
+    </div>
+  </section>
+
+<script>
+(function(){
+  var root=document.documentElement, tog=document.getElementById('themeTog');
+  function render(){
+    var light=root.getAttribute('data-theme')==='light';
+    tog.querySelectorAll('.opt').forEach(function(o){
+      o.classList.toggle('on', o.getAttribute('data-v')===(light?'light':'dark'));
+    });
+  }
+  render();
+  tog.addEventListener('click',function(){
+    if(root.getAttribute('data-theme')==='light'){
+      root.removeAttribute('data-theme'); localStorage.setItem('larchive-theme','dark');
+    }else{
+      root.setAttribute('data-theme','light'); localStorage.setItem('larchive-theme','light');
+    }
+    render();
+  });
+})();
+
+
+</script>
+</body>
+</html>

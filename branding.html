@@ -1,0 +1,292 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>L'ARCHIVE — Branding</title>
+<script>(function(){var s=localStorage.getItem('larchive-theme');if(s==='dark')document.documentElement.removeAttribute('data-theme');else if(s==='light')document.documentElement.setAttribute('data-theme','light');})();</script>
+<style>
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  :root{
+    /* ===== DARK ("흑") — base ===== */
+    --paper:#0d0d0d;         /* black bg */
+    --tx:#f0efe9;            /* off-white text */
+    --tx2:#8f8b81;           /* muted grey: toc / caption / footer */
+    --red:#7a2226;           /* burgundy accent (lifted for black bg) */
+    --pad:clamp(16px,3vw,58px);   /* same gutter as home / projects */
+    --sans:"Helvetica Neue",Helvetica,Arial,sans-serif;
+    --mono:"SF Mono",ui-monospace,"Cascadia Mono","Courier New",monospace;
+  }
+  html,body{height:100%}
+  body{
+    background:var(--paper);color:var(--tx);font-family:var(--sans);
+    -webkit-font-smoothing:antialiased;position:relative;
+    min-height:100dvh;overflow-x:hidden;
+  }
+
+  /* ===== global gradient + grain overlay (over text AND images) ===== */
+  body::before{content:"";position:absolute;inset:0;z-index:9998;pointer-events:none;mix-blend-mode:screen;
+    background:
+      radial-gradient(112% 1450px at 50% 0%,rgba(255,255,255,.11) 0%,rgba(255,255,255,.042) 36%,rgba(255,255,255,.012) 55%,transparent 73%),
+      radial-gradient(74% 1270px at 0% 0%,rgba(255,255,255,.10) 0%,rgba(255,255,255,.03) 42%,transparent 71%),
+      radial-gradient(74% 1270px at 100% 0%,rgba(255,255,255,.08) 0%,rgba(255,255,255,.026) 42%,transparent 71%),
+      radial-gradient(100% 1570px at 100% 100%,rgba(255,255,255,.07) 0%,rgba(255,255,255,.02) 45%,transparent 72%),
+      radial-gradient(100% 1570px at 0% 100%,rgba(255,255,255,.07) 0%,rgba(255,255,255,.02) 45%,transparent 72%)}
+  body::after{content:"";position:absolute;inset:0;z-index:9999;pointer-events:none;opacity:.45;
+    -webkit-mask-image:radial-gradient(85% 72% at 50% 44%,rgba(0,0,0,.14) 0%,rgba(0,0,0,.42) 48%,#000 100%);
+    mask-image:radial-gradient(85% 72% at 50% 44%,rgba(0,0,0,.14) 0%,rgba(0,0,0,.42) 48%,#000 100%);
+    background-size:420px 420px,260px 260px,190px 190px;
+    background:
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='420' height='420'%3E%3Cfilter id='d1'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.08' numOctaves='2' seed='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='matrix' values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 20 -17'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23d1)'/%3E%3C/svg%3E"),
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='260' height='260'%3E%3Cfilter id='d2'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.35' numOctaves='2' seed='19' stitchTiles='stitch'/%3E%3CfeColorMatrix type='matrix' values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 22 -19'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23d2)'/%3E%3C/svg%3E"),
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='190' height='190'%3E%3Cfilter id='gg'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.72' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='matrix' values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0.5 0.5 0.5 0 -0.66'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23gg)'/%3E%3C/svg%3E")}
+  /* real grunge scan texture overlay (screen blend — only light scratches/blotches show) */
+  .tex{position:absolute;inset:0;z-index:-1;pointer-events:none;mix-blend-mode:screen;
+    opacity:.08;background:url("assets/tex/grunge.jpg") top center/100% auto repeat-y}
+
+  /* ===== LIGHT (white) theme ===== */
+  [data-theme="light"]{
+    --paper:#ffffff;
+    --tx:#16150f;
+    --tx2:#6d6a62;
+    --red:#501518;          /* deep burgundy on white */
+  }
+  [data-theme="light"] body::before{
+    mix-blend-mode:multiply;
+    background:
+      radial-gradient(112% 1450px at 50% 0%,rgba(0,0,0,.055) 0%,rgba(0,0,0,.02) 40%,transparent 70%),
+      radial-gradient(100% 1570px at 100% 100%,rgba(0,0,0,.05) 0%,transparent 66%),
+      radial-gradient(100% 1570px at 0% 100%,rgba(0,0,0,.05) 0%,transparent 66%);
+  }
+  [data-theme="light"] body::after{filter:invert(1);mix-blend-mode:multiply;opacity:.30}
+  [data-theme="light"] .tex{mix-blend-mode:multiply;filter:invert(1);opacity:.06}
+
+  /* 16:9 sheet, scales to fit either dimension; cqw = 1% of sheet width */
+  .sheet{
+    width:100%;
+    min-height:100dvh;
+    background:transparent;
+    position:relative;
+    container-type:inline-size;
+    display:flex;flex-direction:column;
+    padding:clamp(16px,2.2vw,42px) var(--pad);
+  }
+
+  /* top brand label */
+  .sh__nav{
+    display:flex;gap:clamp(14px,1.8vw,35px);
+    font-family:var(--mono);
+    font-size:0.82cqw;font-weight:700;letter-spacing:0.12em;
+    text-transform:uppercase;
+    position:relative;z-index:1;
+  }
+  .sh__nav a{color:var(--tx);text-decoration:none;transition:color .3s ease}
+  .sh__nav a:hover,.sh__nav a.active{color:var(--red)}
+
+  /* main = left column (title + toc) / right grid */
+  .sh__main{flex:1;display:flex;padding-top:2.1cqw;min-height:0;position:relative;z-index:1}
+
+  .sh__left{flex:1 1 auto;display:flex;flex-direction:column}
+  .sh__title{
+    font-family:var(--sans);font-weight:800;
+    font-size:4.6cqw;letter-spacing:-.03em;line-height:.8;
+    text-transform:uppercase;margin-left:-0.03em;
+    color:var(--red);                 /* dark(흑): burgundy */
+  }
+  [data-theme="light"] .sh__title{color:var(--tx)}   /* light(백): black */
+  .toc{margin-top:3.0cqw;display:grid;
+    grid-template-columns:3.4cqw auto;
+    row-gap:1.5cqw;
+    font-size:0.86cqw;letter-spacing:0.02em;color:var(--tx2)}
+  .toc .n{color:var(--red);font-family:var(--mono);padding-top:0.14cqw}
+  .toc b{font-weight:800;color:var(--tx);letter-spacing:0.04em;
+    text-transform:uppercase;font-size:1.02cqw}
+  .toc i{font-style:normal;color:var(--red);font-family:var(--mono);
+    font-size:0.62cqw;letter-spacing:0.1em;text-transform:uppercase;
+    margin-left:0.5cqw;vertical-align:0.12em}
+  .toc em{display:block;font-style:normal;color:var(--tx2);
+    margin-top:0.32cqw;font-size:0.8cqw;letter-spacing:0.01em}
+
+  /* right 3x3 grid (landscape 3:2 cells) */
+  .sh__grid{flex:0 0 auto;width:54cqw;margin-left:auto;margin-right:0;
+    position:relative;
+    display:grid;grid-template-columns:repeat(3,16.6cqw);
+    justify-content:space-between;row-gap:3.4cqw;align-content:space-between}
+  .cell{display:flex;flex-direction:column}
+  .cell img{width:100%;aspect-ratio:3/2;object-fit:cover;display:block;
+    background:#2a2a2a}
+  .cell figcaption{margin-top:0.66cqw;font-size:0.6cqw;
+    letter-spacing:0.14em;color:var(--tx2)}
+
+  /* footer */
+  .sh__foot{display:flex;justify-content:space-between;align-items:flex-end;
+    font-family:var(--mono);font-size:0.6cqw;letter-spacing:0.08em;
+    color:var(--tx2);text-transform:uppercase;line-height:1.5;position:relative;z-index:1}
+  .sh__foot .foot__right{flex:0 0 auto;width:54cqw;display:flex;
+    justify-content:space-between;align-items:flex-end}
+  .sh__foot .mid{display:flex;gap:2.4cqw}
+  .sh__foot .col span{display:block}
+  .sh__foot .col span:first-child{color:var(--red)}   /* [SS.01] code -> burgundy */
+  .sh__foot .right{margin-right:0;text-align:right}
+
+  /* clickable cells */
+  .cell{cursor:pointer}
+  .cell img{transition:filter .25s ease}
+  .cell:hover img{filter:brightness(1.06)}
+
+  /* ===== in-grid lightbox — fills only the right-half grid area ===== */
+  /* background = page paper colour, so body::before/after effects sit on top
+     and it matches the page exactly in both 흑 / 백 themes */
+  .gb{position:absolute;inset:0;z-index:20;display:none;
+    flex-direction:column;align-items:center;justify-content:center;
+    gap:1.3cqw;background:transparent;cursor:pointer}
+  .gb.open{display:flex}
+  /* hide the 9 thumbnails while open so the real page background (paper +
+     grunge tex + gradient + grain) shows through unchanged — no seam */
+  .sh__grid.lb-open .cell{visibility:hidden}
+  .gb__img{max-width:100%;max-height:80%;width:auto;height:auto;
+    object-fit:contain;display:block}
+  .gb__cap{font-family:var(--mono);color:var(--tx2);
+    font-size:0.72cqw;letter-spacing:0.14em;text-transform:uppercase;text-align:center}
+  .gb__close{position:absolute;top:-0.4cqw;right:-0.4cqw;
+    font-family:var(--mono);font-size:1.5cqw;line-height:1;
+    color:var(--tx);opacity:.55;background:none;border:0;cursor:pointer;
+    padding:0.4cqw 0.55cqw;transition:opacity .2s ease}
+  .gb__close:hover{opacity:1}
+
+  /* ===== black/white theme toggle (POSITIVE / NEGATIVE) — fixed top-right ===== */
+  .theme-tog{position:fixed;top:clamp(15px,2.1vw,40px);right:var(--pad);z-index:10000;
+    background:none;border:0;padding:0;cursor:pointer;user-select:none;
+    display:flex;gap:0.55em;align-items:center;
+    font-family:var(--mono);font-size:clamp(10px,0.8vw,13px);
+    font-weight:700;letter-spacing:0.12em;text-transform:uppercase}
+  .theme-tog .opt{color:var(--tx2);transition:color .3s ease;
+    border-bottom:1.5px solid transparent;padding-bottom:2px;line-height:1}
+  .theme-tog .opt.on{color:var(--red);border-bottom-color:var(--red)}
+  .theme-tog .sep{color:var(--tx2);opacity:.5;font-weight:400}
+</style>
+</head>
+<body>
+  <div class="tex" aria-hidden="true"></div>
+
+  <button class="theme-tog" id="themeTog" aria-label="Toggle positive / negative theme">
+    <span class="opt" data-v="light">POSITIVE</span>
+    <span class="sep">/</span>
+    <span class="opt" data-v="dark">NEGATIVE</span>
+  </button>
+
+  <section class="sheet">
+    <nav class="sh__nav">
+      <a href="index.html">HOME</a>
+      <a href="projects.html" class="active">PROJECTS</a>
+      <a href="about.html">ABOUT</a>
+      <a href="cv.html">CV</a>
+      <a href="contact.html">CONTACT</a>
+    </nav>
+
+    <div class="sh__main">
+      <div class="sh__left">
+        <h1 class="sh__title">BRANDING</h1>
+        <div class="toc">
+          <span class="n">1.1</span><span><b>JANOUBI</b> <i>Interior Showroom</i><em>Logo design &amp; brand direction — showroom identity</em></span>
+          <span class="n">1.2</span><span><b>CHADOL</b> <i>Global Interim Management</i><em>Logo design &amp; web UI/UX</em></span>
+          <span class="n">1.3</span><span><b>HAPPY HOUR</b> <i>Bar</i><em>Marketing copy concept &amp; design — Cheongdam</em></span>
+          <span class="n">1.4</span><span><b>SHABBYMARE</b> <i>Photo Studio</i><em>Logo design</em></span>
+          <span class="n">1.5</span><span><b>LUPIN</b> <i>Bar</i><em>Cocktail menu naming &amp; copywriting / design</em></span>
+          <span class="n">1.6</span><span><b>MORF</b> <i>Content Studio</i><em>Website, logo &amp; concept design</em></span>
+          <span class="n">1.7</span><span><b>PANACELL</b> <i>Biotech</i><em>Brand identity &amp; packaging</em></span>
+          <span class="n">1.8</span><span><b>AALAB</b> <i>Beauty Clinic</i><em>Website marketing pop-up design</em></span>
+          <span class="n">1.9</span><span><b>IKOVOX</b> <i>Coffee House</i><em>Store banner design &amp; concept</em></span>
+        </div>
+      </div>
+
+      <div class="sh__grid">
+        <figure class="cell"><img src="assets/branding/b4.jpg" alt=""><figcaption>1.1 &nbsp;JANOUBI</figcaption></figure>
+        <figure class="cell"><img src="assets/branding/b2.jpg" alt=""><figcaption>1.2 &nbsp;CHADOL</figcaption></figure>
+        <figure class="cell"><img src="assets/branding/b3.jpg" alt=""><figcaption>1.3 &nbsp;HAPPY HOUR</figcaption></figure>
+        <figure class="cell"><img src="assets/branding/b9.jpg" alt=""><figcaption>1.4 &nbsp;SHABBYMARE</figcaption></figure>
+        <figure class="cell"><img src="assets/branding/b6.jpg" alt=""><figcaption>1.5 &nbsp;LUPIN</figcaption></figure>
+        <figure class="cell"><img src="assets/branding/contact.jpg" alt=""><figcaption>1.6 &nbsp;MORF</figcaption></figure>
+        <figure class="cell"><img src="assets/branding/b8.jpg" alt=""><figcaption>1.7 &nbsp;PANACELL</figcaption></figure>
+        <figure class="cell"><img src="assets/branding/aalab.jpg" alt=""><figcaption>1.8 &nbsp;AALAB</figcaption></figure>
+        <figure class="cell"><img src="assets/branding/b1.jpg" alt=""><figcaption>1.9 &nbsp;IKOVOX</figcaption></figure>
+
+        <div class="gb" id="gb" aria-hidden="true">
+          <button class="gb__close" id="gbClose" aria-label="Close">&times;</button>
+          <img class="gb__img" id="gbImg" src="" alt="">
+          <figcaption class="gb__cap" id="gbCap"></figcaption>
+        </div>
+      </div>
+    </div>
+
+    <div class="sh__foot">
+      <div class="col left">
+        <span>[LA.01]</span>
+        <span>Dongwoo Kim — L'ARCHIVE</span>
+      </div>
+      <div class="foot__right">
+        <div class="mid">
+          <span>01</span>
+          <span>09</span>
+        </div>
+        <div class="col right">
+          <span>[BR.09]</span>
+          <span>Branding &amp; Identity</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+<script>
+(function(){
+  var root=document.documentElement, tog=document.getElementById('themeTog');
+  function render(){
+    var light=root.getAttribute('data-theme')==='light';
+    tog.querySelectorAll('.opt').forEach(function(o){
+      o.classList.toggle('on', o.getAttribute('data-v')===(light?'light':'dark'));
+    });
+  }
+  render();
+  tog.addEventListener('click',function(){
+    if(root.getAttribute('data-theme')==='light'){
+      root.removeAttribute('data-theme'); localStorage.setItem('larchive-theme','dark');
+    }else{
+      root.setAttribute('data-theme','light'); localStorage.setItem('larchive-theme','light');
+    }
+    render();
+  });
+})();
+(function(){
+  var gb=document.getElementById('gb'),
+      gbImg=document.getElementById('gbImg'),
+      gbCap=document.getElementById('gbCap'),
+      gbClose=document.getElementById('gbClose'),
+      grid=gb.parentNode;
+  function open(src,cap){
+    gbImg.src=src; gbCap.textContent=cap;
+    gb.classList.add('open'); gb.setAttribute('aria-hidden','false');
+    grid.classList.add('lb-open');
+  }
+  function close(){
+    gb.classList.remove('open'); gb.setAttribute('aria-hidden','true');
+    grid.classList.remove('lb-open');
+    gbImg.src='';
+  }
+  document.addEventListener('click',function(e){
+    // while open, a click anywhere (photo, close button, or elsewhere) closes it
+    if(gb.classList.contains('open')){ close(); return; }
+    // while closed, only a thumbnail opens it
+    var cell=e.target.closest('.cell');
+    if(cell){
+      var img=cell.querySelector('img');
+      var cap=cell.querySelector('figcaption');
+      open(img.currentSrc||img.src, cap?cap.textContent.trim():'');
+    }
+  });
+  document.addEventListener('keydown',function(e){
+    if(e.key==='Escape'&&gb.classList.contains('open')) close();
+  });
+})();
+</script>
+</body>
+</html>

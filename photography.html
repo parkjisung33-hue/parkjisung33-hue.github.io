@@ -1,0 +1,296 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>L'ARCHIVE — Photography</title>
+<script>(function(){var s=localStorage.getItem('larchive-theme');if(s==='dark')document.documentElement.removeAttribute('data-theme');else if(s==='light')document.documentElement.setAttribute('data-theme','light');})();</script>
+<style>
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  :root{
+    /* ===== DARK ("흑") — base ===== */
+    --paper:#0d0d0d;
+    --tx:#f0efe9;
+    --tx2:#8f8b81;
+    --red:#7a2226;
+    --pad:clamp(16px,3vw,58px);
+    --sans:"Helvetica Neue",Helvetica,Arial,sans-serif;
+    --mono:"SF Mono",ui-monospace,"Cascadia Mono","Courier New",monospace;
+  }
+  html,body{height:100%}
+  body{
+    background:var(--paper);color:var(--tx);font-family:var(--sans);
+    -webkit-font-smoothing:antialiased;position:relative;
+    min-height:100dvh;overflow-x:hidden;
+  }
+
+  /* ===== global gradient + grain overlay ===== */
+  body::before{content:"";position:fixed;inset:0;z-index:9998;pointer-events:none;mix-blend-mode:screen;
+    background:
+      radial-gradient(112% 1450px at 50% 0%,rgba(255,255,255,.11) 0%,rgba(255,255,255,.042) 36%,rgba(255,255,255,.012) 55%,transparent 73%),
+      radial-gradient(74% 1270px at 0% 0%,rgba(255,255,255,.10) 0%,rgba(255,255,255,.03) 42%,transparent 71%),
+      radial-gradient(74% 1270px at 100% 0%,rgba(255,255,255,.08) 0%,rgba(255,255,255,.026) 42%,transparent 71%),
+      radial-gradient(100% 1570px at 100% 100%,rgba(255,255,255,.07) 0%,rgba(255,255,255,.02) 45%,transparent 72%),
+      radial-gradient(100% 1570px at 0% 100%,rgba(255,255,255,.07) 0%,rgba(255,255,255,.02) 45%,transparent 72%)}
+  body::after{content:"";position:fixed;inset:0;z-index:9999;pointer-events:none;opacity:.45;
+    -webkit-mask-image:radial-gradient(85% 72% at 50% 44%,rgba(0,0,0,.14) 0%,rgba(0,0,0,.42) 48%,#000 100%);
+    mask-image:radial-gradient(85% 72% at 50% 44%,rgba(0,0,0,.14) 0%,rgba(0,0,0,.42) 48%,#000 100%);
+    background-size:420px 420px,260px 260px,190px 190px;
+    background:
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='420' height='420'%3E%3Cfilter id='d1'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.08' numOctaves='2' seed='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='matrix' values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 20 -17'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23d1)'/%3E%3C/svg%3E"),
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='260' height='260'%3E%3Cfilter id='d2'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.35' numOctaves='2' seed='19' stitchTiles='stitch'/%3E%3CfeColorMatrix type='matrix' values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 22 -19'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23d2)'/%3E%3C/svg%3E"),
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='190' height='190'%3E%3Cfilter id='gg'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.72' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='matrix' values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0.5 0.5 0.5 0 -0.66'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23gg)'/%3E%3C/svg%3E")}
+  .tex{position:fixed;inset:0;z-index:-1;pointer-events:none;mix-blend-mode:screen;
+    opacity:.08;background:url("assets/tex/grunge.jpg") top center/100% auto repeat-y}
+
+  /* ===== LIGHT (white) theme ===== */
+  [data-theme="light"]{
+    --paper:#ffffff;
+    --tx:#16150f;
+    --tx2:#6d6a62;
+    --red:#501518;
+  }
+  [data-theme="light"] body::before{
+    mix-blend-mode:multiply;
+    background:
+      radial-gradient(112% 1450px at 50% 0%,rgba(0,0,0,.055) 0%,rgba(0,0,0,.02) 40%,transparent 70%),
+      radial-gradient(100% 1570px at 100% 100%,rgba(0,0,0,.05) 0%,transparent 66%),
+      radial-gradient(100% 1570px at 0% 100%,rgba(0,0,0,.05) 0%,transparent 66%);
+  }
+  [data-theme="light"] body::after{filter:invert(1);mix-blend-mode:multiply;opacity:.30}
+  [data-theme="light"] .tex{mix-blend-mode:multiply;filter:invert(1);opacity:.06}
+
+  /* ===== sheet (full width, cqw scales to viewport width) ===== */
+  .sheet{
+    width:100%;
+    background:transparent;
+    position:relative;
+    container-type:inline-size;
+    display:flex;flex-direction:column;
+    padding:clamp(16px,2.2vw,42px) var(--pad) clamp(24px,3vw,58px);
+  }
+
+  /* top nav menu */
+  .sh__nav{
+    display:flex;gap:clamp(14px,1.8vw,35px);
+    font-family:var(--mono);
+    font-size:0.82cqw;font-weight:700;letter-spacing:0.12em;
+    text-transform:uppercase;
+    position:relative;z-index:1;
+  }
+  .sh__nav a{color:var(--tx);text-decoration:none;transition:color .3s ease}
+  .sh__nav a:hover,.sh__nav a.active{color:var(--red)}
+
+  /* ===== intro header: left text blocks + top-right code ===== */
+  .ph__head{display:flex;justify-content:space-between;align-items:flex-start;
+    padding-top:4.4cqw;position:relative;z-index:1}
+  .ph__intro{max-width:34cqw}
+  .ph__intro p{font-family:var(--mono);font-size:1.02cqw;line-height:1.6;letter-spacing:0.01em;color:var(--tx)}
+  .ph__intro p+p{margin-top:1.4cqw}
+  .ph__intro .lead{color:var(--red)}
+  .ph__code{font-family:var(--mono);font-size:0.82cqw;letter-spacing:0.12em;
+    text-transform:uppercase;color:var(--tx);text-align:right;white-space:nowrap}
+  .ph__code b{color:var(--red);font-weight:700}
+
+  /* ===== 6-column image grid ===== */
+  .ph__grid{margin-top:10cqw;position:relative;z-index:1;
+    display:grid;grid-template-columns:repeat(4,1fr);
+    column-gap:1.15cqw;row-gap:1.15cqw}
+  .ph__cell{aspect-ratio:1;overflow:hidden;cursor:pointer}
+  .ph__cell img{width:100%;height:100%;object-fit:cover;object-position:center 40%;display:block;
+    transition:filter .3s ease,transform .4s ease}
+  .ph__cell:hover img{filter:brightness(1.05);transform:scale(1.04)}
+
+  /* ===== lightbox — click to enlarge, hide the rest (same behaviour as BRANDING) ===== */
+  .ph__lb{position:fixed;inset:0;z-index:5000;display:none;
+    align-items:center;justify-content:center;cursor:pointer;
+    padding:clamp(24px,5vw,90px)}
+  .ph__lb.open{display:flex}
+  .ph__lb img{max-width:100%;max-height:100%;width:auto;height:auto;
+    object-fit:contain;display:block}
+  .ph__lb .lb__close{position:fixed;top:clamp(15px,2.1vw,40px);left:var(--pad);
+    font-family:var(--mono);font-size:clamp(10px,0.8vw,13px);letter-spacing:0.12em;
+    color:var(--tx);opacity:.55;background:none;border:0;cursor:pointer;
+    text-transform:uppercase;transition:opacity .2s ease}
+  .ph__lb .lb__close:hover{opacity:1}
+  body.lb-open .sheet,body.lb-open .theme-tog{visibility:hidden}
+
+  /* ===== footer ===== */
+  .ph__foot{display:flex;justify-content:space-between;align-items:flex-end;
+    margin-top:6cqw;font-family:var(--mono);font-size:0.6cqw;letter-spacing:0.08em;
+    color:var(--tx2);text-transform:uppercase;line-height:1.5;position:relative;z-index:1}
+  .ph__foot .foot__right{flex:0 0 auto;display:flex;gap:6cqw;align-items:flex-end}
+  .ph__foot .col span{display:block}
+  .ph__foot .col span:first-child{color:var(--red)}
+  .ph__foot .right{text-align:right}
+
+  /* ===== theme toggle (POSITIVE / NEGATIVE) — fixed top-right ===== */
+  .theme-tog{position:fixed;top:clamp(15px,2.1vw,40px);right:var(--pad);z-index:10000;
+    background:none;border:0;padding:0;cursor:pointer;user-select:none;
+    display:flex;gap:0.55em;align-items:center;
+    font-family:var(--mono);font-size:clamp(10px,0.8vw,13px);
+    font-weight:700;letter-spacing:0.12em;text-transform:uppercase}
+  .theme-tog .opt{color:var(--tx2);transition:color .3s ease;
+    border-bottom:1.5px solid transparent;padding-bottom:2px;line-height:1}
+  .theme-tog .opt.on{color:var(--red);border-bottom-color:var(--red)}
+  .theme-tog .sep{color:var(--tx2);opacity:.5;font-weight:400}
+
+  @media(max-width:900px){
+    .sh__nav{font-size:11px}
+    .ph__intro{max-width:60cqw}
+    .ph__intro p{font-size:2.4cqw}
+    .ph__code{font-size:1.6cqw}
+    .ph__grid{grid-template-columns:repeat(2,1fr)}
+    .ph__foot{font-size:1.4cqw}
+  }
+</style>
+</head>
+<body>
+  <div class="tex" aria-hidden="true"></div>
+
+  <button class="theme-tog" id="themeTog" aria-label="Toggle positive / negative theme">
+    <span class="opt" data-v="light">POSITIVE</span>
+    <span class="sep">/</span>
+    <span class="opt" data-v="dark">NEGATIVE</span>
+  </button>
+
+  <section class="sheet">
+    <nav class="sh__nav">
+      <a href="index.html">HOME</a>
+      <a href="projects.html" class="active">PROJECTS</a>
+      <a href="about.html">ABOUT</a>
+      <a href="cv.html">CV</a>
+      <a href="contact.html">CONTACT</a>
+    </nav>
+
+    <div class="ph__head">
+      <div class="ph__intro">
+        <p><span class="lead">Every frame here began with a single source of light</span> and someone who trusted where it fell — portraits, spaces, and the small objects that hold a room together.</p>
+        <p>This isn't a highlight reel. It's the archive itself: commissioned work, personal shots, and the frames that earned a second look.</p>
+      </div>
+    </div>
+
+    <div class="ph__grid">
+      <figure class="ph__cell"><img src="assets/photography/DSC00557.jpg" alt="" loading="lazy"></figure>
+      <figure class="ph__cell"><img src="assets/carousel/csl01.jpg" alt="" loading="lazy"></figure>
+      <figure class="ph__cell"><img src="assets/photography/DSC07180.jpg" alt="" loading="lazy"></figure>
+      <figure class="ph__cell"><img src="assets/photography/DSCF2545.jpg" alt="" loading="lazy"></figure>
+      <figure class="ph__cell"><img src="assets/photography/DSCF3615.jpg" alt="" loading="lazy"></figure>
+      <figure class="ph__cell"><img src="assets/photography/DSC07803.jpg" alt="" loading="lazy"></figure>
+      <figure class="ph__cell"><img src="assets/photography/DSCF2085.jpg" alt="" loading="lazy"></figure>
+      <figure class="ph__cell"><img src="assets/photography/DSC06876.jpg" alt="" loading="lazy"></figure>
+      <figure class="ph__cell"><img src="assets/photography/DSCF3146.jpg" alt="" loading="lazy"></figure>
+      <figure class="ph__cell"><img src="assets/photography/DSCF2318.jpg" alt="" loading="lazy"></figure>
+      <figure class="ph__cell"><img src="assets/photography/Eli-SHABBY-4.jpg" alt="" loading="lazy" style="object-position:22% 40%"></figure>
+      <figure class="ph__cell"><img src="assets/photography/DSCF1680.jpg" alt="" loading="lazy"></figure>
+      <figure class="ph__cell"><img src="assets/photography/DSCF4109.jpg" alt="" loading="lazy"></figure>
+      <figure class="ph__cell"><img src="assets/photography/DSC06180.jpg" alt="" loading="lazy"></figure>
+      <figure class="ph__cell"><img src="assets/photography/DSCF6363.jpg" alt="" loading="lazy"></figure>
+      <figure class="ph__cell"><img src="assets/photography/DSCF4505.jpg" alt="" loading="lazy"></figure>
+      <figure class="ph__cell"><img src="assets/photography/DSC06630.jpg" alt="" loading="lazy" style="object-position:center 62%"></figure>
+      <figure class="ph__cell"><img src="assets/carousel/csl04.jpg" alt="" loading="lazy"></figure>
+      <figure class="ph__cell"><img src="assets/carousel/csl02.jpg" alt="" loading="lazy"></figure>
+      <figure class="ph__cell"><img src="assets/photography/DSCF2438.jpg" alt="" loading="lazy"></figure>
+      <figure class="ph__cell"><img src="assets/top/top10.jpg" alt="" loading="lazy"></figure>
+      <figure class="ph__cell"><img src="assets/carousel/csl05.jpg" alt="" loading="lazy"></figure>
+      <figure class="ph__cell"><img src="assets/carousel/csl03.jpg" alt="" loading="lazy" style="object-position:center 58%"></figure>
+      <figure class="ph__cell"><img src="assets/photography/DSC07593.jpg" alt="" loading="lazy"></figure>
+      <figure class="ph__cell"><img src="assets/photography/DSCF1612.jpg" alt="" loading="lazy"></figure>
+      <figure class="ph__cell"><img src="assets/carousel/csl08.jpg" alt="" loading="lazy" style="object-position:center 100%"></figure>
+      <figure class="ph__cell"><img src="assets/photography/DSC09986.jpg" alt="" loading="lazy"></figure>
+      <figure class="ph__cell"><img src="assets/photography/DSCF7625.jpg" alt="" loading="lazy"></figure>
+      <figure class="ph__cell"><img src="assets/carousel/csl09.jpg" alt="" loading="lazy" style="object-position:center 6%"></figure>
+      <figure class="ph__cell"><img src="assets/photography/DSC06021.jpg" alt="" loading="lazy"></figure>
+      <figure class="ph__cell"><img src="assets/photography/DSCF6453.jpg" alt="" loading="lazy"></figure>
+      <figure class="ph__cell"><img src="assets/photography/DSCF7388.jpg" alt="" loading="lazy"></figure>
+      <figure class="ph__cell"><img src="assets/photography/HW-9.jpg" alt="" loading="lazy"></figure>
+      <figure class="ph__cell"><img src="assets/photography/DSCF5880.jpg" alt="" loading="lazy"></figure>
+      <figure class="ph__cell"><img src="assets/photography/DSCF5920.jpg" alt="" loading="lazy"></figure>
+      <figure class="ph__cell"><img src="assets/carousel/csl10.jpg" alt="" loading="lazy"></figure>
+      <figure class="ph__cell"><img src="assets/photography/DSC08881.jpg" alt="" loading="lazy"></figure>
+      <figure class="ph__cell"><img src="assets/photography/DSCF2657.jpg" alt="" loading="lazy"></figure>
+      <figure class="ph__cell"><img src="assets/carousel/csl11.jpg" alt="" loading="lazy" style="object-position:center top"></figure>
+      <figure class="ph__cell"><img src="assets/carousel/csl07.jpg" alt="" loading="lazy"></figure>
+      <figure class="ph__cell"><img src="assets/photography/DSCF3346.jpg" alt="" loading="lazy"></figure>
+      <figure class="ph__cell"><img src="assets/photography/DSCF1578.jpg" alt="" loading="lazy"></figure>
+      <figure class="ph__cell"><img src="assets/photography/ROOMING-3.jpg" alt="" loading="lazy"></figure>
+      <figure class="ph__cell"><img src="assets/photography/DSCF1707.jpg" alt="" loading="lazy"></figure>
+      <figure class="ph__cell"><img src="assets/photography/DSCF5964.jpg" alt="" loading="lazy"></figure>
+      <figure class="ph__cell"><img src="assets/photography/DSCF7727.jpg" alt="" loading="lazy"></figure>
+      <figure class="ph__cell"><img src="assets/photography/DWK01658.jpg" alt="" loading="lazy"></figure>
+      <figure class="ph__cell"><img src="assets/photography/SC_FIN_3.jpg" alt="" loading="lazy"></figure>
+      <figure class="ph__cell"><img src="assets/photography/DSCF9527.jpg" alt="" loading="lazy"></figure>
+      <figure class="ph__cell"><img src="assets/photography/DSC08541.jpg" alt="" loading="lazy" style="object-position:center 66%"></figure>
+      <figure class="ph__cell"><img src="assets/top/top11.jpg" alt="" loading="lazy"></figure>
+      <figure class="ph__cell"><img src="assets/photography/NamCat-3.jpg" alt="" loading="lazy"></figure>
+    </div>
+
+    <div class="ph__foot">
+      <div class="col left">
+        <span>[LA.01]</span>
+        <span>Dongwoo Kim — L'ARCHIVE</span>
+      </div>
+      <div class="foot__right">
+        <div class="mid">
+          <span>52</span>
+          <span>Frames</span>
+        </div>
+        <div class="col right">
+          <span>[PH.09]</span>
+          <span>Photography &amp; Image</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="ph__lb" id="phLb" aria-hidden="true">
+    <button class="lb__close" id="phLbClose" aria-label="Close">&times; Close</button>
+    <img id="phLbImg" alt="">
+  </div>
+
+<script>
+(function(){
+  var root=document.documentElement, tog=document.getElementById('themeTog');
+  function render(){
+    var light=root.getAttribute('data-theme')==='light';
+    tog.querySelectorAll('.opt').forEach(function(o){
+      o.classList.toggle('on', o.getAttribute('data-v')===(light?'light':'dark'));
+    });
+  }
+  render();
+  tog.addEventListener('click',function(){
+    if(root.getAttribute('data-theme')==='light'){
+      root.removeAttribute('data-theme'); localStorage.setItem('larchive-theme','dark');
+    }else{
+      root.setAttribute('data-theme','light'); localStorage.setItem('larchive-theme','light');
+    }
+    render();
+  });
+})();
+(function(){
+  var grid=document.querySelector('.ph__grid'),
+      lb=document.getElementById('phLb'),
+      lbImg=document.getElementById('phLbImg');
+  function open(src){
+    lbImg.src=src;
+    lb.classList.add('open'); lb.setAttribute('aria-hidden','false');
+    document.body.classList.add('lb-open');
+  }
+  function close(){
+    lb.classList.remove('open'); lb.setAttribute('aria-hidden','true');
+    document.body.classList.remove('lb-open');
+    lbImg.removeAttribute('src');
+  }
+  grid.addEventListener('click',function(e){
+    var cell=e.target.closest('.ph__cell'); if(!cell) return;
+    var img=cell.querySelector('img'); if(!img) return;
+    open(img.currentSrc||img.src);
+  });
+  lb.addEventListener('click', close);
+  document.addEventListener('keydown',function(e){
+    if(e.key==='Escape'&&lb.classList.contains('open')) close();
+  });
+})();
+</script>
+</body>
+</html>
