@@ -1,4 +1,5 @@
 User-agent: *
 Allow: /
+Disallow: /gaboja/
 
 Sitemap: https://larchive.page/sitemap.xml
