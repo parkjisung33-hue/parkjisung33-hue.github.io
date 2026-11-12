@@ -56,6 +56,16 @@ body { margin: 0; word-break: keep-all; overflow-wrap: anywhere; background: var
 body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 10; background: var(--canvas); }
 button { font: inherit; color: inherit; background: none; border: 0; padding: 0; cursor: pointer; letter-spacing: inherit; text-align: inherit; }
 button:focus-visible, a:focus-visible, input:focus-visible { outline: 2px solid var(--blue); outline-offset: 2px; }
+[tabindex="-1"]:focus, [tabindex="-1"]:focus-visible { outline: none; }
+/* 2. 비행기 편 입력 (가는 편·오는 편 × 편명·출발·도착) */
+.flbox { display: flex; flex-direction: column; gap: 0.875rem; animation: drop .22s cubic-bezier(.2,.8,.2,1); }
+.flr { display: flex; flex-direction: column; gap: 0.4375rem; }
+.flr .fll { font-size: 0.75rem; font-weight: 700; color: var(--sub); }
+.flr .tms { display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; }
+.flr .tms label { display: flex; flex-direction: column; gap: 0.25rem; font-size: 0.6875rem; color: var(--sub); }
+.flr .in.tm { height: 2.875rem; padding: 0 0.75rem; }
+.flr .in.fno { text-transform: uppercase; }
+.flr .in.fno::placeholder { text-transform: none; }
 a { color: inherit; }
 [hidden] { display: none !important; }
 .glass { background: var(--glass); -webkit-backdrop-filter: blur(1.25rem) saturate(1.5); backdrop-filter: blur(1.25rem) saturate(1.5);
@@ -456,6 +466,7 @@ let dir = 1;
 
 let NAV = 0; const SCROLL = {};
 function later(fn, ms) { const tok = NAV; return setTimeout(() => { if (tok === NAV) fn(); }, ms); }
+const FROM_APP = new URLSearchParams(location.search).get('from') === 'app';
 function go(step, opt = {}) {
   if (!opt.noHist && S.step !== step) S.hist.push(S.step);
   SCROLL[S.step] = window.scrollY; NAV++; busy = false; clearInterval(spinT);
@@ -467,14 +478,14 @@ function back() {
   if (rxOpen()) { NAV++; closeRx(); busy = false; dir = -1; render(); return; } // 반응 시트 닫고 같은 질문 다시 고르기
   if (busy) return; // 고르는 순간엔 뒤로 안 감
   if (S.step === 'view') clearHash();
-  const p = S.hist.pop(); if (!p) { go('intro', { noHist: true, back: true }); return; }
+  const p = S.hist.pop(); if (!p) { if (FROM_APP) { location.href = 'index.html'; return; } go('intro', { noHist: true, back: true }); return; }
   if (p === 'view') S.view = S.viewStack.pop() || S.type; // 유형 → 다른 유형 → 뒤로 = 처음 유형
   go(p, { noHist: true, back: true });
 }
 function clearHash() { if (location.hash) { try { history.replaceState(null, '', location.pathname + location.search); } catch (_) { location.hash = ''; } } }
 
 function setBar(kind, n, total, right) {
-  const bb = $('#backBtn'); bb.disabled = false; bb.setAttribute('aria-label', S.step === 'intro' ? '가보자 앱으로' : '뒤로');
+  const bb = $('#backBtn'); bb.disabled = false; bb.setAttribute('aria-label', S.step === 'intro' || (FROM_APP && !S.hist.length) ? '내 일정으로' : '뒤로');
   const p = $('#prog'); if (p.dataset.k !== String(kind)) { p.innerHTML = ''; p.dataset.k = kind; } p.className = 'prog' + (kind === 'info' ? ' blue' : '');
   if (!kind) p.innerHTML = ''; else { if (p.children.length !== total) p.innerHTML = '<i></i>'.repeat(total); [...p.children].forEach((x, i) => x.classList.toggle('on', i < n)); }
   const r = $('#barR'); r.textContent = right ? right.t : ''; r.hidden = !right; r.className = 'barR' + (right && right.fn ? ' btn' : ''); r.tabIndex = right && right.fn ? 0 : -1; r.onclick = right && right.fn || null;
@@ -644,7 +655,8 @@ function rResult(c, mine) {
       <button id="allBtn2">${ICON.grid}16가지 유형</button>
     </div>
     <div class="foot">
-      <button class="cta" id="nextBtn">${mine ? '이 유형으로 내 여행 만들기' : (S.type ? '내 유형으로 여행 만들기' : '나도 해 보기')} ${ICON.arrow}</button>
+      ${FROM_APP && hasPlan() ? `<a class="cta" href="index.html" style="text-decoration:none">내 일정으로 돌아가기 ${ICON.arrow}</a><button class="ghost" id="nextBtn">${mine ? '이 유형으로 새 여행 만들기' : (S.type ? '내 유형으로 새 여행 만들기' : '나도 해 보기')}</button>`
+        : `<button class="cta" id="nextBtn">${mine ? '이 유형으로 내 여행 만들기' : (S.type ? '내 유형으로 여행 만들기' : '나도 해 보기')} ${ICON.arrow}</button>`}
     </div>`);
   el.querySelectorAll('.pair .mini').forEach(b => b.onclick = () => openType(b.dataset.code));
   $('#copyBtn').onclick = () => copyLink(c);
@@ -652,6 +664,7 @@ function rResult(c, mine) {
   $('#allBtn2').onclick = () => go('types');
   $('#nextBtn').onclick = () => { if (S.type) { clearHash(); go('method'); } else { S.ans = []; S.hist = ['intro']; clearHash(); go('q0', { noHist: true }); } };
 }
+function hasPlan() { try { return !!JSON.parse(localStorage.getItem('gaboja-plan')); } catch (_) { return false; } }
 function openType(c) { if (S.step === 'view') { S.viewStack.push(S.view); S.hist.push('view'); } S.view = c; go('view', { noHist: S.step === 'view' }); try { history.replaceState(null, '', '#r-' + c); } catch (_) {} }
 function copyLink(c) {
   const url0 = location.origin + location.pathname + '#r-' + c, t0 = T(c);
@@ -727,14 +740,18 @@ function rInfo(s) {
   if (s === 'book') {
     el = screen(head('예약', '예약한 게 있나요?', '정한 것만 알려 주세요. 없으면 그냥 넘어가요') + `
       <div class="blk"><div class="sub2">비행기</div><div class="seg" id="fSeg"><button data-f="no" aria-pressed="${tr.flight === 'no'}">아직 안 정했어요</button><button data-f="yes" aria-pressed="${tr.flight === 'yes'}">정했어요</button></div>
-        <input class="in" id="fIn" placeholder="편명 또는 ‘인천 09:00 → 간사이 10:50’" value="${esc(tr.flightTx || '')}" ${tr.flight === 'yes' ? '' : 'hidden'}></div>
+        <div class="flbox" id="fBox" ${tr.flight === 'yes' ? '' : 'hidden'}>${['fo', 'fb'].map(k => { const f = tr[k] || {}; return `<div class="flr"><span class="fll">${k === 'fo' ? '가는 편 · 인천 → 간사이' : '오는 편 · 간사이 → 인천'}</span>
+          <input class="in fno" data-fk="${k}" data-ff="no" placeholder="편명 (예: WE513)" value="${esc(f.no || '')}" autocomplete="off" autocapitalize="characters" maxlength="8" aria-label="${k === 'fo' ? '가는 편' : '오는 편'} 편명">
+          <div class="tms"><label>출발 시각<input class="in tm" type="time" data-fk="${k}" data-ff="dep" value="${esc(f.dep || '')}"></label><label>도착 시각<input class="in tm" type="time" data-fk="${k}" data-ff="arr" value="${esc(f.arr || '')}"></label></div></div>`; }).join('')}
+          <div class="note">${ICON.check}<span>시각은 예약 확인 메일이나 탑승권에 있어요. 모르는 칸은 비워 두면 보통 시각으로 짜고 ‘확인 필요’로 표시해요</span></div></div></div>
       <div class="blk"><div class="sub2">숙소</div><div class="seg" id="sSeg"><button data-s="no" aria-pressed="${tr.stay === 'no'}">아직</button><button data-s="area" aria-pressed="${tr.stay === 'area'}">동네만</button><button data-s="yes" aria-pressed="${tr.stay === 'yes'}">정했어요</button></div>
         <input class="in" id="sIn" value="${esc(tr.stayTx || '')}" ${tr.stay === 'no' ? 'hidden' : ''} placeholder="${tr.stay === 'area' ? '동네 이름 (예: 난바)' : '숙소 이름'}"></div>
       <div class="note">${ICON.check}<span>체크인 시각은 안 물어요. 숙소 이름으로 찾아 넣어요</span></div>
       <div class="foot"><button class="cta" id="bNext">다음</button></div>`);
-    $('#fSeg').onclick = e => { const b = e.target.closest('[data-f]'); if (!b) return; tr.flight = b.dataset.f; $('#fSeg').querySelectorAll('button').forEach(x => x.setAttribute('aria-pressed', x === b)); $('#fIn').hidden = tr.flight !== 'yes'; if (tr.flight === 'yes') $('#fIn').focus(); };
+    $('#fSeg').onclick = e => { const b = e.target.closest('[data-f]'); if (!b) return; tr.flight = b.dataset.f; $('#fSeg').querySelectorAll('button').forEach(x => x.setAttribute('aria-pressed', x === b)); $('#fBox').hidden = tr.flight !== 'yes'; if (tr.flight === 'yes') $('#fBox input').focus(); };
     $('#sSeg').onclick = e => { const b = e.target.closest('[data-s]'); if (!b) return; tr.stay = b.dataset.s; $('#sSeg').querySelectorAll('button').forEach(x => x.setAttribute('aria-pressed', x === b)); const i = $('#sIn'); i.hidden = tr.stay === 'no'; i.placeholder = tr.stay === 'area' ? '동네 이름 (예: 난바)' : '숙소 이름'; if (!i.hidden) i.focus(); };
-    $('#fIn').oninput = e => tr.flightTx = e.target.value; $('#sIn').oninput = e => tr.stayTx = e.target.value;
+    el.querySelectorAll('[data-fk]').forEach(i => i.oninput = () => { const k = i.dataset.fk; tr[k] = tr[k] || {}; tr[k][i.dataset.ff] = i.dataset.ff === 'no' ? i.value.toUpperCase().replace(/\s+/g, '') : i.value; tr.flightTx = flightText(tr); });
+    $('#sIn').oninput = e => tr.stayTx = e.target.value;
     $('#bNext').onclick = () => next(s);
   }
   if (s === 'send') {
@@ -771,6 +788,8 @@ function rInfo(s) {
     $('#lNext').onclick = () => next(s);
   }
 }
+// 비행기 편 → 시트에 남길 한 줄 ('가는 편 WE513 09:00→10:50 / 오는 편 …')
+function flightText(tr) { return ['fo', 'fb'].map(k => { const f = tr[k] || {}; if (!f.no && !f.dep && !f.arr) return ''; return (k === 'fo' ? '가는 편 ' : '오는 편 ') + [f.no, (f.dep || '?') + '→' + (f.arr || '?')].filter(Boolean).join(' '); }).filter(Boolean).join(' / '); }
 function next(s) { const i = INFO.indexOf(s); store.set('gaboja-trip', S.trip); go(i + 1 < INFO.length ? INFO[i + 1] : 'build'); }
 
 /* 달력 */
@@ -827,7 +846,7 @@ function buildPlan() {
   const tr = S.trip; PLANNED = null;
   if (tr.city !== '오사카·교토' || !window.GABOJA_GEN) return null;
   const d = n => n ? `${Math.floor(n / 10000)}-${String(Math.floor(n / 100) % 100).padStart(2, '0')}-${String(n % 100).padStart(2, '0')}` : null;
-  try { PLANNED = window.GABOJA_GEN.make({ type: S.type, start: d(tr.start), nights: tr.nights || 3, likes: tr.likes, avoid: tr.avoid, flightTx: tr.flight === 'yes' ? tr.flightTx : '', stayTx: tr.stay !== 'no' ? tr.stayTx : '', cityLabel: '오사카·교토' }); PLANNED.nick = (tr.nick || '').trim().slice(0, 12); store.set('gaboja-plan', PLANNED); } catch (e) { PLANNED = null; }
+  try { PLANNED = window.GABOJA_GEN.make({ type: S.type, start: d(tr.start), nights: tr.nights || 3, likes: tr.likes, avoid: tr.avoid, flightTx: tr.flight === 'yes' ? tr.flightTx : '', fo: tr.flight === 'yes' ? tr.fo : null, fb: tr.flight === 'yes' ? tr.fb : null, stayTx: tr.stay !== 'no' ? tr.stayTx : '', cityLabel: '오사카·교토' }); PLANNED.nick = (tr.nick || '').trim().slice(0, 12); store.set('gaboja-plan', PLANNED); } catch (e) { PLANNED = null; }
   return PLANNED;
 }
 function rBuild() {
@@ -900,8 +919,8 @@ $('#backBtn').onclick = () => { if (S.step === 'intro') location.href = 'index.h
 /* 주소 #r-LSRP = 그 유형 결과 바로 보기 · #types = 16가지 */
 function route() {
   const h = location.hash.slice(1);
-  if (/^r-[LH][SE][FR][JP]$/.test(h)) { const c = h.slice(2); if (S.step === 'view' && S.view === c) return; if (S.step === 'result' && S.type === c) return; S.view = c; S.hist = ['intro']; go('view', { noHist: true }); return; }
-  if (h === 'types') { S.hist = ['intro']; go('types', { noHist: true }); return; }
+  if (/^r-[LH][SE][FR][JP]$/.test(h)) { const c = h.slice(2); if (S.step === 'view' && S.view === c) return; if (S.step === 'result' && S.type === c) return; S.view = c; S.hist = FROM_APP && !S.booted ? [] : ['intro']; go('view', { noHist: true }); return; }
+  if (h === 'types') { S.hist = FROM_APP && !S.booted ? [] : ['intro']; go('types', { noHist: true }); return; }
   if (!h && (S.step === 'view' || S.step === 'result')) { back(); return; }
   if (!S.booted) render();
 }

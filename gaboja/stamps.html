@@ -1,0 +1,260 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="robots" content="noindex">
+<title>기록 스탬프 대안 6종</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<style>
+@font-face { font-family: "Pretendard Variable"; font-weight: 45 920; font-style: normal; font-display: swap;
+  src: local("Pretendard Variable"), url("fonts/PretendardVariable.woff2") format("woff2-variations"), url("fonts/PretendardVariable.woff2") format("woff2"); }
+:root {
+  color-scheme: light;
+  --canvas: #EEF0F3; --ink: #15171A; --sub: #6F757D; --hair: rgba(21,23,26,.09); --on-ink: #FFFFFF;
+  --glass: rgba(255,255,255,.62); --glass-hi: rgba(255,255,255,.94); --glass-edge: rgba(255,255,255,.85);
+  --paper: #FFFFFF; --tile: rgba(255,255,255,.86); --tile-edge: rgba(255,255,255,.98);
+  --red: #E0453A; --blue: #3B5BDB;
+  --sh-xs: 0 1px 2px rgba(24,36,60,.05), 0 0.25rem 0.75rem -0.375rem rgba(24,36,60,.14);
+  --kr: "Pretendard Variable", Pretendard, -apple-system, "Apple SD Gothic Neo", "Malgun Gothic", system-ui, sans-serif;
+  --r-md: 1.25rem;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  color-scheme: dark;
+  --canvas: #0E1013; --ink: #ECEEF1; --sub: #8F969F; --hair: rgba(255,255,255,.08); --on-ink: #0E1013;
+  --glass: rgba(30,33,38,.62); --glass-hi: rgba(255,255,255,.14); --glass-edge: rgba(255,255,255,.08);
+  --paper: #1B1E23; --tile: rgba(36,40,46,.9); --tile-edge: rgba(255,255,255,.06);
+  --red: #F2675D; --blue: #8095F5;
+  --sh-xs: 0 1px 2px rgba(0,0,0,.35), 0 0.25rem 0.75rem -0.375rem rgba(0,0,0,.55); } }
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --canvas: #0E1013; --ink: #ECEEF1; --sub: #8F969F; --hair: rgba(255,255,255,.08); --on-ink: #0E1013;
+  --glass: rgba(30,33,38,.62); --glass-hi: rgba(255,255,255,.14); --glass-edge: rgba(255,255,255,.08);
+  --paper: #1B1E23; --tile: rgba(36,40,46,.9); --tile-edge: rgba(255,255,255,.06);
+  --red: #F2675D; --blue: #8095F5;
+  --sh-xs: 0 1px 2px rgba(0,0,0,.35), 0 0.25rem 0.75rem -0.375rem rgba(0,0,0,.55); }
+html { font-size: clamp(13.5px, calc(100vw * 16 / 390), 18px); -webkit-text-size-adjust: 100%; background: var(--canvas); }
+* { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+body { margin: 0; background: var(--canvas); color: var(--ink); font-family: var(--kr); font-size: 0.9375rem; line-height: 1.5; letter-spacing: -.01em; font-variant-numeric: tabular-nums; overflow-x: hidden; }
+button { font: inherit; color: inherit; background: none; border: 0; padding: 0; cursor: pointer; letter-spacing: inherit; }
+button:focus-visible { outline: 2px solid var(--blue); outline-offset: 2px; }
+.wrap { max-width: 60rem; margin: 0 auto; padding: 1.5rem 1rem 3rem; }
+h1 { font-size: 1.375rem; font-weight: 800; margin: 0 0 0.25rem; letter-spacing: -.02em; }
+.lead { color: var(--sub); font-size: 0.8125rem; margin: 0 0 1rem; }
+.bar { position: sticky; top: 0.5rem; z-index: 5; display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem; padding: 0.5rem 0.625rem;
+  border-radius: 1rem; background: var(--glass-hi); border: 1px solid var(--tile-edge); box-shadow: var(--sh-xs);
+  -webkit-backdrop-filter: blur(1rem); backdrop-filter: blur(1rem); margin-bottom: 1.25rem; }
+.bar .step { width: 2.25rem; height: 2.25rem; border-radius: 50%; background: var(--hair); font-weight: 800; font-size: 1.125rem; line-height: 1; }
+.bar .cnt { min-width: 5.5rem; text-align: center; font-weight: 800; font-size: 0.9375rem; }
+.bar .txt { height: 2.25rem; padding: 0 0.875rem; border-radius: 1.125rem; background: var(--hair); font-weight: 700; font-size: 0.8125rem; }
+.bar .txt.pri { background: var(--red); color: #fff; }
+.bar .sp { flex: 1 1 0; }
+.grid { display: grid; grid-template-columns: minmax(0,1fr); gap: 1.5rem 1.25rem; }
+@media (min-width: 52rem) { .grid { grid-template-columns: repeat(2, minmax(0,1fr)); } }
+.item { display: flex; flex-direction: column; gap: 0.75rem; min-width: 0; }
+.trip { border-radius: var(--r-md); padding: 1rem 1.125rem; display: grid; grid-template-columns: 3.5rem minmax(0,1fr) 4.5rem; gap: 0.75rem; align-items: center;
+  background: var(--tile); border: 1px solid var(--tile-edge); box-shadow: var(--sh-xs); }
+.trip .d b { display: block; font-weight: 600; font-size: 0.9375rem; }
+.trip .d span { font-size: 0.75rem; color: var(--sub); white-space: nowrap; }
+.trip .ttl2 { font-weight: 700; font-size: 0.90625rem; margin-bottom: 0.25rem; line-height: 1.3; }
+.trip .codes { font-size: 0.75rem; letter-spacing: .02em; color: var(--sub); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.prog { height: 0.375rem; border-radius: 0.375rem; background: var(--hair); overflow: hidden; margin-top: 0.625rem; }
+.prog i { display: block; height: 100%; background: var(--red); transition: width .3s; }
+.s-sm { width: 4.5rem; height: 4.5rem; }
+.s-sm svg { display: block; width: 100%; height: 100%; }
+.cap { display: flex; align-items: center; gap: 1rem; }
+.cap .t { min-width: 0; flex: 1; }
+.cap h2 { font-size: 0.9375rem; font-weight: 800; margin: 0; }
+.cap p { margin: 0.125rem 0 0; font-size: 0.78125rem; color: var(--sub); }
+.s-lg { width: 11rem; height: 11rem; flex: none; }
+.s-lg svg { display: block; width: 100%; height: 100%; }
+/* SVG 잉크 */
+svg { overflow: visible; }
+.f { fill: var(--red); }
+.ln { fill: none; stroke: var(--red); }
+.gh { fill: none; stroke: var(--red); stroke-dasharray: 2 2.5; opacity: .35; }
+.pp { fill: var(--paper); }
+.tx { fill: var(--red); font-family: var(--kr); font-weight: 900; letter-spacing: -.03em; text-anchor: middle; font-variant-numeric: tabular-nums; }
+.pt { fill: var(--paper); font-family: var(--kr); font-weight: 900; letter-spacing: -.03em; text-anchor: middle; }
+.vt { fill: var(--ink); font-family: var(--kr); font-weight: 800; writing-mode: vertical-rl; text-anchor: start; letter-spacing: .02em; }
+/* 쾅 */
+.pop, .popc, .flap { transform-box: view-box; transform-origin: 50% 50%; animation: slam .42s cubic-bezier(.2,.9,.3,1.2) both; }
+.popc { transform-box: fill-box; }
+.flap { transform-box: fill-box; transform-origin: 50% 0; animation: flap .45s ease-out both; }
+@keyframes slam {
+  0% { transform: scale(1.25) rotate(-4deg); opacity: 0; }
+  35% { opacity: 1; }
+  60% { transform: scale(.97) rotate(.8deg); }
+  100% { transform: scale(1) rotate(0); opacity: 1; }
+}
+@keyframes flap {
+  0% { transform: scaleY(.04); opacity: .4; }
+  60% { transform: scaleY(1.08); opacity: 1; }
+  100% { transform: scaleY(1); }
+}
+@media (prefers-reduced-motion: reduce) { .pop, .popc, .flap { animation: none; } .prog i { transition: none; } }
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <defs>
+    <filter id="rough" filterUnits="userSpaceOnUse" x="-6" y="-6" width="112" height="112" color-interpolation-filters="sRGB">
+      <feTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="2" seed="7" result="n"/>
+      <feDisplacementMap in="SourceGraphic" in2="n" scale="0.7" xChannelSelector="R" yChannelSelector="G" result="d"/>
+      <feTurbulence type="fractalNoise" baseFrequency="0.55" numOctaves="1" seed="3" result="b0"/>
+      <feColorMatrix in="b0" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  5 0 0 0 -1.1" result="b"/>
+      <feComposite in="d" in2="b" operator="in"/>
+    </filter>
+  </defs>
+</svg>
+
+<div class="wrap">
+  <h1>기록 스탬프 대안 6종</h1>
+  <p class="lead">'기록' 탭 진행 스탬프의 모양 대안입니다. 아래 버튼으로 일정 8개 중 끝낸 수를 바꿔 보세요 (6개가 동시에 바뀜).</p>
+  <div class="bar" role="group" aria-label="진행 조작">
+    <button class="step" id="minus" aria-label="하나 줄이기">−</button>
+    <div class="cnt" id="cnt" aria-live="polite">완료 3 / 8</div>
+    <button class="step" id="plus" aria-label="하나 늘리기">+</button>
+    <span class="sp"></span>
+    <button class="txt pri" id="all">전부 완료</button>
+    <button class="txt" id="reset">처음부터</button>
+  </div>
+  <div class="grid" id="grid"></div>
+</div>
+
+<script>
+(function () {
+  var N = 8, n = 3, prev = 3, uid = 0;
+  var PLACES = ['인천', '간사이', '난바', '타코야키', '도톤보리', '숙소', '후쿠타로', '야경'];
+
+  function pc(i) { return (i >= prev && i < n) ? ' pop' : ''; }
+  function fin() { return (n === N && prev < N) ? 'pop' : ''; }
+  function pt(cx, cy, r, deg) { var a = deg * Math.PI / 180; return [(cx + r * Math.cos(a)).toFixed(2), (cy + r * Math.sin(a)).toFixed(2)]; }
+  function wrap(inner) { return '<svg viewBox="0 0 100 100" role="img" aria-hidden="true"><g filter="url(#rough)">' + inner + '</g></svg>'; }
+
+  /* 1 조각 도장 */
+  function s1() {
+    var o = n ? 'ln' : 'gh';
+    var h = '<circle class="' + o + '" cx="50" cy="50" r="46" stroke-width="2.6"/><circle class="' + o + '" cx="50" cy="50" r="41.5" stroke-width="1.2"/>';
+    for (var i = 0; i < N; i++) {
+      var a0 = -90 + i * 45 + 1.5, a1 = -90 + (i + 1) * 45 - 1.5, ro = 37, ri = 23;
+      var p0 = pt(50, 50, ro, a0), p1 = pt(50, 50, ro, a1), q1 = pt(50, 50, ri, a1), q0 = pt(50, 50, ri, a0);
+      var d = 'M' + p0 + 'A' + ro + ' ' + ro + ' 0 0 1 ' + p1 + 'L' + q1 + 'A' + ri + ' ' + ri + ' 0 0 0 ' + q0 + 'Z';
+      h += i < n ? '<path class="f' + pc(i) + '" d="' + d + '"/>' : '<path class="gh" d="' + d + '"/>';
+    }
+    if (n === N) h += '<g class="' + fin() + '"><text class="tx" x="50" y="48" font-size="14">DAY 1</text><text class="tx" x="50" y="63" font-size="12" style="font-weight:800">12.04</text></g>';
+    else h += '<circle class="gh" cx="50" cy="50" r="18" opacity=".18"/>';
+    return wrap(h);
+  }
+
+  /* 2 입국 도장 */
+  function s2() {
+    var o = n ? 'ln' : 'gh';
+    var h = '<rect class="' + o + '" x="4" y="10" width="92" height="80" rx="10" stroke-width="2.6"/><rect class="' + o + '" x="9" y="15" width="82" height="70" rx="6" stroke-width="1.2"/>';
+    if (n) {
+      h += '<text class="tx" x="50" y="32" font-size="9.5" style="letter-spacing:.06em">KIX · OSAKA</text>'
+        + '<text class="tx" x="50" y="52" font-size="12">04 DEC 26</text>'
+        + '<text class="tx" x="50" y="66" font-size="9" style="letter-spacing:.14em">ARRIVED</text>';
+    }
+    for (var i = 0; i < N; i++) {
+      var x = 13.5 + i * 9.6;
+      h += i < n ? '<rect class="f' + (i >= prev ? ' popc' : '') + '" x="' + x + '" y="73" width="7.2" height="6.5" rx="1"/>' : '<rect class="gh" x="' + x + '" y="73" width="7.2" height="6.5" rx="1"/>';
+    }
+    if (n === N) h += '<g class="' + fin() + '"><g transform="rotate(-20 50 50)"><rect x="-8" y="39" width="116" height="22" fill="var(--paper)" fill-opacity=".82"/><rect class="ln" x="-8" y="39" width="116" height="22" stroke-width="2.4"/><text class="tx" x="50" y="55.5" font-size="12.5" style="letter-spacing:.08em">COMPLETE</text></g></g>';
+    return wrap(h);
+  }
+
+  /* 3 출발 안내판 플립 */
+  function s3(id) {
+    var o = n ? 'ln' : 'gh';
+    var h = '<circle class="' + o + '" cx="50" cy="50" r="46" stroke-width="2.6"/><circle class="' + o + '" cx="50" cy="50" r="41.5" stroke-width="1.2"/>'
+      + '<path id="arc' + id + '" d="M16 50A34 34 0 0 1 84 50" fill="none"/>'
+      + (n ? '<text class="tx" font-size="9.5" style="letter-spacing:.04em"><textPath href="#arc' + id + '" startOffset="50%">GABOJA · DAY 1</textPath></text>' : '');
+    var w = 'DEPARTED';
+    for (var i = 0; i < N; i++) {
+      var x = 12.5 + i * 9.5;
+      if (i < n) {
+        h += '<g class="' + (i >= prev ? 'flap' : '') + '"><rect class="f" x="' + x + '" y="40" width="8.6" height="22" rx="1"/><text class="pt" x="' + (x + 4.3) + '" y="55" font-size="11">' + w[i] + '</text>'
+          + '<line x1="' + x + '" x2="' + (x + 8.6) + '" y1="51" y2="51" stroke="var(--paper)" stroke-opacity=".55" stroke-width=".7"/></g>';
+      } else h += '<rect class="gh" x="' + x + '" y="40" width="8.6" height="22" rx="1"/>';
+    }
+    return wrap(h);
+  }
+
+  /* 4 탑승권 펀치 */
+  function s4() {
+    var path = 'M7 18H67A5 5 0 0 0 77 18H93Q98 18 98 23V77Q98 82 93 82H77A5 5 0 0 0 67 82H7Q2 82 2 77V23Q2 18 7 18Z';
+    var h = '<path class="' + (n ? 'ln' : 'gh') + '" d="' + path + '" stroke-width="2.4"/>'
+      + (n ? '<path d="' + path + '" fill="var(--red)" fill-opacity=".07"/>' : '')
+      + '<line class="' + (n ? 'ln' : 'gh') + '" x1="72" x2="72" y1="24" y2="76" stroke-width="1.2" stroke-dasharray="2 2.4"/>';
+    for (var i = 0; i < N; i++) {
+      var cx = 14 + (i % 4) * 16, cy = 38 + Math.floor(i / 4) * 24;
+      if (i < n) h += '<g class="' + (i >= prev ? 'popc' : '') + '"><circle class="pp" cx="' + cx + '" cy="' + cy + '" r="5.6"/><circle class="ln" cx="' + cx + '" cy="' + cy + '" r="5.6" stroke-width="1"/><path d="M' + (cx - 4.6) + ' ' + (cy + 1.5) + 'A4.8 4.8 0 0 1 ' + (cx + 1.5) + ' ' + (cy - 4.6) + '" fill="none" stroke="rgba(0,0,0,.45)" stroke-width="1.8" stroke-linecap="round"/></g>';
+      else h += '<circle class="gh" cx="' + cx + '" cy="' + cy + '" r="5.2"/>';
+    }
+    if (n === N) h += '<g class="' + fin() + '"><g transform="rotate(-14 50 50)"><rect x="22" y="37" width="56" height="26" rx="3" fill="var(--paper)" fill-opacity=".6"/><rect class="ln" x="22" y="37" width="56" height="26" rx="3" stroke-width="2.6"/><text class="tx" x="50" y="57" font-size="19" style="letter-spacing:.04em">USED</text></g></g>';
+    return wrap(h);
+  }
+
+  /* 5 고슈인 */
+  function s5() {
+    var h = '<rect x="20" y="3" width="60" height="94" rx="3" fill="var(--canvas)" stroke="var(--hair)" stroke-width="1"/>'
+      + '<rect class="' + (n ? 'ln' : 'gh') + '" x="23" y="6" width="54" height="88" rx="1.5" stroke-width="1"' + (n ? ' opacity=".5"' : '') + '/>';
+    for (var i = 0; i < N; i++) {
+      var x = 71 - i * 6.6;
+      if (i < n) h += '<text class="vt' + (i >= prev ? ' pop' : '') + '" x="' + x + '" y="11" font-size="6.4">' + PLACES[i] + '</text>';
+      else h += '<line class="gh" x1="' + (x + 0.5) + '" x2="' + (x + 0.5) + '" y1="12" y2="40" stroke-width=".8" opacity=".2"/>';
+    }
+    if (n === N) h += '<g class="' + fin() + '"><g transform="rotate(4 60 74)"><rect class="f" x="45" y="59" width="30" height="30" rx="1.5"/><rect x="47" y="61" width="26" height="26" fill="none" stroke="var(--paper)" stroke-width=".9" stroke-opacity=".8"/>'
+      + '<text class="pt" x="54" y="75" font-size="13.5">가</text><text class="pt" x="67" y="75" font-size="13.5">보</text><text class="pt" x="54" y="86" font-size="11.5">자</text>'
+      + '<text class="pt" x="67" y="80" font-size="6.2" style="font-weight:800">12</text><text class="pt" x="67" y="86.5" font-size="6.2" style="font-weight:800">04</text></g></g>';
+    else h += '<rect class="gh" x="45" y="59" width="30" height="30" rx="1.5" opacity=".25"/>';
+    return wrap(h);
+  }
+
+  /* 6 링 + 가운데 도장 */
+  function s6() {
+    var h = '';
+    for (var i = 0; i < N; i++) {
+      var a0 = -90 + i * 45 + 4, a1 = -90 + (i + 1) * 45 - 4, p0 = pt(50, 50, 41, a0), p1 = pt(50, 50, 41, a1);
+      var d = 'M' + p0 + 'A41 41 0 0 1 ' + p1;
+      h += '<path class="' + (i < n ? 'ln' + pc(i) : 'gh') + '" d="' + d + '" ' + (i < n ? 'stroke-width="8" stroke-linecap="butt"' : 'stroke-width="1.6"') + '/>';
+    }
+    if (n === N) h += '<g class="' + fin() + '"><circle class="ln" cx="50" cy="50" r="29" stroke-width="2.4"/><circle class="ln" cx="50" cy="50" r="25.5" stroke-width="1"/><text class="tx" x="50" y="53" font-size="15">12.04</text><text class="tx" x="50" y="66" font-size="9.5" style="letter-spacing:.04em">DAY 1</text></g>';
+    else h += '<circle class="gh" cx="50" cy="50" r="28" opacity=".22"/>';
+    return wrap(h);
+  }
+
+  var DEFS = [
+    ['1. 조각 도장', '원형 도장이 8개 부채꼴로 나뉘어 하나씩 찍히고, 다 차면 가운데 DAY 1과 날짜가 확정됩니다.', s1],
+    ['2. 입국 도장 (여권)', '이중 테두리 사각 도장. 아래 칸 8개가 채워지고, 다 차면 COMPLETE 띠가 비스듬히 겹칩니다.', s2],
+    ['3. 출발 안내판 플립', '글자 칸 8개가 스플릿 플랩처럼 하나씩 넘어가 DEPARTED를 완성합니다.', s3],
+    ['4. 탑승권 펀치', '탑승권에 구멍이 하나씩 뚫리고, 다 뚫리면 USED 도장이 비스듬히 찍힙니다.', s4],
+    ['5. 고슈인(御朱印)식', '일정마다 장소 이름이 세로로 한 줄씩 적히고, 끝나면 붉은 직인이 겹쳐 찍힙니다.', s5],
+    ['6. 링 + 가운데 도장', '바깥 링 8칸이 채워지고, 닫히면 안쪽에 날짜 도장이 찍히는 가장 단순한 안.', s6]
+  ];
+
+  var grid = document.getElementById('grid');
+  function render() {
+    uid = 0;
+    var pct = Math.round(n / N * 100), html = '';
+    DEFS.forEach(function (d) {
+      var small = d[2](++uid), big = d[2](++uid);
+      html += '<section class="item"><div class="trip"><div class="d"><b>DAY 1</b><span>12. 4 금</span></div>'
+        + '<div style="min-width:0"><div class="ttl2">도착하자마자 도톤보리</div><div class="codes">ICN · KIX · NMB · DTB</div>'
+        + '<div class="prog" aria-label="다녀온 비율"><i style="width:' + pct + '%"></i></div></div>'
+        + '<div class="s-sm">' + small + '</div></div>'
+        + '<div class="cap"><div class="s-lg">' + big + '</div><div class="t"><h2>' + d[0] + '</h2><p>' + d[1] + '</p></div></div></section>';
+    });
+    grid.innerHTML = html;
+    document.getElementById('cnt').textContent = '완료 ' + n + ' / ' + N;
+  }
+  function set(v) { v = Math.max(0, Math.min(N, v)); prev = n; n = v; render(); prev = n; }
+  document.getElementById('plus').onclick = function () { set(n + 1); };
+  document.getElementById('minus').onclick = function () { set(n - 1); };
+  document.getElementById('all').onclick = function () { set(N); };
+  document.getElementById('reset').onclick = function () { set(0); };
+  render();
+})();
+</script>
+</body>
+</html>

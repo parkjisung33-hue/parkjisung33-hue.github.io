@@ -28,12 +28,15 @@
 
   // 장소가 그 날·그 시각에 되는지: {ok, start(기다린 뒤 시작), why}
   function openAt(p, date, t, stay) {
-    const h = p.h; if (!h) return { ok: true, start: t, unknown: true };
     const wd = WD[date.getDay()], md = String(date.getMonth() + 1).padStart(2, '0') + '-' + String(date.getDate()).padStart(2, '0');
+    if (p.sea && !p.sea.some(([a, b]) => a <= b ? md >= a && md <= b : md >= a || md <= b)) return { ok: false, why: '기간 아님' };
+    if (p.mday && !p.mday.includes(date.getDate())) return { ok: false, why: '장 서는 날 아님' };
+    const h = p.h; if (!h) return { ok: true, start: t, unknown: true };
     if ((h.x || []).includes(wd)) return { ok: false, why: WDK[date.getDay()] + '요일 휴무' };
     for (const c of h.cd || []) { const [a, b] = c.split('..'); if (b ? (a <= b ? md >= a && md <= b : md >= a || md <= b) : md === a) return { ok: false, why: '휴무일' }; }
     const winter = [11, 0, 1].includes(date.getMonth());
-    const ranges = (h.w && h.w[wd]) || (winter && h.wi) || h.o; if (!ranges || !ranges.length) return { ok: true, start: t, unknown: true };
+    const mo = date.getMonth() + 1, byM = h.m && Object.keys(h.m).find(k => { const [a, b] = k.split('-').map(Number); return a <= b ? mo >= a && mo <= b : mo >= a || mo <= b; });
+    const ranges = (h.w && h.w[wd]) || (byM && h.m[byM]) || (winter && h.wi) || h.o; if (!ranges || !ranges.length) return { ok: true, start: t, unknown: true };
     for (const [o, c] of ranges) {
       const O = toMin(o), C = toMin(c), last = h.le ? toMin(h.le) : C;
       let s = t; if (s < O) { if (O - s > 45) continue; s = O; }
@@ -52,11 +55,18 @@
     if (!start || isNaN(start)) { start = new Date(); start.setDate(start.getDate() + 21); while (start.getDay() !== 5) start.setDate(start.getDate() + 1); assumed.push('날짜 미정 → ' + (start.getMonth() + 1) + '/' + start.getDate() + '(금) 출발로 가정'); }
     const rand = rng(type + (input.start || '') + nights);
     const likes = new Set(input.likes || []), avoid = new Set(input.avoid || []);
-    // 비행기: 입력에 시각 둘이 있으면 가는 편, 없으면 가정
+    // 비행기 (v2): 가는 편 fo · 오는 편 fb = { no 편명, dep 출발, arr 도착 }. 빈 칸은 보통 시각으로 가정 + 표시
+    //   (옛 입력: flightTx 안의 시각 둘 = 가는 편)
+    const hm = v => /^\d{1,2}:\d{2}$/.test(v || '') ? v.padStart(5, '0') : null;
     const tm = String(input.flightTx || '').match(/(\d{1,2}):(\d{2})/g);
-    const out = tm && tm.length >= 2 ? [tm[0].padStart(5, '0'), tm[1].padStart(5, '0')] : ['09:00', '10:50'];
-    if (!(tm && tm.length >= 2)) assumed.push('가는 비행기 인천 09:00 → 간사이 10:50 가정');
-    const back = ['15:00', '16:50']; assumed.push('오는 비행기 간사이 15:00 → 인천 16:50 가정'); assumed.push('동네 사이 이동 시간은 대략값 · 길찾기 버튼으로 실제 시간 확인');
+    const fo = input.fo || {}, fb = input.fb || {};
+    const out = hm(fo.dep) && hm(fo.arr) ? [hm(fo.dep), hm(fo.arr)] : !input.fo && tm && tm.length >= 2 ? [tm[0].padStart(5, '0'), tm[1].padStart(5, '0')] : ['09:00', '10:50'];
+    const back = hm(fb.dep) && hm(fb.arr) ? [hm(fb.dep), hm(fb.arr)] : ['15:00', '16:50'];
+    const outOk = out[0] !== '09:00' || hm(fo.dep), backOk = !!(hm(fb.dep) && hm(fb.arr));
+    if (!outOk) assumed.push('가는 비행기 인천 09:00 → 간사이 10:50 가정');
+    if (!backOk) assumed.push('오는 비행기 간사이 15:00 → 인천 16:50 가정');
+    assumed.push('동네 사이 이동 시간은 대략값 · 길찾기 버튼으로 실제 시간 확인');
+    const fnoOut = String(fo.no || '').toUpperCase().slice(0, 8), fnoBack = String(fb.no || '').toUpperCase().slice(0, 8);
     const base = /우메다|기타|梅田/.test(input.stayTx || '') ? 'osk-kita' : 'osk-minami';
     const baseName = base === 'osk-kita' ? '우메다' : '난바';
     const homeMin = 75; // 집 → 인천공항 (주소별 계산은 앱 단계, 지금은 가정)
@@ -141,7 +151,7 @@
         it.push({ k: 'w', s: leave - 45, n: '기상', say: '여권·지갑·충전기 확인' });
         it.push({ k: 'm', s: leave, e: airport, mode: 'home', n: '집에서 출발', mv: '집 → 인천공항 · 약 ' + homeMin + '분 (가정)', to: '인천국제공항' });
         it.push({ k: 'p', s: airport, e: dep, sh: '인천공항', n: '인천공항', say: '체크인·출국 심사 먼저', q: '인천국제공항' });
-        it.push({ k: 'x', s: dep, e: arr, fly: ['ICN', '인천', 'KIX', '간사이'], n: '비행기 · 인천 → 간사이', mv: '비행기' });
+        it.push({ k: 'x', s: dep, e: arr, fly: ['ICN', '인천', 'KIX', '간사이'], fno: fnoOut || undefined, n: '비행기 · 인천 → 간사이' + (fnoOut ? ' ' + fnoOut : ''), mv: '비행기' });
         it.push({ k: 'p', s: arr, e: arr + 60, sh: '간사이공항', n: '간사이공항 도착', l: '関西国際空港', say: '입국 심사 → 南海 なんば 표지판', q: '関西国際空港' });
         const tr = base === 'osk-kita' ? 70 : 40;
         it.push({ k: 'm', s: arr + 60, e: arr + 60 + tr, mode: 'train', n: base === 'osk-kita' ? 'JR 하루카 + 환승' : '난카이 라피트', mv: (base === 'osk-kita' ? '전철 · 약 ' : '난카이 라피트 · 약 ') + tr + '분', to: D.clQ[base] });
@@ -162,7 +172,7 @@
         if (t > leave) leave2 = t;
         it.push({ k: 'm', s: leave2, e: Math.max(airport, leave2 + 40), mode: 'train', n: base === 'osk-kita' ? 'JR 하루카' : '난카이 라피트', mv: '공항으로 · 약 ' + (airport - leave) + '분', to: '関西国際空港' });
         it.push({ k: 'x', s: airport, e: dep, sh: '간사이공항', n: '간사이공항 · 체크인', l: '関西国際空港', say: '면세품 있으면 세관 먼저', q: '関西国際空港' });
-        it.push({ k: 'x', s: dep, e: arr, fly: ['KIX', '간사이', 'ICN', '인천'], n: '비행기 · 간사이 → 인천', mv: '비행기' });
+        it.push({ k: 'x', s: dep, e: arr, fly: ['KIX', '간사이', 'ICN', '인천'], fno: fnoBack || undefined, n: '비행기 · 간사이 → 인천' + (fnoBack ? ' ' + fnoBack : ''), mv: '비행기' });
         it.push({ k: 'p', s: arr, e: arr + 50, sh: '인천공항', n: '인천공항 도착', q: '인천국제공항' });
         it.push({ k: 'm', s: arr + 50, e: arr + 50 + homeMin, mode: 'home', n: '집으로', mv: '인천공항 → 집 · 약 ' + homeMin + '분 (가정)' });
         it.push({ k: 'p', s: arr + 50 + homeMin, sh: '집 도착', n: '집 도착 — 여행 끝', est: 1 });
@@ -187,10 +197,12 @@
       const seen = new Set(); notes[i] = nt.filter(n => { const k = n.t; if (seen.has(k)) return false; seen.add(k); return true; }).slice(0, 4);
       days.push({ no: i, city, date: fmtD(date), title, route: route.filter((x, k, a) => x && x !== a[k - 1]).join(' → '), drop: blocks.length ? blocks[blocks.length - 1] + ' 먼저 빼기' : '', codes: '', items });
     }
-    if (assumed.length) (notes[1] = notes[1] || []).push({ lv: 'gray', t: (tm && tm.length >= 2 ? '오는 비행기 시각 가정' : '비행기 시각 가정') + ' · 이동 시간 대략값' });
+    if (!outOk) (notes[1] = notes[1] || []).unshift({ lv: 'amber', ref: '인천공항', t: '가는 비행기 시각 미입력 · 09:00 가정' });
+    if (!backOk) (notes[N] = notes[N] || []).unshift({ lv: 'amber', ref: '간사이공항', t: '오는 비행기 시각 미입력 · 15:00 가정' });
+    (notes[1] = notes[1] || []).push({ lv: 'gray', t: '동네 사이 이동 시간 대략값' });
     const end = new Date(start); end.setDate(start.getDate() + nights);
     const f2 = d => (d.getMonth() + 1) + '. ' + d.getDate();
     return { v: 1, type, title: (input.cityLabel || '오사카·교토') + ' ' + nights + '박 ' + N + '일', sub: f2(start) + ' – ' + f2(end) + ' · 집에서 집까지', start: start.getFullYear() + '-' + String(start.getMonth() + 1).padStart(2, '0') + '-' + String(start.getDate()).padStart(2, '0'), days, notes, assumed, made: new Date().toISOString() };
   }
-  window.GABOJA_GEN = { make, version: 1 };
+  window.GABOJA_GEN = { make, version: 2 };
 })();
