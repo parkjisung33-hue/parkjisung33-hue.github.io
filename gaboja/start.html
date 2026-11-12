@@ -368,6 +368,8 @@ main { flex: 1; display: flex; flex-direction: column; position: relative; overf
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
 <script src="types.js"></script>
+<script src="gen-data.js"></script>
+<script src="gen.js"></script>
 <script>
 /* ── 데이터: 확정본 v2 (문서/여행앱/2026-11-12_가보자_첫화면질문·16유형_제안_v2.md) ── */
 const AX = [ // 축: 코드 글자 · 이름
@@ -820,8 +822,17 @@ function sendNow() {
     .finally(() => clearTimeout(to));
 }
 
+let PLANNED = null; // 방금 만든 일정 (오사카·교토만, 나머지 도시는 준비 중)
+function buildPlan() {
+  const tr = S.trip; PLANNED = null;
+  if (tr.city !== '오사카·교토' || !window.GABOJA_GEN) return null;
+  const d = n => n ? `${Math.floor(n / 10000)}-${String(Math.floor(n / 100) % 100).padStart(2, '0')}-${String(n % 100).padStart(2, '0')}` : null;
+  try { PLANNED = window.GABOJA_GEN.make({ type: S.type, start: d(tr.start), nights: tr.nights || 3, likes: tr.likes, avoid: tr.avoid, flightTx: tr.flight === 'yes' ? tr.flightTx : '', stayTx: tr.stay !== 'no' ? tr.stayTx : '', cityLabel: '오사카·교토' }); PLANNED.nick = (tr.nick || '').trim().slice(0, 12); store.set('gaboja-plan', PLANNED); } catch (e) { PLANNED = null; }
+  return PLANNED;
+}
 function rBuild() {
   if (!SEND || SEND.st !== 'ok') sendNow();
+  buildPlan();
   setBar('info', INFO.length + 1, INFO.length + 1, { t: '만드는 중' });
   const tr = S.trip, t = S.type ? T(S.type) : null, city = tr.city === '다른 곳' ? (tr.cityEtc || '여행지') : (tr.city || '여행지');
   const lines = [tr.home ? '집 문 앞에서 공항까지 시간 계산' : '출발 시각 정하기', `${city}에서 ${t ? t.name + ' 취향' : '취향'}에 맞는 곳 고르기`, '영업시간·휴무일 맞춰 보기', tr.nights ? `${tr.nights + 1}일 동선 짜기` : '하루 동선 짜기', '가이드북 한 권으로 정리'];
@@ -866,9 +877,9 @@ function rDone() {
     </article>
     ${SEND && SEND.st === 'ok' ? `<div class="sent ok">${ICON.check}<span>신청 접수됨 · 받을 곳 ${esc(tr.to || '')}</span></div>`
       : `<div class="sent bad"><span>신청을 못 보냈어요 (${esc((SEND && SEND.err) || '연결 실패')})</span><button id="reSend">다시 보내기</button></div>`}
-    <div class="note">${ICON.lock}<span>가이드북은 아키가 확인한 뒤 보내 드려요(시험판). ‘일정 보기’는 지금은 오사카·교토 3박 4일 샘플이에요</span></div>
+    <div class="note">${ICON.lock}<span>${PLANNED ? `방금 만든 ${esc(PLANNED.title)} 일정이 열려요. 시험판이라 아키가 한 번 더 확인한 가이드북을 따로 보내 드려요` : '이 도시는 일정 자동 만들기 준비 중이에요. 가이드북은 아키가 만들어 보내 드리고, 지금은 오사카·교토 샘플 일정이 열려요'}</span></div>
     <div class="foot">
-      <a class="cta" href="index.html" style="text-decoration:none">일정 보기 ${ICON.arrow}</a>
+      <a class="cta" href="${PLANNED ? 'index.html' : 'index.html#sample'}" style="text-decoration:none">${PLANNED ? '내 일정 보기' : '샘플 일정 보기'} ${ICON.arrow}</a>
       <button class="ghost" id="dEdit">수정하기</button>
     </div>`);
   $('#dEdit').onclick = () => { S.hist = ['intro', 'method']; go('city', { noHist: true, back: true }); };
