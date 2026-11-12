@@ -194,7 +194,7 @@ main { flex: 1; display: flex; flex-direction: column; position: relative; overf
 .perf::before, .perf::after { content: ""; position: absolute; top: -0.75rem; width: 1.375rem; height: 1.375rem; border-radius: 50%; background: var(--canvas); }
 .perf::before { left: -1.875rem; } .perf::after { right: -1.875rem; }
 .meters { padding: 1rem 1.125rem 0.5rem; display: flex; flex-direction: column; gap: 0.625rem; }
-.mt { display: grid; grid-template-columns: 2.75rem minmax(0,1fr) auto minmax(0,1fr); align-items: center; gap: 0.5rem; font-size: 0.8125rem; }
+.mt { display: grid; grid-template-columns: 2.625rem minmax(0,1fr) auto minmax(0,1fr); align-items: center; gap: 0.5rem; font-size: 0.8125rem; }
 .mt .ax { font-size: 0.71875rem; color: var(--sub); }
 .mt .a, .mt .b { color: var(--sub); white-space: nowrap; }
 .mt .b { text-align: right; }
@@ -220,7 +220,8 @@ main { flex: 1; display: flex; flex-direction: column; position: relative; overf
 .row .tm.zone { font-size: 0.8125rem; color: var(--blue); }
 .row b { text-wrap: balance; display: block; font-size: 0.9375rem; font-weight: 700; word-break: keep-all; }
 .row span { display: block; font-size: 0.8125rem; color: var(--sub); }
-.plan span { text-wrap: balance; }
+.plan span { text-wrap: balance; display: flex; flex-direction: column; gap: 1px; }
+.plan small { font-size: 0.75rem; font-weight: 600; color: var(--blue); }
 .plan { display: flex; gap: 0.75rem; align-items: center; padding: 0.875rem 1rem; border-radius: var(--r-md); background: var(--blue-soft); font-weight: 600; }
 .plan svg { width: 1.25rem; height: 1.25rem; stroke: var(--blue); fill: none; stroke-width: 1.9; stroke-linecap: round; stroke-linejoin: round; flex: none; }
 .pair { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 0.625rem; }
@@ -228,7 +229,8 @@ main { flex: 1; display: flex; flex-direction: column; position: relative; overf
 .pair .lab.ok { color: var(--blue); } .pair .lab.no { color: var(--red); }
 .pair .mini { box-shadow: var(--sh-xs); }
 .pair .mini .t3 { white-space: normal; word-break: keep-all; }
-.acts { display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 0.5rem; }
+.acts { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 0.5rem; }
+.acts .share { grid-column: 1 / -1; background: var(--blue); color: #fff; height: 3.25rem; font-size: 0.9375rem; }
 .acts button { height: 3rem; border-radius: var(--r-sm); background: var(--hair); font-size: 0.8125rem; font-weight: 700; display: flex; align-items: center; justify-content: center; gap: 0.375rem; white-space: nowrap; }
 .acts svg { width: 1rem; height: 1rem; stroke: currentColor; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
 
@@ -237,7 +239,10 @@ main { flex: 1; display: flex; flex-direction: column; position: relative; overf
 .grp h3 { margin: 0; font-size: 0.875rem; font-weight: 800; display: flex; gap: 0.5rem; align-items: baseline; }
 .grp h3 span { font-size: 0.75rem; font-weight: 500; color: var(--sub); }
 .g4 { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 0.5rem; }
-.g4 .mini { box-shadow: var(--sh-xs); position: relative; }
+.g4 .mini { box-shadow: var(--sh-xs); position: relative; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; min-height: 7.25rem; padding: 0.75rem 0.5rem; }
+.g4 .mini .t2 { padding: 0; align-items: center; gap: 0.25rem; }
+.g4 .mini .pf { width: 2.5rem; margin: 0.625rem auto; }
+.g4 .mini .t3 { padding: 0; }
 .g4 .mini .cd { font-size: 1.125rem; }
 .g4 .mini .nm { font-size: 0.875rem; }
 .g4 .mini.me { box-shadow: inset 0 0 0 2px var(--blue), var(--sh-xs); }
@@ -296,6 +301,44 @@ main { flex: 1; display: flex; flex-direction: column; position: relative; overf
 .toast { position: fixed; left: 50%; bottom: calc(6rem + env(safe-area-inset-bottom, 0px)); transform: translate(-50%, 1rem); background: var(--toast-bg); color: var(--toast-fg); padding: 0.75rem 1.125rem; border-radius: 62rem; font-size: 0.875rem; font-weight: 600; opacity: 0; transition: opacity .2s, transform .2s; pointer-events: none; z-index: 30; max-width: calc(100vw - 2rem); width: max-content; text-align: center; border-radius: 1.25rem; }
 .toast.on { opacity: 1; transform: translate(-50%, 0); }
 
+/* 답 고른 뒤 반응 시트: 아래에서 올라와 새 코드 칸이 넘어가고, 멘트·설명·가까운 유형 → '다음 질문'(3.2초 뒤 자동, 누르면 바로) */
+.rx-scrim { position: fixed; inset: 0; z-index: 20; background: rgba(20,24,30,.28); opacity: 0; transition: opacity .3s ease; }
+.rx-scrim.on { opacity: 1; }
+.rx { position: fixed; left: 50%; bottom: 0; z-index: 21; width: min(27.5rem, 100%); transform: translate(-50%, 104%); visibility: hidden;
+  border-radius: 1.75rem 1.75rem 0 0; background: var(--paper); box-shadow: var(--shadow);
+  padding: 1.25rem max(1.25rem, env(safe-area-inset-left, 0px)) calc(1.125rem + env(safe-area-inset-bottom, 0px)) max(1.25rem, env(safe-area-inset-right, 0px));
+  display: flex; flex-direction: column; gap: 0.875rem; transition: transform .36s cubic-bezier(.4,0,.2,1), visibility 0s .36s; }
+.rx.on { transform: translate(-50%, 0); visibility: visible; transition: transform .42s cubic-bezier(.2,.9,.25,1); }
+.rx:focus { outline: none; }
+.rx .rh { display: flex; align-items: center; gap: 0.75rem; }
+.rx .rh .step { margin-left: auto; font-size: 0.75rem; font-weight: 700; color: var(--blue); white-space: nowrap; }
+.rx h2 { margin: 0; font-size: 1.3125rem; font-weight: 800; letter-spacing: -.035em; line-height: 1.32; text-wrap: balance; }
+.rx p { margin: -0.375rem 0 0; color: var(--sub); font-size: 0.9375rem; line-height: 1.5; text-wrap: balance; }
+.rx .near { display: flex; flex-direction: column; gap: 0.5rem; }
+.rx .near > span { font-size: 0.75rem; font-weight: 700; color: var(--sub); }
+.rx .near div { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 0.5rem; }
+.rx .near b { display: flex; align-items: center; gap: 0.5rem; padding: 0.625rem 0.75rem; border-radius: var(--r-sm); background: var(--canvas); font-size: 0.875rem; font-weight: 700; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.rx .near b em { font-style: normal; font-size: 0.6875rem; font-weight: 800; letter-spacing: .06em; color: var(--sub); flex: none; }
+.rx .go2 { position: relative; overflow: hidden; }
+.rx .go2 i { position: absolute; inset: 0; background: rgba(127,127,127,.28); transform: scaleX(0); transform-origin: left; }
+.rx.on .go2 i { animation: fill var(--auto, 3.2s) linear .4s forwards; }
+@keyframes fill { to { transform: scaleX(1); } }
+.rx .go2 span { position: relative; display: flex; align-items: center; gap: 0.5rem; }
+.fl.lock { box-shadow: inset 0 0 0 2px var(--red); transition: box-shadow .3s; }
+.fl.new { animation: flip .38s cubic-bezier(.3,.7,.3,1), glowN 1.2s ease-out .38s; }
+@keyframes glowN { 0% { box-shadow: 0 0 0 0 rgba(59,91,219,.55); } 100% { box-shadow: 0 0 0 0.5rem rgba(59,91,219,0); } }
+/* 분석·가이드북 만드는 화면 */
+.calc .meter { width: min(15rem, 80%); height: 0.375rem; border-radius: 1rem; background: var(--hair); overflow: hidden; margin-top: -0.5rem; }
+.calc .meter i { display: block; height: 100%; width: 100%; background: var(--blue); transform: scaleX(0); transform-origin: left; transition: transform .6s cubic-bezier(.3,.7,.3,1); }
+.calc .pct { font-size: 0.8125rem; font-weight: 700; color: var(--blue); min-height: 1.25rem; margin-top: -1rem; }
+.ticks div .spin { width: 1rem; height: 1rem; border-radius: 50%; border: 2px solid var(--hair); border-top-color: var(--blue); animation: rot .8s linear infinite; flex: none; visibility: hidden; }
+.ticks div.cur .spin { visibility: visible; }
+.ticks div.on .spin { display: none; }
+.ticks div:not(.on) svg { display: none; }
+.ticks div.cur { opacity: 1; color: var(--ink); }
+@keyframes rot { to { transform: rotate(360deg); } }
+.calc .sub3 { margin: -1rem 0 0; font-size: 0.875rem; color: var(--sub); }
+.calc h2.found { color: var(--blue); }
 @media (max-width: 340px) { .opt { min-height: 8.25rem; } .opt .tx { font-size: 0.96875rem; } .hero h1 { font-size: 1.875rem; } }
 @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; } }
 </style>
@@ -309,6 +352,8 @@ main { flex: 1; display: flex; flex-direction: column; position: relative; overf
   </header>
   <main id="stage"></main>
 </div>
+<div class="rx-scrim" id="rxScrim" hidden></div>
+<div class="rx" id="rx" role="dialog" aria-modal="true" aria-labelledby="rxT"></div>
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
 <script src="types.js"></script>
@@ -317,8 +362,9 @@ main { flex: 1; display: flex; flex-direction: column; position: relative; overf
 const AX = [ // 축: 코드 글자 · 이름
   { k: 'LH', ax: '어디로', a: ['L', '로컬'], b: ['H', '핫플'] },
   { k: 'SE', ax: '무엇을', a: ['S', '구경'], b: ['E', '즐기기'] },
-  { k: 'FR', ax: '속도', a: ['F', '빡빡'], b: ['R', '여유'] },
-  { k: 'JP', ax: '계획', a: ['J', '계획형'], b: ['P', '즉흥형'] } ];
+  { k: 'FR', ax: '얼마나', a: ['F', '알차게'], b: ['R', '여유롭게'] },
+  { k: 'JP', ax: '어떻게', a: ['J', '계획형'], b: ['P', '즉흥형'] } ];
+const PAIR = { FJ: '알차게 · 계획형', FP: '알차게 · 즉흥형', RJ: '여유롭게 · 계획형', RP: '여유롭게 · 즉흥형' };
 const GROUPS = { LS: ['로컬 탐험형', '처음 보는 동네'], LE: ['취향 수집형', '로컬 맛집·시장·소품샵'], HS: ['명소 정복형', '꼭 봐야 할 그곳'], HE: ['힐링 충전형', '검증된 맛집·좋은 숙소'] };
 const BASE = { // 이름·한 줄 (types.js가 없어도 결과가 뜨게)
   LSFJ: ['골목 탐험대장', '지도에 없는 동네도 동선은 미리. 하루 1만 보는 기본'], LSFP: ['프로 뚜벅이', '계획은 없어도 체력은 있음. 걷다 보면 그게 코스'],
@@ -344,6 +390,17 @@ const QI = [ // 보기 아이콘 (선 하나짜리, 앱 아이콘과 같은 굵�
   ['<rect x="4" y="4.5" width="16" height="16" rx="2"/><path d="M4 9.5h16M9 4.5v16M14 4.5v16M4 15h16"/>', '<path d="M9 6h11M9 12h11M9 18h7M4.5 6h.01M4.5 12h.01M4.5 18h.01"/>', '<rect x="4" y="5" width="16" height="15" rx="2.5"/><path d="M4 10h16M9 3v4M15 3v4M9 15l2 2 4-4"/>', '<path d="M3 14.5l7-2.5 6.5-7.5c.8-.9 2.3-.4 2.4.8L19 7l-4.5 7 .5 6-2 .5-2-5.5-5 1.5-1 2.5H4z"/>'],
   ['<path d="M5 19c4 0 3-6 7-6s3-6 7-6"/><circle cx="5" cy="19" r="1.6"/><path d="M16.5 4.5L19 7l-2.5 2.5"/>', '<path d="M9 4L3.5 6v14L9 18l6 2 5.5-2V4L15 6zM9 4v14M15 6v14"/>', '<path d="M3 19v-7h18v7M3 16h18M7 12V9h4v3M5 8.5V6h14v6"/>', '<path d="M6 10h10v3.5A4.5 4.5 0 0 1 11.5 18h-1A4.5 4.5 0 0 1 6 13.5zM16 11h1a2 2 0 0 1 0 4h-1M4 21h14"/>'],
   ['<path d="M4 20V9l8-5 8 5v11M4 20h16M9.5 20v-6h5v6"/>', '<path d="M12 4a8 8 0 0 1 8 7.5H4A8 8 0 0 1 12 4zM12 11.5V18a2 2 0 0 1-4 0M12 2.5V4"/>', '<path d="M12 4v1.5M5.6 6.6l1 1M18.4 6.6l-1 1M4 13h1.5M18.5 13H20M8 13a4 4 0 0 1 8 0M3 17h18M6 20.5h12"/>', '<path d="M4 18v-4a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v4M4 18h16M6 12V8.5A2.5 2.5 0 0 1 8.5 6h7A2.5 2.5 0 0 1 18 8.5V12M6 18v2M18 18v2"/>'] ];
+const RX = [ // 보기 순서 = Q의 o 순서. [멘트, 설명]
+  [['지도 밖 골목부터 걷는 타입이시군요?', '유명한 곳보다 처음 보는 동네에서 더 신나요.'], ['현지인 단골집부터 찾는 타입이시군요?', '그 동네 사람들이 먹는 걸 맛봐야 여행이 시작돼요.'], ['도착하자마자 랜드마크부터 찍는 타입이시군요?', '그 도시에 왔다는 확신이 들어야 마음이 놓여요.'], ['커피 한 잔으로 여행을 여는 타입이시군요?', '첫날은 서두르지 않고 기분 좋게 시작하는 게 중요해요.']],
+  [['골목 풍경을 모으는 분이시군요?', '처음 보는 간판과 길이 가장 오래 기억에 남아요.'], ['건진 물건이 곧 추억인 분이시군요?', '여행에서 산 것 하나하나에 이야기가 담겨 있어요.'], ['명장면은 꼭 남기는 분이시군요?', '그 도시를 대표하는 장면을 내 사진으로 갖고 싶어요.'], ['여행의 기분을 남기는 분이시군요?', '좋은 방, 좋은 디저트, 늘어진 시간이 제일 소중해요.']],
+  [['남들이 모르는 곳을 찾아내는 분이시군요?', '나만 아는 동네 하나쯤은 꼭 들고 돌아와요.'], ['거기서만 파는 걸 꼭 챙기는 분이시군요?', '남들과 다른 기념품이 여행의 증거예요.'], ['가 봐야 할 곳은 직접 가 보는 분이시군요?', '사진으로만 보던 곳 앞에 서는 순간이 최고예요.'], ['제대로 쉬고 오는 분이시군요?', '다녀와서 몸이 가벼우면 그게 성공한 여행이에요.']],
+  [['시간표까지 완벽한 준비파시군요?', '동선이 정리돼 있어야 마음 놓고 즐길 수 있어요.'], ['가고 싶은 곳이 넘치는 분이시군요?', '목록은 길게, 순서는 그날 기분 따라 정해요.'], ['꼭 갈 곳만 확실히 챙기는 분이시군요?', '많이 안 가도 예약해 둔 곳은 제대로 즐겨요.'], ['가서 정하는 자유파시군요?', '비행기와 숙소만 있으면 나머진 여행이 알려 줘요.']],
+  [['플랜 B까지 준비된 분이시군요?', '시간이 남아도 허투루 쓰지 않아요.'], ['멈추면 아까운 분이시군요?', '지도만 있으면 어디든 한 곳 더 갈 수 있어요.'], ['쉬는 시간도 일정인 분이시군요?', '충전하고 저녁을 제대로 즐기는 게 더 중요해요.'], ['흘러가는 대로 즐기는 분이시군요?', '눈에 띈 카페 하나가 그날의 하이라이트가 되기도 해요.']],
+  [['비도 계획에 있었던 분이시군요?', '실내 코스로 바꿔도 하루가 그대로 굴러가요.'], ['비가 와도 일단 나가는 분이시군요?', '길에서 만나는 뜻밖의 장소를 믿어요.'], ['하루를 똑똑하게 나누는 분이시군요?', '오전은 쉬고 오후 일정은 지키는 균형파예요.'], ['비 오는 날은 쉬는 날인 분이시군요?', '여행에서도 무리하지 않는 게 원칙이에요.']] ];
+const AUTO = 3200; // 반응 시트가 떠 있다가 다음 질문으로 넘어가기까지
+/* 코드 칸이 한 문항에 한 걸음씩: 1번 → 1칸, 2번 → 2칸, 3번 → 1·2칸 확정, 4번 → 3칸, 5번 → 4칸, 6번 → 3·4칸 확정 */
+const SHOWN = [1, 2, 2, 3, 4, 4], LOCKED = [0, 0, 2, 2, 2, 4];
+const STEP_TX = ['첫 글자 등장', '두 번째 글자 등장', '앞 두 글자 확정', '세 번째 글자 등장', '네 번째 글자 등장', '코드 완성'];
 const CITIES = [['오사카·교토', '고베·나라까지 · 일본'], ['도쿄', '요코하마까지 · 일본'], ['후쿠오카', '일본 규슈'], ['삿포로', '오타루까지 · 일본'], ['서울', '국내'], ['부산', '국내'], ['제주', '국내'], ['다른 곳', '직접 입력']];
 const WHO = [['혼자', '내 속도대로'], ['연인', '둘이서'], ['친구', '여럿이'], ['가족 (아이 포함)', '쉬는 시간 넉넉히'], ['가족 (어른만)', '이동은 편하게']];
 const NIGHTS = [[1, '1박 2일'], [2, '2박 3일'], [3, '3박 4일'], [4, '4박 5일'], [5, '5박 이상']];
@@ -370,12 +427,14 @@ function letters(v) { return AX.map(x => { const A = v[x.a[0]], B = v[x.b[0]]; r
 const ICON = {
   check: '<svg viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>',
   arrow: '<svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg>',
+  share: '<svg viewBox="0 0 24 24"><path d="M12 15V4M8 8l4-4 4 4M5 12v7a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-7"/></svg>',
   link: '<svg viewBox="0 0 24 24"><path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1"/></svg>',
   redo: '<svg viewBox="0 0 24 24"><path d="M4 12a8 8 0 1 0 2.4-5.7M4 4v4h4"/></svg>',
   grid: '<svg viewBox="0 0 24 24"><rect x="4" y="4" width="7" height="7" rx="1.5"/><rect x="13" y="4" width="7" height="7" rx="1.5"/><rect x="4" y="13" width="7" height="7" rx="1.5"/><rect x="13" y="13" width="7" height="7" rx="1.5"/></svg>',
   wand: '<svg viewBox="0 0 24 24"><path d="M5 19L15 9M14 4v3M19 9h-3M17.5 5.5l-2 2M9 4l.6 1.4L11 6l-1.4.6L9 8l-.6-1.4L7 6l1.4-.6z"/></svg>',
   lock: '<svg viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>',
   l: '<svg viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7"/></svg>', r: '<svg viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg>' };
+const wa = w => { const c = w.charCodeAt(w.length - 1) - 0xAC00; return w + (c >= 0 && c < 11172 && c % 28 ? '과' : '와'); }; // 받침 따라 과/와
 const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]);
 let dir = 1;
 
@@ -389,7 +448,8 @@ function go(step, opt = {}) {
   const h = document.querySelector('.scr:not(.leaving) h1, .scr:not(.leaving) h2'); if (h && !opt.noFocus) { h.tabIndex = -1; h.focus({ preventScroll: true }); }
 }
 function back() {
-  if (busy) return; // 고르는 0.56초 사이엔 뒤로 안 감
+  if (rxOpen()) { NAV++; closeRx(); busy = false; dir = -1; render(); return; } // 반응 시트 닫고 같은 질문 다시 고르기
+  if (busy) return; // 고르는 순간엔 뒤로 안 감
   if (S.step === 'view') clearHash();
   const p = S.hist.pop(); if (!p) { go('intro', { noHist: true, back: true }); return; }
   if (p === 'view') S.view = S.viewStack.pop() || S.type; // 유형 → 다른 유형 → 뒤로 = 처음 유형
@@ -414,7 +474,9 @@ function screen(html, cls = '') {
   const sec = document.createElement('section'); sec.className = `scr ${dir < 0 ? 'back' : ''} ${cls}`; sec.innerHTML = html; m.appendChild(sec); return sec;
 }
 const REDUCED = matchMedia('(prefers-reduced-motion: reduce)').matches;
-function flapsHtml(ls, big) { return `<div class="flaps${big ? ' big' : ''}">${ls.map((l, i) => `<span class="fl ${l ? '' : 'empty'}" data-i="${i}">${l || '·'}</span>`).join('')}</div>`; }
+function flapsHtml(ls, big, qi = -1) { const lk = qi >= 0 ? LOCKED[qi] : 0; return `<div class="flaps${big ? ' big' : ''}">${ls.map((l, i) => `<span class="fl ${l ? '' : 'empty'} ${i < lk ? 'lock' : ''}" data-i="${i}">${l || '·'}</span>`).join('')}</div>`; }
+/* 문항 qi까지 답했을 때 안내판에 보이는 글자 (아직 안 열린 칸은 null) */
+function boardLetters(qi) { if (qi < 0) return [null, null, null, null]; const ls = letters(tally(S.ans.slice(0, qi + 1))); return ls.map((l, k) => k < SHOWN[qi] ? l : null); }
 function setFlap(el, ch) { if (el.textContent === ch) return; el.classList.remove('flip'); void el.offsetWidth; el.classList.add('flip'); setTimeout(() => { el.textContent = ch; el.classList.remove('empty'); }, 170); }
 
 function render() {
@@ -428,6 +490,7 @@ function render() {
   if (s === 'method') return rMethod();
   if (INFO.includes(s)) return rInfo(s);
   if (s === 'done') return rDone();
+  if (s === 'build') return rBuild();
 }
 
 function miniHtml(c, sub, extra = '') { const t = T(c); return `<button class="mini" data-code="${c}" ${extra}><div class="t1"><span>GABOJA · BOARDING PASS</span><em>${esc(t.group)}</em></div><div class="t2"><span class="cd">${c}</span><span class="nm">${esc(t.name)}</span></div><div class="pf"></div><div class="t3">${esc(sub == null ? t.line : sub)}</div></button>`; }
@@ -441,7 +504,7 @@ function rIntro() {
       <span class="eyebrow">가보자 · 여행 유형</span>
       <h1>이번 여행, 나는 어떤 여행자일까?</h1>
       <p>고르기만 하면 16가지 탑승권 중 내 것이 나와요. 그 유형에 맞춰 일정도 바로 짜 드려요.</p>
-      <div class="facts"><span>질문 6개</span><span>6번 고르면 끝</span><span>가입 없음</span></div>
+      <div class="facts"><span>질문 6개</span><span>1분이면 끝</span><span>가입 없음</span></div>
     </div>
     <div class="fan" aria-hidden="true">${pick.map(c => miniHtml(c, null, 'tabindex="-1"')).join('')}</div>
     ${me ? `<button class="mine" id="mineBtn"><div><span>지난번 내 유형</span><b>${S.type} · ${esc(me.name)}</b></div><span class="go">다시 보기</span></button>` : ''}
@@ -457,14 +520,13 @@ function rIntro() {
 function rQ(i) {
   const q = Q[i], ord = S.shuffle[i], prev = S.ans[i];
   setBar('test', i, Q.length, { t: `${i + 1} / ${Q.length}` });
-  const ls = letters(tally(S.ans.slice(0, i)));
-  const known = ls.filter(Boolean).length;
+  const ls = boardLetters(i - 1), known = i > 0;
   const el = screen(`
-    <div class="qh"><span class="eyebrow">${i < 3 ? '어디로 · 무엇을' : '속도 · 계획'}</span><h1>${esc(q.h)}</h1><p>가장 가까운 걸 하나만 골라요</p></div>
+    <div class="qh"><span class="eyebrow">${i < 3 ? '여행 취향' : '여행 스타일'}</span><h1>${esc(q.h)}</h1><p>가장 가까운 걸 하나만 골라요</p></div>
     <div class="opts" id="opts">${ord.map((oi, n) => `<button class="opt ${prev === oi ? 'prev' : ''}" data-oi="${oi}"><span class="top"><span class="k">${'ABCD'[n]}</span><svg class="ic" viewBox="0 0 24 24" aria-hidden="true">${QI[i][oi]}</svg></span><span class="tx">${esc(q.o[oi][0])}</span><span class="stamp">${ICON.check}</span></button>`).join('')}</div>
     <div class="board glass" id="board">
-      ${flapsHtml(ls)}
-      <div class="lb"><b id="bdT">${known ? '탑승권 코드 만드는 중' : '고를 때마다 코드가 채워져요'}</b><span id="bdS">${known ? boardSub(ls) : '어디로 · 무엇을 · 속도 · 계획'}</span></div>
+      ${flapsHtml(ls, false, i - 1)}
+      <div class="lb"><b id="bdT">${known ? `탑승권 코드 ${SHOWN[i - 1]} / 4` : '하나 고를 때마다 코드가 한 칸씩'}</b><span id="bdS">${known ? boardSub(ls) : AX.map(x => x.ax).join(' · ')}</span></div>
     </div>`);
   el.querySelectorAll('.opt').forEach(b => b.onclick = () => choose(i, +b.dataset.oi, b));
 }
@@ -474,27 +536,58 @@ function choose(i, oi, btn) {
   S.ans[i] = oi; S.ans.length = Math.max(S.ans.length, i + 1);
   try { navigator.vibrate && navigator.vibrate(12); } catch (_) {}
   const box = $('#opts'); btn.classList.add('chosen'); box.classList.add('done');
-  const ls = letters(tally(S.ans.slice(0, i + 1)));
-  document.querySelectorAll('#board .fl').forEach((f, k) => { if (ls[k]) setFlap(f, ls[k]); });
-  $('#bdT').textContent = '탑승권 코드 만드는 중'; $('#bdS').textContent = boardSub(ls);
-  later(() => { busy = false; if (i + 1 < Q.length) go('q' + (i + 1)); else go('calc'); }, 560);
+  later(() => openRx(i, oi), 420);
 }
+
+function nearTypes(i) { // 이 답과 가까운 유형 2개: 1~3번은 같은 묶음, 4~6번은 같은 여행 스타일(묶음은 다른 것) — 최종 결과는 미리 안 보여 줌
+  const ls = letters(tally(S.ans.slice(0, i + 1)));
+  if (i < 3) { const g = ORDER.filter(c => c.startsWith(ls[0] + ls[1])); return [g[(i * 2) % 4], g[(i * 2 + 1) % 4]]; }
+  const tail = ls[2] + ls[3], g = ORDER.filter(c => c.endsWith(tail) && !c.startsWith(ls[0] + ls[1])); return [g[i % 3], g[(i + 1) % 3]];
+}
+function openRx(i, oi) {
+  const [t, d] = RX[i][oi], last = i === Q.length - 1, ls = boardLetters(i), prevLs = boardLetters(i - 1);
+  const rx = $('#rx'), sc = $('#rxScrim');
+  rx.style.setProperty('--auto', AUTO + 'ms');
+  rx.innerHTML = `<div class="rh">${flapsHtml(prevLs, false, i - 1)}<span class="step">${STEP_TX[i]}</span></div>
+    <h2 id="rxT">${esc(t)}</h2><p>${esc(d)}</p>
+    <div class="near"><span>지금까지 답으로 보면 이런 유형에 가까워요</span><div>${nearTypes(i).filter(Boolean).map(c => `<b><em>${c}</em>${esc(T(c).name)}</b>`).join('')}</div></div>
+    <button class="cta go2" id="rxGo"><i></i><span>${last ? '내 탑승권 받기' : '다음 질문'} ${ICON.arrow}</span></button>`;
+  sc.hidden = false; void rx.offsetWidth; void sc.offsetWidth; sc.classList.add('on'); rx.classList.add('on');
+  const fls = rx.querySelectorAll('.fl');
+  later(() => ls.forEach((l, k) => { if (l && l !== prevLs[k]) { setFlap(fls[k], l); fls[k].classList.add('new'); } if (k < LOCKED[i]) fls[k].classList.add('lock'); }), 420);
+  let done = false;
+  const goOn = () => { if (done) return; done = true; closeRx(); setTimeout(() => { busy = false; go(last ? 'calc' : 'q' + (i + 1)); }, 240); };
+  $('#rxGo').onclick = goOn; sc.onclick = goOn;
+  later(goOn, AUTO + 400);
+  rx.tabIndex = -1; setTimeout(() => rx.focus({ preventScroll: true }), 60); // 시트 자체에 포커스(버튼 테두리 안 보이게), Enter = 다음
+}
+function closeRx() { const rx = $('#rx'), sc = $('#rxScrim'); rx.classList.remove('on'); sc.classList.remove('on'); setTimeout(() => { if (!rx.classList.contains('on')) sc.hidden = true; }, 360); }
+function rxOpen() { return $('#rx').classList.contains('on'); }
 
 function rCalc() {
   setBar('test', Q.length, Q.length);
   const v = tally(S.ans), ls = letters(v), code = ls.join('');
   S.type = code; S.votes = v; store.set('gaboja-type', { code, votes: v, at: Date.now() });
+  const lines = ['고른 답 6개 다시 읽기'].concat(AX.map(x => `${x.ax} · ${wa(x.a[1])} ${x.b[1]} 사이 저울질`)).concat(['16가지 탑승권 중 가장 가까운 것 찾기']);
   screen(`<div class="calc">
-      <span class="eyebrow">탑승권 발급 중</span>
+      <span class="eyebrow">분석 중</span>
       ${flapsHtml(['', '', '', ''], true)}
-      <h2>내 탑승권 만드는 중</h2>
-      <div class="ticks">${['어디로 · 로컬과 핫플 사이', '무엇을 · 구경과 즐기기 사이', '속도 · 빡빡과 여유 사이', '계획 · 계획형과 즉흥형 사이'].map(t => `<div>${ICON.check}${t}</div>`).join('')}</div>
+      <h2 id="cT">나에게 맞는 탑승권 찾는 중</h2>
+      <div class="meter"><i id="cM"></i></div><span class="pct" id="cP">0%</span>
+      <div class="ticks">${lines.map(t => `<div><span class="spin"></span>${ICON.check}<span>${t}</span></div>`).join('')}</div>
     </div>`);
   const fls = document.querySelectorAll('.calc .fl'), tk = document.querySelectorAll('.ticks div'), AB = 'ABCDEFGHJKLMNPRSTUVXYZ';
-  const spin = spinT = setInterval(() => { fls.forEach((f, k) => { if (!f.dataset.done) { f.textContent = AB[(Math.random() * AB.length) | 0]; f.classList.remove('empty'); } }); }, 70);
-  ls.forEach((l, k) => later(() => { fls[k].dataset.done = 1; setFlap(fls[k], l); tk[k].classList.add('on'); }, 380 + k * 300));
-  setTimeout(() => { clearInterval(spin); }, 380 + 3 * 300 + 50);
-  later(() => { S.hist = ['intro']; go('result', { noHist: true }); try { history.replaceState(null, '', '#r-' + code); } catch (_) {} }, 1900);
+  const spin = spinT = setInterval(() => { fls.forEach(f => { if (!f.dataset.done) { f.textContent = AB[(Math.random() * AB.length) | 0]; f.classList.remove('empty'); } }); }, 90);
+  // 단계마다 0.85초: 줄이 하나씩 체크되고, 축 줄이 끝날 때 그 칸 글자가 멈춤 (약 6초 — 계산이 빨라도 일부러 기다림)
+  const STEP = 850, setP = v => { $('#cM').style.transform = `scaleX(${v / 100})`; $('#cP').textContent = Math.round(v) + '%'; };
+  tk[0].classList.add('cur');
+  lines.forEach((_, k) => later(() => { tk[k].classList.remove('cur'); tk[k].classList.add('on'); if (tk[k + 1]) tk[k + 1].classList.add('cur');
+    if (k >= 1 && k <= 4) { fls[k - 1].dataset.done = 1; setFlap(fls[k - 1], ls[k - 1]); }
+    setP((k + 1) / lines.length * 100); }, 500 + k * STEP));
+  const end = 500 + lines.length * STEP;
+  later(() => clearInterval(spin), end - STEP);
+  later(() => { const h = $('#cT'); h.textContent = '찾았어요!'; h.classList.add('found'); }, end);
+  later(() => { S.hist = ['intro']; go('result', { noHist: true }); try { history.replaceState(null, '', '#r-' + code); } catch (_) {} }, end + 800);
 }
 
 function barcode(code) { let h = 7; const out = []; for (let i = 0; i < 46; i++) { h = (h * 31 + code.charCodeAt(i % 4) + i) % 9973; out.push(`<i style="width:${1 + (h % 3)}px;opacity:${h % 5 ? 1 : .35}"></i>`); } return out.join(''); }
@@ -525,14 +618,14 @@ function rResult(c, mine) {
     </article>
     ${t.scenes ? `<div class="sec"><h3>이런 장면, 익숙하죠?</h3><div class="card">${t.scenes.map(s => `<div class="scene"><span class="ck">${ICON.check}</span><span>${esc(s)}</span></div>`).join('')}</div></div>` : ''}
     ${day ? `<div class="sec"><h3>이 유형의 오사카 하루</h3><div class="card">${day}</div></div>` : ''}
-    ${t.plan ? `<div class="plan">${ICON.wand}<span>가보자가 짜는 방식 · ${esc(t.plan)}</span></div>` : ''}
+    ${t.plan ? `<div class="plan">${ICON.wand}<span><small>가보자가 짜는 방식</small>${esc(t.plan)}</span></div>` : ''}
     ${t.best ? `<div class="sec"><h3>같이 가면</h3><div class="pair">
       <div><div class="lab ok">잘 맞아요</div>${miniHtml(t.best, t.bestWhy)}</div>
       <div><div class="lab no">부딪힐 수 있어요</div>${miniHtml(t.clash, t.clashWhy)}</div></div></div>` : ''}
     <div class="acts">
-      <button id="copyBtn">${ICON.link}링크 복사</button>
+      <button id="copyBtn" class="share">${ICON.share}친구에게 공유하기</button>
       <button id="redoBtn">${ICON.redo}다시 하기</button>
-      <button id="allBtn2">${ICON.grid}16가지</button>
+      <button id="allBtn2">${ICON.grid}16가지 유형</button>
     </div>
     <div class="foot">
       <button class="cta" id="nextBtn">${mine ? '이 유형으로 내 여행 만들기' : (S.type ? '내 유형으로 여행 만들기' : '나도 해 보기')} ${ICON.arrow}</button>
@@ -545,17 +638,19 @@ function rResult(c, mine) {
 }
 function openType(c) { if (S.step === 'view') { S.viewStack.push(S.view); S.hist.push('view'); } S.view = c; go('view', { noHist: S.step === 'view' }); try { history.replaceState(null, '', '#r-' + c); } catch (_) {} }
 function copyLink(c) {
-  const url = location.origin + location.pathname + '#r-' + c, txt = `나는 ${T(c).name} (${c}) — 가보자 여행 유형 ${url}`;
-  const ok = () => toast('링크 복사됨'), bad = () => { toast('복사할 수 없어요. 주소창 링크를 길게 눌러 복사해 주세요'); };
+  const url0 = location.origin + location.pathname + '#r-' + c, t0 = T(c);
+  if (navigator.share) { navigator.share({ title: '가보자 여행 유형', text: `나는 ‘${t0.name}’(${c}) 여행자래. 너는 어떤 여행자야? 6번만 고르면 나와`, url: url0 }).catch(() => {}); return; }
+  const url = url0, txt = `나는 ‘${t0.name}’(${c}) 여행자래. 너는 어떤 여행자야? 6번만 고르면 나와 ${url}`;
+  const ok = () => toast('공유 문구 복사됨 · 친구에게 붙여 넣어 보내 보세요'), bad = () => { toast('복사할 수 없어요. 주소창 링크를 길게 눌러 복사해 주세요'); };
   try { navigator.clipboard.writeText(txt).then(ok, bad); } catch (_) { bad(); }
 }
 
 function rTypes() {
   setBar(null, 0, 0, { t: '16가지' });
   const el = screen(`
-    <div class="qh"><span class="eyebrow">가보자 · 16가지 탑승권</span><h1>여행 유형 한눈에</h1><p>네 묶음 × 속도·계획. 눌러서 자세히</p></div>
+    <div class="qh"><span class="eyebrow">가보자 · 16가지 탑승권</span><h1>여행 유형 한눈에</h1><p>여행 취향 4묶음 × 여행 스타일 4가지. 눌러서 자세히</p></div>
     ${Object.keys(GROUPS).map(g => `<div class="grp"><h3>${GROUPS[g][0]}<span>${GROUPS[g][1]}</span></h3><div class="g4">
-      ${ORDER.filter(c => c.startsWith(g)).map(c => { const t = T(c), lab = { FJ: '빡빡 · 계획', FP: '빡빡 · 즉흥', RJ: '여유 · 계획', RP: '여유 · 즉흥' }[c.slice(2)];
+      ${ORDER.filter(c => c.startsWith(g)).map(c => { const t = T(c), lab = PAIR[c.slice(2)];
         return `<button class="mini ${c === S.type ? 'me' : ''}" data-code="${c}">${c === S.type ? '<span class="me-b">나</span>' : ''}<div class="t2"><span class="cd">${c}</span><span class="nm">${esc(t.name)}</span></div><div class="pf"></div><div class="t3">${lab}</div></button>`; }).join('')}
     </div></div>`).join('')}
     <div class="foot"><button class="cta" id="tStart">${S.type ? '내 결과 보기' : '내 유형 알아보기'} ${ICON.arrow}</button></div>`);
@@ -639,7 +734,7 @@ function rInfo(s) {
     $('#lNext').onclick = () => next(s);
   }
 }
-function next(s) { const i = INFO.indexOf(s); store.set('gaboja-trip', S.trip); go(i + 1 < INFO.length ? INFO[i + 1] : 'done'); }
+function next(s) { const i = INFO.indexOf(s); store.set('gaboja-trip', S.trip); go(i + 1 < INFO.length ? INFO[i + 1] : 'build'); }
 
 /* 달력 */
 const WD = ['일', '월', '화', '수', '목', '금', '토'];
@@ -669,6 +764,25 @@ function dateSum() {
   else if (tr.nights) el.innerHTML = `날짜 미정 · <span>${NIGHTS.find(x => x[0] === tr.nights)[1]}</span>`;
   else el.innerHTML = '<span class="muted">출발일을 눌러요</span>';
   $('#dNext').disabled = !(tr.nights && (!tr.start || tr.end));
+}
+
+function rBuild() {
+  setBar('info', INFO.length + 1, INFO.length + 1, { t: '만드는 중' });
+  const tr = S.trip, t = S.type ? T(S.type) : null, city = tr.city === '다른 곳' ? (tr.cityEtc || '여행지') : (tr.city || '여행지');
+  const lines = [tr.home ? '집 문 앞에서 공항까지 시간 계산' : '출발 시각 정하기', `${city}에서 ${t ? t.name + ' 취향' : '취향'}에 맞는 곳 고르기`, '영업시간·휴무일 맞춰 보기', tr.nights ? `${tr.nights + 1}일 동선 짜기` : '하루 동선 짜기', '가이드북 한 권으로 정리'];
+  screen(`<div class="calc">
+      <span class="eyebrow">${t ? esc(t.name) + ' 맞춤' : '맞춤 일정'}</span>
+      ${S.type ? flapsHtml(S.type.split(''), true) : ''}
+      <h2 id="cT">내 여행 가이드북 만드는 중</h2>
+      <p class="sub3">${esc(city)}${tr.nights ? ` · ${tr.nights}박 ${tr.nights + 1}일` : ''}${tr.who ? ' · ' + esc(tr.who) : ''}</p>
+      <div class="meter"><i id="cM"></i></div><span class="pct" id="cP">0%</span>
+      <div class="ticks">${lines.map(l => `<div><span class="spin"></span>${ICON.check}<span>${esc(l)}</span></div>`).join('')}</div>
+    </div>`);
+  const tk = document.querySelectorAll('.ticks div'), STEP = 1050; tk[0].classList.add('cur');
+  lines.forEach((_, k) => later(() => { tk[k].classList.remove('cur'); tk[k].classList.add('on'); if (tk[k + 1]) tk[k + 1].classList.add('cur'); const v = (k + 1) / lines.length; $('#cM').style.transform = `scaleX(${v})`; $('#cP').textContent = Math.round(v * 100) + '%'; }, 600 + k * STEP));
+  const end = 600 + lines.length * STEP;
+  later(() => { const h = $('#cT'); h.textContent = '다 만들었어요!'; h.classList.add('found'); }, end);
+  later(() => { S.hist = S.hist.filter(h => h !== 'build'); go('done', { noHist: true }); }, end + 800);
 }
 
 function rDone() {
@@ -706,6 +820,7 @@ function toast(m) { const t = $('#toast'); t.textContent = m; t.classList.add('o
 /* 키보드: A~D / 1~4로 고르기, Esc = 뒤로 */
 document.addEventListener('keydown', e => {
   if (e.target.tagName === 'INPUT' || e.ctrlKey || e.metaKey || e.altKey || e.repeat) return;
+  if (rxOpen() && (e.key === 'Enter' || e.key === ' ')) { e.preventDefault(); const g = $('#rxGo'); if (g) g.click(); return; }
   if (S.step[0] === 'q') { const k = 'abcd1234'.indexOf(e.key.toLowerCase()); if (k >= 0) { const b = document.querySelectorAll('.opt')[k % 4]; if (b) b.click(); } }
   if (e.key === 'Escape' && S.step !== 'intro') back();
 });
@@ -723,11 +838,14 @@ window.addEventListener('hashchange', route);
 /* 시안 점검용: ?s=q3 · ?s=date 처럼 화면 하나를 바로 열기 (?type=LSRP로 유형 지정) */
 const QS = new URLSearchParams(location.search), qsS = QS.get('s'), qsT = QS.get('type');
 if (qsT && BASE[qsT]) { S.type = qsT; S.votes = S.votes && S.type === saved?.code ? S.votes : (() => { const v = { L: 0, H: 0, S: 0, E: 0, F: 0, R: 0, J: 0, P: 0 }; qsT.split('').forEach((l, k) => { v[l] = k % 2 ? 3 : 2; const x = AX[k], o = x.a[0] === l ? x.b[0] : x.a[0]; v[o] = 3 - v[l]; }); return v; })(); }
-if (qsS && (/^q[0-5]$/.test(qsS) || ['intro', 'result', 'types', 'method', 'done'].concat(INFO).includes(qsS))) {
+if (qsS && (/^q[0-5]$/.test(qsS) || ['intro', 'result', 'types', 'method', 'done', 'calc', 'build'].concat(INFO).includes(qsS))) {
+  if (qsS === 'calc') S.ans = [0, 1, 2, 3, 0, 1];
   if (qsS[0] === 'q') for (let k = 0; k < +qsS[1]; k++) S.ans[k] = (k * 3) % 4;
   if (!S.type && !qsS.startsWith('q') && qsS !== 'intro' && qsS !== 'types') { S.type = 'LSRP'; S.votes = { L: 3, H: 0, S: 2, E: 1, F: 1, R: 2, J: 0, P: 3 }; }
   if (qsS === 'done') Object.assign(S.trip, { city: '오사카·교토', start: 20261204, end: 20261207, nights: 3, who: '친구', home: '올림픽로 300', method: 'auto', likes: ['자연·산책', '카페'] });
+  if (qsS === 'build') Object.assign(S.trip, { city: '오사카·교토', nights: 3, who: '친구', home: '올림픽로 300' });
   S.hist = ['intro']; S.step = qsS; render();
+  if (qsS[0] === 'q' && QS.get('rx')) { const i = +qsS[1], oi = S.shuffle[i][0]; S.ans[i] = oi; const b = document.querySelector(`.opt[data-oi="${oi}"]`); b.classList.add('chosen'); document.querySelector('#opts').classList.add('done'); busy = true; openRx(i, oi); NAV++; } // 점검용: 반응 시트 열어 둔 채
 } else if (location.hash) route(); else render();
 S.booted = true;
 </script>
