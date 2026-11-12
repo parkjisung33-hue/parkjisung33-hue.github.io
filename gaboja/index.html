@@ -435,6 +435,7 @@ html.locked, html.locked body { overflow: hidden; }
 .drawer .brand { font-weight: 800; font-size: 1.4375rem; letter-spacing: -.04em; padding: 0.25rem 0.75rem 0.75rem; }
 .drawer .brand span { font-family: var(--mono); font-weight: 400; font-size: 0.71875rem; letter-spacing: .1em; color: var(--sub); display: block; }
 .drawer .grp { font-size: 0.71875rem; color: var(--sub); padding: 0.75rem 0.875rem 0.25rem; }
+.drawer a[data-m] { text-decoration: none; color: inherit; }
 .drawer [data-m] { text-align: left; padding: 0.75rem 0.875rem; border-radius: var(--r-sm); font-size: 0.9375rem; font-weight: 600; display: flex; align-items: center; gap: 0.75rem; white-space: nowrap; }
 .drawer [data-m]:hover { background: var(--hair); }
 .drawer [data-m] svg { width: 1.25rem; height: 1.25rem; stroke: currentColor; fill: none; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; flex: none; color: var(--sub); }
@@ -521,6 +522,8 @@ html.locked, html.locked body { overflow: hidden; }
 <div class="sheet glass" id="sheet" role="dialog" aria-modal="true" aria-labelledby="sheetTitle"><div class="grab"></div><div id="sheetIn"></div></div>
 <nav class="drawer glass" id="drawer" aria-label="메뉴">
   <div class="brand">가보자<span>GABOJA</span></div>
+  <a data-m="type" href="start.html#types"><svg viewBox="0 0 24 24"><rect x="3.5" y="6" width="17" height="12" rx="2"/><path d="M15 6v12" stroke-dasharray="2 2"/><path d="M7 10h4M7 14h3"/></svg><span>내 여행 유형</span><span class="muted" id="typeN" style="margin-left:auto;font-weight:500"></span></a>
+  <a data-m="new" href="start.html"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>새 여행 만들기</a>
   <button data-m="sum"><svg viewBox="0 0 24 24"><path d="M5 6h14M5 12h14M5 18h9"/></svg>여행 요약</button>
   <button data-m="memo"><svg viewBox="0 0 24 24"><path d="M5 4h14v11l-5 5H5z"/><path d="M14 20v-5h5M8 9h8M8 13h4"/></svg><span>메모</span><span class="muted" id="memoN" style="margin-left:auto;font-weight:500"></span></button>
   <button data-m="chk"><svg viewBox="0 0 24 24"><path d="M5 12l4 4 10-10"/></svg>정보 출처</button>
@@ -632,6 +635,7 @@ function setTheme(t, save) {
   syncBar();
 }
 try { const t = localStorage.getItem('gaboja-theme'); if (t) setTheme(t); } catch (_) {}
+try { const ty = JSON.parse(localStorage.getItem('gaboja-type')); if (ty && /^[LH][SE][FR][JP]$/.test(ty.code)) { document.getElementById('typeN').textContent = ty.code; document.querySelector('[data-m="type"]').href = 'start.html#r-' + ty.code; } } catch (_) {}
 $('#themeSeg').onclick = e => { const b = e.target.closest('[data-th]'); if (b) setTheme(b.dataset.th, true); };
 
 /* ---------- 고칠 수 있는 하루 목록 ---------- */
@@ -1268,7 +1272,7 @@ document.querySelector('.tabs').onclick = e => {
 };
 $('#addBtn').onclick = addSheet;
 $('#menuBtn').onclick = () => { lastFocus = $('#menuBtn'); const tok = ++openTok; $('#scrim').hidden = false; nextFrame(() => { if (tok !== openTok) return; $('#scrim').classList.add('on'); $('#drawer').classList.add('on'); }); setTimeout(() => $('#drawer [data-m]').focus({ preventScroll: true }), 60); };
-$('#drawer').onclick = e => { const b = e.target.closest('[data-m]'); if (!b) return; $('#drawer').classList.remove('on'); menuSheet(b.dataset.m); };
+$('#drawer').onclick = e => { const b = e.target.closest('[data-m]'); if (!b || b.tagName === 'A') return; $('#drawer').classList.remove('on'); menuSheet(b.dataset.m); };
 $('#scrim').onclick = closeAll;
 document.addEventListener('keydown', e => {
   if (e.key === 'Escape') closeAll();
