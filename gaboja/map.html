@@ -1,0 +1,255 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<link rel="icon" href="icons/icon-192.png">
+<title>가보자 위쪽 지도 시안</title>
+<style>[hidden]{display:none!important}</style>
+</head>
+<body>
+<link rel="stylesheet" href="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.css">
+<script src="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.js"></script>
+<style>
+/* 위쪽 지도 시안 v1 (2026-11-12) — 앱에 넣기 전 따로 보는 페이지.
+   지도 = MapLibre GL JS 4.7.1 + OpenFreeMap(키·가입 없음) · 좌표 = 우리 장소 DB(Overture, 저장 가능 라이선스)
+   위 = 지도(오늘 갈 곳 번호 마커 · 지금 = 파란 pulse · 지난 곳 회색), 아래 = 시트(그날 일정). 시트 손잡이를 누르면 지도 크게/작게 */
+@font-face { font-family: "Pretendard Variable"; font-weight: 45 920; font-display: swap;
+  src: local("Pretendard Variable"), url("fonts/PretendardVariable.woff2") format("woff2-variations"), url("fonts/PretendardVariable.woff2") format("woff2"); }
+:root { color-scheme: light;
+  --canvas: #EEF0F3; --ink: #15171A; --sub: #6F757D; --hair: rgba(21,23,26,.09); --on-ink: #fff; --paper: #fff;
+  --glass: rgba(255,255,255,.72); --red: #E0453A; --amber: #E8A317; --blue: #3B5BDB; --past: #B9BEC6;
+  --shadow: 0 1.375rem 2.75rem -1.375rem rgba(24,36,60,.32), 0 2px 0.375rem -2px rgba(24,36,60,.10);
+  --kr: "Pretendard Variable", Pretendard, -apple-system, "Apple SD Gothic Neo", "Malgun Gothic", system-ui, sans-serif; --jp: "Yu Gothic", "Hiragino Sans", sans-serif;
+  --mapH: 46svh; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { color-scheme: dark;
+  --canvas: #0E1013; --ink: #ECEEF1; --sub: #8F969F; --hair: rgba(255,255,255,.08); --on-ink: #0E1013; --paper: #1B1E23;
+  --glass: rgba(30,33,38,.78); --red: #F2675D; --amber: #F0B43C; --blue: #8095F5; --past: #4A5059; --shadow: 0 1.375rem 2.75rem -1.375rem rgba(0,0,0,.7), 0 2px 0.375rem -2px rgba(0,0,0,.4); } }
+:root[data-theme="dark"] { color-scheme: dark;
+  --canvas: #0E1013; --ink: #ECEEF1; --sub: #8F969F; --hair: rgba(255,255,255,.08); --on-ink: #0E1013; --paper: #1B1E23;
+  --glass: rgba(30,33,38,.78); --red: #F2675D; --amber: #F0B43C; --blue: #8095F5; --past: #4A5059; --shadow: 0 1.375rem 2.75rem -1.375rem rgba(0,0,0,.7), 0 2px 0.375rem -2px rgba(0,0,0,.4); }
+html { font-size: clamp(13.5px, calc(100vw * 16 / 390), 18px); -webkit-text-size-adjust: 100%; background: var(--canvas); }
+* { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+body { margin: 0; background: var(--canvas); color: var(--ink); font-family: var(--kr); font-size: 0.9375rem; line-height: 1.5; letter-spacing: -.01em; font-variant-numeric: tabular-nums; overflow: hidden; }
+button { font: inherit; color: inherit; background: none; border: 0; padding: 0; cursor: pointer; }
+a { color: inherit; }
+.one { display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-width: 0; }
+.glass { background: var(--glass); -webkit-backdrop-filter: blur(1.25rem) saturate(1.5); backdrop-filter: blur(1.25rem) saturate(1.5); border: 1px solid rgba(255,255,255,.5); box-shadow: var(--shadow); }
+
+/* 지도 */
+#map { position: fixed; left: 0; right: 0; top: 0; height: calc(var(--mapH) + 1.75rem); transition: height .35s cubic-bezier(.2,.8,.2,1); }
+body.big { --mapH: 78svh; }
+.maplibregl-ctrl-attrib { font-size: 10px; }
+.maplibregl-ctrl-bottom-left { bottom: 1.75rem; }
+
+/* 위: 알약 바 + 날짜 */
+.top { position: fixed; z-index: 5; left: 0; right: 0; top: 0; padding: calc(0.75rem + env(safe-area-inset-top, 0px)) max(1rem, env(safe-area-inset-right, 0px)) 0 max(1rem, env(safe-area-inset-left, 0px)); display: flex; flex-direction: column; gap: 0.5rem; max-width: 27.5rem; margin: 0 auto; pointer-events: none; }
+.top > * { pointer-events: auto; }
+.pill { display: flex; align-items: center; gap: 0.5rem; height: 3.25rem; padding: 0 0.5rem 0 1.125rem; border-radius: 999px; }
+.pill .ttl { flex: 1; min-width: 0; }
+.pill b { font-size: 0.9375rem; font-weight: 700; }
+.pill span { font-size: 0.71875rem; color: var(--sub); }
+.days { display: flex; gap: 0.375rem; overflow-x: auto; scrollbar-width: none; }
+.days::-webkit-scrollbar { display: none; }
+.days button { flex: none; height: 2.25rem; padding: 0 0.875rem; border-radius: 999px; font-size: 0.8125rem; font-weight: 700; background: var(--glass); -webkit-backdrop-filter: blur(1rem); backdrop-filter: blur(1rem); box-shadow: 0 2px 0.5rem rgba(0,0,0,.12); white-space: nowrap; }
+.days button span { color: var(--sub); font-weight: 500; margin-left: 0.25rem; }
+.days button[aria-pressed="true"] { background: var(--ink); color: var(--on-ink); }
+.days button[aria-pressed="true"] span { color: inherit; opacity: .7; }
+
+/* 지도 위 오른쪽 버튼 */
+.fabs { position: fixed; z-index: 4; right: max(1rem, env(safe-area-inset-right, 0px)); top: calc(var(--mapH) - 6.75rem); display: flex; flex-direction: column; gap: 0.5rem; transition: top .35s cubic-bezier(.2,.8,.2,1); }
+.fabs button, .fabs a { width: 3rem; height: 3rem; border-radius: 50%; display: grid; place-items: center; text-decoration: none; }
+.fabs svg { width: 1.375rem; height: 1.375rem; stroke: currentColor; fill: none; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+.fabs .go { background: var(--blue); color: #fff; border: 0; }
+
+/* 마커: 번호 동그라미 · 지금 = 파란 pulse(앱의 '지금' 칸과 같은 1.8초 박자) · 지난 곳 = 회색 */
+.mk { min-width: 1.75rem; height: 1.75rem; padding: 0 0.375rem; border-radius: 999px; background: var(--ink); color: var(--on-ink); border: 2px solid var(--paper);
+  display: grid; place-items: center; font-size: 0.78125rem; font-weight: 800; box-shadow: 0 2px 0.375rem rgba(0,0,0,.3); cursor: pointer; transition: transform .15s; }
+.mk.past { background: var(--past); color: #fff; }
+.mk.now { background: var(--blue); color: #fff; animation: mkpulse 1.8s ease-out infinite; z-index: 2; }
+.mk.sel { transform: scale(1.25); }
+@keyframes mkpulse { 0% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--blue) 55%, transparent), 0 2px 0.375rem rgba(0,0,0,.3); } 100% { box-shadow: 0 0 0 0.875rem transparent, 0 2px 0.375rem rgba(0,0,0,.3); } }
+
+/* 아래 시트 */
+.sheet { position: fixed; z-index: 3; left: 0; right: 0; bottom: 0; top: var(--mapH); background: var(--canvas); border-radius: 1.5rem 1.5rem 0 0;
+  box-shadow: 0 -0.5rem 1.5rem -0.75rem rgba(0,0,0,.25); transition: top .35s cubic-bezier(.2,.8,.2,1); display: flex; flex-direction: column; }
+.grab { flex: none; height: 1.75rem; display: grid; place-items: center; width: 100%; }
+.grab i { width: 2.5rem; height: 0.3125rem; border-radius: 0.3125rem; background: var(--sub); opacity: .35; }
+.sc { flex: 1; overflow-y: auto; overscroll-behavior: contain; padding: 0 max(1rem, env(safe-area-inset-right, 0px)) calc(2rem + env(safe-area-inset-bottom, 0px)) max(1rem, env(safe-area-inset-left, 0px)); }
+.inner { max-width: 27.5rem; margin: 0 auto; display: flex; flex-direction: column; gap: 0.75rem; }
+.r1 { display: flex; align-items: center; gap: 0.5rem; font-size: 0.75rem; color: var(--sub); }
+.dchip { background: var(--ink); color: var(--on-ink); border-radius: 999px; padding: 2px 0.5625rem; font-weight: 500; letter-spacing: .04em; }
+h2 { margin: 0; font-size: 1.3125rem; font-weight: 800; letter-spacing: -.03em; line-height: 1.3; }
+.nowbar { display: flex; align-items: center; gap: 0.5rem; height: 2.75rem; padding: 0 1rem; border-radius: 999px; background: var(--paper); box-shadow: 0 1px 2px rgba(0,0,0,.06); font-size: 0.8125rem; white-space: nowrap; width: 100%; text-align: left; }
+.nowbar .pulse { width: 0.5rem; height: 0.5rem; border-radius: 50%; background: var(--blue); flex: none; animation: pulse 1.8s ease-out infinite; }
+@keyframes pulse { 0% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--blue) 50%, transparent); } 100% { box-shadow: 0 0 0 0.5rem transparent; } }
+.nowbar b { color: var(--blue); flex: none; }
+.nowbar .cur { font-weight: 700; min-width: 0; overflow: hidden; text-overflow: ellipsis; }
+.nowbar .nx { margin-left: auto; color: var(--sub); font-size: 0.75rem; flex: none; }
+.list { background: var(--paper); border-radius: 1.25rem; padding: 0.25rem 0.875rem; }
+.li { display: grid; grid-template-columns: 3rem 1.75rem minmax(0,1fr) auto; gap: 0 0.5rem; align-items: center; padding: 0.625rem 0; border-top: 1px solid var(--hair); width: 100%; text-align: left; border-radius: 0.5rem; transition: background .3s; }
+.li:first-child { border-top: 0; }
+.li .tm { font-size: 0.875rem; font-weight: 500; }
+.li .no { width: 1.5rem; height: 1.5rem; border-radius: 50%; background: var(--ink); color: var(--on-ink); font-size: 0.6875rem; font-weight: 800; display: grid; place-items: center; }
+.li .no.none { background: transparent; border: 1.5px dashed var(--hair); color: var(--sub); }
+.li.past { opacity: .5; } .li.past .no { background: var(--past); color: #fff; }
+.li.now .no { background: var(--blue); color: #fff; }
+.li.now { box-shadow: 0 0 0 1.5px var(--blue); animation: glow 1.8s ease-out infinite; padding-inline: 0.375rem; margin-inline: -0.375rem; width: calc(100% + 0.75rem); }
+@keyframes glow { 0% { box-shadow: 0 0 0 1.5px var(--blue), 0 0 0 1.5px color-mix(in srgb, var(--blue) 45%, transparent); } 100% { box-shadow: 0 0 0 1.5px var(--blue), 0 0 0 0.5625rem transparent; } }
+.li .nm { font-size: 0.90625rem; font-weight: 700; }
+.li .s { font-size: 0.75rem; color: var(--sub); }
+.li .go { font-size: 0.78125rem; font-weight: 700; color: var(--blue); text-decoration: none; padding: 0.375rem 0 0.375rem 0.25rem; }
+.li.m { grid-template-columns: 3rem minmax(0,1fr); font-size: 0.78125rem; color: var(--sub); padding-block: 0.375rem; }
+.li.flash { background: color-mix(in srgb, var(--blue) 12%, transparent); }
+.note { font-size: 0.75rem; color: var(--sub); line-height: 1.55; padding: 0 0.25rem; }
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; animation: none !important; } }
+</style>
+
+<div id="map" aria-label="오늘 갈 곳 지도"></div>
+<div class="top">
+  <div class="pill glass"><div class="ttl"><b class="one">오사카·교토 3박 4일</b><span class="one">위쪽 지도 시안 · 앱에 넣기 전</span></div></div>
+  <div class="days" id="days" role="group" aria-label="날짜 고르기"></div>
+</div>
+<div class="fabs">
+  <button class="glass" id="fitBtn" aria-label="남은 곳 한눈에 보기"><svg viewBox="0 0 24 24"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg></button>
+  <a class="go" id="goBtn" target="_blank" rel="noopener" aria-label="구글 지도로 남은 곳 길찾기"><svg viewBox="0 0 24 24"><path d="M5 19L19 5M10 5h9v9"/></svg></a>
+</div>
+<section class="sheet" aria-label="그날 일정">
+  <button class="grab" id="grab" aria-label="지도 크게 보기"><i></i></button>
+  <div class="sc"><div class="inner" id="inner"></div></div>
+</section>
+
+<script>
+// 좌표 = 장소 DB(places.json, Overture). 하나미코지는 DB에 좌표가 없어 마커 없이 목록에만
+const PL = {
+  kix: [135.244173, 34.435027, '関西国際空港'], namba: [135.501634, 34.663481, 'なんば駅'], wanaka: [135.503456, 34.665183, 'わなか 千日前本店'],
+  doton: [135.501295, 34.669043, '戎橋'], fuku: [135.504566, 34.665601, '福太郎 本店 千日前'], kukuru: [135.500861, 34.668779, 'くくる 道頓堀本店'],
+  kiyo: [135.784556, 34.994804, '清水寺'], sannen: [135.780845, 34.99625, '三年坂'], tsujiri: [135.774501, 35.00364, '茶寮都路里 祇園本店'],
+  keibun: [135.784829, 35.04395, '恵文社 一乗寺店'], delta: [135.771737, 35.02947, '鴨川デルタ']
+};
+// 그날 일정 (앱 시안 DAY 데이터 중 현지 부분) · p = 장소 키, m = 이동 줄
+const DAYS = [
+ { no: 1, date: '12. 4 금', title: '도착하자마자 도톤보리', items: [
+   { s: '10:50', e: '11:50', n: '간사이공항 도착', sub: '입국 심사 → 南海 なんば 표지판', p: 'kix' },
+   { s: '11:50', e: '12:30', m: '난카이 라피트 · 35분' },
+   { s: '12:30', e: '13:00', n: '난바 · 숙소에 짐 맡기기', sub: '체크인 전 짐만 보관', p: 'namba' },
+   { s: '13:00', e: '14:00', n: '와나카 센니치마에 본점', sub: '타코야키 · 전날 전화', p: 'wanaka' },
+   { s: '14:00', e: '15:30', n: '도톤보리 산책', sub: '글리코 간판 사진', p: 'doton' },
+   { s: '15:30', e: '17:00', n: '숙소 체크인 · 휴식', sub: '숙소 위치 미정 · 지도 표시 없음' },
+   { s: '17:00', e: '18:30', n: '후쿠타로 본점', sub: '오코노미야키 · 17:00 개점', p: 'fuku' },
+   { s: '18:30', e: '21:00', n: '도톤보리 야경', sub: '에비스바시 다리 산책', p: 'doton' } ] },
+ { no: 2, date: '12. 5 토', title: '교토 — 기요미즈데라와 말차', items: [
+   { s: '07:40', e: '09:20', m: '전철 · 걸어서 오르막' },
+   { s: '09:20', e: '11:00', n: '기요미즈데라', sub: '나무 무대 전망', p: 'kiyo' },
+   { s: '11:00', e: '12:00', n: '산넨자카 · 니넨자카', sub: '돌계단 옛 거리', p: 'sannen' },
+   { s: '13:30', e: '15:00', n: '사료 츠지리 기온 본점', sub: '말차 파르페', p: 'tsujiri' },
+   { s: '15:00', e: '16:00', n: '기온 하나미코지', sub: '장소 DB에 좌표 없음' },
+   { s: '18:30', e: '20:00', n: '쿠쿠루 도톤보리 본점', sub: '저녁 · 오사카로 돌아와서', p: 'kukuru' } ] },
+ { no: 3, date: '12. 6 일', title: '교토 서점과 강변', items: [
+   { s: '11:00', e: '12:30', n: '게이분샤 이치조지점', sub: '꼭 방문', p: 'keibun' },
+   { s: '14:00', e: '15:30', n: '가모강 델타', sub: '징검다리 건너기', p: 'delta' },
+   { s: '18:30', e: '20:30', n: '마지막 밤 — 난바', sub: '자유', p: 'namba' } ] },
+ { no: 4, date: '12. 7 월', title: '돌아가는 날', items: [
+   { s: '10:30', e: '12:00', n: '브런치 — 난바', p: 'namba' },
+   { s: '12:00', e: '12:40', m: '난카이 라피트 · 35분' },
+   { s: '12:40', e: '15:00', n: '간사이공항 · 체크인', sub: '13:00까지 도착', p: 'kix' } ] }
+];
+const NOW = { day: 0, min: 13 * 60 + 52 };   // 시안용 가상 시각 (앱과 같음)
+const toMin = t => { const [h, m] = t.split(':').map(Number); return h * 60 + m; };
+const esc = s => String(s ?? '').replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+const $ = s => document.querySelector(s);
+let day = 0, map, markers = [], ready = false;
+
+// 그날 장소에 번호 매기기: 같은 장소를 두 번 가면 마커 하나에 '4·6'
+function model(d) {
+  const today = day === NOW.day, items = d.items; let n = 0;
+  items.forEach(it => {
+    if (it.m) return;
+    it.no = ++n;
+    it.state = !today ? '' : toMin(it.e) <= NOW.min ? 'past' : toMin(it.s) <= NOW.min ? 'now' : '';
+  });
+  const groups = [];
+  items.filter(it => it.p).forEach(it => {
+    let g = groups.find(x => x.p === it.p); if (!g) groups.push(g = { p: it.p, its: [] }); g.its.push(it);
+  });
+  groups.forEach(g => { g.state = g.its.some(i => i.state === 'now') ? 'now' : g.its.every(i => i.state === 'past') ? 'past' : ''; });
+  return { items, groups, cur: items.find(i => i.state === 'now'), next: items.find(i => !i.m && today && toMin(i.s) > NOW.min) };
+}
+function render() {
+  const d = DAYS[day], M = model(d);
+  $('#days').innerHTML = DAYS.map((x, i) => '<button aria-pressed="' + (i === day) + '" data-d="' + i + '">DAY ' + x.no + '<span>' + x.date.slice(0, 5) + '</span></button>').join('');
+  let h = '<div class="r1"><span class="dchip">DAY ' + d.no + '</span><span>' + d.date + '</span></div><h2 class="one">' + esc(d.title) + '</h2>';
+  if (day === NOW.day) h += '<button class="nowbar" data-go="' + (M.cur ? M.cur.no : '') + '"><i class="pulse"></i><b>지금 13:52</b><span class="cur">' + esc(M.cur ? M.cur.n : '이동 중') + '</span>' + (M.next ? '<span class="nx">다음 ' + M.next.s + ' ' + esc(M.next.n.split(' ')[0]) + '</span>' : '') + '</button>';
+  h += '<div class="list">' + M.items.map(it => it.m ? '<div class="li m"><span>' + it.s + '</span><span class="one">' + esc(it.m) + '</span></div>'
+    : '<button class="li ' + it.state + '" data-no="' + it.no + '"><span class="tm">' + it.s + '</span><span class="no' + (it.p ? '' : ' none') + '">' + it.no + '</span>'
+      + '<span style="min-width:0"><span class="nm one">' + esc(it.n) + '</span>' + (it.sub ? '<span class="s one">' + esc(it.sub) + '</span>' : '') + '</span>'
+      + (it.p ? '<a class="go" href="https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(PL[it.p][2]) + '" target="_blank" rel="noopener">지도</a>' : '<span></span>') + '</button>').join('') + '</div>'
+    + '<p class="note">시안 메모 · 지도 = OpenFreeMap(무료·키 없음), 좌표 = 우리 장소 DB. 장소 사이 선은 직선(실제 길 아님) — 실제 길은 오른쪽 파란 버튼으로 구글 지도에서. 번호 마커를 누르면 목록의 그 일정으로, 목록을 누르면 지도가 그 장소로 이동.</p>';
+  $('#inner').innerHTML = h;
+  drawMap(M);
+}
+function drawMap(M) {
+  if (!map || !ready) return;
+  markers.forEach(m => m.remove()); markers = [];
+  M.groups.forEach(g => {
+    const el = document.createElement('button');
+    el.className = 'mk ' + g.state; el.textContent = g.its.map(i => i.no).join('·'); el.setAttribute('aria-label', g.its.map(i => i.no + '번 ' + i.n).join(', '));
+    el.onclick = () => { selectNo(g.its.find(i => i.state === 'now') ? g.its.find(i => i.state === 'now').no : g.its[0].no, false); };
+    markers.push(new maplibregl.Marker({ element: el }).setLngLat(PL[g.p].slice(0, 2)).addTo(map));
+  });
+  // 순서대로 잇는 선: 지난 길 = 회색, 남은 길 = 진한 점선
+  const pts = M.items.filter(i => i.p), past = [], rest = [];
+  pts.forEach((it, i) => { const c = PL[it.p].slice(0, 2); if (it.state === 'past' || it.state === 'now') past.push(c); if (it.state !== 'past') rest.push(c); });
+  const ln = c => ({ type: 'Feature', geometry: { type: 'LineString', coordinates: c.length > 1 ? c : [] } });
+  map.getSource('past').setData(ln(day === NOW.day ? past : []));
+  map.getSource('rest').setData(ln(day === NOW.day ? rest : pts.map(i => PL[i.p].slice(0, 2))));
+  // 남은 곳 구글 지도 길찾기 (키 없음 · 모바일 브라우저 경유지 최대 3곳)
+  const left = pts.filter(i => i.state !== 'past'), dst = left[left.length - 1];
+  const wps = left.slice(0, -1).filter((it, i, a) => a.findIndex(x => x.p === it.p) === i && it.p !== (dst && dst.p)).slice(0, 3);
+  $('#goBtn').href = dst ? 'https://www.google.com/maps/dir/?api=1&destination=' + encodeURIComponent(PL[dst.p][2]) + (wps.length ? '&waypoints=' + encodeURIComponent(wps.map(w => PL[w.p][2]).join('|')) : '') + '&travelmode=transit' : '#';
+  fit(M);
+}
+function fit(M, animate) {
+  M = M || model(DAYS[day]);
+  const pts = M.items.filter(i => i.p && (day !== NOW.day || i.state !== 'past')).map(i => PL[i.p].slice(0, 2));
+  const all = pts.length ? pts : M.items.filter(i => i.p).map(i => PL[i.p].slice(0, 2));
+  if (!all.length) return;
+  const b = all.reduce((b, c) => b.extend(c), new maplibregl.LngLatBounds(all[0], all[0]));
+  const topPad = $('.top').getBoundingClientRect().bottom + 24;
+  map.fitBounds(b, { padding: { top: topPad, bottom: 96, left: 48, right: 80 }, maxZoom: 16, duration: animate ? 700 : 0 });
+}
+function selectNo(no, fromList) {
+  const it = DAYS[day].items.find(i => i.no === no); if (!it) return;
+  markers.forEach(m => m.getElement().classList.toggle('sel', m.getElement().textContent.split('·').includes(String(no))));
+  if (it.p) map.easeTo({ center: PL[it.p].slice(0, 2), zoom: Math.max(map.getZoom(), 15.5), duration: 600, padding: { top: $('.top').getBoundingClientRect().bottom } });
+  if (!fromList) { const row = document.querySelector('.li[data-no="' + no + '"]'); if (row) { row.scrollIntoView({ behavior: 'smooth', block: 'center' }); row.classList.add('flash'); setTimeout(() => row.classList.remove('flash'), 1200); } }
+}
+document.addEventListener('click', e => {
+  const dd = e.target.closest('[data-d]'); if (dd) { day = +dd.dataset.d; render(); return; }
+  if (e.target.closest('a')) return;
+  const row = e.target.closest('.li[data-no]'); if (row) { selectNo(+row.dataset.no, true); return; }
+  const go = e.target.closest('[data-go]'); if (go && go.dataset.go) { selectNo(+go.dataset.go, false); return; }
+  if (e.target.closest('#fitBtn')) { markers.forEach(m => m.getElement().classList.remove('sel')); fit(null, true); return; }
+  if (e.target.closest('#grab')) { document.body.classList.toggle('big'); $('#grab').setAttribute('aria-label', document.body.classList.contains('big') ? '목록 크게 보기' : '지도 크게 보기'); setTimeout(() => { map.resize(); fit(null, true); }, 380); }
+});
+
+// 지도: OpenFreeMap 'liberty' 스타일. 장소 이름은 한국어 있으면 한국어, 없으면 현지어
+map = new maplibregl.Map({ container: 'map', style: 'https://tiles.openfreemap.org/styles/liberty', center: [135.5023, 34.6670], zoom: 14.5, attributionControl: false });
+map.addControl(new maplibregl.AttributionControl({ compact: true }), 'bottom-left');   // 출처 표기는 필수 — 접힌 (i) 버튼으로
+map.on('load', () => {
+  map.getStyle().layers.forEach(l => {
+    if (l.type === 'symbol' && l.layout && l.layout['text-field']) map.setLayoutProperty(l.id, 'text-field', ['coalesce', ['get', 'name:ko'], ['get', 'name']]);
+  });
+  const blue = getComputedStyle(document.documentElement).getPropertyValue('--ink').trim();
+  map.addSource('past', { type: 'geojson', data: { type: 'Feature', geometry: { type: 'LineString', coordinates: [] } } });
+  map.addSource('rest', { type: 'geojson', data: { type: 'Feature', geometry: { type: 'LineString', coordinates: [] } } });
+  map.addLayer({ id: 'past', type: 'line', source: 'past', paint: { 'line-color': '#9AA0A8', 'line-width': 3 }, layout: { 'line-cap': 'round' } });
+  map.addLayer({ id: 'rest', type: 'line', source: 'rest', paint: { 'line-color': '#15171A', 'line-width': 3, 'line-dasharray': [1.5, 1.5] }, layout: { 'line-cap': 'round' } });
+  ready = true; render();
+});
+render();
+</script>
+
+</body>
+</html>
