@@ -179,7 +179,8 @@ h2 { margin: 0; font-size: 1.3125rem; font-weight: 800; letter-spacing: -.03em; 
 @keyframes just { 0% { box-shadow: 0 0 0 0.1875rem color-mix(in srgb, var(--blue) 45%, transparent); } 100% { box-shadow: var(--sh-xs); } }
 /* 지금: 현재 시각에 하고 있는 일정이 빛남 · 지난 일정은 흐리게 */
 /* 지금 칸 테두리 = 위 '지금' 줄의 파란 점과 같은 박자(1.8초)로 바깥으로 퍼지며 빛남 (같이 그려져서 박자가 맞음) */
-.now-on { box-shadow: 0 0 0 1.5px var(--blue) !important; animation: glow 1.8s ease-out infinite; }
+/* !important 를 쓰면 애니메이션이 덮이지 못해 pulse가 안 보임(v9 버그) → 선택자 우선순위로 이김 */
+.tile.now-on, .li.now-on { box-shadow: 0 0 0 1.5px var(--blue); animation: glow 1.8s ease-out infinite; }
 @keyframes glow { 0% { box-shadow: 0 0 0 1.5px var(--blue), 0 0 0 1.5px color-mix(in srgb, var(--blue) 45%, transparent); } 100% { box-shadow: 0 0 0 1.5px var(--blue), 0 0 0 0.5625rem transparent; } }
 .now-pill { flex: none; font-size: 0.65625rem; font-weight: 700; line-height: 1; padding: 0.25rem 0.4375rem; border-radius: 62.4375rem; background: var(--blue); color: #fff; white-space: nowrap; }
 .past-on { opacity: .5; }
