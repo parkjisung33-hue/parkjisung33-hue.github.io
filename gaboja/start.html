@@ -273,6 +273,17 @@ main { flex: 1; display: flex; flex-direction: column; position: relative; overf
 .seg button[aria-pressed="true"] { background: var(--glass-hi); color: var(--ink); box-shadow: 0 1px 0.1875rem rgba(0,0,0,.14); }
 .in { width: 100%; height: 3.25rem; border-radius: var(--r-sm); border: 1px solid var(--hair); background: var(--field); color: var(--ink); padding: 0 1rem; font: inherit; font-size: max(16px, 1rem); }
 .in::placeholder { color: var(--sub); opacity: .75; }
+.err { color: var(--red); font-size: 0.78125rem; min-height: 1.1em; }
+.agree { display: flex; gap: 0.75rem; align-items: flex-start; padding: 0.875rem 1rem; border-radius: var(--r-md); background: var(--tile); border: 1px solid var(--tile-edge); box-shadow: var(--sh-xs); cursor: pointer; }
+.agree input { width: 1.25rem; height: 1.25rem; margin: 0.125rem 0 0; accent-color: var(--blue); flex: none; }
+.agree span { display: flex; flex-direction: column; gap: 0.25rem; min-width: 0; }
+.agree b { font-size: 0.9375rem; }
+.agree small { font-size: 0.75rem; color: var(--sub); line-height: 1.5; text-wrap: pretty; }
+.sent { display: flex; gap: 0.625rem; align-items: center; padding: 0.75rem 1rem; border-radius: var(--r-md); font-size: 0.875rem; font-weight: 600; }
+.sent.ok { background: var(--blue-soft); color: var(--blue); }
+.sent.bad { background: rgba(224,69,58,.1); color: var(--red); }
+.sent svg { width: 1.125rem; height: 1.125rem; stroke: currentColor; fill: none; stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; flex: none; }
+.sent button { margin-left: auto; font-weight: 700; text-decoration: underline; white-space: nowrap; }
 .note span { text-wrap: balance; }
 .note { display: flex; gap: 0.5rem; font-size: 0.78125rem; color: var(--sub); line-height: 1.5; }
 .note svg { width: 1rem; height: 1rem; flex: none; margin-top: 0.125rem; stroke: currentColor; fill: none; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
@@ -407,7 +418,10 @@ const NIGHTS = [[1, '1박 2일'], [2, '2박 3일'], [3, '3박 4일'], [4, '4박 
 const LIKES = ['맛집', '카페', '쇼핑', '옷·빈티지', '신발', '잡화·소품', '서점', '향수', '술집·밤', '사진 명소', '전시·문화', '자연·산책', '휴식'];
 const AVOID = ['긴 줄', '많이 걷기', '날것 (회·스시)', '매운 음식'];
 const METHOD = [['auto', '알아서 다 짜 줘요', '완성된 일정 바로 받기'], ['blocks', '추천 받아서 내가 고를래요', '날짜별 지역 위에 추천 블록 끼우기'], ['self', '장소는 내가 정할게요', '이름·링크만 넣으면 시각·동선 계산']];
-const INFO = ['city', 'date', 'who', 'home', 'book', 'likes'];
+const INFO = ['city', 'date', 'who', 'home', 'book', 'likes', 'send'];
+/* 신청 받기: 구글 시트 '가보자 테스트 신청'에 붙은 Apps Script 웹 앱 (tools/gaboja_intake.gs, 2026-11-12 배포 v1) */
+const INTAKE = 'https://script.google.com/macros/s/AKfycbw-LJh-YkVlHiTKyoALyQoU98swSuYtHuC7wjYU6A5GBDqwfRKtAAkL-ioI3wlHSJsM/exec';
+const RE_MAIL = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/, RE_KAKAO = /^[A-Za-z0-9._-]{4,20}$/;
 
 /* ── 상태 ── */
 const $ = s => document.querySelector(s);
@@ -670,7 +684,7 @@ const tap = () => { try { navigator.vibrate && navigator.vibrate(10); } catch (_
 
 function rInfo(s) {
   const n = INFO.indexOf(s) + 1, tr = S.trip;
-  const optional = s === 'home' || s === 'book' || s === 'likes';
+  const optional = s === 'home' || s === 'book' || s === 'likes'; // send(받을 곳)는 필수
   setBar('info', n, INFO.length + 1, optional ? { t: '건너뛰기', fn: () => next(s) } : { t: `${n} / ${INFO.length}` });
   const head = (e, h, p) => `<div class="qh"><span class="eyebrow">여행 정보 · ${e}</span><h1>${h}</h1>${p ? `<p>${p}</p>` : ''}</div>`;
   let el;
@@ -721,12 +735,33 @@ function rInfo(s) {
     $('#fIn').oninput = e => tr.flightTx = e.target.value; $('#sIn').oninput = e => tr.stayTx = e.target.value;
     $('#bNext').onclick = () => next(s);
   }
+  if (s === 'send') {
+    const tr = S.trip; tr.toKind = tr.toKind || 'mail';
+    el = screen(head('받을 곳', '가이드북, 어디로 보내 드릴까요?', '완성되면 여기로 보내 드려요') + `
+      <div class="blk"><div class="sub2">닉네임</div><input class="in" id="nkIn" maxlength="20" autocomplete="nickname" placeholder="가이드북에 들어갈 이름" value="${esc(tr.nick || '')}"></div>
+      <div class="blk"><div class="sub2">받을 곳</div>
+        <div class="seg" id="toSeg"><button data-k="mail" aria-pressed="${tr.toKind === 'mail'}">이메일</button><button data-k="kakao" aria-pressed="${tr.toKind === 'kakao'}">카카오톡 ID</button></div>
+        <input class="in" id="toIn" autocomplete="off" value="${esc(tr.to || '')}"><span class="err" id="toErr"></span></div>
+      <input id="hpIn" name="website" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;width:1px;height:1px;opacity:0">
+      <label class="agree" id="agBox"><input type="checkbox" id="agIn" ${tr.agree ? 'checked' : ''}><span><b>개인정보 수집·이용에 동의해요</b>
+        <small>닉네임·받을 곳·여행 정보·출발 주소를 가이드북을 만들어 보내는 데만 써요. 출발 주소는 받은 지 7일 뒤, 나머지는 만든 날부터 1년 뒤 지워요. 받은 곳으로 ‘삭제해 주세요’라고 답장하면 바로 지워요.</small></span></label>
+      <div class="foot"><button class="cta" id="sNext" disabled>가이드북 신청하기 ${ICON.arrow}</button></div>`);
+    const toIn = $('#toIn'), ph = () => { toIn.placeholder = tr.toKind === 'mail' ? '예: name@gmail.com' : '예: gaboja_trip'; toIn.type = tr.toKind === 'mail' ? 'email' : 'text'; toIn.inputMode = tr.toKind === 'mail' ? 'email' : 'text'; };
+    const ok = () => { const v = (tr.to || '').trim(); return tr.toKind === 'mail' ? RE_MAIL.test(v) : RE_KAKAO.test(v); };
+    const upd = (showErr) => { const good = ok(); $('#toErr').textContent = showErr && tr.to && !good ? (tr.toKind === 'mail' ? '이메일 주소 형식을 확인해 주세요' : '영문·숫자·._- 4~20자로 적어 주세요') : ''; $('#sNext').disabled = !(good && (tr.nick || '').trim() && tr.agree); };
+    ph(); upd(false);
+    $('#toSeg').onclick = e => { const b = e.target.closest('[data-k]'); if (!b) return; tr.toKind = b.dataset.k; $('#toSeg').querySelectorAll('button').forEach(x => x.setAttribute('aria-pressed', x === b)); ph(); upd(true); toIn.focus(); };
+    $('#nkIn').oninput = e => { tr.nick = e.target.value; upd(false); };
+    toIn.oninput = e => { tr.to = e.target.value; upd(false); }; toIn.onblur = () => upd(true);
+    $('#agIn').onchange = e => { tr.agree = e.target.checked; upd(true); };
+    $('#sNext').onclick = () => { tr.hp = $('#hpIn').value; next(s); };
+  }
   if (s === 'likes') {
     if (!tr.likesSet) { tr.likes = (T(S.type || 'LSRP').likes || []).filter(x => LIKES.includes(x)).slice(0, 3); tr.likesSet = true; }
     el = screen(head('취향', '특히 좋아하는 게 있다면?', S.type ? `${esc(T(S.type).name)} 유형에 맞춰 골라 뒀어요 · 최대 3개` : '최대 3개') + `
       <div class="chips" id="likeC">${LIKES.map(x => `<button class="chip" data-v="${x}" aria-pressed="${tr.likes.includes(x)}">${x}</button>`).join('')}</div>
       <div class="blk"><div class="sub2">피하고 싶은 것<span>여러 개 가능</span></div><div class="chips" id="avoidC">${AVOID.map(x => `<button class="chip soft" data-v="${x}" aria-pressed="${tr.avoid.includes(x)}">${x}</button>`).join('')}</div></div>
-      <div class="foot"><button class="cta" id="lNext">탑승권 받기 ${ICON.arrow}</button></div>`);
+      <div class="foot"><button class="cta" id="lNext">다음</button></div>`);
     $('#likeC').onclick = e => { const b = e.target.closest('[data-v]'); if (!b) return; const v = b.dataset.v, i = tr.likes.indexOf(v);
       if (i >= 0) tr.likes.splice(i, 1); else { if (tr.likes.length >= 3) { toast('최대 3개 · 하나를 먼저 빼 주세요'); return; } tr.likes.push(v); }
       b.setAttribute('aria-pressed', i < 0); tap(); };
@@ -766,7 +801,27 @@ function dateSum() {
   $('#dNext').disabled = !(tr.nights && (!tr.start || tr.end));
 }
 
+let SEND = null; // { st: 'wait'|'ok'|'bad', row, err }
+function payload() {
+  const tr = S.trip, d = n => n ? `${Math.floor(n / 10000)}-${String(Math.floor(n / 100) % 100).padStart(2, '0')}-${String(n % 100).padStart(2, '0')}` : '';
+  return { agree: tr.agree === true, hp: tr.hp || '', nick: (tr.nick || '').trim(), toKind: tr.toKind === 'mail' ? '이메일' : '카카오톡', to: (tr.to || '').trim(),
+    type: S.type || '', typeName: S.type ? T(S.type).name : '', votes: S.votes ? JSON.stringify(S.votes) : '',
+    answers: S.ans.map((oi, i) => oi == null ? '' : `${i + 1}.${Q[i].o[oi][0]}`).filter(Boolean).join(' / '),
+    method: (METHOD.find(m => m[0] === tr.method) || ['', ''])[1], city: tr.city === '다른 곳' ? (tr.cityEtc || '다른 곳') : (tr.city || ''),
+    start: d(tr.start), end: d(tr.end), nights: tr.nights || '', who: tr.who || '', homeMode: tr.home ? (tr.homeMode === 'addr' ? '집 주소' : '동네+역') : '', home: tr.home || '',
+    flight: tr.flight === 'yes' ? '정함' : '미정', flightTx: tr.flight === 'yes' ? (tr.flightTx || '') : '', stay: { no: '미정', area: '동네만', yes: '정함' }[tr.stay] || '', stayTx: tr.stay === 'no' ? '' : (tr.stayTx || ''),
+    likes: tr.likes.join(', '), avoid: tr.avoid.join(', '), page: location.origin + location.pathname };
+}
+function sendNow() {
+  SEND = { st: 'wait' }; const ctl = new AbortController(), to = setTimeout(() => ctl.abort(), 15000);
+  return fetch(INTAKE, { method: 'POST', body: JSON.stringify(payload()), signal: ctl.signal }) // text/plain → 사전 요청 없이 감
+    .then(r => r.json()).then(j => { SEND = j.ok ? { st: 'ok', row: j.row } : { st: 'bad', err: j.err || '저장 실패' }; })
+    .catch(e => { SEND = { st: 'bad', err: e.name === 'AbortError' ? '응답이 늦어요' : (/larchive\.page|localhost/.test(location.hostname) ? '인터넷 연결을 확인해 주세요' : '이 미리보기에선 막혀 있어요 · larchive.page 주소에서 신청') }; })
+    .finally(() => clearTimeout(to));
+}
+
 function rBuild() {
+  if (!SEND || SEND.st !== 'ok') sendNow();
   setBar('info', INFO.length + 1, INFO.length + 1, { t: '만드는 중' });
   const tr = S.trip, t = S.type ? T(S.type) : null, city = tr.city === '다른 곳' ? (tr.cityEtc || '여행지') : (tr.city || '여행지');
   const lines = [tr.home ? '집 문 앞에서 공항까지 시간 계산' : '출발 시각 정하기', `${city}에서 ${t ? t.name + ' 취향' : '취향'}에 맞는 곳 고르기`, '영업시간·휴무일 맞춰 보기', tr.nights ? `${tr.nights + 1}일 동선 짜기` : '하루 동선 짜기', '가이드북 한 권으로 정리'];
@@ -782,7 +837,9 @@ function rBuild() {
   lines.forEach((_, k) => later(() => { tk[k].classList.remove('cur'); tk[k].classList.add('on'); if (tk[k + 1]) tk[k + 1].classList.add('cur'); const v = (k + 1) / lines.length; $('#cM').style.transform = `scaleX(${v})`; $('#cP').textContent = Math.round(v * 100) + '%'; }, 600 + k * STEP));
   const end = 600 + lines.length * STEP;
   later(() => { const h = $('#cT'); h.textContent = '다 만들었어요!'; h.classList.add('found'); }, end);
-  later(() => { S.hist = S.hist.filter(h => h !== 'build'); go('done', { noHist: true }); }, end + 800);
+  // 연출이 끝나도 전송이 안 끝났으면 조금 더 기다림 (최대 9초)
+  const finish = () => { S.hist = S.hist.filter(h => h !== 'build'); go('done', { noHist: true }); };
+  later(() => { const t0 = Date.now(); const wait = () => { if (!SEND || SEND.st === 'wait') { if (Date.now() - t0 > 9000) return finish(); $('#cT').textContent = '거의 다 됐어요'; return later(wait, 300); } finish(); }; wait(); }, end + 800);
 }
 
 function rDone() {
@@ -807,12 +864,15 @@ function rDone() {
       </div>
       <div class="barcode" aria-hidden="true">${barcode(S.type || 'GABO')}</div>
     </article>
-    <div class="note">${ICON.lock}<span>시안이라 아직 실제 일정은 안 만들어요. ‘일정 보기’는 오사카·교토 3박 4일 샘플 일정으로 열려요</span></div>
+    ${SEND && SEND.st === 'ok' ? `<div class="sent ok">${ICON.check}<span>신청 접수됨 · 받을 곳 ${esc(tr.to || '')}</span></div>`
+      : `<div class="sent bad"><span>신청을 못 보냈어요 (${esc((SEND && SEND.err) || '연결 실패')})</span><button id="reSend">다시 보내기</button></div>`}
+    <div class="note">${ICON.lock}<span>가이드북은 아키가 확인한 뒤 보내 드려요(시험판). ‘일정 보기’는 지금은 오사카·교토 3박 4일 샘플이에요</span></div>
     <div class="foot">
       <a class="cta" href="index.html" style="text-decoration:none">일정 보기 ${ICON.arrow}</a>
       <button class="ghost" id="dEdit">수정하기</button>
     </div>`);
   $('#dEdit').onclick = () => { S.hist = ['intro', 'method']; go('city', { noHist: true, back: true }); };
+  const rs = $('#reSend'); if (rs) rs.onclick = () => { rs.disabled = true; rs.textContent = '보내는 중…'; sendNow().then(() => { dir = 1; render(); }); };
 }
 
 function toast(m) { const t = $('#toast'); t.textContent = m; t.classList.add('on'); clearTimeout(toast.k); toast.k = setTimeout(() => t.classList.remove('on'), 1800); }
