@@ -5,7 +5,10 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="robots" content="noindex, nofollow">
 <meta name="theme-color" content="#EEF0F3">
-<link rel="icon" href="data:,">
+<link rel="icon" href="icons/icon-192.png">
+<link rel="apple-touch-icon" href="icons/icon-180.png">
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="apple-mobile-web-app-title" content="가보자">
 <style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
 <title>가보자 앱 시안</title>
 </head>
@@ -20,8 +23,8 @@
   src: local("Pretendard Variable"), url("fonts/PretendardVariable.woff2") format("woff2-variations"), url("fonts/PretendardVariable.woff2") format("woff2"); }
 /* 크기: 모든 길이는 rem — 기준 글자 크기가 폰 폭에 비례(390px=16px)해서 어느 폰이든 같은 비율로 보임.
    레이아웃: 폰 폭 한 열 앱. 위 = 유리 알약 바(메뉴·제목·간단히/자세히) + 따라오는 날짜 칩, 가운데 = 탭 화면, 아래 = 떠 있는 유리 탭바(일정·오늘·기록) + 일정 추가.
-   하루 머리 = 유리 카드(DAY 칩·날짜·시간대 / 제목 한 줄 / '가야 할 길' 노선). 간단히 = 납작한 블록, 자세히 = 카드 없는 목록.
-   손동작(둘 다): 꾹 눌러 옮기기 · 좌우로 밀어 삭제 · 눌러서 라벨/색. 비행기·이동은 고정. 라이트/다크/시스템은 메뉴 맨 아래 */
+   하루 머리(v8) = 카드 없이 DAY 칩·날짜·'일정 요약 보기' / 제목 한 줄 / 지금 줄(현재 일정이 빛남). 요약 = 납작한 블록(+맨 위 탑승권), 상세 = 카드 없는 목록.
+   손동작(둘 다): 꾹 눌러 옮기기(다른 일정이 비켜남) · 좌우로 밀어 보관('보관' 표시) · 눌러서 라벨/색. 비행기·이동은 고정. 라이트/다크/시스템은 메뉴 맨 아래 */
 :root {
   color-scheme: light;
   --canvas: #EEF0F3; --ink: #15171A; --sub: #6F757D; --hair: rgba(21,23,26,.09); --on-ink: #FFFFFF;
@@ -134,22 +137,52 @@ h2 { margin: 0; font-size: 1.3125rem; font-weight: 800; letter-spacing: -.03em; 
 .path .stop2:first-child i { background: var(--ink); }
 .path .stop2:last-child i { border-color: var(--red); }
 .path span { font-size: 0.71875rem; color: var(--sub); max-width: 100%; }
+/* 일정 탭 하루 머리 (v8): 카드 없이 제목 한 줄 + '일정 요약 보기' + 지금 줄 */
+.dayline { display: flex; flex-direction: column; gap: 0.5rem; padding: 0 0.25rem; }
+.dayline .r1 { display: flex; align-items: center; gap: 0.5rem; font-family: var(--mono); font-size: 0.75rem; color: var(--sub); white-space: nowrap; min-height: 2rem; }
+.dayline .dchip { background: var(--ink); color: var(--on-ink); border-radius: 62.4375rem; padding: 2px 0.5625rem; font-weight: 500; letter-spacing: .04em; }
+.dayline .sumlink { margin-left: auto; display: inline-flex; align-items: center; gap: 2px; font-family: var(--kr); font-size: 0.8125rem; font-weight: 700; color: var(--blue); padding: 0.375rem 0 0.375rem 0.5rem; }
+.dayline .sumlink svg { width: 1rem; height: 1rem; stroke: currentColor; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.nowbar { display: flex; align-items: center; gap: 0.5rem; width: 100%; height: 2.75rem; padding: 0 1rem; border-radius: 62.4375rem; text-align: left; font-size: 0.8125rem; white-space: nowrap; }
+.nowbar .pulse { width: 0.5rem; height: 0.5rem; border-radius: 50%; background: var(--blue); flex: none; animation: pulse 1.8s ease-out infinite; }
+@keyframes pulse { 0% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--blue) 50%, transparent); } 100% { box-shadow: 0 0 0 0.5rem transparent; } }
+.nowbar b { color: var(--blue); font-weight: 700; flex: none; }
+.nowbar .cur { font-weight: 700; min-width: 0; overflow: hidden; text-overflow: ellipsis; }
+.nowbar .nx { margin-left: auto; padding-left: 0.5rem; color: var(--sub); font-size: 0.75rem; flex: none; }
+@media (max-width: 359px) { .nowbar .nx { display: none; } }
+.sumlist { display: flex; flex-direction: column; }
+.sumlist > div { display: grid; grid-template-columns: 3rem minmax(0,1fr); gap: 0.625rem; padding: 0.375rem 0; border-top: 1px solid var(--hair); font-size: 0.84375rem; }
+.sumlist > div:first-child { border-top: 0; }
+.sumlist .tm { font-family: var(--mono); color: var(--sub); }
+.sumlist .past-on { opacity: .45; }
+.sumlist .now-row { color: var(--blue); font-weight: 700; }
+.sumlist .now-row .tm { color: var(--blue); }
 
 /* 손으로 만지는 일정 (블록·줄 공통) */
 [data-key] { position: relative; touch-action: pan-y; -webkit-user-select: none; user-select: none; -webkit-touch-callout: none; }
-.swiping { transition: none !important; }
-.kill { background: color-mix(in srgb, var(--red) 18%, transparent) !important; }
-.lifted { opacity: .25; }
+.tiles, .list { position: relative; }
+/* 밀기: 뒤에 '보관' 표시가 드러남 (Gmail처럼 밀리는 쪽에 아이콘+글자, 기준선 넘으면 진해짐) */
+.swiping { transition: none !important; z-index: 1; background: var(--paper) !important; }
+.swbg { position: absolute; z-index: 0; pointer-events: none; display: flex; align-items: center; gap: 0.3125rem; padding: 0 0.875rem; border-radius: 0.875rem;
+  font-size: 0.8125rem; font-weight: 700; color: var(--blue); background: color-mix(in srgb, var(--blue) 14%, var(--paper)); transition: background .15s, color .15s; }
+.swbg.r { justify-content: flex-end; }
+.swbg.go { background: var(--blue); color: #fff; }
+.swbg svg { width: 1.125rem; height: 1.125rem; stroke: currentColor; fill: none; stroke-width: 1.9; stroke-linecap: round; stroke-linejoin: round; flex: none; transition: transform .15s; }
+.swbg.go svg { transform: scale(1.15); }
+/* 옮기기: 들어 올린 자리는 점선 빈칸, 다른 일정이 비켜나며 밀리고 당겨짐 */
+.lifted { background: transparent !important; border: 1.5px dashed color-mix(in srgb, var(--blue) 60%, transparent) !important; box-shadow: none !important; }
+.lifted > * { visibility: hidden; }
 .dragghost { position: fixed; z-index: 40; pointer-events: none; margin: 0; transform: scale(1.04) rotate(-1.2deg); opacity: .97;
   background: var(--paper) !important; border-radius: 0.875rem; box-shadow: 0 1.5rem 2.5rem -1rem rgba(0,0,0,.45); }
-.drop-a::after, .drop-b::after { content: ""; position: absolute; background: var(--blue); border-radius: 0.1875rem; }
-.tile.drop-a::after { left: -0.3125rem; top: 0.5rem; bottom: 0.5rem; width: 0.1875rem; }
-.tile.drop-b::after { right: -0.3125rem; top: 0.5rem; bottom: 0.5rem; width: 0.1875rem; }
-.li.drop-a::after { left: 0; right: 0; top: -2px; height: 0.1875rem; }
-.li.drop-b::after { left: 0; right: 0; bottom: -2px; height: 0.1875rem; }
+.dragghost.settle { transition: left .2s cubic-bezier(.2,.8,.2,1), top .2s cubic-bezier(.2,.8,.2,1), transform .2s, box-shadow .2s; transform: none; box-shadow: var(--sh-xs); }
 .just { animation: just .9s ease; }
 @keyframes just { 0% { box-shadow: 0 0 0 0.1875rem color-mix(in srgb, var(--blue) 45%, transparent); } 100% { box-shadow: var(--sh-xs); } }
 .lab-pill { flex: none; font-size: 0.65625rem; font-weight: 700; line-height: 1; padding: 0.25rem 0.4375rem; border-radius: 62.4375rem; background: var(--lc); color: #fff; white-space: nowrap; }
+/* 지금: 현재 시각에 하고 있는 일정이 빛남 · 지난 일정은 흐리게 */
+.now-on { box-shadow: 0 0 0 1.5px var(--blue), 0 0.375rem 1.25rem -0.375rem color-mix(in srgb, var(--blue) 55%, transparent) !important; animation: glow 2.4s ease-in-out infinite; }
+@keyframes glow { 50% { box-shadow: 0 0 0 1.5px var(--blue), 0 0 0 0.375rem color-mix(in srgb, var(--blue) 14%, transparent), 0 0.375rem 1.25rem -0.375rem color-mix(in srgb, var(--blue) 55%, transparent); } }
+.now-pill { flex: none; font-size: 0.65625rem; font-weight: 700; line-height: 1; padding: 0.25rem 0.4375rem; border-radius: 62.4375rem; background: var(--blue); color: #fff; white-space: nowrap; }
+.past-on { opacity: .5; }
 .kd { width: 0.375rem; height: 0.375rem; border-radius: 50%; flex: none; }
 .kd.red { background: var(--red); } .kd.amber { background: var(--amber); }
 
@@ -171,6 +204,9 @@ h2 { margin: 0; font-size: 1.3125rem; font-weight: 800; letter-spacing: -.03em; 
 .tile.fix .n { font-weight: 600; color: var(--sub); }
 .tile.u { background: transparent; border: 1.5px dashed var(--blue); box-shadow: none; }
 .tile.lab { background: color-mix(in srgb, var(--lc) 16%, var(--paper)); border-color: color-mix(in srgb, var(--lc) 30%, var(--paper)); }
+/* 라벨·'지금' 표시가 있는 칸은 시각 + 라벨이 한 줄에 다 들어가게 최소 폭을 넓힘 */
+.tile.wide { min-width: 8.5rem; }
+.tile .t .pills { display: flex; gap: 0.25rem; flex: none; }
 .hint { padding: 0 0.25rem; font-size: 0.75rem; color: var(--sub); }
 /* 주의: 점 색 = 일정 블록의 점 색 (빨강 시간 고정 · 호박 확인 필요 · 회색 알아 두기) */
 .sec { border-radius: var(--r-lg); padding: 0.875rem 1rem 0.375rem; }
@@ -187,7 +223,7 @@ h2 { margin: 0; font-size: 1.3125rem; font-weight: 800; letter-spacing: -.03em; 
 .nrow .v { font-size: 0.8125rem; color: var(--sub); white-space: nowrap; }
 .nrow .v.num { color: var(--ink); font-weight: 600; }
 .nrow .src { font-size: 0.6875rem; color: var(--sub); }
-/* 현지 정보: 접어 두고 제목 줄을 누르면 펼침. 번호 = 전화 걸기 링크, 옆 아이콘 = 복사 */
+/* 현지 정보: 접어 두고 제목 줄을 누르면 펼침. 번호 = 전화 걸기 링크 (복사 아이콘 없음 — 번호를 누르면 바로 전화) */
 details.sec { padding-bottom: 0.875rem; }
 details.sec[open] { padding-bottom: 0.375rem; }
 details.sec > summary { list-style: none; cursor: pointer; display: flex; align-items: center; gap: 0.5rem; font-size: 0.875rem; font-weight: 700; }
@@ -198,16 +234,14 @@ details.sec > summary .chev { color: var(--sub); transition: transform .2s; }
 details.sec[open] > summary .chev { transform: rotate(180deg); }
 details.sec > summary + * { margin-top: 0.375rem; }
 .grp2 { font-size: 0.71875rem; color: var(--sub); padding: 0.625rem 0 2px; }
-.crow { display: grid; grid-template-columns: 1.375rem minmax(0,1fr) auto 2rem; gap: 0.5rem; align-items: center; padding: 0.5rem 0; border-top: 1px solid var(--hair); font-size: 0.84375rem; }
+.crow { display: grid; grid-template-columns: 1.375rem minmax(0,1fr) auto; gap: 0.5rem; align-items: center; padding: 0.5rem 0; border-top: 1px solid var(--hair); font-size: 0.84375rem; }
 .grp2 + .crow { border-top: 0; }
 .crow .ic { width: 1.375rem; height: 1.375rem; display: grid; place-items: center; color: var(--sub); }
-.crow .ic svg, .crow .cp svg { width: 1.1875rem; height: 1.1875rem; stroke: currentColor; fill: none; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
+.crow .ic svg { width: 1.1875rem; height: 1.1875rem; stroke: currentColor; fill: none; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
 .crow b { font-weight: 600; }
 .crow .nm2 { display: flex; flex-direction: column; min-width: 0; line-height: 1.35; }
 .crow .src { font-size: 0.6875rem; color: var(--sub); }
-.crow .tel { color: var(--blue); font-weight: 700; text-decoration: none; white-space: nowrap; padding: 0.375rem 2px; }
-.crow .cp { width: 2rem; height: 2rem; border-radius: 50%; display: grid; place-items: center; color: var(--sub); }
-.crow .cp:hover { background: var(--hair); }
+.crow .tel { color: var(--blue); font-weight: 700; text-decoration: none; white-space: nowrap; padding: 0.5rem 0.25rem; }
 .arow { display: grid; grid-template-columns: 3rem minmax(0,1fr) auto auto; gap: 0.5rem; align-items: center; padding: 0.625rem 0; border-top: 1px solid var(--hair); font-size: 0.875rem; }
 .arow .tmx { color: var(--sub); font-size: 0.8125rem; }
 .arow .btn { height: 2.125rem; padding: 0 0.75rem; font-size: 0.8125rem; }
@@ -254,6 +288,13 @@ details.sec > summary + * { margin-top: 0.375rem; }
 .banner { border-radius: var(--r-md); padding: 0.8125rem 1rem; font-size: 0.84375rem; display: flex; gap: 0.625rem; align-items: center; }
 .banner[hidden] { display: none; }
 .banner i { flex: none; width: 0.5rem; height: 0.5rem; border-radius: 50%; background: var(--red); }
+.banner #bannerTx { flex: 1; min-width: 0; }
+.banner .rs { flex: none; font-size: 0.78125rem; font-weight: 700; color: var(--sub); padding: 0.375rem 0 0.375rem 0.5rem; }
+/* 늦어짐: 누를 때마다 더해짐 (+10 · +15 · +30 · +1시간), 초기화는 알림 줄 안에 */
+.late { display: flex; flex-direction: column; gap: 0.4375rem; }
+.late > span { font-size: 0.75rem; color: var(--sub); padding: 0 0.25rem; }
+.late .g { display: grid; grid-template-columns: repeat(4, minmax(0,1fr)); gap: 0.4375rem; }
+.late .btn { padding: 0 0.375rem; }
 .track { border-radius: var(--r-lg); padding: 0.625rem 1.125rem; }
 .stop { display: grid; grid-template-columns: 1.375rem 3.125rem minmax(0,1fr); gap: 0.625rem; align-items: start; position: relative; padding: 0.6875rem 0; }
 .stop .rail { position: relative; height: 100%; display: flex; justify-content: center; }
@@ -296,18 +337,26 @@ details.sec > summary + * { margin-top: 0.375rem; }
 .fab { width: 4rem; height: 4rem; border-radius: 50%; background: var(--ink); color: var(--on-ink); display: grid; place-items: center; flex: none; box-shadow: var(--shadow); transition: transform .12s; }
 .fab:active { transform: scale(.94); }
 .fab svg { width: 1.625rem; height: 1.625rem; stroke: currentColor; stroke-width: 2.2; fill: none; stroke-linecap: round; }
+/* 아이폰 사파리 탭(홈 화면 앱 아님): iOS 26 사파리의 떠 있는 아래 주소창은 safe-area-inset-bottom에 안 잡힘 →
+   아래 탭바를 화면 아래가 아니라 '주소창까지 다 보일 때의 높이(100svh)' 기준으로 위에서부터 놓음. 홈 화면 앱(standalone)은 그대로 */
+@supports (height: 100svh) {
+  html.ios-tab .dock { bottom: auto; top: calc(100svh - 5rem - env(safe-area-inset-bottom, 0px)); }
+  html.ios-tab .toast { bottom: auto; top: calc(100svh - 8.25rem - env(safe-area-inset-bottom, 0px)); }
+  html.ios-tab .sheet { max-height: calc(100svh - 1rem - env(safe-area-inset-top, 0px)); }
+}
 
 /* 시트·서랍·토스트 */
-.scrim { position: fixed; inset: 0; background: var(--scrim); z-index: 20; opacity: 0; transition: opacity .2s; }
+.scrim { position: fixed; inset: 0; background: var(--scrim); z-index: 20; opacity: 0; transition: opacity .34s ease; }
 .scrim.on { opacity: 1; }
 .sheet { position: fixed; left: 50%; bottom: 0; transform: translate(-50%, 102%); z-index: 21; width: min(27.5rem, 100%);
   border-radius: 1.75rem 1.75rem 0 0; padding: 0.5rem max(1.125rem, env(safe-area-inset-left, 0px)) calc(1.25rem + env(safe-area-inset-bottom, 0px)) max(1.125rem, env(safe-area-inset-right, 0px));
   max-height: calc(100vh - 1rem - env(safe-area-inset-top, 0px)); max-height: calc(100dvh - 1rem - env(safe-area-inset-top, 0px));
   overflow-y: auto; overscroll-behavior: contain; background: var(--sheet); }
 html.locked, html.locked body { overflow: hidden; }
-.sheet, .drawer { visibility: hidden; transition: transform .28s cubic-bezier(.2,.8,.2,1), visibility 0s .28s; }
+/* 열기 = 빠르게 올라와 부드럽게 멈춤 · 닫기 = 천천히 내려가며 흐려짐 (v8: 닫을 때 뚝 끊기던 것 수정) */
+.sheet, .drawer { visibility: hidden; opacity: 0; transition: transform .38s cubic-bezier(.4,0,.2,1), opacity .26s ease .12s, visibility 0s .38s; }
 .sheet.on { transform: translate(-50%, 0); }
-.sheet.on, .drawer.on { visibility: visible; transition: transform .28s cubic-bezier(.2,.8,.2,1); }
+.sheet.on, .drawer.on { visibility: visible; opacity: 1; transition: transform .3s cubic-bezier(.2,.8,.2,1), opacity .12s ease; }
 .grab { width: 2.5rem; height: 0.3125rem; border-radius: 0.3125rem; background: var(--hair); margin: 0 auto 0.625rem; }
 .shd { display: flex; align-items: flex-start; gap: 0.5rem; }
 .shd > div { flex: 1; min-width: 0; }
@@ -315,11 +364,12 @@ html.locked, html.locked body { overflow: hidden; }
 .sheet h3 { margin: 2px 0 0; font-size: 1.25rem; font-weight: 800; letter-spacing: -.02em; }
 .sheet .sub { color: var(--sub); font-size: 0.84375rem; margin: 2px 0 0; }
 .sheet .body { display: flex; flex-direction: column; gap: 0.875rem; margin-top: 0.875rem; }
-.kv { display: grid; grid-template-columns: 4rem minmax(0,1fr); gap: 0.3125rem 0.75rem; font-size: 0.875rem; margin: 0; }
+.kv { display: grid; grid-template-columns: 4.75rem minmax(0,1fr); gap: 0.3125rem 0.75rem; font-size: 0.875rem; margin: 0; }
 .kv dt { color: var(--sub); font-size: 0.78125rem; padding-top: 1px; white-space: nowrap; } .kv dd { margin: 0; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .kv .jp { font-family: var(--jp); }
 .row2 { display: flex; align-items: center; gap: 0.625rem; }
 .row2 > span { flex: none; width: 2.125rem; font-size: 0.78125rem; color: var(--sub); }
+.row2.wl > span { width: 4.5rem; white-space: nowrap; }
 .chips { display: flex; gap: 0.375rem; flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none; min-width: 0; }
 .chips::-webkit-scrollbar { display: none; }
 .chips button { flex: none; height: 2.125rem; padding: 0 0.75rem; border-radius: 62.4375rem; border: 1px solid var(--hair); background: var(--field); font-size: 0.8125rem; font-weight: 600; white-space: nowrap; }
@@ -377,7 +427,7 @@ html.locked, html.locked body { overflow: hidden; }
 
   <!-- 일정 -->
   <section class="view" id="v-plan" aria-label="일정">
-    <div class="pass card glass">
+    <div class="pass card glass" id="pass">
       <div class="hd">
         <div class="lbl"><span class="eyebrow">Boarding pass · 가보자</span><span class="eyebrow">MIA</span></div>
         <div class="route">
@@ -394,20 +444,20 @@ html.locked, html.locked body { overflow: hidden; }
       </div>
     </div>
 
-    <div class="dhd glass" id="dayHead"></div>
+    <div class="dayline" id="dayHead"></div>
     <div id="dayBody"></div>
     <span class="hint one">꾹 눌러 옮기기 · 옆으로 밀어 보관 · 눌러서 라벨</span>
     <div class="sec glass" id="warn"></div>
     <details class="sec glass" id="tips">
-      <summary><svg viewBox="0 0 24 24"><path d="M12 3l7 3v5c0 4.5-3 8-7 10-4-2-7-5.5-7-10V6z"/></svg>현지 정보<span class="cnt">긴급 연락처 6 · 현지 규칙 2</span><svg class="chev" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg></summary>
+      <summary><svg viewBox="0 0 24 24"><path d="M12 3l7 3v5c0 4.5-3 8-7 10-4-2-7-5.5-7-10V6z"/></svg>현지 정보<span class="cnt">긴급 연락처 6 · 현지 상식 2</span><svg class="chev" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg></summary>
       <div class="grp2">긴급 연락처 · 번호를 누르면 전화</div>
-      <div class="crow"><span class="ic"><svg viewBox="0 0 24 24"><path d="M12 3l7 3v5c0 4.5-3 8-7 10-4-2-7-5.5-7-10V6z"/></svg></span><span class="nm2"><b class="one">경찰</b><span class="src one">일본</span></span><a class="tel" href="tel:110">110</a><button class="cp" data-copy="110" aria-label="경찰 번호 복사"><svg viewBox="0 0 24 24"><rect x="8" y="8" width="12" height="12" rx="2"/><path d="M16 8V5a1 1 0 0 0-1-1H5a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h3"/></svg></button></div>
-      <div class="crow"><span class="ic"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></span><span class="nm2"><b class="one">구급·소방</b><span class="src one">일본</span></span><a class="tel" href="tel:119">119</a><button class="cp" data-copy="119" aria-label="구급·소방 번호 복사"><svg viewBox="0 0 24 24"><rect x="8" y="8" width="12" height="12" rx="2"/><path d="M16 8V5a1 1 0 0 0-1-1H5a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h3"/></svg></button></div>
-      <div class="crow"><span class="ic"><svg viewBox="0 0 24 24"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a1 1 0 0 1-1 1A16 16 0 0 1 4 5a1 1 0 0 1 1-1"/></svg></span><span class="nm2"><b class="one">관광객 핫라인</b><span class="src one">JNTO · 24시간 · 한국어</span></span><a class="tel" href="tel:+81-50-3816-2787">050-3816-2787</a><button class="cp" data-copy="050-3816-2787" aria-label="관광객 핫라인 번호 복사"><svg viewBox="0 0 24 24"><rect x="8" y="8" width="12" height="12" rx="2"/><path d="M16 8V5a1 1 0 0 0-1-1H5a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h3"/></svg></button></div>
-      <div class="crow"><span class="ic"><svg viewBox="0 0 24 24"><path d="M4 20h16M6 20V10M10 20V10M14 20V10M18 20V10M3 10l9-6 9 6"/></svg></span><span class="nm2"><b class="one">주오사카 총영사관</b><span class="src one">평일 근무시간</span></span><a class="tel" href="tel:+81-6-4256-2345">06-4256-2345</a><button class="cp" data-copy="06-4256-2345" aria-label="주오사카 총영사관 번호 복사"><svg viewBox="0 0 24 24"><rect x="8" y="8" width="12" height="12" rx="2"/><path d="M16 8V5a1 1 0 0 0-1-1H5a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h3"/></svg></button></div>
-      <div class="crow"><span class="ic"><svg viewBox="0 0 24 24"><path d="M4 20h16M6 20V10M10 20V10M14 20V10M18 20V10M3 10l9-6 9 6"/></svg></span><span class="nm2"><b class="one">총영사관 긴급</b><span class="src one">근무시간 외</span></span><a class="tel" href="tel:+81-90-3050-0746">090-3050-0746</a><button class="cp" data-copy="090-3050-0746" aria-label="총영사관 긴급 번호 복사"><svg viewBox="0 0 24 24"><rect x="8" y="8" width="12" height="12" rx="2"/><path d="M16 8V5a1 1 0 0 0-1-1H5a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h3"/></svg></button></div>
-      <div class="crow"><span class="ic"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><path d="M3.5 12h17M12 3.5c2.5 3 2.5 14 0 17M12 3.5c-2.5 3-2.5 14 0 17"/></svg></span><span class="nm2"><b class="one">영사안전콜센터</b><span class="src one">24시간 · 유료</span></span><a class="tel" href="tel:+82-2-3210-0404">+82-2-3210-0404</a><button class="cp" data-copy="+82-2-3210-0404" aria-label="영사안전콜센터 번호 복사"><svg viewBox="0 0 24 24"><rect x="8" y="8" width="12" height="12" rx="2"/><path d="M16 8V5a1 1 0 0 0-1-1H5a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h3"/></svg></button></div>
-      <div class="grp2">현지 규칙</div>
+      <div class="crow"><span class="ic"><svg viewBox="0 0 24 24"><path d="M12 3l7 3v5c0 4.5-3 8-7 10-4-2-7-5.5-7-10V6z"/></svg></span><span class="nm2"><b class="one">경찰</b><span class="src one">일본</span></span><a class="tel" href="tel:110">110</a></div>
+      <div class="crow"><span class="ic"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></span><span class="nm2"><b class="one">구급·소방</b><span class="src one">일본</span></span><a class="tel" href="tel:119">119</a></div>
+      <div class="crow"><span class="ic"><svg viewBox="0 0 24 24"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a1 1 0 0 1-1 1A16 16 0 0 1 4 5a1 1 0 0 1 1-1"/></svg></span><span class="nm2"><b class="one">관광객 핫라인</b><span class="src one">JNTO · 24시간 · 한국어</span></span><a class="tel" href="tel:+81-50-3816-2787">050-3816-2787</a></div>
+      <div class="crow"><span class="ic"><svg viewBox="0 0 24 24"><path d="M4 20h16M6 20V10M10 20V10M14 20V10M18 20V10M3 10l9-6 9 6"/></svg></span><span class="nm2"><b class="one">주오사카 총영사관</b><span class="src one">평일 근무시간</span></span><a class="tel" href="tel:+81-6-4256-2345">06-4256-2345</a></div>
+      <div class="crow"><span class="ic"><svg viewBox="0 0 24 24"><path d="M4 20h16M6 20V10M10 20V10M14 20V10M18 20V10M3 10l9-6 9 6"/></svg></span><span class="nm2"><b class="one">총영사관 긴급</b><span class="src one">근무시간 외</span></span><a class="tel" href="tel:+81-90-3050-0746">090-3050-0746</a></div>
+      <div class="crow"><span class="ic"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><path d="M3.5 12h17M12 3.5c2.5 3 2.5 14 0 17M12 3.5c-2.5 3-2.5 14 0 17"/></svg></span><span class="nm2"><b class="one">영사안전콜센터</b><span class="src one">24시간 · 유료</span></span><a class="tel" href="tel:+82-2-3210-0404">+82-2-3210-0404</a></div>
+      <div class="grp2">현지 상식</div>
       <div class="nrow"><span class="ic"><svg viewBox="0 0 24 24"><rect x="5" y="4" width="14" height="16" rx="2"/><path d="M9 9h6M9 13h6M9 17h3"/></svg></span><span class="one"><b>면세품</b> <span class="src">짐 부치기 전 세관 먼저</span></span><span></span></div>
       <div class="nrow"><span class="ic"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><path d="M9 9l3 4 3-4M9 13h6M12 13v4"/></svg></span><span class="one"><b>팁</b> <span class="src">팁 문화 없음</span></span><span></span></div>
       <div class="nrow"><span></span><span class="src one">출처 외교부·JNTO (11/12 확인)</span><span></span></div>
@@ -417,10 +467,9 @@ html.locked, html.locked body { overflow: hidden; }
   <!-- 오늘 -->
   <section class="view" id="v-now" aria-label="오늘" hidden>
     <div class="next card glass" id="nextCard"></div>
-    <div class="banner glass" id="banner" hidden><i></i><span id="bannerTx"></span></div>
-    <div class="acts">
-      <button class="btn sec" id="lateBtn">+15분 지연</button>
-      <button class="btn ghost" id="resetBtn">초기화</button>
+    <div class="banner glass" id="banner" hidden><i></i><span id="bannerTx"></span><button class="rs" id="resetBtn">초기화</button></div>
+    <div class="late"><span>늦어지면 누르기 · 누를 때마다 더해짐</span>
+      <div class="g" id="lateBtns"><button class="btn sec sm" data-late="10">+10분</button><button class="btn sec sm" data-late="15">+15분</button><button class="btn sec sm" data-late="30">+30분</button><button class="btn sec sm" data-late="60">+1시간</button></div>
     </div>
     <div class="k2"><span class="a">지나온 길</span><span class="b">남은 길</span></div>
     <div class="track glass" id="track"></div>
@@ -589,27 +638,63 @@ const labCls = c => c.lab && c.lab.c ? ' lab' : '';
 const labVar = c => c.lab && c.lab.c ? '--lc:' + LCOL[c.lab.c] : '';
 const labPill = c => c.lab && c.lab.t ? '<span class="lab-pill" style="--lc:' + LCOL[c.lab.c || 'gray'] + '">' + esc(c.lab.t) + '</span>' : '';
 
-/* ---------- 하루 머리 ---------- */
+/* ---------- 지금 (현재 시각 기준) ---------- */
+// 여행 기간(2026-12-04~07) 안이면 폰 시각, 아니면 시안용 가상 시각 DAY 1 13:52 (길안내 탭과 같음)
+const TRIP0 = new Date(2026, 11, 4);
+function nowRef() {
+  const t = new Date(), di = Math.floor((new Date(t.getFullYear(), t.getMonth(), t.getDate()) - TRIP0) / 864e5);
+  if (di >= 0 && di < DAYS.length) return { day: di, min: t.getHours() * 60 + t.getMinutes(), demo: false };
+  return { day: 0, min: toMin('13:52'), demo: true };
+}
+// 그날의 '지금' 일정(이동 포함)과 다음 일정. 지금이 아닌 날이면 null
+function nowOf(d) {
+  const n = nowRef(); if (DAYS[n.day] !== d) return null;
+  const L = d.list, cur = L.find(c => toMin(c.s) <= n.min && n.min < toMin(c.e) && !c.est) || L.find(c => c.est && toMin(c.s) <= n.min && n.min < toMin(c.s) + c.du);
+  const nx = L.find(c => toMin(c.s) > n.min && c.k !== 'm');
+  return { ...n, cur, nx };
+}
+const pastOf = (nw, c) => nw && toMin(c.e) <= nw.min && c !== nw.cur;
+
+/* ---------- 하루 머리: 제목 한 줄 + 일정 요약 보기 + 지금 줄 ---------- */
 function dayHead(d) {
-  const first = d.list[0], last = d.list[d.list.length - 1];
-  const stops = d.route.split(' → ');
+  const nw = nowOf(d);
+  let h = '<div class="r1"><span class="dchip">DAY ' + d.no + '</span><span>' + d.date + '</span>'
+    + '<button class="sumlink" data-daysum>일정 요약 보기<svg viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg></button></div>'
+    + '<h2 class="one">' + esc(d.title) + '</h2>';
+  if (nw) {
+    const c = nw.cur, nm = c ? (c.k === 'm' ? '이동 중 · ' + (c.n || '') : (c.sh || c.n)) : (nw.nx ? '다음 일정까지 여유' : '오늘 일정 끝');
+    const goId = c && c.k !== 'm' ? c.id : nw.nx ? nw.nx.id : '';
+    h += '<button class="nowbar glass"' + (goId ? ' data-goto="' + goId + '"' : '') + '><i class="pulse"></i><b>지금 ' + toT(nw.min) + '</b><span class="cur">' + esc(nm) + '</span>'
+      + (nw.nx ? '<span class="nx">다음 ' + nw.nx.s + ' ' + esc(nw.nx.sh || nw.nx.n) + '</span>' : '') + '</button>';
+  }
+  return h;
+}
+function daySumSheet() {
+  const d = DAYS[st.day], nw = nowOf(d), first = d.list[0], last = d.list[d.list.length - 1];
   const range = first ? first.s + ' – ' + (last.est ? last.s : last.e) : '일정 없음';
-  return '<div class="dmeta"><span class="dchip">DAY ' + d.no + '</span><span>' + d.date + '</span><span class="sp"></span><span>' + range + '</span></div>'
-    + '<h2 class="one">' + esc(d.title) + '</h2>'
-    + '<div class="path" aria-label="동선: ' + esc(d.route) + '">' + stops.map(s => '<span class="stop2"><i></i><span class="one">' + esc(s) + '</span></span>').join('') + '</div>';
+  const stops = d.route.split(' → ');
+  let h = '<div class="shd"><div><span class="eyebrow">DAY ' + d.no + ' · ' + d.date + ' · ' + range + '</span><h3 id="sheetTitle" class="one">' + esc(d.title) + '</h3>'
+    + (nw && nw.demo ? '<p class="sub one">지금 = 시안용 가상 시각 ' + toT(nw.min) + '</p>' : '') + '</div>' + X_BTN + '</div><div class="body">'
+    + '<div class="path" aria-label="동선: ' + esc(d.route) + '">' + stops.map(s => '<span class="stop2"><i></i><span class="one">' + esc(s) + '</span></span>').join('') + '</div><div class="sumlist">';
+  d.list.forEach(c => {
+    const cls = nw && c === nw.cur ? 'now-row' : pastOf(nw, c) ? 'past-on' : '';
+    h += '<div class="' + cls + '"><span class="tm">' + c.s + '</span><span class="one">' + esc(c.k === 'm' ? c.mv : c.fly ? '✈ ' + c.fly[1] + ' → ' + c.fly[3] : (c.n.split(' — ')[1] || c.n)) + (cls === 'now-row' ? ' · 지금' : '') + '</span></div>';
+  });
+  sheetMode = 'daysum'; openSheet(h + '</div></div>');
 }
 /* ---------- 간단히: 블록 ---------- */
 function blocks(d) {
   const bands = [[], [], []];
   d.list.filter(c => c.k !== 'm').forEach(c => bands[pieceOf(c.s)].push(c));
+  const nw = nowOf(d);
   let h = '<div class="blocks">';
   bands.forEach((b, bi) => {
     if (!b.length) return;
     h += '<div class="band"><div class="bh"><b>' + PIECE[bi] + '</b><span>' + b[0].s + '</span></div><div class="tiles">';
     b.forEach(c => {
-      const fx = fixedOf(c);
-      h += '<button class="tile ' + c.k + (fx ? ' fix' : '') + labCls(c) + '" data-key="' + c.id + '"' + (fx ? ' data-fixed="1"' : '') + ' style="flex-grow:' + Math.max(30, c.du) + ';' + labVar(c) + '">'
-        + '<span class="t">' + dotHtml(d, c) + c.s + '<span class="sp"></span>' + labPill(c) + '</span>'
+      const fx = fixedOf(c), isNow = nw && c === nw.cur, pills = labPill(c) + (isNow ? '<span class="now-pill">지금</span>' : '');
+      h += '<button class="tile ' + c.k + (fx ? ' fix' : '') + labCls(c) + (pills ? ' wide' : '') + (isNow ? ' now-on' : pastOf(nw, c) ? ' past-on' : '') + '" data-key="' + c.id + '"' + (fx ? ' data-fixed="1"' : '') + ' style="flex-grow:' + Math.max(30, c.du) + ';' + labVar(c) + '">'
+        + '<span class="t">' + dotHtml(d, c) + c.s + '<span class="sp"></span>' + (pills ? '<span class="pills">' + pills + '</span>' : '') + '</span>'
         + '<span class="n one">' + esc(c.fly ? '✈ ' + c.fly[0] + ' → ' + c.fly[2] : (c.sh || c.n)) + '</span></button>';
     });
     h += '</div></div>';
@@ -619,11 +704,12 @@ function blocks(d) {
 /* ---------- 자세히: 목록 ---------- */
 function list(d) {
   let h = '<div class="list glass">', wi = 0;
-  const flush = upto => { while (wi < d.wake.length && toMin(d.wake[wi].s) <= upto) { const w = d.wake[wi++]; h += '<div class="li w"><span class="tm">' + w.s + '</span><span class="c one">' + esc(w.n) + (w.say ? ' · ' + esc(w.say) : '') + '</span><span></span></div>'; } };
+  const nw = nowOf(d), nowCls = c => nw && c === nw.cur ? ' now-on' : pastOf(nw, c) ? ' past-on' : '';
+  const flush = upto => { while (wi < d.wake.length && toMin(d.wake[wi].s) <= upto) { const w = d.wake[wi++]; h += '<div class="li w' + (nw && toMin(w.s) < nw.min ? ' past-on' : '') + '"><span class="tm">' + w.s + '</span><span class="c one">' + esc(w.n) + (w.say ? ' · ' + esc(w.say) : '') + '</span><span></span></div>'; } };
   d.list.forEach(c => {
     flush(toMin(c.s));
     if (c.k === 'm') {
-      h += '<div class="li m" data-key="' + c.id + '" data-fixed="1"><span class="tm">' + c.s + '</span><span class="c one">' + esc(c.mv) + '</span>'
+      h += '<div class="li m' + nowCls(c) + '" data-key="' + c.id + '" data-fixed="1"><span class="tm">' + c.s + '</span><span class="c one">' + esc(c.mv) + '</span>'
         + (c.to ? '<a class="go" href="' + gdir(c.to, c.mode) + '" target="_blank" rel="noopener">길찾기</a>' : '<span></span>') + '</div>';
       return;
     }
@@ -634,9 +720,9 @@ function list(d) {
     if (c.say) sub.push(esc(c.say));
     if (c.k === 'u') sub.push('직접 추가');
     const fx = fixedOf(c);
-    h += '<div class="li ' + c.k + labCls(c) + '" style="' + labVar(c) + '" data-key="' + c.id + '"' + (fx ? ' data-fixed="1"' : '') + ' role="button" tabindex="0">'
+    h += '<div class="li ' + c.k + labCls(c) + nowCls(c) + '" style="' + labVar(c) + '" data-key="' + c.id + '"' + (fx ? ' data-fixed="1"' : '') + ' role="button" tabindex="0">'
       + '<span class="tm">' + c.s + '</span>'
-      + '<span class="c"><span class="nm">' + dotHtml(d, c) + '<span class="one">' + esc(main) + '</span>' + labPill(c) + '</span>'
+      + '<span class="c"><span class="nm">' + dotHtml(d, c) + '<span class="one">' + esc(main) + '</span>' + labPill(c) + (nw && c === nw.cur ? '<span class="now-pill">지금</span>' : '') + '</span>'
       + (sub.length ? '<span class="s one">' + sub.join(' · ') + '</span>' : '') + '</span>'
       + (c.q ? '<a class="go" href="' + gmap(c.q) + '" target="_blank" rel="noopener">지도</a>' : '<span></span>') + '</div>';
   });
@@ -646,8 +732,25 @@ function list(d) {
 function renderDays() {
   $('#dayBtns').innerHTML = DAYS.map((d,i) => '<button aria-pressed="' + (i===st.day) + '" data-day="' + i + '"><b>DAY' + d.no + '</b><span>' + d.date.slice(0, 5) + '</span></button>').join('');
 }
+// 다시 그릴 때 일정들이 새 자리로 미끄러져 감 (옮김·보관·복원·추가 → 밀려나고 당겨짐). 날짜·보기 바꿀 땐 안 함
+const calm = () => { try { return matchMedia('(prefers-reduced-motion: reduce)').matches; } catch (_) { return false; } };
+function snapRects(root) { const m = new Map(); root.querySelectorAll('[data-key]').forEach(el => m.set(el.dataset.key, el.getBoundingClientRect())); return m; }
+function flip(root, before, skip) {
+  if (!before || calm() || !Element.prototype.animate) return;
+  root.querySelectorAll('[data-key]').forEach(el => {
+    if (el === skip) return;
+    const r0 = before.get(el.dataset.key), r1 = el.getBoundingClientRect();
+    if (!r0) { el.animate([{ opacity: 0, transform: 'scale(.94)' }, { opacity: 1, transform: 'none' }], { duration: 260, easing: 'ease-out' }); return; }
+    const dx = r0.left - r1.left, dy = r0.top - r1.top;
+    if (Math.abs(dx) < 1 && Math.abs(dy) < 1) return;
+    el.animate([{ transform: 'translate(' + dx + 'px,' + dy + 'px)' }, { transform: 'none' }], { duration: 300, easing: 'cubic-bezier(.2,.8,.2,1)' });
+  });
+}
+let lastView = '';
 function renderPlan(flashId) {
-  const d = DAYS[st.day];
+  const d = DAYS[st.day], view = st.day + st.mode;
+  const before = view === lastView ? snapRects($('#dayBody')) : null; lastView = view;
+  $('#pass').hidden = st.mode !== 'simple';
   $('#dayHead').innerHTML = dayHead(d);
   const W = { red:'시간 고정', amber:'확인 필요', gray:'알아 두기' };
   $('#warn').innerHTML = '<h4 class="warnh">' + NICON.amber + '주의</h4>' + (NOTES[d.no] || []).map(n => {
@@ -655,6 +758,7 @@ function renderPlan(flashId) {
     return '<' + (it ? 'button data-open="' + it.id + '"' : 'div') + ' class="nrow"><i class="kd ' + n.lv + '"></i><span class="one">' + esc(n.t) + '</span><span class="v">' + W[n.lv] + '</span></' + (it ? 'button' : 'div') + '>';
   }).join('');
   $('#dayBody').innerHTML = st.mode === 'simple' ? blocks(d) : list(d);
+  flip($('#dayBody'), before);
   if (flashId) { const el = document.querySelector('#dayBody [data-key="' + flashId + '"]'); el && el.classList.add('just'); }
 }
 
@@ -665,7 +769,7 @@ function moveItem(id, toId, after) {
   let ti = L.findIndex(x => x.id === toId); if (after) ti++;
   L.splice(ti, 0, it);
   const clash = recompute(d); renderPlan(id);
-  toast(clash ? '비행기 시각과 겹침 · 다시 옮겨 주세요' : '‘' + (it.sh || it.n) + '’ ' + it.s + '로 이동');
+  toast(clash ? '비행기 시각과 겹침 · 다시 옮겨 주세요' : '‘' + (it.sh || it.n) + '’ 옮김 · ' + it.s + ' 시작');
 }
 function shiftItem(id, step) {
   const d = DAYS[st.day], L = d.list, i = L.findIndex(x => x.id === id);
@@ -681,7 +785,7 @@ function removeItem(id) {
   const it = d.list.splice(i, 1)[0], sl = d.slots.splice(i, 1)[0];
   const rec = { d, it, sl }; st.archive.unshift(rec);
   recompute(d); renderPlan(); arcCount();
-  toast('‘' + (it.sh || it.n) + '’ 보관함으로 이동', () => restore(rec));
+  toast('‘' + (it.sh || it.n) + '’ 보관함에 넣음', () => restore(rec));
 }
 function restore(rec) {
   st.archive = st.archive.filter(r => r !== rec);
@@ -689,36 +793,44 @@ function restore(rec) {
   d.list.splice(i, 0, rec.it); d.slots.splice(i, 0, rec.sl);
   recompute(d); arcCount();
   if (DAYS[st.day] === d) renderPlan(rec.it.id);
-  toast('‘' + (rec.it.sh || rec.it.n) + '’ DAY ' + d.no + '에 복원');
+  toast('‘' + (rec.it.sh || rec.it.n) + '’ 복원 · DAY ' + d.no + ' ' + rec.it.s);
 }
 function arcCount() { $('#arcN').textContent = st.archive.length ? st.archive.length : ''; }
 function arcSheet() {
   const rows = st.archive.map((r, i) => '<div class="arow"><span class="tmx">DAY ' + r.d.no + '</span><span class="one"><b>' + esc(r.it.sh || r.it.n) + '</b> <span class="muted">' + toT(r.sl) + '</span></span>'
     + '<button class="btn sec" data-res="' + i + '">복원</button><button class="btn del" data-kill="' + i + '">삭제</button></div>').join('');
   const h = '<div class="shd"><div><span class="eyebrow">보관함</span><h3 id="sheetTitle">보관한 일정 ' + st.archive.length + '개</h3><p class="sub one">밀어서 뺀 일정 · 복원하면 원래 시간대로</p></div>' + X_BTN + '</div><div class="body">'
-    + (rows || '<p class="sub">보관한 일정이 없습니다. 일정을 옆으로 밀면 여기에 모입니다.</p>') + '</div>';
+    + (rows || '<p class="sub">보관한 일정 없음 · 일정을 옆으로 밀면 여기로</p>') + '</div>';
   if ($('#sheet').classList.contains('on') && sheetMode === 'arc') $('#sheetIn').innerHTML = h; else { sheetMode = 'arc'; openSheet(h); }
 }
 let sheetMode = null;
 
-/* ---------- 손동작: 꾹 눌러 옮기기 · 좌우로 밀어 삭제 ---------- */
-let g = null, justG = false, raf = 0;
-function clearDrop() { document.querySelectorAll('.drop-a, .drop-b').forEach(x => x.classList.remove('drop-a', 'drop-b')); }
+/* ---------- 손동작: 꾹 눌러 옮기기 · 좌우로 밀어 보관 ---------- */
+// 옮기기(v8): 들어 올린 자리(점선 빈칸)가 손가락을 따라 실제로 움직이고, 다른 일정은 비켜나며 밀리고 당겨짐.
+// 놓으면 떠 있던 칸이 빈칸 자리로 내려앉은 뒤 시각을 다시 계산
+// 밀기(v8): 밀리는 뒤쪽에 '보관' 표시(Gmail식). 35% 넘으면 진해지고 '놓으면 보관'
+let g = null, justG = false, raf = 0, settling = false;
+const ARC_IC = '<svg viewBox="0 0 24 24"><rect x="4" y="5" width="16" height="4" rx="1"/><path d="M5 9v9a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V9M10 13h4"/></svg>';
 function placeGhost() { g.ghost.style.left = (g.x - g.ox) + 'px'; g.ghost.style.top = (g.y - g.oy) + 'px'; }
 function findTarget() {
-  clearDrop(); g.target = null;
+  if (performance.now() < g.lock) return;
   const hit = document.elementFromPoint(g.x, g.y), t = hit && hit.closest('#dayBody [data-key]');
   if (!t || t === g.el) return;
   const r = t.getBoundingClientRect(), after = t.classList.contains('tile') ? g.x > r.left + r.width / 2 : g.y > r.top + r.height / 2;
-  t.classList.add(after ? 'drop-b' : 'drop-a'); g.target = { id: t.dataset.key, after };
+  if (after ? t.nextElementSibling === g.el : t.previousElementSibling === g.el) return;
+  const root = $('#dayBody'), before = snapRects(root);
+  t.parentNode.insertBefore(g.el, after ? t.nextSibling : t);
+  try { g.el.setPointerCapture(g.pid); } catch (_) {}
+  flip(root, before, null);
+  g.moved = true; g.lock = performance.now() + 220;
 }
 function startDrag() {
   if (!g || g.mode !== 'wait') return;
-  g.mode = 'drag';
+  g.mode = 'drag'; g.lock = 0; g.moved = false;
   try { navigator.vibrate && navigator.vibrate(12); } catch (_) {}
   const r = g.el.getBoundingClientRect();
   g.ox = g.x - r.left; g.oy = g.y - r.top;
-  const gh = g.el.cloneNode(true); gh.classList.add('dragghost'); gh.classList.remove('just');
+  const gh = g.el.cloneNode(true); gh.classList.add('dragghost'); gh.classList.remove('just', 'past-on', 'now-on');
   gh.style.width = r.width + 'px'; gh.style.height = r.height + 'px';
   document.body.appendChild(gh); g.ghost = gh; g.el.classList.add('lifted'); placeGhost();
   try { g.el.setPointerCapture(g.pid); } catch (_) {}
@@ -729,25 +841,49 @@ function startDrag() {
     findTarget(); loop(); }); };
   loop();
 }
+function swipeBg(G, dx) {
+  if (!G.bg) {
+    const el = G.el, b = document.createElement('div');
+    b.className = 'swbg'; b.setAttribute('aria-hidden', 'true');
+    b.style.cssText = 'left:' + el.offsetLeft + 'px;top:' + el.offsetTop + 'px;width:' + el.offsetWidth + 'px;height:' + el.offsetHeight + 'px';
+    b.innerHTML = ARC_IC + '<span>보관</span>';
+    el.parentNode.insertBefore(b, el); G.bg = b;
+  }
+  const go = Math.abs(dx) > G.el.offsetWidth * .35;
+  G.bg.classList.toggle('r', dx < 0); G.bg.classList.toggle('go', go);
+  G.bg.lastChild.textContent = go ? '놓으면 보관' : '보관';
+}
 function endGesture(cancel) {
   const G = g; g = null; if (!G) return;
   clearTimeout(G.timer);
   if (G.mode === 'swipe') {
     justG = true;
     const dx = G.x - G.x0, w = G.el.offsetWidth;
-    G.el.style.transition = 'transform .2s, opacity .2s';
+    G.el.style.transition = 'transform .22s cubic-bezier(.2,.8,.2,1)';
     G.el.classList.remove('swiping');
-    if (!cancel && Math.abs(dx) > w * .35) { G.el.style.transform = 'translateX(' + (dx > 0 ? w : -w) * 1.1 + 'px)'; G.el.style.opacity = '0'; setTimeout(() => removeItem(G.id), 170); }
-    else { G.el.style.transform = ''; G.el.style.opacity = ''; G.el.classList.remove('kill'); }
+    G.el.style.zIndex = '1'; G.el.style.background = 'var(--paper)';
+    if (!cancel && Math.abs(dx) > w * .35) { G.el.style.transform = 'translateX(' + (dx > 0 ? w : -w) * 1.1 + 'px)'; setTimeout(() => removeItem(G.id), 200); }
+    else { G.el.style.transform = ''; setTimeout(() => { G.bg && G.bg.remove(); G.el.style.zIndex = ''; G.el.style.background = ''; G.el.style.transition = ''; }, 230); }
   } else if (G.mode === 'drag') {
-    justG = true; cancelAnimationFrame(raf); G.ghost.remove(); G.el.classList.remove('lifted'); clearDrop();
-    if (!cancel && G.target) moveItem(G.id, G.target.id, G.target.after);
+    justG = true; cancelAnimationFrame(raf);
+    const all = [...document.querySelectorAll('#dayBody [data-key]')], i = all.indexOf(G.el), nx = all[i + 1], pv = all[i - 1];
+    const commit = () => { G.ghost.remove(); G.el.classList.remove('lifted');
+      if (cancel || !G.moved) { renderPlan(); return; }
+      if (nx) moveItem(G.id, nx.dataset.key, false); else if (pv) moveItem(G.id, pv.dataset.key, true); else renderPlan(); };
+    if (calm()) { commit(); }
+    else {
+      settling = true;
+      const r = G.el.getBoundingClientRect();
+      G.ghost.classList.add('settle'); G.ghost.style.left = r.left + 'px'; G.ghost.style.top = r.top + 'px';
+      G.ghost.style.width = r.width + 'px'; G.ghost.style.height = r.height + 'px';
+      setTimeout(() => { settling = false; commit(); }, 210);
+    }
   }
   setTimeout(() => { justG = false; }, 60);
 }
 document.addEventListener('pointerdown', e => {
   const el = e.target.closest('#dayBody [data-key]');
-  if (!el || e.button > 0 || e.target.closest('a') || g) return;
+  if (!el || e.button > 0 || e.target.closest('a') || g || settling) return;
   g = { el, id: el.dataset.key, fixed: el.dataset.fixed === '1', x0: e.clientX, y0: e.clientY, x: e.clientX, y: e.clientY, mode: 'wait', pid: e.pointerId };
   if (!g.fixed) g.timer = setTimeout(startDrag, 380);
 });
@@ -761,15 +897,12 @@ document.addEventListener('pointermove', e => {
       try { g.el.setPointerCapture(g.pid); } catch (_) {}
     } else if (Math.hypot(dx, dy) > 10) { clearTimeout(g.timer); g = null; return; }
   }
-  if (g.mode === 'swipe') {
-    const w = g.el.offsetWidth;
-    g.el.style.transform = 'translateX(' + dx + 'px)';
-    g.el.style.opacity = String(1 - Math.min(Math.abs(dx) / w, 1) * .7);
-    g.el.classList.toggle('kill', Math.abs(dx) > w * .35);
-  } else if (g.mode === 'drag') { placeGhost(); findTarget(); }
+  if (g.mode === 'swipe') { g.el.style.transform = 'translateX(' + dx + 'px)'; swipeBg(g, dx); }
+  else if (g.mode === 'drag') { placeGhost(); findTarget(); }
 });
 document.addEventListener('pointerup', e => { if (g && e.pointerId === g.pid) endGesture(false); });
 document.addEventListener('pointercancel', e => { if (g && e.pointerId === g.pid) endGesture(true); });
+document.addEventListener('lostpointercapture', e => { if (g && g.mode === 'drag' && e.pointerId === g.pid) { try { g.el.setPointerCapture(g.pid); } catch (_) {} } }, true);
 document.addEventListener('touchmove', e => { if (g && (g.mode === 'drag' || g.mode === 'swipe')) e.preventDefault(); }, { passive: false });
 document.addEventListener('contextmenu', e => { if (e.target.closest('#dayBody [data-key]')) e.preventDefault(); });
 
@@ -806,11 +939,11 @@ function renderNow() {
   else {
     b.hidden = false;
     $('#bannerTx').textContent = st.delay <= 60
-      ? st.delay + '분 지연 → 도톤보리 ' + st.delay + '분 단축 · 후쿠타로 17:00 유지'
-      : st.delay < 120 ? '도톤보리 30분만 · 숙소 휴식 ' + (st.delay - 60) + '분 단축 · 후쿠타로 유지'
-      : '후쿠타로 17:00 위험 · 숙소 휴식 빼고 바로 이동';
+      ? durTx(st.delay) + ' 늦어짐 → 도톤보리 ' + durTx(st.delay) + ' 단축 · 후쿠타로 17:00 유지'
+      : st.delay < 120 ? durTx(st.delay) + ' 늦어짐 → 도톤보리 30분만 · 숙소 휴식 ' + durTx(st.delay - 60) + ' 단축'
+      : '2시간 늦어짐 → 후쿠타로 17:00 위험 · 숙소 휴식 빼고 바로 이동';
   }
-  $('#lateBtn').disabled = st.delay >= 120;
+  document.querySelectorAll('#lateBtns [data-late]').forEach(b => { b.disabled = st.delay >= 120; });
 }
 
 /* ---------- 기록 ---------- */
@@ -845,7 +978,7 @@ function closeAll() {
   const tok = ++openTok; sheetId = null; sheetMode = null;
   $('#sheet').classList.remove('on'); $('#drawer').classList.remove('on'); $('#scrim').classList.remove('on');
   document.documentElement.classList.remove('locked');
-  setTimeout(() => { if (tok === openTok) $('#scrim').hidden = true; }, 220);
+  setTimeout(() => { if (tok === openTok) $('#scrim').hidden = true; }, 400);
   lastFocus && lastFocus.focus && lastFocus.focus({ preventScroll: true });
 }
 let tt, undoFn = null;
@@ -856,19 +989,19 @@ function toast(m, undo) {
 }
 $('#toastBtn').onclick = () => { const f = undoFn; undoFn = null; $('#toast').classList.remove('on', 'has'); f && f(); };
 
-function sheetHtml(d, c) {
+function sheetHtml(d, c, noLab) {
   const fx = fixedOf(c), parts = c.n.split(' — ');
   let h = '<div class="shd"><div><span class="eyebrow one">DAY ' + d.no + ' · ' + c.s + (c.est ? '' : ' – ' + c.e) + ' · ' + KIND[c.k] + '</span>'
     + '<h3 class="one" id="sheetTitle">' + esc(parts[1] || parts[0]) + '</h3>' + (c.say ? '<p class="sub one">' + esc(c.say) + '</p>' : '') + '</div>' + X_BTN + '</div><div class="body">';
   const kv = [];
   if (parts[1]) kv.push(['종류', esc(parts[0])]);
-  if (!c.est && c.k !== 'm') kv.push(['머무름', durTx(c.du)]);
+  if (!c.est && c.k !== 'm') kv.push(['머무는 시간', durTx(c.du)]);
   if (c.l) kv.push(['현지어', '<span class="jp">' + esc(c.l) + '</span> <span class="muted">' + esc(c.r) + '</span>']);
   if (c.mv) kv.push(['이동', esc(c.mv)]);
   (c.info || []).forEach(x => kv.push([x[0], esc(x[1])]));
   if (kv.length) h += '<dl class="kv">' + kv.map(x => '<dt>' + x[0] + '</dt><dd>' + x[1] + '</dd>').join('') + '</dl>';
   if (c.ck) h += '<span class="chk' + (c.ck === 'no' ? ' no' : '') + '">' + CHECKS[c.ck].t + '</span>';
-  if (!fx) {
+  if (!fx && !noLab) {
     const lt = c.lab && c.lab.t, lc = c.lab && c.lab.c;
     h += '<div class="row2"><span>라벨</span><div class="chips">' + LABELS.map(l => '<button data-lab="' + l[0] + '" aria-pressed="' + (lt === l[0]) + '">' + l[0] + '</button>').join('') + '</div></div>'
       + '<div class="row2"><span>색</span><div class="swatch"><button class="none" data-col="" aria-label="색 없음" aria-pressed="' + !lc + '"></button>'
@@ -881,8 +1014,10 @@ function sheetHtml(d, c) {
     : '<div class="acts"><button class="btn ghost sm" data-ord="-1">↑ 앞으로</button><button class="btn ghost sm" data-ord="1">↓ 뒤로</button><button class="btn ghost sm" data-del>보관</button></div>';
   return h + '</div>';
 }
-function itemSheet(id) { const d = DAYS[st.day], c = findIt(d, id); if (!c) return; sheetId = id; sheetMode = 'item'; openSheet(sheetHtml(d, c)); }
-function refreshSheet() { const d = DAYS[st.day], c = findIt(d, sheetId); if (c) $('#sheetIn').innerHTML = sheetHtml(d, c); renderPlan(); }
+// fromWarn: 주의 칸에서 열면 라벨·색 메뉴는 숨김 (동우님 11/12 피드백 8)
+let sheetNoLab = false;
+function itemSheet(id, fromWarn) { const d = DAYS[st.day], c = findIt(d, id); if (!c) return; sheetId = id; sheetMode = 'item'; sheetNoLab = !!fromWarn; openSheet(sheetHtml(d, c, sheetNoLab)); }
+function refreshSheet() { const d = DAYS[st.day], c = findIt(d, sheetId); if (c) $('#sheetIn').innerHTML = sheetHtml(d, c, sheetNoLab); renderPlan(); }
 $('#sheet').addEventListener('click', e => {
   const rs = e.target.closest('[data-res]'), kl = e.target.closest('[data-kill]');
   if (rs) { restore(st.archive[+rs.dataset.res]); arcSheet(); return; }
@@ -902,15 +1037,15 @@ $('#sheet').addEventListener('click', e => {
 
 function addSheet() {
   const d = DAYS[st.day];
-  openSheet('<div class="shd"><div><span class="eyebrow">DAY ' + d.no + ' · ' + d.date + '</span><h3 id="sheetTitle">일정 추가</h3><p class="sub one">늦어지면 가장 먼저 빠지는 일정</p></div>' + X_BTN + '</div><div class="body">'
+  openSheet('<div class="shd"><div><span class="eyebrow">DAY ' + d.no + ' · ' + d.date + '</span><h3 id="sheetTitle">일정 추가</h3><p class="sub one">직접 넣은 일정 · 늦어지면 먼저 빠짐</p></div>' + X_BTN + '</div><div class="body">'
     + '<div class="field"><label for="addName">장소</label><input id="addName" placeholder="예: 구로몬 시장" autocomplete="off"><span class="err" id="addErr"></span></div>'
-    + '<div class="row2"><span>시간</span><div class="chips" id="addWhen"><button aria-pressed="false" data-v="0">오전</button><button aria-pressed="true" data-v="1">오후</button><button aria-pressed="false" data-v="2">저녁</button></div></div>'
-    + '<div class="row2"><span>머묾</span><div class="chips" id="addDur"><button aria-pressed="true" data-v="30">30분</button><button aria-pressed="false" data-v="60">1시간</button><button aria-pressed="false" data-v="120">2시간</button></div></div>'
+    + '<div class="row2 wl"><span>시간대</span><div class="chips" id="addWhen"><button aria-pressed="false" data-v="0">오전</button><button aria-pressed="true" data-v="1">오후</button><button aria-pressed="false" data-v="2">저녁</button></div></div>'
+    + '<div class="row2 wl"><span>머무는 시간</span><div class="chips" id="addDur"><button aria-pressed="true" data-v="30">30분</button><button aria-pressed="false" data-v="60">1시간</button><button aria-pressed="false" data-v="120">2시간</button></div></div>'
     + '<div class="acts"><button class="btn pri" id="addGo">추가</button></div></div>');
 }
 function doAdd() {
   const name = $('#addName').value.trim();
-  if (!name) { $('#addErr').textContent = '장소 이름을 입력해 주세요.'; $('#addName').focus(); return; }
+  if (!name) { $('#addErr').textContent = '장소 이름을 적어 주세요'; $('#addName').focus(); return; }
   const d = DAYS[st.day], w = +$('#addWhen [aria-pressed="true"]').dataset.v, du = +$('#addDur [aria-pressed="true"]').dataset.v;
   const inBand = d.list.filter(c => pieceOf(c.s) === w);
   const start = Math.min(inBand.length ? Math.max(...inBand.map(c => toMin(c.e))) : [540, 780, 1080][w], 23*60);
@@ -919,7 +1054,7 @@ function doAdd() {
   d.list.splice(i, 0, c); d.slots.splice(i, 0, start);
   recompute(d); closeAll(); renderPlan(c.id);
   const got = pieceOf(c.s);
-  toast(got === w ? 'DAY ' + d.no + ' ' + PIECE[w] + ' · ‘' + name + '’ 추가됨' : PIECE[w] + '이 꽉 차서 ' + c.s + '(' + PIECE[got] + ')에 추가됨');
+  toast(got === w ? '‘' + name + '’ 추가 · DAY ' + d.no + ' ' + c.s : PIECE[w] + ' 자리 없음 · ' + PIECE[got] + ' ' + c.s + '에 추가');
 }
 function menuSheet(k) {
   if (k === 'sum') {
@@ -937,12 +1072,12 @@ function menuSheet(k) {
     const url = location.hostname === 'larchive.page' ? 'https://larchive.page/gaboja/' : 'https://claude.ai/artifact/FKawd3L992W8SqCHkfB4gU';
     try { navigator.clipboard.writeText(url).then(() => toast('링크 복사됨'), () => toast('복사 안 됨 · 길게 눌러 복사')); } catch (_) { toast('복사 안 됨'); }
   }
-  else if (k === 'kakao') { closeAll(); toast('시안에서는 카카오톡이 열리지 않아요'); }
+  else if (k === 'kakao') { closeAll(); toast('시안에서는 카카오톡 공유 준비 중'); }
   else if (k === 'share') {
     closeAll();
     const data = { title: '가보자 · 오사카·교토 3박 4일', url: location.hostname === 'larchive.page' ? 'https://larchive.page/gaboja/' : 'https://claude.ai/artifact/FKawd3L992W8SqCHkfB4gU' };
-    if (navigator.share) navigator.share(data).catch(e => { if (e && e.name !== 'AbortError') toast('이 화면에서는 공유 창을 열 수 없어요'); });
-    else toast('이 브라우저는 공유 창을 지원하지 않아요 · 링크 복사를 써 주세요');
+    if (navigator.share) navigator.share(data).catch(e => { if (e && e.name !== 'AbortError') toast('공유 창 열기 실패 · 링크 복사 이용'); });
+    else toast('공유 창 미지원 브라우저 · 링크 복사 이용');
   }
   else if (k === 'pdf') { closeAll(); toast('시안에서는 PDF 저장 불가'); }
   else { closeAll(); toast('시안에서는 아직 준비 중'); }
@@ -961,10 +1096,11 @@ document.addEventListener('click', e => {
   const it = e.target.closest('#dayBody [data-key]');
   if (it && !justG && !e.target.closest('a')) { itemSheet(it.dataset.key); return; }
   if (e.target.closest('[data-close]')) { closeAll(); return; }
-  const op = e.target.closest('[data-open]'); if (op) { itemSheet(op.dataset.open); return; }
-  const cp = e.target.closest('[data-copy]');
-  if (cp) { const v = cp.dataset.copy; try { navigator.clipboard.writeText(v).then(() => toast(v + ' 복사됨'), () => toast(v)); } catch (_) { toast(v); } return; }
-  if (e.target.id === 'arriveBtn') { st.nowIdx = Math.min(st.nowIdx + 1, D1C().length - 1); renderNow(); renderTrail(); toast('도착 확인 · 지나온 길 회색'); return; }
+  const op = e.target.closest('[data-open]'); if (op) { itemSheet(op.dataset.open, true); return; }
+  if (e.target.closest('[data-daysum]')) { daySumSheet(); return; }
+  const gt = e.target.closest('[data-goto]');
+  if (gt) { const el = document.querySelector('#dayBody [data-key="' + gt.dataset.goto + '"]'); if (el) { el.scrollIntoView({ behavior: calm() ? 'auto' : 'smooth', block: 'center' }); el.classList.remove('just'); void el.offsetWidth; el.classList.add('just'); } return; }
+  if (e.target.id === 'arriveBtn') { st.nowIdx = Math.min(st.nowIdx + 1, D1C().length - 1); renderNow(); renderTrail(); toast('도착 확인'); return; }
   if (e.target.id === 'addGo') { doAdd(); return; }
   const chip = e.target.closest('#addWhen button, #addDur button'); if (chip) chip.parentElement.querySelectorAll('button').forEach(b => b.setAttribute('aria-pressed', b === chip));
 });
@@ -988,9 +1124,17 @@ document.addEventListener('keydown', e => {
   if (e.key === 'Enter' && e.target.id === 'addName') doAdd();
   if ((e.key === 'Enter' || e.key === ' ') && e.target.matches && e.target.matches('#dayBody .li[data-key]')) { e.preventDefault(); itemSheet(e.target.dataset.key); }
 });
-$('#lateBtn').onclick = () => { st.delay = Math.min(st.delay + 15, 120); renderNow(); };
+$('#lateBtns').onclick = e => { const b = e.target.closest('[data-late]'); if (!b || b.disabled) return; st.delay = Math.min(st.delay + +b.dataset.late, 120); renderNow(); };
 $('#resetBtn').onclick = () => { st.delay = 0; st.nowIdx = null; renderNow(); renderTrail(); };
 
+// 아이폰 사파리 탭이면 html.ios-tab (CSS에서 아래 탭바를 100svh 기준으로 올림). 홈 화면 앱(standalone)·안드로이드는 해당 없음
+(function () {
+  const ios = /iP(hone|od|ad)/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+  let solo = false; try { solo = navigator.standalone === true || matchMedia('(display-mode: standalone)').matches; } catch (_) {}
+  if (ios && !solo) document.documentElement.classList.add('ios-tab');
+})();
+// '지금' 표시는 1분마다 다시 그림 (실제 여행 날짜일 때만 바뀜)
+setInterval(() => { if (!g && !settling && !$('#v-plan').hidden && !nowRef().demo) renderPlan(); }, 60000);
 renderDays(); renderPlan(); renderNow(); renderTrail(); arcCount(); syncBar();
 </script>
 
