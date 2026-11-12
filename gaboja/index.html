@@ -82,7 +82,7 @@ a { color: inherit; }
 /* 지도는 위 말풍선(제목·DAY) 바로 아래부터 → 구글이 지도 왼쪽 위에 띄우는 장소 상자가 말풍선과 안 겹침 */
 #gmap { display: none; position: fixed; left: 0; right: 0; top: var(--topH); width: 100%; height: calc(var(--mapH) - var(--topH) + 2rem); border: 0; z-index: 0; background: var(--canvas); }
 body.maptab #gmap { display: block; }
-body.maptab .app { position: relative; z-index: 1; margin-top: var(--mapH); min-height: calc(100vh - var(--mapH)); border-radius: 1.5rem 1.5rem 0 0;
+body.maptab .app { position: relative; z-index: 1; margin-top: var(--mapH); min-height: calc(100vh - var(--mapH)); border-radius: 0;
   background: var(--sheetbg);   /* backdrop-filter를 걸면 안의 고정 말풍선(.top)이 시트 기준으로 붙어 버려서 뺌 */
   box-shadow: 0 -0.5rem 1.5rem -0.75rem rgba(0,0,0,.22), inset 0 1px 0 rgba(255,255,255,.6); }
 body.maptab .top { position: fixed; left: 0; right: 0; top: 0; max-width: 27.5rem; margin: 0 auto; z-index: 5; pointer-events: none;
@@ -125,7 +125,8 @@ h2 { margin: 0; font-size: 1.3125rem; font-weight: 800; letter-spacing: -.03em; 
 .view[hidden] { display: none; }
 .view { display: flex; flex-direction: column; gap: 1.25rem; }
 
-/* 여행 탑승권 (맨 위) */
+/* 탑승권 (v11): 비행기 타는 날에만, 그날 비행 정보로. 다른 날은 제목부터 */
+#passSlot:empty { display: none; }
 .pass { padding: 0; overflow: hidden; }
 .pass .hd { padding: 1.125rem 1.25rem 1rem; display: flex; flex-direction: column; gap: 0.875rem; }
 .pass .lbl { display: flex; justify-content: space-between; align-items: center; }
@@ -482,22 +483,7 @@ html.locked, html.locked body { overflow: hidden; }
   <div class="sgrab" aria-hidden="true"></div>
   <!-- 일정 -->
   <section class="view" id="v-plan" aria-label="일정">
-    <div class="pass card glass" id="pass">
-      <div class="hd">
-        <div class="lbl"><span class="eyebrow">Boarding pass · 가보자</span><span class="eyebrow">MIA</span></div>
-        <div class="route">
-          <div><div class="code">HOME</div><div class="place one">집 · 05:15 출발</div></div>
-          <div class="plane"><svg viewBox="0 0 24 24"><path d="M21 15.5v-1.6l-8-5V3.6a1.5 1.5 0 0 0-3 0v5.3l-8 5v1.6l8-2.5v5.4l-2 1.5v1.3l3.5-1 3.5 1v-1.3l-2-1.5V13z"/></svg><small>3박 4일</small></div>
-          <div class="to"><div class="code">OSA</div><div class="place one">오사카·교토</div></div>
-        </div>
-      </div>
-      <div class="perf"></div>
-      <div class="fields">
-        <div class="fld"><span>출발</span><b>12. 4 금</b></div>
-        <div class="fld"><span>귀국</span><b>12. 7 월</b></div>
-        <div class="fld"><span>집 도착</span><b>18:55</b></div>
-      </div>
-    </div>
+    <div id="passSlot"></div>
 
     <div class="dayline" id="dayHead"></div>
     <div id="dayBody"></div>
@@ -708,6 +694,19 @@ function nowOf(d) {
 }
 const pastOf = (nw, c) => nw && toMin(c.e) <= nw.min && c !== nw.cur;
 
+// 비행기 칸(fly)이 있는 날만 탑승권. 공항 도착 = 출발 2시간 전, 출발 공항 일정(sh)에서 터미널 표시
+function passHtml(d) {
+  const f = d.list.find(c => c.fly); if (!f) return '';
+  const i = d.list.indexOf(f), ap = d.list.slice(0, i).reverse().find(c => c.k !== 'm');
+  const term = ap && /T\d/.test(ap.sh || '') ? (ap.sh.match(/T\d/) || [''])[0] : '';
+  const fld = (k, v) => '<div class="fld"><span>' + k + '</span><b>' + v + '</b></div>';
+  return '<div class="pass card glass"><div class="hd"><div class="lbl"><span class="eyebrow">Boarding pass · DAY ' + d.no + '</span><span class="eyebrow">' + d.date + '</span></div>'
+    + '<div class="route"><div><div class="code">' + f.fly[0] + '</div><div class="place one">' + f.fly[1] + (term ? ' ' + term : '') + ' · ' + f.s + '</div></div>'
+    + '<div class="plane"><svg viewBox="0 0 24 24"><path d="M21 15.5v-1.6l-8-5V3.6a1.5 1.5 0 0 0-3 0v5.3l-8 5v1.6l8-2.5v5.4l-2 1.5v1.3l3.5-1 3.5 1v-1.3l-2-1.5V13z"/></svg><small>' + durTx(toMin(f.e) - toMin(f.s)) + '</small></div>'
+    + '<div class="to"><div class="code">' + f.fly[2] + '</div><div class="place one">' + f.fly[3] + ' · ' + f.e + '</div></div></div></div>'
+    + '<div class="perf"></div><div class="fields">' + fld('공항 도착', toT(Math.max(toMin(f.s) - 120, 0))) + fld('출발', f.s) + fld('도착', f.e) + '</div></div>';
+}
+
 /* ---------- 하루 머리: 제목 한 줄 + 일정 요약 보기 + 지금 줄 ---------- */
 function dayHead(d) {
   const nw = nowOf(d);
@@ -803,7 +802,7 @@ let lastView = '';
 function renderPlan(flashId) {
   const d = DAYS[st.day], view = st.day + st.mode;
   const before = view === lastView ? snapRects($('#dayBody')) : null; lastView = view;
-  $('#pass').hidden = st.mode !== 'simple';
+  $('#passSlot').innerHTML = st.mode === 'simple' ? passHtml(d) : '';
   $('#dayHead').innerHTML = dayHead(d);
   const W = { red:'시간 고정', amber:'확인 필요', gray:'알아 두기' };
   $('#warn').innerHTML = '<h4 class="warnh">' + NICON.amber + '주의</h4>' + (NOTES[d.no] || []).map(n => {
