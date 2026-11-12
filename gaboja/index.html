@@ -358,15 +358,23 @@ details.sec > summary + * { margin-top: 0.375rem; }
 .trip { border-radius: var(--r-md); padding: 1rem 1.125rem; display: grid; grid-template-columns: 4rem minmax(0,1fr); gap: 0.875rem; align-items: center; position: relative; }
 .trip .d b { display: block; font-family: var(--mono); font-weight: 500; font-size: 0.9375rem; }
 .trip .d span { font-size: 0.75rem; color: var(--sub); white-space: nowrap; }
-.trip .codes { font-family: var(--mono); font-size: 0.75rem; letter-spacing: .02em; color: var(--sub); padding-right: 4rem; }
-.trip .ttl2 { font-weight: 700; font-size: 0.90625rem; margin-bottom: 0.25rem; padding-right: 4rem; }
+.trip .codes { font-family: var(--mono); font-size: 0.75rem; letter-spacing: .02em; color: var(--sub); padding-right: 4.5rem; }
+.trip .ttl2 { font-weight: 700; font-size: 0.90625rem; margin-bottom: 0.25rem; padding-right: 4.5rem; }
 .trip.later { opacity: .55; }
-.stamp { position: absolute; right: 0.875rem; top: 0.75rem; width: 3.75rem; height: 3.75rem; border-radius: 50%; border: 2px solid var(--red); color: var(--red);
-  display: grid; place-items: center; text-align: center; transform: rotate(-12deg); font-family: var(--mono); font-size: 0.65625rem; line-height: 1.2; letter-spacing: .04em;
-  box-shadow: inset 0 0 0 0.1875rem var(--glass), inset 0 0 0 0.28125rem var(--red); background: var(--glass); }
+/* 기록 스탬프 (v12, 동우님 1안 '조각 도장'): 일정 수만큼 부채꼴 조각 → 하나 끝낼 때마다 한 조각이 '쾅' 찍힘 → 다 차면 가운데 DAY·날짜 */
+.stamp { position: absolute; right: 0.75rem; top: 50%; width: 4rem; height: 4rem; transform: translateY(-50%) rotate(-8deg); }
+.stamp svg { display: block; width: 100%; height: 100%; overflow: visible; }
+.stamp .f { fill: var(--red); }
+.stamp .ln { fill: none; stroke: var(--red); }
+.stamp .gh { fill: none; stroke: var(--red); stroke-dasharray: 2 2.5; opacity: .35; }
+.stamp .tx { fill: var(--red); font-family: var(--kr); font-weight: 900; letter-spacing: -.03em; text-anchor: middle; }
+.stamp .cnt { fill: var(--red); opacity: .6; font-family: var(--kr); font-weight: 800; text-anchor: middle; }
+.stamp .pop { transform-box: view-box; transform-origin: 50% 50%; animation: slam .42s cubic-bezier(.2,.9,.3,1.2) both; }
+@keyframes slam { 0% { transform: scale(1.25) rotate(-4deg); opacity: 0; } 35% { opacity: 1; } 60% { transform: scale(.97) rotate(.8deg); } 100% { transform: none; opacity: 1; } }
+@media (prefers-reduced-motion: reduce) { .stamp .pop { animation: none; } }
 .trail { height: 1.375rem; margin: -0.75rem 0; padding-left: 3rem; color: var(--ink); }
 .trail svg { width: 1.875rem; height: 1.375rem; }
-.prog { height: 0.375rem; border-radius: 0.375rem; background: var(--hair); overflow: hidden; margin-top: 0.625rem; margin-right: 4rem; }
+.prog { height: 0.375rem; border-radius: 0.375rem; background: var(--hair); overflow: hidden; margin-top: 0.625rem; margin-right: 4.5rem; }
 .prog i { display: block; height: 100%; background: var(--red); transition: width .3s; }
 
 /* 아래 탭바 */
@@ -595,6 +603,14 @@ html, body { overscroll-behavior-y: contain; }
     </div>
   </div>
 </nav>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs>
+  <filter id="gbRough" filterUnits="userSpaceOnUse" x="-6" y="-6" width="112" height="112" color-interpolation-filters="sRGB">
+    <feTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="2" seed="7" result="n"/>
+    <feDisplacementMap in="SourceGraphic" in2="n" scale="0.7" xChannelSelector="R" yChannelSelector="G" result="d"/>
+    <feTurbulence type="fractalNoise" baseFrequency="0.55" numOctaves="1" seed="3" result="b0"/>
+    <feColorMatrix in="b0" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  5 0 0 0 -1.1" result="b"/>
+    <feComposite in="d" in2="b" operator="in"/>
+  </filter></defs></svg>
 <div class="toast" id="toast" role="status" aria-live="polite"><span id="toastTx"></span><button id="toastBtn" hidden>되돌리기</button></div>
 
 <script>
@@ -745,7 +761,7 @@ function nowRef() {
 // 길안내에서 '도착'을 누르면 그 자리(st.cur)가 시각보다 우선
 function posOf(di) {
   const d = DAYS[di], L = d.list, n = nowRef();
-  if (st.cur && st.cur.day === di) { const i = L.findIndex(c => c.id === st.cur.id); if (i >= 0) return { i, at: true }; }
+  if (st.cur && st.cur.day === di) { if (st.cur.id === '__end') return { i: L.length, at: false }; const i = L.findIndex(c => c.id === st.cur.id); if (i >= 0) return { i, at: true }; }
   if (st.cur && st.cur.day > di) return { i: L.length, at: false };
   if (st.cur && st.cur.day < di) return { i: -1, at: false };
   if (n.phase === 'before' || (n.phase === 'during' && n.day < di)) return { i: -1, at: false };
@@ -1085,7 +1101,8 @@ function renderNow() {
       + (nx.say ? '<div class="lo one">' + esc(nx.say) + '</div>' : '')
       + '<div class="acts">' + (nx.q || nx.to ? '<a class="btn sec" href="' + gdir(nx.to || nx.q, nx.mode) + '" target="_blank" rel="noopener">길찾기</a>' : '')
       + '<button class="btn pri" id="arriveBtn">' + (nx.k === 'm' ? '출발' : '도착') + '</button></div>';
-  } else h += '<div class="nm">' + (n.phase === 'after' && !st.cur ? '다녀왔어요' : '오늘 일정 끝') + '</div><div class="lo">기록에 DAY ' + d.no + ' 저장</div>'
+  } else if (p.at) { const c = L[p.i]; h += '<div class="nm one">마지막 · ' + esc(c.k === 'm' ? c.mv : (c.sh || c.n)) + '</div><div class="lo">끝나면 눌러서 하루 도장 완성</div><div class="acts"><button class="btn pri" id="endDayBtn">오늘 일정 끝</button></div>'; }
+  else h += '<div class="nm">' + (n.phase === 'after' && !st.cur ? '다녀왔어요' : '오늘 일정 끝') + '</div><div class="lo">기록에 DAY ' + d.no + ' 저장</div>'
       + (di < DAYS.length - 1 ? '<div class="acts"><button class="btn sec" id="nextDayBtn">DAY ' + (d.no + 1) + ' 미리 따라가기</button></div>' : '');
   $('#nextCard').innerHTML = h;
   // 지나온 길 / 남은 길 = 일정 탭과 같은 목록(추가·옮김·보관·늦어짐 그대로)
@@ -1112,7 +1129,23 @@ function renderNow() {
 }
 
 /* ---------- 기록 ---------- */
+const spt = (r, deg) => { const a = deg * Math.PI / 180; return (50 + r * Math.cos(a)).toFixed(2) + ' ' + (50 + r * Math.sin(a)).toFixed(2); };
+// 조각 도장: total = 그날 일정 수(이동 뺌), done = 끝낸 수, from = 지난번 그릴 때 끝낸 수(그 뒤 조각만 '쾅')
+function stampSvg(d, done, total, from) {
+  const N = Math.max(total, 1), step = 360 / N, all = total > 0 && done >= N, o = done ? 'ln' : 'gh';
+  let h = '<circle class="' + o + '" cx="50" cy="50" r="46" stroke-width="2.6"/><circle class="' + o + '" cx="50" cy="50" r="41.5" stroke-width="1.2"/>';
+  for (let i = 0; i < N; i++) {
+    const a0 = -90 + i * step + 1.5, a1 = -90 + (i + 1) * step - 1.5, lg = a1 - a0 > 180 ? 1 : 0;
+    const p = 'M' + spt(37, a0) + 'A37 37 0 ' + lg + ' 1 ' + spt(37, a1) + 'L' + spt(23, a1) + 'A23 23 0 ' + lg + ' 0 ' + spt(23, a0) + 'Z';
+    h += '<path class="' + (i < done ? 'f' + (i >= from ? ' pop' : '') : 'gh') + '" d="' + p + '"/>';
+  }
+  const t = dateOfDay(d), md = String(t.getMonth() + 1).padStart(2, '0') + '.' + String(t.getDate()).padStart(2, '0');
+  h += all ? '<g class="' + (from < N ? 'pop' : '') + '"><text class="tx" x="50" y="48" font-size="14">DAY ' + d.no + '</text><text class="tx" x="50" y="63" font-size="12">' + md + '</text></g>'
+    : done ? '<text class="cnt" x="50" y="55" font-size="13">' + done + '/' + N + '</text>' : '';
+  return '<div class="stamp" role="img" aria-label="DAY ' + d.no + ' ' + (all ? '완료' : done + ' / ' + N + ' 진행') + '"><svg viewBox="0 0 100 100"><g filter="url(#gbRough)">' + h + '</g></svg></div>';
+}
 function renderTrail() {
+  st.stampDone = st.stampDone || {};
   let h = '';
   DAYS.forEach((d, i) => {
     const V = d.list.filter(c => c.k !== 'm'), p = posOf(i);
@@ -1122,7 +1155,8 @@ function renderTrail() {
     h += '<div class="trip glass' + (started ? '' : ' later') + '"><div class="d"><b>DAY ' + d.no + '</b><span>' + d.date + '</span></div><div style="min-width:0">'
       + '<div class="ttl2 one">' + esc(d.title) + '</div><div class="codes one">' + esc(d.codes || d.route || '') + '</div>'
       + (started ? '<div class="prog" aria-label="다녀온 비율"><i style="width:' + Math.round(done / V.length * 100) + '%"></i></div>' : '') + '</div>'
-      + (started ? '<div class="stamp">' + (all ? '완료<br>' + d.date.slice(0, 5).replace(' ', '') : '진행<br>' + done + '/' + V.length) + '</div>' : '') + '</div>';
+      + stampSvg(d, done, V.length, st.stampDone[i] ?? done) + '</div>';
+    if (!$('#v-log').hidden) st.stampDone[i] = done;   // 기록 탭을 볼 때만 기억 → 다른 탭에서 끝낸 조각은 기록 탭을 열 때 '쾅'
   });
   $('#trips').innerHTML = h;
 }
@@ -1381,6 +1415,7 @@ document.addEventListener('click', e => {
   const gt = e.target.closest('[data-goto]');
   if (gt) { const el = document.querySelector('#dayBody [data-key="' + gt.dataset.goto + '"]'); if (el) { el.scrollIntoView({ behavior: calm() ? 'auto' : 'smooth', block: 'center' }); el.classList.remove('just'); void el.offsetWidth; el.classList.add('just'); } return; }
   if (e.target.id === 'arriveBtn') { const di = navDay(), L = DAYS[di].list, p = posOf(di), nx = L[p.i + 1]; if (nx) { st.cur = { day: di, id: nx.id }; refreshAll(); toast((nx.k === 'm' ? '출발 · ' : '도착 · ') + (nx.sh || nx.n)); } return; }
+  if (e.target.id === 'endDayBtn') { const di = navDay(); st.cur = { day: di, id: '__end' }; refreshAll(); toast('DAY ' + DAYS[di].no + ' 끝 · 기록에 도장 완성'); return; }
   if (e.target.id === 'nextDayBtn') { const di = navDay() + 1; if (DAYS[di]) { st.cur = { day: di, id: DAYS[di].list[0].id }; st.day = di; renderDays(); refreshAll(); } return; }
   const fd = e.target.closest('[data-flyday]'); if (fd) { st.day = +fd.dataset.flyday; renderDays(); renderPlan(); itemSheet(fd.dataset.fid); return; }
   if (e.target.id === 'addGo') { doAdd(); return; }
