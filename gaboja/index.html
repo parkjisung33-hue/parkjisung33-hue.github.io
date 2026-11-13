@@ -24,7 +24,7 @@
 /* 크기: 모든 길이는 rem — 기준 글자 크기가 폰 폭에 비례(390px=16px)해서 어느 폰이든 같은 비율로 보임.
    레이아웃: 폰 폭 한 열 앱. 위 = 유리 알약 바(메뉴·제목·간단히/자세히) + 따라오는 날짜 칩, 가운데 = 탭 화면, 아래 = 떠 있는 유리 탭바(일정·오늘·기록) + 일정 추가.
    하루 머리(v8) = 카드 없이 DAY 칩·날짜·'일정 요약 보기' / 제목 한 줄 / 지금 줄(현재 일정이 빛남). 요약 = 납작한 블록(+맨 위 탑승권), 상세 = 카드 없는 목록.
-   손동작(둘 다): 꾹 눌러 옮기기(다른 일정이 비켜남) · 좌우로 밀어 보관('보관' 표시) · 눌러서 라벨/색. 비행기·이동은 고정. 라이트/다크/시스템은 메뉴 맨 아래 */
+   손동작: 꾹 눌러 옮기기(다른 일정이 비켜남, 요약·상세) · 상세 목록만 왼쪽으로 밀면 '보관' 버튼 → 눌러야 보관(11/14) · 눌러서 라벨/색. 비행기·이동은 고정. 라이트/다크/시스템은 메뉴 맨 아래 */
 :root {
   color-scheme: light;
   --canvas: #EEF0F3; --ink: #15171A; --sub: #6F757D; --hair: rgba(21,23,26,.09); --on-ink: #FFFFFF;
@@ -179,6 +179,15 @@ h2 { margin: 0; font-size: 1.3125rem; font-weight: 800; letter-spacing: -.03em; 
 .swbg.go { background: var(--blue); color: #fff; }
 .swbg svg { width: 1.125rem; height: 1.125rem; stroke: currentColor; fill: none; stroke-width: 1.9; stroke-linecap: round; stroke-linejoin: round; flex: none; transition: transform .15s; }
 .swbg.go svg { transform: scale(1.15); }
+.swbg.r { padding: 0; overflow: hidden; }
+.swbtn { margin-left: auto; height: 100%; width: 5.25rem; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 0.1875rem; border: 0; background: var(--blue); color: #fff; font: inherit; font-size: 0.75rem; font-weight: 700; border-radius: 0 0.875rem 0.875rem 0; }
+.swbg.open { pointer-events: auto; }
+/* 날짜 칩 (11/14 D1-A): 두 줄 — 위 DAY 작게 · 아래 날짜+요일 크게. 좁은 폰에서도 날짜 안 숨김 */
+.days { border-radius: 1.375rem !important; }
+.days button { height: 3.125rem !important; flex-direction: column; gap: 0.125rem !important; border-radius: 1.0625rem !important; line-height: 1.1 !important; }
+.days button b { font-size: 0.6875rem !important; font-weight: 700 !important; letter-spacing: .04em; opacity: .6; }
+.days button span { display: block !important; font-size: 0.875rem !important; font-weight: 700; color: var(--ink) !important; top: 0 !important; }
+.days button[aria-pressed="true"] span { color: inherit !important; opacity: 1 !important; }
 /* 옮기기: 들어 올린 자리는 점선 빈칸, 다른 일정이 비켜나며 밀리고 당겨짐 */
 .lifted { background: transparent !important; border: 1.5px dashed color-mix(in srgb, var(--blue) 60%, transparent) !important; box-shadow: none !important; }
 .lifted > * { visibility: hidden; }
@@ -1007,10 +1016,11 @@ function subOf(tab) {
 function dayHead(d) {
   const nw = nowOf(d), t = dateOfDay(d), n = nowRef(), first = d.list[0], last = d.list[d.list.length - 1];
   const range = d.tbd ? '시각 미정' : first ? first.s + ' – ' + (last.est ? last.s : last.e) : '';
-  let h = '<div class="r1"><span class="dchip">DAY ' + d.no + '</span><span class="city">' + esc(d.city || '') + '</span>'
+  // 11/14 D1-A: DAY·날짜는 위 칩에 있으므로 하루 머리엔 도시 · 시간대만 (오늘이면 '오늘')
+  let h = '<div class="r1"><span class="city">' + esc(d.city || '') + '</span>'
     + '<button class="sumlink" data-daysum>일정 요약 보기<svg viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg></button></div>'
     + '<h2 class="one">' + esc(d.title) + '</h2>'
-    + '<div class="dmeta2"><b>' + fullDate(t) + '</b>' + (n.phase === 'during' && n.day === d.no - 1 ? '<span style="color:var(--blue);font-weight:700">오늘</span>' : '') + (range ? '<i></i><span class="one">' + range + '</span>' : '') + '</div>' + wxLine(d);
+    + '<div class="dmeta2">' + (n.phase === 'during' && n.day === d.no - 1 ? '<span style="color:var(--blue);font-weight:700">오늘</span>' + (range ? '<i></i>' : '') : '') + (range ? '<span class="one">' + range + '</span>' : '') + '</div>' + wxLine(d);
   if (nw) {
     const c = nw.cur, nm = c ? (c.k === 'm' ? '이동 중 · ' + (c.n || '') : (c.sh || c.n)) : (nw.nx ? '다음 일정까지 여유' : '오늘 일정 끝');
     const goId = c && c.k !== 'm' ? c.id : nw.nx ? nw.nx.id : '';
@@ -1132,7 +1142,7 @@ function list(d) {
 }
 function renderDays() {
   const n = DAYS.length, db = $('#dayBtns'); db.style.gridTemplateColumns = 'repeat(' + n + ', minmax(max-content, 1fr))';
-  $('#dayBtns').innerHTML = DAYS.map((d,i) => '<button aria-pressed="' + (i===st.day) + '" data-day="' + i + '"><b>DAY' + d.no + '</b><span>' + dShort(d) + '</span></button>').join('');
+  $('#dayBtns').innerHTML = DAYS.map((d,i) => '<button aria-pressed="' + (i===st.day) + '" data-day="' + i + '"><b>DAY ' + d.no + '</b><span>' + d.date.replace('. ', '.') + '</span></button>').join('');
   const on = db.querySelector('[aria-pressed="true"]'); if (on && db.scrollWidth > db.clientWidth) db.scrollLeft = on.offsetLeft - db.offsetLeft - (db.clientWidth - on.offsetWidth) / 2;
 }
 // 다시 그릴 때 일정들이 새 자리로 미끄러져 감 (옮김·보관·복원·추가 → 밀려나고 당겨짐). 날짜·보기 바꿀 땐 안 함
@@ -1263,29 +1273,36 @@ function startDrag() {
     findTarget(); loop(); }); };
   loop();
 }
-function swipeBg(G, dx) {
-  if (!G.bg) {
-    const el = G.el, b = document.createElement('div');
-    b.className = 'swbg'; b.setAttribute('aria-hidden', 'true');
-    b.style.cssText = 'left:' + el.offsetLeft + 'px;top:' + el.offsetTop + 'px;width:' + el.offsetWidth + 'px;height:' + el.offsetHeight + 'px';
-    b.innerHTML = ARC_IC + '<span>보관</span>';
-    el.parentNode.insertBefore(b, el); G.bg = b;
-  }
-  const go = Math.abs(dx) > G.el.offsetWidth * .35;
-  G.bg.classList.toggle('r', dx < 0); G.bg.classList.toggle('go', go);
-  G.bg.lastChild.textContent = go ? '놓으면 보관' : '보관';
+// 밀기(11/14 D1-A): 상세 목록만. 왼쪽으로 밀면 오른쪽에 '보관' 버튼이 드러나고 멈춤 → 버튼을 눌러야 보관 (iOS 메일식, 실수로 안 빠짐)
+// 요약 블록은 밀기 없음(가로로 옮기기와 같은 방향이라 충돌) — 보관은 상세 목록·일정 시트에서
+const SW_OPEN = () => 5.25 * parseFloat(getComputedStyle(document.documentElement).fontSize);   // 84px @16px
+let swOpen = null;   // 버튼이 드러난 채 열려 있는 줄 {el, bg, id}
+function swipeBg(G) {
+  if (G.bg) return;
+  const el = G.el, b = document.createElement('div');
+  b.className = 'swbg r'; b.setAttribute('aria-hidden', 'true');
+  b.style.cssText = 'left:' + el.offsetLeft + 'px;top:' + el.offsetTop + 'px;width:' + el.offsetWidth + 'px;height:' + el.offsetHeight + 'px';
+  b.innerHTML = '<button class="swbtn" data-arc="' + G.id + '" tabindex="-1">' + ARC_IC + '<span>보관</span></button>';
+  el.parentNode.insertBefore(b, el); G.bg = b;
+}
+function swClose(now) {
+  const o = swOpen; swOpen = null; if (!o) return;
+  o.el.style.transition = now ? '' : 'transform .22s cubic-bezier(.2,.8,.2,1)'; o.el.style.transform = '';
+  o.bg.classList.remove('open');
+  setTimeout(() => { o.bg.remove(); o.el.style.zIndex = ''; o.el.style.background = ''; o.el.style.transition = ''; }, now ? 0 : 230);
 }
 function endGesture(cancel) {
   const G = g; g = null; if (!G) return;
   clearTimeout(G.timer);
+  if (G.base && G.mode === 'wait') { swOpen = { el: G.el, bg: G.bg, id: G.id }; swClose(); justG = true; setTimeout(() => { justG = false; }, 60); return; }   // 열린 줄을 톡 = 닫기
   if (G.mode === 'swipe') {
     justG = true;
-    const dx = G.x - G.x0, w = G.el.offsetWidth;
+    const x = Math.min(0, (G.base || 0) + G.x - G.x0), w = SW_OPEN();
     G.el.style.transition = 'transform .22s cubic-bezier(.2,.8,.2,1)';
     G.el.classList.remove('swiping');
     G.el.style.zIndex = '1'; G.el.style.background = 'var(--paper)';
-    if (!cancel && Math.abs(dx) > w * .35) { G.el.style.transform = 'translateX(' + (dx > 0 ? w : -w) * 1.1 + 'px)'; setTimeout(() => removeItem(G.id), 200); }
-    else { G.el.style.transform = ''; setTimeout(() => { G.bg && G.bg.remove(); G.el.style.zIndex = ''; G.el.style.background = ''; G.el.style.transition = ''; }, 230); }
+    if (!cancel && x < -w / 2) { G.el.style.transform = 'translateX(' + -w + 'px)'; G.bg.classList.add('open'); swOpen = { el: G.el, bg: G.bg, id: G.id }; }
+    else { swOpen = { el: G.el, bg: G.bg, id: G.id }; swClose(); }
   } else if (G.mode === 'drag') {
     justG = true; cancelAnimationFrame(raf);
     const all = [...document.querySelectorAll('#dayBody [data-key]')], i = all.indexOf(G.el), nx = all[i + 1], pv = all[i - 1];
@@ -1305,21 +1322,29 @@ function endGesture(cancel) {
 }
 document.addEventListener('pointerdown', e => {
   const el = e.target.closest('#dayBody [data-key]');
+  if (e.target.closest('.swbtn')) return;
+  let base = 0;
+  if (swOpen) { if (swOpen.el === el) base = -SW_OPEN(); else { swClose(); justG = true; setTimeout(() => { justG = false; }, 350); return; } }
   if (!el || e.button > 0 || e.target.closest('a') || g || settling) return;
-  g = { el, id: el.dataset.key, fixed: el.dataset.fixed === '1', x0: e.clientX, y0: e.clientY, x: e.clientX, y: e.clientY, mode: 'wait', pid: e.pointerId };
-  if (!g.fixed) g.timer = setTimeout(startDrag, 320);
+  g = { el, id: el.dataset.key, fixed: el.dataset.fixed === '1', canSw: !el.classList.contains('tile'), base, x0: e.clientX, y0: e.clientY, x: e.clientX, y: e.clientY, mode: 'wait', pid: e.pointerId };
+  if (base) { const o = swOpen; swOpen = null; g.bg = o.bg; o.bg.classList.remove('open'); }
+  if (!g.fixed && !base) g.timer = setTimeout(startDrag, 320);
 });
 document.addEventListener('pointermove', e => {
   if (!g || e.pointerId !== g.pid) return;
   g.x = e.clientX; g.y = e.clientY;
   const dx = g.x - g.x0, dy = g.y - g.y0;
   if (g.mode === 'wait') {
-    if (!g.fixed && Math.abs(dx) > 10 && Math.abs(dx) > Math.abs(dy) * 1.3) {
-      clearTimeout(g.timer); g.mode = 'swipe'; g.el.classList.add('swiping');
+    if (!g.fixed && g.canSw && Math.abs(dx) > 10 && Math.abs(dx) > Math.abs(dy) * 1.3 && (dx < 0 || g.base)) {
+      clearTimeout(g.timer); g.mode = 'swipe'; g.el.classList.add('swiping'); swipeBg(g);
       try { g.el.setPointerCapture(g.pid); } catch (_) {}
-    } else if (Math.hypot(dx, dy) > 12) { clearTimeout(g.timer); g = null; return; }
+    } else if (Math.hypot(dx, dy) > 12) {
+      clearTimeout(g.timer);
+      if (g.base) { swOpen = { el: g.el, bg: g.bg, id: g.id }; swClose(); justG = true; setTimeout(() => { justG = false; }, 350); }
+      g = null; return;
+    }
   }
-  if (g.mode === 'swipe') { g.el.style.transform = 'translateX(' + dx + 'px)'; swipeBg(g, dx); }
+  if (g.mode === 'swipe') { g.el.style.transform = 'translateX(' + Math.max(-SW_OPEN() * 1.4, Math.min(0, g.base + dx)) + 'px)'; }
   else if (g.mode === 'drag') { placeGhost(); findTarget(); }
 });
 document.addEventListener('pointerup', e => { if (g && e.pointerId === g.pid) endGesture(false); });
@@ -1926,6 +1951,8 @@ $('#dayBtns').onclick = e => {
   const y = $('#dayHead').getBoundingClientRect().top + scrollY - 140; if (scrollY > y) window.scrollTo({ top: y, behavior: 'smooth' });
 };
 document.addEventListener('click', e => {
+  const arc = e.target.closest('.swbtn');
+  if (arc) { const id = arc.dataset.arc; swClose(true); removeItem(id); return; }
   const it = e.target.closest('#dayBody [data-key]');
   if (it && !justG && !e.target.closest('a')) { itemSheet(it.dataset.key); return; }
   if (e.target.closest('[data-close]')) { closeAll(); return; }
