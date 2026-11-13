@@ -1,0 +1,228 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<title>D1 보관·옮기기 · 날짜 칩</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<style>
+@font-face { font-family: "Pretendard Variable"; font-weight: 45 920; font-style: normal; font-display: swap;
+  src: local("Pretendard Variable"), url("../app/fonts/PretendardVariable.woff2") format("woff2-variations"), url("fonts/PretendardVariable.woff2") format("woff2-variations"); }
+:root {
+  color-scheme: light;
+  --canvas: #EEF0F3; --ink: #15171A; --sub: #6F757D; --hair: rgba(21,23,26,.09); --on-ink: #FFFFFF;
+  --paper: #FFFFFF; --tile: rgba(255,255,255,.86); --glass: rgba(255,255,255,.62);
+  --red: #E0453A; --amber: #E8A317; --blue: #3B5BDB; --blue-soft: rgba(59,91,219,.10);
+  --sh-xs: 0 1px 2px rgba(24,36,60,.05), 0 0.25rem 0.75rem -0.375rem rgba(24,36,60,.14);
+  --kr: "Pretendard Variable", Pretendard, -apple-system, "Apple SD Gothic Neo", "Malgun Gothic", system-ui, sans-serif;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  color-scheme: dark; --canvas: #0E1013; --ink: #ECEEF1; --sub: #8F969F; --hair: rgba(255,255,255,.08); --on-ink: #0E1013;
+  --paper: #1A1D22; --tile: rgba(36,40,46,.9); --glass: rgba(30,33,38,.62); --blue: #7C95FF; --blue-soft: rgba(124,149,255,.14);
+  --sh-xs: 0 1px 2px rgba(0,0,0,.35), 0 0.25rem 0.75rem -0.375rem rgba(0,0,0,.55); } }
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--canvas); color: var(--ink); font-family: var(--kr); font-size: 15px; line-height: 1.5; letter-spacing: -.01em; font-variant-numeric: tabular-nums; -webkit-tap-highlight-color: transparent; }
+main { max-width: 430px; margin: 0 auto; padding: 24px 16px 80px; }
+h1 { font-size: 22px; margin: 0 0 4px; }
+.lead { color: var(--sub); font-size: 13px; margin: 0 0 28px; }
+h2 { font-size: 17px; margin: 40px 0 6px; }
+h2 small { font-weight: 500; color: var(--sub); font-size: 12px; margin-left: 6px; }
+.why { font-size: 13px; color: var(--sub); margin: 0 0 14px; }
+.card { background: var(--glass); border: 1px solid var(--hair); border-radius: 22px; padding: 16px; margin: 0 0 18px; }
+.card h3 { font-size: 15px; margin: 0 0 2px; display: flex; align-items: center; gap: 8px; }
+.card h3 .rec { font-size: 11px; font-weight: 700; color: var(--on-ink); background: var(--blue); border-radius: 99px; padding: 1px 8px; }
+.card p.d { font-size: 12.5px; color: var(--sub); margin: 0 0 12px; }
+.card .src { font-size: 11px; color: var(--sub); margin: 10px 0 0; }
+.card .src a { color: var(--sub); }
+.lab { font-size: 11px; font-weight: 700; color: var(--sub); letter-spacing: .04em; margin: 10px 0 6px; }
+/* 요약 블록 */
+.tiles { display: flex; gap: 6px; }
+.tile { flex: 1 1 0; min-width: 0; background: var(--tile); border-radius: 14px; box-shadow: var(--sh-xs); padding: 8px 9px; font-size: 13px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; touch-action: pan-y; user-select: none; transition: transform .2s cubic-bezier(.2,.8,.2,1); position: relative; }
+.tile small { display: block; font-size: 11px; font-weight: 500; color: var(--sub); }
+.tile.lift { transform: scale(1.05) rotate(-1deg); box-shadow: 0 10px 24px -10px rgba(24,36,60,.45); z-index: 2; }
+/* 상세 목록 */
+.rows { display: flex; flex-direction: column; gap: 6px; }
+.rowwrap { position: relative; border-radius: 14px; overflow: hidden; }
+.act { position: absolute; inset: 0 0 0 auto; width: 84px; display: flex; align-items: center; justify-content: center; gap: 4px; flex-direction: column; background: var(--amber); color: #fff; font-size: 12px; font-weight: 700; border: 0; font-family: inherit; }
+.act svg { width: 18px; height: 18px; stroke: currentColor; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.row { position: relative; display: flex; align-items: center; gap: 10px; background: var(--paper); padding: 10px 12px; font-size: 14px; touch-action: pan-y; user-select: none; transition: transform .22s cubic-bezier(.2,.8,.2,1); }
+.row .tm { font-size: 13px; color: var(--sub); width: 40px; flex: none; }
+.row .nm { flex: 1; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-weight: 600; }
+.row .hd, .row .rm { display: none; width: 28px; height: 28px; flex: none; align-items: center; justify-content: center; border: 0; background: none; color: var(--sub); padding: 0; }
+.row .hd svg, .row .rm svg { width: 18px; height: 18px; stroke: currentColor; fill: none; stroke-width: 2; stroke-linecap: round; }
+.row .rm { color: var(--amber); }
+.edit .row .hd, .edit .row .rm { display: flex; }
+.edit .row .hd { cursor: grab; touch-action: none; }
+.row.lift { box-shadow: 0 10px 24px -10px rgba(24,36,60,.45); z-index: 2; transform: scale(1.02); }
+.bar { display: flex; justify-content: space-between; align-items: center; margin: 0 0 8px; font-size: 12px; color: var(--sub); }
+.btn { font: inherit; font-size: 13px; font-weight: 700; color: var(--blue); background: var(--blue-soft); border: 0; border-radius: 99px; padding: 5px 12px; }
+.toast { position: fixed; left: 50%; bottom: 24px; transform: translate(-50%, 220%); visibility: hidden; background: rgba(21,23,26,.92); color: #fff; font-size: 13px; padding: 10px 16px; border-radius: 99px; display: flex; gap: 14px; transition: transform .25s; z-index: 9; white-space: nowrap; }
+.toast.on { transform: translate(-50%, 0); visibility: visible; }
+.act { opacity: 0; transition: opacity .15s; } .rowwrap.sw .act { opacity: 1; }
+.row { border-radius: 14px; }
+.toast button { font: inherit; font-weight: 700; color: #9DB2FF; background: none; border: 0; padding: 0; }
+/* 날짜 칩 */
+.days { display: grid; grid-template-columns: repeat(4, minmax(0,1fr)); gap: 6px; padding: 5px; border-radius: 99px; background: var(--glass); border: 1px solid var(--hair); }
+.days b, .days span { display: block; line-height: 1.15; }
+.days button { font: inherit; color: var(--ink); background: none; border: 0; border-radius: 99px; min-width: 0; white-space: nowrap; }
+.days button[aria-pressed="true"] { background: var(--ink); color: var(--on-ink); }
+.d0 button { height: 40px; display: flex; align-items: center; justify-content: center; gap: 5px; }
+.d0 b { font-size: 13px; font-weight: 600; } .d0 span { font-size: 11.5px; color: var(--sub); }
+.d0 button[aria-pressed="true"] span { color: inherit; opacity: .7; }
+.dA, .dB, .dC { border-radius: 22px; }
+.dA button, .dB button { height: 50px; border-radius: 17px; }
+.dA b { font-size: 11px; font-weight: 700; letter-spacing: .04em; opacity: .6; } .dA span { font-size: 14px; font-weight: 700; }
+.dB b { font-size: 11px; font-weight: 600; opacity: .6; } .dB span { font-size: 15px; font-weight: 700; }
+.dB .today { color: var(--blue); opacity: 1; }
+.dC button { height: 40px; font-size: 13px; font-weight: 700; }
+.head { margin: 12px 4px 0; }
+.head .r1 { font-size: 12px; color: var(--sub); display: flex; gap: 8px; align-items: center; }
+.head .r1 .chip { background: var(--ink); color: var(--on-ink); border-radius: 99px; padding: 1px 9px; font-weight: 600; }
+.head h4 { font-size: 18px; margin: 2px 0 0; }
+.head .big { font-size: 20px; font-weight: 800; margin: 0; }
+.head .big small { font-size: 13px; font-weight: 600; color: var(--sub); margin-left: 6px; }
+.pick { margin-top: 36px; padding: 16px; border-radius: 22px; background: var(--blue-soft); font-size: 13.5px; }
+.pick b { display: block; margin-bottom: 4px; }
+</style>
+</head>
+<body>
+<main>
+<h1>D1 · 두 번째 지적 두 가지</h1>
+<p class="lead">2026-11-14 · 직접 눌러 보세요(폰 권장). 위는 지금 앱, 아래가 대안입니다.</p>
+
+<!-- ================= 1. 보관 · 옮기기 ================= -->
+<h2>① 옮기려는데 보관함으로 빠짐 <small>53개 중 26 · 학이형 11/12</small></h2>
+<p class="why">원인(코드 확인): 옆으로 <b>10px</b>만 움직여도 '밀기'로 잡히고, 보관 기준이 <b>칸 폭의 35%</b>라 좁은 요약 블록은 손가락 한 마디(약 30px)면 보관됨. 요약 블록은 가로로 놓여 있어 '옆으로 옮기기'와 '밀기'가 같은 방향.</p>
+
+<div class="card">
+  <h3>지금</h3>
+  <p class="d">요약·상세 둘 다: 꾹(0.32초) → 옮기기 / 옆으로 밀기 → 바로 보관</p>
+  <div class="lab">요약 블록 — 옆으로 살짝 밀어 보세요</div>
+  <div class="tiles" data-demo="now">
+    <div class="tile" data-n="오사카성">10:00<small>오사카성</small></div>
+    <div class="tile" data-n="구로몬 시장">12:00<small>구로몬 시장</small></div>
+    <div class="tile" data-n="도톤보리">15:30<small>도톤보리</small></div>
+  </div>
+</div>
+
+<div class="card">
+  <h3>A안 · 나눠 쓰기 <span class="rec">추천</span></h3>
+  <p class="d"><b>요약 블록</b> = 밀기 없음, 꾹 눌러 옮기기만. <b>상세 목록</b> = 밀면 '보관' 버튼만 드러나고 <b>버튼을 눌러야</b> 보관(실수로 안 빠짐). 보관 뒤엔 되돌리기.</p>
+  <div class="lab">요약 블록 — 밀어도 아무 일 없음, 꾹 누르면 들림</div>
+  <div class="tiles" data-demo="a">
+    <div class="tile" data-n="오사카성">10:00<small>오사카성</small></div>
+    <div class="tile" data-n="구로몬 시장">12:00<small>구로몬 시장</small></div>
+    <div class="tile" data-n="도톤보리">15:30<small>도톤보리</small></div>
+  </div>
+  <div class="lab">상세 목록 — 왼쪽으로 밀어 보세요</div>
+  <div class="rows" data-demo="a-rows"></div>
+  <p class="src">근거: iOS 메일 — 일부만 밀면 버튼 노출, 끝까지 밀어야 실행 (<a href="https://iphonelife.com/blog/5/tip-day-save-time-using-swipe-gestures-mark-or-flag-email-ios-8">iPhone Life</a>) · Material 목록 — 밀기 = 동작, 끌기 = 순서 (<a href="https://m2.material.io/go/design-lists">Material Design</a>) · Gmail 실행 취소 (<a href="https://workspaceupdates.googleblog.com/2019/03/take-action-faster-with-customizable.html">Google</a>)</p>
+</div>
+
+<div class="card">
+  <h3>B안 · 편집 모드</h3>
+  <p class="d">평소엔 손동작 없음(눌러서 상세만). <b>'편집'</b>을 누르면 줄마다 ≡ 손잡이(끌어서 옮기기)와 ⊖ 보관이 나옴. 실수 가능성 0, 대신 한 번 더 누름.</p>
+  <div class="bar"><span>상세 목록</span><button class="btn" id="editBtn">편집</button></div>
+  <div class="rows" data-demo="b-rows"></div>
+  <p class="src">근거: Apple HIG — 목록 순서 바꾸기는 편집 모드에서 (<a href="https://developer.apple.com/design/human-interface-guidelines/lists-and-tables">Apple</a>) · Wanderlog — 오른쪽 손잡이를 잡고 끌어 이동 (<a href="https://help.wanderlog.com/hc/en-us/articles/5159751100443-Move-a-place">Wanderlog 도움말</a>)</p>
+</div>
+
+<!-- ================= 2. 날짜 칩 ================= -->
+<h2>② DAY 옆 날짜가 붙어 읽기 어려움 <small>11/12 피드백 1 · 53개 중 5</small></h2>
+<p class="why">'DAY 1'과 '12.4'가 한 줄에 같은 크기로 붙어 숫자 두 개가 이어 읽힘. 좁은 폰(370px 이하)에선 날짜가 아예 숨겨짐.</p>
+
+<div class="card">
+  <h3>지금</h3>
+  <div class="days d0"><button aria-pressed="true"><b>DAY 1</b><span>12.4</span></button><button><b>DAY 2</b><span>12.5</span></button><button><b>DAY 3</b><span>12.6</span></button><button><b>DAY 4</b><span>12.7</span></button></div>
+  <div class="head"><div class="r1"><span class="chip">DAY 1</span>오사카</div><h4>도착하자마자 도톤보리</h4><div class="r1">12월 4일 금요일 · 05:15 – 21:00</div></div>
+</div>
+
+<div class="card">
+  <h3>A안 · 칩을 두 줄로 (DAY 작게 위 · 날짜 크게 아래) <span class="rec">추천</span></h3>
+  <p class="d">숫자 두 개를 위아래로 떼고 크기를 다르게. 날짜에 요일을 붙여 '언제'가 먼저 읽히게. 좁은 폰에서도 날짜가 안 숨음.</p>
+  <div class="days dA"><button aria-pressed="true"><b>DAY 1</b><span>12.4 금</span></button><button><b>DAY 2</b><span>12.5 토</span></button><button><b>DAY 3</b><span>12.6 일</span></button><button><b>DAY 4</b><span>12.7 월</span></button></div>
+  <div class="head"><div class="r1">오사카 · 05:15 – 21:00</div><h4>도착하자마자 도톤보리</h4></div>
+  <p class="src">하루 머리에선 날짜가 칩과 겹치므로 빼고 '도시 · 시간대'만. 근거: 위아래 2줄 날짜 탭 = haggie 도쿄 노트(요일 위·날짜 아래, <code>자료/레퍼런스/가보자/도쿄여행노트_kimhaggie/01</code>) · Wanderlog 'Sat 3/21' 날짜 칩(경쟁 레퍼런스 문서 4번)</p>
+</div>
+
+<div class="card">
+  <h3>B안 · 칩엔 요일·날짜만, DAY는 아래 머리에서</h3>
+  <p class="d">칩 = 달력처럼 '금 / 4'. 오늘은 파란 글씨. 'DAY 1'은 하루 머리 큰 제목 옆에만.</p>
+  <div class="days dB"><button aria-pressed="true"><b>금</b><span>12.4</span></button><button><b>토</b><span>12.5</span></button><button><b class="today">오늘</b><span>12.6</span></button><button><b>월</b><span>12.7</span></button></div>
+  <div class="head"><p class="big">DAY 1<small>오사카 · 05:15 – 21:00</small></p><h4>도착하자마자 도톤보리</h4></div>
+  <p class="src">근거: haggie 도쿄 노트 날짜 탭(요일 위·날짜 아래, DAY는 본문 머리에) · 날짜 고르기 UI 일반 — 오늘은 색으로 표시 (<a href="https://kombai.com/gallery/sections/date-picker-ios-14/">사례</a>)</p>
+</div>
+
+<div class="card">
+  <h3>C안 · 칩은 DAY만, 날짜는 머리에 크게</h3>
+  <p class="d">칩을 가장 단순하게. 날짜는 고른 날 하나만 크게 보임(다른 날 날짜는 칩에서 안 보임).</p>
+  <div class="days dC"><button aria-pressed="true">DAY 1</button><button>DAY 2</button><button>DAY 3</button><button>DAY 4</button></div>
+  <div class="head"><p class="big">12월 4일 금요일<small>오사카</small></p><h4>도착하자마자 도톤보리</h4></div>
+</div>
+
+<div class="pick"><b>고르실 것</b>① 보관·옮기기: 지금 / A / B &nbsp;·&nbsp; ② 날짜 칩: 지금 / A / B / C<br>아키 추천 = ① A · ② A</div>
+</main>
+<div class="toast" id="toast"><span id="tmsg"></span><button id="undo">되돌리기</button></div>
+<script>
+const ROWS = [['10:00','오사카성'],['12:00','구로몬 시장 · 점심'],['14:00','신세카이 산책'],['15:30','도톤보리']];
+const ARC = '<svg viewBox="0 0 24 24"><rect x="4" y="5" width="16" height="4" rx="1"/><path d="M5 9v9a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V9M10 13h4"/></svg>';
+const HD = '<svg viewBox="0 0 24 24"><path d="M5 8h14M5 12h14M5 16h14"/></svg>';
+const RM = '<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M8 12h8"/></svg>';
+function rowsHtml(withAct) { return ROWS.map(([t, n]) => '<div class="rowwrap">' + (withAct ? '<button class="act">' + ARC + '보관</button>' : '') + '<div class="row" data-n="' + n + '"><span class="tm">' + t + '</span><span class="nm">' + n + '</span><button class="rm" aria-label="보관">' + RM + '</button><span class="hd" aria-label="끌어서 옮기기">' + HD + '</span></div></div>').join(''); }
+document.querySelector('[data-demo="a-rows"]').innerHTML = rowsHtml(true);
+document.querySelector('[data-demo="b-rows"]').innerHTML = rowsHtml(false);
+let last = null;
+const toast = (m, el) => { last = el; document.getElementById('tmsg').textContent = m; const t = document.getElementById('toast'); t.classList.add('on'); clearTimeout(toast.t); toast.t = setTimeout(() => t.classList.remove('on'), 3500); };
+document.getElementById('undo').onclick = () => { if (last) { last.style.display = ''; const r = last.querySelector('.row'); if (r) r.style.transform = ''; last.querySelectorAll('.tile').forEach(x => x.style.transform = ''); if (last.classList.contains('tile')) last.style.transform = ''; } document.getElementById('toast').classList.remove('on'); };
+const archive = el => { el.style.display = 'none'; toast('보관함으로 옮김', el); };
+// 옮기기: 꾹 → 들림 → 끌면 이웃과 자리 바꿈 (가로 타일 · 세로 목록 공통)
+function liftDrag(item, list, axis, startEv) {
+  item.classList.add('lift'); try { navigator.vibrate && navigator.vibrate(12); } catch (_) {}
+  const move = e => {
+    const sibs = [...list.children], me = item.closest('.rowwrap') || item;
+    for (const s of sibs) { if (s === me) continue; const r = s.getBoundingClientRect(), mid = axis === 'x' ? r.left + r.width / 2 : r.top + r.height / 2, p = axis === 'x' ? e.clientX : e.clientY, mr = me.getBoundingClientRect(), mm = axis === 'x' ? mr.left + mr.width / 2 : mr.top + mr.height / 2;
+      if ((mm < mid && p > mid) ) { list.insertBefore(me, s.nextSibling); break; } if (mm > mid && p < mid) { list.insertBefore(me, s); break; } }
+  };
+  const up = () => { item.classList.remove('lift'); removeEventListener('pointermove', move); removeEventListener('pointerup', up); removeEventListener('pointercancel', up); };
+  addEventListener('pointermove', move); addEventListener('pointerup', up); addEventListener('pointercancel', up);
+}
+function gesture(root, opts) {
+  root.addEventListener('pointerdown', e => {
+    const item = e.target.closest(opts.sel); if (!item || e.target.closest('.act, .rm, .btn')) return;
+    if (opts.handleOnly) { if (!e.target.closest('.hd') || !root.classList.contains('edit')) return; e.preventDefault(); liftDrag(item, root, 'y', e); return; }
+    const x0 = e.clientX, y0 = e.clientY; let mode = 'wait';
+    const tm = opts.long ? setTimeout(() => { mode = 'drag'; liftDrag(item, root, opts.axis, e); }, 320) : 0;
+    const mv = ev => { const dx = ev.clientX - x0, dy = ev.clientY - y0;
+      if (mode === 'wait') { if (opts.swipe && Math.abs(dx) > 10 && Math.abs(dx) > Math.abs(dy) * 1.3) { clearTimeout(tm); mode = 'swipe'; } else if (Math.hypot(dx, dy) > 12) { clearTimeout(tm); mode = 'none'; } }
+      if (mode === 'swipe') opts.swipe(item, dx, false); };
+    const up = ev => { clearTimeout(tm); if (mode === 'swipe') opts.swipe(item, ev.clientX - x0, true); removeEventListener('pointermove', mv); removeEventListener('pointerup', up); removeEventListener('pointercancel', up); };
+    addEventListener('pointermove', mv); addEventListener('pointerup', up); addEventListener('pointercancel', up);
+  });
+}
+// 지금: 타일 밀기 35% 넘으면 바로 보관
+gesture(document.querySelector('[data-demo="now"]'), { sel: '.tile', long: true, axis: 'x', swipe: (el, dx, end) => {
+  if (!end) { el.style.transition = 'none'; el.style.transform = 'translateX(' + dx + 'px)'; return; }
+  el.style.transition = ''; if (Math.abs(dx) > el.offsetWidth * .35) { el.style.transform = 'translateX(' + (dx > 0 ? 300 : -300) + 'px)'; setTimeout(() => archive(el), 180); } else el.style.transform = '';
+} });
+// A: 타일 = 옮기기만
+gesture(document.querySelector('[data-demo="a"]'), { sel: '.tile', long: true, axis: 'x' });
+// A: 목록 = 밀면 버튼 드러남(84px 멈춤), 버튼 눌러야 보관 · 꾹 = 옮기기
+const aRows = document.querySelector('[data-demo="a-rows"]');
+gesture(aRows, { sel: '.row', long: true, axis: 'y', swipe: (el, dx, end) => {
+  const open = el.dataset.open === '1', base = open ? -84 : 0, x = Math.min(0, Math.max(-110, base + dx));
+  el.parentNode.classList.add('sw');
+  if (!end) { el.style.transition = 'none'; el.style.transform = 'translateX(' + x + 'px)'; return; }
+  el.style.transition = ''; const o = x < -42; el.dataset.open = o ? '1' : ''; el.style.transform = o ? 'translateX(-84px)' : '';
+  if (!o) setTimeout(() => el.parentNode.classList.remove('sw'), 230);
+} });
+aRows.addEventListener('click', e => { const b = e.target.closest('.act'); if (b) archive(b.parentNode); });
+// B: 편집 모드
+const bRows = document.querySelector('[data-demo="b-rows"]');
+gesture(bRows, { sel: '.row', handleOnly: true });
+bRows.addEventListener('click', e => { const b = e.target.closest('.rm'); if (b) archive(b.closest('.rowwrap')); });
+document.getElementById('editBtn').onclick = e => { const on = bRows.classList.toggle('edit'); e.target.textContent = on ? '완료' : '편집'; };
+// 날짜 칩 누르기
+document.querySelectorAll('.days').forEach(d => d.addEventListener('click', e => { const b = e.target.closest('button'); if (!b) return; d.querySelectorAll('button').forEach(x => x.setAttribute('aria-pressed', x === b)); }));
+</script>
+</body>
+</html>
