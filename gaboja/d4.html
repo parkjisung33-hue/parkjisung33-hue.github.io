@@ -1,0 +1,418 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<title>D4 질문지·추가·여행 끝</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<style>
+@font-face { font-family: "Pretendard Variable"; font-weight: 45 920; font-style: normal; font-display: swap;
+  src: local("Pretendard Variable"), url("../app/fonts/PretendardVariable.woff2") format("woff2-variations"), url("fonts/PretendardVariable.woff2") format("woff2-variations"); }
+:root {
+  color-scheme: light;
+  --canvas: #EEF0F3; --ink: #15171A; --sub: #6F757D; --hair: rgba(21,23,26,.09); --on-ink: #FFFFFF;
+  --paper: #FFFFFF; --tile: rgba(255,255,255,.86); --glass: rgba(255,255,255,.62); --field: #FFFFFF;
+  --red: #E0453A; --amber: #E8A317; --blue: #3B5BDB; --blue-soft: rgba(59,91,219,.10); --blue-faint: rgba(59,91,219,.06);
+  --sh-xs: 0 1px 2px rgba(24,36,60,.05), 0 0.25rem 0.75rem -0.375rem rgba(24,36,60,.14);
+  --kr: "Pretendard Variable", Pretendard, -apple-system, "Apple SD Gothic Neo", "Malgun Gothic", system-ui, sans-serif;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  color-scheme: dark; --canvas: #0E1013; --ink: #ECEEF1; --sub: #8F969F; --hair: rgba(255,255,255,.08); --on-ink: #0E1013;
+  --paper: #1A1D22; --tile: rgba(36,40,46,.9); --glass: rgba(30,33,38,.62); --field: #15181C; --blue: #7C95FF; --blue-soft: rgba(124,149,255,.14); --blue-faint: rgba(124,149,255,.08);
+  --sh-xs: 0 1px 2px rgba(0,0,0,.35), 0 0.25rem 0.75rem -0.375rem rgba(0,0,0,.55); } }
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--canvas); color: var(--ink); font-family: var(--kr); font-size: 15px; line-height: 1.5; letter-spacing: -.01em; font-variant-numeric: tabular-nums; -webkit-tap-highlight-color: transparent; }
+main { max-width: 430px; margin: 0 auto; padding: 24px 16px 80px; }
+h1 { font-size: 22px; margin: 0 0 4px; }
+.lead { color: var(--sub); font-size: 13px; margin: 0 0 28px; }
+h2 { font-size: 17px; margin: 40px 0 6px; }
+h2 small { font-weight: 500; color: var(--sub); font-size: 12px; margin-left: 6px; }
+.why { font-size: 13px; color: var(--sub); margin: 0 0 14px; }
+.card { background: var(--glass); border: 1px solid var(--hair); border-radius: 22px; padding: 16px; margin: 0 0 18px; min-width: 0; }
+.card h3 { font-size: 15px; margin: 0 0 2px; display: flex; align-items: center; gap: 8px; }
+.card h3 .rec { font-size: 11px; font-weight: 700; color: var(--on-ink); background: var(--blue); border-radius: 99px; padding: 1px 8px; }
+.card p.d { font-size: 12.5px; color: var(--sub); margin: 0 0 12px; }
+.card .src { font-size: 11px; color: var(--sub); margin: 10px 0 0; }
+.card .src a { color: var(--sub); }
+.lab { font-size: 11px; font-weight: 700; color: var(--sub); letter-spacing: .04em; margin: 10px 0 6px; }
+button { font: inherit; color: inherit; }
+.one { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-width: 0; }
+svg.ic { width: 16px; height: 16px; stroke: currentColor; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; flex: none; }
+
+/* 공통 칩·입력 (start.html 값 따라 재현) */
+.chips { display: flex; flex-wrap: wrap; gap: 7px; }
+.chip { height: 42px; padding: 0 16px; border-radius: 99px; background: var(--tile); border: 1px solid var(--hair); box-shadow: var(--sh-xs); font-size: 14px; font-weight: 600; white-space: nowrap; transition: background .15s, color .15s, transform .12s; }
+.chip:active { transform: scale(.96); }
+.chip[aria-pressed="true"] { background: var(--ink); color: var(--on-ink); border-color: var(--ink); }
+.in { width: 100%; height: 46px; border-radius: 14px; border: 1px solid var(--hair); background: var(--field); color: var(--ink); padding: 0 14px; font: inherit; font-size: max(16px, 1rem); }
+.in::placeholder { color: var(--sub); opacity: .75; }
+.now button:focus-visible, .now input:focus-visible, .now .in:focus { outline: 2px solid var(--blue); outline-offset: -2px; }
+
+/* ① 시각 */
+.tmrow { display: flex; gap: 8px; align-items: center; }
+.tmrow label { font-size: 11px; color: var(--sub); display: flex; flex-direction: column; gap: 4px; flex: 1; min-width: 0; }
+.quick { display: flex; gap: 6px; overflow-x: auto; padding: 2px 2px 8px; margin: 0 -2px; scrollbar-width: none; }
+.quick::-webkit-scrollbar { display: none; }
+.quick .chip { height: 44px; padding: 0 13px; font-size: 13.5px; flex: none; }
+.quick .chip.dir { display: flex; align-items: center; gap: 5px; color: var(--blue); }
+.quick .chip.dir[aria-pressed="true"] { color: var(--on-ink); }
+.kp { display: none; margin-top: 2px; }
+.kp.on { display: block; }
+.kp .in { text-align: center; font-size: 22px; font-weight: 700; letter-spacing: .06em; height: 52px; }
+.kp .hint { font-size: 11.5px; color: var(--sub); margin: 6px 2px 0; }
+.kp .hint.bad { color: var(--red); }
+.res { font-size: 13px; margin: 6px 2px 0; color: var(--sub); } .res b { color: var(--ink); }
+.wheel { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; position: relative; height: 150px; background: var(--paper); border-radius: 16px; border: 1px solid var(--hair); overflow: hidden; }
+.wheel::before { content: ""; position: absolute; left: 8px; right: 8px; top: 50%; height: 34px; margin-top: -17px; border-radius: 10px; background: var(--blue-soft); }
+.wheel::after { content: ""; position: absolute; inset: 0; background: linear-gradient(var(--paper), transparent 32%, transparent 68%, var(--paper)); }
+.wheel ul { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; position: relative; z-index: 1; }
+.wheel li { height: 30px; line-height: 30px; font-size: 17px; color: var(--sub); }
+.wheel li.c { color: var(--ink); font-weight: 700; font-size: 20px; }
+.wheel li:nth-child(2), .wheel li:nth-child(4) { opacity: .65; }
+.wheel li:nth-child(1), .wheel li:nth-child(5) { opacity: .3; }
+
+/* ② 선택·입력 표현 */
+.pks { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 8px; }
+.pk { position: relative; text-align: left; border-radius: 18px; padding: 14px; background: var(--tile); border: 1px solid var(--hair); box-shadow: var(--sh-xs); display: flex; flex-direction: column; gap: 2px; min-width: 0; transition: transform .12s, background .18s, color .18s; }
+.pk:active { transform: scale(.97); }
+.pk b { font-size: 15px; } .pk span { font-size: 12px; color: var(--sub); }
+.pk[aria-pressed="true"] { background: var(--ink); color: var(--on-ink); border-color: var(--ink); }
+.pk[aria-pressed="true"] span { color: inherit; opacity: .7; }
+.pk .ck { display: none; position: absolute; right: 9px; top: 9px; width: 20px; height: 20px; border-radius: 50%; background: var(--on-ink); color: var(--ink); align-items: center; justify-content: center; }
+.pk .ck svg { width: 12px; height: 12px; stroke: currentColor; fill: none; stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; }
+.vA .pk { border-color: transparent; outline: none; }
+.vA .pk[aria-pressed="true"] .ck { display: flex; }
+.vA .in { border-radius: 14px 14px 0 0; border: 0; border-bottom: 2px solid var(--hair); background: var(--field); outline: none; transition: background .15s, border-color .15s; }
+.vA .in:focus { background: var(--blue-faint); border-bottom-color: var(--blue); }
+.vB .pk, .vB .in { outline: none; }
+.vB .pk[aria-pressed="true"] { box-shadow: inset 0 0 0 2px var(--blue); background: var(--blue-faint); color: var(--ink); border-color: transparent; }
+.vB .pk[aria-pressed="true"] span { opacity: 1; }
+.vB .in:focus { box-shadow: inset 0 0 0 2px var(--blue); border-color: transparent; }
+.vA .in, .vB .in { margin-top: 8px; }
+.now .in { margin-top: 8px; }
+
+/* ③ 취향 */
+.grp { margin: 0 0 12px; }
+.grp .lab { display: flex; align-items: center; gap: 6px; margin-top: 0; }
+.more { margin-top: 4px; }
+.more summary { list-style: none; cursor: pointer; font-size: 13px; font-weight: 700; color: var(--blue); display: flex; align-items: center; gap: 4px; min-height: 36px; }
+.more summary::-webkit-details-marker { display: none; }
+.more[open] summary svg { transform: rotate(180deg); }
+.chips.sm .chip { height: 38px; padding: 0 13px; font-size: 13.5px; }
+.cnt { font-size: 12px; color: var(--sub); margin: 10px 2px 0; }
+.srch { position: relative; }
+.srch svg { position: absolute; left: 13px; top: 15px; color: var(--sub); }
+.srch .in { padding-left: 38px; }
+.empty { font-size: 12.5px; color: var(--sub); margin: 8px 2px 0; }
+
+/* ④ 일정 추가 */
+.sheet { background: var(--paper); border: 1px solid var(--hair); border-radius: 20px; padding: 14px; box-shadow: var(--sh-xs); }
+.sheet .eb { font-size: 11px; font-weight: 700; color: var(--sub); letter-spacing: .04em; }
+.sheet h4 { font-size: 17px; margin: 2px 0 10px; }
+.sheet .srch .in { background: var(--canvas); border: 0; }
+.mh { display: block; font-size: 11px; font-weight: 700; color: var(--sub); margin: 14px 0 8px; letter-spacing: .04em; }
+.recs { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 8px; }
+.rec1 { text-align: left; border: 1px solid var(--hair); background: var(--tile); border-radius: 14px; padding: 10px 11px; min-height: 64px; display: flex; flex-direction: column; gap: 1px; min-width: 0; position: relative; transition: transform .12s, opacity .2s; }
+.rec1:active { transform: scale(.97); }
+.rec1 b { font-size: 14px; } .rec1 span { font-size: 12px; color: var(--sub); }
+.rec1 .on { color: #1F9D55; font-weight: 700; }
+.rec1 .tm { color: var(--blue); font-weight: 700; }
+.rec1.added { opacity: .45; }
+.rec1.added::after { content: ""; position: absolute; right: 9px; top: 9px; width: 16px; height: 16px; background: currentColor; -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M5 12.5l4.5 4.5L19 7.5'/%3E%3C/svg%3E") center/contain no-repeat; mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M5 12.5l4.5 4.5L19 7.5'/%3E%3C/svg%3E") center/contain no-repeat; }
+.rec1 .box { position: absolute; right: 9px; top: 9px; width: 20px; height: 20px; border-radius: 6px; border: 2px solid var(--hair); display: flex; align-items: center; justify-content: center; color: transparent; }
+.rec1[aria-pressed="true"] { background: var(--ink); color: var(--on-ink); border-color: var(--ink); }
+.rec1[aria-pressed="true"] span, .rec1[aria-pressed="true"] .tm, .rec1[aria-pressed="true"] .on { color: inherit; opacity: .8; }
+.rec1[aria-pressed="true"] .box { background: var(--on-ink); border-color: var(--on-ink); color: var(--ink); }
+.rec1 .box svg { width: 12px; height: 12px; stroke: currentColor; fill: none; stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; }
+.go { width: 100%; height: 48px; border: 0; border-radius: 99px; background: var(--ink); color: var(--on-ink); font-weight: 700; font-size: 15px; margin-top: 12px; }
+.go:disabled { opacity: .35; }
+.steps { display: flex; flex-direction: column; gap: 6px; font-size: 13px; }
+.steps div { display: flex; gap: 8px; align-items: center; background: var(--tile); border-radius: 12px; padding: 9px 12px; box-shadow: var(--sh-xs); }
+.steps i { font-style: normal; width: 20px; height: 20px; border-radius: 50%; background: var(--ink); color: var(--on-ink); font-size: 11px; font-weight: 800; display: flex; align-items: center; justify-content: center; flex: none; }
+
+/* ⑤ 여행 끝 */
+.full { background: var(--paper); border: 1px solid var(--hair); border-radius: 26px; padding: 18px 16px 16px; text-align: center; box-shadow: var(--sh-xs); overflow: hidden; }
+.full .eb { font-size: 11px; font-weight: 700; color: var(--sub); letter-spacing: .08em; }
+.full h4 { font-size: 22px; margin: 2px 0 6px; }
+.stage { position: relative; width: 100%; max-width: 250px; aspect-ratio: 1; margin: 0 auto 8px; }
+.stage .mini, .stage .big { position: absolute; }
+.stage .mini { width: 36%; aspect-ratio: 1; transition: transform .85s cubic-bezier(.5,0,.2,1), opacity .25s; will-change: transform; }
+.stage .mini svg, .stage .big svg { width: 100%; height: 100%; display: block; overflow: visible; }
+.m1 { left: 8%; top: 8%; --tx: 42%; --ty: 42%; --r: -8deg; } .m2 { right: 8%; top: 8%; --tx: -42%; --ty: 42%; --r: 6deg; }
+.m3 { left: 8%; bottom: 8%; --tx: 42%; --ty: -42%; --r: 5deg; } .m4 { right: 8%; bottom: 8%; --tx: -42%; --ty: -42%; --r: -6deg; }
+.stage .mini { transform: rotate(var(--r)); }
+.stage.go .mini { transform: translate(var(--tx), var(--ty)) scale(.4) rotate(0deg); opacity: 0; transition: transform .85s cubic-bezier(.5,0,.2,1), opacity .2s .65s; }
+.stage .big { inset: 6%; opacity: 0; transform: rotate(-8deg); }
+.stage.go .big { animation: slam .5s .9s cubic-bezier(.2,.9,.3,1.2) both; }
+.stage.fin .big { opacity: 1; animation: none; }
+.stage.fin .mini { display: none; }
+@keyframes slam { 0% { opacity: 0; transform: scale(1.7) rotate(-8deg); } 60% { opacity: 1; transform: scale(.94) rotate(-8deg); } 100% { opacity: 1; transform: scale(1) rotate(-8deg); } }
+@media (prefers-reduced-motion: reduce) { .stage.go .big { animation: none; opacity: 1; } .stage .mini { transition: none; } }
+.st .ln { fill: none; stroke: var(--red); } .st .tx { fill: var(--red); font-family: var(--kr); font-weight: 900; letter-spacing: -.03em; text-anchor: middle; } .st .f { fill: var(--red); }
+.nums { display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 6px; margin: 4px 0 12px; }
+.nums div { background: var(--canvas); border-radius: 14px; padding: 9px 4px; }
+.nums b { display: block; font-size: 22px; line-height: 1.1; } .nums span { font-size: 11.5px; color: var(--sub); }
+.btn2 { display: flex; align-items: center; justify-content: center; gap: 6px; width: 100%; height: 46px; border: 0; border-radius: 99px; font-weight: 700; font-size: 14.5px; }
+.btn2.pri { background: var(--ink); color: var(--on-ink); } .btn2.sec { background: var(--blue-soft); color: var(--blue); margin-top: 8px; }
+.play { font-size: 13px; font-weight: 700; color: var(--blue); background: var(--blue-soft); border: 0; border-radius: 99px; padding: 6px 14px; margin: 0 0 12px; display: inline-flex; align-items: center; gap: 6px; min-height: 34px; }
+.rc { width: 112px; aspect-ratio: 9/16; border-radius: 14px; background: var(--ink); color: var(--on-ink); padding: 10px 8px; display: flex; flex-direction: column; align-items: center; justify-content: space-between; margin: 10px auto 0; font-size: 8.5px; box-shadow: var(--sh-xs); }
+.rc .st2 { width: 62px; }
+.rc svg { width: 100%; display: block; }
+.rc b { font-size: 11px; } .rc .n3 { display: flex; gap: 8px; text-align: center; opacity: .85; } .rc .n3 i { font-style: normal; display: block; font-size: 13px; font-weight: 800; }
+.rc .st .ln { stroke: #FF7A6E; } .rc .st .tx, .rc .st .f { fill: #FF7A6E; }
+.tabbar { display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); background: var(--paper); border: 1px solid var(--hair); border-radius: 99px; padding: 5px; box-shadow: var(--sh-xs); }
+.tabbar button { height: 42px; border: 0; background: none; border-radius: 99px; font-size: 13px; font-weight: 600; position: relative; color: var(--sub); }
+.tabbar button.on { background: var(--ink); color: var(--on-ink); }
+.tabbar .dot { position: absolute; top: 8px; left: calc(50% + 14px); min-width: 16px; height: 16px; border-radius: 99px; background: var(--red); color: #fff; font-size: 10px; font-weight: 800; line-height: 16px; padding: 0 4px; }
+.pick { margin-top: 36px; padding: 16px; border-radius: 22px; background: var(--blue-soft); font-size: 13.5px; }
+.pick b { display: block; margin-bottom: 4px; }
+.toast { position: fixed; left: 50%; bottom: 24px; transform: translate(-50%, 220%); visibility: hidden; background: rgba(21,23,26,.92); color: #fff; font-size: 13px; padding: 10px 16px; border-radius: 99px; display: flex; gap: 14px; transition: transform .25s; z-index: 9; white-space: nowrap; max-width: calc(100vw - 24px); }
+.toast.on { transform: translate(-50%, 0); visibility: visible; }
+.toast button { font-weight: 700; color: #9DB2FF; background: none; border: 0; padding: 0; }
+.card .src, .card .src * { white-space: normal !important; overflow: visible !important; text-overflow: clip !important; }
+</style>
+</head>
+<body>
+<main>
+<h1>D4 · 질문지 · 일정 추가 · 여행 끝</h1>
+<p class="lead">2026-11-14 · 직접 눌러 보세요(폰 권장). 위는 지금 앱, 아래가 대안입니다.</p>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+  <symbol id="i-ck" viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></symbol>
+  <symbol id="i-kb" viewBox="0 0 24 24"><rect x="3" y="6" width="18" height="12" rx="2"/><path d="M7 10h.01M11 10h.01M15 10h.01M7 14h10"/></symbol>
+  <symbol id="i-sr" viewBox="0 0 24 24"><circle cx="11" cy="11" r="6.5"/><path d="M16 16l4 4"/></symbol>
+  <symbol id="i-dn" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></symbol>
+  <symbol id="i-pl" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></symbol>
+  <symbol id="i-sv" viewBox="0 0 24 24"><path d="M12 4v11M7.5 10.5L12 15l4.5-4.5M5 19h14"/></symbol>
+  <symbol id="i-bk" viewBox="0 0 24 24"><rect x="4" y="5" width="16" height="4" rx="1"/><path d="M5 9v9a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V9M10 13h4"/></symbol>
+</defs></svg>
+
+<!-- ================= ① 시각 입력 ================= -->
+<h2>① 시각 입력 터치가 많음 <small>53개 중 12</small></h2>
+<p class="why">지금: 출발·도착 시각 칸이 <b>시각 전용 입력(type=time)</b>이라, 누르면 폰 기본 시간창이 떠서 시·분(·오전/오후)을 따로 돌려 맞추고 확인을 눌러야 함.</p>
+
+<div class="card now">
+  <h3>지금</h3>
+  <p class="d">출발 시각 · 도착 시각 칸</p>
+  <div class="tmrow"><label>출발 시각<input class="in" type="time" value="09:30"></label><label>도착 시각<input class="in" type="time" value="11:00"></label></div>
+</div>
+
+<div class="card">
+  <h3>A안 · 빠른 칩 + 직접 숫자 입력 <span class="rec">추천</span></h3>
+  <p class="d">자주 쓰는 시각은 칩 한 번. 그 외는 '직접' → 숫자 키패드에서 4자리만(0930 → 09:30).</p>
+  <div class="lab">출발 시각</div>
+  <div class="quick" id="qA">
+    <button class="chip" data-t="06:00" aria-pressed="false">06:00</button><button class="chip" data-t="09:00" aria-pressed="false">09:00</button><button class="chip" data-t="12:00" aria-pressed="false">12:00</button><button class="chip" data-t="15:00" aria-pressed="false">15:00</button><button class="chip" data-t="18:00" aria-pressed="false">18:00</button><button class="chip" data-t="21:00" aria-pressed="false">21:00</button><button class="chip dir" id="dirBtn" aria-pressed="false"><svg class="ic"><use href="#i-kb"/></svg>직접</button>
+  </div>
+  <div class="kp" id="kp"><input class="in" id="kpIn" inputmode="numeric" pattern="[0-9]*" maxlength="5" placeholder="--:--" autocomplete="off" aria-label="출발 시각 숫자 4자리"><p class="hint" id="kpHint">숫자 4자리 · 예: 0930</p></div>
+  <p class="res" id="resA">고른 시각 <b>없음</b></p>
+  <p class="src">근거: Apple HIG 피커 — 키보드 입력 지원 · 분 간격 줄이기 · 필드 근처에 (<a href="https://developer.apple.com/design/human-interface-guidelines/pickers">Apple</a>) · Material TimeInput 입력 모드 (<a href="https://developer.android.com/develop/ui/compose/components/time-pickers-dialogs">Android</a>)</p>
+</div>
+
+<div class="card">
+  <h3>B안 · 휠 피커 (시·분, 15분 간격)</h3>
+  <p class="d">한 화면에서 시와 분을 돌려 맞춤. 분은 00·15·30·45만. (정적 그림)</p>
+  <div class="wheel" aria-label="시·분 휠 피커 그림">
+    <ul><li>08</li><li>09</li><li class="c">10</li><li>11</li><li>12</li></ul>
+    <ul><li>00</li><li>15</li><li class="c">30</li><li>45</li><li>00</li></ul>
+  </div>
+  <p class="src">근거: Apple HIG 피커 — 분 간격 줄이기 (<a href="https://developer.apple.com/design/human-interface-guidelines/pickers">Apple</a>)</p>
+</div>
+
+<!-- ================= ② 선택 표현 ================= -->
+<h2>② 선택·입력 시 파란 테두리 <small>53개 중 22</small></h2>
+<p class="why">지금: 버튼·입력칸에 포커스가 가면 <b>파란 outline 2px</b>(안쪽으로 -2px)이 둘러져 표시됨. 카드·칸을 눌러 보세요(카드 선택은 잉크 채움).</p>
+
+<div class="card now">
+  <h3>지금</h3>
+  <div class="pks"><button class="pk" aria-pressed="true"><b>혼자</b><span>나만의 속도</span></button><button class="pk" aria-pressed="false"><b>둘이</b><span>함께 걷기</span></button></div>
+  <input class="in" placeholder="동네 이름 (예: 난바)" aria-label="동네 이름">
+  <p class="src">카드는 Tab 키로 이동할 때, 입력칸은 누를 때마다 파란 테두리가 뜸.</p>
+</div>
+
+<div class="card vA">
+  <h3>A안 · 잉크 채움 + 체크 배지 / 입력은 옅은 파랑 + 아래선 <span class="rec">추천</span></h3>
+  <p class="d">선택 카드 = 진한 잉크로 채우고 오른쪽 위 작은 체크. 테두리 없음. 입력칸 = 바탕 옅은 파랑 + 아래 2px 파란 선.</p>
+  <div class="pks" data-sel><button class="pk" aria-pressed="true"><b>혼자</b><span>나만의 속도</span><i class="ck"><svg><use href="#i-ck"/></svg></i></button><button class="pk" aria-pressed="false"><b>둘이</b><span>함께 걷기</span><i class="ck"><svg><use href="#i-ck"/></svg></i></button></div>
+  <input class="in" placeholder="동네 이름 (예: 난바)" aria-label="동네 이름">
+</div>
+
+<div class="card vB">
+  <h3>B안 · 안쪽 그림자 테두리</h3>
+  <p class="d">inset box-shadow 2px — 모서리에서 끊기지 않는 파란 테두리. 선택 카드는 옅은 파랑 바탕.</p>
+  <div class="pks" data-sel><button class="pk" aria-pressed="true"><b>혼자</b><span>나만의 속도</span></button><button class="pk" aria-pressed="false"><b>둘이</b><span>함께 걷기</span></button></div>
+  <input class="in" placeholder="동네 이름 (예: 난바)" aria-label="동네 이름">
+  <p class="src">근거: 선택 UI 업계 사례는 조사에서 확인 못 함 — 끊김 없는 표현 위주로 제안.</p>
+</div>
+
+<!-- ================= ③ 취향 옵션 ================= -->
+<h2>③ 좋아하는 것·싫어하는 것 옵션 적음 <small>53개 중 23</small></h2>
+<p class="why">지금 좋아하는 것 13개(맛집·카페 … 휴식) 한 덩어리, 피하고 싶은 것 4개. 장소 DB(559곳) 태그 빈도 상위: 맛집 200 · 사진 명소 164 · 자연·산책 127 · 전시·문화 104 · 카페 70 · 쇼핑 65 · 술집·밤 44 · 한식 34 · 잡화·소품 24 · 휴식 22 · 해산물 20 · 라멘 18 · 옷·빈티지 14 · 서점 11 · 국밥 11 · 스시 10.</p>
+
+<div class="card now">
+  <h3>지금</h3>
+  <p class="d">좋아하는 것 · 최대 3개</p>
+  <div class="chips">
+    <button class="chip" aria-pressed="true">맛집</button><button class="chip" aria-pressed="false">카페</button><button class="chip" aria-pressed="false">쇼핑</button><button class="chip" aria-pressed="false">옷·빈티지</button><button class="chip" aria-pressed="false">신발</button><button class="chip" aria-pressed="false">잡화·소품</button><button class="chip" aria-pressed="false">서점</button><button class="chip" aria-pressed="false">향수</button><button class="chip" aria-pressed="false">술집·밤</button><button class="chip" aria-pressed="false">사진 명소</button><button class="chip" aria-pressed="false">전시·문화</button><button class="chip" aria-pressed="false">자연·산책</button><button class="chip" aria-pressed="false">휴식</button>
+  </div>
+</div>
+
+<div class="card">
+  <h3>A안 · 4묶음 칩 + 더 보기 <span class="rec">추천</span></h3>
+  <p class="d">먹기 · 보기 · 하기 · 쉬기로 나눠 한눈에. 니치 항목은 맨 아래 '더 보기'에.</p>
+  <div id="likeA"></div>
+  <details class="more"><summary>더 보기<svg class="ic"><use href="#i-dn"/></svg></summary>
+    <div class="chips sm" id="likeMore" style="margin-top:6px"></div></details>
+  <p class="cnt" id="likeCnt">고른 것 0개</p>
+  <p class="src">근거: 여행앱 카테고리 목록은 조사에서 확인 못 함 → 가보자 장소 DB 태그 빈도 기준(맛집 200 · 사진 명소 164 · 자연·산책 127 · 전시·문화 104 · 카페 70 · 쇼핑 65 · 술집·밤 44 · 한식 34 · 잡화·소품 24 · 휴식 22 …).</p>
+</div>
+
+<div class="card">
+  <h3>B안 · 검색칸 + 인기 칩 12개</h3>
+  <p class="d">묶음 없이. 인기 12개를 먼저 보여 주고, 찾는 게 없으면 검색.</p>
+  <div class="srch"><svg class="ic"><use href="#i-sr"/></svg><input class="in" id="likeQ" placeholder="취향 찾기 (예: 라멘)" autocomplete="off" aria-label="취향 검색"></div>
+  <div class="chips sm" id="likeB" style="margin-top:10px"></div>
+  <p class="empty" id="likeEmpty" hidden>일치하는 항목 없음</p>
+  <p class="src">근거: 가보자 장소 DB 태그 빈도 기준(위와 같음).</p>
+</div>
+
+<!-- ================= ④ 일정 추가 ================= -->
+<h2>④ 일정 추가 클릭이 많음 <small>53개 중 25</small></h2>
+<p class="why">지금: 추가 버튼 <b>1</b> → 아래 추천 블록 장소 탭 <b>2</b> → 시작·머무는 시간 확인 후 '추가' <b>3</b>. 이름을 직접 찾으면 입력 → 결과 탭까지 <b>4번 이상</b>.</p>
+
+<div class="card">
+  <h3>지금</h3>
+  <div class="steps"><div><i>1</i>+ 일정 추가 누름</div><div><i>2</i>추천 블록에서 장소 탭</div><div><i>3</i>시작·시간 확인 → '추가'</div></div>
+</div>
+
+<div class="card">
+  <h3>A안 · 카드 한 번 탭 = 바로 추가 <span class="rec">추천</span></h3>
+  <p class="d">시트를 열면 검색칸 + '이 시간에 갈 만한 곳' 6개. 탭하면 추천 시각에 바로 들어가고 토스트로 되돌리기.</p>
+  <div class="sheet">
+    <div class="eb">DAY 1 · 12.4 · 오사카</div><h4>일정 추가</h4>
+    <div class="srch"><svg class="ic"><use href="#i-sr"/></svg><input class="in" placeholder="장소 이름 또는 지도 링크" aria-label="장소 검색"></div>
+    <span class="mh">이 시간에 갈 만한 곳</span>
+    <div class="recs" id="recA"></div>
+  </div>
+  <p class="src">근거: Wanderlog 추천에서 여러 개 골라 한 번에 추가 — Digital Trends 기사(3자 글, 신뢰도 낮음). 카드의 영업·도보 값은 시안용 예시.</p>
+</div>
+
+<div class="card">
+  <h3>B안 · 체크로 여러 개 → '3곳 추가'</h3>
+  <p class="d">카드를 눌러 체크만 하고, 아래 버튼 한 번으로 한꺼번에.</p>
+  <div class="sheet">
+    <div class="eb">DAY 1 · 12.4 · 오사카</div><h4>일정 추가</h4>
+    <div class="recs" id="recB"></div>
+    <button class="go" id="goB" disabled>곳을 골라 주세요</button>
+  </div>
+</div>
+
+<!-- ================= ⑤ 여행 끝 ================= -->
+<h2>⑤ 여행 끝 축하 · 기록 소장 <small>53개 중 50</small></h2>
+<p class="why">지금: 하루 끝에 도장 '쾅'만 있고, 마지막 날을 마쳐도 여행 전체를 마무리하는 장면은 없음('여행 마지막 날 완료' 문구만).</p>
+
+<div class="card">
+  <h3>지금</h3>
+  <div class="full" style="padding:14px"><div class="eb">DAY 4 완료</div>
+    <div class="stage fin" style="max-width:120px;margin:6px auto"><div class="big" style="inset:0"><svg class="st" viewBox="0 0 100 100"><circle class="ln" cx="50" cy="50" r="46" stroke-width="2.6"/><circle class="ln" cx="50" cy="50" r="41.5" stroke-width="1.2"/><text class="tx" x="50" y="48" font-size="14">DAY 4</text><text class="tx" x="50" y="63" font-size="12">12.07</text></svg></div></div>
+    <div style="font-size:13px;color:var(--sub)">여행 마지막 날 완료</div></div>
+</div>
+
+<div class="card">
+  <h3>A안 · 여행 완주 전체 화면 <span class="rec">추천</span></h3>
+  <p class="d">날마다 받은 조각 도장 4개가 모여 큰 도장 하나로. 숫자 3칸, 기록 카드 저장, 내 여행 목록에 보관.</p>
+  <button class="play" id="playBtn"><svg class="ic"><use href="#i-pl"/></svg>애니메이션 재생</button>
+  <div class="full">
+    <div class="eb">오사카 · 12.4 – 12.7</div><h4>여행 완주</h4>
+    <div class="stage" id="stage">
+      <div class="mini m1"><svg class="st" viewBox="0 0 100 100"><circle class="ln" cx="50" cy="50" r="46" stroke-width="3"/><text class="tx" x="50" y="48" font-size="15">DAY 1</text><text class="tx" x="50" y="64" font-size="12">12.04</text></svg></div>
+      <div class="mini m2"><svg class="st" viewBox="0 0 100 100"><circle class="ln" cx="50" cy="50" r="46" stroke-width="3"/><text class="tx" x="50" y="48" font-size="15">DAY 2</text><text class="tx" x="50" y="64" font-size="12">12.05</text></svg></div>
+      <div class="mini m3"><svg class="st" viewBox="0 0 100 100"><circle class="ln" cx="50" cy="50" r="46" stroke-width="3"/><text class="tx" x="50" y="48" font-size="15">DAY 3</text><text class="tx" x="50" y="64" font-size="12">12.06</text></svg></div>
+      <div class="mini m4"><svg class="st" viewBox="0 0 100 100"><circle class="ln" cx="50" cy="50" r="46" stroke-width="3"/><text class="tx" x="50" y="48" font-size="15">DAY 4</text><text class="tx" x="50" y="64" font-size="12">12.07</text></svg></div>
+      <div class="big"><svg class="st" viewBox="0 0 100 100"><circle class="ln" cx="50" cy="50" r="47" stroke-width="2.6"/><circle class="ln" cx="50" cy="50" r="42" stroke-width="1.2"/><circle class="ln" cx="50" cy="50" r="24" stroke-width="1.2"/><text class="tx" x="50" y="43" font-size="9">오사카</text><text class="tx" x="50" y="55" font-size="13">완주</text><text class="tx" x="50" y="66" font-size="7">12.04–12.07</text></svg></div>
+    </div>
+    <div class="nums"><div><b>18</b><span>다녀온 곳</span></div><div><b>4</b><span>도장</span></div><div><b>7</b><span>메모</span></div></div>
+    <button class="btn2 pri"><svg class="ic"><use href="#i-sv"/></svg>기록 카드 저장</button>
+    <button class="btn2 sec"><svg class="ic"><use href="#i-bk"/></svg>내 여행 목록에 보관</button>
+    <div class="lab" style="margin-top:14px">기록 카드 미리보기 (9:16)</div>
+    <div class="rc"><b>오사카 · 12.4–12.7</b>
+      <div class="st2"><svg class="st" viewBox="0 0 100 100"><circle class="ln" cx="50" cy="50" r="47" stroke-width="3"/><circle class="ln" cx="50" cy="50" r="42" stroke-width="1.4"/><text class="tx" x="50" y="43" font-size="9">오사카</text><text class="tx" x="50" y="56" font-size="14">완주</text></svg></div>
+      <div class="n3"><span><i>18</i>곳</span><span><i>4</i>도장</span><span><i>7</i>메모</span></div></div>
+  </div>
+  <p class="src">근거: Polarsteps Unpacked — 순간·통계·여행 스타일을 모아 공유용으로 (<a href="https://www.polarsteps.com/unpacked">Polarsteps</a>)</p>
+</div>
+
+<div class="card">
+  <h3>B안 · 간단 축하 토스트 + 기록 탭 배지</h3>
+  <p class="d">마지막 날을 마치면 토스트 한 줄, 기록 탭에 배지만.</p>
+  <div class="tabbar"><button>일정</button><button>오늘</button><button class="on" id="logTab">기록<span class="dot">1</span></button></div>
+  <button class="play" id="toastB" style="margin-top:12px"><svg class="ic"><use href="#i-pl"/></svg>마지막 날 끝내기</button>
+</div>
+
+<div class="pick"><b>고르실 것</b>① 시각 입력 지금/A/B · ② 선택 표현 지금/A/B · ③ 취향 옵션 지금/A/B · ④ 일정 추가 지금/A/B · ⑤ 여행 끝 지금/A/B<br>아키 추천 = 전부 A</div>
+</main>
+<div class="toast" id="toast"><span id="tmsg"></span><button id="undo" hidden>되돌리기</button></div>
+<script>
+const $ = s => document.querySelector(s);
+let undoFn = null;
+function toast(m, u) { $('#tmsg').textContent = m; undoFn = u || null; $('#undo').hidden = !u; const t = $('#toast'); t.classList.add('on'); clearTimeout(toast.t); toast.t = setTimeout(() => t.classList.remove('on'), 3500); }
+$('#undo').onclick = () => { if (undoFn) undoFn(); undoFn = null; $('#toast').classList.remove('on'); };
+
+// ① 빠른 칩 + 직접 숫자
+const qA = $('#qA'), kp = $('#kp'), kpIn = $('#kpIn'), kpHint = $('#kpHint'), dirBtn = $('#dirBtn');
+const setRes = v => { $('#resA').innerHTML = '고른 시각 <b>' + (v || '없음') + '</b>'; };
+qA.onclick = e => { const b = e.target.closest('button'); if (!b) return;
+  qA.querySelectorAll('button').forEach(x => x.setAttribute('aria-pressed', x === b));
+  if (b === dirBtn) { kp.classList.add('on'); kpIn.focus(); setRes(/^\d\d:\d\d$/.test(kpIn.value) ? kpIn.value : ''); }
+  else { kp.classList.remove('on'); setRes(b.dataset.t); } };
+kpIn.addEventListener('input', () => {
+  const d = kpIn.value.replace(/\D/g, '').slice(0, 4);
+  kpIn.value = d.length > 2 ? d.slice(0, 2) + ':' + d.slice(2) : d;
+  kpHint.classList.remove('bad');
+  if (d.length === 4) { const h = +d.slice(0, 2), m = +d.slice(2);
+    if (h > 23 || m > 59) { kpHint.textContent = '00:00 – 23:59 안에서 입력'; kpHint.classList.add('bad'); setRes(''); }
+    else { kpHint.textContent = '입력됨'; setRes(kpIn.value); } }
+  else { kpHint.textContent = '숫자 4자리 · 예: 0930'; setRes(''); } });
+
+// ② 선택 카드
+document.querySelectorAll('[data-sel]').forEach(g => g.onclick = e => { const b = e.target.closest('.pk'); if (b) g.querySelectorAll('.pk').forEach(x => x.setAttribute('aria-pressed', x === b)); });
+document.querySelectorAll('.now .pks').forEach(g => g.onclick = e => { const b = e.target.closest('.pk'); if (b) g.querySelectorAll('.pk').forEach(x => x.setAttribute('aria-pressed', x === b)); });
+
+// ③ 취향
+const GROUPS = [['먹기', ['맛집', '카페', '디저트', '시장', '술집·밤', '한식', '라멘', '해산물']], ['보기', ['사진 명소', '전시·문화', '역사', '야경', '전망', '자연', '바다']], ['하기', ['쇼핑', '잡화·소품', '옷·빈티지', '온천', '테마파크', '체험']], ['쉬기', ['산책', '공원', '스파', '숙소 휴식']]];
+const MORE = ['향수', '신발', '서점', '국밥', '스시', '카레', '고기', '야키토리', '모츠나베', '타코야키', '말차'];
+const POP12 = ['맛집', '사진 명소', '자연·산책', '전시·문화', '카페', '쇼핑', '술집·밤', '한식', '잡화·소품', '휴식', '해산물', '라멘'];
+const ALLB = [...POP12, '옷·빈티지', '서점', '국밥', '스시', '카레', '고기', '야키토리', '양식', '빵', '냉면', '타코야키', '신발', '향수', '말차'];
+const chip = (x, on) => '<button class="chip" data-v="' + x + '" aria-pressed="' + !!on + '">' + x + '</button>';
+const likes = new Set();
+$('#likeA').innerHTML = GROUPS.map(g => '<div class="grp"><div class="lab">' + g[0] + '</div><div class="chips sm">' + g[1].map(x => chip(x, x === '맛집')).join('') + '</div></div>').join('');
+$('#likeMore').innerHTML = MORE.map(x => chip(x)).join('');
+likes.add('맛집');
+const cnt = () => { $('#likeCnt').textContent = '고른 것 ' + likes.size + '개'; };
+cnt();
+[$('#likeA'), $('#likeMore'), $('#likeB')].forEach(root => root.onclick = e => { const b = e.target.closest('[data-v]'); if (!b) return; const v = b.dataset.v, on = !likes.has(v); on ? likes.add(v) : likes.delete(v);
+  document.querySelectorAll('[data-v="' + v + '"]').forEach(x => x.setAttribute('aria-pressed', on)); cnt(); });
+document.querySelectorAll('#likeA .chips.sm, #likeMore').forEach(c => c.classList.add('sm'));
+const drawB = q => { const list = q ? ALLB.filter(x => x.includes(q)) : POP12; $('#likeB').innerHTML = list.map(x => chip(x, likes.has(x))).join(''); $('#likeEmpty').hidden = list.length > 0; };
+$('#likeQ').addEventListener('input', e => drawB(e.target.value.trim())); drawB('');
+
+// ④ 일정 추가
+const RECS = [['구로몬 시장', '닛폰바시', 4, '15:30'], ['도톤보리', '도톤보리', 6, '15:30'], ['신세카이 산책', '신세카이', 12, '16:30'], ['카페 태양의 탑', '나카자키초', 9, '15:30'], ['호리에 오렌지 스트리트', '호리에', 15, '16:00'], ['아메리카무라', '신사이바시', 8, '17:00']];
+const recHtml = (r, box) => '<button class="rec1" data-i="' + RECS.indexOf(r) + '" ' + (box ? 'aria-pressed="false"' : '') + '>' + (box ? '<i class="box"><svg><use href="#i-ck"/></svg></i>' : '') + '<b class="one">' + r[0] + '</b><span class="one">' + r[1] + ' · <span class="on">영업 중</span></span><span class="one">도보 ' + r[2] + '분 · <span class="tm">' + r[3] + '</span></span></button>';
+$('#recA').innerHTML = RECS.map(r => recHtml(r)).join('');
+$('#recA').onclick = e => { const b = e.target.closest('.rec1'); if (!b || b.classList.contains('added')) return; const r = RECS[b.dataset.i];
+  b.classList.add('added'); toast(r[3] + '에 추가 · ' + r[0], () => b.classList.remove('added')); };
+$('#recB').innerHTML = RECS.map(r => recHtml(r, true)).join('');
+const goB = $('#goB');
+const updB = () => { const n = $('#recB').querySelectorAll('[aria-pressed="true"]').length; goB.disabled = !n; goB.textContent = n ? n + '곳 추가' : '곳을 골라 주세요'; };
+$('#recB').onclick = e => { const b = e.target.closest('.rec1'); if (!b) return; b.setAttribute('aria-pressed', b.getAttribute('aria-pressed') !== 'true'); updB(); };
+goB.onclick = () => { const sel = [...$('#recB').querySelectorAll('[aria-pressed="true"]')]; if (!sel.length) return; const n = sel.length; sel.forEach(b => b.setAttribute('aria-pressed', 'false')); updB(); toast(n + '곳을 추가했어요'); };
+
+// ⑤ 여행 완주 애니메이션
+const stage = $('#stage');
+function play() { stage.classList.remove('go', 'fin'); void stage.offsetWidth; stage.classList.add('go'); clearTimeout(play.t); play.t = setTimeout(() => stage.classList.add('fin'), 1500); }
+$('#playBtn').onclick = play;
+$('#toastB').onclick = () => { toast('여행 완주 · 기록에서 보기'); const d = $('#logTab .dot'); d.textContent = '2'; };
+</script>
+</body>
+</html>

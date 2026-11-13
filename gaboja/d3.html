@@ -1,0 +1,300 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<title>D3 메뉴 · 요약 · 메모 · 기록 버튼</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<style>
+@font-face { font-family: "Pretendard Variable"; font-weight: 45 920; font-style: normal; font-display: swap;
+  src: local("Pretendard Variable"), url("../app/fonts/PretendardVariable.woff2") format("woff2-variations"), url("fonts/PretendardVariable.woff2") format("woff2-variations"); }
+:root {
+  color-scheme: light;
+  --canvas: #EEF0F3; --ink: #15171A; --sub: #6F757D; --hair: rgba(21,23,26,.09); --on-ink: #FFFFFF;
+  --paper: #FFFFFF; --tile: rgba(255,255,255,.86); --glass: rgba(255,255,255,.62);
+  --red: #E0453A; --amber: #E8A317; --blue: #3B5BDB; --blue-soft: rgba(59,91,219,.10); --note: #FFF4C2; --note-ink: #5A4A10;
+  --sh-xs: 0 1px 2px rgba(24,36,60,.05), 0 0.25rem 0.75rem -0.375rem rgba(24,36,60,.14);
+  --kr: "Pretendard Variable", Pretendard, -apple-system, "Apple SD Gothic Neo", "Malgun Gothic", system-ui, sans-serif;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  color-scheme: dark; --canvas: #0E1013; --ink: #ECEEF1; --sub: #8F969F; --hair: rgba(255,255,255,.08); --on-ink: #0E1013;
+  --paper: #1A1D22; --tile: rgba(36,40,46,.9); --glass: rgba(30,33,38,.62); --blue: #7C95FF; --blue-soft: rgba(124,149,255,.14); --note: #3A3318; --note-ink: #F1E3A0;
+  --sh-xs: 0 1px 2px rgba(0,0,0,.35), 0 0.25rem 0.75rem -0.375rem rgba(0,0,0,.55); } }
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--canvas); color: var(--ink); font-family: var(--kr); font-size: 15px; line-height: 1.5; letter-spacing: -.01em; font-variant-numeric: tabular-nums; -webkit-tap-highlight-color: transparent; }
+main { max-width: 430px; margin: 0 auto; padding: 24px 16px 80px; }
+h1 { font-size: 22px; margin: 0 0 4px; }
+.lead { color: var(--sub); font-size: 13px; margin: 0 0 28px; }
+h2 { font-size: 17px; margin: 40px 0 6px; }
+h2 small { font-weight: 500; color: var(--sub); font-size: 12px; margin-left: 6px; }
+.why { font-size: 13px; color: var(--sub); margin: 0 0 14px; }
+.card { background: var(--glass); border: 1px solid var(--hair); border-radius: 22px; padding: 16px; margin: 0 0 18px; }
+.card h3 { font-size: 15px; margin: 0 0 2px; display: flex; align-items: center; gap: 8px; }
+.card h3 .rec { font-size: 11px; font-weight: 700; color: var(--on-ink); background: var(--blue); border-radius: 99px; padding: 1px 8px; }
+.card p.d { font-size: 12.5px; color: var(--sub); margin: 0 0 12px; }
+.card .src { font-size: 11px; color: var(--sub); margin: 10px 0 0; }
+.card .src a { color: var(--sub); }
+.lab { font-size: 11px; font-weight: 700; color: var(--sub); letter-spacing: .04em; margin: 10px 0 6px; }
+.pick { margin-top: 36px; padding: 16px; border-radius: 22px; background: var(--blue-soft); font-size: 13.5px; }
+.pick b { display: block; margin-bottom: 4px; }
+.one { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-width: 0; }
+svg.i { width: 18px; height: 18px; flex: none; stroke: currentColor; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+/* 폰 프레임 */
+.ph { position: relative; width: 100%; height: 560px; border-radius: 26px; overflow: hidden; background: var(--canvas); border: 1px solid var(--hair); box-shadow: var(--sh-xs); }
+.ph.sm { height: 340px; } .ph.mini { height: 170px; }
+.bg { position: absolute; inset: 0; padding: 14px; opacity: .55; }
+.bg i { display: block; height: 14px; border-radius: 7px; background: var(--hair); margin: 0 0 10px; } .bg i:nth-child(2) { width: 70%; } .bg i:nth-child(3) { width: 85%; height: 60px; border-radius: 14px; }
+.scr { position: absolute; inset: 0; background: rgba(10,12,16,.38); }
+.dr { position: absolute; left: 0; top: 0; bottom: 0; width: 80%; background: var(--paper); padding: 14px 10px; display: flex; flex-direction: column; gap: 2px; overflow: hidden; box-shadow: 8px 0 24px -12px rgba(0,0,0,.4); }
+.brand { font-weight: 800; font-size: 17px; padding: 2px 8px 8px; } .brand span { font-size: 10px; color: var(--sub); font-weight: 600; margin-left: 6px; letter-spacing: .08em; }
+.it { display: flex; align-items: center; gap: 10px; height: 34px; padding: 0 8px; border-radius: 10px; font-size: 13.5px; font-weight: 600; flex: none; white-space: nowrap; }
+.it .mu { margin-left: auto; font-size: 11.5px; font-weight: 500; color: var(--sub); }
+.grp { font-size: 10.5px; font-weight: 700; color: var(--sub); letter-spacing: .06em; padding: 6px 8px 2px; flex: none; }
+.hr { height: 1px; background: var(--hair); margin: 5px 4px; flex: none; }
+.seg { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px; padding: 3px; border-radius: 99px; background: var(--canvas); margin: 2px 4px; flex: none; }
+.seg span { text-align: center; font-size: 12px; font-weight: 600; padding: 5px 0; border-radius: 99px; color: var(--sub); white-space: nowrap; }
+.seg span.on { background: var(--ink); color: var(--on-ink); }
+.tcard { display: flex; align-items: center; gap: 8px; margin: 2px 4px 6px; padding: 8px 10px; border-radius: 14px; background: var(--blue-soft); font-size: 13px; font-weight: 700; flex: none; }
+.tcard b { background: var(--blue); color: var(--on-ink); border-radius: 8px; padding: 0 7px; font-size: 12px; }
+.nbtn { display: flex; align-items: center; justify-content: center; gap: 6px; margin: 0 4px 6px; height: 34px; border-radius: 99px; background: var(--ink); color: var(--on-ink); font-size: 13px; font-weight: 700; flex: none; }
+.grid4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; margin: 2px 4px 4px; flex: none; }
+.grid4 div { display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 9px 0 7px; border-radius: 14px; background: var(--canvas); font-size: 11px; font-weight: 600; white-space: nowrap; }
+.mytrip { display: flex; align-items: center; gap: 8px; margin: 0 4px; padding: 7px 10px; border-radius: 12px; font-size: 12.5px; font-weight: 600; flex: none; }
+.mytrip small { margin-left: auto; font-size: 11px; font-weight: 500; color: var(--sub); white-space: nowrap; }
+.mytrip.on { background: var(--blue-soft); }
+.mytrip.on small { color: var(--blue); font-weight: 700; }
+/* 아래 시트 · 대화상자 */
+.bs { position: absolute; left: 0; right: 0; bottom: 0; background: var(--paper); border-radius: 22px 22px 0 0; padding: 8px 14px 14px; box-shadow: 0 -10px 30px -12px rgba(0,0,0,.4); }
+.grab { width: 36px; height: 4px; border-radius: 4px; background: var(--hair); margin: 0 auto 8px; }
+.bs h4 { font-size: 14px; margin: 0 0 6px; }
+.dlg { position: absolute; left: 7%; right: 7%; top: 50%; transform: translateY(-50%); background: var(--paper); border-radius: 22px; padding: 16px 14px 12px; box-shadow: 0 20px 40px -16px rgba(0,0,0,.5); }
+.dlg h4 { font-size: 14.5px; margin: 0 0 4px; white-space: nowrap; } .dlg p { font-size: 12px; color: var(--sub); margin: 0 0 12px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.dlg .bt { display: flex; gap: 8px; } .dlg .bt span { flex: 1; text-align: center; border-radius: 99px; padding: 8px 0; font-size: 13px; font-weight: 700; background: var(--canvas); white-space: nowrap; }
+.dlg .bt .pri { background: var(--ink); color: var(--on-ink); } .dlg .bt .dan { background: var(--red); color: #fff; }
+/* 시트 박스(요약·메모) */
+.sb { background: var(--paper); border-radius: 22px; padding: 14px; box-shadow: var(--sh-xs); }
+.eyebrow { font-size: 11px; font-weight: 700; color: var(--sub); letter-spacing: .04em; display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; } .sb h5 { font-size: 16px; margin: 0 0 8px; }
+.path { display: flex; gap: 10px; font-size: 12px; font-weight: 600; margin: 0 0 8px; overflow: hidden; white-space: nowrap; }
+.srow { display: flex; gap: 10px; font-size: 13px; padding: 5px 0; border-top: 1px solid var(--hair); } .srow .tm { color: var(--sub); width: 40px; flex: none; }
+.t4 { display: grid; grid-template-columns: repeat(4, minmax(0,1fr)); gap: 6px; margin-bottom: 10px; }
+.t4 div { background: var(--canvas); border-radius: 14px; padding: 8px 2px; text-align: center; font-size: 14px; font-weight: 800; line-height: 1.2; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.t4 small { display: block; font-size: 10.5px; font-weight: 500; color: var(--sub); }
+.dc { background: var(--canvas); border-radius: 16px; padding: 10px 12px; margin: 0 0 8px; }
+.chip { display: inline-block; flex: none; background: var(--ink); color: var(--on-ink); border-radius: 99px; padding: 1px 9px; font-size: 11px; font-weight: 700; margin-right: 6px; }
+.dc .tt { font-size: 14.5px; font-weight: 700; display: flex; align-items: center; } .dc .rt { font-size: 12.5px; margin: 3px 0 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; } .dc .hs { font-size: 11.5px; color: var(--sub); display: flex; align-items: center; gap: 5px; }
+.dc .hs svg.i { width: 13px; height: 13px; }
+.tl { position: relative; padding-left: 22px; } .tl::before { content: ""; position: absolute; left: 6px; top: 8px; bottom: 8px; width: 2px; background: var(--hair); }
+.tl > div { position: relative; padding: 4px 0 10px; } .tl > div::before { content: ""; position: absolute; left: -21px; top: 9px; width: 10px; height: 10px; border-radius: 50%; background: var(--ink); border: 2px solid var(--paper); box-sizing: content-box; }
+.tl b { font-size: 14px; display: flex; gap: 6px; } .tl b span:last-child { margin-left: auto; font-size: 12px; font-weight: 500; color: var(--sub); flex: none; } .tl small { font-size: 11.5px; color: var(--sub); display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+/* 메모 */
+.mh { font-size: 11px; font-weight: 700; color: var(--sub); letter-spacing: .04em; display: block; margin: 8px 0 4px; }
+.ck { display: flex; align-items: center; gap: 8px; font-size: 13px; padding: 4px 0; } .ck i { width: 16px; height: 16px; border: 2px solid var(--sub); border-radius: 5px; flex: none; } .ck.dn i { background: var(--blue); border-color: var(--blue); } .ck.dn span { text-decoration: line-through; color: var(--sub); }
+.ck span { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-width: 0; }
+.post { background: var(--note); color: var(--note-ink); border-radius: 6px 6px 14px 6px; padding: 8px 12px 6px; margin: 0 0 10px; box-shadow: 0 3px 8px -4px rgba(0,0,0,.3); } .post .mh { color: inherit; opacity: .7; margin-top: 0; } .post .ck i { border-color: var(--note-ink); } .post .ck.dn span { color: inherit; opacity: .6; }
+.ev { display: flex; align-items: center; gap: 8px; font-size: 12.5px; font-weight: 700; margin: 6px 0 2px; } .ev span.tm { font-size: 11px; font-weight: 500; color: var(--sub); margin-left: auto; flex: none; }
+.fold { display: flex; align-items: center; gap: 6px; margin-top: 8px; padding-top: 8px; border-top: 1px solid var(--hair); font-size: 12.5px; font-weight: 700; color: var(--sub); }
+/* 탭바 · FAB */
+.tb { position: absolute; bottom: 14px; display: flex; gap: 2px; padding: 4px; border-radius: 99px; background: var(--paper); box-shadow: var(--sh-xs); border: 1px solid var(--hair); }
+.tb span { display: flex; flex-direction: column; align-items: center; gap: 1px; width: 52px; padding: 5px 0 3px; border-radius: 99px; font-size: 10.5px; font-weight: 600; color: var(--sub); white-space: nowrap; } .tb span.on { background: var(--ink); color: var(--on-ink); }
+.tb.l { left: 14px; } .tb.c { left: 50%; transform: translateX(-50%); }
+.fab { position: absolute; right: 14px; bottom: 16px; width: 50px; height: 50px; border-radius: 50%; background: var(--blue); color: #fff; display: flex; align-items: center; justify-content: center; box-shadow: 0 8px 18px -8px rgba(59,91,219,.7); }
+.cap { position: absolute; left: 12px; top: 10px; font-size: 11px; font-weight: 700; color: var(--sub); }
+.two { display: grid; grid-template-columns: minmax(0,1fr) minmax(0,1fr); gap: 8px; }
+.two .tb span { width: 40px; font-size: 10px; } .two .fab { width: 40px; height: 40px; }
+.flow { display: flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 600; } .flow span.b { background: var(--canvas); border-radius: 99px; padding: 6px 12px; white-space: nowrap; } .flow svg.i { color: var(--sub); }
+.card .src, .card .src * { white-space: normal !important; overflow: visible !important; text-overflow: clip !important; }
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+<symbol id="plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
+<symbol id="type" viewBox="0 0 24 24"><rect x="3.5" y="6" width="17" height="12" rx="2"/><path d="M15 6v12" stroke-dasharray="2 2"/><path d="M7 10h4M7 14h3"/></symbol>
+<symbol id="sum" viewBox="0 0 24 24"><path d="M5 6h14M5 12h14M5 18h9"/></symbol>
+<symbol id="memo" viewBox="0 0 24 24"><path d="M5 4h14v11l-5 5H5z"/><path d="M14 20v-5h5M8 9h8M8 13h4"/></symbol>
+<symbol id="arc" viewBox="0 0 24 24"><rect x="4" y="5" width="16" height="4" rx="1"/><path d="M5 9v9a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V9M10 13h4"/></symbol>
+<symbol id="edit" viewBox="0 0 24 24"><path d="M4 20h4l10-10-4-4L4 16z"/></symbol>
+<symbol id="inst" viewBox="0 0 24 24"><rect x="7" y="3" width="10" height="18" rx="2"/><path d="M12 8v6M9.5 11.5L12 14l2.5-2.5"/></symbol>
+<symbol id="kk" viewBox="0 0 24 24"><path d="M12 4c4.7 0 8.5 2.9 8.5 6.5S16.7 17 12 17c-.7 0-1.4-.1-2-.2L6 19.5l1-3.6C5 14.7 3.5 12.7 3.5 10.5 3.5 6.9 7.3 4 12 4z"/></symbol>
+<symbol id="lk" viewBox="0 0 24 24"><path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1"/></symbol>
+<symbol id="sh" viewBox="0 0 24 24"><path d="M12 15V4M8 8l4-4 4 4M5 12v7a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-7"/></symbol>
+<symbol id="pdf" viewBox="0 0 24 24"><path d="M12 4v11M7 10l5 5 5-5M5 20h14"/></symbol>
+<symbol id="bed" viewBox="0 0 24 24"><path d="M3 18V7M3 14h18v4M21 14v-2a3 3 0 0 0-3-3h-7v5"/></symbol>
+<symbol id="cam" viewBox="0 0 24 24"><path d="M4 8h3l2-2h6l2 2h3v11H4z"/><circle cx="12" cy="13" r="3.2"/></symbol>
+<symbol id="pen" viewBox="0 0 24 24"><path d="M4 20h4L19 9l-4-4L4 16zM13 7l4 4"/></symbol>
+<symbol id="cal" viewBox="0 0 24 24"><rect x="4" y="5" width="16" height="15" rx="2"/><path d="M4 10h16M9 3v4M15 3v4"/></symbol>
+<symbol id="pin" viewBox="0 0 24 24"><path d="M12 21s6-5.6 6-11a6 6 0 0 0-12 0c0 5.4 6 11 6 11z"/><circle cx="12" cy="10" r="2"/></symbol>
+<symbol id="paw" viewBox="0 0 24 24"><ellipse cx="8" cy="15" rx="2.6" ry="3.6"/><ellipse cx="16" cy="8" rx="2.6" ry="3.6"/><path d="M7 21h2M15 14h2"/></symbol>
+<symbol id="arr" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></symbol>
+<symbol id="chev" viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></symbol>
+</defs></svg>
+<main>
+<h1>D3 · 메뉴 · 요약 · 메모 · 기록 버튼</h1>
+<p class="lead">2026-11-14 · 예시 데이터는 오사카·교토 12.4–12.7. 위는 지금 앱, 아래가 대안입니다.</p>
+
+<!-- ① 메뉴 -->
+<h2>① 왼쪽 메뉴가 세로로 너무 김 <small>53개 중 9</small></h2>
+<p class="why">항목 13개가 한 줄씩 이어져 어디서 끊기는지 안 보임.</p>
+
+<div class="card"><h3>지금</h3><p class="d">항목 그대로 나열 · 공유가 네 줄</p>
+<div class="ph"><div class="bg"><i></i><i></i><i></i></div><div class="scr"></div>
+<div class="dr">
+ <div class="brand">가보자<span>GABOJA</span></div>
+ <div class="it"><svg class="i"><use href="#type"/></svg><span class="one">내 여행 유형</span><span class="mu">LSFJ</span></div>
+ <div class="it"><svg class="i"><use href="#plus"/></svg>새 여행 만들기</div>
+ <div class="it"><svg class="i"><use href="#sum"/></svg>여행 요약</div>
+ <div class="it"><svg class="i"><use href="#memo"/></svg>메모<span class="mu">5</span></div>
+ <div class="it"><svg class="i"><use href="#arc"/></svg>보관함<span class="mu">2</span></div>
+ <div class="it"><svg class="i"><use href="#edit"/></svg>여행 정보 수정</div>
+ <div class="it"><svg class="i"><use href="#inst"/></svg><span class="one">앱 설치</span></div>
+ <div class="grp">공유</div>
+ <div class="it"><svg class="i"><use href="#kk"/></svg>카카오톡으로 공유</div>
+ <div class="it"><svg class="i"><use href="#lk"/></svg>링크 복사</div>
+ <div class="it"><svg class="i"><use href="#sh"/></svg>다른 앱으로 공유</div>
+ <div class="it"><svg class="i"><use href="#pdf"/></svg>PDF로 저장</div>
+ <div class="seg"><span class="on">시스템</span><span>라이트</span><span>다크</span></div>
+</div></div></div>
+
+<div class="card"><h3>A안 · 3묶음 + 구분선 <span class="rec">추천</span></h3>
+<p class="d">내 유형·새 여행 / 이 여행 / 공유 한 줄 / 설정. 공유는 누르면 아래 시트.</p>
+<div class="ph"><div class="bg"><i></i><i></i><i></i></div><div class="scr"></div>
+<div class="dr">
+ <div class="brand">가보자<span>GABOJA</span></div>
+ <div class="tcard"><b>LSFJ</b><span class="one">골목 탐험대장</span></div>
+ <div class="nbtn"><svg class="i"><use href="#plus"/></svg>새 여행</div>
+ <div class="hr"></div><div class="grp">이 여행</div>
+ <div class="it"><svg class="i"><use href="#sum"/></svg>여행 요약</div>
+ <div class="it"><svg class="i"><use href="#memo"/></svg>메모<span class="mu">5</span></div>
+ <div class="it"><svg class="i"><use href="#arc"/></svg>보관함<span class="mu">2</span></div>
+ <div class="it"><svg class="i"><use href="#edit"/></svg>여행 정보 수정</div>
+ <div class="hr"></div><div class="grp">공유</div>
+ <div class="it"><svg class="i"><use href="#sh"/></svg>공유하기<svg class="i" style="margin-left:auto;color:var(--sub)"><use href="#chev"/></svg></div>
+ <div class="hr"></div><div class="grp">설정</div>
+ <div class="seg"><span class="on">시스템</span><span>라이트</span><span>다크</span></div>
+ <div class="it"><svg class="i"><use href="#inst"/></svg>앱 설치</div>
+</div></div>
+<div class="lab">공유하기를 누르면</div>
+<div class="ph sm"><div class="bg"><i></i><i></i><i></i></div><div class="scr"></div>
+<div class="bs"><div class="grab"></div><h4>공유하기</h4>
+ <div class="it"><svg class="i"><use href="#kk"/></svg>카카오톡</div>
+ <div class="it"><svg class="i"><use href="#lk"/></svg>링크 복사</div>
+ <div class="it"><svg class="i"><use href="#sh"/></svg>다른 앱</div>
+ <div class="it"><svg class="i"><use href="#pdf"/></svg>PDF</div>
+</div></div>
+<p class="src">근거: Android drawer = 섹션·구분선·항목 <a href="https://developer.android.com/develop/ui/compose/components/drawer">developer.android.com</a></p></div>
+
+<div class="card"><h3>B안 · 아이콘 4칸 + 짧은 목록</h3><p class="d">자주 쓰는 넷은 그리드, 나머지는 세 줄.</p>
+<div class="ph"><div class="bg"><i></i><i></i><i></i></div><div class="scr"></div>
+<div class="dr">
+ <div class="brand">가보자<span>GABOJA</span></div>
+ <div class="tcard"><b>LSFJ</b><span class="one">골목 탐험대장</span></div>
+ <div class="nbtn"><svg class="i"><use href="#plus"/></svg>새 여행</div>
+ <div class="grid4"><div><svg class="i"><use href="#sum"/></svg>요약</div><div><svg class="i"><use href="#memo"/></svg>메모</div><div><svg class="i"><use href="#arc"/></svg>보관함</div><div><svg class="i"><use href="#sh"/></svg>공유</div></div>
+ <div class="hr"></div>
+ <div class="it"><svg class="i"><use href="#edit"/></svg>여행 정보 수정</div>
+ <div class="it"><svg class="i"><use href="#inst"/></svg>앱 설치</div>
+ <div class="it"><svg class="i"><use href="#cal"/></svg>화면 모드<span class="mu">시스템</span></div>
+</div></div></div>
+
+<!-- ② 요약 -->
+<h2>② 여행 요약이 글·숫자만 우르르 <small>53개 중 17</small></h2>
+<p class="why">하루 목록이 시각·이름 줄로만 이어져 한눈에 안 들어옴.</p>
+
+<div class="card"><h3>지금</h3><p class="d">하루 시트 — 동선 + 시각·이름 목록</p>
+<div class="sb"><span class="eyebrow">DAY 1 · 12.4 · 05:15 – 21:00</span><h5 class="one">도착하자마자 도톤보리</h5>
+<div class="path"><span>오사카성</span><span>→ 구로몬 시장</span><span>→ 신세카이</span><span>→ 도톤보리</span></div>
+<div class="srow"><span class="tm">10:00</span><span class="one">오사카성</span></div><div class="srow"><span class="tm">12:00</span><span class="one">구로몬 시장 · 점심</span></div><div class="srow"><span class="tm">14:00</span><span class="one">신세카이 산책</span></div><div class="srow"><span class="tm">15:30</span><span class="one">도톤보리</span></div></div></div>
+
+<div class="card"><h3>A안 · 숫자 타일 + 날짜 카드 <span class="rec">추천</span></h3><p class="d">맨 위에 네 숫자, 아래로 하루씩 카드.</p>
+<div class="sb"><span class="eyebrow">여행 요약 · 오사카·교토 12.4–12.7</span>
+<div class="t4" style="margin-top:8px"><div>4일<small>기간</small></div><div>18<small>장소</small></div><div>3시간 40분<small>이동 합</small></div><div style="color:var(--red)">1<small>확인 필요</small></div></div>
+<div class="dc"><div class="tt"><span class="chip">DAY 1</span><span class="one">도톤보리</span></div><div class="rt">오사카성 → 구로몬 시장 → 도톤보리</div><div class="hs"><svg class="i"><use href="#bed"/></svg>난바 숙소</div></div>
+<div class="dc"><div class="tt"><span class="chip">DAY 2</span><span class="one">교토 동쪽</span></div><div class="rt">후시미이나리 → 기요미즈데라 → 기온</div><div class="hs"><svg class="i"><use href="#bed"/></svg>교토역 숙소</div></div>
+<div class="dc"><div class="tt"><span class="chip">DAY 3</span><span class="one">아라시야마</span></div><div class="rt">도게츠교 → 치쿠린 → 니시키 시장</div><div class="hs"><svg class="i"><use href="#bed"/></svg>교토역 숙소</div></div>
+<div class="dc" style="margin:0"><div class="tt"><span class="chip">DAY 4</span><span class="one">우메다 · 귀국</span></div><div class="rt">우메다 → 간사이공항</div><div class="hs"><svg class="i"><use href="#bed"/></svg>숙소 없음</div></div></div>
+<p class="src">근거: haggie 도쿄 노트 날짜 머리 → 지역 제목 → 동선 한 줄 (<code>문서/여행앱/2026-11-11_가보자_경쟁7곳_디자인레퍼런스_v1.md</code> D2 항목)</p></div>
+
+<div class="card"><h3>B안 · 세로 타임라인</h3><p class="d">날짜 점 · 하루 제목 · 장소 수.</p>
+<div class="sb"><span class="eyebrow">여행 요약 · 오사카·교토 12.4–12.7</span>
+<div class="tl" style="margin-top:8px">
+<div><b><span>12.4 금</span><span>5곳</span></b><small>도착하자마자 도톤보리</small></div>
+<div><b><span>12.5 토</span><span>5곳</span></b><small>교토 동쪽 사찰</small></div>
+<div><b><span>12.6 일</span><span>5곳</span></b><small>아라시야마 · 니시키</small></div>
+<div style="padding-bottom:0"><b><span>12.7 월</span><span>3곳</span></b><small>우메다 · 귀국</small></div></div></div></div>
+
+<!-- ③ 메모 -->
+<h2>③ 메모 모아 보기 구별이 안 됨 <small>53개 중 52</small></h2>
+<p class="why">여행 전체·날짜별 묶음이 같은 모양이라 어디 메모인지 안 읽힘.</p>
+
+<div class="card"><h3>지금</h3><p class="d">작은 머리글 + 체크 줄만 이어짐</p>
+<div class="sb"><h5>메모 모아 보기</h5>
+<span class="mh">여행 전체</span><div class="ck"><i></i><span>환전</span></div><div class="ck dn"><i></i><span>유심</span></div>
+<span class="mh">DAY 1 · 12.4</span><div class="ev"><span class="one">오사카성</span></div><div class="ck"><i></i><span>입장권 미리 사기</span></div>
+<span class="mh">DAY 2 · 12.5</span><div class="ev"><span class="one">후시미이나리</span></div><div class="ck dn"><i></i><span>일출 전 도착</span></div></div></div>
+
+<div class="card"><h3>A안 · 포스트잇 + DAY 칩 <span class="rec">추천</span></h3><p class="d">전체 메모는 노란 카드, 날짜는 칩, 일정 이름이 머리.</p>
+<div class="sb"><h5>메모 모아 보기</h5>
+<div class="post"><span class="mh">여행 전체</span><div class="ck"><i></i><span>환전</span></div><div class="ck dn"><i></i><span>유심</span></div><div class="ck"><i></i><span>보조배터리</span></div></div>
+<div class="dc"><div class="tt"><span class="chip">DAY 1</span><span class="one" style="font-size:12px;color:var(--sub);font-weight:500">12.4 금</span></div>
+<div class="ev"><span class="one">오사카성</span><span class="tm">10:00</span></div><div class="ck"><i></i><span>입장권 미리 사기</span></div></div>
+<div class="dc" style="margin:0"><div class="tt"><span class="chip">DAY 2</span><span class="one" style="font-size:12px;color:var(--sub);font-weight:500">12.5 토</span></div>
+<div class="ev"><span class="one">후시미이나리</span><span class="tm">07:00</span></div><div class="ck dn"><i></i><span>일출 전 도착</span></div></div></div></div>
+
+<div class="card"><h3>B안 · 할 일 먼저, 끝낸 건 접기</h3><p class="d">체크 안 된 것만 위에 모음.</p>
+<div class="sb"><h5>메모 모아 보기</h5>
+<span class="mh">할 일 3</span>
+<div class="ck"><i></i><span>환전</span></div><div class="ck"><i></i><span>오사카성 · 입장권 미리 사기</span></div><div class="ck"><i></i><span>보조배터리</span></div>
+<div class="fold"><svg class="i"><use href="#chev"/></svg>끝낸 것 2</div></div></div>
+
+<!-- ④ 기록 FAB -->
+<h2>④ 기록 탭 메모 버튼 불필요 <small>53개 중 19</small></h2>
+<p class="why">기록 탭에선 메모가 이미 메뉴에 있어 버튼이 겹침.</p>
+
+<div class="card"><h3>지금</h3><p class="d">기록 탭에서 버튼 = 메모 추가</p>
+<div class="ph mini"><div class="tb l"><span><svg class="i"><use href="#cal"/></svg>일정</span><span><svg class="i"><use href="#pin"/></svg>지금</span><span class="on"><svg class="i"><use href="#paw"/></svg>기록</span></div><div class="fab"><svg class="i"><use href="#memo"/></svg></div></div></div>
+
+<div class="card"><h3>A안 · 버튼 숨기고 탭바 가운데로 <span class="rec">추천</span></h3><p class="d">전 → 후. 부드럽게 미끄러져 이동.</p>
+<div class="two"><div class="ph mini"><span class="cap">전</span><div class="tb l"><span><svg class="i"><use href="#cal"/></svg>일정</span><span><svg class="i"><use href="#pin"/></svg>지금</span><span class="on"><svg class="i"><use href="#paw"/></svg>기록</span></div><div class="fab"><svg class="i"><use href="#memo"/></svg></div></div>
+<div class="ph mini"><span class="cap">후</span><div class="tb c"><span><svg class="i"><use href="#cal"/></svg>일정</span><span><svg class="i"><use href="#pin"/></svg>지금</span><span class="on"><svg class="i"><use href="#paw"/></svg>기록</span></div></div></div>
+<p class="src">근거: Material FAB = 화면의 가장 흔한 동작 하나, 모든 화면에 필요하진 않음 <a href="https://v4.mui.com/components/floating-action-button/">v4.mui.com</a></p></div>
+
+<div class="card"><h3>B안 · 사진 추가</h3><p class="d">그날 기록에 사진 넣기.</p>
+<div class="ph mini"><div class="tb l"><span><svg class="i"><use href="#cal"/></svg>일정</span><span><svg class="i"><use href="#pin"/></svg>지금</span><span class="on"><svg class="i"><use href="#paw"/></svg>기록</span></div><div class="fab"><svg class="i"><use href="#cam"/></svg></div></div></div>
+
+<div class="card"><h3>C안 · 오늘 한 줄</h3><p class="d">짧은 일기 한 줄.</p>
+<div class="ph mini"><div class="tb l"><span><svg class="i"><use href="#cal"/></svg>일정</span><span><svg class="i"><use href="#pin"/></svg>지금</span><span class="on"><svg class="i"><use href="#paw"/></svg>기록</span></div><div class="fab"><svg class="i"><use href="#pen"/></svg></div></div></div>
+
+<!-- ⑤ 새 여행 -->
+<h2>⑤ 새 여행 만들 때 이전 일정 <small>53개 중 20</small></h2>
+<p class="why">누르면 경고 없이 질문지로 가고 지금 일정을 덮어씀.</p>
+
+<div class="card"><h3>지금</h3><p class="d">새 여행 만들기 → 바로 질문지, 이전 일정 덮어씀</p>
+<div class="flow"><span class="b">새 여행 만들기</span><svg class="i"><use href="#arr"/></svg><span class="b">질문지</span></div></div>
+
+<div class="card"><h3>A안 · 보관 안내 + 내 여행 목록 <span class="rec">추천</span></h3><p class="d">확인 창으로 안내, 메뉴 맨 위에서 여행 전환.</p>
+<div class="ph sm"><div class="bg"><i></i><i></i><i></i></div><div class="scr"></div>
+<div class="dlg"><h4>새 여행을 만들까요?</h4><p>지금 여행(오사카·교토 12.4–12.7)은 내 여행 목록에 보관돼요</p><div class="bt"><span>취소</span><span class="pri">새로 만들기</span></div></div></div>
+<div class="lab">메뉴 맨 위 내 여행</div>
+<div class="ph"><div class="bg"><i></i><i></i><i></i></div><div class="scr"></div>
+<div class="dr">
+ <div class="brand">가보자<span>GABOJA</span></div>
+ <div class="grp">내 여행</div>
+ <div class="mytrip on"><svg class="i"><use href="#pin"/></svg><span class="one">오사카·교토</span><small>지금 · 12.4–12.7</small></div>
+ <div class="mytrip"><svg class="i"><use href="#arc"/></svg><span class="one">도쿄</span><small>지난 · 10.2–10.5</small></div>
+ <div class="mytrip"><svg class="i"><use href="#arc"/></svg><span class="one">부산</span><small>지난 · 8.14–8.16</small></div>
+ <div class="hr"></div>
+ <div class="tcard"><b>LSFJ</b><span class="one">골목 탐험대장</span></div>
+ <div class="nbtn"><svg class="i"><use href="#plus"/></svg>새 여행</div>
+ <div class="hr"></div><div class="grp">이 여행</div>
+ <div class="it"><svg class="i"><use href="#sum"/></svg>여행 요약</div>
+ <div class="it"><svg class="i"><use href="#memo"/></svg>메모</div>
+</div></div>
+<p class="src">근거: Airbnb 지난 여행 = 프로필 &gt; Past trips <a href="https://www.airbnb.com/help/article/4222">airbnb.com</a></p></div>
+
+<div class="card"><h3>B안 · 경고만</h3><p class="d">지우는 쪽을 빨갛게.</p>
+<div class="ph sm"><div class="bg"><i></i><i></i><i></i></div><div class="scr"></div>
+<div class="dlg"><h4>지금 일정이 지워져요</h4><p>오사카·교토 12.4–12.7 일정은 복구할 수 없어요</p><div class="bt"><span>취소</span><span class="dan">지우고 새로</span></div></div></div></div>
+
+<div class="pick"><b>고르실 것</b>① 메뉴 지금/A/B · ② 요약 지금/A/B · ③ 메모 지금/A/B · ④ 기록 버튼 지금/A/B/C · ⑤ 새 여행 지금/A/B<br>아키 추천 = 전부 A</div>
+</main>
+</body>
+</html>

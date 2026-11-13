@@ -1,0 +1,361 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<title>D2 일정 화면 대안</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<style>
+@font-face { font-family: "Pretendard Variable"; font-weight: 45 920; font-style: normal; font-display: swap;
+  src: local("Pretendard Variable"), url("../app/fonts/PretendardVariable.woff2") format("woff2-variations"), url("fonts/PretendardVariable.woff2") format("woff2-variations"); }
+:root {
+  color-scheme: light;
+  --canvas: #EEF0F3; --ink: #15171A; --sub: #6F757D; --hair: rgba(21,23,26,.09); --on-ink: #FFFFFF;
+  --paper: #FFFFFF; --tile: rgba(255,255,255,.86); --glass: rgba(255,255,255,.62);
+  --red: #E0453A; --amber: #E8A317; --blue: #3B5BDB; --blue-soft: rgba(59,91,219,.10); --green: #2E9E5B; --past: #C9CDD3;
+  --sh-xs: 0 1px 2px rgba(24,36,60,.05), 0 0.25rem 0.75rem -0.375rem rgba(24,36,60,.14);
+  --kr: "Pretendard Variable", Pretendard, -apple-system, "Apple SD Gothic Neo", "Malgun Gothic", system-ui, sans-serif;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  color-scheme: dark; --canvas: #0E1013; --ink: #ECEEF1; --sub: #8F969F; --hair: rgba(255,255,255,.08); --on-ink: #0E1013;
+  --paper: #1A1D22; --tile: rgba(36,40,46,.9); --glass: rgba(30,33,38,.62); --blue: #7C95FF; --blue-soft: rgba(124,149,255,.14); --green: #4CC283; --amber: #F0B43C; --past: #3A3F46;
+  --sh-xs: 0 1px 2px rgba(0,0,0,.35), 0 0.25rem 0.75rem -0.375rem rgba(0,0,0,.55); } }
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--canvas); color: var(--ink); font-family: var(--kr); font-size: 15px; line-height: 1.5; letter-spacing: -.01em; font-variant-numeric: tabular-nums; -webkit-tap-highlight-color: transparent; }
+main { max-width: 430px; margin: 0 auto; padding: 24px 16px 80px; overflow-x: clip; }
+h1 { font-size: 22px; margin: 0 0 4px; }
+.lead { color: var(--sub); font-size: 13px; margin: 0 0 28px; }
+h2 { font-size: 17px; margin: 40px 0 6px; }
+h2 small { font-weight: 500; color: var(--sub); font-size: 12px; margin-left: 6px; }
+.why { font-size: 13px; color: var(--sub); margin: 0 0 14px; }
+.card { background: var(--glass); border: 1px solid var(--hair); border-radius: 22px; padding: 16px; margin: 0 0 18px; }
+.card h3 { font-size: 15px; margin: 0 0 8px; display: flex; align-items: center; gap: 8px; }
+.card h3 .rec { font-size: 11px; font-weight: 700; color: var(--on-ink); background: var(--blue); border-radius: 99px; padding: 1px 8px; flex: none; }
+.card .src { font-size: 11px; color: var(--sub); margin: 10px 0 0; }
+.card .src a { color: var(--sub); }
+.lab { font-size: 11px; font-weight: 700; color: var(--sub); letter-spacing: .04em; margin: 10px 0 6px; }
+.pick { margin-top: 36px; padding: 16px; border-radius: 22px; background: var(--blue-soft); font-size: 13.5px; }
+.pick b { display: block; margin-bottom: 4px; }
+/* 한 줄 고정 (.pick은 내용이 길어 줄바꿈 허용) */
+h1, h2, h3, .lead, .why, .src, .lab, .nw { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+svg.i { width: 18px; height: 18px; flex: none; stroke: currentColor; fill: none; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+
+/* 탑승권(앱 .pass/.flycard 재현) */
+.tk { position: relative; background: var(--paper); border-radius: 22px; box-shadow: var(--sh-xs); overflow: hidden; margin: 6px 0 0; }
+.tk .hd { padding: 14px 18px 12px; display: flex; flex-direction: column; gap: 10px; }
+.tk .lbl { display: flex; justify-content: space-between; align-items: center; gap: 8px; font-size: 11px; font-weight: 700; color: var(--sub); letter-spacing: .04em; }
+.tk .lbl span { display: flex; align-items: center; gap: 6px; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.tk .route { display: grid; grid-template-columns: minmax(0,1fr) auto minmax(0,1fr); align-items: end; gap: 10px; }
+.tk .code { font-size: 28px; font-weight: 500; line-height: 1; letter-spacing: .02em; }
+.tk .place { font-size: 13px; color: var(--sub); margin-top: 6px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.tk .to { text-align: right; }
+.tk .mid { color: var(--red); padding-bottom: 6px; display: flex; }
+.tk .perf { position: relative; height: 0; border-top: 2px dashed var(--hair); margin: 0 18px; }
+.tk .perf::before, .tk .perf::after { content: ""; position: absolute; top: -12px; width: 22px; height: 22px; border-radius: 50%; background: var(--glass); }
+.tk .perf::before { left: -30px; } .tk .perf::after { right: -30px; }
+.tk .fields { display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 12px; padding: 12px 18px 14px; }
+.tk .fld span { display: block; font-size: 11.5px; color: var(--sub); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.tk .fld b { display: block; font-size: 15px; font-weight: 700; margin-top: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.tk.now { box-shadow: 0 0 0 1.5px var(--blue), var(--sh-xs); animation: passglow 2.4s ease-in-out infinite; }
+.tk.now::after, .tk.slow::after { content: ""; position: absolute; inset: 0; pointer-events: none; border-radius: inherit; background: linear-gradient(105deg, transparent 38%, rgba(255,255,255,.5) 50%, transparent 62%); transform: translateX(-110%); animation: sheen 3.6s ease-in-out infinite; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .tk.now::after, :root:not([data-theme="light"]) .tk.slow::after { background: linear-gradient(105deg, transparent 38%, rgba(255,255,255,.12) 50%, transparent 62%); } }
+@keyframes passglow { 0%,100% { box-shadow: 0 0 0 1.5px var(--blue), 0 0 0 0 color-mix(in srgb, var(--blue) 30%, transparent), var(--sh-xs); }
+  50% { box-shadow: 0 0 0 1.5px var(--blue), 0 0 1.5rem .25rem color-mix(in srgb, var(--blue) 28%, transparent), var(--sh-xs); } }
+@keyframes sheen { 0%,55% { transform: translateX(-110%); } 85%,100% { transform: translateX(110%); } }
+.tk.slow { box-shadow: 0 0 0 1.5px var(--blue), var(--sh-xs); animation: passglow 4.8s ease-in-out infinite; }
+.tk.slow::after { animation-duration: 7.2s; }
+.tk.fix { box-shadow: 0 0 0 1.5px var(--blue), var(--sh-xs); }
+.tk.breath { box-shadow: 0 0 0 1.5px var(--blue), var(--sh-xs); animation: breath 4s ease-in-out infinite; }
+@keyframes breath { 0%,100% { box-shadow: 0 0 0 1.5px color-mix(in srgb, var(--blue) 70%, transparent), var(--sh-xs); } 50% { box-shadow: 0 0 0 1.5px var(--blue), var(--sh-xs); } }
+.ban { display: flex; align-items: center; gap: 8px; background: var(--blue-soft); color: var(--blue); font-size: 13px; font-weight: 700; padding: 8px 18px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.ban svg { width: 16px; height: 16px; flex: none; stroke: currentColor; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+/* ② 개성 */
+.tk.has-band { padding-left: 8px; }
+.tk .band { position: absolute; inset: 0 auto 0 0; width: 8px; background: var(--c); }
+.tk.plane-t { --c: var(--blue); } .tk.train-t { --c: var(--green); } .tk.car-t { --c: var(--amber); }
+.has-band .lbl span:first-child, .has-band .mid { color: var(--c); }
+.has-band .perf::before { left: -26px; } .has-band .perf::after { right: -30px; }
+.stk { display: flex; flex-direction: column; gap: 12px; }
+.stk .tk { margin: 0; }
+.stk .tk .hd { padding: 12px 18px 10px; } .stk .tk .fields { padding: 10px 18px 12px; }
+.stk .tk .code { font-size: 22px; }
+/* 절취선 B */
+.pf-train .perf { border-top: 0; height: 22px; margin: -11px 18px 0; background: radial-gradient(circle, var(--glass) 0 3.5px, transparent 4px) 0 50% / 14px 14px repeat-x; }
+.pf-train .perf::before, .pf-train .perf::after { display: none; }
+.pf-car .perf { border-top: 3px dashed color-mix(in srgb, var(--ink) 35%, transparent); }
+.pf-car .perf::before, .pf-car .perf::after { display: none; }
+/* ③ 상세 */
+.rows { display: flex; flex-direction: column; background: var(--paper); border-radius: 18px; box-shadow: var(--sh-xs); padding: 4px 12px; }
+.li { display: grid; grid-template-columns: 44px minmax(0,1fr) auto; gap: 0 10px; align-items: center; padding: 10px 0; border-top: 1px solid var(--hair); }
+.li:first-child { border-top: 0; }
+.li .tm { font-size: 14px; font-weight: 500; }
+.li .c { min-width: 0; display: flex; flex-direction: column; }
+.li .nm { font-size: 14.5px; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.li .s { font-size: 12.5px; color: var(--sub); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.li .chk { color: var(--red); font-weight: 600; }
+.li .rt { display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--sub); white-space: nowrap; }
+.dot { width: 8px; height: 8px; border-radius: 50%; background: var(--green); flex: none; }
+.dot.w { background: var(--amber); }
+.ago { color: var(--amber); font-weight: 700; }
+.foot { font-size: 12px; color: var(--sub); padding: 10px 0 6px; border-top: 1px solid var(--hair); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.foot b { color: var(--amber); font-weight: 700; }
+.sheet { background: var(--paper); border-radius: 18px; box-shadow: var(--sh-xs); padding: 12px 14px; }
+.sheet .t { font-size: 15px; font-weight: 700; }
+.sheet .m { font-size: 12.5px; color: var(--sub); }
+.sheet .m b { color: var(--ink); }
+/* ④ 요약 시트 */
+.sum { display: flex; flex-direction: column; background: var(--paper); border-radius: 18px; box-shadow: var(--sh-xs); padding: 4px 12px; }
+.sum .r { display: grid; grid-template-columns: 44px minmax(0,1fr) auto; align-items: center; gap: 0 10px; min-height: 44px; border-top: 1px solid var(--hair); }
+.sum .r:first-child { border-top: 0; }
+.sum .tm { font-size: 13px; color: var(--sub); }
+.sum .nm { font-size: 14.5px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.sum .nm.lk { color: var(--blue); }
+.pin { width: 44px; height: 44px; margin: 0 -8px 0 0; display: flex; align-items: center; justify-content: center; border: 0; background: none; color: var(--blue); padding: 0; }
+.pin svg { width: 20px; height: 20px; stroke: currentColor; fill: none; stroke-width: 1.9; stroke-linecap: round; stroke-linejoin: round; }
+/* ⑤ 길안내 */
+.way { background: var(--paper); border-radius: 18px; box-shadow: var(--sh-xs); padding: 12px 14px; }
+.wl { display: flex; flex-direction: column; }
+.wl .st { display: grid; grid-template-columns: 18px minmax(0,1fr) auto; gap: 0 12px; align-items: center; min-height: 28px; font-size: 14px; }
+.wl .st .nm { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.wl .st .tm { font-size: 12px; color: var(--sub); white-space: nowrap; }
+.wl .st.done .nm, .wl .st.done .tm { color: var(--past); }
+.wl .st i { width: 10px; height: 10px; border-radius: 50%; border: 2.5px solid var(--ink); background: var(--paper); justify-self: center; }
+.wl .st.done i { background: var(--ink); } .wl .st.todo i { border-color: var(--sub); }
+.wl .seg { display: grid; grid-template-columns: 18px minmax(0,1fr); gap: 0 12px; min-height: 46px; }
+.wl .ln { position: relative; justify-self: center; width: 0; }
+.wl .ln.solid { border-left: 2.5px solid var(--ink); }
+.wl .ln.dash { border-left: 2.5px dotted var(--sub); }
+.wl .ln.run { border-left: 2.5px solid var(--hair); }
+.wl .ln.run::before { content: ""; position: absolute; left: -2.5px; top: 0; width: 2.5px; height: 0; background: var(--blue); animation: fill 2.4s ease-out .4s forwards; }
+.wl .ln.run .ic { position: absolute; left: -11.25px; top: 0; width: 22px; height: 22px; border-radius: 50%; background: var(--blue); color: #fff; display: flex; align-items: center; justify-content: center; margin-top: -11px; animation: ride 2.4s ease-out .4s forwards; }
+.wl .ln.run .ic svg { width: 14px; height: 14px; stroke: currentColor; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+@keyframes fill { to { height: 60%; } }
+@keyframes ride { to { top: 60%; } }
+.wl .info { align-self: center; font-size: 12.5px; color: var(--sub); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.wl .info.on { color: var(--blue); font-weight: 700; }
+.nowdot { width: 10px; height: 10px; border-radius: 50%; background: var(--red); justify-self: center; }
+.wl .ln.flow { border-left: 2.5px solid color-mix(in srgb, var(--blue) 30%, transparent); }
+.wl .ln.flow b { position: absolute; left: -4.75px; width: 7px; height: 7px; border-radius: 50%; background: var(--blue); top: 0; opacity: 0; animation: flow 1.8s linear infinite; }
+.wl .ln.flow b:nth-child(2) { animation-delay: .6s; } .wl .ln.flow b:nth-child(3) { animation-delay: 1.2s; }
+@keyframes flow { 0% { top: 0; opacity: 0; } 15% { opacity: 1; } 85% { opacity: 1; } 100% { top: calc(100% - 7px); opacity: 0; } }
+@media (prefers-reduced-motion: reduce) { .tk.now, .tk.slow, .tk.breath, .tk.now::after, .tk.slow::after { animation: none; } }
+.card .src, .card .src * { white-space: normal !important; overflow: visible !important; text-overflow: clip !important; }
+</style>
+</head>
+<body>
+<main>
+<h1>D2 · 일정 화면 다섯 가지</h1>
+<p class="lead">2026-11-14 · 위는 지금 앱, 아래가 대안입니다. 데이터는 오사카 예시.</p>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+<symbol id="i-plane" viewBox="0 0 24 24"><path d="M21 15.5v-1.7l-8-4.8V4.5a1.5 1.5 0 0 0-3 0V9l-8 4.8v1.7l8-2.4v4.4l-2 1.5V20l3.5-1 3.5 1v-1.2l-2-1.5v-4.4z"/></symbol>
+<symbol id="i-train" viewBox="0 0 24 24"><rect x="5" y="3" width="14" height="14" rx="3"/><path d="M5 11h14M9 21l2-4M15 21l-2-4"/><circle cx="9" cy="14" r=".6"/><circle cx="15" cy="14" r=".6"/></symbol>
+<symbol id="i-car" viewBox="0 0 24 24"><path d="M5 16V12l2-5h10l2 5v4M3 16h18v2H3zM7 12h10"/><circle cx="7.5" cy="16" r=".6"/><circle cx="16.5" cy="16" r=".6"/></symbol>
+<symbol id="i-walk" viewBox="0 0 24 24"><circle cx="13" cy="4.5" r="1.8"/><path d="M12 8l-2.5 3 1 3.5-2 5.5M12 8l3 3 2.5.5M10.5 14.5l3 2 1 4"/></symbol>
+<symbol id="i-pin" viewBox="0 0 24 24"><path d="M12 21s-6.5-5.7-6.5-10.5a6.5 6.5 0 0 1 13 0C18.5 15.3 12 21 12 21z"/><circle cx="12" cy="10.5" r="2.3"/></symbol>
+<symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></symbol>
+</defs></svg>
+
+<!-- ================= 1 ================= -->
+<h2>① 탑승권 반짝임이 너무 빠름 <small>53개 중 10</small></h2>
+<p class="why">테두리 맥박 2.4초 + 빛줄기 3.6초가 겹쳐 계속 눈에 들어옴.</p>
+
+<div class="card">
+  <h3>지금</h3>
+  <div class="tk now">
+    <div class="hd"><div class="lbl"><span><svg class="i"><use href="#i-plane"/></svg>BOARDING PASS</span><span>KE 723</span></div>
+      <div class="route"><div><div class="code">ICN</div><div class="place">인천</div></div><div class="mid"><svg class="i"><use href="#i-plane"/></svg></div><div class="to"><div class="code">KIX</div><div class="place">오사카 간사이</div></div></div></div>
+    <div class="perf"></div>
+    <div class="fields"><div class="fld"><span>출발</span><b>14:45</b></div><div class="fld"><span>좌석</span><b>32K</b></div><div class="fld"><span>게이트</span><b>14</b></div></div>
+  </div>
+</div>
+
+<div class="card">
+  <h3>A안 · 고정 테두리 + 출발 배너 <span class="rec">추천</span></h3>
+  <div class="tk fix">
+    <div class="ban"><svg><use href="#i-clock"/></svg>곧 출발 · 3시간 12분 남음</div>
+    <div class="hd"><div class="lbl"><span><svg class="i"><use href="#i-plane"/></svg>BOARDING PASS</span><span>KE 723</span></div>
+      <div class="route"><div><div class="code">ICN</div><div class="place">인천</div></div><div class="mid"><svg class="i"><use href="#i-plane"/></svg></div><div class="to"><div class="code">KIX</div><div class="place">오사카 간사이</div></div></div></div>
+    <div class="perf"></div>
+    <div class="fields"><div class="fld"><span>출발</span><b>14:45</b></div><div class="fld"><span>좌석</span><b>32K</b></div><div class="fld"><span>게이트</span><b>14</b></div></div>
+  </div>
+  <p class="src">반짝임 없음 · 출발 24시간 안일 때만 배너. 근거: Apple HIG Live Activities(굵은 색 한 가지, 바뀔 때만 갱신) <a href="https://developer.apple.com/design/human-interface-guidelines/live-activities">링크</a> · Wallet 'Get ready for flight' 배너 <a href="https://developer.apple.com/design/human-interface-guidelines/wallet">링크</a></p>
+</div>
+
+<div class="card">
+  <h3>B안 · 느린 숨쉬기</h3>
+  <div class="tk breath">
+    <div class="hd"><div class="lbl"><span><svg class="i"><use href="#i-plane"/></svg>BOARDING PASS</span><span>KE 723</span></div>
+      <div class="route"><div><div class="code">ICN</div><div class="place">인천</div></div><div class="mid"><svg class="i"><use href="#i-plane"/></svg></div><div class="to"><div class="code">KIX</div><div class="place">오사카 간사이</div></div></div></div>
+    <div class="perf"></div>
+    <div class="fields"><div class="fld"><span>출발</span><b>14:45</b></div><div class="fld"><span>좌석</span><b>32K</b></div><div class="fld"><span>게이트</span><b>14</b></div></div>
+  </div>
+  <p class="src">테두리 밝기만 4초 주기로 아주 옅게, 빛줄기 없음. 근거: 직접 만든 안(외부 근거 없음)</p>
+</div>
+
+<div class="card">
+  <h3>C안 · 지금 효과, 속도 절반</h3>
+  <div class="tk slow">
+    <div class="hd"><div class="lbl"><span><svg class="i"><use href="#i-plane"/></svg>BOARDING PASS</span><span>KE 723</span></div>
+      <div class="route"><div><div class="code">ICN</div><div class="place">인천</div></div><div class="mid"><svg class="i"><use href="#i-plane"/></svg></div><div class="to"><div class="code">KIX</div><div class="place">오사카 간사이</div></div></div></div>
+    <div class="perf"></div>
+    <div class="fields"><div class="fld"><span>출발</span><b>14:45</b></div><div class="fld"><span>좌석</span><b>32K</b></div><div class="fld"><span>게이트</span><b>14</b></div></div>
+  </div>
+  <p class="src">맥박 4.8초 · 빛줄기 7.2초. 근거: 직접 만든 안(외부 근거 없음)</p>
+</div>
+
+<!-- ================= 2 ================= -->
+<h2>② 탑승권·열차표·차 카드 개성 <small>53개 중 21</small></h2>
+<p class="why">세 카드가 같은 모양이라 한눈에 구분이 안 됨.</p>
+
+<div class="card">
+  <h3>지금</h3>
+  <div class="stk">
+    <div class="tk"><div class="hd"><div class="lbl"><span><svg class="i"><use href="#i-plane"/></svg>이동</span><span>KE 723</span></div><div class="route"><div><div class="code">ICN</div></div><div class="mid"><svg class="i"><use href="#i-plane"/></svg></div><div class="to"><div class="code">KIX</div></div></div></div><div class="perf"></div><div class="fields"><div class="fld"><span>편명</span><b>KE 723</b></div><div class="fld"><span>좌석</span><b>32K</b></div><div class="fld"><span>게이트</span><b>14</b></div></div></div>
+    <div class="tk"><div class="hd"><div class="lbl"><span><svg class="i"><use href="#i-plane"/></svg>이동</span><span>하루카 17</span></div><div class="route"><div><div class="code">KIX</div></div><div class="mid"><svg class="i"><use href="#i-plane"/></svg></div><div class="to"><div class="code">KYT</div></div></div></div><div class="perf"></div><div class="fields"><div class="fld"><span>열차</span><b>하루카 17</b></div><div class="fld"><span>호차</span><b>3</b></div><div class="fld"><span>좌석</span><b>12A</b></div></div></div>
+    <div class="tk"><div class="hd"><div class="lbl"><span><svg class="i"><use href="#i-plane"/></svg>이동</span><span>렌터카</span></div><div class="route"><div><div class="code">KYT</div></div><div class="mid"><svg class="i"><use href="#i-plane"/></svg></div><div class="to"><div class="code">NRA</div></div></div></div><div class="perf"></div><div class="fields"><div class="fld"><span>출발</span><b>10:30</b></div><div class="fld"><span>소요</span><b>55분</b></div><div class="fld"><span>주차</span><b>있음</b></div></div></div>
+  </div>
+</div>
+
+<div class="card">
+  <h3>A안 · 색 띠·아이콘·머리 글자 <span class="rec">추천</span></h3>
+  <div class="stk">
+    <div class="tk plane-t has-band"><i class="band"></i><div class="hd"><div class="lbl"><span><svg class="i"><use href="#i-plane"/></svg>BOARDING PASS</span><span>KE 723</span></div><div class="route"><div><div class="code">ICN</div></div><div class="mid"><svg class="i"><use href="#i-plane"/></svg></div><div class="to"><div class="code">KIX</div></div></div></div><div class="perf"></div><div class="fields"><div class="fld"><span>편명</span><b>KE 723</b></div><div class="fld"><span>좌석</span><b>32K</b></div><div class="fld"><span>게이트</span><b>14</b></div></div></div>
+    <div class="tk train-t has-band"><i class="band"></i><div class="hd"><div class="lbl"><span><svg class="i"><use href="#i-train"/></svg>TRAIN TICKET</span><span>하루카 17</span></div><div class="route"><div><div class="code">KIX</div></div><div class="mid"><svg class="i"><use href="#i-train"/></svg></div><div class="to"><div class="code">KYT</div></div></div></div><div class="perf"></div><div class="fields"><div class="fld"><span>열차</span><b>하루카 17</b></div><div class="fld"><span>호차</span><b>3</b></div><div class="fld"><span>좌석</span><b>12A</b></div></div></div>
+    <div class="tk car-t has-band"><i class="band"></i><div class="hd"><div class="lbl"><span><svg class="i"><use href="#i-car"/></svg>DRIVE</span><span>렌터카</span></div><div class="route"><div><div class="code">KYT</div></div><div class="mid"><svg class="i"><use href="#i-car"/></svg></div><div class="to"><div class="code">NRA</div></div></div></div><div class="perf"></div><div class="fields"><div class="fld"><span>출발</span><b>10:30</b></div><div class="fld"><span>소요</span><b>55분</b></div><div class="fld"><span>주차</span><b>있음</b></div></div></div>
+  </div>
+  <p class="src">공통 틀 유지. 근거: Apple Wallet 운송 패스는 항공·열차·버스를 한 스타일로 묶고 색·로고·칸으로 구분 <a href="https://developer.apple.com/design/human-interface-guidelines/wallet">링크</a></p>
+</div>
+
+<div class="card">
+  <h3>B안 · 절취선 모양만 다르게</h3>
+  <div class="stk">
+    <div class="tk pf-plane"><div class="hd"><div class="lbl"><span><svg class="i"><use href="#i-plane"/></svg>이동</span><span>KE 723</span></div><div class="route"><div><div class="code">ICN</div></div><div class="mid"><svg class="i"><use href="#i-plane"/></svg></div><div class="to"><div class="code">KIX</div></div></div></div><div class="perf"></div><div class="fields"><div class="fld"><span>편명</span><b>KE 723</b></div><div class="fld"><span>좌석</span><b>32K</b></div><div class="fld"><span>게이트</span><b>14</b></div></div></div>
+    <div class="tk pf-train"><div class="hd"><div class="lbl"><span><svg class="i"><use href="#i-train"/></svg>이동</span><span>하루카 17</span></div><div class="route"><div><div class="code">KIX</div></div><div class="mid"><svg class="i"><use href="#i-train"/></svg></div><div class="to"><div class="code">KYT</div></div></div></div><div class="perf"></div><div class="fields"><div class="fld"><span>열차</span><b>하루카 17</b></div><div class="fld"><span>호차</span><b>3</b></div><div class="fld"><span>좌석</span><b>12A</b></div></div></div>
+    <div class="tk pf-car"><div class="hd"><div class="lbl"><span><svg class="i"><use href="#i-car"/></svg>이동</span><span>렌터카</span></div><div class="route"><div><div class="code">KYT</div></div><div class="mid"><svg class="i"><use href="#i-car"/></svg></div><div class="to"><div class="code">NRA</div></div></div></div><div class="perf"></div><div class="fields"><div class="fld"><span>출발</span><b>10:30</b></div><div class="fld"><span>소요</span><b>55분</b></div><div class="fld"><span>주차</span><b>있음</b></div></div></div>
+  </div>
+  <p class="src">비행기 반원 노치 · 열차 펀치 구멍 줄 · 차 도로 점선. 근거: 직접 만든 안(외부 근거 없음)</p>
+</div>
+
+<!-- ================= 3 ================= -->
+<h2>③ 상세에 '확인 + 날짜'가 너무 많음 <small>53개 중 18</small></h2>
+<p class="why">줄마다 '확인 11.12'가 붙어 이름보다 눈에 띔.</p>
+
+<div class="card">
+  <h3>지금</h3>
+  <div class="rows">
+    <div class="li"><span class="tm">10:00</span><div class="c"><span class="nm">오사카성</span><span class="s">09:00–17:00 · <span class="chk">확인 11.12</span></span></div></div>
+    <div class="li"><span class="tm">12:00</span><div class="c"><span class="nm">구로몬 시장</span><span class="s">점심 · <span class="chk">확인 11.12</span></span></div></div>
+    <div class="li"><span class="tm">15:30</span><div class="c"><span class="nm">도톤보리</span><span class="s">산책 · <span class="chk">확인 11.10</span></span></div></div>
+  </div>
+</div>
+
+<div class="card">
+  <h3>A안 · 상태 점만, 날짜는 시트 안 한 곳 <span class="rec">추천</span></h3>
+  <div class="lab">상세 목록 — 점 = 초록 확인 · 호박 확인 필요</div>
+  <div class="rows">
+    <div class="li"><span class="tm">10:00</span><div class="c"><span class="nm">오사카성</span><span class="s">09:00–17:00</span></div><span class="rt"><i class="dot"></i></span></div>
+    <div class="li"><span class="tm">12:00</span><div class="c"><span class="nm">구로몬 시장</span><span class="s">점심</span></div><span class="rt"><i class="dot"></i></span></div>
+    <div class="li"><span class="tm">15:30</span><div class="c"><span class="nm">도톤보리</span><span class="s">산책</span></div><span class="rt"><i class="dot w"></i></span></div>
+  </div>
+  <div class="lab">일정을 눌러 연 시트</div>
+  <div class="sheet"><div class="t nw">오사카성</div><div class="m nw">영업시간 09:00–17:00 · <b>확인 11.12</b></div></div>
+  <p class="src">근거(2차): Google 영업시간 옆 작은 라벨 'Updated X days ago' <a href="https://hitchhikers.yext.com/docs/listings/google-hours">링크</a></p>
+</div>
+
+<div class="card">
+  <h3>B안 · 상대 시간, 확인 필요한 줄만</h3>
+  <div class="rows">
+    <div class="li"><span class="tm">10:00</span><div class="c"><span class="nm">오사카성</span><span class="s">09:00–17:00</span></div></div>
+    <div class="li"><span class="tm">12:00</span><div class="c"><span class="nm">구로몬 시장</span><span class="s">점심</span></div></div>
+    <div class="li"><span class="tm">15:30</span><div class="c"><span class="nm">도톤보리</span><span class="s">산책</span></div><span class="rt"><span class="ago">2일 전</span></span></div>
+  </div>
+  <p class="src">근거: 직접 만든 안(외부 근거 없음)</p>
+</div>
+
+<div class="card">
+  <h3>C안 · 하루 목록 맨 아래 한 줄</h3>
+  <div class="rows">
+    <div class="li"><span class="tm">10:00</span><div class="c"><span class="nm">오사카성</span><span class="s">09:00–17:00</span></div></div>
+    <div class="li"><span class="tm">12:00</span><div class="c"><span class="nm">구로몬 시장</span><span class="s">점심</span></div></div>
+    <div class="li"><span class="tm">15:30</span><div class="c"><span class="nm">도톤보리</span><span class="s">산책</span></div></div>
+    <div class="foot">이 날 정보 확인 11.10–11.13 · <b>확인 필요 1곳</b></div>
+  </div>
+  <p class="src">근거: 직접 만든 안(외부 근거 없음)</p>
+</div>
+
+<!-- ================= 4 ================= -->
+<h2>④ 요약에서 장소마다 지도 링크 <small>53개 중 40</small></h2>
+<p class="why">요약 시트에서 바로 지도로 못 감. 장소마다 한 번에 열리게.</p>
+
+<div class="card">
+  <h3>지금</h3>
+  <div class="sum">
+    <div class="r"><span class="tm">10:00</span><span class="nm">오사카성</span></div>
+    <div class="r"><span class="tm">12:00</span><span class="nm">구로몬 시장</span></div>
+    <div class="r"><span class="tm">15:30</span><span class="nm">도톤보리</span></div>
+  </div>
+</div>
+
+<div class="card">
+  <h3>A안 · 이름 옆 지도 핀 버튼 <span class="rec">추천</span></h3>
+  <div class="sum">
+    <div class="r"><span class="tm">10:00</span><span class="nm">오사카성</span><button class="pin" aria-label="구글 지도에서 열기"><svg><use href="#i-pin"/></svg></button></div>
+    <div class="r"><span class="tm">12:00</span><span class="nm">구로몬 시장</span><button class="pin" aria-label="구글 지도에서 열기"><svg><use href="#i-pin"/></svg></button></div>
+    <div class="r"><span class="tm">15:30</span><span class="nm">도톤보리</span><button class="pin" aria-label="구글 지도에서 열기"><svg><use href="#i-pin"/></svg></button></div>
+  </div>
+  <p class="src">버튼 44px → 구글 지도. 근거: Wanderlog 일정에서 'directions' → 지도 앱 선택(앱스토어 리뷰) <a href="https://apps.apple.com/us/app/wanderlog/id1476732439">링크</a></p>
+</div>
+
+<div class="card">
+  <h3>B안 · 이름 자체를 누르면 지도</h3>
+  <div class="sum">
+    <div class="r"><span class="tm">10:00</span><span class="nm lk">오사카성</span></div>
+    <div class="r"><span class="tm">12:00</span><span class="nm lk">구로몬 시장</span></div>
+    <div class="r"><span class="tm">15:30</span><span class="nm lk">도톤보리</span></div>
+  </div>
+  <p class="src">밑줄 없이 파란 글자. 근거: 위 Wanderlog 리뷰와 같음</p>
+</div>
+
+<!-- ================= 5 ================= -->
+<h2>⑤ 길안내 진행선 — 빨간 점만 있어 어색 <small>53개 중 41</small></h2>
+<p class="why">지나온 길·남은 길 목록에 빨간 점 하나뿐, 얼마나 왔는지 안 보임.</p>
+
+<div class="card">
+  <h3>지금</h3>
+  <div class="way"><div class="wl">
+    <div class="st done"><i></i><span class="nm">난바역 출발</span><span class="tm">지나옴</span></div>
+    <div class="st done"><i></i><span class="nm">미도스지선 3정거장</span><span class="tm">지나옴</span></div>
+    <div class="st"><span class="nowdot"></span><span class="nm">신사이바시역 하차 · 도보</span><span class="tm">지금</span></div>
+    <div class="st todo"><i></i><span class="nm">도톤보리 도착</span><span class="tm">남음</span></div>
+  </div></div>
+</div>
+
+<div class="card">
+  <h3>A안 · 세로 진행선 채워짐 <span class="rec">추천</span></h3>
+  <div class="way"><div class="wl">
+    <div class="st done"><i></i><span class="nm">난바역 출발</span><span class="tm">10:02</span></div>
+    <div class="seg"><div class="ln solid"></div><span class="info">지하철 3정거장</span></div>
+    <div class="st done"><i></i><span class="nm">신사이바시역</span><span class="tm">10:12</span></div>
+    <div class="seg"><div class="ln run"><span class="ic"><svg><use href="#i-walk"/></svg></span></div><span class="info on">도보 이동 중 · 4분</span></div>
+    <div class="st todo"><i></i><span class="nm">도톤보리 도착</span><span class="tm">10:20</span></div>
+    <div class="seg"><div class="ln dash"></div><span class="info">남은 길 · 식사</span></div>
+    <div class="st todo"><i></i><span class="nm">구로몬 시장</span><span class="tm">12:00</span></div>
+  </div></div>
+  <p class="src">지나온 구간 실선 · 이동 중 파란 선(60%) + 도보 아이콘 · 남은 구간 점선. 열 때 1회 채워짐. 근거: Google Maps 대중교통 단계 목록·잠금화면 진행 <a href="https://techcrunch.com/2017/12/09/google-maps-will-soon-tell-you-when-its-time-to-get-off-your-train-or-bus">링크</a> · Citymapper GO <a href="https://content.citymapper.com/i/2553/citymapper-introduces-ios-lock-screen-navigation">링크</a> (세부 시각 디자인은 확인 못 함)</p>
+</div>
+
+<div class="card">
+  <h3>B안 · 이동 구간에 점 3개 흐름</h3>
+  <div class="way"><div class="wl">
+    <div class="st done"><i></i><span class="nm">신사이바시역</span><span class="tm">10:12</span></div>
+    <div class="seg"><div class="ln flow"><b></b><b></b><b></b></div><span class="info on">도보 이동 중 · 4분</span></div>
+    <div class="st todo"><i></i><span class="nm">도톤보리 도착</span><span class="tm">10:20</span></div>
+  </div></div>
+  <p class="src">이동 중 구간에만 파란 점이 아래로 반복. 근거: 위 Google Maps·Citymapper 링크와 같음 (세부 시각 디자인은 확인 못 함)</p>
+</div>
+
+<div class="pick"><b>고르실 것</b>① 반짝임 지금/A/B/C · ② 카드 개성 지금/A/B · ③ 확인 표기 지금/A/B/C · ④ 지도 링크 지금/A/B · ⑤ 진행선 지금/A/B — 아키 추천 = 전부 A</div>
+</main>
+</body>
+</html>
