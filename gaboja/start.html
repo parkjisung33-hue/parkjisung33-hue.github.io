@@ -425,8 +425,21 @@ const AUTO = 3200; // 반응 시트가 떠 있다가 다음 질문으로 넘어�
 const SHOWN = [1, 2, 2, 3, 4, 4], LOCKED = [0, 0, 2, 2, 2, 4];
 const STEP_TX = ['첫 글자 등장', '두 번째 글자 등장', '앞 두 글자 확정', '세 번째 글자 등장', '네 번째 글자 등장', '코드 완성'];
 // 자동 일정이 되는 곳 → 엔진 도시 키 (gen.js cfg)
-const DEST = { '오사카·교토': 'kix', '도쿄': 'tyo' };
-const AIRPORTS = { kix: [['KIX', '간사이']], tyo: [['NRT', '나리타'], ['HND', '하네다']] };
+const DEST = { '오사카·교토': 'kix', '도쿄': 'tyo', '후쿠오카': 'fuk', '삿포로': 'spk', '서울': 'sel', '부산': 'bsn' };
+const AIRPORTS = { kix: [['KIX', '간사이']], tyo: [['NRT', '나리타'], ['HND', '하네다']], fuk: [['FUK', '후쿠오카']], spk: [['CTS', '신치토세']] };
+// 국내(서울·부산): 출발 지역 × 교통수단 = gen-data.js cfg[dest].modes (domestic_moves_add.json 조사값)
+const REGIONS = ['수도권', '강원', '충청', '대구·경북', '부산·경남', '광주·전라', '제주'];
+const MODE_NM = { home: '집에서 바로', train: '기차', air: '비행기', car: '차' };
+const cfgOf = tr => ((window.GABOJA_DATA || {}).cfg || {})[DEST[tr.city]] || null;
+const isDom = tr => { const c = cfgOf(tr); return !!(c && c.domestic); };
+function domOpts(tr) {   // 그 지역에서 되는 교통수단·노선
+  const M = (cfgOf(tr) || {}).modes || {};
+  const L = (m, r) => m === 'home' ? (((M.home || {}).regions || []).includes(r) ? [{}] : []) : [].concat(((M[m] || {}).regions || {})[r] || []);
+  const regs = REGIONS.filter(x => ['home', 'train', 'air', 'car'].some(m => L(m, x).length));
+  const modes = ['home', 'train', 'air', 'car'].filter(m => L(m, tr.region).length);
+  return { modes, regs, lines: m => L(m, tr.region) };
+}
+const rideOn = tr => isDom(tr) && ['train', 'air', 'car'].includes(tr.mode) && tr.flight === 'yes';
 const CITIES = [['오사카·교토', '고베·나라까지 · 일본'], ['도쿄', '신주쿠·시부야·아사쿠사 · 일본'], ['후쿠오카', '일본 규슈'], ['삿포로', '오타루까지 · 일본'], ['서울', '국내'], ['부산', '국내'], ['제주', '국내'], ['다른 곳', '직접 입력']];
 const WHO = [['혼자', '내 속도대로'], ['연인', '둘이서'], ['친구', '여럿이'], ['가족 (아이 포함)', '쉬는 시간 넉넉히'], ['가족 (어른만)', '이동은 편하게']];
 const NIGHTS = [[1, '1박 2일'], [2, '2박 3일'], [3, '3박 4일'], [4, '4박 5일'], [5, '5박 이상']];
@@ -740,7 +753,41 @@ function rInfo(s) {
     $('#homeIn').onkeydown = e => { if (e.key === 'Enter') next(s); };
     $('#hNext').onclick = () => next(s);
   }
-  if (s === 'book') {
+  if (s === 'book' && isDom(tr)) {
+    const C = cfgOf(tr), ex = (C.bases[1] || C.bases[0]).name;
+    el = screen(head('가는 길', '어떻게 가세요?', '출발 지역과 교통만 고르면 첫날·마지막 날을 짜 드려요') + `
+      <div id="dBox"></div>
+      <div class="blk"><div class="sub2">숙소</div><div class="seg" id="sSeg"><button data-s="no" aria-pressed="${tr.stay === 'no'}">아직</button><button data-s="area" aria-pressed="${tr.stay === 'area'}">동네만</button><button data-s="yes" aria-pressed="${tr.stay === 'yes'}">정했어요</button></div>
+        <input class="in" id="sIn" value="${esc(tr.stayTx || '')}" ${tr.stay === 'no' ? 'hidden' : ''} placeholder="${tr.stay === 'area' ? '동네 이름 (예: ' + ex + ')' : '숙소 이름'}"></div>
+      <div class="foot"><button class="cta" id="bNext">다음</button></div>`);
+    const draw = () => {
+      if (!domOpts(tr).regs.includes(tr.region)) tr.region = domOpts(tr).regs[0];
+      const o = domOpts(tr); if (!o.modes.includes(tr.mode)) tr.mode = o.modes[0];
+      const lines = o.lines(tr.mode), ride = tr.mode === 'train' || tr.mode === 'air' || tr.mode === 'car', car = tr.mode === 'car';
+      if ((tr.line || 0) >= lines.length) tr.line = 0;
+      const ln = lines[tr.line || 0] || {}, nm = x => (x || '') + (tr.mode === 'air' ? '공항' : ''), w = tr.mode === 'air' ? '편' : '열차';
+      $('#dBox').innerHTML = `<div class="blk"><div class="sub2">출발 지역</div><div class="chips" id="rgC">${o.regs.map(x => `<button class="chip soft" data-rg="${x}" aria-pressed="${tr.region === x}">${x}</button>`).join('')}</div></div>
+        <div class="blk"><div class="sub2">교통</div><div class="seg" id="mdSeg">${o.modes.map(m => `<button data-md="${m}" aria-pressed="${tr.mode === m}">${MODE_NM[m]}</button>`).join('')}</div>
+        ${lines.length > 1 ? `<div class="seg" id="lnSeg" style="margin-top:.5rem">${lines.map((l, i) => `<button data-ln="${i}" aria-pressed="${(tr.line || 0) === i}">${tr.mode === 'air' ? l.from + ' 출발' : l.line + ' ' + l.from}</button>`).join('')}</div>` : ''}
+        ${car ? `<div class="note">${ICON.check}<span>출발 시각만 넣어도 돼요. 비우면 09:00 출발로, 도착은 경로·시간대 막힘·휴식을 더해 계산해요</span></div>` : ''}
+        ${tr.mode === 'home' ? `<div class="note">${ICON.check}<span>집에서 숙소까지 지하철로 가는 걸로 짜요</span></div>` : ''}</div>
+        ${ride ? `<div class="blk"><div class="sub2">${car ? '운전' : tr.mode === 'air' ? '비행기' : '열차'} 시각</div><div class="seg" id="fSeg"><button data-f="no" aria-pressed="${tr.flight === 'no'}">아직 안 정했어요</button><button data-f="yes" aria-pressed="${tr.flight === 'yes'}">정했어요</button></div>
+          <div class="flbox" id="fBox" ${tr.flight === 'yes' ? '' : 'hidden'}>${['fo', 'fb'].map(k => { const f = tr[k] || {}; return `<div class="flr"><span class="fll">${car ? (k === 'fo' ? '가는 날 · 집 → 숙소' : '오는 날 · 숙소 → 집') : k === 'fo' ? '가는 ' + w + ' · ' + nm(ln.from) + ' → ' + nm(ln.to) : '오는 ' + w + ' · ' + nm(ln.to) + ' → ' + nm(ln.from)}</span>
+            ${car ? '' : `<input class="in fno" data-fk="${k}" data-ff="no" placeholder="${tr.mode === 'air' ? '편명 (예: KE1101)' : '열차 번호 (예: 101)'}" value="${esc(f.no || '')}" autocomplete="off" autocapitalize="characters" maxlength="8">`}
+            <div class="tms"><label>출발 시각<input class="in tm" type="time" data-fk="${k}" data-ff="dep" value="${esc(f.dep || '')}"></label><label>도착 시각<input class="in tm" type="time" data-fk="${k}" data-ff="arr" value="${esc(f.arr || '')}"></label></div></div>`; }).join('')}
+            <div class="note">${ICON.check}<span>모르는 칸은 비워 두면 보통 시각으로 짜고 ‘확인 필요’로 표시해요</span></div></div></div>` : ''}`;
+      $('#rgC').onclick = e => { const b = e.target.closest('[data-rg]'); if (!b) return; tr.region = b.dataset.rg; tr.line = 0; tap(); draw(); };
+      $('#mdSeg').onclick = e => { const b = e.target.closest('[data-md]'); if (!b) return; tr.mode = b.dataset.md; tr.line = 0; tap(); draw(); };
+      const lns = $('#lnSeg'); if (lns) lns.onclick = e => { const b = e.target.closest('[data-ln]'); if (!b) return; tr.line = +b.dataset.ln; draw(); };
+      const fs = $('#fSeg'); if (fs) fs.onclick = e => { const b = e.target.closest('[data-f]'); if (!b) return; tr.flight = b.dataset.f; fs.querySelectorAll('button').forEach(x => x.setAttribute('aria-pressed', x === b)); $('#fBox').hidden = tr.flight !== 'yes'; tr.flightTx = flightText(tr); };
+      $('#dBox').querySelectorAll('[data-fk]').forEach(i => i.oninput = () => { const k = i.dataset.fk; tr[k] = tr[k] || {}; tr[k][i.dataset.ff] = i.dataset.ff === 'no' ? i.value.toUpperCase().replace(/\s+/g, '') : i.value; tr.flightTx = flightText(tr); });
+      tr.flightTx = flightText(tr);
+    };
+    draw();
+    $('#sSeg').onclick = e => { const b = e.target.closest('[data-s]'); if (!b) return; tr.stay = b.dataset.s; $('#sSeg').querySelectorAll('button').forEach(x => x.setAttribute('aria-pressed', x === b)); const i = $('#sIn'); i.hidden = tr.stay === 'no'; i.placeholder = tr.stay === 'area' ? '동네 이름 (예: ' + ex + ')' : '숙소 이름'; if (!i.hidden) i.focus(); };
+    $('#sIn').oninput = e => tr.stayTx = e.target.value;
+    $('#bNext').onclick = () => next(s);
+  } else if (s === 'book') {
     el = screen(head('예약', '예약한 게 있나요?', '정한 것만 알려 주세요. 없으면 그냥 넘어가요') + `
       <div class="blk"><div class="sub2">비행기</div><div class="seg" id="fSeg"><button data-f="no" aria-pressed="${tr.flight === 'no'}">아직 안 정했어요</button><button data-f="yes" aria-pressed="${tr.flight === 'yes'}">정했어요</button></div>
         <div class="flbox" id="fBox" ${tr.flight === 'yes' ? '' : 'hidden'}>${(AIRPORTS[DEST[tr.city]] || []).length > 1 ? `<div class="flr"><span class="fll">도착 공항</span><div class="seg" id="apSeg">${AIRPORTS[DEST[tr.city]].map(a => `<button data-ap="${a[0]}" aria-pressed="${(tr.airport || AIRPORTS[DEST[tr.city]][0][0]) === a[0]}">${a[1]} ${a[0]}</button>`).join('')}</div></div>` : ''}${['fo', 'fb'].map(k => { const f = tr[k] || {}, apn = apName(tr); return `<div class="flr"><span class="fll">${k === 'fo' ? '가는 편 · 인천 → ' + apn : '오는 편 · ' + apn + ' → 인천'}</span>
@@ -794,7 +841,10 @@ function rInfo(s) {
 }
 const apName = tr => { const L = AIRPORTS[DEST[tr.city]]; if (!L) return '현지 공항'; return (L.find(a => a[0] === tr.airport) || L[0])[1]; };
 // 비행기 편 → 시트에 남길 한 줄 ('가는 편 WE513 09:00→10:50 / 오는 편 …')
-function flightText(tr) { return (DEST[tr.city] === 'tyo' ? apName(tr) + ' · ' : '') + ['fo', 'fb'].map(k => { const f = tr[k] || {}; if (!f.no && !f.dep && !f.arr) return ''; return (k === 'fo' ? '가는 편 ' : '오는 편 ') + [f.no, (f.dep || '?') + '→' + (f.arr || '?')].filter(Boolean).join(' '); }).filter(Boolean).join(' / '); }
+function flightText(tr) {
+  if (isDom(tr)) { const ln = (domOpts(tr).lines(tr.mode)[tr.line || 0] || {}); const head = [tr.region, MODE_NM[tr.mode], tr.mode === 'train' ? ln.line : ''].filter(Boolean).join(' ');
+    if (!rideOn(tr)) return head; const t = ['fo', 'fb'].map(k => { const f = tr[k] || {}; if (!f.no && !f.dep && !f.arr) return ''; return (k === 'fo' ? '가는 편 ' : '오는 편 ') + [f.no, (f.dep || '?') + '→' + (f.arr || '?')].filter(Boolean).join(' '); }).filter(Boolean).join(' / '); return head + (t ? ' · ' + t : ''); }
+  return (DEST[tr.city] === 'tyo' ? apName(tr) + ' · ' : '') + ['fo', 'fb'].map(k => { const f = tr[k] || {}; if (!f.no && !f.dep && !f.arr) return ''; return (k === 'fo' ? '가는 편 ' : '오는 편 ') + [f.no, (f.dep || '?') + '→' + (f.arr || '?')].filter(Boolean).join(' '); }).filter(Boolean).join(' / '); }
 function next(s) { const i = INFO.indexOf(s); store.set('gaboja-trip', S.trip); go(i + 1 < INFO.length ? INFO[i + 1] : 'build'); }
 
 /* 달력 */
@@ -835,7 +885,7 @@ function payload() {
     answers: S.ans.map((oi, i) => oi == null ? '' : `${i + 1}.${Q[i].o[oi][0]}`).filter(Boolean).join(' / '),
     method: (METHOD.find(m => m[0] === tr.method) || ['', ''])[1], city: tr.city === '다른 곳' ? (tr.cityEtc || '다른 곳') : (tr.city || ''),
     start: d(tr.start), end: d(tr.end), nights: tr.nights || '', who: tr.who || '', homeMode: tr.home ? (tr.homeMode === 'addr' ? '집 주소' : '동네+역') : '', home: tr.home || '',
-    flight: tr.flight === 'yes' ? '정함' : '미정', flightTx: tr.flight === 'yes' ? (tr.flightTx || '') : '', stay: { no: '미정', area: '동네만', yes: '정함' }[tr.stay] || '', stayTx: tr.stay === 'no' ? '' : (tr.stayTx || ''),
+    flight: tr.flight === 'yes' ? '정함' : '미정', flightTx: isDom(tr) ? flightText(tr) : tr.flight === 'yes' ? (tr.flightTx || '') : '', stay: { no: '미정', area: '동네만', yes: '정함' }[tr.stay] || '', stayTx: tr.stay === 'no' ? '' : (tr.stayTx || ''),
     likes: tr.likes.join(', '), avoid: tr.avoid.join(', '), page: location.origin + location.pathname };
 }
 function sendNow() {
@@ -851,7 +901,7 @@ function buildPlan() {
   const tr = S.trip; PLANNED = null;
   const dest = DEST[tr.city]; if (!dest || !window.GABOJA_GEN || !(window.GABOJA_GEN.dests || ['kix']).includes(dest)) return null;
   const d = n => n ? `${Math.floor(n / 10000)}-${String(Math.floor(n / 100) % 100).padStart(2, '0')}-${String(n % 100).padStart(2, '0')}` : null;
-  try { PLANNED = window.GABOJA_GEN.make({ type: S.type, start: d(tr.start), nights: tr.nights || 3, likes: tr.likes, avoid: tr.avoid, flightTx: tr.flight === 'yes' ? tr.flightTx : '', fo: tr.flight === 'yes' ? tr.fo : null, fb: tr.flight === 'yes' ? tr.fb : null, stayTx: tr.stay !== 'no' ? tr.stayTx : '', cityLabel: tr.city, dest, airport: tr.airport || (AIRPORTS[dest] || [[]])[0][0] }); PLANNED.nick = (tr.nick || '').trim().slice(0, 12); store.set('gaboja-plan', PLANNED); } catch (e) { PLANNED = null; }
+  try { PLANNED = window.GABOJA_GEN.make({ type: S.type, start: d(tr.start), nights: tr.nights || 3, likes: tr.likes, avoid: tr.avoid, flightTx: tr.flight === 'yes' ? tr.flightTx : '', fo: tr.flight === 'yes' ? tr.fo : null, fb: tr.flight === 'yes' ? tr.fb : null, stayTx: tr.stay !== 'no' ? tr.stayTx : '', cityLabel: tr.city, dest, airport: tr.airport || ((AIRPORTS[dest] || [[]])[0] || [])[0], region: tr.region, mode: tr.mode, line: tr.line || 0 }); PLANNED.nick = (tr.nick || '').trim().slice(0, 12); store.set('gaboja-plan', PLANNED); } catch (e) { PLANNED = null; }
   return PLANNED;
 }
 function rBuild() {
@@ -859,7 +909,7 @@ function rBuild() {
   buildPlan();
   setBar('info', INFO.length + 1, INFO.length + 1, { t: '만드는 중' });
   const tr = S.trip, t = S.type ? T(S.type) : null, city = tr.city === '다른 곳' ? (tr.cityEtc || '여행지') : (tr.city || '여행지');
-  const lines = [tr.home ? '집 문 앞에서 공항까지 시간 계산' : '출발 시각 정하기', `${city}에서 ${t ? t.name + ' 취향' : '취향'}에 맞는 곳 고르기`, '영업시간·휴무일 맞춰 보기', tr.nights ? `${tr.nights + 1}일 동선 짜기` : '하루 동선 짜기', '가이드북 한 권으로 정리'];
+  const lines = [tr.home ? (isDom(tr) ? '집 문 앞에서 ' + (tr.mode === 'air' ? '공항' : tr.mode === 'train' ? '역' : '숙소') + '까지 시간 계산' : '집 문 앞에서 공항까지 시간 계산') : '출발 시각 정하기', `${city}에서 ${t ? t.name + ' 취향' : '취향'}에 맞는 곳 고르기`, '영업시간·휴무일 맞춰 보기', tr.nights ? `${tr.nights + 1}일 동선 짜기` : '하루 동선 짜기', '가이드북 한 권으로 정리'];
   screen(`<div class="calc">
       <span class="eyebrow">${t ? esc(t.name) + ' 맞춤' : '맞춤 일정'}</span>
       ${S.type ? flapsHtml(S.type.split(''), true) : ''}
@@ -893,7 +943,7 @@ function rDone() {
         ${f('유형', t ? t.name : '건너뜀')}
         ${f('일정', (METHOD.find(m => m[0] === tr.method) || METHOD[0])[1])}
         ${f('출발', tr.home ? tr.home : '나중에 입력')}
-        ${f('예약', [tr.flight === 'yes' ? '비행기 ' + (tr.flightTx || '정함') : '비행기 미정', tr.stay === 'no' ? '숙소 미정' : '숙소 ' + (tr.stayTx || (tr.stay === 'area' ? '동네만' : '정함'))].join(' · '))}
+        ${f(isDom(tr) ? '가는 길' : '예약', [isDom(tr) ? (flightText(tr) || '미정') : tr.flight === 'yes' ? '비행기 ' + (tr.flightTx || '정함') : '비행기 미정', tr.stay === 'no' ? '숙소 미정' : '숙소 ' + (tr.stayTx || (tr.stay === 'area' ? '동네만' : '정함'))].join(' · '))}
         ${f('취향', tr.likes.length ? tr.likes.join(' · ') : '고르지 않음')}
         ${tr.avoid.length ? f('피함', tr.avoid.join(' · ')) : ''}
       </div>

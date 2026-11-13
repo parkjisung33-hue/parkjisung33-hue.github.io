@@ -232,6 +232,7 @@ h2 { margin: 0; font-size: 1.3125rem; font-weight: 800; letter-spacing: -.03em; 
 .nrow .v { font-size: 0.8125rem; color: var(--sub); white-space: nowrap; }
 .nrow .v.num { color: var(--ink); font-weight: 600; }
 .nrow .src { font-size: 0.6875rem; color: var(--sub); }
+.cattr { font-size: 0.6875rem; line-height: 1.4; color: var(--sub); padding: 0.375rem 0 0; }   /* 차 시간 출처 표기 (현지 정보 맨 아래) */
 /* 현지 정보: 접어 두고 제목 줄을 누르면 펼침. 번호 = 전화 걸기 링크 (복사 아이콘 없음 — 번호를 누르면 바로 전화) */
 details.sec { padding-bottom: 0.875rem; }
 details.sec[open] { padding-bottom: 0.375rem; }
@@ -681,21 +682,41 @@ const NOTES = {
 const NICON = { red:'<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/></svg>', amber:'<svg viewBox="0 0 24 24"><path d="M12 4l9 16H3z"/><path d="M12 10v4M12 17h.01"/></svg>', gray:'<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><path d="M12 11v5M12 8h.01"/></svg>' };
 const CHECKS = { ok:{t:'영업시간 확인 11/11', s:'확인 11/11'}, no:{t:'영업시간 자료마다 다름 · 전날 전화', s:'전날 전화'} };
 // 장소 DB 일부 (디자인/2026-11-11_가보자_데이터구조/places.json → 오사카·교토, 허브·기간 행사 제외). o=영업 [열기,닫기] · x=휴무 요일 · st=보통 머무는 분
-const PLACES = [{"id":"osk-kuromon","n":"구로몬 시장","l":"黒門市場","c":"오사카","a":"닛폰바시","t":["맛집","스시"],"o":["08:00","18:00"],"x":[],"st":75,"say":"","q":"黒門市場"},{"id":"osk-sushi-urara","n":"난바 스시 우라라","l":"難波 すし麗","c":"오사카","a":"난바","t":["맛집","스시"],"o":["12:00","15:00"],"x":[],"st":90,"say":"난바역에서 걸어서 1~2분","q":"難波 すし麗"},{"id":"osk-wanaka","n":"와나카 센니치마에 본점","l":"わなか 千日前本店","c":"오사카","a":"난바","t":["맛집","타코야키"],"o":null,"x":[],"st":30,"say":"","q":"わなか 千日前本店"},{"id":"osk-kukuru","n":"쿠쿠루 도톤보리 본점","l":"たこ家道頓堀くくる 本店","c":"오사카","a":"도톤보리","t":["맛집","타코야키"],"o":null,"x":[],"st":40,"say":"","q":"くくる 道頓堀本店"},{"id":"osk-dotonbori","n":"도톤보리 · 에비스바시","l":"道頓堀 · 戎橋","c":"오사카","a":"도톤보리","t":["사진 명소","술집·밤"],"o":null,"x":[],"st":60,"say":"","q":"戎橋"},{"id":"osk-uranamba","n":"우라난바 술집 거리","l":"裏なんば","c":"오사카","a":"난바","t":["술집·밤","맛집"],"o":null,"x":[],"st":150,"say":"난바역 동쪽, 서서 마시는 집이 많은 골목","q":"裏なんば"},{"id":"osk-nakazakicho","n":"나카자키초 골목","l":"中崎町","c":"오사카","a":"우메다","t":["카페","옷·빈티지"],"o":null,"x":["wed"],"st":120,"say":"쇼와 초기 목조 집들이 남은 골목에 카페·잡화·구제 가게가 모여 있어요","q":"中崎町"},{"id":"osk-taiyonoto","n":"카페 태양의 탑","l":"太陽ノ塔","c":"오사카","a":"나카자키초","t":["카페"],"o":null,"x":[],"st":60,"say":"2002년 나카자키초 카페 문화를 연 집으로 소개돼요","q":"太陽ノ塔 中崎町"},{"id":"osk-horie","n":"호리에 오렌지 스트리트","l":"南堀江 オレンジストリート","c":"오사카","a":"호리에","t":["쇼핑","잡화·소품"],"o":null,"x":[],"st":90,"say":"생활용품·가구·카페가 모인 조용한 거리","q":"オレンジストリート 堀江"},{"id":"osk-amemura","n":"아메리카무라","l":"アメリカ村","c":"오사카","a":"신사이바시","t":["옷·빈티지","신발"],"o":null,"x":[],"st":120,"say":"오사카에서 가장 큰 구제 거리로 소개돼요","q":"アメリカ村"},{"id":"osk-magnets","n":"마그네츠 아메리카무라점","l":"マグネッツ アメリカ村店","c":"오사카","a":"신사이바시","t":["옷·빈티지"],"o":null,"x":[],"st":40,"say":"‘어른이 고른 구제’가 주제인 가게","q":"マグネッツ アメリカ村店"},{"id":"osk-umeda-sky","n":"우메다 스카이빌딩 공중정원","l":"梅田スカイビル 空中庭園展望台","c":"오사카","a":"우메다","t":["사진 명소","술집·밤"],"o":["09:30","22:30"],"x":[],"st":75,"say":"","q":"梅田スカイビル 空中庭園展望台"},{"id":"osk-nakanoshima-museum","n":"오사카 나카노시마 미술관","l":"大阪中之島美術館","c":"오사카","a":"나카노시마","t":["전시·문화"],"o":null,"x":["mon"],"st":120,"say":"","q":"大阪中之島美術館"},{"id":"osk-shinsaibashisuji","n":"신사이바시스지 상점가","l":"心斎橋筋商店街","c":"오사카","a":"신사이바시","t":["쇼핑"],"o":null,"x":[],"st":90,"say":"","q":"心斎橋筋商店街"},{"id":"kyo-kiyomizudera","n":"기요미즈데라","l":"清水寺","c":"교토","a":"히가시야마","t":["사진 명소","전시·문화"],"o":["06:00","18:00"],"x":[],"st":90,"say":"","q":"清水寺"},{"id":"kyo-shinkyogoku","n":"데라마치 · 신쿄고쿠 상점가","l":"寺町 · 新京極","c":"교토","a":"가와라마치","t":["쇼핑","옷·빈티지"],"o":["10:30","19:30"],"x":[],"st":120,"say":"지붕 덮인 쇼핑 거리 두 줄이 나란히 있어요","q":"新京極商店街"},{"id":"kyo-teramachi-north","n":"데라마치 북쪽 (니조 위)","l":"寺町通 二条以北","c":"교토","a":"가와라마치","t":["옷·빈티지","전시·문화"],"o":null,"x":[],"st":60,"say":"골동·옛 판화·중고 기모노 천 가게가 있어요","q":"寺町通 二条"},{"id":"kyo-francois","n":"찻집 프랑수아","l":"フランソア喫茶室","c":"교토","a":"가와라마치","t":["카페"],"o":["10:00","22:00"],"x":[],"st":60,"say":"","q":"フランソア喫茶室"},{"id":"kyo-rokuyosha","n":"롯카쿠샤 지하점","l":"六曜社 地下店","c":"교토","a":"가와라마치","t":["카페"],"o":["08:30","22:00"],"x":["wed"],"st":60,"say":"","q":"六曜社 地下店"},{"id":"kyo-soiree","n":"찻집 소와레","l":"喫茶ソワレ","c":"교토","a":"가와라마치","t":["카페"],"o":["13:00","19:00"],"x":["mon"],"st":60,"say":"","q":"喫茶ソワレ"},{"id":"kyo-keibunsha","n":"게이분샤 이치조지점","l":"恵文社 一乗寺店","c":"교토","a":"이치조지","t":["서점","잡화·소품"],"o":["10:00","21:00"],"x":[],"st":75,"say":"책·잡지 2만 5천 권을 고른 서점","q":"恵文社 一乗寺店"},{"id":"kyo-seikosha","n":"세이코샤 서점","l":"誠光社","c":"교토","a":"진구마루타마치","t":["서점"],"o":["10:00","20:00"],"x":[],"st":60,"say":"주제별로 꽂힌 작은 서점","q":"誠光社"},{"id":"kyo-botanical","n":"교토 부립 식물원","l":"京都府立植物園","c":"교토","a":"기타야마","t":["자연·산책","휴식"],"o":["09:00","17:00"],"x":[],"st":120,"say":"기타야마역에서 걸어서 약 10분","q":"京都府立植物園"},{"id":"kyo-nishiki","n":"니시키 시장","l":"錦市場","c":"교토","a":"가와라마치","t":["맛집"],"o":["10:00","18:00"],"x":["wed"],"st":60,"say":"","q":"錦市場"},{"id":"kyo-byodoin","n":"뵤도인","l":"平等院","c":"교토","a":"우지","t":["전시·문화","사진 명소"],"o":["08:30","17:30"],"x":[],"st":90,"say":"JR 우지역에서 걸어서 10분","q":"平等院"},{"id":"kyo-kamogawa-yuka","n":"가모강 노료유카","l":"鴨川納涼床","c":"교토","a":"폰토초","t":["맛집","사진 명소"],"o":null,"x":[],"st":120,"say":"가모강 서쪽 니조~고조 사이 가게들이 강 위에 평상 자리를 내놔요","q":"先斗町"},{"id":"kyo-yakitori-seseri","n":"요시다야마 세세리","l":"吉田山 せせり","c":"교토","a":"교토역","t":["맛집","야키토리"],"o":null,"x":[],"st":90,"say":"교토역 근처 8석 야키토리 카운터","q":"吉田山 せせり 京都駅"},{"id":"kyo-yakitori-hitomi","n":"스미야키 소사이 도리야 히토미","l":"炭焼創彩鳥家 ひとみ","c":"교토","a":"사쿄","t":["맛집","야키토리"],"o":null,"x":[],"st":90,"say":"","q":"炭焼創彩鳥家 ひとみ"},{"id":"kyo-yakitori-tachibana","n":"야키토리 교토 다치바나","l":"焼鳥 京都橘","c":"교토","a":"나카교","t":["맛집","야키토리"],"o":null,"x":[],"st":90,"say":"교탄바 닭 꼬치","q":"焼鳥 京都橘"},{"id":"kyo-yakitori-torikago","n":"도리카고","l":"鳥かご","c":"교토","a":"시조오미야","t":["맛집","야키토리"],"o":null,"x":[],"st":90,"say":"","q":"鳥かご 四条大宮"},{"id":"osk-fukutaro","n":"오코노미야키 후쿠타로 본점","l":"お好み焼 福太郎 本店","c":"오사카","a":"난바","t":["맛집","오코노미야키"],"o":["17:00","23:30"],"x":[],"st":75,"say":"난바역에서 걸어서 5분","q":"福太郎 本店 千日前"},{"id":"kyo-tsujiri-gion","n":"사료 츠지리 기온 본점","l":"茶寮都路里 祇園本店","c":"교토","a":"기온","t":["카페","말차"],"o":["11:00","18:00"],"x":["wed"],"st":60,"say":"","q":"茶寮都路里 祇園本店"},{"id":"kyo-sannenzaka","n":"산넨자카 · 니넨자카","l":"三年坂 · 二年坂","c":"교토","a":"히가시야마","t":["사진 명소","쇼핑"],"o":null,"x":[],"st":60,"say":"","q":"三年坂"},{"id":"kyo-hanamikoji","n":"기온 하나미코지","l":"花見小路","c":"교토","a":"기온","t":["사진 명소"],"o":null,"x":[],"st":45,"say":"","q":"花見小路"},{"id":"kyo-kamo-delta","n":"가모강 델타","l":"鴨川デルタ","c":"교토","a":"데마치야나기","t":["자연·산책","휴식"],"o":null,"x":[],"st":45,"say":"","q":"鴨川デルタ"},{"id":"kyo-kamogawa-sanjo","n":"가모강 산책 (산조~시조)","l":"鴨川","c":"교토","a":"산조","t":["자연·산책"],"o":null,"x":[],"st":40,"say":"","q":"鴨川 三条"},{"id":"osk-jiyuken","n":"지유켄 난바 본점","l":"自由軒 難波本店","c":"오사카","a":"난바","t":["맛집","카레"],"o":["11:00","20:00"],"x":["mon"],"st":45,"say":"1910년 창업","q":"自由軒 難波本店"},{"id":"osk-kiji","n":"오코노미야키 기지 본점","l":"お好み焼 きじ 本店","c":"오사카","a":"우메다","t":["맛집","오코노미야키"],"o":["11:30","21:30"],"x":["sun"],"st":60,"say":"1969년 문을 연 신우메다 식당가의 오코노미야키집","q":"お好み焼 きじ 本店 新梅田食道街"},{"id":"osk-kougaryu","n":"고가류 아메리카무라 본점","l":"甲賀流 本店","c":"오사카","a":"아메리카무라","t":["맛집","타코야키"],"o":["10:30","20:30"],"x":[],"st":30,"say":"아메리카무라 산카쿠 공원 맞은편","q":"甲賀流 本店 アメリカ村"},{"id":"kyo-takayasu","n":"주카소바 다카야스","l":"中華そば 高安","c":"교토","a":"이치조지","t":["맛집","라멘"],"o":["11:30","26:00"],"x":[],"st":45,"say":"이치조지역에서 걸어서 4분","q":"中華そば 高安 一乗寺"},{"id":"kyo-daiichi-asahi","n":"혼케 다이이치아사히 본점","l":"本家 第一旭 たかばし本店","c":"교토","a":"교토역","t":["맛집","라멘"],"o":["06:00","25:00"],"x":["thu"],"st":45,"say":"교토역에서 걸어서 5분","q":"本家 第一旭 たかばし本店"},{"id":"kyo-mimikou-porta","n":"미미코 교토 포르타점 (카레 우동)","l":"京のカレーうどん 味味香 京都ポルタ店","c":"교토","a":"교토역","t":["맛집","카레"],"o":["11:00","20:00"],"x":[],"st":45,"say":"교토역 지하상가 포르타 안","q":"味味香 京都ポルタ店"}];
+let PLACES = [{"id":"osk-kuromon","n":"구로몬 시장","l":"黒門市場","c":"오사카","a":"닛폰바시","t":["맛집","스시"],"o":["08:00","18:00"],"x":[],"st":75,"say":"","q":"黒門市場"},{"id":"osk-sushi-urara","n":"난바 스시 우라라","l":"難波 すし麗","c":"오사카","a":"난바","t":["맛집","스시"],"o":["12:00","15:00"],"x":[],"st":90,"say":"난바역에서 걸어서 1~2분","q":"難波 すし麗"},{"id":"osk-wanaka","n":"와나카 센니치마에 본점","l":"わなか 千日前本店","c":"오사카","a":"난바","t":["맛집","타코야키"],"o":null,"x":[],"st":30,"say":"","q":"わなか 千日前本店"},{"id":"osk-kukuru","n":"쿠쿠루 도톤보리 본점","l":"たこ家道頓堀くくる 本店","c":"오사카","a":"도톤보리","t":["맛집","타코야키"],"o":null,"x":[],"st":40,"say":"","q":"くくる 道頓堀本店"},{"id":"osk-dotonbori","n":"도톤보리 · 에비스바시","l":"道頓堀 · 戎橋","c":"오사카","a":"도톤보리","t":["사진 명소","술집·밤"],"o":null,"x":[],"st":60,"say":"","q":"戎橋"},{"id":"osk-uranamba","n":"우라난바 술집 거리","l":"裏なんば","c":"오사카","a":"난바","t":["술집·밤","맛집"],"o":null,"x":[],"st":150,"say":"난바역 동쪽, 서서 마시는 집이 많은 골목","q":"裏なんば"},{"id":"osk-nakazakicho","n":"나카자키초 골목","l":"中崎町","c":"오사카","a":"우메다","t":["카페","옷·빈티지"],"o":null,"x":["wed"],"st":120,"say":"쇼와 초기 목조 집들이 남은 골목에 카페·잡화·구제 가게가 모여 있어요","q":"中崎町"},{"id":"osk-taiyonoto","n":"카페 태양의 탑","l":"太陽ノ塔","c":"오사카","a":"나카자키초","t":["카페"],"o":null,"x":[],"st":60,"say":"2002년 나카자키초 카페 문화를 연 집으로 소개돼요","q":"太陽ノ塔 中崎町"},{"id":"osk-horie","n":"호리에 오렌지 스트리트","l":"南堀江 オレンジストリート","c":"오사카","a":"호리에","t":["쇼핑","잡화·소품"],"o":null,"x":[],"st":90,"say":"생활용품·가구·카페가 모인 조용한 거리","q":"オレンジストリート 堀江"},{"id":"osk-amemura","n":"아메리카무라","l":"アメリカ村","c":"오사카","a":"신사이바시","t":["옷·빈티지","신발"],"o":null,"x":[],"st":120,"say":"오사카에서 가장 큰 구제 거리로 소개돼요","q":"アメリカ村"},{"id":"osk-magnets","n":"마그네츠 아메리카무라점","l":"マグネッツ アメリカ村店","c":"오사카","a":"신사이바시","t":["옷·빈티지"],"o":null,"x":[],"st":40,"say":"‘어른이 고른 구제’가 주제인 가게","q":"マグネッツ アメリカ村店"},{"id":"osk-umeda-sky","n":"우메다 스카이빌딩 공중정원","l":"梅田スカイビル 空中庭園展望台","c":"오사카","a":"우메다","t":["사진 명소","술집·밤"],"o":["09:30","22:30"],"x":[],"st":75,"say":"","q":"梅田スカイビル 空中庭園展望台"},{"id":"osk-nakanoshima-museum","n":"오사카 나카노시마 미술관","l":"大阪中之島美術館","c":"오사카","a":"나카노시마","t":["전시·문화"],"o":null,"x":["mon"],"st":120,"say":"","q":"大阪中之島美術館"},{"id":"osk-shinsaibashisuji","n":"신사이바시스지 상점가","l":"心斎橋筋商店街","c":"오사카","a":"신사이바시","t":["쇼핑"],"o":null,"x":[],"st":90,"say":"","q":"心斎橋筋商店街"},{"id":"kyo-kiyomizudera","n":"기요미즈데라","l":"清水寺","c":"교토","a":"히가시야마","t":["사진 명소","전시·문화"],"o":["06:00","18:00"],"x":[],"st":90,"say":"","q":"清水寺"},{"id":"kyo-shinkyogoku","n":"데라마치 · 신쿄고쿠 상점가","l":"寺町 · 新京極","c":"교토","a":"가와라마치","t":["쇼핑","옷·빈티지"],"o":["10:30","19:30"],"x":[],"st":120,"say":"지붕 덮인 쇼핑 거리 두 줄이 나란히 있어요","q":"新京極商店街"},{"id":"kyo-teramachi-north","n":"데라마치 북쪽 (니조 위)","l":"寺町通 二条以北","c":"교토","a":"가와라마치","t":["옷·빈티지","전시·문화"],"o":null,"x":[],"st":60,"say":"골동·옛 판화·중고 기모노 천 가게가 있어요","q":"寺町通 二条"},{"id":"kyo-francois","n":"찻집 프랑수아","l":"フランソア喫茶室","c":"교토","a":"가와라마치","t":["카페"],"o":["10:00","22:00"],"x":[],"st":60,"say":"","q":"フランソア喫茶室"},{"id":"kyo-rokuyosha","n":"롯카쿠샤 지하점","l":"六曜社 地下店","c":"교토","a":"가와라마치","t":["카페"],"o":["08:30","22:00"],"x":["wed"],"st":60,"say":"","q":"六曜社 地下店"},{"id":"kyo-soiree","n":"찻집 소와레","l":"喫茶ソワレ","c":"교토","a":"가와라마치","t":["카페"],"o":["13:00","19:00"],"x":["mon"],"st":60,"say":"","q":"喫茶ソワレ"},{"id":"kyo-keibunsha","n":"게이분샤 이치조지점","l":"恵文社 一乗寺店","c":"교토","a":"이치조지","t":["서점","잡화·소품"],"o":["10:00","21:00"],"x":[],"st":75,"say":"책·잡지 2만 5천 권을 고른 서점","q":"恵文社 一乗寺店"},{"id":"kyo-seikosha","n":"세이코샤 서점","l":"誠光社","c":"교토","a":"진구마루타마치","t":["서점"],"o":["10:00","20:00"],"x":[],"st":60,"say":"주제별로 꽂힌 작은 서점","q":"誠光社"},{"id":"kyo-botanical","n":"교토 부립 식물원","l":"京都府立植物園","c":"교토","a":"기타야마","t":["자연·산책","휴식"],"o":["09:00","17:00"],"x":[],"st":120,"say":"기타야마역에서 걸어서 약 10분","q":"京都府立植物園"},{"id":"kyo-nishiki","n":"니시키 시장","l":"錦市場","c":"교토","a":"가와라마치","t":["맛집"],"o":["10:00","18:00"],"x":["wed"],"st":60,"say":"","q":"錦市場"},{"id":"kyo-byodoin","n":"뵤도인","l":"平等院","c":"교토","a":"우지","t":["전시·문화","사진 명소"],"o":["08:30","17:30"],"x":[],"st":90,"say":"JR 우지역에서 걸어서 10분","q":"平等院"},{"id":"kyo-kamogawa-yuka","n":"가모강 노료유카","l":"鴨川納涼床","c":"교토","a":"폰토초","t":["맛집","사진 명소"],"o":null,"x":[],"st":120,"say":"가모강 서쪽 니조~고조 사이 가게들이 강 위에 평상 자리를 내놔요","q":"先斗町"},{"id":"kyo-yakitori-seseri","n":"요시다야마 세세리","l":"吉田山 せせり","c":"교토","a":"교토역","t":["맛집","야키토리"],"o":null,"x":[],"st":90,"say":"교토역 근처 8석 야키토리 카운터","q":"吉田山 せせり 京都駅"},{"id":"kyo-yakitori-hitomi","n":"스미야키 소사이 도리야 히토미","l":"炭焼創彩鳥家 ひとみ","c":"교토","a":"사쿄","t":["맛집","야키토리"],"o":null,"x":[],"st":90,"say":"","q":"炭焼創彩鳥家 ひとみ"},{"id":"kyo-yakitori-tachibana","n":"야키토리 교토 다치바나","l":"焼鳥 京都橘","c":"교토","a":"나카교","t":["맛집","야키토리"],"o":null,"x":[],"st":90,"say":"교탄바 닭 꼬치","q":"焼鳥 京都橘"},{"id":"kyo-yakitori-torikago","n":"도리카고","l":"鳥かご","c":"교토","a":"시조오미야","t":["맛집","야키토리"],"o":null,"x":[],"st":90,"say":"","q":"鳥かご 四条大宮"},{"id":"osk-fukutaro","n":"오코노미야키 후쿠타로 본점","l":"お好み焼 福太郎 本店","c":"오사카","a":"난바","t":["맛집","오코노미야키"],"o":["17:00","23:30"],"x":[],"st":75,"say":"난바역에서 걸어서 5분","q":"福太郎 本店 千日前"},{"id":"kyo-tsujiri-gion","n":"사료 츠지리 기온 본점","l":"茶寮都路里 祇園本店","c":"교토","a":"기온","t":["카페","말차"],"o":["11:00","18:00"],"x":["wed"],"st":60,"say":"","q":"茶寮都路里 祇園本店"},{"id":"kyo-sannenzaka","n":"산넨자카 · 니넨자카","l":"三年坂 · 二年坂","c":"교토","a":"히가시야마","t":["사진 명소","쇼핑"],"o":null,"x":[],"st":60,"say":"","q":"三年坂"},{"id":"kyo-hanamikoji","n":"기온 하나미코지","l":"花見小路","c":"교토","a":"기온","t":["사진 명소"],"o":null,"x":[],"st":45,"say":"","q":"花見小路"},{"id":"kyo-kamo-delta","n":"가모강 델타","l":"鴨川デルタ","c":"교토","a":"데마치야나기","t":["자연·산책","휴식"],"o":null,"x":[],"st":45,"say":"","q":"鴨川デルタ"},{"id":"kyo-kamogawa-sanjo","n":"가모강 산책 (산조~시조)","l":"鴨川","c":"교토","a":"산조","t":["자연·산책"],"o":null,"x":[],"st":40,"say":"","q":"鴨川 三条"},{"id":"osk-jiyuken","n":"지유켄 난바 본점","l":"自由軒 難波本店","c":"오사카","a":"난바","t":["맛집","카레"],"o":["11:00","20:00"],"x":["mon"],"st":45,"say":"1910년 창업","q":"自由軒 難波本店"},{"id":"osk-kiji","n":"오코노미야키 기지 본점","l":"お好み焼 きじ 本店","c":"오사카","a":"우메다","t":["맛집","오코노미야키"],"o":["11:30","21:30"],"x":["sun"],"st":60,"say":"1969년 문을 연 신우메다 식당가의 오코노미야키집","q":"お好み焼 きじ 本店 新梅田食道街"},{"id":"osk-kougaryu","n":"고가류 아메리카무라 본점","l":"甲賀流 本店","c":"오사카","a":"아메리카무라","t":["맛집","타코야키"],"o":["10:30","20:30"],"x":[],"st":30,"say":"아메리카무라 산카쿠 공원 맞은편","q":"甲賀流 本店 アメリカ村"},{"id":"kyo-takayasu","n":"주카소바 다카야스","l":"中華そば 高安","c":"교토","a":"이치조지","t":["맛집","라멘"],"o":["11:30","26:00"],"x":[],"st":45,"say":"이치조지역에서 걸어서 4분","q":"中華そば 高安 一乗寺"},{"id":"kyo-daiichi-asahi","n":"혼케 다이이치아사히 본점","l":"本家 第一旭 たかばし本店","c":"교토","a":"교토역","t":["맛집","라멘"],"o":["06:00","25:00"],"x":["thu"],"st":45,"say":"교토역에서 걸어서 5분","q":"本家 第一旭 たかばし本店"},{"id":"kyo-mimikou-porta","n":"미미코 교토 포르타점 (카레 우동)","l":"京のカレーうどん 味味香 京都ポルタ店","c":"교토","a":"교토역","t":["맛집","카레"],"o":["11:00","20:00"],"x":[],"st":45,"say":"교토역 지하상가 포르타 안","q":"味味香 京都ポルタ店"}];
 let PLAN = null;
 try { if (!/sample/.test(location.hash)) { const pl = JSON.parse(localStorage.getItem('gaboja-plan')); if (pl && pl.v === 1 && Array.isArray(pl.days) && pl.days.length) PLAN = pl; } } catch (_) {}
 if (PLAN) { DAYS.length = 0; PLAN.days.forEach(d => DAYS.push(d)); Object.keys(NOTES).forEach(k => delete NOTES[k]); Object.assign(NOTES, PLAN.notes || {}); }
 const T0 = PLAN ? PLAN.title : '오사카·교토 3박 4일', TM = T0.match(/^(.+?) (\d+)박 (\d+)일$/);
 const TRIP_TITLE = TM ? TM[1] + '에서 ' + TM[3] + '일' : T0, TRIP_NIGHTS = TM ? TM[2] + '박 ' + TM[3] + '일' : '';
 const TRIP_SUB = PLAN ? PLAN.sub : '12. 4 – 12. 7 · 집에서 집까지', TRIP_DATES = TRIP_SUB.split(' · ')[0];
-if (PLAN) CHECKS.ok = { t:'영업시간 공식 확인 (11/11~11/12)', s:'확인 11/12' }, CHECKS.no = { t:'영업시간 확인 못 함 · 가기 전 확인', s:'확인 필요' };
+if (PLAN) CHECKS.ok = { t:'영업시간 확인 (11/11~11/13)', s:'확인 11/13' }, CHECKS.no = { t:'영업시간 확인 못 함 · 가기 전 확인', s:'확인 필요' };
 const $ = s => document.querySelector(s);
 const esc = s => String(s ?? '').replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
-const toMin = t => { const [h,m] = t.split(':').map(Number); return h*60+m; };
-const toT = m => String(Math.floor(m/60)).padStart(2,'0') + ':' + String(m%60).padStart(2,'0');
+// 현지 정보 = 도시마다 (내 일정의 PLAN.local, gen.js가 도시 설정 cfg.local에서 넣음). 샘플은 위 HTML(오사카) 그대로
+const TIP_IC = { police: '<path d="M12 3l7 3v5c0 4.5-3 8-7 10-4-2-7-5.5-7-10V6z"/>', plus: '<path d="M12 5v14M5 12h14"/>', phone: '<path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a1 1 0 0 1-1 1A16 16 0 0 1 4 5a1 1 0 0 1 1-1"/>', bldg: '<path d="M4 20h16M6 20V10M10 20V10M14 20V10M18 20V10M3 10l9-6 9 6"/>', globe: '<circle cx="12" cy="12" r="8.5"/><path d="M3.5 12h17M12 3.5c2.5 3 2.5 14 0 17M12 3.5c-2.5 3-2.5 14 0 17"/>', doc: '<rect x="5" y="4" width="14" height="16" rx="2"/><path d="M9 9h6M9 13h6M9 17h3"/>', coin: '<circle cx="12" cy="12" r="8.5"/><path d="M9 9l3 4 3-4M9 13h6M12 13v4"/>' };
+function renderTips(L) {
+  const el = document.getElementById('tips'); if (!el || !L || !Array.isArray(L.rows)) return;
+  const ic = k => '<span class="ic"><svg viewBox="0 0 24 24">' + (TIP_IC[k] || TIP_IC.phone) + '</svg></span>';
+  const sum = el.querySelector('summary'), cnt = sum && sum.querySelector('.cnt');
+  if (cnt) cnt.textContent = '긴급 연락처 ' + L.rows.length + ((L.life || []).length ? ' · 생활 정보 ' + L.life.length : '');
+  let h = sum ? sum.outerHTML : '';
+  h += '<div class="grp2">긴급 연락처 · 번호를 누르면 전화</div>';
+  L.rows.forEach(r => { h += '<div class="crow">' + ic(r.ic) + '<span class="nm2"><b class="one">' + esc(r.n) + '</b><span class="src one">' + esc(r.sub || '') + '</span></span><a class="tel" href="' + esc(r.href || 'tel:' + r.tel) + '">' + esc(r.tel) + '</a></div>'; });
+  if ((L.life || []).length) { h += '<div class="grp2">생활 정보</div>'; L.life.forEach(([b, t], i) => { h += '<div class="nrow">' + ic(i % 2 ? 'coin' : 'doc') + '<span class="one"><b>' + esc(b) + '</b> <span class="src">' + esc(t) + '</span></span><span></span></div>'; }); }
+  if (L.src) h += '<div class="nrow"><span></span><span class="src one">' + esc(L.src) + '</span><span></span></div>';
+  if (PLAN && PLAN.carAttr) h += '<div class="cattr">' + esc(PLAN.carAttr) + '</div>';
+  el.innerHTML = h;
+}
+if (PLAN && PLAN.local) { try { renderTips(PLAN.local); } catch (_) {} }
+// 24:00 넘는 시각 = '01:40(다음 날)' 로 표시, 읽을 때 다시 +1440 (옛 저장 일정의 '25:40'도 그대로 읽힘)
+const toMin = t => { const [h,m] = String(t).split(':'); return (+h)*60 + (parseInt(m,10)||0) + (/다음/.test(t) ? 1440 : 0); };
+const toT = m => { m = Math.max(0, Math.round(m)); const nx = m >= 1440; m %= 1440; return String(Math.floor(m/60)).padStart(2,'0') + ':' + String(m%60).padStart(2,'0') + (nx ? '(다음 날)' : ''); };
 const durTx = m => m >= 60 ? Math.floor(m/60) + '시간' + (m%60 ? ' ' + m%60 + '분' : '') : m + '분';
 const gmap = q => 'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(q);
-const gdir = (q, mode) => 'https://www.google.com/maps/dir/?api=1&destination=' + encodeURIComponent(q) + '&travelmode=' + (mode === 'walk' ? 'walking' : 'transit');
+const gdir = (q, mode) => 'https://www.google.com/maps/dir/?api=1&destination=' + encodeURIComponent(q) + '&travelmode=' + (mode === 'walk' ? 'walking' : mode === 'car' ? 'driving' : 'transit');
+// 차 구간 길찾기: 한국 = 카카오맵 자동차 길찾기, 일본 = 구글 지도 (점 = [이름, 위도, 경도])
+const drvLink = v => v.kr ? 'https://map.kakao.com/link/by/car/' + [v.a, v.b].map(p => encodeURIComponent(p[0]) + ',' + p[1] + ',' + p[2]).join('/') : 'https://www.google.com/maps/dir/?api=1&origin=' + v.a[1] + ',' + v.a[2] + '&destination=' + v.b[1] + ',' + v.b[2] + '&travelmode=driving';
+const goHref = (c, q) => c.drv ? drvLink(c.drv) : gdir(q, c.mode);
 const pieceOf = t => { const m = toMin(t); return m < 720 ? 0 : m < 1020 ? 1 : 2; };
 const PIECE = ['오전', '오후', '저녁'];
 const KIND = { m:'이동', p:'장소', f:'식사', x:'꼭 지킬 것', u:'직접 추가' };
@@ -721,7 +742,7 @@ $('#themeSeg').onclick = e => { const b = e.target.closest('[data-th]'); if (b) 
 // list = 기상·취침 뺀 일정(순서가 곧 자리) · slots = 자리마다 원래 시작 시각.
 // 다시 계산: 자리 시각과 앞 일정 끝 중 늦은 쪽에서 시작(밀리기만 함), 비행기는 제 시각 고정.
 DAYS.forEach(d => {
-  d.list = d.items.filter(c => c.k !== 'w').map((c, i) => ({ ...c, id: d.no + '-' + i, o: c.s, du: c.e ? toMin(c.e) - toMin(c.s) : 30 }));
+  d.list = d.items.filter(c => c.k !== 'w').map((c, i) => ({ ...c, id: d.no + '-' + i, o: c.s, du: c.e ? (toMin(c.e) - toMin(c.s) + (toMin(c.e) < toMin(c.s) ? 1440 : 0)) : 30 }));
   d.slots = d.list.map(c => toMin(c.s));
   d.wake = d.items.filter(c => c.k === 'w');
 });
@@ -733,7 +754,7 @@ function recompute(d) {
     let s; if (c.fly) { s = toMin(c.o); if (prev > s) clash = true; } else s = Math.max(d.slots[i], prev);
     const du = c.du + (useLate && d.lates ? d.lates[c.id] || 0 : 0); prev = s + du; return [s, du]; }); return { out, clash }; };
   const base = run(false).out, r = run(true);
-  d.list.forEach((c, i) => { const [s, du] = r.out[i]; c.s = toT(s); c.e = toT(Math.min(s + du, 24*60 - 1)); c.b = base[i][0]; });
+  d.list.forEach((c, i) => { const [s, du] = r.out[i]; c.s = toT(s); c.e = toT(Math.min(s + du, 48*60 - 1)); c.b = base[i][0]; });
   return r.clash;
 }
 function dotOf(d, c) {
@@ -828,22 +849,25 @@ function daySumSheet() {
     + '<div class="path" aria-label="동선: ' + esc(d.route) + '">' + stops.map(s => '<span class="stop2"><i></i><span class="one">' + esc(s) + '</span></span>').join('') + '</div><div class="sumlist">';
   d.list.forEach(c => {
     const cls = nw && c === nw.cur ? 'now-row' : pastOf(nw, c) ? 'past-on' : '';
-    h += '<div class="' + cls + '"><span class="tm">' + c.s + '</span><span class="one">' + esc(c.k === 'm' ? c.mv : c.fly ? '✈ ' + c.fly[1] + ' → ' + c.fly[3] : (c.n.split(' — ')[1] || c.n)) + (cls === 'now-row' ? ' · 지금' : '') + '</span></div>';
+    h += '<div class="' + cls + '"><span class="tm">' + c.s + '</span><span class="one">' + esc(c.k === 'm' ? c.mv : c.fly ? flyTx(c, 1, 3) : (c.n.split(' — ')[1] || c.n)) + (cls === 'now-row' ? ' · 지금' : '') + '</span></div>';
   });
   sheetMode = 'daysum'; openSheet(h + '</div></div>');
 }
 const PLANE_SVG = '<svg viewBox="0 0 24 24"><path d="M21 15.5v-1.6l-8-5V3.6a1.5 1.5 0 0 0-3 0v5.3l-8 5v1.6l8-2.5v5.4l-2 1.5v1.3l3.5-1 3.5 1v-1.3l-2-1.5V13z"/></svg>';
+const TRAIN_SVG = '<svg viewBox="0 0 24 24"><rect x="5" y="3" width="14" height="14" rx="3"/><path d="M5 11h14M9 21l1.5-4M15 21l-1.5-4"/><circle cx="9" cy="14" r=".8"/><circle cx="15" cy="14" r=".8"/></svg>';
+// 비행기·열차 한 줄 표기 (국내 기차 = 'KTX 서울역 → 부산역')
+const flyTx = (c, a, b, tight) => (c.ride === 'train' ? (c.line || '열차') + ' ' : '✈ ') + c.fly[a] + (tight ? '→' : ' → ') + c.fly[b];
 // 비행기 타는 날만: 비행기 일정 칸 = 탑승권 카드 (출발·도착 공항과 시각 · 비행 시간 · 날짜 · 공항 도착 권장 = 출발 2시간 전)
 function flyCard(d, c, cls, top) {
-  const arr = toT(Math.max(toMin(c.s) - 120, 0)), nw = nowOf(d), live = / live/.test(cls || '');
-  const tag = nw && c === nw.cur ? '지금 비행 중' : live ? (nowRef().phase === 'before' ? '출발 ' + d.date.slice(0, 5) : '오늘 탑승') : (PLAN && PLAN.nick ? PLAN.nick : 'MIA');
+  const arr = toT(Math.max(toMin(c.s) - (c.pre || 120), 0)), nw = nowOf(d), live = / live/.test(cls || ''), TR = c.ride === 'train';
+  const tag = nw && c === nw.cur ? (TR ? '지금 이동 중' : '지금 비행 중') : live ? (nowRef().phase === 'before' ? '출발 ' + d.date.slice(0, 5) : '오늘 탑승') : (PLAN && PLAN.nick ? PLAN.nick : 'MIA');
   return '<div class="pass flycard glass' + (cls || '') + '" ' + (top ? 'data-flyday="' + DAYS.indexOf(d) + '" data-fid="' + c.id + '"' : 'data-key="' + c.id + '" data-fixed="1"') + ' role="button" tabindex="0">'
-    + '<div class="hd"><div class="lbl"><span class="eyebrow">' + (c.fno ? esc(c.fno) : 'Boarding pass') + ' · DAY ' + d.no + '</span><span class="eyebrow' + (live ? ' live-tag' : '') + '">' + esc(tag) + '</span></div>'
-    + '<div class="route"><div><div class="code">' + c.fly[0] + '</div><div class="place one">' + c.fly[1] + ' · ' + c.s + ' 출발</div></div>'
-    + '<div class="plane">' + PLANE_SVG + '<small>' + durTx(c.du) + '</small></div>'
-    + '<div class="to"><div class="code">' + c.fly[2] + '</div><div class="place one">' + c.fly[3] + ' · ' + c.e + ' 도착</div></div></div></div>'
+    + '<div class="hd"><div class="lbl"><span class="eyebrow">' + (c.fno ? esc(c.fno) : TR ? esc(c.line || '승차권') : 'Boarding pass') + ' · DAY ' + d.no + '</span><span class="eyebrow' + (live ? ' live-tag' : '') + '">' + esc(tag) + '</span></div>'
+    + '<div class="route"><div><div class="code">' + c.fly[0] + '</div><div class="place' + (/다음 날/.test(c.s) ? '' : ' one') + '">' + c.fly[1] + ' · ' + c.s + ' 출발</div></div>'
+    + '<div class="plane">' + (TR ? TRAIN_SVG : PLANE_SVG) + '<small>' + durTx(c.du) + '</small></div>'
+    + '<div class="to"><div class="code">' + c.fly[2] + '</div><div class="place' + (/다음 날/.test(c.e) ? '' : ' one') + '">' + c.fly[3] + ' · ' + c.e + ' 도착</div></div></div></div>'
     + '<div class="perf"></div>'
-    + '<div class="fields"><div class="fld"><span>날짜</span><b>' + d.date + '</b></div><div class="fld"><span>공항 도착</span><b>' + arr + '까지</b></div><div class="fld"><span>' + (c.fno ? '편명' : '비행') + '</span><b>' + (c.fno ? esc(c.fno) : durTx(c.du)) + '</b></div></div></div>';
+    + '<div class="fields"><div class="fld"><span>날짜</span><b>' + d.date + '</b></div><div class="fld"><span>' + (TR ? '역 도착' : '공항 도착') + '</span><b>' + arr + '까지</b></div><div class="fld"><span>' + (c.fno ? (TR ? '열차' : '편명') : TR ? '소요' : '비행') + '</span><b>' + (c.fno ? esc((TR && c.line ? c.line + ' ' : '') + c.fno) : durTx(c.du)) + '</b></div></div></div>';
 }
 /* ---------- 간단히: 블록 ---------- */
 function blocks(d) {
@@ -855,12 +879,12 @@ function blocks(d) {
     if (!b.length) return;
     h += '<div class="band"><div class="bh"><b>' + PIECE[bi] + '</b><span>' + b[0].s + '</span></div><div class="tiles">';
     b.forEach(c => {
-      if (c.fly && isPinned(c)) { h += '<button class="tile flyref fix wide" data-key="' + c.id + '" data-fixed="1" style="flex-grow:' + c.du + '"><span class="t">' + c.s + '</span><span class="n one">✈ ' + c.fly[0] + ' → ' + c.fly[2] + '</span></button>'; return; }
+      if (c.fly && isPinned(c)) { h += '<button class="tile flyref fix wide" data-key="' + c.id + '" data-fixed="1" style="flex-grow:' + c.du + '"><span class="t">' + c.s + '</span><span class="n one">' + esc(flyTx(c, 0, 2)) + '</span></button>'; return; }
       if (c.fly) { h += flyCard(d, c, nw && c === nw.cur ? ' now-on' : pastOf(nw, c) ? ' past-on' : ''); return; }
       const fx = fixedOf(c), isNow = nw && c === nw.cur, pills = (isNow ? '<span class="now-pill">지금</span>' : '') + memoBadge(c);
       h += '<button class="tile ' + c.k + (fx ? ' fix' : '') + (pills ? ' wide' : '') + (isNow ? ' now-on' : pastOf(nw, c) ? ' past-on' : '') + '" data-key="' + c.id + '"' + (fx ? ' data-fixed="1"' : '') + ' style="flex-grow:' + Math.max(30, c.du) + '">'
         + '<span class="t">' + dotHtml(d, c) + c.s + '<span class="sp"></span>' + (pills ? '<span class="pills">' + pills + '</span>' : '') + '</span>'
-        + '<span class="n one">' + esc(c.fly ? '✈ ' + c.fly[0] + ' → ' + c.fly[2] : (c.sh || c.n)) + '</span></button>';
+        + '<span class="n one">' + esc(c.fly ? flyTx(c, 0, 2) : (c.sh || c.n)) + '</span></button>';
     });
     h += '</div></div>';
   });
@@ -875,15 +899,15 @@ function list(d) {
     flush(toMin(c.s));
     if (c.k === 'm') {
       h += '<div class="li m' + nowCls(c) + '" data-key="' + c.id + '" data-fixed="1"><span class="tm">' + c.s + '</span><span class="c one">' + esc(c.mv) + '</span>'
-        + (c.to ? '<a class="go" href="' + gdir(c.to, c.mode) + '" target="_blank" rel="noopener">길찾기</a>' : '<span></span>') + '</div>';
+        + (c.to || c.drv ? '<a class="go" href="' + goHref(c, c.to) + '" target="_blank" rel="noopener">길찾기</a>' : '<span></span>') + '</div>';
       return;
     }
-    if (c.fly && isPinned(c)) { h += '<div class="li m" data-key="' + c.id + '" data-fixed="1"><span class="tm">' + c.s + '</span><span class="c one" style="color:var(--blue);font-weight:600">✈ ' + c.fly[1] + ' → ' + c.fly[3] + ' · 위 탑승권</span><span></span></div>'; return; }
+    if (c.fly && isPinned(c)) { h += '<div class="li m" data-key="' + c.id + '" data-fixed="1"><span class="tm">' + c.s + '</span><span class="c one" style="color:var(--blue);font-weight:600">' + esc(flyTx(c, 1, 3)) + ' · 위 ' + (c.ride === 'train' ? '승차권' : '탑승권') + '</span><span></span></div>'; return; }
     if (c.fly) { h += flyCard(d, c, nowCls(c)); return; }
     const sub = [], parts = c.n.split(' — '), main = parts[1] || parts[0];
     if (c.ck) sub.push('<span class="' + (c.ck === 'ok' ? 'ok' : '') + '">' + CHECKS[c.ck].s + '</span>');
     if (parts[1]) sub.push(esc(parts[0]));
-    if (c.fly) sub.push('도착 ' + c.e + ' · 출발 2시간 전 공항');
+    if (c.fly) sub.push('도착 ' + c.e + ' · 출발 ' + ((c.pre || 120) >= 60 ? (c.pre || 120) / 60 + '시간' : c.pre + '분') + ' 전 ' + (c.ride === 'train' ? '역' : '공항'));
     if (c.say) sub.push(esc(c.say));
     if (c.k === 'u') sub.push('직접 추가');
     const fx = fixedOf(c);
@@ -1096,10 +1120,10 @@ function renderNow() {
   if (nx) {
     const parts = nx.n.split(' — '), sh = toMin(nx.s) - nx.b;
     h += '<div class="when"><span class="big">' + nx.s + '</span>' + (sh > 0 ? '<span class="chk">원래 ' + toT(nx.b) + '</span>' : '') + '</div>'
-      + '<div class="nm one">' + esc(nx.k === 'm' ? nx.mv : nx.fly ? '✈ ' + nx.fly[1] + ' → ' + nx.fly[3] + (nx.fno ? ' · ' + nx.fno : '') : (parts[1] || parts[0])) + '</div>'
+      + '<div class="nm one">' + esc(nx.k === 'm' ? nx.mv : nx.fly ? flyTx(nx, 1, 3) + (nx.fno ? ' · ' + nx.fno : '') : (parts[1] || parts[0])) + '</div>'
       + (nx.l ? '<div class="lo one"><span class="jp">' + esc(nx.l) + '</span>' + (nx.r ? ' · ' + esc(nx.r) : '') + '</div>' : '')
       + (nx.say ? '<div class="lo one">' + esc(nx.say) + '</div>' : '')
-      + '<div class="acts">' + (nx.q || nx.to ? '<a class="btn sec" href="' + gdir(nx.to || nx.q, nx.mode) + '" target="_blank" rel="noopener">길찾기</a>' : '')
+      + '<div class="acts">' + (nx.q || nx.to || nx.drv ? '<a class="btn sec" href="' + goHref(nx, nx.to || nx.q) + '" target="_blank" rel="noopener">길찾기</a>' : '')
       + '<button class="btn pri" id="arriveBtn">' + (nx.k === 'm' ? '출발' : '도착') + '</button></div>';
   } else if (p.at) { const c = L[p.i]; h += '<div class="nm one">마지막 · ' + esc(c.k === 'm' ? c.mv : (c.sh || c.n)) + '</div><div class="lo">끝나면 눌러서 하루 도장 완성</div><div class="acts"><button class="btn pri" id="endDayBtn">오늘 일정 끝</button></div>'; }
   else h += '<div class="nm">' + (n.phase === 'after' && !st.cur ? '다녀왔어요' : '오늘 일정 끝') + '</div><div class="lo">기록에 DAY ' + d.no + ' 저장</div>'
@@ -1108,7 +1132,7 @@ function renderNow() {
   // 지나온 길 / 남은 길 = 일정 탭과 같은 목록(추가·옮김·보관·늦어짐 그대로)
   $('#track').innerHTML = L.map((x, i) => {
     const cls = (i < p.i || (i === p.i && !p.at)) ? 'past' : i === p.i ? 'now' : '', sh = toMin(x.s) - x.b;
-    const nm = x.k === 'm' ? x.mv : x.fly ? '✈ ' + x.fly[1] + ' → ' + x.fly[3] : (x.sh || x.n);
+    const nm = x.k === 'm' ? x.mv : x.fly ? flyTx(x, 1, 3) : (x.sh || x.n);
     return '<div class="stop ' + cls + (x.k === 'm' ? ' m' : '') + '"><span class="rail"><span class="pt"></span></span><span class="t">' + x.s + '</span><span><b>' + esc(nm) + '</b>'
       + (x.k === 'u' ? '<span class="s2">직접 추가</span>' : '')
       + (sh > 0 && !cls ? '<span class="moved">+' + sh + '분 밀림 · 원래 ' + toT(x.b) + '</span>' : '') + '</span></div>';
@@ -1222,9 +1246,9 @@ function sheetHtml(d, c) {
   if (kv.length) h += '<dl class="kv">' + kv.map(x => '<dt>' + x[0] + '</dt><dd>' + x[1] + '</dd>').join('') + '</dl>';
   if (c.ck) h += '<span class="chk' + (c.ck === 'no' ? ' no' : '') + '">' + CHECKS[c.ck].t + '</span>';
   h += '<div class="memos"><span class="mh">메모' + (L.length ? ' ' + L.length : '') + '</span>' + memoLines(L, key) + memoAdd(key, '예: 여기선 셔츠 보기') + '</div>';
-  const dest = c.q || c.to;
+  const dest = c.q || c.to || (c.drv ? c.drv.b[0] : '');
   if (dest) h += '<div class="acts">' + (c.q ? '<a class="btn pri" href="' + gmap(c.q) + '" target="_blank" rel="noopener">지도</a>' : '')
-    + '<a class="btn sec" href="' + gdir(dest, c.mode) + '" target="_blank" rel="noopener">길찾기</a></div>';
+    + '<a class="btn sec" href="' + goHref(c, dest) + '" target="_blank" rel="noopener">길찾기</a></div>';
   h += fx ? '<p class="sub">고정 일정 · 이동·삭제 불가</p>'
     : '<div class="acts"><button class="btn ghost sm" data-ord="-1">↑ 앞으로</button><button class="btn ghost sm" data-ord="1">↓ 뒤로</button><button class="btn ghost sm" data-del>보관</button></div>';
   return h + '</div>';
@@ -1277,8 +1301,18 @@ $('#sheet').addEventListener('click', e => {
 const WD = { '월':'mon', '화':'tue', '수':'wed', '목':'thu', '금':'fri', '토':'sat', '일':'sun' };
 const WDK = { mon:'월', tue:'화', wed:'수', thu:'목', fri:'금', sat:'토', sun:'일' };
 let addPick = null;   // { p: 장소 DB 항목 또는 null, name, du, sug, when }
+// 일정 추가의 추천·검색 장소: 오사카·교토(kix)와 샘플 = 위 목록. 다른 도시 일정 = gen-data.js(장소 DB 전체)를 불러와 같은 모양으로 바꿔 씀 (없으면 목록 그대로)
+(function () {
+  const dest = PLAN && PLAN.dest; if (!dest || dest === 'kix') return;
+  const apply = () => {
+    const D = window.GABOJA_DATA; if (!D || !D.places) return;
+    PLACES = Object.entries(D.places).map(([id, p]) => { const h = p.h, o = h && h.o && h.o[0] && !/^거리/.test(p.oTx || '') ? h.o[0] : null;
+      return { id, n: p.n, l: p.l || '', c: p.city, a: (D.clName && D.clName[p.cl]) || '', t: p.tg || [], o, x: (h && h.x) || [], st: p.st || 60, say: p.say || '', q: p.q || p.n }; });
+  };
+  if (window.GABOJA_DATA) apply(); else { try { fetch('gen-data.js?v=6').then(r => r.arrayBuffer()).then(b => { (0, eval)(new TextDecoder('utf-8').decode(b)); apply(); }).catch(() => {}); } catch (_) {} }   /* 페이지 글자 설정과 상관없이 UTF-8로 읽음 */
+})();
 const inPlan = (d, p) => d.list.some(c => (c.l && p.l && (c.l.includes(p.l) || p.l.includes(c.l))) || (c.q && p.q && c.q === p.q) || (c.n || '').includes(p.n));
-const hoursTx = p => p && p.o ? p.o[0] + '–' + (toMin(p.o[1]) >= 1440 ? toT(toMin(p.o[1]) - 1440) + '(다음 날)' : p.o[1]) : '';
+const hoursTx = p => p && p.o ? (toMin(p.o[1]) === 1440 ? (p.o[0] === '00:00' ? '24시간' : p.o[0] + '–24:00') : p.o[0] + '–' + (toMin(p.o[1]) > 1440 ? toT(toMin(p.o[1]) - 1440) + '(다음 날)' : p.o[1])) : '';
 function linkName(v) {   // 구글 지도 링크에서 장소 이름 꺼내기 (긴 링크만. 짧은 공유 링크는 앱 버전에서 서버가 열어 읽음)
   if (!/^https?:\/\//i.test(v)) return { name: v };
   if (/maps\.app\.goo\.gl|goo\.gl\/maps/i.test(v)) return { name: '', short: true };
@@ -1291,7 +1325,8 @@ function linkName(v) {   // 구글 지도 링크에서 장소 이름 꺼내기 (
 function findPlaces(q) {
   const s = q.toLowerCase().replace(/\s+/g, '');
   if (!s) return [];
-  return PLACES.filter(p => (p.n + p.l + p.a + p.t.join('')).toLowerCase().replace(/\s+/g, '').includes(s)).slice(0, 5);
+  const cy = (DAYS[st.day] || {}).city;   // 그날 도시의 장소만
+  return PLACES.filter(p => (!cy || p.c === cy) && (p.n + p.l + p.a + p.t.join('')).toLowerCase().replace(/\s+/g, '').includes(s)).slice(0, 5);
 }
 // 추천 시작 시각: 앞 일정 끝 ~ 다음 일정 시작 사이 빈 시간 중 영업시간 안에 다 들어가는 첫 자리. 없으면 영업시간 안 첫 자리(뒤 일정이 밀림)
 function suggest(d, p, du) {
@@ -1366,7 +1401,7 @@ function doAdd() {
 function menuSheet(k) {
   if (k === 'sum') {
     let h = '<div class="shd"><div><span class="eyebrow">여행 요약</span><h3 id="sheetTitle">' + esc(TRIP_TITLE) + '</h3></div>' + X_BTN + '</div><div class="body">';
-    DAYS.forEach(d => { h += '<div class="sumday"><b>DAY ' + d.no + ' · ' + d.date + '</b><p>' + d.list.filter(c => c.k !== 'm').map(c => '<span class="muted">' + c.s + '</span> ' + esc(c.fly ? '✈ ' + c.fly[0] + '→' + c.fly[2] : (c.sh || c.n))).join(' · ') + '</p></div>'; });
+    DAYS.forEach(d => { h += '<div class="sumday"><b>DAY ' + d.no + ' · ' + d.date + '</b><p>' + d.list.filter(c => c.k !== 'm').map(c => '<span class="muted">' + c.s + '</span> ' + esc(c.fly ? flyTx(c, 0, 2, 1) : (c.sh || c.n))).join(' · ') + '</p></div>'; });
     openSheet(h + '</div>');
   } else if (k === 'arc') { arcSheet(); }
   else if (k === 'install') {
