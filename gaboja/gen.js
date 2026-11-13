@@ -17,7 +17,8 @@
   const toT = m => { m = Math.max(0, Math.round(m)); const nx = m >= 1440; m %= 1440; return String(Math.floor(m / 60)).padStart(2, '0') + ':' + String(m % 60).padStart(2, '0') + (nx ? '(다음 날)' : ''); };
   // 출발 a → 도착 b (둘 다 'HH:MM'): 도착이 더 이르면 다음 날로 보고 +1440
   const spanEnd = (a, b) => { const x = toMin(a), y = toMin(b); return y < x ? y + 1440 : y; };
-  const r5 = m => Math.ceil(m / 5) * 5;
+  // 11/13: 5분 올림 제거 — 이동·도착 시각은 데이터의 실제 분(8분 등) 그대로. (r5는 이제 정수로만 맞춤)
+  const r5 = m => Math.round(m);
   // 차(운전) 이동 시간 정책 (2026-11-13) — 값은 전부 여기 한 곳. 시간 = 기준분(경로 엔진 표 car_times.json) × 혼잡 배수 + 버퍼
   // 근거 구분: [근거] = 확인한 자료가 있는 부분, [추정] = 아키 추정(출처 없음, 바꿔도 됨)
   const CAR_POLICY = {
@@ -50,6 +51,19 @@
   // 날짜에 따라 다른 결과가 나오게 하는 고정 난수
   function rng(seed) { let h = 2166136261; for (const ch of seed) { h ^= ch.charCodeAt(0); h = Math.imul(h, 16777619); } return () => { h ^= h << 13; h ^= h >>> 17; h ^= h << 5; return ((h >>> 0) % 1000) / 1000; }; }
 
+  // 시간대 제약 (11/13): 밤에만 의미 있는 곳('night') · 아침에만 되는 곳('morning'). 식당은 영업시간 경고만(제약 없음).
+  //  night = 술집(bar) · 이름·한 줄·태그에 야경/일루미네이션/야시장/포장마차/야타이/이자카야 · 영업이 17:00 이후에만 시작 · 밤 전용 조각(slots=[night])의 구경거리(sight·street·event)
+  //  morning = 영업이 14:00 안에 끝남 (예: 시장 09:00–14:00). 앱이 17:30 전 = night, 12:00 이후 = morning 이면 옮김·추가를 막음
+  const TW_NIGHT = /야경|일루미네이션|야시장|포장마차|야타이|이자카야/;
+  function twOf(p, nightPiece) {
+    if (p.kind === 'restaurant' || p.kind === 'hub') return '';
+    const o = p.h && p.h.o && p.h.o.length && !/^거리/.test(p.oTx || '') ? p.h.o : null;
+    if (p.kind === 'bar' || TW_NIGHT.test([p.n, p.say || '', (p.tg || []).join(' ')].join(' '))) return 'night';
+    if (o && o.every(([a]) => toMin(a) >= 1020)) return 'night';
+    if (nightPiece && ['sight', 'street', 'event'].includes(p.kind)) return 'night';
+    if (o && o.every(([, b]) => toMin(b) <= 840)) return 'morning';
+    return '';
+  }
   // 장소가 그 날·그 시각에 되는지: {ok, start(기다린 뒤 시작), why}
   function openAt(p, date, t, stay) {
     const wd = WD[date.getDay()], md = String(date.getMonth() + 1).padStart(2, '0') + '-' + String(date.getDate()).padStart(2, '0'), ymd = date.getFullYear() + '-' + md;
@@ -69,7 +83,7 @@
       let s = t; if (s < O) { if (O - s > 45) continue; s = O; }
       if (s > last) continue;
       if (s + Math.min(stay, 30) > C) continue;
-      return { ok: true, start: s, end: Math.min(s + stay, C), waited: s > t, opensAt: s === O && s > t ? o : null };
+      return { ok: true, start: s, end: Math.min(s + stay, C), waited: s > t, opensAt: s === O && s > t ? o : null, ran: [o, c] };
     }
     return { ok: false, why: '영업시간 밖' };
   }
@@ -90,12 +104,15 @@
     // 도시 설정 (gen-data.js의 cfg: 공항·숙소 동네·공항↔숙소 이동) — kix = 오사카·교토, tyo = 도쿄
     const C = (D.cfg || {})[input.dest] || (D.cfg || {}).kix;
     const DOM = !!C.domestic;   // 국내(서울·부산): 비행기 대신 기차·국내선·차·집에서 바로
-    const stayRaw = String(input.stayTx || '').trim(), matchB = C.bases.find(b => b.re && new RegExp(b.re).test(stayRaw));
+    const stayRaw = String(input.stayTx || '').trim(), matchB = C.bases.find(b => b.re && new RegExp(b.re).test(stayRaw)) || (stayRaw && C.bases.find(b => stayRaw.includes(b.name.split('·')[0].trim())));
     const B = matchB || C.bases[0];
-    const base = B.key, baseName = B.name;
+    const base = B.key, calcName = B.name;
+    // 화면에 쓰는 숙소 이름: 목록에 있으면 동네 이름, 없으면 사용자가 적은 말 그대로(계산만 첫 동네 기준). 지도 검색어도 같은 말 (11/13)
+    const baseName = matchB || !stayRaw ? calcName : stayRaw.slice(0, 14), BQ = matchB || !stayRaw ? (D.clQ[base] || calcName) : stayRaw;
     // 숙소 동네가 목록에 없으면 첫 동네로 계산 → 1일차 회색 주의에 알림 (아래 notes[1])
-    const stayUnknown = stayRaw && !matchB && !C.bases.some(b => stayRaw.includes(b.name.split('·')[0].trim())) ? '숙소 ‘' + stayRaw.slice(0, 20) + '’은 목록에 없어 ' + baseName + ' 기준으로 계산' : '';
+    const stayUnknown = stayRaw && !matchB ? '숙소 ‘' + stayRaw.slice(0, 20) + '’ → 목록에 없는 동네라 이동 시간은 ' + calcName + ' 기준으로 계산' : '';
     if (stayUnknown) assumed.push(stayUnknown);
+    else if (!stayRaw) assumed.push('숙소 미정 → ' + calcName + ' 기준으로 계산');
     const fnoOut = String(fo.no || '').toUpperCase().slice(0, 8), fnoBack = String(fb.no || '').toUpperCase().slice(0, 8);
     const durK = m => (m >= 60 ? Math.floor(m / 60) + '시간' + (m % 60 ? ' ' + m % 60 + '분' : '') : m + '분');
     let apK = null, AP = null, TB = null, R = null, mode = 'intl', out, back, outOk, backOk, homeMin = 75; // 집 → 인천공항 (주소별 계산은 앱 단계, 지금은 가정)
@@ -190,7 +207,10 @@
         const o = openAt(p, date, cur, st.stay); if (!o.ok) return { fail: p.n + ' ' + o.why };
         const s = o.start, e = s + st.stay;
         if (o.end && e > o.end + 1) return { fail: p.n + ' 닫는 시각' };
-        items.push({ k: st.meal && st.meal !== '간식' ? 'f' : (o.opensAt ? 'x' : 'p'), s, e, n: (st.meal && st.meal !== '간식' ? st.meal + ' — ' : '') + p.n, sh: p.sh || p.n, l: p.l, say: p.say || '', q: p.q, ck: o.unknown ? 'no' : 'ok', info: p.oTx ? [['영업', p.oTx]] : null, pid: st.place, meal: st.meal });
+        const tw = twOf(p, pc.slots && pc.slots.length === 1 && pc.slots[0] === 'night');
+        if (tw === 'night' && s < 1050) return { fail: p.n + ' 밤 전용(17:30 이후)' };   // 11/13: 야경·바 같은 밤 전용을 낮 시각에 넣지 않음
+        if (tw === 'morning' && s >= 720) return { fail: p.n + ' 아침 전용(정오 전)' };
+        items.push({ k: st.meal && st.meal !== '간식' ? 'f' : (o.opensAt ? 'x' : 'p'), s, e, n: (st.meal && st.meal !== '간식' ? st.meal + ' — ' : '') + p.n, sh: p.sh || p.n, l: p.l, say: p.say || '', q: p.q, ck: o.unknown ? 'no' : 'ok', info: p.oTx ? [['영업', p.oTx]] : null, pid: st.place, meal: st.meal, tw: tw || undefined, oh: o.ran });
         if (o.opensAt) warn.push({ lv: 'red', ref: p.sh || p.n, t: (p.sh || p.n) + ' ' + o.opensAt + ' 문 열 때 맞춰 도착' });
         if (o.unknown) warn.push({ lv: 'amber', ref: p.sh || p.n, t: (p.sh || p.n) + ' 영업시간 확인 필요 · 전날 확인' });
         cur = e; loc = cl(st.place);
@@ -243,10 +263,11 @@
       for (const [id, p] of near.sort(() => rand() - 0.5).sort((a, b) => (cl(a[0]) !== at) - (cl(b[0]) !== at))) {
         const go = cl(id) === at ? 0 : mins(at, cl(id));
         const o = openAt(p, date, t + go, p.st || 60); if (!o.ok || o.start > lim) continue;
+        const dur = o.end ? Math.min(p.st || 60, o.end - o.start) : (p.st || 60); if (dur < 30) continue;   // 닫는 시각을 넘기지 않게 식사 시간을 줄임 (11/13)
         usedPlaces.add(id);
         const items = []; if (go) items.push({ k: 'm', s: t, e: t + go, mode: 'train', n: '이동', mv: '약 ' + go + '분' + estTx(at, cl(id)), to: p.q, tc: cl(id) });
-        items.push({ k: 'f', s: o.start, e: o.start + (p.st || 60), n: kind + ' — ' + p.n, sh: p.sh || p.n, l: p.l, say: p.say || '', q: p.q, ck: o.unknown ? 'no' : 'ok', info: p.oTx ? [['영업', p.oTx]] : null, pid: id });
-        return { items, end: o.start + (p.st || 60), loc: cl(id), warn: o.unknown ? [{ lv: 'amber', ref: p.sh || p.n, t: (p.sh || p.n) + ' 영업시간 확인 필요' }] : [] };
+        items.push({ k: 'f', s: o.start, e: o.start + dur, n: kind + ' — ' + p.n, sh: p.sh || p.n, l: p.l, say: p.say || '', q: p.q, ck: o.unknown ? 'no' : 'ok', info: p.oTx ? [['영업', p.oTx]] : null, pid: id, oh: o.ran });
+        return { items, end: o.start + dur, loc: cl(id), warn: o.unknown ? [{ lv: 'amber', ref: p.sh || p.n, t: (p.sh || p.n) + ' 영업시간 확인 필요' }] : [] };
       }
       const area = D.clName[at] || '근처';
       return { items: [{ k: 'f', s: t, e: t + 60, n: kind + ' — ' + area + ' 근처', sh: kind, say: '현장 선택 · 줄이 길면 옆 가게', q: D.clQ[at] || area }], end: t + 60, loc: at, warn: [] };
@@ -266,14 +287,14 @@
       const addBlock = (slot, until, cityX) => { const b = place(cityX || city, slot, date, t, at, until); if (!b) return false; push(decorate(b)); nt.push(...b.warn); blocks.push(b.pc.name); t = b.end; at = b.loc; return true; };
       const decorate = b => { const its = b.items.map(x => ({ ...x })); if (b.alt) { const f = its.find(x => x.k !== 'm'); if (f) f.say = '또는 ' + b.alt.name + (f.say ? ' · ' + f.say : ''); } return its; };
       const addMeal = kind => { const m = meal(kind, city, date, t, at); push(m.items); nt.push(...m.warn); t = m.end; at = m.loc; };
-      const rest = (len, why) => { const back = at === base ? 0 : mins(at, base); if (back) it.push({ k: 'm', s: t, e: t + back, mode: 'train', n: '숙소로', mv: '숙소로 · 약 ' + back + '분' + estTx(at, base), to: D.clQ[base] }); t += back; it.push({ k: 'p', s: t, e: t + len, n: why, sh: '숙소 휴식' }); t += len; at = base; };
+      const rest = (len, why) => { const back = at === base ? 0 : mins(at, base); if (back) it.push({ k: 'm', s: t, e: t + back, mode: 'train', n: '숙소로', mv: '숙소로 · 약 ' + back + '분' + estTx(at, base), to: BQ }); t += back; it.push({ k: 'p', s: t, e: t + len, n: why, sh: '숙소 휴식', q: BQ }); t += len; at = base; };
       // 첫날 도착 뒤: 짐 → 점심(11:00~14:30) → 오후 조각 → 체크인/휴식 → 저녁(~21:00) → 밤 조각. 한밤 도착이면 체크인만
       const arriveTail = bagSay => {
-        if (t >= toMin('21:00')) { it.push({ k: 'p', s: t, e: t + 30, sh: '체크인', n: baseName + ' · 숙소 체크인' }); t += 30; at = base; return; }
-        it.push({ k: 'p', s: t, e: t + 30, sh: '숙소 · 짐', n: baseName + ' · 숙소에 짐 맡기기', say: bagSay }); t += 30;
+        if (t >= toMin('21:00')) { it.push({ k: 'p', s: t, e: t + 30, sh: '체크인', n: baseName + ' · 숙소 체크인', q: BQ }); t += 30; at = base; return; }
+        it.push({ k: 'p', s: t, e: t + 30, sh: '숙소 · 짐', n: baseName + ' · 숙소에 짐 맡기기', say: bagSay, q: BQ }); t += 30;
         if (!ate.l && t < toMin('12:30')) addMeal('점심');
         if (t <= toMin('15:30')) addBlock('pm', toMin(F ? '18:00' : '17:00'));
-        if (!F) rest(60, '숙소 체크인 · 휴식'); else if (t < toMin('17:30')) { it.push({ k: 'p', s: t, e: t + 30, sh: '체크인', n: '숙소 체크인' }); t += 30; at = base; }
+        if (!F) rest(60, '숙소 체크인 · 휴식'); else if (t < toMin('17:30')) { it.push({ k: 'p', s: t, e: t + 30, sh: '체크인', n: '숙소 체크인', q: BQ }); t += 30; at = base; }
         if (!ate.d) { t = Math.max(t, toMin('18:00')); if (t <= toMin('20:30')) addMeal('저녁'); }
         if (F && t <= toMin('20:30')) addBlock('night', toMin('22:30'));
       };
@@ -281,7 +302,7 @@
       const checkoutMorning = leave => {
         const ck = Math.min(toMin('10:00'), leave - 30);
         it.push({ k: 'w', s: Math.min(toMin('08:30'), ck - 30), n: '기상', say: '짐 싸기' });
-        it.push({ k: 'p', s: ck, e: ck + 30, sh: '체크아웃', n: '체크아웃' }); return ck + 30;
+        it.push({ k: 'p', s: ck, e: ck + 30, sh: '체크아웃', n: '체크아웃', q: BQ }); return ck + 30;
       };
       let title = '', route = [];
       if (i === 1 && DOM) {
@@ -292,17 +313,17 @@
           it.push({ k: 'p', s: hub, e: dep, sh: R.fromName, n: R.fromName, say: mode === 'air' ? '탑승 수속·보안 검색 먼저' : '타는 곳 확인', q: R.fromName });
           it.push({ k: 'x', s: dep, e: arr, fly: [R.fc, R.fromName, R.tc, R.toName], ride: mode, line: R.lineTx, pre: R.pre, fno: fnoOut || undefined, n: R.lineTx + ' · ' + R.fromName + ' → ' + R.toName + (fnoOut ? ' ' + fnoOut : ''), mv: R.lineTx });
           it.push({ k: 'p', s: arr, e: arr + R.ex, sh: R.toName, n: R.toName + ' 도착', say: TB[1] + ' 타는 곳으로', q: R.toName });
-          it.push({ k: 'm', s: arr + R.ex, e: arr + R.ex + TB[0], mode: 'train', n: TB[1], mv: TB[1] + ' · 약 ' + TB[0] + '분', to: D.clQ[base] });
+          it.push({ k: 'm', s: arr + R.ex, e: arr + R.ex + TB[0], mode: 'train', n: TB[1], mv: TB[1] + ' · 약 ' + TB[0] + '분', to: BQ });
           t = r5(arr + R.ex + TB[0]); route = ['집', R.fromName, R.toName, baseName];
         } else if (mode === 'car') {
           const leave = toMin(R.carOut[0]), L = R.tabOut ? carLeg(R.kOut, leave, date) : null, arrv = L ? L.arr : Math.max(spanEnd(R.carOut[0], R.carOut[1]), leave + 30);
           it.push({ k: 'w', s: leave - 45, n: '기상', say: '짐 싣기 · 주차 확인' });
-          it.push({ k: 'm', s: leave, e: arrv, mode: 'car', n: '차로 출발', mv: '집 → ' + baseName + ' · 차' + (L ? ' 약 ' : '로 약 ') + durK(arrv - leave) + (L ? ' (추정)' : outOk ? '' : ' (가정)'), to: D.clQ[base], drv: L ? L.drv : undefined });
+          it.push({ k: 'm', s: leave, e: arrv, mode: 'car', n: '차로 출발', mv: '집 → ' + baseName + ' · 차' + (L ? ' 약 ' : '로 약 ') + durK(arrv - leave) + (L ? ' (추정)' : outOk ? '' : ' (가정)'), to: BQ, drv: L ? L.drv : undefined });
           t = r5(arrv + (L ? CAR_POLICY.parkMin : 0)); route = ['집', baseName];
         } else {
           const leave = toMin('10:00');
           it.push({ k: 'w', s: leave - 60, n: '기상', say: '짐 챙기기' });
-          it.push({ k: 'm', s: leave, e: leave + R.min, mode: 'home', n: '집에서 출발', mv: '집 → ' + baseName + ' · 지하철 약 ' + R.min + '분 (가정)', to: D.clQ[base] });
+          it.push({ k: 'm', s: leave, e: leave + R.min, mode: 'home', n: '집에서 출발', mv: '집 → ' + baseName + ' · 지하철 약 ' + R.min + '분 (가정)', to: BQ });
           t = r5(leave + R.min); route = ['집', baseName];
         }
         arriveTail(mode === 'car' ? '체크인 전 짐·주차' : '체크인 전 짐만 보관');
@@ -314,9 +335,9 @@
         let leave2 = leave;
         t = checkoutMorning(leave);
         if (leave - t >= 150) { addBlock('am', leave - 60); }
-        if (leave - t >= 50 && !ate.l && t <= toMin('14:30')) { const m = meal('점심', C.main, date, t, at); if (m.end + (m.loc === base ? 0 : mins(m.loc, base)) <= leave) { push(m.items); t = m.end; at = m.loc; } else { it.push({ k: 'f', s: t, e: t + 40, n: (t < 660 ? '브런치' : '점심') + ' — ' + baseName + ' 근처', sh: '점심', say: '출발 전 간단히', q: D.clQ[base] }); t += 40; at = base; } }
+        if (leave - t >= 50 && !ate.l && t <= toMin('14:30')) { const m = meal('점심', C.main, date, t, at); if (m.end + (m.loc === base ? 0 : mins(m.loc, base)) <= leave) { push(m.items); t = m.end; at = m.loc; } else { it.push({ k: 'f', s: t, e: t + 40, n: (t < 660 ? '브런치' : '점심') + ' — ' + baseName + ' 근처', sh: '점심', say: '출발 전 간단히', q: BQ }); t += 40; at = base; } }
         if (R.pre && leave - t >= 150) { addBlock('pm', leave - 60); }
-        if (at !== base) { const b = mins(at, base); it.push({ k: 'm', s: t, e: t + b, mode: 'train', n: '숙소로', mv: '짐 찾으러 · 약 ' + b + '분' + estTx(at, base) }); t += b; at = base; }
+        if (at !== base) { const b = mins(at, base); it.push({ k: 'm', s: t, e: t + b, mode: 'train', n: '숙소로', mv: '짐 찾으러 · 약 ' + b + '분' + estTx(at, base), to: BQ }); t += b; at = base; }
         if (t > leave) leave2 = t;
         if (R.pre) {
           it.push({ k: 'm', s: leave2, e: Math.max(hub, leave2 + TB[0]), mode: 'train', n: TB[1], mv: R.toName + '으로 · ' + TB[1] + ' 약 ' + TB[0] + '분', to: R.toName });
@@ -344,15 +365,15 @@
         it.push({ k: 'x', s: dep, e: arr, fly: ['ICN', '인천', apK, AP.name], fno: fnoOut || undefined, n: '비행기 · 인천 → ' + AP.name + (fnoOut ? ' ' + fnoOut : ''), mv: '비행기' });
         it.push({ k: 'p', s: arr, e: arr + 60, sh: AP.name + '공항', n: AP.name + '공항 도착', l: AP.l, say: AP.say, q: AP.q });
         const tr = TB[0];
-        it.push({ k: 'm', s: arr + 60, e: arr + 60 + tr, mode: 'train', n: TB[1], mv: TB[1] + ' · 약 ' + tr + '분', to: D.clQ[base] });
+        it.push({ k: 'm', s: arr + 60, e: arr + 60 + tr, mode: 'train', n: TB[1], mv: TB[1] + ' · 약 ' + tr + '분', to: BQ });
         t = r5(arr + 60 + tr); arriveTail('체크인 전 짐만 보관');
         title = '도착하자마자 ' + (blocks[0] || '동네 산책'); route = ['집', '인천공항', AP.name + '공항', baseName];
       } else if (i === N) {
         const dep = toMin(back[0]), arr = spanEnd(back[0], back[1]), airport = dep - 120, leave = airport - (TB[0] + 5); let leave2 = leave;
         t = checkoutMorning(leave);
         if (leave - t >= 150) { addBlock('am', leave - 60); }
-        if (leave - t >= 50 && !ate.l && t <= toMin('14:30')) { const m = meal('점심', C.main, date, t, at); if (m.end + (m.loc === base ? 0 : mins(m.loc, base)) <= leave) { push(m.items); t = m.end; at = m.loc; } else { it.push({ k: 'f', s: t, e: t + 40, n: (t < 660 ? '브런치' : '점심') + ' — ' + baseName + ' 역 근처', sh: '점심', say: '공항 가기 전 간단히', q: D.clQ[base] }); t += 40; at = base; } }
-        if (at !== base) { const b = mins(at, base); it.push({ k: 'm', s: t, e: t + b, mode: 'train', n: '숙소로', mv: '짐 찾으러 · 약 ' + b + '분' + estTx(at, base) }); t += b; at = base; }
+        if (leave - t >= 50 && !ate.l && t <= toMin('14:30')) { const m = meal('점심', C.main, date, t, at); if (m.end + (m.loc === base ? 0 : mins(m.loc, base)) <= leave) { push(m.items); t = m.end; at = m.loc; } else { it.push({ k: 'f', s: t, e: t + 40, n: (t < 660 ? '브런치' : '점심') + ' — ' + baseName + ' 역 근처', sh: '점심', say: '공항 가기 전 간단히', q: BQ }); t += 40; at = base; } }
+        if (at !== base) { const b = mins(at, base); it.push({ k: 'm', s: t, e: t + b, mode: 'train', n: '숙소로', mv: '짐 찾으러 · 약 ' + b + '분' + estTx(at, base), to: BQ }); t += b; at = base; }
         if (t > leave) leave2 = t;
         it.push({ k: 'm', s: leave2, e: Math.max(airport, leave2 + TB[0]), mode: 'train', n: TB[1], mv: '공항으로 · ' + TB[1] + ' 약 ' + TB[0] + '분', to: AP.q });
         it.push({ k: 'x', s: airport, e: dep, sh: AP.name + '공항', n: AP.name + '공항 · 체크인', l: AP.l, say: '면세품 있으면 세관 먼저', q: AP.q });
@@ -375,7 +396,7 @@
         if (!F) rest(city === C.side ? 45 : 75, '숙소 휴식');
         if (!ate.d) { t = Math.max(t, toMin('18:30')); if (t <= toMin('21:00')) addMeal('저녁'); }
         if (F && t <= toMin('20:30')) addBlock('night', toMin('22:00'));
-        if (at !== base) { const b = mins(at, base); it.push({ k: 'm', s: t, e: t + b, mode: 'train', n: '숙소로', mv: '숙소로 · 약 ' + b + '분' + estTx(at, base), to: D.clQ[base] }); t += b; }
+        if (at !== base) { const b = mins(at, base); it.push({ k: 'm', s: t, e: t + b, mode: 'train', n: '숙소로', mv: '숙소로 · 약 ' + b + '분' + estTx(at, base), to: BQ }); t += b; }
         title = (city === C.side ? C.side + ' — ' : '') + (blocks.slice(0, 2).join(' · ') || '자유 일정');
         route = [baseName].concat(it.filter(x => x.tc).map(x => D.clName[x.tc])).concat(at === base ? [] : [baseName]);
       }
@@ -385,7 +406,7 @@
       const flyS = it.filter(x => x.fly && x.s != null).map(x => x.s);
       const items = it.filter(x => x.s != null).map(x => { const o = { ...x }; if (x.fly) { o.s = toT(x.s); o.e = toT(x.e); } else { o.s = toT(r5(x.s)); if (x.e != null) { let e = Math.max(r5(x.e), r5(x.s)); const nf = flyS.find(f => f >= x.s && f < e); if (nf != null) e = Math.max(nf, r5(x.s)); o.e = toT(e); } }   /* 5분 올림이 뒤 열차·비행기 출발 시각을 넘지 않게 */   /* 비행기·열차 = 실제 시각 그대로 */ delete o.tc; delete o.pid; delete o.meal; if (!o.info) delete o.info; return o; });
       const seen = new Set(); notes[i] = nt.filter(n => { const k = n.t; if (seen.has(k)) return false; seen.add(k); return true; }).slice(0, 4);
-      days.push({ no: i, city, date: fmtD(date), title, route: route.filter((x, k, a) => x && x !== a[k - 1]).join(' → '), drop: blocks.length ? blocks[blocks.length - 1] + ' 먼저 빼기' : '', codes: '', items });
+      days.push({ no: i, city, base: baseName, date: fmtD(date), title, route: route.filter((x, k, a) => x && x !== a[k - 1]).join(' → '), drop: blocks.length ? blocks[blocks.length - 1] + ' 먼저 빼기' : '', codes: '', items });
     }
     const wd = DOM && mode === 'train' ? '열차' : '비행기';
     if (!DOM || R.pre) {

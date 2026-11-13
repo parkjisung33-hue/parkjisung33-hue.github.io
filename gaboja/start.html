@@ -55,7 +55,8 @@ html { font-size: clamp(13.5px, calc(100vw * 16 / 390), 18px); -webkit-text-size
 body { margin: 0; word-break: keep-all; overflow-wrap: anywhere; background: var(--canvas); color: var(--ink); font-family: var(--kr); font-size: 0.9375rem; line-height: 1.5; letter-spacing: -.01em; font-variant-numeric: tabular-nums; }
 body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 10; background: var(--canvas); }
 button { font: inherit; color: inherit; background: none; border: 0; padding: 0; cursor: pointer; letter-spacing: inherit; text-align: inherit; }
-button:focus-visible, a:focus-visible, input:focus-visible { outline: 2px solid var(--blue); outline-offset: 2px; }
+/* 포커스 테두리는 안쪽으로 (바깥으로 그리면 main의 overflow-x: clip에 좌우가 잘림) */
+button:focus-visible, a:focus-visible, input:focus-visible { outline: 2px solid var(--blue); outline-offset: -2px; }
 [tabindex="-1"]:focus, [tabindex="-1"]:focus-visible { outline: none; }
 /* 2. 비행기 편 입력 (가는 편·오는 편 × 편명·출발·도착) */
 .flbox { display: flex; flex-direction: column; gap: 0.875rem; animation: drop .22s cubic-bezier(.2,.8,.2,1); }
@@ -193,6 +194,8 @@ main { flex: 1; display: flex; flex-direction: column; position: relative; overf
 
 /* 결과: 큰 탑승권 */
 .ticket { border-radius: var(--r-lg); background: var(--paper); box-shadow: var(--shadow); overflow: hidden; animation: rise .55s cubic-bezier(.2,.8,.2,1) both; }
+@keyframes pulseT { 0% { box-shadow: var(--shadow), 0 0 0 0 rgba(59,91,219,.5); } 40% { box-shadow: var(--shadow), 0 0 0 0.375rem rgba(59,91,219,.28); } 100% { box-shadow: var(--shadow), 0 0 0 0 rgba(59,91,219,0); } }
+.ticket.pulse { animation: pulseT .7s ease-out; }
 @keyframes rise { from { opacity: 0; transform: translateY(1.25rem) scale(.98); } to { opacity: 1; transform: none; } }
 .ticket .hd { padding: 1rem 1.125rem 0; display: flex; justify-content: space-between; align-items: center; font-size: 0.6875rem; font-weight: 700; letter-spacing: .1em; color: var(--sub); }
 .ticket .hd b { color: var(--ink); letter-spacing: .02em; font-size: 0.8125rem; }
@@ -230,10 +233,6 @@ main { flex: 1; display: flex; flex-direction: column; position: relative; overf
 .row .tm.zone { font-size: 0.8125rem; color: var(--blue); }
 .row b { text-wrap: balance; display: block; font-size: 0.9375rem; font-weight: 700; word-break: keep-all; }
 .row span { display: block; font-size: 0.8125rem; color: var(--sub); }
-.plan span { text-wrap: balance; display: flex; flex-direction: column; gap: 1px; }
-.plan small { font-size: 0.75rem; font-weight: 600; color: var(--blue); }
-.plan { display: flex; gap: 0.75rem; align-items: center; padding: 0.875rem 1rem; border-radius: var(--r-md); background: var(--blue-soft); font-weight: 600; }
-.plan svg { width: 1.25rem; height: 1.25rem; stroke: var(--blue); fill: none; stroke-width: 1.9; stroke-linecap: round; stroke-linejoin: round; flex: none; }
 .pair { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 0.625rem; }
 .pair .lab { font-size: 0.75rem; font-weight: 700; padding: 0 0.25rem 0.375rem; }
 .pair .lab.ok { color: var(--blue); } .pair .lab.no { color: var(--red); }
@@ -298,6 +297,7 @@ main { flex: 1; display: flex; flex-direction: column; position: relative; overf
 .note { display: flex; gap: 0.5rem; font-size: 0.78125rem; color: var(--sub); line-height: 1.5; }
 .note svg { width: 1rem; height: 1rem; flex: none; margin-top: 0.125rem; stroke: currentColor; fill: none; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
 .blk { display: flex; flex-direction: column; gap: 0.625rem; }
+#dBox { display: flex; flex-direction: column; gap: 1.25rem; }
 
 /* 달력 */
 .cal { border-radius: var(--r-lg); background: var(--paper); box-shadow: var(--sh-xs); padding: 0.75rem 0.75rem 0.875rem; }
@@ -430,6 +430,9 @@ const AIRPORTS = { kix: [['KIX', '간사이']], tyo: [['NRT', '나리타'], ['HN
 // 국내(서울·부산): 출발 지역 × 교통수단 = gen-data.js cfg[dest].modes (domestic_moves_add.json 조사값)
 const REGIONS = ['수도권', '강원', '충청', '대구·경북', '부산·경남', '광주·전라', '제주'];
 const MODE_NM = { home: '집에서 바로', train: '기차', air: '비행기', car: '차' };
+/* 출발 주소에 적은 동네 → 출발 지역 칩 (직접 칩을 고르기 전까지만 따라감. 칩을 안 눌러도 주소가 '서울'이면 수도권으로 잡힘) */
+const REGION_KW = { '수도권': /서울|경기|인천|수원|성남|고양|용인|부천|안양|안산|화성|평택|남양주|의정부|하남|광명|판교|일산|김포|시흥|파주/, '강원': /강원|춘천|원주|강릉|속초|동해/, '충청': /충청|충남|충북|대전|세종|천안|청주|아산/, '대구·경북': /대구|경북|경상북도|포항|구미|경주/, '부산·경남': /부산|울산|경남|경상남도|창원|김해|진주|양산/, '광주·전라': /광주|전남|전북|전라|전주|목포|여수|순천/, '제주': /제주|서귀포/ };
+const regionOf = txt => { const t = String(txt || ''); let best = null, at = 1e9; Object.keys(REGION_KW).forEach(r => { const m = t.match(REGION_KW[r]); if (m && m.index < at) { at = m.index; best = r; } }); return best; }; // 가장 앞에 나온 지명 (예: '부산 해운대구'의 '대구' 오인 방지)
 const cfgOf = tr => ((window.GABOJA_DATA || {}).cfg || {})[DEST[tr.city]] || null;
 const isDom = tr => { const c = cfgOf(tr); return !!(c && c.domestic); };
 function domOpts(tr) {   // 그 지역에서 되는 교통수단·노선
@@ -644,7 +647,7 @@ function strength(c, v) { if (!v) return ''; const soft = AX.filter((x, k) => v[
 
 function rResult(c, mine) {
   const t = T(c), v = mine ? S.votes : null;
-  setBar(null, 0, 0, mine ? { t: '내 결과' } : null);
+  setBar(null, 0, 0, mine ? { t: '내 결과', fn: toTicket } : null);
   const day = (t.day || []).map(d => `<div class="row"><span class="tm ${/\d/.test(d.t) ? '' : 'zone'}">${esc(d.t)}</span><div><b>${esc(d.n)}</b><span>${esc(d.s || '')}</span></div></div>`).join('');
   const el = screen(`
     <article class="ticket" aria-label="${c} ${esc(t.name)}">
@@ -661,7 +664,6 @@ function rResult(c, mine) {
     </article>
     ${t.scenes ? `<div class="sec"><h3>이런 장면, 익숙하죠?</h3><div class="card">${t.scenes.map(s => `<div class="scene"><span class="ck">${ICON.check}</span><span>${esc(s)}</span></div>`).join('')}</div></div>` : ''}
     ${day ? `<div class="sec"><h3>이 유형의 오사카 하루</h3><div class="card">${day}</div></div>` : ''}
-    ${t.plan ? `<div class="plan">${ICON.wand}<span><small>가보자가 짜는 방식</small>${esc(t.plan)}</span></div>` : ''}
     ${t.best ? `<div class="sec"><h3>같이 가면</h3><div class="pair">
       <div><div class="lab ok">잘 맞아요</div>${miniHtml(t.best, t.bestWhy)}</div>
       <div><div class="lab no">부딪힐 수 있어요</div>${miniHtml(t.clash, t.clashWhy)}</div></div></div>` : ''}
@@ -679,6 +681,11 @@ function rResult(c, mine) {
   $('#redoBtn').onclick = () => { S.ans = []; S.shuffle = Q.map(q => shuffled(q.o.map((_, i) => i))); S.hist = ['intro']; clearHash(); go('q0', { noHist: true }); };
   $('#allBtn2').onclick = () => go('types');
   $('#nextBtn').onclick = () => { if (S.type) { clearHash(); go('method'); } else { S.ans = []; S.hist = ['intro']; clearHash(); go('q0', { noHist: true }); } };
+}
+function toTicket() { // 오른쪽 위 '내 결과': 아래로 내려와 있으면 맨 위로, 이미 맨 위면 탑승권만 살짝 강조
+  if (window.scrollY > 8) { window.scrollTo({ top: 0, behavior: REDUCED ? 'auto' : 'smooth' }); return; }
+  const t = document.querySelector('.scr:not(.leaving) .ticket'); if (!t) return;
+  t.classList.remove('pulse'); void t.offsetWidth; t.classList.add('pulse');
 }
 function hasPlan() { try { return !!JSON.parse(localStorage.getItem('gaboja-plan')); } catch (_) { return false; } }
 function openType(c) { if (S.step === 'view') { S.viewStack.push(S.view); S.hist.push('view'); } S.view = c; go('view', { noHist: S.step === 'view' }); try { history.replaceState(null, '', '#r-' + c); } catch (_) {} }
@@ -730,7 +737,7 @@ function rInfo(s) {
     if (!S.calM) { const d = new Date(); S.calM = new Date(d.getFullYear(), d.getMonth(), 1); }
     el = screen(head('언제', '언제 가세요?', '날짜를 두 번 눌러요. 모르면 몇 박만 골라요') + `
       <div class="cal" id="cal"></div>
-      <div class="blk"><div class="sub2">날짜 미정이면<span>몇 박인지만</span></div><div class="chips" id="nights">${NIGHTS.map(x => `<button class="chip soft" data-n="${x[0]}" aria-pressed="${!tr.start && tr.nights === x[0]}">${x[1]}</button>`).join('')}</div></div>
+      <div class="blk"><div class="sub2">날짜 미정이면</div><div class="chips" id="nights">${NIGHTS.map(x => `<button class="chip soft" data-n="${x[0]}" aria-pressed="${!tr.start && tr.nights === x[0]}">${x[1]}</button>`).join('')}</div></div>
       <div class="foot"><div class="sum" id="dSum"></div><button class="cta" id="dNext" ${tr.nights ? '' : 'disabled'}>다음</button></div>`);
     drawCal(); dateSum();
     $('#nights').onclick = e => { const b = e.target.closest('[data-n]'); if (!b) return; tr.nights = +b.dataset.n; tr.start = tr.end = null; tap(); drawCal(); dateSum(); };
@@ -761,6 +768,7 @@ function rInfo(s) {
         <input class="in" id="sIn" value="${esc(tr.stayTx || '')}" ${tr.stay === 'no' ? 'hidden' : ''} placeholder="${tr.stay === 'area' ? '동네 이름 (예: ' + ex + ')' : '숙소 이름'}"></div>
       <div class="foot"><button class="cta" id="bNext">다음</button></div>`);
     const draw = () => {
+      if (!tr.regionPicked) { const g = regionOf(tr.home); if (g && domOpts(tr).regs.includes(g)) tr.region = g; }
       if (!domOpts(tr).regs.includes(tr.region)) tr.region = domOpts(tr).regs[0];
       const o = domOpts(tr); if (!o.modes.includes(tr.mode)) tr.mode = o.modes[0];
       const lines = o.lines(tr.mode), ride = tr.mode === 'train' || tr.mode === 'air' || tr.mode === 'car', car = tr.mode === 'car';
@@ -776,7 +784,7 @@ function rInfo(s) {
             ${car ? '' : `<input class="in fno" data-fk="${k}" data-ff="no" placeholder="${tr.mode === 'air' ? '편명 (예: KE1101)' : '열차 번호 (예: 101)'}" value="${esc(f.no || '')}" autocomplete="off" autocapitalize="characters" maxlength="8">`}
             <div class="tms"><label>출발 시각<input class="in tm" type="time" data-fk="${k}" data-ff="dep" value="${esc(f.dep || '')}"></label><label>도착 시각<input class="in tm" type="time" data-fk="${k}" data-ff="arr" value="${esc(f.arr || '')}"></label></div></div>`; }).join('')}
             <div class="note">${ICON.check}<span>모르는 칸은 비워 두면 보통 시각으로 짜고 ‘확인 필요’로 표시해요</span></div></div></div>` : ''}`;
-      $('#rgC').onclick = e => { const b = e.target.closest('[data-rg]'); if (!b) return; tr.region = b.dataset.rg; tr.line = 0; tap(); draw(); };
+      $('#rgC').onclick = e => { const b = e.target.closest('[data-rg]'); if (!b) return; tr.region = b.dataset.rg; tr.regionPicked = true; tr.line = 0; tap(); draw(); };
       $('#mdSeg').onclick = e => { const b = e.target.closest('[data-md]'); if (!b) return; tr.mode = b.dataset.md; tr.line = 0; tap(); draw(); };
       const lns = $('#lnSeg'); if (lns) lns.onclick = e => { const b = e.target.closest('[data-ln]'); if (!b) return; tr.line = +b.dataset.ln; draw(); };
       const fs = $('#fSeg'); if (fs) fs.onclick = e => { const b = e.target.closest('[data-f]'); if (!b) return; tr.flight = b.dataset.f; fs.querySelectorAll('button').forEach(x => x.setAttribute('aria-pressed', x === b)); $('#fBox').hidden = tr.flight !== 'yes'; tr.flightTx = flightText(tr); };
