@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<title>가보자 게이지 시안</title>
+<style>
+@font-face { font-family: "Pretendard Variable"; font-weight: 45 920; font-display: swap; src: url("fonts/PretendardVariable.woff2") format("woff2-variations"), url("fonts/PretendardVariable.woff2") format("woff2"); }
+:root { color-scheme: light; --canvas:#EEF0F3; --ink:#15171A; --sub:#6F757D; --hair:rgba(21,23,26,.09); --line:rgba(21,23,26,.16); --paper:#FFFFFF; --red:#E0453A;
+  --kr:"Pretendard Variable",Pretendard,-apple-system,"Apple SD Gothic Neo","Malgun Gothic",system-ui,sans-serif; --shadow:0 1.375rem 2.75rem -1.375rem rgba(24,36,60,.32), 0 2px .375rem -2px rgba(24,36,60,.10); }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { color-scheme: dark; --canvas:#0E1013; --ink:#ECEEF1; --sub:#8F969F; --hair:rgba(255,255,255,.08); --line:rgba(255,255,255,.18); --paper:#1B1E23; --red:#F2675D; --shadow:none; } }
+:root[data-theme="dark"] { color-scheme: dark; --canvas:#0E1013; --ink:#ECEEF1; --sub:#8F969F; --hair:rgba(255,255,255,.08); --line:rgba(255,255,255,.18); --paper:#1B1E23; --red:#F2675D; --shadow:none; }
+html { font-size: clamp(13.5px, calc(100vw * 16 / 390), 18px); }
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--canvas); color: var(--ink); font-family: var(--kr); -webkit-font-smoothing: antialiased; letter-spacing: -.01em; }
+main { max-width: 26rem; margin: 0 auto; padding: 1.25rem 1rem 4rem; }
+h1 { font-size: 1.25rem; margin: 0 0 .25rem; letter-spacing: -.02em; }
+.lead { color: var(--sub); font-size: .875rem; margin: 0 0 1rem; line-height: 1.6; word-break: keep-all; }
+.opt { margin: 2rem 0 .5rem; display: flex; align-items: baseline; gap: .5rem; flex-wrap: wrap; }
+.opt b { font-size: 1.125rem; } .opt span { color: var(--sub); font-size: .8125rem; }
+.how { color: var(--sub); font-size: .8125rem; line-height: 1.6; margin: 0 0 .75rem; word-break: keep-all; padding-left: 1.1rem; }
+.card { background: var(--paper); border-radius: 1.625rem; box-shadow: var(--shadow); padding: 1.125rem; display: flex; flex-direction: column; gap: 1.125rem; }
+.top { display: flex; justify-content: space-between; align-items: baseline; font-size: .8125rem; color: var(--sub); font-weight: 500; }
+.top .w { color: var(--ink); font-weight: 800; }
+.note { font-size: .71875rem; color: var(--sub); margin: 0; }
+.rec { display: inline-block; font-size: .6875rem; font-weight: 800; color: var(--red); border: 1.5px solid var(--red); border-radius: 1rem; padding: 0 .4375rem; margin-left: .25rem; }
+.src { color: var(--sub); font-size: .75rem; line-height: 1.6; margin-top: 2.5rem; word-break: break-all; } .src a { color: var(--sub); }
+
+/* 1 위치 점 */
+.m .ln { position: relative; height: 1.25rem; margin: .375rem .5rem 0; }
+.m .ln::before { content: ""; position: absolute; left: 0; right: 0; top: 50%; height: 2px; margin-top: -1px; background: var(--line); border-radius: 1px; }
+.m .tk { position: absolute; top: 50%; width: 2px; height: .5rem; margin: -.25rem 0 0 -1px; background: var(--line); border-radius: 1px; }
+.m .tk.c { height: .75rem; margin-top: -.375rem; background: var(--sub); }
+.m .dot { position: absolute; top: 50%; width: 1rem; height: 1rem; margin: -.5rem 0 0 -.5rem; border-radius: 50%; background: var(--ink); box-shadow: 0 0 0 .25rem var(--paper); }
+.m .pc { position: absolute; bottom: 100%; transform: translateX(-50%); font-size: .6875rem; font-weight: 800; font-variant-numeric: tabular-nums; margin-bottom: .125rem; white-space: nowrap; }
+
+/* 2 다섯 칸 (답 5개) */
+.s .cells { display: grid; grid-template-columns: repeat(5, 1fr); gap: .25rem; margin-top: .5rem; }
+.s .cells i { height: .375rem; border-radius: .1875rem; background: var(--hair); }
+.s .cells i.on { background: var(--ink); }
+.s .top em { font-style: normal; font-weight: 600; color: var(--sub); margin-left: .375rem; font-size: .75rem; }
+
+/* 3 숫자 + 얇은 선 */
+.n .row { display: grid; grid-template-columns: 1fr auto; align-items: end; gap: .5rem; }
+.n .big { font-size: 1.5rem; font-weight: 800; letter-spacing: -.03em; font-variant-numeric: tabular-nums; line-height: 1; }
+.n .big small { font-size: .875rem; font-weight: 700; margin-left: .125rem; }
+.n .lb { font-size: .875rem; font-weight: 700; } .n .vs { font-size: .75rem; color: var(--sub); }
+.n .thin { position: relative; height: 2px; background: var(--hair); margin-top: .5rem; border-radius: 1px; }
+.n .thin i { position: absolute; top: 0; bottom: 0; background: var(--ink); border-radius: 1px; }
+</style>
+</head>
+<body>
+<main>
+<h1>결과 게이지 시안 — 11번 다시</h1>
+<p class="lead">예시 = LEFJ (로컬 80 · 즐기기 60 · 알차게 100 · 계획형 60). 두꺼운 막대를 빼고 세 가지 방식으로 바꿔 봤습니다. 앱에는 <b>1안</b>을 먼저 넣었습니다(앱에선 %를 점 위가 아니라 이름 옆에 — 양 끝 100%일 때 글자와 겹쳐서).</p>
+
+<div class="opt"><b>1안 위치 점</b><span class="rec">적용</span><span>얇은 선 위에 점 하나</span></div>
+<ul class="how"><li>16Personalities 설명처럼 ‘두 성향 사이 어디쯤인지’를 보여 주는 방식 — 채우는 막대가 아니라 위치</li><li>가운데 눈금 = 반반, 점 위에 %</li></ul>
+<div class="card m" id="m"></div>
+
+<div class="opt"><b>2안 다섯 칸</b><span>답 5개를 그대로 칸으로</span></div>
+<ul class="how"><li>축마다 답이 5개라서 ‘5개 중 4개가 로컬’이 그대로 보임 (가장 정직한 표현)</li><li>% 대신 ‘5개 중 4’</li></ul>
+<div class="card s" id="s"></div>
+
+<div class="opt"><b>3안 숫자 + 얇은 선</b><span>숫자가 주인공, 선은 보조</span></div>
+<ul class="how"><li>건강·금융 앱 요약처럼 큰 숫자 + 2px 선</li></ul>
+<div class="card n" id="n"></div>
+
+<p class="src">근거 · 16Personalities: 각 축은 양 끝이 있는 척도, 가운데 = 50%, 50%에 가까울수록 약한 성향 <a href="https://16personalities.com/articles/strength-of-individual-traits">16personalities.com/articles/strength-of-individual-traits</a> · 다섯 칸·숫자형은 아키 시안(근거 없음)</p>
+</main>
+<script>
+const AX = [['로컬','핫플'],['구경','즐기기'],['알차게','여유롭게'],['계획형','즉흥형']], CODEW = [0,1,0,0], P = [80,60,100,60], N = [4,3,5,3];
+document.getElementById('m').innerHTML = AX.map((x,k)=>{ const aw = CODEW[k]===0, p=P[k], pos = aw ? 100-p : p;
+  return `<div><div class="top"><span class="${aw?'w':''}">${x[0]}</span><span class="${aw?'':'w'}">${x[1]}</span></div>
+  <div class="ln"><i class="tk" style="left:0"></i><i class="tk c" style="left:50%"></i><i class="tk" style="left:100%"></i><span class="pc" style="left:${pos}%">${p}%</span><span class="dot" style="left:${pos}%"></span></div></div>`; }).join('') + '<p class="note">가운데 눈금이 반반이에요 · 축마다 답 5개로 계산했어요</p>';
+document.getElementById('s').innerHTML = AX.map((x,k)=>{ const aw = CODEW[k]===0, n=N[k];
+  const cells = Array.from({length:5},(_,j)=> `<i class="${aw ? (j<n?'on':'') : (j>=5-n?'on':'')}"></i>`).join('');
+  return `<div><div class="top"><span class="${aw?'w':''}">${x[0]}${aw?`<em>5개 중 ${n}</em>`:''}</span><span class="${aw?'':'w'}">${aw?'':`<em style="margin:0 .375rem 0 0">5개 중 ${n}</em>`}${x[1]}</span></div><div class="cells">${cells}</div></div>`; }).join('') + '<p class="note">답 5개 중 몇 개가 그쪽이었는지예요</p>';
+document.getElementById('n').innerHTML = AX.map((x,k)=>{ const aw = CODEW[k]===0, p=P[k];
+  return `<div><div class="row"><div><div class="lb">${aw?x[0]:x[1]}</div><div class="vs">${aw?x[1]:x[0]} ${100-p}%</div></div><div class="big">${p}<small>%</small></div></div>
+  <div class="thin"><i style="${aw?'left:0':'right:0'};width:${p}%"></i></div></div>`; }).join('');
+</script>
+</body>
+</html>
