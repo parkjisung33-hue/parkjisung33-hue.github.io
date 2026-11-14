@@ -118,6 +118,10 @@ main { flex: 1; display: flex; flex-direction: column; position: relative; overf
 @keyframes inR { from { opacity: 0; transform: translateX(1.5rem); } to { opacity: 1; transform: none; } }
 @keyframes inL { from { opacity: 0; transform: translateX(-1.5rem); } to { opacity: 1; transform: none; } }
 .qh { display: flex; flex-direction: column; gap: 0.5rem; }
+/* 11/14 밤: 질문 화면 — 제목은 위로 붙이고, 보기·안내판 사이 간격은 화면 높이에 비례 (작은 폰 1.25rem ~ 큰 폰 2.75rem) */
+.scr.qs { gap: 0; padding-top: 0; }
+.scr.qs .opts { margin-top: clamp(1.25rem, 4.5svh, 2.75rem); }
+.scr.qs .board { margin-top: clamp(1.25rem, 4.5svh, 2.75rem); }
 .qh h1 { margin: 0; word-break: keep-all; font-size: 1.625rem; font-weight: 800; letter-spacing: -.035em; line-height: 1.28; text-wrap: balance; }
 .qh p { margin: 0; font-size: 0.875rem; color: var(--sub); }
 
@@ -905,7 +909,7 @@ function rQ(i) {
     <div class="board glass" id="board">
       ${flapsHtml(ls, false, i - 1)}
       <div class="lb"><b id="bdT">${known ? `탑승권 코드 ${SHOWN[i - 1]} / 4` : '고를 때마다 한 칸씩 채워져요'}</b><span id="bdS">${known ? boardSub(ls) : '4칸이 다 차면 내 여행 유형'}</span></div>
-    </div>`);
+    </div>`, 'qs');
   el.querySelectorAll('.opt').forEach(b => b.onclick = () => choose(i, +b.dataset.oi, b));
 }
 function boardSub(ls) { return AX.map((x, k) => ls[k] ? (ls[k] === x.a[0] ? x.a[1] : x.b[1]) : null).filter(Boolean).join(' · ') + ' 쪽'; }
