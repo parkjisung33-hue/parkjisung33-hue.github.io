@@ -971,8 +971,8 @@ const minFixItems = L => (L || []).forEach(c => { if (c) ['mv', 'n', 'say', 'sh'
 const minFixNotes = N => Object.values(N || {}).forEach(a => (a || []).forEach(n => { if (n && n.t) n.t = minFix(n.t); }));
 try { if (PLAN) { PLAN.days.forEach(d => minFixItems(d.items)); minFixNotes(PLAN.notes); PLAN.assumed = (PLAN.assumed || []).map(minFix); } } catch (_) {}
 if (PLAN) { DAYS.length = 0; PLAN.days.forEach(d => DAYS.push(d)); Object.keys(NOTES).forEach(k => delete NOTES[k]); Object.assign(NOTES, PLAN.notes || {}); }
-const T0 = PLAN ? PLAN.title : '오사카·교토 3박 4일', TM = T0.match(/^(.+?) (\d+)박 (\d+)일$/);
-const TRIP_TITLE = TM ? TM[1] + '에서 ' + TM[3] + '일' : T0, TRIP_NIGHTS = TM ? TM[2] + '박 ' + TM[3] + '일' : '';
+const T0 = PLAN ? PLAN.title : '오사카·교토 3박 4일', TM = T0.match(/^(.+?) (\d+)박 (\d+)일$/), TD = T0.match(/^(.+?) 당일치기$/);   // 13b 당일치기 제목
+const TRIP_TITLE = TM ? TM[1] + '에서 ' + TM[3] + '일' : TD ? TD[1] + ' 당일치기' : T0, TRIP_NIGHTS = TM ? TM[2] + '박 ' + TM[3] + '일' : TD ? '당일치기' : '';
 const TRIP_SUB = PLAN ? PLAN.sub : '12. 4 – 12. 7 · 집에서 집까지', TRIP_DATES = TRIP_SUB.split(' · ')[0];
 if (PLAN) CHECKS.ok = { t:'영업시간 확인 11.11~11.13', s:'확인 11.13' }, CHECKS.no = { t:'영업시간 확인 못 함 · 가기 전 확인', s:'확인 필요' };
 const $ = s => document.querySelector(s);
@@ -2326,7 +2326,7 @@ const tripsSet = a => { try { localStorage.setItem(TRIPS_KEY, JSON.stringify(a))
 function rawPlan() { try { const p = JSON.parse(localStorage.getItem('gaboja-plan')); return p && p.v === 1 && Array.isArray(p.days) && p.days.length ? p : null; } catch (_) { return null; } }
 const planId = p => p.made || ('x' + (p.start || '') + (p.title || ''));
 const planDates = p => String(p.sub || '').split(' · ')[0];
-const planCity = p => { const m = String(p.title || '').match(/^(.+?) \d+박 \d+일$/); return m ? m[1] : (p.title || '여행'); };
+const planCity = p => { const m = String(p.title || '').match(/^(.+?) (?:\d+박 \d+일|당일치기)$/); return m ? m[1] : (p.title || '여행'); };
 function snapshotCurrent() {
   const p = rawPlan(); if (!p) return null;
   if (PLAN && PLAN.made === p.made) saveEdits(true);   // 방금 고친 것까지
