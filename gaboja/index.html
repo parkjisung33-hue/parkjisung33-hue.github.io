@@ -522,6 +522,16 @@ html, body { overscroll-behavior-y: contain; }
 .wxl { display: flex; align-items: center; gap: 0.375rem; margin-top: 0.1875rem; font-size: 0.8125rem; color: var(--sub); white-space: nowrap; min-width: 0; }   /* 하루 머리 날씨 한 줄 */
 .wxl svg { width: 1.1875rem; height: 1.1875rem; stroke: currentColor; fill: none; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; flex: none; }
 .wxl b { color: var(--ink); font-weight: 600; font-variant-numeric: tabular-nums; }
+/* 11/14 #20: 첫 화면 글자 간격 — 자간은 기본(0)으로, 줄·묶음 사이 숨 쉴 공간 */
+body { letter-spacing: 0; }
+.stateline { gap: 0.625rem; }
+.stateline .tx { letter-spacing: .01em; }
+.dayline { gap: 0.625rem; }
+.dayline h2 { line-height: 1.3; letter-spacing: -.01em; }
+.dayline .dmeta2 { margin-top: -0.125rem; letter-spacing: .01em; }
+.wxl { gap: 0.4375rem; margin-top: 0.125rem; letter-spacing: .01em; }
+.pass .place { letter-spacing: .01em; }
+.pass .fld span { letter-spacing: .02em; }
 .wxl small { font-size: 0.6875rem; line-height: 1; padding: 0.1875rem 0.4375rem; border-radius: 62.4375rem; border: 1px solid var(--hair); color: var(--sub); }
 .dayline .dmeta2 i { width: 2px; height: 2px; border-radius: 50%; background: currentColor; flex: none; align-self: center; }
 .dayline .dmeta2 .one { display: inline-block; }
@@ -955,7 +965,11 @@ let PLACES = [{"id":"osk-kuromon","n":"구로몬 시장","l":"黒門市場","c":
 let PLAN = null;
 try { if (!/sample/.test(location.hash)) { const pl = JSON.parse(localStorage.getItem('gaboja-plan')); if (pl && pl.v === 1 && Array.isArray(pl.days) && pl.days.length) PLAN = pl; } } catch (_) {}
 // 11/14 #24: 예전에 저장된 일정 글자의 '288분' → '4시간 48분' (새로 만든 일정은 엔진이 이미 이렇게 씀)
-try { if (PLAN) PLAN = JSON.parse(JSON.stringify(PLAN).replace(/(\d{2,4})분/g, (m, x) => +x >= 60 ? Math.floor(x / 60) + '시간' + (x % 60 ? ' ' + x % 60 + '분' : '') : m)); } catch (_) {}
+// 표시 글자(이동 줄·이름·안내·주의)만 바꿈 — 사용자 입력(inp·메모)은 그대로. 편집 저장본(loadEdits)에도 같이 씀
+const minFix = t => typeof t === 'string' ? t.replace(/(\d{2,4})분/g, (m, x) => +x >= 60 ? Math.floor(x / 60) + '시간' + (x % 60 ? ' ' + x % 60 + '분' : '') : m) : t;
+const minFixItems = L => (L || []).forEach(c => { if (c) ['mv', 'n', 'say', 'sh'].forEach(k => { if (c[k]) c[k] = minFix(c[k]); }); });
+const minFixNotes = N => Object.values(N || {}).forEach(a => (a || []).forEach(n => { if (n && n.t) n.t = minFix(n.t); }));
+try { if (PLAN) { PLAN.days.forEach(d => minFixItems(d.items)); minFixNotes(PLAN.notes); PLAN.assumed = (PLAN.assumed || []).map(minFix); } } catch (_) {}
 if (PLAN) { DAYS.length = 0; PLAN.days.forEach(d => DAYS.push(d)); Object.keys(NOTES).forEach(k => delete NOTES[k]); Object.assign(NOTES, PLAN.notes || {}); }
 const T0 = PLAN ? PLAN.title : '오사카·교토 3박 4일', TM = T0.match(/^(.+?) (\d+)박 (\d+)일$/);
 const TRIP_TITLE = TM ? TM[1] + '에서 ' + TM[3] + '일' : T0, TRIP_NIGHTS = TM ? TM[2] + '박 ' + TM[3] + '일' : '';
@@ -1033,11 +1047,12 @@ $('#themeSeg').onclick = e => { const b = e.target.closest('[data-th]'); if (b) 
 /* ---------- 고칠 수 있는 하루 목록 ---------- */
 // list = 기상·취침 뺀 일정(순서가 곧 자리) · slots = 자리마다 원래 시작 시각.
 // 다시 계산: 자리 시각과 앞 일정 끝 중 늦은 쪽에서 시작(밀리기만 함), 비행기는 제 시각 고정.
-DAYS.forEach(d => {
-  d.list = d.items.filter(c => c.k !== 'w').map((c, i) => { const du = c.e ? (toMin(c.e) - toMin(c.s) + (toMin(c.e) < toMin(c.s) ? 1440 : 0)) : 30; return { ...c, id: d.no + '-' + i, o: c.s, du, du0: du }; });
+function prepDay(d, tag) {   // tag = 다시 짠 날의 id 꼬리(보관함 옛 일정과 id 안 겹치게)
+  d.list = d.items.filter(c => c.k !== 'w').map((c, i) => { const du = c.e ? (toMin(c.e) - toMin(c.s) + (toMin(c.e) < toMin(c.s) ? 1440 : 0)) : 30; return { ...c, id: d.no + '-' + i + (tag || ''), o: c.s, du, du0: du }; });
   d.slots = d.list.map(c => toMin(c.s));
   d.wake = d.items.filter(c => c.k === 'w');
-});
+}
+DAYS.forEach(d => prepDay(d));
 const fixedOf = c => !!(c.fly || c.k === 'm');
 const isCar = c => !!c && !!c.fly && c.ride === 'car';
 const dayOf = c => c && /^\d/.test(c.id || '') ? DAYS[parseInt(c.id, 10) - 1] : null;   // 일정 id '2-5' → 그 날 (직접 추가 'u3'는 null)
@@ -1950,8 +1965,8 @@ function loadEdits() {
   if (!e) { migrateMemos(all); return; }
   if (e.v !== 1) return;
   try {
-    (e.days || []).forEach(sd => { const d = DAYS.find(x => x.no === sd.no); if (!d || !Array.isArray(sd.list) || !Array.isArray(sd.slots)) return; d.list = sd.list; d.slots = sd.slots; if (Array.isArray(sd.wake)) d.wake = sd.wake; d.lates = sd.lates || null; d.clash = !!sd.clash; d.tbd = !!sd.tbd; });
-    if (e.notes) { Object.keys(NOTES).forEach(k => delete NOTES[k]); Object.assign(NOTES, e.notes); }
+    (e.days || []).forEach(sd => { const d = DAYS.find(x => x.no === sd.no); if (!d || !Array.isArray(sd.list) || !Array.isArray(sd.slots)) return; minFixItems(sd.list); d.list = sd.list; d.slots = sd.slots; if (Array.isArray(sd.wake)) d.wake = sd.wake; d.lates = sd.lates || null; d.clash = !!sd.clash; d.tbd = !!sd.tbd; });
+    if (e.notes) { minFixNotes(e.notes); Object.keys(NOTES).forEach(k => delete NOTES[k]); Object.assign(NOTES, e.notes); }
     st.uid = e.uid || 0; st.cur = e.cur && DAYS[e.cur.day] ? e.cur : null; st.tripMemo = Array.isArray(e.tripMemo) ? e.tripMemo : [];
     st.archive = (e.archive || []).map(r => ({ d: DAYS.find(x => x.no === r.day), it: r.it, sl: r.sl, closed: !!r.closed })).filter(r => r.d && r.it);
   } catch (_) {}
@@ -1978,6 +1993,40 @@ function fixNotes(d, c) {
   if (d.no === DAYS.length && !d.tbd && !isCar(c) && c.fly) { const pre = c.pre || 120, nm = hubName(c); arr.unshift({ lv: 'red', ref: nm, t: nm + ' ' + toT(toMin(c.s) - pre) + '까지 도착 · 출발 ' + (c.pre ? durTx(c.pre) : '2시간') + ' 전' }); }
   NOTES[d.no] = arr;
 }
+// 11/14 #28: 비행기 시각을 넣거나 바꾸면 그날(가는 날·오는 날)만 엔진으로 다시 짬 → 시각에 맞게 장소를 채우고 빼고, 빠진 장소는 보관함으로
+// 엔진 입력 = PLAN.inp (없는 옛 일정은 유형·날짜·도시로 복원). 다른 날·메모(같은 장소)·여행 메모는 그대로
+function loadGen(cb) {
+  if (window.GABOJA_GEN) { loadGD(() => cb(window.GABOJA_GEN)); return; }
+  loadGD(() => { try { fetch('gen.js?v=9').then(r => r.arrayBuffer()).then(b => { (0, eval)(new TextDecoder('utf-8').decode(b)); cb(window.GABOJA_GEN || null); }).catch(() => cb(null)); } catch (_) { cb(null); } });
+}
+let regenBusy = false;
+function regenDay(d, c, dep, arr, fno, done0) {
+  if (regenBusy) return; regenBusy = true; const done = (...a) => { regenBusy = false; done0(...a); };
+  if (!PLAN || isCar(c) || c.ride === 'train' || !(d.no === 1 || d.no === DAYS.length)) { done(false); return; }
+  loadGen(G => {
+    if (!G) { done(false); return; }
+    try {
+      const inp = JSON.parse(JSON.stringify(PLAN.inp || { type: PLAN.type, start: PLAN.start, nights: DAYS.length - 1, dest: PLAN.dest, sgg: PLAN.sgg || undefined }));
+      const f = { no: fno || '', dep, arr }, k = d.no === 1 ? 'fo' : 'fb';
+      inp[k] = f; if (d.no === 1 && !inp.fb) inp.fb = { no: '', dep: '', arr: '' }; if (d.no !== 1 && !inp.fo) inp.fo = { no: '', dep: '', arr: '' };
+      inp.flightTx = '';
+      const others = []; DAYS.forEach(o => { if (o !== d) o.list.forEach(x => { if (x.pid) others.push(x.pid); }); });
+      inp.ban = [...new Set((inp.ban || []).concat(others))];   // 다른 날에 있는 장소는 이 날에 다시 안 넣음
+      const np = G.make(inp), nd = np.days[d.no - 1]; if (!nd || !nd.items) { done(false); return; } prepDay(nd, 'r' + (Date.now() % 100000));
+      const key = x => x.pid || (x.sh || x.n || ''), curIt = st.cur && st.cur.day === d.no - 1 && d.list.find(x => x.id === st.cur.id), curKey = curIt ? key(curIt) : '', keep = new Set(nd.list.map(key)), memo = {};
+      d.list.forEach(x => { if (x.memo && x.memo.length) memo[key(x)] = x.memo; });
+      const gone = d.list.filter((x, i) => !x.fly && x.k !== 'm' && x.k !== 'x' && (x.pid || x.k === 'u') && !keep.has(key(x))).map(x => ({ x, sl: d.slots[d.list.indexOf(x)] }));
+      d.items = nd.items; d.list = nd.list; d.slots = nd.slots; d.wake = nd.wake; d.route = nd.route || d.route; d.drop = nd.drop || d.drop; d.title = nd.title || d.title; d.tbd = !!nd.tbd; d.lates = null; d.clash = false;
+      d.list.forEach(x => { const m = memo[key(x)]; if (m && !x.fly) x.memo = m; });
+      gone.forEach(g => st.archive.unshift({ d, it: g.x, sl: g.sl }));
+      if (np.notes && np.notes[d.no]) NOTES[d.no] = np.notes[d.no];
+      recompute(d);
+      const inpKeep = { ...inp, ban: (PLAN.inp && PLAN.inp.ban) || undefined }; PLAN.inp = inpKeep; try { const raw = JSON.parse(localStorage.getItem('gaboja-plan')); if (raw && raw.made === PLAN.made) { raw.inp = inpKeep; localStorage.setItem('gaboja-plan', JSON.stringify(raw)); } } catch (_) {}
+      if (st.cur && st.cur.day === d.no - 1) { const was = curKey, nx = was && d.list.find(x => key(x) === was); st.cur = nx ? { day: d.no - 1, id: nx.id } : null; }
+      arcCount(); done(true, gone.length);
+    } catch (e) { done(false); }
+  });
+}
 function rideSave() {
   const d = DAYS[st.day], c = d && sheetId && findIt(d, sheetId); if (!c || !c.fly) return;
   const q = k => { const el = document.querySelector('[data-rf="' + k + '"]'); return el ? el.value.trim() : ''; }, CAR = isCar(c);
@@ -1989,6 +2038,16 @@ function rideSave() {
   if (du1 < 10 || du1 > 18 * 60) return bad('출발·도착 시각을 다시 확인해 주세요');
   const wasTbd = !!d.tbd, wasDflt = !!(c.car && c.car.dflt), same = !wasTbd && !wasDflt && dep1 === toMin(c.o) && du1 === c.du && (c.fno || '') === fno;
   if (same) { closeAll(); toast('바뀐 것 없음'); return; }
+  if (!CAR && c.ride !== 'train' && PLAN && (d.no === 1 || d.no === DAYS.length)) {
+    regenDay(d, c, toT(dep1), toT(dep1 + du1).replace(/\(.*/, ''), fno, (ok, n) => {
+      if (!ok) { rideFallback(); return; }
+      closeAll(); renderPlan(); renderNow(); renderTrail(); saveEdits();
+      toast('비행기 시각에 맞춰 이날 일정을 다시 짰어요' + (n ? ' · ' + n + '곳은 보관함으로' : ''));
+    });
+    return;
+  }
+  rideFallback();
+  function rideFallback() {
   d.tbd = false;
   const clash = rideApply(d, c, dep1, du1); d.clash = clash;
   if (!CAR && !c.ride !== undefined) { if (c.fno && c.n.endsWith(' ' + c.fno)) c.n = c.n.slice(0, -(c.fno.length + 1)); c.fno = fno || undefined; if (fno) c.n += ' ' + fno; }
@@ -1997,6 +2056,7 @@ function rideSave() {
   fixNotes(d, c);
   closeAll(); renderPlan(c.id); renderNow(); renderTrail();
   toast(clash ? '시각이 겹쳐요 · 줄이려면 ' + (dropOf(d) || '앞 일정 빼기') : wasTbd || wasDflt ? '시각 저장 · 그날 시간이 정해졌어요' : (CAR ? '출발 ' : '도착 ') + toT(dep1 + (CAR ? 0 : du1)).replace(/\(.*/, '') + ' · 그날 일정 다시 계산', null, clash ? 4500 : 0);
+  }
 }
 // 머무는 시간 바꾸기 → 그 뒤 일정 다시 계산 (줄이면 뒤를 당김 · 늘리면 뒤가 밀림, 시간 고정 일정이 밀리면 기존 경고)
 function setStay(id, du) {

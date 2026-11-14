@@ -513,7 +513,7 @@
     if (stayUnknown) notes[1].push({ lv: 'gray', t: stayUnknown });
     const end = new Date(start); end.setDate(start.getDate() + nights);
     const f2 = d => (d.getMonth() + 1) + '. ' + d.getDate();
-    return { v: 1, type, title: (input.cityLabel || C.label) + ' ' + nights + '박 ' + N + '일', sub: f2(start) + ' – ' + f2(end) + ' · 집에서 집까지', start: start.getFullYear() + '-' + String(start.getMonth() + 1).padStart(2, '0') + '-' + String(start.getDate()).padStart(2, '0'), days, notes, assumed, local: C.local || null, sgg: SG && sgUsed ? SG.name : null, dest: input.dest || 'kix', go: DOM ? { mode, line: R.lineTx || null, region: R.region } : { mode: 'intl', airport: apK }, carAttr, ...(BLANK ? { blank: true } : {}), made: new Date().toISOString() };
+    return { v: 1, type, title: (input.cityLabel || C.label) + ' ' + nights + '박 ' + N + '일', sub: f2(start) + ' – ' + f2(end) + ' · 집에서 집까지', start: start.getFullYear() + '-' + String(start.getMonth() + 1).padStart(2, '0') + '-' + String(start.getDate()).padStart(2, '0'), days, notes, assumed, local: C.local || null, sgg: SG && sgUsed ? SG.name : null, dest: input.dest || 'kix', go: DOM ? { mode, line: R.lineTx || null, region: R.region } : { mode: 'intl', airport: apK }, carAttr, ...(BLANK ? { blank: true } : {}), inp: JSON.parse(JSON.stringify(input)), made: new Date().toISOString() };   // inp = 11/14 #28: 앱에서 비행기 시각을 바꾸면 그날을 다시 짤 때 씀
   }
   // 차 예상 도착 (질문지 start.html도 이 함수를 씀): key 'pt>base' 또는 'sgg:서울 마포구>base' · dep 'HH:MM' · date Date · dest 도시코드 → { dep, arr 'HH:MM', next(다음 날), dur(분), rest(휴게소 쉼 포함) } 또는 null(표에 없음)
   function carEta(key, dep, date, dest) {

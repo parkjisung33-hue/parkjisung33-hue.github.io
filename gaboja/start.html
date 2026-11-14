@@ -366,9 +366,6 @@ main { flex: 1; display: flex; flex-direction: column; position: relative; overf
 .rx .near b { display: flex; align-items: center; gap: 0.5rem; padding: 0.625rem 0.75rem; border-radius: var(--r-sm); background: var(--canvas); font-size: 0.875rem; font-weight: 700; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .rx .near b em { font-style: normal; font-size: 0.6875rem; font-weight: 800; letter-spacing: .06em; color: var(--sub); flex: none; }
 .rx .go2 { position: relative; overflow: hidden; }
-.rx .go2 i { position: absolute; inset: 0; background: rgba(127,127,127,.28); transform: scaleX(0); transform-origin: left; }
-.rx .go2 i { display: none; } /* 11/14 #6: 게이지·자동 넘김 없앰 → '다음 질문'을 눌러야 넘어감 */
-@keyframes fill { to { transform: scaleX(1); } }
 .rx .go2 span { position: relative; display: flex; align-items: center; gap: 0.5rem; }
 .fl.lock { box-shadow: inset 0 0 0 2px var(--red); transition: box-shadow .3s; }
 .fl.new { animation: flip .38s cubic-bezier(.3,.7,.3,1), glowN 1.2s ease-out .38s; }
@@ -591,7 +588,6 @@ const RXX = [ // 새 문항 반응 [멘트, 설명] — 보기 순서 = QX의 o 
 const QSEQ = [Q6[0], Q6[1], Q6[2], QX[0], QX[1], Q6[3], Q6[4], Q6[5], QX[2], QX[3]];
 const Q = QSEQ, QI = [QI6[0], QI6[1], QI6[2], QIX[0], QIX[1], QI6[3], QI6[4], QI6[5], QIX[2], QIX[3]], RX = [RX6[0], RX6[1], RX6[2], RXX[0], RXX[1], RX6[3], RX6[4], RX6[5], RXX[2], RXX[3]];
 const HALF = 5; // 앞 묶음(여행 취향) 문항 수 = 뒤 묶음(여행 스타일) 문항 수
-const AUTO = 3200; // 반응 시트가 떠 있다가 다음 질문으로 넘어가기까지
 /* E1 코드 칸 (10문항): 앞 묶음 5문항 동안 1·2칸(1번 → 1칸, 2번 → 2칸, 3~4번 다듬는 중, 5번 → 앞 두 칸 확정) · 뒤 묶음 5문항 동안 3·4칸(6번 → 3칸, 7번 → 4칸, 8~9번 다듬는 중, 10번 → 완성) */
 const SHOWN = [1, 2, 2, 2, 2, 3, 4, 4, 4, 4], LOCKED = [0, 0, 0, 0, 2, 2, 2, 2, 2, 4];
 const STEP_TX = ['첫 글자 등장', '두 번째 글자 등장', '앞 두 글자 맞춰 보는 중', '앞 두 글자 맞춰 보는 중', '앞 두 글자 확정', '세 번째 글자 등장', '네 번째 글자 등장', '뒤 두 글자 다듬는 중', '뒤 두 글자 다듬는 중', '코드 완성'];
@@ -744,6 +740,7 @@ function go(step, opt = {}) {
   const h = document.querySelector('.scr:not(.leaving) h1, .scr:not(.leaving) h2'); if (h && !opt.noFocus) { h.tabIndex = -1; h.focus({ preventScroll: true }); }
 }
 function back() {
+  if (rxOpen() && PAIR_OPEN) { closeRx(); return; }   // 같이 가면 시트 = 닫기만
   if (rxOpen()) { NAV++; closeRx(); busy = false; dir = -1; render(); return; } // 반응 시트 닫고 같은 질문 다시 고르기
   if (busy) return; // 고르는 순간엔 뒤로 안 감
   if (S.step === 'view') clearHash();
@@ -858,11 +855,10 @@ function nearTypes(i) { // 이 답과 가까운 유형 2개: 앞 묶음(1~5번)�
 function openRx(i, oi) {
   const [t, d] = RX[i][oi], last = i === Q.length - 1, ls = boardLetters(i), prevLs = boardLetters(i - 1);
   const rx = $('#rx'), sc = $('#rxScrim');
-  rx.style.setProperty('--auto', AUTO + 'ms');
   rx.innerHTML = `<div class="rh">${flapsHtml(prevLs, false, i - 1)}<span class="step">${STEP_TX[i]}</span></div>
     <h2 id="rxT">${esc(t)}</h2><p>${esc(d)}</p>
     <div class="near"><span>지금까지 답으로 보면 이런 유형에 가까워요</span><div>${nearTypes(i).filter(Boolean).map(c => `<b><em>${c}</em>${esc(T(c).name)}</b>`).join('')}</div></div>
-    <button class="cta go2" id="rxGo"><i></i><span>${last ? '내 탑승권 받기' : '다음 질문'} ${ICON.arrow}</span></button>`;
+    <button class="cta go2" id="rxGo"><span>${last ? '내 탑승권 받기' : '다음 질문'} ${ICON.arrow}</span></button>`;
   sc.hidden = false; void rx.offsetWidth; void sc.offsetWidth; sc.classList.add('on'); rx.classList.add('on');
   const fls = rx.querySelectorAll('.fl');
   later(() => ls.forEach((l, k) => { if (l && l !== prevLs[k]) { setFlap(fls[k], l); fls[k].classList.add('new'); } if (k < LOCKED[i]) fls[k].classList.add('lock'); }), 420);
@@ -872,7 +868,9 @@ function openRx(i, oi) {
   rx.tabIndex = -1; setTimeout(() => rx.focus({ preventScroll: true }), 60); // 시트 자체에 포커스(버튼 테두리 안 보이게), Enter = 다음
 }
 // 11/14 #13a: '같이 가면' 카드 → 아래에서 올라오는 시트(그 유형 한 줄·장면·왜 맞는지/부딪히는지) + '이 유형 자세히'
+let PAIR_OPEN = false;
 function pairSheet(c, why, good) {
+  PAIR_OPEN = true;
   const t = T(c), rx = $('#rx'), sc = $('#rxScrim');
   rx.innerHTML = `<div class="rh"><span class="step">${good ? '잘 맞아요' : '부딪힐 수 있어요'} · ${esc(t.group)}</span></div>
     <h2 id="rxT">${c} ${esc(t.name)}</h2><p>${esc(t.line || '')}</p>
@@ -885,7 +883,7 @@ function pairSheet(c, why, good) {
   $('#rxClose').onclick = closeRx; sc.onclick = closeRx;
   rx.tabIndex = -1; setTimeout(() => rx.focus({ preventScroll: true }), 60);
 }
-function closeRx() { const rx = $('#rx'), sc = $('#rxScrim'); rx.classList.remove('on'); sc.classList.remove('on'); setTimeout(() => { if (!rx.classList.contains('on')) sc.hidden = true; }, 360); }
+function closeRx() { PAIR_OPEN = false; const rx = $('#rx'), sc = $('#rxScrim'); rx.classList.remove('on'); sc.classList.remove('on'); setTimeout(() => { if (!rx.classList.contains('on')) sc.hidden = true; }, 360); }
 function rxOpen() { return $('#rx').classList.contains('on'); }
 
 function rCalc() {
