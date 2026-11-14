@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<title>가보자 길안내 일정표 시안</title>
+<style>
+@font-face { font-family: "Pretendard Variable"; font-weight: 45 920; font-display: swap; src: url("fonts/PretendardVariable.woff2") format("woff2-variations"), url("fonts/PretendardVariable.woff2") format("woff2"); }
+:root { color-scheme: light; --canvas:#EEF0F3; --ink:#15171A; --sub:#6F757D; --hair:rgba(21,23,26,.09); --paper:#FFFFFF; --blue:#3B5BDB; --blue-soft:rgba(59,91,219,.09); --past:#C9CDD3; --past-tx:#9AA0A8; --red:#E0453A;
+  --kr:"Pretendard Variable",Pretendard,-apple-system,"Apple SD Gothic Neo","Malgun Gothic",system-ui,sans-serif; --shadow:0 0.25rem 0.75rem -0.375rem rgba(24,36,60,.18); }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { color-scheme: dark; --canvas:#0E1013; --ink:#ECEEF1; --sub:#8F969F; --hair:rgba(255,255,255,.08); --paper:#1B1E23; --blue:#8095F5; --blue-soft:rgba(128,149,245,.12); --past:#3A3F46; --past-tx:#5F656D; --red:#F2675D; --shadow:none; } }
+html { font-size: clamp(13.5px, calc(100vw * 16 / 390), 18px); }
+body { margin: 0; background: var(--canvas); color: var(--ink); font-family: var(--kr); -webkit-font-smoothing: antialiased; }
+main { max-width: 26rem; margin: 0 auto; padding: 1.25rem 1rem 4rem; }
+h1 { font-size: 1.25rem; margin: 0 0 .25rem; } .lead { color: var(--sub); font-size: .875rem; margin: 0 0 1.5rem; line-height: 1.55; }
+h2 { font-size: 1rem; margin: 2rem 0 .375rem; } .note { color: var(--sub); font-size: .8125rem; margin: 0 0 .75rem; line-height: 1.55; }
+.card { background: var(--paper); border-radius: 1.25rem; padding: 1rem 1.125rem; box-shadow: var(--shadow); }
+.t { font-variant-numeric: tabular-nums; font-size: .9375rem; width: 3.125rem; flex: none; }
+.one { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-width: 0; }
+.m { color: var(--sub); font-weight: 500 !important; font-size: .9375rem; }
+
+/* 지금 (문제) */
+.cur .row { display: grid; grid-template-columns: 1.375rem 3.125rem minmax(0,1fr); gap: .625rem; padding: .6875rem 0; position: relative; }
+.cur .rail { position: relative; display: flex; justify-content: center; }
+.cur .rail::before { content: ""; position: absolute; top: -.6875rem; bottom: -.6875rem; width: .1875rem; background: var(--ink); }
+.cur .row.past .rail::before { background: var(--past); }
+.cur .row:first-child .rail::before { top: .75rem; } .cur .row:last-child .rail::before { bottom: auto; height: 1.4375rem; }
+.cur .pt { position: relative; z-index: 1; width: .875rem; height: .875rem; margin-top: .3125rem; border-radius: 50%; background: var(--paper); border: .1875rem solid var(--ink); box-sizing: content-box; width: .5rem; height: .5rem; }
+.cur .past .pt { border-color: var(--past); background: var(--past); } .cur .now .pt { border-color: var(--blue); background: var(--blue); box-shadow: 0 0 0 .3125rem var(--blue-soft); }
+.cur b { font-weight: 800; } .cur .past b, .cur .past .t { color: var(--past-tx); }
+.bad { outline: 2px dashed var(--red); outline-offset: 2px; border-radius: 2px; }
+
+/* A: 지나온 건 접고, 지금 = 강조 카드, 남은 건 선 없이 */
+.a .fold { display: flex; align-items: center; gap: .5rem; width: 100%; border: 0; background: var(--hair); color: var(--sub); font: 600 .8125rem var(--kr); padding: .625rem .875rem; border-radius: .875rem; }
+.a .fold svg { width: 1rem; height: 1rem; stroke: currentColor; fill: none; stroke-width: 2; margin-left: auto; }
+.a .pastlist { display: none; padding: .25rem .875rem 0; } .a.open .pastlist { display: block; }
+.a .pastlist div { display: flex; gap: .625rem; padding: .375rem 0; color: var(--past-tx); font-size: .875rem; }
+.a .nowc { margin: .625rem 0; display: flex; align-items: center; gap: .625rem; background: var(--blue-soft); border-radius: .875rem; padding: .75rem .875rem; border-left: .25rem solid var(--blue); }
+.a .nowc .lb { font-size: .6875rem; font-weight: 800; color: var(--blue); letter-spacing: .04em; }
+.a .nowc b { font-size: 1.0625rem; }
+.a .up { display: flex; gap: .625rem; padding: .625rem .875rem; border-top: 1px solid var(--hair); align-items: baseline; }
+.a .up:first-of-type { border-top: 0; }
+.a .up b { font-weight: 700; }
+
+/* B: 진행 막대 — 지나온 구간은 파랑으로 채워지고, 남은 구간은 회색 점선. 끊김 없음 */
+.b .row { display: grid; grid-template-columns: 1.375rem 3.125rem minmax(0,1fr); gap: .625rem; padding: .6875rem 0; }
+.b .rail { position: relative; display: flex; justify-content: center; }
+.b .rail::before { content: ""; position: absolute; top: -.6875rem; bottom: -.6875rem; left: 50%; transform: translateX(-50%); border-left: .125rem dashed var(--past); }
+.b .row.done .rail::before, .b .row.now .rail::before { border-left: .1875rem solid var(--blue); }
+.b .row.now .rail::before { bottom: 50%; }
+.b .row:first-child .rail::before { top: 50%; } .b .row:last-child .rail::before { bottom: 50%; }
+.b .pt { position: relative; z-index: 1; margin-top: .4375rem; width: .625rem; height: .625rem; border-radius: 50%; background: var(--paper); border: .125rem solid var(--past); }
+.b .done .pt { background: var(--blue); border-color: var(--blue); width: .5rem; height: .5rem; margin-top: .5rem; }
+.b .now .pt { width: 1rem; height: 1rem; margin-top: .25rem; background: var(--blue); border: .1875rem solid var(--paper); box-shadow: 0 0 0 .125rem var(--blue); }
+.b .done .t, .b .done b { color: var(--past-tx); } .b b { font-weight: 700; } .b .now b { font-weight: 800; }
+.b .now .tag { font-size: .6875rem; font-weight: 800; color: var(--blue); margin-left: .375rem; }
+
+/* C: 시간 막대 없음 — 왼쪽 시각 칩, 지금 줄만 칠함 (Wanderlog·구글 캘린더 '일정' 보기) */
+.c .row { display: flex; align-items: center; gap: .75rem; padding: .5rem .25rem; border-radius: .75rem; }
+.c .chip { flex: none; font-variant-numeric: tabular-nums; font-size: .8125rem; font-weight: 700; padding: .3125rem .5rem; border-radius: .5rem; background: var(--hair); width: 3rem; text-align: center; }
+.c .done { opacity: .45; } .c .done .chip { background: transparent; }
+.c .now { background: var(--blue-soft); } .c .now .chip { background: var(--blue); color: #fff; }
+.c b { font-weight: 700; } .c .divider { display: flex; align-items: center; gap: .5rem; color: var(--blue); font-size: .75rem; font-weight: 800; margin: .25rem 0; }
+.c .divider::after { content: ""; flex: 1; height: 1px; background: var(--blue); opacity: .5; }
+.pick { margin-top: .5rem; font-size: .8125rem; color: var(--sub); }
+.rec { display: inline-block; font-size: .6875rem; font-weight: 800; color: #fff; background: var(--blue); padding: .125rem .5rem; border-radius: 1rem; margin-left: .375rem; vertical-align: middle; }
+</style>
+</head>
+<body>
+<main>
+<h1>33 · 길안내 아래 일정표</h1>
+<p class="lead">문제: '지금' 점 위로 흰 선 토막이 남아 지나온 회색 선과 끊겨 보임. 같은 예시(DAY 2 · 13:30 말차 파르페 중)로 대안 3개.</p>
+
+<h2>지금 (문제)</h2>
+<div class="card cur">
+  <div class="row past"><span class="rail"><span class="pt"></span></span><span class="t">11:00</span><b class="one">산넨자카</b></div>
+  <div class="row past"><span class="rail"><span class="pt"></span></span><span class="t">12:00</span><b class="one">점심</b></div>
+  <div class="row now"><span class="rail bad"><span class="pt"></span></span><span class="t">13:30</span><b class="one">말차 파르페</b></div>
+  <div class="row"><span class="rail"><span class="pt"></span></span><span class="t">15:00</span><b class="one">기온</b></div>
+  <div class="row"><span class="rail"><span class="pt"></span></span><span class="t">16:00</span><b class="one m">전철 1시간 · 요도야바시 환승</b></div>
+</div>
+
+<h2>A · 지나온 건 접기 + 지금 카드 <span class="rec">아키 추천</span></h2>
+<p class="note">선 자체를 없앰. 지나온 일정은 한 줄로 접고(눌러 펼침), 지금 일정은 파란 띠 카드, 남은 일정은 얇은 구분선 목록. 참고: 구글 지도 대중교통 단계 · 애플 지도 경로 단계.</p>
+<div class="card a" id="aCard">
+  <button class="fold" onclick="aCard.classList.toggle('open')">지나온 일정 5개<svg viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg></button>
+  <div class="pastlist"><div><span class="t">07:40</span><span class="one">전철 1시간 10분</span></div><div><span class="t">08:50</span><span class="one">기요미즈고조역 → 오르막</span></div><div><span class="t">09:20</span><span class="one">기요미즈데라</span></div><div><span class="t">11:00</span><span class="one">산넨자카</span></div><div><span class="t">12:00</span><span class="one">점심</span></div></div>
+  <div class="nowc"><span class="t" style="font-weight:700">13:30</span><div style="min-width:0"><div class="lb">지금</div><b class="one" style="display:block">말차 파르페</b></div></div>
+  <div class="up"><span class="t">15:00</span><b class="one">기온</b></div>
+  <div class="up"><span class="t">16:00</span><b class="one m">전철 1시간 · 요도야바시 환승</b></div>
+  <div class="up"><span class="t">17:00</span><b class="one">숙소 휴식</b></div>
+</div>
+
+<h2>B · 진행 막대 (배달 추적식)</h2>
+<p class="note">선은 남기되 지나온 구간 = 파랑 실선으로 채워지고 '지금' 점에서 끝남, 남은 구간 = 회색 점선. 흰 토막 없음. 참고: 배달·택배 진행 단계.</p>
+<div class="card b">
+  <div class="row done"><span class="rail"><span class="pt"></span></span><span class="t">11:00</span><b class="one">산넨자카</b></div>
+  <div class="row done"><span class="rail"><span class="pt"></span></span><span class="t">12:00</span><b class="one">점심</b></div>
+  <div class="row now"><span class="rail"><span class="pt"></span></span><span class="t">13:30</span><b class="one">말차 파르페<span class="tag">지금</span></b></div>
+  <div class="row"><span class="rail"><span class="pt"></span></span><span class="t">15:00</span><b class="one">기온</b></div>
+  <div class="row"><span class="rail"><span class="pt"></span></span><span class="t">16:00</span><b class="one m">전철 1시간 · 요도야바시 환승</b></div>
+</div>
+
+<h2>C · 선 없이 시각 칩 + '지금' 가로줄</h2>
+<p class="note">세로선·점 없음. 왼쪽 시각 칩, 지나온 건 흐리게, 지금 줄만 칠하고 그 위에 '지금 13:42' 가로줄. 참고: 구글 캘린더 일정 보기(빨간 현재 시각 줄) · Wanderlog.</p>
+<div class="card c">
+  <div class="row done"><span class="chip">11:00</span><b class="one">산넨자카</b></div>
+  <div class="row done"><span class="chip">12:00</span><b class="one">점심</b></div>
+  <div class="divider">현재 시각 13:42</div>
+  <div class="row now"><span class="chip">13:30</span><b class="one">말차 파르페</b></div>
+  <div class="row"><span class="chip">15:00</span><b class="one">기온</b></div>
+  <div class="row"><span class="chip">16:00</span><b class="one m">전철 1시간 · 요도야바시 환승</b></div>
+</div>
+<p class="pick">A는 36번(일정 눌러 건너뛰기·삭제)과도 잘 맞습니다 — 남은 줄을 누르거나 밀기 쉬움.</p>
+</main>
+</body>
+</html>
