@@ -696,6 +696,51 @@ html, body { overscroll-behavior-y: contain; }
 .addbar { position: sticky; bottom: 0; margin-top: 0.75rem; padding-top: 0.5rem; background: linear-gradient(transparent, var(--sheet) 30%); }
 .addbar[hidden] { display: none; }
 .addbar .btn { width: 100%; height: 3rem; font-size: 0.9375rem; }
+
+/* PDF로 저장 (11/14) — 안내 시트 + 인쇄용 문서 (평소엔 안 보임) */
+.pdfg { display: flex; flex-direction: column; margin-top: 0.75rem; }
+.pdfg p { margin: 0; padding: 0.625rem 0; border-top: 1px solid var(--hair); display: flex; flex-direction: column; gap: 2px; font-size: 0.8125rem; color: var(--sub); }
+.pdfg p:first-child { border-top: 0; }
+.pdfg p b { font-size: 0.875rem; font-weight: 600; color: var(--ink); }
+.pdfg p.me b { font-weight: 800; } .pdfg p.me span { color: var(--ink); font-weight: 700; }
+#printDoc { display: none; }
+@media print {
+  @page { size: 110mm 200mm; margin: 9mm 8mm; }
+  html, body { background: #fff !important; overflow: visible !important; height: auto !important; scrollbar-gutter: auto; }
+  body > *:not(#printDoc) { display: none !important; }
+  #printDoc { display: block; color: #111; background: #fff; font-family: var(--kr); font-size: 10.5pt; line-height: 1.5; letter-spacing: -.01em; font-variant-numeric: normal; font-feature-settings: normal; width: 100%; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  #printDoc * { box-sizing: border-box; }
+  #printDoc .ps { break-before: page; }
+  #printDoc .ps:first-child { break-before: auto; }
+  #printDoc .g { color: #6b6b6b; font-size: 9pt; font-weight: 400; }
+  #printDoc h1 { font-size: 15pt; font-weight: 800; line-height: 1.3; margin: 0.5em 0 0.3em; }
+  #printDoc h2 { font-size: 15pt; font-weight: 800; line-height: 1.3; margin: 0.15em 0 0.5em; }
+  #printDoc h3 { font-size: 10.5pt; font-weight: 800; margin: 1.1em 0 0.3em; padding-top: 0.5em; border-top: 1px solid #111; }
+  #printDoc p { margin: 0; }
+  #printDoc .cover { height: 176mm; display: flex; flex-direction: column; justify-content: space-between; }
+  #printDoc .cover .ctop { padding-top: 38mm; }
+  #printDoc .eb { font-size: 9pt; letter-spacing: .18em; color: #6b6b6b; }
+  #printDoc .cover .sb { margin: 0 0 1.4em; }
+  #printDoc .dep { border-top: 1px solid #111; padding-top: 0.6em; }
+  #printDoc .dep p { margin: 0 0 0.3em; }
+  #printDoc .foot { font-size: 9pt; color: #6b6b6b; }
+  #printDoc .ov { padding: 0.55em 0; border-top: 1px solid #d4d4d4; break-inside: avoid; }
+  #printDoc .ov b { display: block; font-weight: 700; }
+  #printDoc .ov .g { display: block; }
+  #printDoc .dh { padding-bottom: 0.6em; margin-bottom: 0.4em; border-bottom: 1px solid #111; }
+  #printDoc .dh .g { display: block; }
+  #printDoc .it { padding: 0.45em 0; border-top: 1px solid #e3e3e3; break-inside: avoid; }
+  #printDoc .it.mv { padding: 0.15em 0; border-top: 0; }
+  #printDoc .r1 { display: flex; gap: 0.7em; align-items: baseline; }
+  #printDoc .r1 .t { flex: none; min-width: 3.2em; font-weight: 700; }
+  #printDoc .r1 b { flex: 1 1 auto; min-width: 0; font-weight: 700; }
+  #printDoc .pmap { flex: none; font-size: 9pt; color: #6b6b6b; text-decoration: underline; }
+  #printDoc .sd { padding-left: 3.9em; }
+  #printDoc .mm.dn { text-decoration: line-through; }
+  #printDoc .cr { display: flex; justify-content: space-between; gap: 1em; padding: 0.3em 0; border-top: 1px solid #e3e3e3; break-inside: avoid; }
+  #printDoc .cr.dn { text-decoration: line-through; color: #6b6b6b; }
+  #printDoc .src { margin-top: 0.5em; }
+}
 </style>
 
 <div class="app">
@@ -2201,9 +2246,90 @@ function menuSheet(k) {
     if (navigator.share) navigator.share(data).catch(e => { if (e && e.name !== 'AbortError') toast('공유 창 열기 실패 · 링크 복사 이용'); });
     else toast('공유 창 미지원 브라우저 · 링크 복사 이용');
   }
-  else if (k === 'pdf') { closeAll(); toast('시안에서는 PDF 저장 불가'); }
+  else if (k === 'pdf') { pdfSheet(); }
   else { closeAll(); toast('시안에서는 아직 준비 중'); }
 }
+
+/* ---------- PDF로 저장 (11/14) ----------
+   인쇄용 문서(#printDoc)를 만들어 window.print() → 글자가 살아 있는 PDF. 새 데이터 로직 없이 화면과 같은 값(DAYS·편집 반영·메모·#tips)을 읽음.
+   점검용: index.html?print=1 → 문서만 만들고 인쇄 창은 안 띄움 */
+function pdfSheet() {
+  const ua = navigator.userAgent, ios = /iP(hone|od|ad)/.test(ua) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1), and = !ios && /Android/.test(ua);
+  const rows = [['ios', '아이폰·아이패드', '인쇄 화면에서 공유 버튼 → ‘파일에 저장’'], ['and', '안드로이드(크롬·삼성 인터넷)', '프린터를 ‘PDF로 저장’으로 바꾸고 저장 버튼'], ['pc', 'PC', '대상 ‘PDF로 저장’']];
+  const me = ios ? 'ios' : and ? 'and' : 'pc';
+  rows.sort((a, b) => (b[0] === me) - (a[0] === me));
+  openSheet('<div class="shd"><div><span class="eyebrow">PDF</span><h3 id="sheetTitle">PDF로 저장</h3></div>' + X_BTN + '</div><div class="body"><div><p class="sub">인쇄 화면이 열리면 아래처럼 저장하세요</p>'
+    + '<div class="pdfg">' + rows.map(r => '<p' + (r[0] === me ? ' class="me"' : '') + '><b>' + r[1] + '</b><span>' + r[2] + '</span></p>').join('') + '</div></div>'
+    + '<div class="acts"><button class="btn ghost" data-close>취소</button><button class="btn pri" id="pdfGo">PDF 만들기</button></div></div>');
+}
+function buildPrintDoc() {
+  const old = document.getElementById('printDoc'); if (old) old.remove();
+  const wd = d => { const t = dateOfDay(d); return (t.getMonth() + 1) + '/' + t.getDate() + '(' + WDF[t.getDay()] + ')'; };
+  const mapA = (d, c) => { const u = mapUrl(d, c); return u ? '<a class="pmap" href="' + u + '">지도</a>' : ''; };
+  const now = new Date(), made = now.getFullYear() + '.' + String(now.getMonth() + 1).padStart(2, '0') + '.' + String(now.getDate()).padStart(2, '0');
+  const wxTx = d => { const w = wxOf(d); if (!w) return ''; const [hi, lo, pr] = w.v; return (w.n ? '평년 ' : '') + hi + '°/' + lo + '°' + (pr != null ? ' · 비 ' + Math.round(pr) + '%' : ''); };
+  // 표지
+  const fl = []; DAYS.forEach(d => d.list.forEach(c => { if (c.fly && !isCar(c) && c.ride !== 'train') fl.push([d, c]); }));
+  const flTx = (lb, d, c) => '<p>' + lb + ' · ' + esc(wd(d)) + (d.tbd ? '' : ' ' + c.s) + ' · ' + esc(c.fly[0] + ' ' + c.fly[1] + ' → ' + c.fly[2] + ' ' + c.fly[3]) + (c.fno ? ' · ' + esc(c.fno) : '') + '</p>';
+  let h = '<div class="ps cover"><div class="ctop"><span class="eb">GABOJA</span><h1>' + esc(TRIP_TITLE) + '</h1><p class="sb">' + esc(TRIP_DATES + (TRIP_NIGHTS ? ' · ' + TRIP_NIGHTS : '')) + '</p>'
+    + (fl.length ? '<div class="dep">' + flTx('가는 편', fl[0][0], fl[0][1]) + (fl.length > 1 ? flTx('오는 편', fl[fl.length - 1][0], fl[fl.length - 1][1]) : '') + '</div>' : '')
+    + '</div><p class="foot">가보자로 만든 일정 · 만든 날 ' + made + '</p></div>';
+  // 한눈에 보기
+  h += '<div class="ps"><h2>한눈에 보기</h2>';
+  DAYS.forEach(d => {
+    let nm = routeOf(d).filter(x => x !== '집' && x !== baseOf(d)); if (!nm.length) nm = routeOf(d);
+    const rt = nm.length > 3 ? nm.slice(0, 3).join(' → ') + ' 외 ' + (nm.length - 3) + '곳' : nm.join(' → ');
+    h += '<div class="ov"><b>DAY ' + d.no + ' · ' + esc(wd(d)) + ' · ' + esc(d.title) + '</b><span class="g">' + esc(rt || '일정 없음') + '</span></div>';
+  });
+  h += '</div>';
+  // 날짜별
+  DAYS.forEach(d => {
+    const wx = wxTx(d);
+    h += '<div class="ps"><div class="dh"><span class="g">DAY ' + d.no + ' · ' + esc(wd(d)) + (d.city ? ' · ' + esc(d.city) : '') + '</span><h2>' + esc(d.title) + '</h2>' + (wx ? '<span class="g">' + esc(wx) + '</span>' : '') + '</div>';
+    d.list.forEach(c => {
+      const tm = d.tbd ? '–' : c.s;
+      if (c.k === 'm') { h += '<div class="it mv"><span class="g">' + esc(tm) + ' · ' + esc(c.mv || c.n || '') + '</span></div>'; return; }
+      const parts = (c.n || '').split(' — '), main = c.fly ? rideWord(c) + ' ' + c.fly[1] + ' → ' + c.fly[3] : (parts[1] || parts[0]);
+      const sub = [];
+      if (c.fly) sub.push(d.tbd ? '시각 미정' : '출발 ' + c.s + ' → 도착 ' + c.e); else if (parts[1]) sub.push(parts[0]);
+      if (c.fly && c.fno) sub.push((c.ride === 'train' && c.line ? c.line + ' ' : '') + c.fno);
+      if (c.say) sub.push(c.say);
+      if (c.k === 'u') sub.push('직접 추가');
+      h += '<div class="it"><div class="r1"><span class="t">' + esc(tm) + '</span><b>' + esc(main) + '</b>' + mapA(d, c) + '</div>'
+        + (sub.length ? '<div class="g sd">' + sub.map(esc).join(' · ') + '</div>' : '')
+        + (c.memo || []).map(m => '<div class="g sd mm' + (m.done ? ' dn' : '') + '">메모 · ' + esc(m.t) + '</div>').join('') + '</div>';
+    });
+    h += '</div>';
+  });
+  // 현지 정보 (화면의 #tips 내용을 그대로 — 내 일정은 PLAN.local, 안 보이는 도시면 생략)
+  const tp = document.getElementById('tips');
+  if (tp && tp.style.display !== 'none') {
+    let t = '';
+    [...tp.children].forEach(el => {
+      if (el.tagName === 'SUMMARY') return;
+      if (el.classList.contains('grp2')) t += '<h3>' + esc(el.textContent.replace(/\s*·\s*번호를 누르면 전화/, '')) + '</h3>';
+      else if (el.classList.contains('crow')) { const b = el.querySelector('b'), s = el.querySelector('.src'), tl = el.querySelector('.tel'); t += '<div class="cr"><span><b>' + esc(b ? b.textContent : '') + '</b>' + (s && s.textContent ? '<span class="g"> ' + esc(s.textContent) + '</span>' : '') + '</span><span>' + esc(tl ? tl.textContent : '') + '</span></div>'; }
+      else if (el.classList.contains('nrow')) { const b = el.querySelector('b'), s = el.querySelector('.src'); if (b) t += '<div class="cr"><span><b>' + esc(b.textContent) + '</b> ' + esc(s ? s.textContent : '') + '</span></div>'; else if (s && s.textContent) t += '<p class="g src">' + esc(s.textContent) + '</p>'; }
+      else if (el.classList.contains('cattr')) t += '<p class="g src">' + esc(el.textContent) + '</p>';
+    });
+    if (t) h += '<div class="ps"><h2>현지 정보</h2>' + t + '</div>';
+  }
+  // 메모 (있을 때만): 할 일 / 끝낸 것
+  const tm = st.tripMemo || [], todo = [], done = [];
+  tm.forEach(m => (m.done ? done : todo).push(['여행 전체', m]));
+  DAYS.forEach(d => d.list.forEach(c => (c.memo || []).forEach(m => (m.done ? done : todo).push(['DAY ' + d.no + ' · ' + (c.sh || c.n), m]))));
+  if (todo.length || done.length) {
+    const ml = a => a.map(([w, m]) => '<div class="cr' + (m.done ? ' dn' : '') + '"><span><b>' + esc(w) + '</b> ' + esc(m.t) + '</span></div>').join('');
+    h += '<div class="ps"><h2>메모</h2>' + (todo.length ? '<h3>할 일</h3>' + ml(todo) : '') + (done.length ? '<h3>끝낸 것</h3>' + ml(done) : '') + '</div>';
+  }
+  const el = document.createElement('div'); el.id = 'printDoc'; el.innerHTML = h; document.body.appendChild(el);
+  return el;
+}
+document.addEventListener('click', e => {
+  if (!e.target.closest('#pdfGo')) return;
+  closeAll(); buildPrintDoc();
+  setTimeout(() => { try { window.print(); } catch (_) { toast('인쇄 화면을 열지 못했어요'); } }, 600);
+});
 
 /* ---------- 이벤트 ---------- */
 // 14. 크롬·삼성 인터넷: 설치 창을 메뉴에서 띄움 (홈 화면 앱 = 주소창 없음, manifest는 배포본에만)
@@ -2306,6 +2432,8 @@ loadEdits();
 DAYS.forEach(d => { if (!d.slots) d.slots = d.list.map(c => toMin(c.s)); });
 { const n = nowRef(); if (n.phase === 'during') st.day = n.day; }
 renderDays(); renderPlan(); renderNow(); renderTrail(); arcCount(); memoCount(); syncBar(); tripsCount(); endBadge();
+window.addEventListener('beforeprint', () => { try { buildPrintDoc(); } catch (_) {} });   // 브라우저 메뉴·Ctrl+P로 인쇄해도 빈 쪽 안 나오게
+try { if (new URLSearchParams(location.search).get('print') === '1') { buildPrintDoc(); } } catch (_) {}   // 점검용: 인쇄 문서만 만듦 (인쇄 창 안 띄움)
 try { const fm = sessionStorage.getItem('gaboja-flash'); if (fm) { sessionStorage.removeItem('gaboja-flash'); setTimeout(() => toast(fm), 450); } } catch (_) {}
 </script>
 
