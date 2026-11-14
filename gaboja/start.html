@@ -144,7 +144,7 @@ main { flex: 1; display: flex; flex-direction: column; position: relative; overf
 .opt.prev { box-shadow: inset 0 0 0 2px var(--ink), var(--sh-xs); }
 
 /* 아래 출발 안내판: 코드 4칸 */
-.board { position: sticky; bottom: max(0.75rem, env(safe-area-inset-bottom, 0px)); margin-top: auto; z-index: 4; border-radius: var(--r-lg); padding: 0.75rem 0.875rem; display: flex; align-items: center; gap: 0.875rem; }
+.board { position: sticky; bottom: max(0.75rem, env(safe-area-inset-bottom, 0px)); margin-top: 0.75rem; z-index: 4; border-radius: var(--r-lg); padding: 0.75rem 0.875rem; display: flex; align-items: center; gap: 0.875rem; }
 .board .lb { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 1px; }
 .board .lb b { font-size: 0.8125rem; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .board .lb span { font-size: 0.71875rem; color: var(--sub); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
@@ -904,7 +904,7 @@ function rQ(i) {
     <div class="opts" id="opts">${ord.map((oi, n) => `<button class="opt ${prev === oi ? 'prev' : ''}" data-oi="${oi}"><span class="top"><span class="k">${'ABCD'[n]}</span><svg class="ic" viewBox="0 0 24 24" aria-hidden="true">${QI[i][oi]}</svg></span><span class="tx">${esc(q.o[oi][0])}</span><span class="stamp">${ICON.check}</span></button>`).join('')}</div>
     <div class="board glass" id="board">
       ${flapsHtml(ls, false, i - 1)}
-      <div class="lb"><b id="bdT">${known ? `탑승권 코드 ${SHOWN[i - 1]} / 4` : '하나 고를 때마다 코드가 한 칸씩 채워져요'}</b><span id="bdS">${known ? boardSub(ls) : AX.map(x => x.ax).join(' · ')}</span></div>
+      <div class="lb"><b id="bdT">${known ? `탑승권 코드 ${SHOWN[i - 1]} / 4` : '고를 때마다 한 칸씩 채워져요'}</b><span id="bdS">${known ? boardSub(ls) : '4칸이 다 차면 내 여행 유형'}</span></div>
     </div>`);
   el.querySelectorAll('.opt').forEach(b => b.onclick = () => choose(i, +b.dataset.oi, b));
 }
