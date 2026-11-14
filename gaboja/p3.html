@@ -1,0 +1,165 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<title>가보자 시작 화면 시안</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Gasoek+One&family=Nanum+Myeongjo:wght@800&family=Gaegu:wght@700&family=Jua&display=swap" rel="stylesheet">
+<style>
+@font-face { font-family: "Pretendard Variable"; font-weight: 45 920; font-display: swap; src: url("fonts/PretendardVariable.woff2") format("woff2-variations"), url("fonts/PretendardVariable.woff2") format("woff2"); }
+:root { color-scheme: light; --canvas:#EEF0F3; --ink:#15171A; --sub:#6F757D; --hair:rgba(21,23,26,.09); --paper:#FFFFFF; --blue:#3B5BDB; --red:#E0453A; --track:#E4E7EB;
+  --kr:"Pretendard Variable",Pretendard,-apple-system,"Apple SD Gothic Neo","Malgun Gothic",system-ui,sans-serif; --shadow:0 0.25rem 0.75rem -0.375rem rgba(24,36,60,.18); }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { color-scheme: dark; --canvas:#0E1013; --ink:#ECEEF1; --sub:#8F969F; --hair:rgba(255,255,255,.08); --paper:#1B1E23; --blue:#8095F5; --red:#F2675D; --track:#2A2E34; --shadow:none; } }
+:root[data-theme="dark"] { color-scheme: dark; --canvas:#0E1013; --ink:#ECEEF1; --sub:#8F969F; --hair:rgba(255,255,255,.08); --paper:#1B1E23; --blue:#8095F5; --red:#F2675D; --track:#2A2E34; --shadow:none; }
+html { font-size: clamp(13.5px, calc(100vw * 16 / 390), 18px); }
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--canvas); color: var(--ink); font-family: var(--kr); -webkit-font-smoothing: antialiased; }
+main { max-width: 26rem; margin: 0 auto; padding: 1.25rem 1rem 4rem; }
+h1 { font-size: 1.25rem; margin: 0 0 .25rem; letter-spacing: -.02em; }
+.lead { color: var(--sub); font-size: .875rem; margin: 0 0 1rem; line-height: 1.6; word-break: keep-all; }
+.part { margin: 2.75rem 0 .25rem; font-size: .75rem; font-weight: 800; letter-spacing: .08em; color: var(--red); }
+.opt { margin: 1.75rem 0 .5rem; display: flex; align-items: baseline; gap: .5rem; flex-wrap: wrap; }
+.opt b { font-size: 1.125rem; } .opt span { color: var(--sub); font-size: .8125rem; }
+.how { color: var(--sub); font-size: .8125rem; line-height: 1.6; margin: 0 0 .75rem; word-break: keep-all; padding-left: 1.1rem; }
+.src { color: var(--sub); font-size: .75rem; line-height: 1.6; margin-top: 2.5rem; word-break: break-all; } .src a { color: var(--sub); }
+.tabs { position: sticky; top: 0; z-index: 5; display: flex; gap: .375rem; padding: .5rem 0; background: var(--canvas); }
+.tabs a { flex: 1; text-align: center; text-decoration: none; color: var(--ink); background: var(--paper); border-radius: 2rem; padding: .5rem 0; font-size: .8125rem; font-weight: 700; box-shadow: var(--shadow); }
+
+/* 폰 화면 틀 */
+.ph { border-radius: 1.5rem; border: 1px solid var(--hair); background: var(--canvas); height: 44rem; overflow: hidden; display: flex; flex-direction: column; padding: 2.5rem 1.25rem 1.25rem; position: relative; }
+.eb { font-size: .75rem; font-weight: 700; color: var(--sub); letter-spacing: .02em; }
+.ph h2 { font-size: 1.875rem; line-height: 1.25; letter-spacing: -.04em; margin: .5rem 0 .625rem; font-weight: 800; word-break: keep-all; }
+.ph p.d { margin: 0; font-size: .9375rem; color: var(--sub); line-height: 1.55; word-break: keep-all; }
+.facts { display: flex; gap: .375rem; margin-top: .875rem; } .facts span { font-size: .75rem; font-weight: 700; padding: .375rem .625rem; border-radius: 2rem; background: var(--hair); }
+.mid { flex: 1; display: flex; flex-direction: column; justify-content: center; min-height: 0; }
+.cta { border: 0; border-radius: 2rem; padding: 1rem; font: 800 1rem var(--kr); background: var(--ink); color: var(--canvas); width: 100%; }
+.gh { text-align: center; font-size: .875rem; color: var(--sub); font-weight: 600; margin-top: .75rem; }
+
+/* A: 출발 안내판 (스플릿 플랩) */
+.board { background: #121418; border-radius: 1rem; padding: 1rem; color: #F2F3F5; box-shadow: 0 1rem 2rem -1rem rgba(0,0,0,.5); }
+.board .top { display: flex; justify-content: space-between; font-size: .625rem; font-weight: 800; letter-spacing: .12em; color: #8F969F; margin-bottom: .625rem; }
+.board .top em { font-style: normal; color: #F5C542; }
+.brow { display: grid; grid-template-columns: 4.5rem 1fr auto; gap: .625rem; align-items: center; padding: .5rem 0; border-top: 1px solid rgba(255,255,255,.07); font-size: .8125rem; }
+.brow .cd { display: flex; gap: .125rem; }
+.brow .cd i { font-style: normal; width: 1rem; height: 1.375rem; background: #23262C; border-radius: .1875rem; display: grid; place-items: center; font-weight: 800; font-size: .8125rem; position: relative; }
+.brow .cd i::after { content: ""; position: absolute; left: 0; right: 0; top: 50%; height: 1px; background: rgba(0,0,0,.6); }
+.brow .nm { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-weight: 600; }
+.brow .st { font-size: .6875rem; font-weight: 800; color: #F5C542; }
+.brow.you .st { color: #F2675D; } .brow.you .nm { color: #8F969F; }
+.flip { animation: flip .32s ease-in-out; } @keyframes flip { 0% { transform: rotateX(0) } 50% { transform: rotateX(90deg) } 100% { transform: rotateX(0) } }
+
+/* B: 16칸 컬렉션 */
+.grid16 { display: grid; grid-template-columns: repeat(4, 1fr); gap: .375rem; }
+.grid16 div { aspect-ratio: 1 / 1.08; border-radius: .75rem; background: var(--paper); box-shadow: var(--shadow); display: flex; flex-direction: column; justify-content: space-between; padding: .4375rem; }
+.grid16 b { font-size: .75rem; letter-spacing: .04em; } .grid16 span { font-size: .5625rem; color: var(--sub); line-height: 1.3; word-break: keep-all; }
+.grid16 div.q { background: var(--ink); color: var(--canvas); align-items: center; justify-content: center; font-size: 1.5rem; font-weight: 800; }
+.cap { text-align: center; font-size: .8125rem; color: var(--sub); margin-top: .625rem; } .cap b { color: var(--red); }
+
+/* C: 첫 질문 미리 */
+.peek { background: var(--paper); border-radius: 1.25rem; padding: 1rem; box-shadow: var(--shadow); }
+.peek .n { font-size: .6875rem; font-weight: 800; color: var(--red); letter-spacing: .06em; } .peek h3 { margin: .25rem 0 .75rem; font-size: 1.0625rem; letter-spacing: -.02em; }
+.peek .os { display: grid; grid-template-columns: 1fr 1fr; gap: .375rem; }
+.peek .os span { font-size: .8125rem; font-weight: 600; padding: .75rem .625rem; border-radius: .75rem; background: var(--canvas); line-height: 1.35; word-break: keep-all; }
+.peek .hint { font-size: .75rem; color: var(--sub); margin-top: .625rem; text-align: center; }
+
+/* 3번 글꼴 */
+.fq { background: var(--paper); border-radius: 1.25rem; padding: 1.125rem; box-shadow: var(--shadow); }
+.fq .eb2 { font-size: .75rem; color: var(--sub); font-weight: 700; }
+.fq h2 { margin: .375rem 0 .375rem; font-size: 1.75rem; line-height: 1.25; word-break: keep-all; }
+.fq p { margin: 0 0 .875rem; font-size: .875rem; color: var(--sub); }
+.fq .os { display: grid; grid-template-columns: 1fr 1fr; gap: .375rem; }
+.fq .os span { font-size: .875rem; font-weight: 700; padding: .75rem; border-radius: .875rem; background: var(--canvas); line-height: 1.35; word-break: keep-all; }
+.f0 h2 { font-family: var(--kr); font-weight: 800; letter-spacing: -.04em; }
+.f1 h2 { font-family: "Gasoek One", var(--kr); font-weight: 400; letter-spacing: -.02em; font-size: 1.875rem; }
+.f2 h2 { font-family: "Nanum Myeongjo", serif; font-weight: 800; letter-spacing: -.04em; }
+.f3 h2 { font-family: "Jua", var(--kr); font-weight: 400; letter-spacing: -.01em; font-size: 1.875rem; }
+.f4 h2 { font-family: var(--kr); font-weight: 800; letter-spacing: -.04em; }
+.f4 p { font-family: "Gaegu", var(--kr); font-weight: 700; font-size: 1.125rem; color: var(--red); transform: rotate(-1.5deg); transform-origin: left; }
+.meta { font-size: .75rem; color: var(--sub); margin: .5rem .25rem 0; line-height: 1.55; word-break: keep-all; }
+.meta b { color: var(--ink); }
+</style>
+</head>
+<body>
+<main>
+<h1>시작 화면 · 질문 글꼴 시안 — 4·3</h1>
+<p class="lead">4번 = 성향 카드 아래 큰 빈자리를 채울 다른 장치 3안. 3번 = 질문 제목 글꼴 4안(본문은 Pretendard 그대로, <b>제목에만</b> 바꿈).</p>
+<nav class="tabs"><a href="#p4">4 시작 화면</a><a href="#p3">3 질문 글꼴</a></nav>
+
+<div class="part" id="p4">4 · 시작 화면 여백</div>
+
+<div class="opt"><b>A안</b><span>출발 안내판 — 16유형이 공항 전광판처럼 넘어감</span></div>
+<ul class="how"><li>탑승권 콘셉트를 이어서, 글자가 탁탁 넘어가는 움직임으로 시선 끌기</li><li>맨 아래 줄 = ‘나 · ????’ → “내 줄은 비어 있다”는 궁금증</li></ul>
+<div class="ph">
+  <span class="eb">가보자 · 여행 유형</span>
+  <h2>이번 여행, 나는<br>어떤 여행자일까?</h2>
+  <p class="d">고르기만 하면 16가지 탑승권 중 내 것이 나와요.</p>
+  <div class="mid"><div class="board" id="board"><div class="top"><span>DEPARTURES · 여행 유형</span><em>BOARDING</em></div></div></div>
+  <button class="cta">시작하기 →</button><div class="gh">16가지 유형 먼저 보기</div>
+</div>
+
+<div class="opt"><b>B안</b><span>16칸 컬렉션 — “나는 어디 칸?”</span></div>
+<ul class="how"><li>16유형을 한눈에 보여 주고 한 칸만 ‘?’ → 채우고 싶게</li><li>‘16가지 먼저 보기’ 버튼이 필요 없어져 아래가 단순해짐</li></ul>
+<div class="ph">
+  <span class="eb">가보자 · 여행 유형</span>
+  <h2>이번 여행, 나는<br>어떤 여행자일까?</h2>
+  <div class="facts"><span>질문 10개</span><span>2분이면 끝</span><span>가입 없음</span></div>
+  <div class="mid"><div class="grid16" id="g16"></div><div class="cap">16칸 중 <b>내 칸</b>은 어디일까요?</div></div>
+  <button class="cta">내 칸 찾기 →</button>
+</div>
+
+<div class="opt"><b>C안</b><span>첫 질문을 바로 보여 주기</span></div>
+<ul class="how"><li>빈자리에 1번 질문을 미리 띄움 → 보기를 누르면 바로 시작(버튼 한 번 줄어듦)</li><li>설명보다 ‘해 보기’가 먼저인 방식</li></ul>
+<div class="ph">
+  <span class="eb">가보자 · 여행 유형</span>
+  <h2>이번 여행, 나는<br>어떤 여행자일까?</h2>
+  <div class="facts"><span>질문 10개</span><span>2분이면 끝</span><span>가입 없음</span></div>
+  <div class="mid"><div class="peek"><div class="n">Q1 / 10</div><h3>도착 첫날, 짐 풀고 제일 먼저 할 일은?</h3>
+    <div class="os"><span>현지인 가는 시장에서 군것질</span><span>지도에 없는 골목 산책</span><span>평점 좋은 카페에서 커피 한 잔</span><span>그 도시 랜드마크 인증샷</span></div>
+    <div class="hint">하나 누르면 바로 시작돼요</div></div></div>
+  <div class="gh">16가지 유형 먼저 보기</div>
+</div>
+
+<div class="part" id="p3">3 · 질문 제목 글꼴</div>
+<p class="lead" style="margin-top:.5rem">모두 무료·상업 이용 가능(구글 폰트, 오픈 라이선스). 웹 글꼴이라 한글은 쓰는 글자만 받아 와서 가벼움.</p>
+
+<div class="opt"><b>지금</b><span>Pretendard 800</span></div>
+<div class="fq f0"><div class="eb2">여행 취향 · 1 / 10</div><h2>도착 첫날, 짐 풀고 제일 먼저 할 일은?</h2><p>고민 말고, 제일 먼저 발이 가는 쪽으로</p><div class="os"><span>현지인 가는 시장에서 군것질</span><span>지도에 없는 골목 산책</span></div></div>
+
+<div class="opt"><b>1안</b><span>Gasoek One — 아주 굵은 포스터체</span></div>
+<div class="fq f1"><div class="eb2">여행 취향 · 1 / 10</div><h2>도착 첫날, 짐 풀고 제일 먼저 할 일은?</h2><p>고민 말고, 제일 먼저 발이 가는 쪽으로</p><div class="os"><span>현지인 가는 시장에서 군것질</span><span>지도에 없는 골목 산책</span></div></div>
+<p class="meta"><b>느낌</b> 여행 포스터·티켓 광고. 탑승권 플랩 글자와 잘 붙음 · <b>주의</b> 한 굵기뿐, 긴 질문은 무거워 보일 수 있음</p>
+
+<div class="opt"><b>2안</b><span>나눔명조 — 명조(세리프)</span></div>
+<div class="fq f2"><div class="eb2">여행 취향 · 1 / 10</div><h2>도착 첫날, 짐 풀고 제일 먼저 할 일은?</h2><p>고민 말고, 제일 먼저 발이 가는 쪽으로</p><div class="os"><span>현지인 가는 시장에서 군것질</span><span>지도에 없는 골목 산책</span></div></div>
+<p class="meta"><b>느낌</b> 잡지 인터뷰 질문. 격식 있는 제목 + 캐주얼한 보기 카드의 충돌(취향 프로파일 ‘격식×캐주얼’) · <b>주의</b> 작은 크기에선 안 씀</p>
+
+<div class="opt"><b>3안</b><span>Jua — 둥근 손글씨풍</span></div>
+<div class="fq f3"><div class="eb2">여행 취향 · 1 / 10</div><h2>도착 첫날, 짐 풀고 제일 먼저 할 일은?</h2><p>고민 말고, 제일 먼저 발이 가는 쪽으로</p><div class="os"><span>현지인 가는 시장에서 군것질</span><span>지도에 없는 골목 산책</span></div></div>
+<p class="meta"><b>느낌</b> 가볍고 귀여운 테스트 · <b>주의</b> 흔한 편(여러 심리 테스트에서 비슷한 느낌), 앱 본편과 톤 차이 큼</p>
+
+<div class="opt"><b>4안</b><span>제목은 그대로 + 안내 한 줄만 손글씨(Gaegu)</span></div>
+<div class="fq f4"><div class="eb2">여행 취향 · 1 / 10</div><h2>도착 첫날, 짐 풀고 제일 먼저 할 일은?</h2><p>고민 말고, 제일 먼저 발이 가는 쪽으로</p><div class="os"><span>현지인 가는 시장에서 군것질</span><span>지도에 없는 골목 산책</span></div></div>
+<p class="meta"><b>느낌</b> 친구가 옆에 써 준 메모. 변화는 작고 위험도 작음, 손그림 선 취향과 맞음 · <b>주의</b> 빨강 손글씨는 질문마다 한 줄만</p>
+
+<p class="src">근거 · 글꼴 4종 모두 Google Fonts 제공(fonts.googleapis.com에서 불러옴, 11/14 확인) · Google Fonts는 전부 오픈소스 라이선스로 상업 이용 무료 <a href="https://developers.google.com/fonts/faq">developers.google.com/fonts/faq</a> · 안내판·16칸·첫 질문 미리 보기는 아키 시안(관련 근거 못 찾음, 취향 판단)</p>
+</main>
+<script>
+const T = [['LSFJ','골목 탐험대장'],['LSFP','프로 뚜벅이'],['LSRJ','골목 산책가'],['LSRP','동네 방랑자'],['LEFJ','맛집 지도 제작자'],['LEFP','소품샵 헌터'],['LERJ','현지 단골손님'],['LERP','반쯤 현지인'],['HSFJ','명소 정복자'],['HSFP','핫플 러너'],['HSRJ','인생샷 장인'],['HSRP','뷰 맛집 감상가'],['HEFJ','맛집 투어 대장'],['HEFP','쇼핑 마스터'],['HERJ','호캉스 플래너'],['HERP','멍때리기 고수']];
+const g = document.getElementById('g16'), qi = 9;
+g.innerHTML = T.map((t, i) => i === qi ? '<div class="q">?</div>' : `<div><b>${t[0]}</b><span>${t[1]}</span></div>`).join('');
+const bd = document.getElementById('board'), rows = 4;
+const st = ['탑승 중', '탑승 중', '마감 임박', ''];
+for (let r = 0; r < rows; r++) bd.insertAdjacentHTML('beforeend', `<div class="brow${r === rows - 1 ? ' you' : ''}"><span class="cd">${'<i>?</i>'.repeat(4)}</span><span class="nm"></span><span class="st">${r === rows - 1 ? '나 · 대기' : st[r]}</span></div>`);
+const R = [...bd.querySelectorAll('.brow')];
+R[rows - 1].querySelector('.nm').textContent = '내 탑승권 · ????';
+let k = 0;
+function tick() { for (let r = 0; r < rows - 1; r++) { const t = T[(k + r * 5) % 16], row = R[r];
+  row.querySelectorAll('.cd i').forEach((e, j) => { setTimeout(() => { e.classList.remove('flip'); void e.offsetWidth; e.classList.add('flip'); setTimeout(() => e.textContent = t[0][j], 160); }, j * 70 + r * 120); });
+  setTimeout(() => row.querySelector('.nm').textContent = t[1], 380 + r * 120); } k = (k + 1) % 16; }
+tick(); setInterval(tick, 2400);
+</script>
+</body>
+</html>
