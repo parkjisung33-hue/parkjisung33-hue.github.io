@@ -220,19 +220,21 @@ h2 { margin: 0; font-size: 1.3125rem; font-weight: 800; letter-spacing: -.03em; 
 .bh { display: flex; gap: 0.5rem; align-items: baseline; padding: 0 0.25rem; font-size: 0.78125rem; }
 .bh b { font-weight: 700; }
 .bh span { font-family: var(--mono); font-size: 0.71875rem; color: var(--sub); }
-.tiles { display: flex; flex-wrap: wrap; gap: 0.4375rem; }
-.tile { flex: 1 1 0; min-width: 6rem; height: 3.875rem; padding: 0.5625rem 0.75rem; border-radius: 0.875rem; text-align: left;
+.tiles { display: grid; grid-template-columns: 1fr 1fr; gap: 0.4375rem; }   /* 11/14 #31 A안: 한 줄 2개 고정 (시간 비례 너비 X) */
+.tile { min-width: 0; min-height: 3.875rem; gap: 0.1875rem; padding: 0.5625rem 0.75rem; border-radius: 0.875rem; text-align: left;
   background: var(--tile); border: 1px solid var(--tile-edge); box-shadow: var(--sh-xs);
   display: flex; flex-direction: column; justify-content: space-between; transition: transform .15s, opacity .15s, background .15s; }
 .tile:active { transform: scale(.97); }
 .tile .t { display: flex; align-items: center; gap: 0.375rem; font-family: var(--mono); font-size: 0.75rem; color: var(--sub); min-width: 0; }
 .tile .t .sp { flex: 1; }
 .tile .n { font-size: 0.875rem; font-weight: 700; }
+.tile .n.one { white-space: normal; word-break: keep-all; overflow-wrap: anywhere; line-height: 1.3; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }   /* #31 A안: 제목 두 줄까지 */
+.tiles > .flycard { grid-column: 1 / -1; }
 .tile.fix { background: transparent; border: 1px dashed var(--hair); box-shadow: none; }
 .tile.fix .n { font-weight: 600; color: var(--sub); }
 .tile.u { background: transparent; border: 1.5px dashed var(--blue); box-shadow: none; }
 /* '지금'·메모 개수가 있는 칸은 시각과 한 줄에 다 들어가게 최소 폭을 넓힘 */
-.tile.wide { min-width: 9.25rem; }
+.tile.wide { min-width: 0; }
 .tile .t .pills { display: flex; gap: 0.25rem; flex: none; }
 .hint { padding: 0 0.25rem; font-size: 0.75rem; color: var(--sub); }
 /* 주의: 점 색 = 일정 블록의 점 색 (빨강 시간 고정 · 호박 확인 필요 · 회색 알아 두기) */
@@ -249,6 +251,14 @@ h2 { margin: 0; font-size: 1.3125rem; font-weight: 800; letter-spacing: -.03em; 
 .nrow b { font-weight: 600; }
 .nrow .v { font-size: 0.8125rem; color: var(--sub); white-space: nowrap; }
 .nrow .v.num { color: var(--ink); font-weight: 600; }
+/* 11/14 #23 A안: 주의 라벨 = 점과 같은 색 배지(연한 바탕 + 진한 글자, 회색은 글자만) · 문장은 두 줄까지, 낱말 단위로 줄 바꿈 */
+#warn .nrow { align-items: start; }
+#warn .nrow .kd { margin-top: 0.4375rem; }
+#warn .nt { min-width: 0; line-height: 1.45; word-break: keep-all; overflow-wrap: anywhere; text-wrap: pretty; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+#warn .v { margin-top: 0.0625rem; }
+#warn .v.amber, #warn .v.red { font-weight: 700; font-size: 0.75rem; border-radius: 0.375rem; padding: 0.125rem 0.4375rem; }
+#warn .v.amber { background: color-mix(in srgb, var(--amber) 18%, transparent); color: color-mix(in srgb, var(--amber) 55%, var(--ink)); }
+#warn .v.red { background: color-mix(in srgb, var(--red) 12%, transparent); color: var(--red); }
 .nrow .src { font-size: 0.6875rem; color: var(--sub); }
 
 .phbox { flex: none; }
@@ -418,8 +428,6 @@ details.sec > summary + * { margin-top: 0.375rem; }
 .stamp .pop { transform-box: view-box; transform-origin: 50% 50%; animation: slam .42s cubic-bezier(.2,.9,.3,1.2) both; }
 @keyframes slam { 0% { transform: scale(1.25) rotate(-4deg); opacity: 0; } 35% { opacity: 1; } 60% { transform: scale(.97) rotate(.8deg); } 100% { transform: none; opacity: 1; } }
 @media (prefers-reduced-motion: reduce) { .stamp .pop { animation: none; } }
-.trail { height: 1.375rem; margin: -0.75rem 0; padding-left: 3rem; color: var(--ink); }
-.trail svg { width: 1.875rem; height: 1.375rem; }
 .prog { height: 0.375rem; border-radius: 0.375rem; background: var(--hair); overflow: hidden; margin-top: 0.625rem; margin-right: 4.5rem; }
 .prog i { display: block; height: 100%; background: var(--red); transition: width .3s; }
 
@@ -569,6 +577,31 @@ body { letter-spacing: 0; }
 .fab .fic { display: grid; place-items: center; }
 /* 11. 길안내 */
 .navnote { font-size: 0.75rem; color: var(--sub); padding: 0 0.25rem; }
+/* 11/14 #32·35 C안: 다음 일정 · 시간 조정 · 늦어짐 알림을 카드 한 장에, 카드에서 파란 선이 아래 일정표로 이어짐 · 길찾기 = 오른쪽 위 작게, 큰 버튼 = 건너뛰기·도착 */
+.nextwrap { display: flex; flex-direction: column; gap: 0.875rem; position: relative; overflow: hidden; }
+.nextwrap .late { border-top: 1px solid var(--hair); padding-top: 0.75rem; }
+.nextwrap .late > span { padding: 0; }
+.nextwrap .banner { margin: 0 -1.25rem -1.25rem; padding: 0.75rem 1.25rem; border-radius: 0; background: color-mix(in srgb, var(--red) 10%, transparent); }
+#v-now .nextwrap + .track { position: relative; overflow: visible; }
+#v-now .nextwrap + .track::before { content: ""; position: absolute; left: calc(1.125rem + 0.6875rem); top: -1.25rem; height: 1.25rem; transform: translateX(-50%); border-left: 0.1875rem solid var(--blue); }
+.next .hrow .rt { display: flex; align-items: center; gap: 0.375rem; flex: none; }
+.navs { display: inline-flex; align-items: center; gap: 0.25rem; height: 1.875rem; padding: 0 0.6875rem; border-radius: 1rem; font-size: 0.78125rem; font-weight: 700; color: var(--blue); background: color-mix(in srgb, var(--blue) 10%, transparent); text-decoration: none; }
+.navs svg { width: 0.875rem; height: 0.875rem; stroke: currentColor; fill: none; stroke-width: 2.2; stroke-linejoin: round; }
+/* #36: 일정표 남은 줄 = ··· 버튼(시트) · 왼쪽으로 밀면 건너뛰기·빼기 */
+.stop.can { grid-template-columns: 1.375rem 3.125rem minmax(0,1fr) 2rem; }
+.stop .more { width: 2rem; height: 1.5rem; display: grid; place-items: center; color: var(--sub); border-radius: 0.5rem; font-weight: 800; letter-spacing: .05em; line-height: 1; }
+.stopw { position: relative; margin: 0 -1.125rem; padding: 0 1.125rem; touch-action: pan-y; }
+.stopw.open, .stopw.drag { overflow: hidden; }
+.stopw .swb { position: absolute; top: 0; bottom: 0; right: 0; display: flex; visibility: hidden; }
+.stopw.open .swb, .stopw.drag .swb { visibility: visible; }
+.stopw .swb button { width: 5rem; color: #fff; font-weight: 700; font-size: 0.8125rem; }
+.stopw .swb .sk { background: var(--sub); } .stopw .swb .rm { background: var(--red); }
+.stopw > .stop { margin: 0 -1.125rem; padding-left: 1.125rem; padding-right: 1.125rem; transition: transform .2s; }
+.stopw.open > .stop, .stopw.drag > .stop { background: var(--paper); }
+.stopw.open > .stop { transform: translateX(-10rem); }
+.skop { display: flex; align-items: center; gap: 0.75rem; width: 100%; padding: 0.875rem 0; border-top: 1px solid var(--hair); text-align: left; font-weight: 700; font-size: 0.9375rem; }
+.skop small { display: block; font-weight: 500; font-size: 0.75rem; color: var(--sub); margin-top: 0.125rem; }
+.skop svg { width: 1.25rem; height: 1.25rem; stroke: currentColor; fill: none; stroke-width: 1.8; flex: none; stroke-linecap: round; stroke-linejoin: round; }
 .stop .s2 { display: block; font-size: 0.75rem; color: var(--sub); font-weight: 400; }
 .stop.m b { font-weight: 600; color: var(--sub); font-size: 0.9375rem; }
 .stop .moved.ok { color: var(--sub); }
@@ -830,12 +863,13 @@ body { letter-spacing: 0; }
 
   <!-- 오늘 -->
   <section class="view" id="v-now" aria-label="오늘" hidden>
-    <div class="next card glass" id="nextCard"></div>
+    <div class="nextwrap card glass">
+    <div class="next" id="nextCard"></div>
     <div class="late"><span id="lateHint">지금 일정이 늦어지면 +, 일찍 끝나면 − · 누를 때마다 더해져요</span>
       <div class="g1"><span class="g e" id="earlyBtns"><button class="btn sec sm" data-early="15">−15</button><button class="btn sec sm" data-early="10">−10</button><button class="btn sec sm" data-early="5">−5</button></span><i class="gsep" aria-hidden="true"></i><span class="g" id="lateBtns"><button class="btn sec sm" data-late="5">+5</button><button class="btn sec sm" data-late="10">+10</button><button class="btn sec sm" data-late="15">+15</button></span></div>
     </div>
-    <div class="banner glass" id="banner" hidden><i></i><span id="bannerTx"></span><button class="rs" id="resetBtn">되돌리기</button></div>
-    <div class="k2"><span class="a">지나온 길</span><span class="b">남은 길</span></div>
+    <div class="banner" id="banner" hidden><i></i><span id="bannerTx"></span><button class="rs" id="resetBtn">되돌리기</button></div>
+    </div>
     <div class="track glass" id="track"></div>
     <p class="navnote" id="navNote"></p>
   </section>
@@ -1413,7 +1447,7 @@ function renderPlan(flashId) {
   $('#warn').innerHTML = '<h4 class="warnh">' + NICON.amber + '주의</h4>' + (NOTES[d.no] || []).map(n0 => {
     const n = PLAN && /^늦어지면 .+ 먼저 빼기$/.test(n0.t) ? { ...n0, t: dropOf(d) ? '늦어지면 ' + dropOf(d) : '' } : n0; if (!n.t) return '';
     const it = n.ref && d.list.find(c => (c.sh || c.n).includes(n.ref));
-    return '<' + (it ? 'button data-open="' + it.id + '"' : 'div') + ' class="nrow"><i class="kd ' + n.lv + '"></i><span class="one">' + esc(n.t) + '</span><span class="v">' + W[n.lv] + '</span></' + (it ? 'button' : 'div') + '>';
+    return '<' + (it ? 'button data-open="' + it.id + '"' : 'div') + ' class="nrow"><i class="kd ' + n.lv + '"></i><span class="nt">' + esc(n.t) + '</span><span class="v ' + n.lv + '">' + W[n.lv] + '</span></' + (it ? 'button' : 'div') + '>';
   }).join('');
   $('#dayBody').innerHTML = st.mode === 'simple' ? blocks(d) : list(d);
   flip($('#dayBody'), before);
@@ -1450,12 +1484,12 @@ function shiftItem(id, step) {
 }
 // 밀기 = 보관(숨김). 보관함에서 복원하거나 완전 삭제 (Gmail 기본 밀기 동작 = 보관, 되돌리기 알림)
 st.archive = [];
-function removeItem(id) {
-  const d = DAYS[st.day], i = d.list.findIndex(x => x.id === id);
+function removeItem(id, di, skip) {   // di = 날(없으면 일정 탭에서 보는 날) · skip = 길안내 '건너뛰기'(보관함에 '건너뜀'으로)
+  const d = DAYS[di == null ? st.day : di], i = d.list.findIndex(x => x.id === id); if (i < 0) return;
   const it = d.list.splice(i, 1)[0], sl = d.slots.splice(i, 1)[0];
-  const rec = { d, it, sl }; st.archive.unshift(rec);
-  recompute(d); renderPlan(); arcCount();
-  toast('‘' + (it.sh || it.n) + '’ 보관함에 넣음', () => restore(rec));
+  const rec = { d, it, sl, ...(skip ? { skip: true } : {}) }; st.archive.unshift(rec);
+  recompute(d); refreshAll(); arcCount();
+  toast('‘' + (it.sh || it.n) + '’ ' + (skip ? '건너뜀 · 보관함에 있어요' : '보관함에 넣음'), () => restore(rec));
 }
 function restore(rec) {
   st.archive = st.archive.filter(r => r !== rec);
@@ -1463,11 +1497,12 @@ function restore(rec) {
   d.list.splice(i, 0, rec.it); d.slots.splice(i, 0, rec.sl);
   recompute(d); arcCount();
   if (DAYS[st.day] === d) renderPlan(rec.it.id);
+  renderNow(); renderTrail();
   toast('‘' + (rec.it.sh || rec.it.n) + '’ 복원 · DAY ' + d.no + (d.tbd ? '' : ' ' + rec.it.s));
 }
 function arcCount() { $('#arcN').textContent = st.archive.length ? st.archive.length : ''; }
 function arcSheet() {
-  const rows = st.archive.map((r, i) => '<div class="arow"><span class="tmx">DAY ' + r.d.no + '</span><span class="one"><b>' + esc(r.it.sh || r.it.n) + '</b> ' + (r.closed ? '<span class="off">문 닫음</span>' : r.d.tbd ? '' : '<span class="muted">' + toT(r.sl) + '</span>') + '</span>'
+  const rows = st.archive.map((r, i) => '<div class="arow"><span class="tmx">DAY ' + r.d.no + '</span><span class="one"><b>' + esc(r.it.sh || r.it.n) + '</b> ' + (r.closed ? '<span class="off">문 닫음</span>' : r.skip ? '<span class="off">건너뜀</span>' : r.d.tbd ? '' : '<span class="muted">' + toT(r.sl) + '</span>') + '</span>'
     + '<button class="btn sec" data-res="' + i + '">복원</button><button class="btn del" data-kill="' + i + '">삭제</button></div>').join('');
   const h = '<div class="shd"><div><span class="eyebrow">보관함</span><h3 id="sheetTitle">보관한 일정 ' + st.archive.length + '개</h3><p class="sub one">밀어서 보관한 일정이에요 · 복원하면 원래 시간대로 돌아가요</p></div>' + X_BTN + '</div><div class="body">'
     + (rows || '<p class="sub">보관한 일정이 없어요 · 일정을 옆으로 밀면 여기에 모여요</p>') + '</div>';
@@ -1604,7 +1639,9 @@ function renderNow() {
   const nx = L[p.i + 1], lts = Object.values(d.lates || {}), net = lts.reduce((a, b) => a + b, 0), totLate = lts.filter(v => v > 0).reduce((a, b) => a + b, 0);
   const head = st.cur ? '다음 일정 · DAY ' + d.no : n.phase === 'before' ? '출발 전 · D-' + n.left + ' · 첫 일정' : n.phase === 'after' ? '여행 끝' : '다음 일정 · DAY ' + d.no;
   const canPrev = p.i > 0 || (!!st.cur && st.cur.day === di && st.cur.id !== '__pre' && p.i >= 0);   // 잘못 눌렀을 때 지난 일정으로 한 칸
-  let h = '<div class="hrow"><span class="eyebrow">' + head + '</span>' + (canPrev ? '<button class="btn ghost xs" id="prevBtn" type="button">← 이전</button>' : '') + '</div>';
+  const nu0 = nx && navUrl(d, nx);
+  let h = '<div class="hrow"><span class="eyebrow">' + head + '</span><span class="rt">' + (canPrev ? '<button class="btn ghost xs" id="prevBtn" type="button">← 이전</button>' : '')
+    + (nu0 ? '<a class="navs" href="' + nu0 + '" target="_blank" rel="noopener"><svg viewBox="0 0 24 24"><path d="M12 3l7 17-7-4-7 4z"/></svg>길찾기</a>' : '') + '</span></div>';
   const ct = p.at && canClose(L[p.i]) ? L[p.i] : canClose(nx) ? nx : null;
   const closedBtn = ct ? '<div class="acts"><button class="btn ghost sm" data-closed-now="' + ct.id + '">문 닫았어요 · ' + esc((ct.sh || ct.n).split(' — ').pop()) + '</button></div>' : '';
   if (nx) {
@@ -1613,7 +1650,7 @@ function renderNow() {
       + '<div class="nm one">' + esc(nx.k === 'm' ? nx.mv : nx.fly ? flyTx(nx, 1, 3) + (nx.fno ? ' · ' + nx.fno : '') : (parts[1] || parts[0])) + '</div>'
       + (nx.l ? '<div class="lo one"><span class="jp">' + esc(nx.l) + '</span>' + (nx.r ? ' · ' + esc(nx.r) : '') + '</div>' : '')
       + (nx.say ? '<div class="lo one">' + esc(nx.say) + '</div>' : '')
-      + '<div class="acts">' + (navUrl(d, nx) ? '<a class="btn sec" href="' + navUrl(d, nx) + '" target="_blank" rel="noopener">길찾기</a>' : '')
+      + '<div class="acts">' + (canSkip(nx) ? '<button class="btn sec" type="button" data-skip="' + nx.id + '">건너뛰기</button>' : '')
       + '<button class="btn pri" id="arriveBtn">' + (nx.k === 'm' || isCar(nx) ? '출발' : '도착') + '</button></div>' + closedBtn;
   } else if (p.at) { const c = L[p.i]; h += '<div class="nm one">마지막 · ' + esc(c.k === 'm' ? c.mv : (c.sh || c.n)) + '</div><div class="lo">끝나면 눌러서 하루 도장 완성</div><div class="acts"><button class="btn pri" id="endDayBtn">오늘 일정 끝</button></div>' + closedBtn; }
   else h += '<div class="nm">' + (n.phase === 'after' && !st.cur ? '다녀왔어요' : '오늘 일정 끝') + '</div><div class="lo">기록에 DAY ' + d.no + ' 저장</div>'
@@ -1624,9 +1661,12 @@ function renderNow() {
     const cls = (i < p.i || (i === p.i && !p.at)) ? 'past' : i === p.i ? 'now' : '', sh = tb ? 0 : toMin(x.s) - x.b;
     const nm = x.k === 'm' ? x.mv : x.fly ? flyTx(x, 1, 3) : (x.sh || x.n);
     const fl = cls === 'now' && (x.k === 'm' || x.fly) && i < L.length - 1 ? '<span class="fl" aria-hidden="true"><i></i><i></i><i></i></span>' : '';
-    return '<div class="stop ' + cls + (x.k === 'm' ? ' m' : '') + '"><span class="rail"><span class="pt"></span>' + fl + '</span><span class="t">' + tmx(d, x) + '</span><span class="nmc"><b>' + esc(nm) + '</b>'
+    const can = i > p.i && canSkip(x);
+    return (can ? '<div class="stopw" data-sw="' + x.id + '"><div class="swb"><button class="sk" data-skip="' + x.id + '">건너뛰기</button><button class="rm" data-rmv="' + x.id + '">빼기</button></div>' : '')
+      + '<div class="stop ' + cls + (x.k === 'm' ? ' m' : '') + (can ? ' can' : '') + '"><span class="rail"><span class="pt"></span>' + fl + '</span><span class="t">' + tmx(d, x) + '</span><span class="nmc"><b>' + esc(nm) + '</b>'
       + (x.k === 'u' ? '<span class="s2">직접 추가</span>' : '')
-      + (sh > 0 && !cls ? '<span class="moved">+' + durTx(sh) + ' 밀림 · 예정 ' + toT(x.b) + '</span>' : sh < 0 && !cls ? '<span class="moved ok">' + durTx(-sh) + ' 일찍 · 예정 ' + toT(x.b) + '</span>' : '') + '</span></div>';
+      + (sh > 0 && !cls ? '<span class="moved">+' + durTx(sh) + ' 밀림 · 예정 ' + toT(x.b) + '</span>' : sh < 0 && !cls ? '<span class="moved ok">' + durTx(-sh) + ' 일찍 · 예정 ' + toT(x.b) + '</span>' : '') + '</span>'
+      + (can ? '<button class="more" type="button" data-stopm="' + x.id + '" aria-label="건너뛰기·빼기">···</button></div></div>' : '</div>');
   }).join('');
   const b = $('#banner');
   if (!net) b.hidden = true;
@@ -1665,6 +1705,30 @@ function earlyGo(m) {
   refreshAll();
   toast(got < m ? durTx(got) + '만 당김 · ' + why : durTx(m) + ' 일찍 · 뒤 일정 당김');
 }
+// 11/14 #36: 길안내에서 건너뛰기·빼기 할 수 있는 일정 = 장소·식사·직접 추가 (이동·비행기·열차·차·집·공항·숙소 체크인 X)
+const canSkip = c => !!c && c.k !== 'm' && c.k !== 'w' && !c.fly && (!!c.pid || ['f', 'u'].includes(c.k) || !/체크|집 도착|공항|역$|짐/.test(c.sh || c.n || ''));
+function stopSheet(id) {
+  const di = navDay(), d = DAYS[di], c = d.list.find(x => x.id === id); if (!c) return;
+  const ic = q => '<svg viewBox="0 0 24 24">' + q + '</svg>';
+  sheetMode = 'stop';
+  openSheet('<div class="shd"><div><span class="eyebrow">DAY ' + d.no + (d.tbd ? '' : ' · ' + c.s) + '</span><h3 id="sheetTitle" class="one">' + esc(c.sh || c.n) + '</h3>' + (c.l ? '<p class="sub one">' + esc(c.l) + '</p>' : '') + '</div>' + X_BTN + '</div><div class="body">'
+    + '<button class="skop" data-skip="' + id + '">' + ic('<path d="M5 5l7 7-7 7M13 5l7 7-7 7"/>') + '<span>건너뛰기<small>오늘은 안 가요 · 보관함에 ‘건너뜀’으로 남아요</small></span></button>'
+    + '<button class="skop" data-rmv="' + id + '">' + ic('<rect x="3" y="4" width="18" height="5" rx="1"/><path d="M5 9v10h14V9M10 13h4"/>') + '<span>보관함으로 빼기<small>일정에서 빼고 보관 · 나중에 되살릴 수 있어요</small></span></button>'
+    + '<button class="skop" data-stopd="' + id + '">' + ic('<circle cx="12" cy="12" r="9"/><path d="M12 8v5M12 16v.5"/>') + '<span>일정 자세히 보기<small>메모·영업시간·길찾기</small></span></button></div>');
+}
+// 일정표 줄 밀기: 왼쪽으로 밀면 건너뛰기·빼기 버튼 (하나만 열림, 다른 곳 누르면 닫힘)
+(() => {
+  let g = null;
+  const closeSw = except => document.querySelectorAll('.stopw.open').forEach(w => { if (w !== except) w.classList.remove('open'); });
+  const reset = () => { if (g) { g.w.classList.remove('drag'); const s0 = g.w.querySelector('.stop'); s0.style.transition = ''; s0.style.transform = ''; } };
+  document.addEventListener('pointerdown', e => { if (e.target.closest('.swb')) return; const w = e.target.closest('.stopw'); if (!w) { closeSw(); return; } g = { w, x: e.clientX, y: e.clientY, pid: e.pointerId, moved: false }; });
+  document.addEventListener('pointermove', e => { if (!g || e.pointerId !== g.pid) return; const dx = e.clientX - g.x, dy = e.clientY - g.y;
+    if (!g.moved && Math.abs(dy) > 10 && Math.abs(dy) > Math.abs(dx)) { reset(); g = null; return; }
+    if (Math.abs(dx) > 8) { g.moved = true; const base = g.w.classList.contains('open') ? -160 : 0, v = Math.max(-170, Math.min(0, base + dx)), s0 = g.w.querySelector('.stop'); s0.style.transition = 'none'; s0.style.transform = 'translateX(' + v + 'px)'; g.w.classList.add('drag'); } });
+  document.addEventListener('pointerup', e => { if (!g || e.pointerId !== g.pid) return; const dx = e.clientX - g.x, w = g.w, mv = g.moved; reset(); g = null;
+    if (mv) { const open = (w.classList.contains('open') ? -160 : 0) + dx < -60; closeSw(w); w.classList.toggle('open', open); } });
+  document.addEventListener('pointercancel', () => { reset(); g = null; });
+})();
 // 길안내 '← 이전': 잘못 눌린 도착을 지난 일정으로 한 칸 되돌림
 function prevGo() {
   const di = navDay(), L = DAYS[di].list, p = posOf(di); if (p.i < 0) return;
@@ -1715,7 +1779,7 @@ function renderTrail() {
   DAYS.forEach((d, i) => {
     const V = d.list.filter(c => c.k !== 'm'), p = posOf(i);
     const done = d.list.filter((c, k) => c.k !== 'm' && (k < p.i || (k === p.i && !p.at))).length, all = done >= V.length;
-    if (i) h += '<div class="trail" aria-hidden="true"><svg viewBox="0 0 30 22"><circle cx="6" cy="4" r="2" fill="currentColor"/><circle cx="14" cy="11" r="2" fill="currentColor" opacity=".6"/><circle cx="22" cy="18" r="2" fill="currentColor" opacity=".3"/></svg></div>';
+    // 11/14 #27 C안: 카드 사이 발자국 점 3개 뺌 (뜻이 안 읽힘) → 간격만
     const started = done > 0 || p.at;
     h += '<div class="trip glass' + (started ? '' : ' later') + '"><div class="d"><b>DAY ' + d.no + '</b><span>' + d.date + '</span></div><div style="min-width:0">'
       + '<div class="ttl2 one">' + esc(d.title) + '</div><div class="codes one">' + esc(routeOf(d).join(' → ')) + '</div>'
@@ -2530,6 +2594,10 @@ document.addEventListener('click', e => {
   if (gt) { const el = document.querySelector('#dayBody [data-key="' + gt.dataset.goto + '"]'); if (el) { el.scrollIntoView({ behavior: calm() ? 'auto' : 'smooth', block: 'center' }); el.classList.remove('just'); void el.offsetWidth; el.classList.add('just'); } return; }
   if (e.target.id === 'arriveBtn') { const di = navDay(), L = DAYS[di].list, p = posOf(di), nx = L[p.i + 1]; if (nx) { const prev = st.cur ? { ...st.cur } : null; st.cur = { day: di, id: nx.id }; refreshAll(); toast((nx.k === 'm' || isCar(nx) ? '출발 처리 · ' : '도착 처리 · ') + (nx.k === 'm' ? nx.n : (nx.sh || nx.n)), () => { st.cur = prev; refreshAll(); }, 5000); } return; }
   if (e.target.closest('#prevBtn')) { prevGo(); return; }
+  const skp = e.target.closest('[data-skip]'); if (skp) { const di = navDay(); if (sheetMode === 'stop') closeAll(); removeItem(skp.dataset.skip, di, true); return; }
+  const rmv = e.target.closest('[data-rmv]'); if (rmv) { const di = navDay(); if (sheetMode === 'stop') closeAll(); removeItem(rmv.dataset.rmv, di, false); return; }
+  const smo = e.target.closest('[data-stopm]'); if (smo) { stopSheet(smo.dataset.stopm); return; }
+  const sdt = e.target.closest('[data-stopd]'); if (sdt) { const di = navDay(), id = sdt.dataset.stopd; closeAll(); st.day = di; renderDays(); renderPlan(); setTimeout(() => itemSheet(id), 320); return; }
   const cn = e.target.closest('[data-closed-now]'); if (cn) { closedSheet(navDay(), cn.dataset.closedNow); return; }
   if (e.target.id === 'endDayBtn') { const di = navDay(); st.cur = { day: di, id: '__end' }; if (di === DAYS.length - 1) st.endPending = true; refreshAll(); celebrate(di); return; }
   if (e.target.id === 'nextDayBtn') { const di = navDay() + 1; if (DAYS[di]) { st.cur = { day: di, id: DAYS[di].list[0].id }; st.day = di; renderDays(); refreshAll(); } return; }
