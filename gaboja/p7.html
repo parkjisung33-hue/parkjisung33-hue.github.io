@@ -1,0 +1,237 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<title>가보자 결과 페이지 시안</title>
+<style>
+@font-face { font-family: "Pretendard Variable"; font-weight: 45 920; font-display: swap; src: url("fonts/PretendardVariable.woff2") format("woff2-variations"), url("fonts/PretendardVariable.woff2") format("woff2"); }
+:root { color-scheme: light; --canvas:#EEF0F3; --ink:#15171A; --sub:#6F757D; --hair:rgba(21,23,26,.09); --paper:#FFFFFF; --blue:#3B5BDB; --blue-soft:rgba(59,91,219,.09); --red:#E0453A; --red-soft:rgba(224,69,58,.09); --track:#E4E7EB;
+  --kr:"Pretendard Variable",Pretendard,-apple-system,"Apple SD Gothic Neo","Malgun Gothic",system-ui,sans-serif; --shadow:0 0.25rem 0.75rem -0.375rem rgba(24,36,60,.18); }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { color-scheme: dark; --canvas:#0E1013; --ink:#ECEEF1; --sub:#8F969F; --hair:rgba(255,255,255,.08); --paper:#1B1E23; --blue:#8095F5; --blue-soft:rgba(128,149,245,.12); --red:#F2675D; --red-soft:rgba(242,103,93,.12); --track:#2A2E34; --shadow:none; } }
+:root[data-theme="dark"] { color-scheme: dark; --canvas:#0E1013; --ink:#ECEEF1; --sub:#8F969F; --hair:rgba(255,255,255,.08); --paper:#1B1E23; --blue:#8095F5; --blue-soft:rgba(128,149,245,.12); --red:#F2675D; --red-soft:rgba(242,103,93,.12); --track:#2A2E34; --shadow:none; }
+html { font-size: clamp(13.5px, calc(100vw * 16 / 390), 18px); }
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--canvas); color: var(--ink); font-family: var(--kr); -webkit-font-smoothing: antialiased; }
+main { max-width: 26rem; margin: 0 auto; padding: 1.25rem 1rem 4rem; }
+h1 { font-size: 1.25rem; margin: 0 0 .25rem; letter-spacing: -.02em; }
+.lead { color: var(--sub); font-size: .875rem; margin: 0 0 1rem; line-height: 1.6; word-break: keep-all; }
+.opt { margin: 2.5rem 0 .75rem; display: flex; align-items: baseline; gap: .5rem; }
+.opt b { font-size: 1.125rem; } .opt span { color: var(--sub); font-size: .8125rem; }
+.how { color: var(--sub); font-size: .8125rem; line-height: 1.6; margin: 0 0 .875rem; word-break: keep-all; }
+.how li { margin: .125rem 0; } .how ul { margin: 0; padding-left: 1.1rem; }
+.card { background: var(--paper); border-radius: 1.25rem; padding: 1rem 1.125rem; box-shadow: var(--shadow); }
+h3 { font-size: 1rem; margin: 1.5rem 0 .5rem; letter-spacing: -.01em; }
+.tabs { position: sticky; top: 0; z-index: 5; display: flex; gap: .375rem; padding: .5rem 0; background: var(--canvas); }
+.tabs a { flex: 1; text-align: center; text-decoration: none; color: var(--ink); background: var(--paper); border-radius: 2rem; padding: .5rem 0; font-size: .8125rem; font-weight: 700; box-shadow: var(--shadow); }
+.src { color: var(--sub); font-size: .75rem; line-height: 1.6; margin-top: 2.5rem; word-break: break-all; }
+.src a { color: var(--sub); }
+
+/* 탑승권 공통 */
+.ticket { border-radius: 1.25rem; background: var(--paper); box-shadow: var(--shadow); overflow: hidden; }
+.hd { padding: 1rem 1.125rem 0; display: flex; justify-content: space-between; align-items: center; font-size: .6875rem; font-weight: 700; letter-spacing: .1em; color: var(--sub); }
+.hd b { color: var(--ink); letter-spacing: .02em; font-size: .8125rem; }
+.grp { display: inline-flex; align-items: center; gap: .3125rem; color: var(--red); letter-spacing: 0; font-size: .75rem; font-weight: 800; }
+.grp svg { width: 1.125rem; height: 1.125rem; stroke: currentColor; fill: none; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+.bd { padding: 1rem 1.125rem 1.125rem; display: flex; flex-direction: column; gap: .875rem; }
+.nm { margin: 0; font-size: 2rem; font-weight: 800; letter-spacing: -.045em; line-height: 1.15; }
+.ln { margin: 0; font-size: .9375rem; line-height: 1.5; word-break: keep-all; }
+.flaps { display: flex; gap: .375rem; }
+.fl { width: 2.75rem; height: 3.625rem; border-radius: .5rem; background: #15171A; color: #fff; display: grid; place-items: center; font-size: 1.875rem; font-weight: 800; position: relative; }
+.fl::after { content: ""; position: absolute; left: 0; right: 0; top: 50%; height: 1px; background: rgba(255,255,255,.18); }
+:root[data-theme="dark"] .fl { background: #ECEEF1; color: #15171A; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .fl { background: #ECEEF1; color: #15171A; } :root:not([data-theme="light"]) .fl::after { background: rgba(0,0,0,.15); } }
+.perf { height: 0; border-top: 2px dashed var(--hair); margin: 0 1.125rem; position: relative; }
+.perf::before, .perf::after { content: ""; position: absolute; top: -.6875rem; width: 1.25rem; height: 1.25rem; border-radius: 50%; background: var(--canvas); }
+.perf::before { left: -1.75rem; } .perf::after { right: -1.75rem; }
+
+/* A: 글자 아래 뜻 + 양 끝 게이지 */
+.a .lflaps { display: grid; grid-template-columns: repeat(4, 2.75rem); gap: .375rem; }
+.a .lflaps .lb { font-size: .6875rem; font-weight: 700; color: var(--sub); text-align: center; margin-top: .3125rem; white-space: nowrap; }
+.gauges { padding: 1rem 1.125rem 1.125rem; display: flex; flex-direction: column; gap: .875rem; }
+.g .top { display: flex; justify-content: space-between; font-size: .8125rem; color: var(--sub); margin-bottom: .375rem; }
+.g .top .w { color: var(--ink); font-weight: 800; }
+.g .top .w em { font-style: normal; color: var(--red); margin: 0 .25rem; font-variant-numeric: tabular-nums; }
+.g .bar { position: relative; height: .5rem; border-radius: 1rem; background: var(--track); }
+.g .bar::before { content: ""; position: absolute; left: 50%; top: -.1875rem; bottom: -.1875rem; width: 1px; background: var(--sub); opacity: .5; }
+.g .fill { position: absolute; top: 0; bottom: 0; border-radius: 1rem; background: var(--ink); }
+.g .why { font-size: .75rem; color: var(--sub); margin-top: .375rem; line-height: 1.5; word-break: keep-all; }
+.note { font-size: .75rem; color: var(--sub); }
+
+/* 하루 리듬 (도시 없이) */
+.rhythm .r { display: grid; grid-template-columns: 3.25rem 1fr; gap: .625rem; padding: .625rem 0; border-top: 1px solid var(--hair); font-size: .9375rem; align-items: baseline; }
+.rhythm .r:first-child { border-top: 0; padding-top: 0; } .rhythm .r:last-child { padding-bottom: 0; }
+.rhythm .t { color: var(--sub); font-variant-numeric: tabular-nums; font-size: .875rem; }
+.rhythm b { font-weight: 700; }
+.plan { display: flex; gap: .75rem; align-items: flex-start; }
+.plan .ic { width: 2.25rem; height: 2.25rem; border-radius: .75rem; background: var(--blue-soft); color: var(--blue); display: grid; place-items: center; flex: none; }
+.plan .ic svg { width: 1.25rem; height: 1.25rem; stroke: currentColor; fill: none; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+.plan b { display: block; font-size: .9375rem; margin-bottom: .1875rem; } .plan span { font-size: .8125rem; color: var(--sub); line-height: 1.5; word-break: keep-all; }
+.plan + .plan { margin-top: .875rem; padding-top: .875rem; border-top: 1px solid var(--hair); }
+
+/* B: 글자 카드 2×2 */
+.b .bd { gap: .625rem; }
+.codeline { display: flex; align-items: baseline; gap: .625rem; }
+.codeline .cd { font-size: 1.125rem; font-weight: 800; letter-spacing: .12em; color: var(--red); }
+.lc { display: grid; grid-template-columns: 1fr 1fr; gap: .625rem; margin-top: .75rem; }
+.lc .c { background: var(--paper); border-radius: 1rem; padding: .875rem; box-shadow: var(--shadow); display: flex; flex-direction: column; gap: .375rem; }
+.lc .row1 { display: flex; justify-content: space-between; align-items: center; }
+.lc .L { width: 2.25rem; height: 2.75rem; border-radius: .4375rem; background: #15171A; color: #fff; display: grid; place-items: center; font-size: 1.375rem; font-weight: 800; }
+:root[data-theme="dark"] .lc .L { background: #ECEEF1; color: #15171A; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .lc .L { background: #ECEEF1; color: #15171A; } }
+.ring { width: 2.75rem; height: 2.75rem; position: relative; }
+.ring svg { width: 100%; height: 100%; transform: rotate(-90deg); }
+.ring circle { fill: none; stroke-width: 4; }
+.ring .bg { stroke: var(--track); } .ring .fg { stroke: var(--red); stroke-linecap: round; }
+.ring span { position: absolute; inset: 0; display: grid; place-items: center; font-size: .6875rem; font-weight: 800; font-variant-numeric: tabular-nums; }
+.lc b { font-size: 1rem; } .lc .vs { font-size: .6875rem; color: var(--sub); } .lc p { margin: 0; font-size: .78125rem; line-height: 1.5; color: var(--sub); word-break: keep-all; }
+.sw { display: grid; grid-template-columns: 1fr 1fr; gap: .625rem; }
+.sw .c { background: var(--paper); border-radius: 1rem; padding: .875rem; box-shadow: var(--shadow); }
+.sw .h { font-size: .75rem; font-weight: 800; margin-bottom: .375rem; } .sw .h.ok { color: var(--blue); } .sw .h.no { color: var(--red); }
+.sw ul { margin: 0; padding-left: 1rem; font-size: .8125rem; line-height: 1.6; word-break: keep-all; }
+
+/* C: 스펙트럼 + 점 */
+.spec { display: flex; flex-direction: column; gap: 1.125rem; }
+.sp .ends { display: flex; justify-content: space-between; align-items: center; font-size: .8125rem; color: var(--sub); }
+.sp .ends span { display: inline-flex; align-items: center; gap: .3125rem; }
+.sp .ends i { font-style: normal; width: 1.375rem; height: 1.375rem; border-radius: .3125rem; display: inline-grid; place-items: center; font-size: .75rem; font-weight: 800; background: var(--track); color: var(--sub); }
+.sp .ends .w { color: var(--ink); font-weight: 800; } .sp .ends .w i { background: var(--red); color: #fff; }
+.sp .line { position: relative; height: .25rem; margin: .75rem .6875rem .5rem; border-radius: 1rem; background: linear-gradient(90deg, var(--track), var(--track)); }
+.sp .line .tick { position: absolute; top: -.1875rem; width: 1px; height: .625rem; background: var(--sub); opacity: .35; }
+.sp .dot { position: absolute; top: 50%; width: 1.25rem; height: 1.25rem; margin: -.625rem 0 0 -.625rem; border-radius: 50%; background: var(--red); border: .1875rem solid var(--paper); box-shadow: 0 0 0 .125rem var(--red); }
+.sp .lab { position: absolute; top: -1.875rem; transform: translateX(-50%); font-size: .6875rem; font-weight: 800; color: var(--red); white-space: nowrap; }
+.sp .pc { font-style: normal; color: var(--red); font-weight: 800; font-variant-numeric: tabular-nums; }
+.sp .say { font-size: .8125rem; line-height: 1.5; margin-top: .375rem; word-break: keep-all; }
+.sp .say b { font-weight: 800; }
+.chips { display: flex; flex-wrap: wrap; gap: .375rem; }
+.chips span { font-size: .8125rem; padding: .375rem .75rem; border-radius: 2rem; background: var(--paper); box-shadow: var(--shadow); }
+.chips span.k { background: var(--ink); color: var(--paper); font-weight: 700; }
+</style>
+</head>
+<body>
+<main>
+<h1>결과 페이지 시안 — 7·10·11·12</h1>
+<p class="lead">예시 = <b>LEFJ 맛집 지도 제작자</b>(로컬 80 · 즐기기 60 · 알차게 100 · 계획형 60). 세 안 모두 공통으로 ① 오른쪽 위 ‘GATE’ → <b>유형 묶음 아이콘 + 이름</b>(10) ② 알파벳마다 <b>뜻</b>(7) ③ 축은 <b>% 게이지</b>(11) ④ ‘오사카 하루’ → <b>도시 없는 성향 정보</b>(12). 다른 건 보여 주는 방식입니다.</p>
+
+<nav class="tabs"><a href="#A">A 탑승권 그대로</a><a href="#B">B 글자 카드</a><a href="#C">C 스펙트럼</a></nav>
+
+<!-- ───────── A ───────── -->
+<div class="opt" id="A"><b>A안</b><span>탑승권은 그대로, 글자 밑에 뜻</span></div>
+<div class="how"><ul>
+<li>알파벳 바로 밑에 뜻 한 단어 → 따로 설명 칸 없이 읽힘</li>
+<li>‘어디로·무엇을…’ 축 이름은 <b>뺌</b> — 양 끝 두 단어(로컬 ↔ 핫플)만으로 뜻이 통함</li>
+<li>게이지: 가운데 선(50) 기준으로 이긴 쪽으로 차오름 + 숫자</li>
+</ul></div>
+<article class="ticket a">
+  <div class="hd"><b>가보자</b><span class="grp" data-g="LE"></span></div>
+  <div class="bd">
+    <div class="lflaps">
+      <div><div class="fl">L</div><div class="lb">로컬</div></div>
+      <div><div class="fl">E</div><div class="lb">즐기기</div></div>
+      <div><div class="fl">F</div><div class="lb">알차게</div></div>
+      <div><div class="fl">J</div><div class="lb">계획형</div></div>
+    </div>
+    <h2 class="nm">맛집 지도 제작자</h2>
+    <p class="ln">현지인 맛집 리스트는 이미 저장 완료. 끼니마다 계획</p>
+  </div>
+  <div class="perf"></div>
+  <div class="gauges" id="gA"></div>
+</article>
+<h3>이 유형의 하루 리듬</h3>
+<div class="card rhythm">
+  <div class="r"><span class="t">08:30</span><span><b>동네 카페</b>에서 아침</span></div>
+  <div class="r"><span class="t">10:00</span><span><b>시장</b> 군것질 순례</span></div>
+  <div class="r"><span class="t">12:00</span><span>저장해 둔 <b>현지 맛집</b> 점심</span></div>
+  <div class="r"><span class="t">14:00</span><span><b>빈티지·소품샵</b> 한 바퀴</span></div>
+  <div class="r"><span class="t">18:30</span><span>그 동네 <b>대표 메뉴</b>로 저녁</span></div>
+</div>
+<h3>가보자가 일정 짤 때</h3>
+<div class="card">
+  <div class="plan"><div class="ic"><svg viewBox="0 0 24 24"><rect x="4" y="5" width="16" height="15" rx="2"/><path d="M4 10h16M9 3v4M15 3v4"/></svg></div><div><b>시각 단위로 꽉</b><span>하루 3묶음 · 식사는 문 여는 시간에 맞춰요</span></div></div>
+  <div class="plan"><div class="ic"><svg viewBox="0 0 24 24"><path d="M12 21s-7-6.1-7-11a7 7 0 0 1 14 0c0 4.9-7 11-7 11z"/><circle cx="12" cy="10" r="2.5"/></svg></div><div><b>관광지보다 현지 동네</b><span>시장·골목 식당을 먼저 넣어요</span></div></div>
+</div>
+
+<!-- ───────── B ───────── -->
+<div class="opt" id="B"><b>B안</b><span>탑승권은 짧게, 글자마다 카드</span></div>
+<div class="how"><ul>
+<li>탑승권 = 이름·한 줄만(짧고 공유 캡처용)</li>
+<li>아래 2×2 카드: 글자 · 뜻 · 링 게이지(%) · 한 줄 설명 → 7·11을 한 번에</li>
+<li>‘오사카 하루’ 자리에 <b>여행 강점 / 조심할 점</b>(성향 중심)</li>
+</ul></div>
+<article class="ticket b">
+  <div class="hd"><b>가보자</b><span class="grp" data-g="LE"></span></div>
+  <div class="bd">
+    <div class="codeline"><span class="cd">LEFJ</span><span class="note">여행 유형</span></div>
+    <h2 class="nm">맛집 지도 제작자</h2>
+    <p class="ln">현지인 맛집 리스트는 이미 저장 완료. 끼니마다 계획</p>
+  </div>
+</article>
+<div class="lc" id="lcB"></div>
+<h3>여행에서 이런 사람</h3>
+<div class="sw">
+  <div class="c"><div class="h ok">강점</div><ul><li>실패 없는 끼니</li><li>동선 낭비 없음</li><li>현지 가게 발견</li></ul></div>
+  <div class="c"><div class="h no">조심할 점</div><ul><li>일정이 밀리면 스트레스</li><li>쉬는 시간 부족</li><li>배가 먼저 찬다</li></ul></div>
+</div>
+
+<!-- ───────── C ───────── -->
+<div class="opt" id="C"><b>C안</b><span>스펙트럼 위의 점 (16Personalities 방식)</span></div>
+<div class="how"><ul>
+<li>양 끝 = 글자+뜻, 선 위 점 = 내 위치 · 점 위에 %</li>
+<li>점 아래 한 줄: 세기에 따라 말이 바뀜(‘확실한 / ~쪽 / 반반’)</li>
+<li>아래는 <b>잘 맞는 여행 키워드</b> 칩(취향 질문 답과 연결)</li>
+</ul></div>
+<article class="ticket c">
+  <div class="hd"><b>가보자</b><span class="grp" data-g="LE"></span></div>
+  <div class="bd">
+    <div class="flaps"><div class="fl">L</div><div class="fl">E</div><div class="fl">F</div><div class="fl">J</div></div>
+    <h2 class="nm">맛집 지도 제작자</h2>
+    <p class="ln">현지인 맛집 리스트는 이미 저장 완료. 끼니마다 계획</p>
+  </div>
+</article>
+<h3>내 위치</h3>
+<div class="card spec" id="spC"></div>
+<h3>잘 맞는 여행 키워드</h3>
+<div class="chips"><span class="k">시장</span><span class="k">현지 식당</span><span>골목 카페</span><span>소품샵</span><span>미리 예약</span><span>야식 거리</span></div>
+
+<div class="opt"><b>유형 묶음 아이콘 (10번)</b><span>임시 — 9번 캐릭터 정해지면 교체</span></div>
+<div class="card" id="icons" style="display:grid;grid-template-columns:1fr 1fr;gap:.875rem"></div>
+
+<p class="src">근거 ·
+16Personalities: 축마다 ‘두 성향 중 어느 쪽이 얼마나 강한지’를 %로, 가운데 = 50%, 남과 비교한 값이 아님 → C안 점·A안 가운데 선 <a href="https://16personalities.com/articles/strength-of-individual-traits">16personalities.com/articles/strength-of-individual-traits</a> ·
+결과 페이지는 결과마다 다른 시각 요소가 공유에 가장 효과적, 버튼은 하나를 설명 바로 아래 <a href="https://cdn.woobox.com/articles/quiz-result-page-best-practices">woobox · quiz result page best practices</a> ·
+아이콘·문구는 아키 시안(근거 없음, 취향 판단)</p>
+</main>
+<script>
+const AX = [['L','로컬','H','핫플','관광지보다 현지 사람 사는 동네','유명한 곳·요즘 뜨는 곳 먼저'],
+            ['S','구경','E','즐기기','보고 걷고 찍는 게 즐거움','먹고 사고 쉬는 게 즐거움'],
+            ['F','알차게','R','여유롭게','하루를 꽉 채워 많이','적게 보고 오래 머물기'],
+            ['J','계획형','P','즉흥형','시간·동선을 미리 정해 둠','가서 끌리는 대로']];
+const CODE = 'LEFJ', PCT = [80, 60, 100, 60];   // 이긴 쪽 %
+const strong = p => p >= 80 ? '확실한' : p >= 60 ? '' : '반반에 가까운';
+// A
+document.getElementById('gA').innerHTML = AX.map((x, k) => { const aw = CODE[k] === x[0], p = PCT[k], w = (p - 50) ;
+  const L = aw ? `${50 - w}%` : '50%', W = `${w}%`;
+  return `<div class="g"><div class="top"><span class="${aw ? 'w' : ''}">${x[1]}${aw ? `<em>${p}</em>` : ''}</span><span class="${aw ? '' : 'w'}">${aw ? '' : `<em>${p}</em>`}${x[3]}</span></div>
+  <div class="bar"><i class="fill" style="left:${aw ? 50 - w : 50}%;width:${Math.max(w, 2)}%"></i></div></div>`; }).join('') + '<div class="note">가운데 선 = 반반 · 막대가 길수록 그쪽이 뚜렷해요</div>';
+// B
+const C = 2 * Math.PI * 18;
+document.getElementById('lcB').innerHTML = AX.map((x, k) => { const aw = CODE[k] === x[0], p = PCT[k];
+  return `<div class="c"><div class="row1"><span class="L">${CODE[k]}</span><span class="ring"><svg viewBox="0 0 44 44"><circle class="bg" cx="22" cy="22" r="18"/><circle class="fg" cx="22" cy="22" r="18" stroke-dasharray="${C * p / 100} ${C}"/></svg><span>${p}%</span></span></div>
+  <b>${aw ? x[1] : x[3]}</b><span class="vs">${aw ? x[3] : x[1]}보다</span><p>${aw ? x[4] : x[5]}</p></div>`; }).join('');
+// C
+document.getElementById('spC').innerHTML = AX.map((x, k) => { const aw = CODE[k] === x[0], p = PCT[k], pos = aw ? 100 - p : p, s = strong(p), nm = aw ? x[1] : x[3];
+  return `<div class="sp"><div class="ends"><span class="${aw ? 'w' : ''}"><i>${x[0]}</i>${x[1]}${aw ? ` <em class="pc">${p}%</em>` : ''}</span><span class="${aw ? '' : 'w'}">${aw ? '' : `<em class="pc">${p}%</em> `}${x[3]}<i>${x[2]}</i></span></div>
+  <div class="line"><i class="tick" style="left:50%"></i><span class="dot" style="left:${pos}%"></span></div>
+  <div class="say">${s ? `<b>${s} ${nm}</b>` : `<b>${nm} 쪽</b>`} — ${aw ? x[4] : x[5]}</div></div>`; }).join('');
+// 묶음 아이콘
+const GI = { LS: ['로컬 탐험형', '<circle cx="12" cy="12" r="8.5"/><path d="M15.5 8.5l-2 5-5 2 2-5z"/>'],
+  LE: ['취향 수집형', '<path d="M5 8h14l-1.2 11.2a1 1 0 0 1-1 .8H7.2a1 1 0 0 1-1-.8zM9 8V6.5a3 3 0 0 1 6 0V8"/>'],
+  HS: ['명소 정복형', '<path d="M6 21V4M6 4h11l-2 3.5 2 3.5H6"/>'],
+  HE: ['힐링 충전형', '<path d="M5 10h11v4a5 5 0 0 1-5 5h-1a5 5 0 0 1-5-5zM16 11h1.5a2.5 2.5 0 0 1 0 5H16M8 3.5c-.6 1 .6 1.6 0 2.8M11.5 3.5c-.6 1 .6 1.6 0 2.8"/>'] };
+const gi = g => `<svg viewBox="0 0 24 24">${GI[g][1]}</svg>${GI[g][0]}`;
+document.querySelectorAll('.grp').forEach(e => e.innerHTML = gi(e.dataset.g));
+document.getElementById('icons').innerHTML = Object.keys(GI).map(g => `<span class="grp" style="font-size:.875rem">${gi(g)}</span>`).join('');
+</script>
+</body>
+</html>
