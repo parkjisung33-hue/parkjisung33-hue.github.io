@@ -1497,7 +1497,7 @@ function rEdit() {
       ${R('어디로', city ? esc(city) : '<small>도시를 골라 주세요</small>', 'city')}
       ${R('언제', when || '<small>날짜·몇 박을 골라 주세요</small>', 'date')}
       ${R('누구와', tr.who ? esc(tr.who) : '<small>안 정했어요</small>', 'who')}
-      ${R('출발', (tr.home ? esc(tr.home) : '<small>안 적었어요</small>') + (!dom && tr.home ? `<small>${tr.sgg ? esc(tr.sgg) + ' 기준 차 시간' : '시·군·구 못 찾음 · 75분 가정'}</small>` : '') + (dom && tr.region ? `<small>${fromTx(tr, ref)}</small>` : ''), 'home')}
+      ${R('출발', (tr.home ? esc(tr.home) : '<small>안 적었어요</small>') + (!dom && tr.home ? `<small>${tr.sgg ? esc(tr.sgg) + ' 기준 차 시간' : '시·군·구 못 찾음 · 1시간 15분 가정'}</small>` : '') + (dom && tr.region ? `<small>${fromTx(tr, ref)}</small>` : ''), 'home')}
       ${R(dom ? '가는 길' : '비행기', esc(way), 'book')}
       ${R('숙소', esc(stayLine(tr)), 'book')}
       ${R('취향', (tr.likes.length ? esc(tr.likes.join(' · ')) : '고르지 않음') + (tr.avoid.length ? `<small>피함 · ${esc(tr.avoid.join(' · '))}</small>` : ''), 'likes')}
