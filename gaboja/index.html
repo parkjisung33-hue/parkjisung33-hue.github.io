@@ -113,6 +113,8 @@ h2 { margin: 0; font-size: 1.3125rem; font-weight: 800; letter-spacing: -.03em; 
 .code { font-family: var(--mono); font-weight: 500; font-size: 2rem; line-height: 1; letter-spacing: .02em; }
 .pass .place { font-size: 0.8125rem; color: var(--sub); margin-top: 0.375rem; }
 .pass .to { text-align: right; }
+/* 11/14 #21: 일정 요약 시트 — 제목·동선은 고정, 일정표만 스크롤 */
+.sumscroll { max-height: 52svh; overflow-y: auto; overscroll-behavior: contain; -webkit-overflow-scrolling: touch; }
 /* 11/14 #29: 공항·시각 줄은 항상 한 줄 — 이름만 말줄임, 시각은 그대로. 다음 날은 '+1' */
 .pass .place.pl1 { display: flex; gap: 0.25rem; white-space: nowrap; min-width: 0; }
 .pass .to .place.pl1 { justify-content: flex-end; }
@@ -585,7 +587,11 @@ html, body { overscroll-behavior-y: contain; }
 .tbdrow .btn { flex: none; height: 2.375rem; padding: 0 1rem; }
 .btn.xs { height: 1.875rem; padding: 0 0.75rem; font-size: 0.75rem; font-weight: 700; }
 .next .hrow { display: flex; align-items: center; justify-content: space-between; gap: 0.5rem; min-height: 1.875rem; }
-.late .g.e { grid-template-columns: repeat(3, minmax(0,1fr)); }
+/* 11/14 #25: 한 줄 = −15 −10 −5 | +5 +10 +15 (분), 알림 줄은 버튼 아래 */
+.late .g1 { display: flex; align-items: center; gap: 0.375rem; }
+.late .g1 .g, .late .g1 .g.e { display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 0.375rem; flex: 1; }
+.late .g1 .gsep { width: 1px; align-self: stretch; margin: 0.375rem 0.125rem; background: var(--hair); }
+.late .g1 .btn { padding: 0; font-variant-numeric: tabular-nums; }
 .row2 input { flex: 1; min-width: 0; height: 2.5rem; border-radius: var(--r-sm); border: 1px solid var(--hair); background: var(--field); color: var(--ink); padding: 0 0.75rem; font: inherit; font-size: max(16px, 0.875rem); }
 .row2 b { font-weight: 700; font-size: 0.9375rem; }
 .rideedit { display: flex; flex-direction: column; gap: 0.625rem; padding: 0.875rem; border-radius: var(--r-md); background: var(--field); border: 1px solid var(--hair); }
@@ -688,7 +694,7 @@ html, body { overscroll-behavior-y: contain; }
 .dcard .rt { height: 1.25rem; line-height: 1.25rem; font-size: 0.84375rem; }
 .dcard .hs { height: 1.25rem; line-height: 1.25rem; font-size: 0.78125rem; color: var(--sub); display: flex; align-items: center; gap: 0.375rem; }
 .dcard .hs svg { width: 0.875rem; height: 0.875rem; stroke: currentColor; fill: none; stroke-width: 1.9; stroke-linecap: round; stroke-linejoin: round; flex: none; }
-/* D3-3 메모 모아 보기: 할 일(노란 카드 + 날짜 카드) / 끝낸 것 접힘 */
+/* D3-3 메모 모아 보기: 할 일(노란 카드 + 날짜 카드) / 완료 접힘 */
 .mtitle { font-size: 0.9375rem; font-weight: 800; }
 .mpost { background: var(--note); color: var(--note-ink); border-radius: 0.375rem 0.375rem 0.875rem 0.375rem; padding: 0.625rem 0.875rem 0.75rem; box-shadow: 0 3px 8px -4px rgba(0,0,0,.3); }
 .mpost .mh { display: block; font-size: 0.71875rem; font-weight: 700; letter-spacing: .04em; opacity: .75; padding-bottom: 0.25rem; }
@@ -798,7 +804,7 @@ html, body { overscroll-behavior-y: contain; }
     <div class="sec glass" id="warn"></div>
     <details class="sec glass" id="tips">
       <summary><svg viewBox="0 0 24 24"><path d="M12 3l7 3v5c0 4.5-3 8-7 10-4-2-7-5.5-7-10V6z"/></svg>현지 정보<span class="cnt">긴급 연락처 6 · 생활 정보 2</span><svg class="chev" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg></summary>
-      <div class="grp2">긴급 연락처 · 번호를 누르면 전화</div>
+      <div class="grp2">긴급 연락처 · 번호를 누르면 전화가 걸려요</div>
       <div class="crow"><span class="ic"><svg viewBox="0 0 24 24"><path d="M12 3l7 3v5c0 4.5-3 8-7 10-4-2-7-5.5-7-10V6z"/></svg></span><span class="nm2"><b class="one">경찰</b><span class="src one">일본</span></span><a class="tel" href="tel:110">110</a></div>
       <div class="crow"><span class="ic"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></span><span class="nm2"><b class="one">구급·소방</b><span class="src one">일본</span></span><a class="tel" href="tel:119">119</a></div>
       <div class="crow"><span class="ic"><svg viewBox="0 0 24 24"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a1 1 0 0 1-1 1A16 16 0 0 1 4 5a1 1 0 0 1 1-1"/></svg></span><span class="nm2"><b class="one">관광객 핫라인</b><span class="src one">JNTO · 24시간 · 한국어</span></span><a class="tel" href="tel:+81-50-3816-2787">050-3816-2787</a></div>
@@ -806,7 +812,7 @@ html, body { overscroll-behavior-y: contain; }
       <div class="crow"><span class="ic"><svg viewBox="0 0 24 24"><path d="M4 20h16M6 20V10M10 20V10M14 20V10M18 20V10M3 10l9-6 9 6"/></svg></span><span class="nm2"><b class="one">총영사관 긴급</b><span class="src one">근무시간 외</span></span><a class="tel" href="tel:+81-90-3050-0746">090-3050-0746</a></div>
       <div class="crow"><span class="ic"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><path d="M3.5 12h17M12 3.5c2.5 3 2.5 14 0 17M12 3.5c-2.5 3-2.5 14 0 17"/></svg></span><span class="nm2"><b class="one">영사안전콜센터</b><span class="src one">24시간 · 유료</span></span><a class="tel" href="tel:+82-2-3210-0404">+82-2-3210-0404</a></div>
       <div class="grp2">생활 정보</div>
-      <div class="nrow"><span class="ic"><svg viewBox="0 0 24 24"><rect x="5" y="4" width="14" height="16" rx="2"/><path d="M9 9h6M9 13h6M9 17h3"/></svg></span><span class="one"><b>면세품</b> <span class="src">짐 부치기 전 세관 먼저</span></span><span></span></div>
+      <div class="nrow"><span class="ic"><svg viewBox="0 0 24 24"><rect x="5" y="4" width="14" height="16" rx="2"/><path d="M9 9h6M9 13h6M9 17h3"/></svg></span><span class="one"><b>면세품</b> <span class="src">짐을 부치기 전에 세관 확인 먼저</span></span><span></span></div>
       <div class="nrow"><span class="ic"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><path d="M9 9l3 4 3-4M9 13h6M12 13v4"/></svg></span><span class="one"><b>팁</b> <span class="src">팁 문화 없음</span></span><span></span></div>
       <div class="nrow"><span></span><span class="src one">출처 외교부·JNTO (11/12 확인)</span><span></span></div>
     </details>
@@ -815,11 +821,10 @@ html, body { overscroll-behavior-y: contain; }
   <!-- 오늘 -->
   <section class="view" id="v-now" aria-label="오늘" hidden>
     <div class="next card glass" id="nextCard"></div>
-    <div class="banner glass" id="banner" hidden><i></i><span id="bannerTx"></span><button class="rs" id="resetBtn">되돌리기</button></div>
-    <div class="late"><span id="lateHint">늦어지면 +, 일찍이면 − 누르기 · 누를 때마다 더해짐</span>
-      <div class="g" id="lateBtns"><button class="btn sec sm" data-late="10">+10분</button><button class="btn sec sm" data-late="15">+15분</button><button class="btn sec sm" data-late="30">+30분</button><button class="btn sec sm" data-late="60">+1시간</button></div>
-      <div class="g e" id="earlyBtns"><button class="btn sec sm" data-early="10">−10분</button><button class="btn sec sm" data-early="15">−15분</button><button class="btn sec sm" data-early="30">−30분</button></div>
+    <div class="late"><span id="lateHint">지금 일정이 늦어지면 +, 일찍 끝나면 − · 누를 때마다 더해져요</span>
+      <div class="g1"><span class="g e" id="earlyBtns"><button class="btn sec sm" data-early="15">−15</button><button class="btn sec sm" data-early="10">−10</button><button class="btn sec sm" data-early="5">−5</button></span><i class="gsep" aria-hidden="true"></i><span class="g" id="lateBtns"><button class="btn sec sm" data-late="5">+5</button><button class="btn sec sm" data-late="10">+10</button><button class="btn sec sm" data-late="15">+15</button></span></div>
     </div>
+    <div class="banner glass" id="banner" hidden><i></i><span id="bannerTx"></span><button class="rs" id="resetBtn">되돌리기</button></div>
     <div class="k2"><span class="a">지나온 길</span><span class="b">남은 길</span></div>
     <div class="track glass" id="track"></div>
     <p class="navnote" id="navNote"></p>
@@ -827,7 +832,7 @@ html, body { overscroll-behavior-y: contain; }
 
   <!-- 기록 -->
   <section class="view" id="v-log" aria-label="기록" hidden>
-    <div class="dhd glass"><div class="dmeta"><span class="dchip">기록</span><span>4일 · 12. 4 – 12. 7</span></div><h2 class="one">여행 기록</h2><span class="muted one" style="font-size:0.8125rem">하루가 끝나면 자동 저장</span></div>
+    <div class="dhd glass"><div class="dmeta"><span class="dchip">기록</span><span>4일 · 12. 4 – 12. 7</span></div><h2 class="one">여행 기록</h2><span class="muted one" style="font-size:0.8125rem">하루가 끝나면 자동으로 저장돼요</span></div>
     <div id="trips" class="view"></div>
   </section>
 </div>
@@ -905,7 +910,7 @@ const DAYS = [
    {s:'08:50',e:'09:20',k:'m',mode:'walk',n:'걸어서 오르막',mv:'기요미즈고조역 → 오르막 25분',to:'清水寺'},
    {s:'09:20',e:'11:00',k:'p',sh:'기요미즈데라',n:'기요미즈데라',l:'清水寺',r:'기요미즈데라',say:'나무 무대 전망',q:'清水寺'},
    {s:'11:00',e:'12:00',k:'p',sh:'산넨자카',n:'산넨자카 · 니넨자카',l:'三年坂 · 二年坂',r:'산넨자카 · 니넨자카',say:'돌계단 옛 거리',q:'三年坂'},
-   {s:'12:00',e:'13:30',k:'f',sh:'점심',n:'점심 — 니넨자카 근처',say:'현장 선택',q:'二年坂'},
+   {s:'12:00',e:'13:30',k:'f',sh:'점심',n:'점심 — 니넨자카 근처',say:'가서 고르기',q:'二年坂'},
    {s:'13:30',e:'15:00',k:'f',sh:'말차 파르페',n:'말차 파르페 — 사료 츠지리 기온 본점',l:'茶寮都路里 祇園本店',r:'사료 츠지리 기온 혼텐',say:'대기 1시간 넘으면 패스',q:'茶寮都路里 祇園本店',info:[['주문 마감','17:30']]},
    {s:'15:00',e:'16:00',k:'p',sh:'기온',n:'기온 거리 산책',l:'花見小路',r:'하나미코지',say:'하나미코지 골목까지',q:'花見小路'},
    {s:'16:00',e:'17:00',k:'m',mode:'train',n:'전철',mv:'전철 1시간 · 요도야바시 환승'},
@@ -917,11 +922,11 @@ const DAYS = [
    {s:'08:30',k:'w',n:'기상',say:'느긋한 아침'},
    {s:'09:30',e:'11:00',k:'m',mode:'train',n:'전철',mv:'전철 1시간 30분 · 데마치야나기 환승',to:'恵文社 一乗寺店'},
    {s:'11:00',e:'12:30',k:'x',sh:'게이분샤',n:'게이분샤 이치조지점',l:'恵文社 一乗寺店',r:'게이분샤 이치조지텐',say:'약 1시간',q:'恵文社 一乗寺店'},
-   {s:'12:30',e:'14:00',k:'f',sh:'점심',n:'점심 — 이치조지역 근처',say:'현장 선택',q:'一乗寺駅'},
+   {s:'12:30',e:'14:00',k:'f',sh:'점심',n:'점심 — 이치조지역 근처',say:'가서 고르기',q:'一乗寺駅'},
    {s:'14:00',e:'15:30',k:'p',sh:'가모강',n:'가모강 델타 산책',l:'鴨川デルタ',r:'가모가와 데루타',say:'징검다리 건너기',q:'鴨川デルタ'},
    {s:'15:30',e:'17:00',k:'m',mode:'train',n:'전철',mv:'전철 1시간 10분 · 데마치야나기에서'},
    {s:'17:00',e:'18:30',k:'p',sh:'숙소 휴식',n:'숙소 휴식'},
-   {s:'18:30',e:'20:30',k:'f',sh:'난바 자유',n:'마지막 밤 — 난바에서 자유',l:'なんば',r:'난바',say:'눈여겨 본 곳 자유',q:'なんば',est:1},
+   {s:'18:30',e:'20:30',k:'f',sh:'난바 자유',n:'마지막 밤 — 난바에서 자유 시간',l:'なんば',r:'난바',say:'눈여겨 둔 곳 가 보기',q:'なんば',est:1},
    {s:'22:30',k:'w',n:'취침',say:'내일 10:00 체크아웃'}]},
  { no:4, city:'오사카', date:'12. 7 월', title:'돌아가는 날', route:'난바 → 간사이공항 → 인천공항 → 집', drop:'브런치 단축 · 공항 13:00 도착 고정', codes:'NMB · KIX · ICN · HOME',
    items:[
@@ -929,7 +934,7 @@ const DAYS = [
    {s:'10:00',e:'10:30',k:'p',sh:'체크아웃',n:'체크아웃'},
    {s:'10:30',e:'12:00',k:'f',sh:'브런치',n:'브런치 — 난바',l:'なんば',r:'난바',q:'なんば'},
    {s:'12:00',e:'12:40',k:'m',mode:'train',n:'난카이 라피트',mv:'난카이 라피트 · 35분',to:'関西国際空港'},
-   {s:'12:40',e:'15:00',k:'x',sh:'간사이공항',n:'간사이공항 · 체크인',l:'関西国際空港',r:'간사이 고쿠사이 쿠코',say:'면세품 있으면 세관 먼저',q:'関西国際空港'},
+   {s:'12:40',e:'15:00',k:'x',sh:'간사이공항',n:'간사이공항 · 체크인',l:'関西国際空港',r:'간사이 고쿠사이 쿠코',say:'면세품이 있으면 세관 확인 먼저',q:'関西国際空港'},
    {s:'15:00',e:'16:50',k:'x',fly:['KIX','간사이','ICN','인천'],n:'비행기 · 간사이 → 인천',mv:'비행기 · 1시간 50분'},
    {s:'16:50',e:'17:40',k:'p',sh:'인천공항',n:'인천공항 도착',q:'인천국제공항'},
    {s:'17:40',e:'18:25',k:'m',mode:'train',n:'공항철도 직통',mv:'공항철도 직통 · 43분 · 서울역'},
@@ -938,13 +943,13 @@ const DAYS = [
 ];
 // 주의: lv = red(시간 고정) · amber(확인 필요) · gray(알아 두기) / ref = 가리키는 일정 이름 → 그 블록에 같은 색 점
 const NOTES = {
-  1: [{lv:'amber',ref:'타코야키',t:'와나카 영업시간 자료마다 다름 · 전날 전화'},{lv:'red',ref:'후쿠타로',t:'후쿠타로 17:00 개점 · 맞춰 도착'},{lv:'gray',t:'늦어지면 도톤보리 → 숙소 휴식 순 단축'}],
+  1: [{lv:'amber',ref:'타코야키',t:'와나카 영업시간이 자료마다 달라요 · 전날 전화로 확인'},{lv:'red',ref:'후쿠타로',t:'후쿠타로 17:00 개점 · 맞춰 도착'},{lv:'gray',t:'늦어지면 도톤보리 → 숙소 휴식 순 단축'}],
   2: [{lv:'amber',ref:'말차',t:'사료 츠지리 주문 마감 17:30'},{lv:'gray',t:'기요미즈데라 오르막 25분 · 편한 신발'},{lv:'gray',t:'늦어지면 기온 → 산넨자카 순 단축'}],
   3: [{lv:'red',ref:'게이분샤',t:'게이분샤 꼭 방문 · 다른 곳부터 빼기'},{lv:'gray',t:'늦어지면 가모강 델타 먼저 빼기'}],
-  4: [{lv:'red',ref:'간사이공항',t:'간사이공항 13:00까지 도착 · 출발 2시간 전'},{lv:'gray',t:'면세품은 짐 부치기 전 세관 먼저'},{lv:'gray',t:'늦어지면 브런치 단축'}]
+  4: [{lv:'red',ref:'간사이공항',t:'간사이공항 13:00까지 도착 · 출발 2시간 전'},{lv:'gray',t:'면세품은 짐을 부치기 전에 세관 확인 먼저'},{lv:'gray',t:'늦어지면 브런치 단축'}]
 };
 const NICON = { red:'<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/></svg>', amber:'<svg viewBox="0 0 24 24"><path d="M12 4l9 16H3z"/><path d="M12 10v4M12 17h.01"/></svg>', gray:'<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><path d="M12 11v5M12 8h.01"/></svg>' };
-const CHECKS = { ok:{t:'영업시간 확인 11.11', s:'확인 11.11'}, no:{t:'영업시간 자료마다 다름 · 전날 전화', s:'전날 전화'} };
+const CHECKS = { ok:{t:'영업시간 확인 11.11', s:'확인 11.11'}, no:{t:'영업시간이 자료마다 달라요 · 전날 전화로 확인', s:'전날 전화'} };
 // 장소 DB 일부 (디자인/2026-11-11_가보자_데이터구조/places.json → 오사카·교토, 허브·기간 행사 제외). o=영업 [열기,닫기] · x=휴무 요일 · st=보통 머무는 분
 let PLACES = [{"id":"osk-kuromon","n":"구로몬 시장","l":"黒門市場","c":"오사카","a":"닛폰바시","t":["맛집","스시"],"o":["08:00","18:00"],"x":[],"st":75,"say":"","q":"黒門市場"},{"id":"osk-sushi-urara","n":"난바 스시 우라라","l":"難波 すし麗","c":"오사카","a":"난바","t":["맛집","스시"],"o":["12:00","15:00"],"x":[],"st":90,"say":"난바역에서 걸어서 1~2분","q":"難波 すし麗"},{"id":"osk-wanaka","n":"와나카 센니치마에 본점","l":"わなか 千日前本店","c":"오사카","a":"난바","t":["맛집","타코야키"],"o":null,"x":[],"st":30,"say":"","q":"わなか 千日前本店"},{"id":"osk-kukuru","n":"쿠쿠루 도톤보리 본점","l":"たこ家道頓堀くくる 本店","c":"오사카","a":"도톤보리","t":["맛집","타코야키"],"o":null,"x":[],"st":40,"say":"","q":"くくる 道頓堀本店"},{"id":"osk-dotonbori","n":"도톤보리 · 에비스바시","l":"道頓堀 · 戎橋","c":"오사카","a":"도톤보리","t":["사진 명소","술집·밤"],"o":null,"x":[],"st":60,"say":"","q":"戎橋"},{"id":"osk-uranamba","n":"우라난바 술집 거리","l":"裏なんば","c":"오사카","a":"난바","t":["술집·밤","맛집"],"o":null,"x":[],"st":150,"say":"난바역 동쪽, 서서 마시는 집이 많은 골목","q":"裏なんば"},{"id":"osk-nakazakicho","n":"나카자키초 골목","l":"中崎町","c":"오사카","a":"우메다","t":["카페","옷·빈티지"],"o":null,"x":["wed"],"st":120,"say":"쇼와 초기 목조 집들이 남은 골목에 카페·잡화·구제 가게가 모여 있어요","q":"中崎町"},{"id":"osk-taiyonoto","n":"카페 태양의 탑","l":"太陽ノ塔","c":"오사카","a":"나카자키초","t":["카페"],"o":null,"x":[],"st":60,"say":"2002년 나카자키초 카페 문화를 연 집으로 소개돼요","q":"太陽ノ塔 中崎町"},{"id":"osk-horie","n":"호리에 오렌지 스트리트","l":"南堀江 オレンジストリート","c":"오사카","a":"호리에","t":["쇼핑","잡화·소품"],"o":null,"x":[],"st":90,"say":"생활용품·가구·카페가 모인 조용한 거리","q":"オレンジストリート 堀江"},{"id":"osk-amemura","n":"아메리카무라","l":"アメリカ村","c":"오사카","a":"신사이바시","t":["옷·빈티지","신발"],"o":null,"x":[],"st":120,"say":"오사카에서 가장 큰 구제 거리로 소개돼요","q":"アメリカ村"},{"id":"osk-magnets","n":"마그네츠 아메리카무라점","l":"マグネッツ アメリカ村店","c":"오사카","a":"신사이바시","t":["옷·빈티지"],"o":null,"x":[],"st":40,"say":"‘어른이 고른 구제’가 주제인 가게","q":"マグネッツ アメリカ村店"},{"id":"osk-umeda-sky","n":"우메다 스카이빌딩 공중정원","l":"梅田スカイビル 空中庭園展望台","c":"오사카","a":"우메다","t":["사진 명소","술집·밤"],"o":["09:30","22:30"],"x":[],"st":75,"say":"","q":"梅田スカイビル 空中庭園展望台"},{"id":"osk-nakanoshima-museum","n":"오사카 나카노시마 미술관","l":"大阪中之島美術館","c":"오사카","a":"나카노시마","t":["전시·문화"],"o":null,"x":["mon"],"st":120,"say":"","q":"大阪中之島美術館"},{"id":"osk-shinsaibashisuji","n":"신사이바시스지 상점가","l":"心斎橋筋商店街","c":"오사카","a":"신사이바시","t":["쇼핑"],"o":null,"x":[],"st":90,"say":"","q":"心斎橋筋商店街"},{"id":"kyo-kiyomizudera","n":"기요미즈데라","l":"清水寺","c":"교토","a":"히가시야마","t":["사진 명소","전시·문화"],"o":["06:00","18:00"],"x":[],"st":90,"say":"","q":"清水寺"},{"id":"kyo-shinkyogoku","n":"데라마치 · 신쿄고쿠 상점가","l":"寺町 · 新京極","c":"교토","a":"가와라마치","t":["쇼핑","옷·빈티지"],"o":["10:30","19:30"],"x":[],"st":120,"say":"지붕 덮인 쇼핑 거리 두 줄이 나란히 있어요","q":"新京極商店街"},{"id":"kyo-teramachi-north","n":"데라마치 북쪽 (니조 위)","l":"寺町通 二条以北","c":"교토","a":"가와라마치","t":["옷·빈티지","전시·문화"],"o":null,"x":[],"st":60,"say":"골동·옛 판화·중고 기모노 천 가게가 있어요","q":"寺町通 二条"},{"id":"kyo-francois","n":"찻집 프랑수아","l":"フランソア喫茶室","c":"교토","a":"가와라마치","t":["카페"],"o":["10:00","22:00"],"x":[],"st":60,"say":"","q":"フランソア喫茶室"},{"id":"kyo-rokuyosha","n":"롯카쿠샤 지하점","l":"六曜社 地下店","c":"교토","a":"가와라마치","t":["카페"],"o":["08:30","22:00"],"x":["wed"],"st":60,"say":"","q":"六曜社 地下店"},{"id":"kyo-soiree","n":"찻집 소와레","l":"喫茶ソワレ","c":"교토","a":"가와라마치","t":["카페"],"o":["13:00","19:00"],"x":["mon"],"st":60,"say":"","q":"喫茶ソワレ"},{"id":"kyo-keibunsha","n":"게이분샤 이치조지점","l":"恵文社 一乗寺店","c":"교토","a":"이치조지","t":["서점","잡화·소품"],"o":["10:00","21:00"],"x":[],"st":75,"say":"책·잡지 2만 5천 권을 고른 서점","q":"恵文社 一乗寺店"},{"id":"kyo-seikosha","n":"세이코샤 서점","l":"誠光社","c":"교토","a":"진구마루타마치","t":["서점"],"o":["10:00","20:00"],"x":[],"st":60,"say":"주제별로 꽂힌 작은 서점","q":"誠光社"},{"id":"kyo-botanical","n":"교토 부립 식물원","l":"京都府立植物園","c":"교토","a":"기타야마","t":["자연·산책","휴식"],"o":["09:00","17:00"],"x":[],"st":120,"say":"기타야마역에서 걸어서 약 10분","q":"京都府立植物園"},{"id":"kyo-nishiki","n":"니시키 시장","l":"錦市場","c":"교토","a":"가와라마치","t":["맛집"],"o":["10:00","18:00"],"x":["wed"],"st":60,"say":"","q":"錦市場"},{"id":"kyo-byodoin","n":"뵤도인","l":"平等院","c":"교토","a":"우지","t":["전시·문화","사진 명소"],"o":["08:30","17:30"],"x":[],"st":90,"say":"JR 우지역에서 걸어서 10분","q":"平等院"},{"id":"kyo-kamogawa-yuka","n":"가모강 노료유카","l":"鴨川納涼床","c":"교토","a":"폰토초","t":["맛집","사진 명소"],"o":null,"x":[],"st":120,"say":"가모강 서쪽 니조~고조 사이 가게들이 강 위에 평상 자리를 내놔요","q":"先斗町"},{"id":"kyo-yakitori-seseri","n":"요시다야마 세세리","l":"吉田山 せせり","c":"교토","a":"교토역","t":["맛집","야키토리"],"o":null,"x":[],"st":90,"say":"교토역 근처 8석 야키토리 카운터","q":"吉田山 せせり 京都駅"},{"id":"kyo-yakitori-hitomi","n":"스미야키 소사이 도리야 히토미","l":"炭焼創彩鳥家 ひとみ","c":"교토","a":"사쿄","t":["맛집","야키토리"],"o":null,"x":[],"st":90,"say":"","q":"炭焼創彩鳥家 ひとみ"},{"id":"kyo-yakitori-tachibana","n":"야키토리 교토 다치바나","l":"焼鳥 京都橘","c":"교토","a":"나카교","t":["맛집","야키토리"],"o":null,"x":[],"st":90,"say":"교탄바 닭 꼬치","q":"焼鳥 京都橘"},{"id":"kyo-yakitori-torikago","n":"도리카고","l":"鳥かご","c":"교토","a":"시조오미야","t":["맛집","야키토리"],"o":null,"x":[],"st":90,"say":"","q":"鳥かご 四条大宮"},{"id":"osk-fukutaro","n":"오코노미야키 후쿠타로 본점","l":"お好み焼 福太郎 本店","c":"오사카","a":"난바","t":["맛집","오코노미야키"],"o":["17:00","23:30"],"x":[],"st":75,"say":"난바역에서 걸어서 5분","q":"福太郎 本店 千日前"},{"id":"kyo-tsujiri-gion","n":"사료 츠지리 기온 본점","l":"茶寮都路里 祇園本店","c":"교토","a":"기온","t":["카페","말차"],"o":["11:00","18:00"],"x":["wed"],"st":60,"say":"","q":"茶寮都路里 祇園本店"},{"id":"kyo-sannenzaka","n":"산넨자카 · 니넨자카","l":"三年坂 · 二年坂","c":"교토","a":"히가시야마","t":["사진 명소","쇼핑"],"o":null,"x":[],"st":60,"say":"","q":"三年坂"},{"id":"kyo-hanamikoji","n":"기온 하나미코지","l":"花見小路","c":"교토","a":"기온","t":["사진 명소"],"o":null,"x":[],"st":45,"say":"","q":"花見小路"},{"id":"kyo-kamo-delta","n":"가모강 델타","l":"鴨川デルタ","c":"교토","a":"데마치야나기","t":["자연·산책","휴식"],"o":null,"x":[],"st":45,"say":"","q":"鴨川デルタ"},{"id":"kyo-kamogawa-sanjo","n":"가모강 산책 (산조~시조)","l":"鴨川","c":"교토","a":"산조","t":["자연·산책"],"o":null,"x":[],"st":40,"say":"","q":"鴨川 三条"},{"id":"osk-jiyuken","n":"지유켄 난바 본점","l":"自由軒 難波本店","c":"오사카","a":"난바","t":["맛집","카레"],"o":["11:00","20:00"],"x":["mon"],"st":45,"say":"1910년 창업","q":"自由軒 難波本店"},{"id":"osk-kiji","n":"오코노미야키 기지 본점","l":"お好み焼 きじ 本店","c":"오사카","a":"우메다","t":["맛집","오코노미야키"],"o":["11:30","21:30"],"x":["sun"],"st":60,"say":"1969년 문을 연 신우메다 식당가의 오코노미야키집","q":"お好み焼 きじ 本店 新梅田食道街"},{"id":"osk-kougaryu","n":"고가류 아메리카무라 본점","l":"甲賀流 本店","c":"오사카","a":"아메리카무라","t":["맛집","타코야키"],"o":["10:30","20:30"],"x":[],"st":30,"say":"아메리카무라 산카쿠 공원 맞은편","q":"甲賀流 本店 アメリカ村"},{"id":"kyo-takayasu","n":"주카소바 다카야스","l":"中華そば 高安","c":"교토","a":"이치조지","t":["맛집","라멘"],"o":["11:30","26:00"],"x":[],"st":45,"say":"이치조지역에서 걸어서 4분","q":"中華そば 高安 一乗寺"},{"id":"kyo-daiichi-asahi","n":"혼케 다이이치아사히 본점","l":"本家 第一旭 たかばし本店","c":"교토","a":"교토역","t":["맛집","라멘"],"o":["06:00","25:00"],"x":["thu"],"st":45,"say":"교토역에서 걸어서 5분","q":"本家 第一旭 たかばし本店"},{"id":"kyo-mimikou-porta","n":"미미코 교토 포르타점 (카레 우동)","l":"京のカレーうどん 味味香 京都ポルタ店","c":"교토","a":"교토역","t":["맛집","카레"],"o":["11:00","20:00"],"x":[],"st":45,"say":"교토역 지하상가 포르타 안","q":"味味香 京都ポルタ店"}];
 let PLAN = null;
@@ -967,7 +972,7 @@ function renderTips(L) {
   const sum = el.querySelector('summary'), cnt = sum && sum.querySelector('.cnt');
   if (cnt) cnt.textContent = '긴급 연락처 ' + L.rows.length + ((L.life || []).length ? ' · 생활 정보 ' + L.life.length : '');
   let h = sum ? sum.outerHTML : '';
-  h += '<div class="grp2">긴급 연락처 · 번호를 누르면 전화</div>';
+  h += '<div class="grp2">긴급 연락처 · 번호를 누르면 전화가 걸려요</div>';
   L.rows.forEach(r => { h += '<div class="crow">' + ic(r.ic) + '<span class="nm2"><b class="one">' + esc(r.n) + '</b><span class="src one">' + esc(r.sub || '') + '</span></span><a class="tel" href="' + esc(r.href || 'tel:' + r.tel) + '">' + esc(r.tel) + '</a></div>'; });
   if ((L.life || []).length) { h += '<div class="grp2">생활 정보</div>'; L.life.forEach(([b, t], i) => { h += '<div class="nrow">' + ic(i % 2 ? 'coin' : 'doc') + '<span class="one"><b>' + esc(b) + '</b> <span class="src">' + esc(t) + '</span></span><span></span></div>'; }); }
   if (L.src) h += '<div class="nrow"><span></span><span class="src one">' + esc(L.src) + '</span><span></span></div>';
@@ -1212,7 +1217,7 @@ function liveTop() {
 }
 function subOf(tab) {
   const n = nowRef();
-  if (tab === 'v-now') { const di = navDay(); return 'DAY ' + DAYS[di].no + ' · 지금 ' + toT(n.min); }
+  if (tab === 'v-now') { const di = navDay(); return 'DAY ' + DAYS[di].no + ' · 현재 시각 ' + toT(n.min); }
   if (tab === 'v-log') return TRIP_DATES + (TRIP_NIGHTS ? ' · ' + TRIP_NIGHTS : '');
   return (n.phase === 'before' ? 'D-' + n.left + ' · ' : n.phase === 'during' ? '여행 중 · ' : '여행 끝 · ') + TRIP_DATES + (TRIP_NIGHTS && n.phase === 'before' ? ' · ' + TRIP_NIGHTS : '');
 }
@@ -1229,7 +1234,7 @@ function dayHead(d) {
   if (nw) {
     const c = nw.cur, nm = c ? (c.k === 'm' ? '이동 중 · ' + (c.n || '') : (c.sh || c.n)) : (nw.nx ? '다음 일정까지 여유' : '오늘 일정 끝');
     const goId = c && c.k !== 'm' ? c.id : nw.nx ? nw.nx.id : '';
-    h += '<button class="nowbar glass"' + (goId ? ' data-goto="' + goId + '"' : '') + '><i class="pulse"></i><b>지금 ' + toT(nw.min) + '</b><span class="cur">' + esc(nm) + '</span>'
+    h += '<button class="nowbar glass"' + (goId ? ' data-goto="' + goId + '"' : '') + '><i class="pulse"></i><b>현재 ' + toT(nw.min) + '</b><span class="cur">' + esc(nm) + '</span>'
       + (nw.nx ? '<span class="nx">다음 ' + (d.tbd ? '' : nw.nx.s + ' ') + esc(nw.nx.sh || nw.nx.n) + '</span>' : '') + '</button>';
   }
   return h;
@@ -1240,7 +1245,7 @@ function daySumSheet() {
   const stops = routeOf(d, 5), allStops = routeOf(d);
   let h = '<div class="shd"><div><span class="eyebrow">DAY ' + d.no + ' · ' + d.date + ' · ' + range + '</span><h3 id="sheetTitle" class="one">' + esc(d.title) + '</h3>'
     + '</div>' + X_BTN + '</div><div class="body">'
-    + '<div class="path" aria-label="동선: ' + esc(allStops.join(' → ')) + '">' + stops.map(s => '<span class="stop2"><i></i><span class="one">' + esc(s) + '</span></span>').join('') + '</div><div class="sumlist">';
+    + '<div class="path" aria-label="동선: ' + esc(allStops.join(' → ')) + '">' + stops.map(s => '<span class="stop2"><i></i><span class="one">' + esc(s) + '</span></span>').join('') + '</div><div class="sumlist sumscroll">';
   d.list.forEach(c => {
     const cls = nw && c === nw.cur ? 'now-row' : pastOf(nw, c) ? 'past-on' : '';
     const nm0 = c.k === 'm' ? c.mv : c.fly ? flyTx(c, 1, 3) : (c.n.split(' — ')[1] || c.n), mu = canClose(c) ? mapUrl(d, c) : '';
@@ -1282,15 +1287,15 @@ function flyCard(d, c, cls, top) {
     return open + '<div class="hd">' + hdL
       + '<div class="route"><div>' + code(0) + (CAR ? pl('출발 시각 미정') : plLine(esc(c.fly[1]), '출발 시각 미정')) + '</div>'
       + '<div class="plane' + (CAR || TR ? ' tr' : '') + '">' + ic + '<small>시각 미정</small></div>'
-      + '<div class="to">' + code(2) + (CAR ? pl('도착은 출발 뒤 계산') : plLine(esc(c.fly[3]), '도착 시각 미정')) + '</div></div></div>'
+      + '<div class="to">' + code(2) + (CAR ? pl('도착은 출발 시각을 입력하면 계산돼요') : plLine(esc(c.fly[3]), '도착 시각 미정')) + '</div></div></div>'
       + '<div class="perf"></div><div class="tbdrow"><span>' + rideWord(c) + ' 시각을 넣으면 그날 시간이 정해져요</span><button class="btn pri sm" type="button">입력</button></div></div>';
   }
   if (CAR) {
     const est = !!(c.car && c.car.est), hasT = !!(c.car && c.car.d), rest = c.car && c.car.rs ? (c.car.rs[Math.floor(toMin(c.s) / 60) % 24] ? '포함' : '없음') : '확인 못 함', nu = navUrl(d, c), dfl = !!(c.car && c.car.dflt);
     return open + '<div class="hd">' + hdL
-      + '<div class="route"><div>' + code(0) + pl('출발 ' + c.s + (dfl ? ' (가정)' : '')) + '</div>'
+      + '<div class="route"><div>' + code(0) + pl('출발 ' + c.s + (dfl ? ' (기본값)' : '')) + '</div>'
       + '<div class="plane tr">' + ic + '<small>약 ' + durTx(c.du) + '</small></div>'
-      + '<div class="to">' + code(2) + pl('도착 ' + c.e + (est ? ' 예상' : ' 가정')) + '</div></div></div>'
+      + '<div class="to">' + code(2) + pl('도착 ' + c.e + (est ? ' 예상' : ' (기본값)')) + '</div></div></div>'
       + '<div class="perf"></div>'
       + '<div class="fields"><div class="fld"><span>날짜</span><b>' + d.date + '</b></div><div class="fld"><span>소요 (' + (hasT ? '추정' : '가정') + ')</span><b>약 ' + durTx(c.du) + '</b></div><div class="fld"><span>휴게소 쉼</span><b>' + rest + '</b></div></div>'
       + (dfl || nu ? '<div class="acts">' + (dfl ? '<button class="btn pri sm" type="button">출발 시각 바꾸기</button>' : '') + (nu ? '<a class="btn sec sm" href="' + nu + '" target="_blank" rel="noopener">' + (c.drv && c.drv.kr ? '카카오맵 길찾기' : '길찾기') + '</a>' : '') + '</div>' : '') + '</div>';
@@ -1413,7 +1418,7 @@ function moveItem(id, toId, after) {
   if (nb) { const ti2 = timeIssue(nb); L.splice(0, L.length, ...L0); recompute(d); renderPlan(); toast(ti2.hard + ' · ' + ti2.fix + '에 옮겨 주세요'); return; }
   renderPlan(id);
   const soft = timeIssue(it).soft;
-  toast(clash ? '비행기 시각과 겹침 · 다시 옮겨 주세요' : anchorWarn(d) || (soft ? soft + ' · 확인 필요' : '‘' + (it.sh || it.n) + '’ 옮김' + (d.tbd ? '' : ' · ' + it.s + ' 시작')));
+  toast(clash ? '비행기 시각과 겹쳐요 · 다시 옮겨 주세요' : anchorWarn(d) || (soft ? soft + ' · 확인 필요' : '‘' + (it.sh || it.n) + '’ 옮김' + (d.tbd ? '' : ' · ' + it.s + ' 시작')));
 }
 // 시간 고정(빨간 점) 일정이 원래 시각에서 벗어나면 알림 — 옮기기·추가 뒤에 확인
 function anchorWarn(d) {
@@ -1425,7 +1430,7 @@ function shiftItem(id, step) {
   const d = DAYS[st.day], L = d.list, i = L.findIndex(x => x.id === id);
   let j = i + step;
   while (j >= 0 && j < L.length && fixedOf(L[j])) j += step;
-  if (j < 0 || j >= L.length) { toast('더 옮길 자리 없음'); return; }
+  if (j < 0 || j >= L.length) { toast('더 옮길 수 없어요'); return; }
   moveItem(id, L[j].id, step > 0);
 }
 // 밀기 = 보관(숨김). 보관함에서 복원하거나 완전 삭제 (Gmail 기본 밀기 동작 = 보관, 되돌리기 알림)
@@ -1449,8 +1454,8 @@ function arcCount() { $('#arcN').textContent = st.archive.length ? st.archive.le
 function arcSheet() {
   const rows = st.archive.map((r, i) => '<div class="arow"><span class="tmx">DAY ' + r.d.no + '</span><span class="one"><b>' + esc(r.it.sh || r.it.n) + '</b> ' + (r.closed ? '<span class="off">문 닫음</span>' : r.d.tbd ? '' : '<span class="muted">' + toT(r.sl) + '</span>') + '</span>'
     + '<button class="btn sec" data-res="' + i + '">복원</button><button class="btn del" data-kill="' + i + '">삭제</button></div>').join('');
-  const h = '<div class="shd"><div><span class="eyebrow">보관함</span><h3 id="sheetTitle">보관한 일정 ' + st.archive.length + '개</h3><p class="sub one">밀어서 뺀 일정 · 복원하면 원래 시간대로</p></div>' + X_BTN + '</div><div class="body">'
-    + (rows || '<p class="sub">보관한 일정 없음 · 일정을 옆으로 밀면 여기로</p>') + '</div>';
+  const h = '<div class="shd"><div><span class="eyebrow">보관함</span><h3 id="sheetTitle">보관한 일정 ' + st.archive.length + '개</h3><p class="sub one">밀어서 보관한 일정이에요 · 복원하면 원래 시간대로 돌아가요</p></div>' + X_BTN + '</div><div class="body">'
+    + (rows || '<p class="sub">보관한 일정이 없어요 · 일정을 옆으로 밀면 여기에 모여요</p>') + '</div>';
   if ($('#sheet').classList.contains('on') && sheetMode === 'arc') $('#sheetIn').innerHTML = h; else { sheetMode = 'arc'; openSheet(h); }
 }
 let sheetMode = null;
@@ -1615,15 +1620,15 @@ function renderNow() {
     const after = L.slice(p.i + 1), moved = after.filter(c => toMin(c.s) > c.b), early = after.filter(c => toMin(c.s) < c.b), maxSh = moved.reduce((a, c) => Math.max(a, toMin(c.s) - c.b), 0);
     const risk = moved.find(c => c.k === 'x' && !c.fly), clash = !!d.clash;
     $('#bannerTx').textContent = net > 0
-      ? durTx(net) + ' 늦어짐 → ' + (moved.length ? '뒤 일정 ' + moved.length + '개 최대 ' + durTx(maxSh) + ' 밀림' : '뒤 일정 그대로 (빈 시간이 흡수)')
+      ? durTx(net) + ' 늦어짐 → ' + (moved.length ? '뒤 일정 ' + moved.length + '개 최대 ' + durTx(maxSh) + ' 밀림' : '뒤 일정은 그대로예요 (여유 시간 안에 들어가요)')
         + (risk ? ' · ' + (risk.sh || risk.n) + ' 예정 ' + toT(risk.b) + ' → 확인' : '') + (clash ? ' · 비행기 시각과 겹침' : '') + (moved.length && dropOf(d) ? ' · 줄이려면 ' + dropOf(d) : '')
       : durTx(-net) + ' 일찍 → ' + (early.length ? '뒤 일정 ' + early.length + '개 당김' : '뒤 일정 그대로 (영업 시작·시간 고정)');
   }
   const cur0 = L[p.i], curLate = cur0 && d.lates ? d.lates[cur0.id] || 0 : 0, off = p.i < 0 || p.i >= L.length;
   document.querySelectorAll('#lateBtns [data-late]').forEach(x => { x.disabled = off || totLate >= 180; });
   document.querySelectorAll('#earlyBtns [data-early]').forEach(x => { x.disabled = off || !cur0 || cur0.fly || cur0.du + curLate - +x.dataset.early < 10; });
-  $('#lateHint').textContent = p.i < 0 ? '출발하면 쓸 수 있어요 · ‘도착’으로 미리 따라가 보기' : '늦어지면 +, 일찍이면 − 누르기 · 누를 때마다 더해짐';
-  $('#navNote').textContent = (NOW_OFF ? '점검용 시각 · ' : '폰 시각 기준 · ') + fullDate(n.t) + ' ' + toT(n.min) + (st.cur ? ' · 도착 표시로 따라가는 중' : '');
+  $('#lateHint').textContent = p.i < 0 ? '출발한 뒤에 쓸 수 있어요 · ‘도착’을 눌러 미리 따라가 볼 수 있어요' : '지금 일정이 늦어지면 +, 일찍 끝나면 − · 누를 때마다 더해져요';
+  $('#navNote').textContent = (NOW_OFF ? '점검용 시각 · ' : '현재 시각 · ') + fullDate(n.t) + ' ' + toT(n.min) + (st.cur ? ' · 도착 버튼 기준으로 안내 중' : '');
   if (!$('#v-now').hidden) $('#topSub').textContent = subOf('v-now');
   saveEdits();
 }
@@ -1631,7 +1636,7 @@ function renderNow() {
 function earlyGo(m) {
   const di = navDay(), d = DAYS[di], p = posOf(di), L = d.list, c = L[p.i]; if (!c) return;
   if (c.fly) { toast('비행기·열차·차는 시각이 고정이라 못 당겨요'); return; }
-  const cur = (d.lates && d.lates[c.id]) || 0; if (c.du + cur - m < 10) { toast('지금 일정이 더 짧아질 수 없어요'); return; }
+  const cur = (d.lates && d.lates[c.id]) || 0; if (c.du + cur - m < 10) { toast('이 일정은 더 줄일 수 없어요'); return; }
   const nx = L.slice(p.i + 1).find(x => x.k !== 'm'), nxi = nx ? L.indexOf(nx) : -1, before = nx ? toMin(nx.s) : 0;
   d.lates = d.lates || {}; d.lates[c.id] = cur - m; if (!d.lates[c.id]) delete d.lates[c.id];
   d.clash = recompute(d);
@@ -1641,7 +1646,7 @@ function earlyGo(m) {
     const nm = '‘' + (nx.sh || nx.n).split(' — ').pop() + '’';
     why = nx.fly ? '비행기·열차·차는 시각 고정' : nx.k === 'x' ? nm + ' 시간 고정' : nx.oh && toMin(nx.s) <= toMin(nx.oh[0]) ? nm + ' 영업 시작(' + hhTx(nx.oh[0]) + ') 전' : twOf(nx) === 'night' && toMin(nx.s) <= NIGHT_FROM ? nm + ' 밤 일정(17:30 이후)' : '앞 일정과 이어져 있어요';
   }
-  if (nx && got <= 0) { d.lates[c.id] = cur; if (!cur) delete d.lates[c.id]; d.clash = recompute(d); renderNow(); toast(why + ' · 더 일찍은 못 당겨요'); return; }
+  if (nx && got <= 0) { d.lates[c.id] = cur; if (!cur) delete d.lates[c.id]; d.clash = recompute(d); renderNow(); toast(why + ' · 더는 당길 수 없어요'); return; }
   refreshAll();
   toast(got < m ? durTx(got) + '만 당김 · ' + why : durTx(m) + ' 일찍 · 뒤 일정 당김');
 }
@@ -1748,7 +1753,9 @@ function memoLines(L, key, only) {
   return L.map((m, i) => only && (only === 'done') !== !!m.done ? '' : '<div class="mline' + (m.done ? ' done' : '') + '"><button class="ck" data-mck="' + key + '|' + i + '" aria-label="' + (m.done ? '완료 취소' : '완료 표시') + '">' + (m.done ? CK_IC : '') + '</button>'
     + '<span class="tx">' + esc(m.t) + '</span><button class="rm" data-mrm="' + key + '|' + i + '" aria-label="메모 지우기"><svg viewBox="0 0 24 24"><path d="M7 7l10 10M17 7L7 17"/></svg></button></div>').join('');
 }
-const memoAdd = (key, ph) => '<div class="madd"><input data-min="' + key + '" placeholder="' + ph + '" autocomplete="off" enterkeyhint="done" aria-label="메모 적기"><button class="btn sec sm" data-madd="' + key + '">추가</button></div>';
+// 11/14 #30: 메모 한 줄 최대 100자(폰 두 줄 정도) · 일정 하나에 최대 20개
+const MEMO_MAX = 100, MEMO_N = 20;
+const memoAdd = (key, ph) => '<div class="madd"><input data-min="' + key + '" maxlength="' + MEMO_MAX + '" placeholder="' + ph + '" autocomplete="off" enterkeyhint="done" aria-label="메모 적기"><button class="btn sec sm" data-madd="' + key + '">추가</button></div>';
 // key = '날짜번호:일정id' 또는 'trip'(여행 전체 메모)
 function memoOf(key) {
   if (key === 'trip') return (st.tripMemo = st.tripMemo || []);
@@ -1760,11 +1767,11 @@ function rideEditHtml(d, c) {
   const CAR = isCar(c), TR = c.ride === 'train', tb = !!d.tbd, hh = x => String(x).slice(0, 5);
   const dep = tb ? '' : hh(c.s), arr = tb ? '' : hh(c.e);
   const row = (l, inner) => '<div class="row2 wl"><span>' + l + '</span>' + inner + '</div>';
-  let h = '<div class="rideedit"><span class="mh">' + (CAR ? '차 출발 시각' : TR ? '열차 시각' : '비행기 시각') + (tb ? ' · 아직 안 넣음' : CAR && c.car && c.car.dflt ? ' · 아직 안 넣음 (' + hh(c.s) + ' 가정)' : '') + '</span>';
+  let h = '<div class="rideedit"><span class="mh">' + (CAR ? '차 출발 시각' : TR ? '열차 시각' : '비행기 시각') + (tb ? ' · 아직 입력하지 않음' : CAR && c.car && c.car.dflt ? ' · 아직 입력하지 않음 (' + hh(c.s) + ' 가정)' : '') + '</span>';
   if (!CAR && !TR) h += row('편명', '<input data-rf="no" value="' + esc(c.fno || '') + '" maxlength="8" placeholder="예: KE723" autocomplete="off" aria-label="편명">');
   h += row('출발', '<input type="time" data-rf="dep" value="' + dep + '" aria-label="출발 시각">');
-  h += CAR ? row('도착', '<b id="rfArr">' + (tb ? '출발을 넣으면 계산' : hh(c.e) + ' · 자동 계산 (추정)') + '</b>') : row('도착', '<input type="time" data-rf="arr" value="' + arr + '" aria-label="도착 시각">');
-  h += '<p class="sub" id="rfNote">날짜는 그대로 · 바꾸려면 메뉴 ‘여행 정보 수정’' + (CAR ? '' : ' · 도착이 출발보다 이르면 다음 날') + '</p>';
+  h += CAR ? row('도착', '<b id="rfArr">' + (tb ? '출발 시각을 입력하면 계산돼요' : hh(c.e) + ' · 자동 계산 (추정)') + '</b>') : row('도착', '<input type="time" data-rf="arr" value="' + arr + '" aria-label="도착 시각">');
+  h += '<p class="sub" id="rfNote">날짜는 그대로예요 · 바꾸려면 메뉴의 ‘여행 정보 수정’을 눌러 주세요' + (CAR ? '' : ' · 도착이 출발보다 이르면 다음 날로 계산해요') + '</p>';
   return h + '<div class="acts"><button class="btn pri" data-ride-save>저장</button></div></div>';
 }
 // 장소 일정이 '문 닫았어요' 대상인지 (이동·비행기·숙소·집 제외)
@@ -1849,24 +1856,24 @@ function sheetHtml(d, c) {
   if (nu || mu) h += '<div class="acts">' + (mu ? '<a class="btn pri" href="' + mu + '" target="_blank" rel="noopener">지도</a>' : '')
     + (nu ? '<a class="btn sec" href="' + nu + '" target="_blank" rel="noopener">길찾기</a>' : '') + '</div>';
   if (canClose(c)) h += '<div class="acts"><button class="btn sec sm" data-closed="' + c.id + '">문 닫았어요 · 근처 대안 보기</button></div>';
-  h += fx ? '<p class="sub">고정 일정 · 이동·삭제 불가</p>'
+  h += fx ? '<p class="sub">고정된 일정이에요 · 옮기거나 삭제할 수 없어요</p>'
     : '<div class="acts"><button class="btn ghost sm" data-ord="-1">↑ 앞으로</button><button class="btn ghost sm" data-ord="1">↓ 뒤로</button><button class="btn ghost sm" data-del>보관</button></div>';
   return h + '</div>';
 }
 const memoTotal = () => DAYS.reduce((a, d) => a + d.list.reduce((b, c) => b + (c.memo ? c.memo.length : 0), 0), 0) + (st.tripMemo || []).length;
 function memoSheet() {
-  // 11/14 D3: 맨 위 '할 일'(체크 안 된 것 · 여행 전체 메모는 노란 카드) / 아래 '끝낸 것' 접힘. 안은 날짜(DAY 칩) → 일정 이름(작은 시각) → 메모 줄
+  // 11/14 D3: 맨 위 '할 일'(체크 안 된 것 · 여행 전체 메모는 노란 카드) / 아래 '완료' 접힘. 안은 날짜(DAY 칩) → 일정 이름(작은 시각) → 메모 줄
   const old = document.getElementById('memoDone'), keep = !!(old && old.open), tm = st.tripMemo || [];
   const grp = only => DAYS.map(d => ({ d, its: d.list.filter(c => c.memo && c.memo.some(m => !!m.done === (only === 'done'))) })).filter(x => x.its.length).map(({ d, its }) =>
     '<div class="mgrp"><div class="tt"><span class="dchip">DAY ' + d.no + '</span><span class="muted one">' + esc(d.date) + '</span></div>'
     + its.map(c => '<button class="mgo" data-mopen="' + d.no + ':' + c.id + '"><b class="one">' + esc(c.sh || c.n) + '</b><span class="tm">' + tmx(d, c) + '</span><svg viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg></button>' + memoLines(c.memo, d.no + ':' + c.id, only)).join('') + '</div>').join('');
   const nTodo = tm.filter(m => !m.done).length + DAYS.reduce((a, d) => a + d.list.reduce((b, c) => b + (c.memo ? c.memo.filter(m => !m.done).length : 0), 0), 0), nDone = memoTotal() - nTodo;
-  let h = '<div class="shd"><div><span class="eyebrow">메모</span><h3 id="sheetTitle">메모 모아 보기</h3><p class="sub one">할 일 ' + nTodo + ' · 끝낸 것 ' + nDone + ' · 체크하면 끝낸 것으로</p></div>' + X_BTN + '</div><div class="body">'
+  let h = '<div class="shd"><div><span class="eyebrow">메모</span><h3 id="sheetTitle">메모 모아 보기</h3><p class="sub one">할 일 ' + nTodo + ' · 완료 ' + nDone + ' · 체크하면 완료로 옮겨져요</p></div>' + X_BTN + '</div><div class="body">'
     + '<span class="mtitle">할 일 ' + nTodo + '</span>'
     + '<div class="mpost"><span class="mh">여행 전체</span>' + memoLines(tm, 'trip', 'todo') + memoAdd('trip', '예: 환전 · 유심 · 보조배터리') + '</div>'
     + grp('todo')
-    + (nTodo ? '' : '<p class="sub">' + (nDone ? '체크 안 된 메모 없음' : '일정을 눌러 메모를 적으면 여기 모입니다') + '</p>')
-    + (nDone ? '<details class="mfold" id="memoDone"' + (keep ? ' open' : '') + '><summary><svg viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg>끝낸 것 ' + nDone + '</summary><div class="mfbody">'
+    + (nTodo ? '' : '<p class="sub">' + (nDone ? '체크 안 된 메모 없음' : '일정을 눌러 메모를 적으면 여기에 모여요') + '</p>')
+    + (nDone ? '<details class="mfold" id="memoDone"' + (keep ? ' open' : '') + '><summary><svg viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg>완료 ' + nDone + '</summary><div class="mfbody">'
       + (tm.some(m => m.done) ? '<div class="mgrp"><div class="tt"><span class="dchip">전체</span><span class="muted one">여행 전체</span></div>' + memoLines(tm, 'trip', 'done') + '</div>' : '') + grp('done') + '</div></details>' : '');
   if ($('#sheet').classList.contains('on') && sheetMode === 'memo') $('#sheetIn').innerHTML = h + '</div>'; else { sheetMode = 'memo'; openSheet(h + '</div>'); }
 }
@@ -1878,7 +1885,7 @@ function memoChanged(focusKey) {
 }
 function addMemo(key) {
   const inp = document.querySelector('[data-min="' + key + '"]'), t = inp && inp.value.trim(); if (!t) { inp && inp.focus(); return; }
-  const L = memoOf(key); if (!L) return; L.push({ t }); memoChanged(key);
+  const L = memoOf(key); if (!L) return; if (L.length >= MEMO_N) { toast('메모는 ' + MEMO_N + '개까지 적을 수 있어요'); return; } L.push({ t: t.slice(0, MEMO_MAX) }); memoChanged(key);
 }
 function itemSheet(id) { const d = DAYS[st.day], c = findIt(d, id); if (!c) return; sheetId = id; sheetMode = 'item'; openSheet(sheetHtml(d, c)); }
 $('#sheet').addEventListener('click', e => {
@@ -1976,8 +1983,8 @@ function rideSave() {
   const q = k => { const el = document.querySelector('[data-rf="' + k + '"]'); return el ? el.value.trim() : ''; }, CAR = isCar(c);
   const bad = m => { const n = $('#rfNote'); n.textContent = m; n.classList.add('off'); };
   const dep = q('dep'), arr = CAR ? '' : q('arr'), fno = q('no').toUpperCase().replace(/[^A-Z0-9 ]/g, '').slice(0, 8);
-  if (!/^\d{1,2}:\d{2}$/.test(dep)) return bad('출발 시각을 넣어 주세요');
-  if (!CAR && !/^\d{1,2}:\d{2}$/.test(arr)) return bad('도착 시각을 넣어 주세요');
+  if (!/^\d{1,2}:\d{2}$/.test(dep)) return bad('출발 시각을 입력해 주세요');
+  if (!CAR && !/^\d{1,2}:\d{2}$/.test(arr)) return bad('도착 시각을 입력해 주세요');
   const dep1 = toMin(dep), du1 = CAR ? carDurAt(c, dep1) : (toMin(arr) >= dep1 ? toMin(arr) - dep1 : toMin(arr) + 1440 - dep1);
   if (du1 < 10 || du1 > 18 * 60) return bad('출발·도착 시각을 다시 확인해 주세요');
   const wasTbd = !!d.tbd, wasDflt = !!(c.car && c.car.dflt), same = !wasTbd && !wasDflt && dep1 === toMin(c.o) && du1 === c.du && (c.fno || '') === fno;
@@ -1989,7 +1996,7 @@ function rideSave() {
   if (!wasTbd && !wasDflt) c.chg = true;
   fixNotes(d, c);
   closeAll(); renderPlan(c.id); renderNow(); renderTrail();
-  toast(clash ? '시각이 겹침 · 줄이려면 ' + (dropOf(d) || '앞 일정 빼기') : wasTbd || wasDflt ? '시각 저장 · 그날 시간이 정해졌어요' : (CAR ? '출발 ' : '도착 ') + toT(dep1 + (CAR ? 0 : du1)).replace(/\(.*/, '') + ' · 그날 일정 다시 계산', null, clash ? 4500 : 0);
+  toast(clash ? '시각이 겹쳐요 · 줄이려면 ' + (dropOf(d) || '앞 일정 빼기') : wasTbd || wasDflt ? '시각 저장 · 그날 시간이 정해졌어요' : (CAR ? '출발 ' : '도착 ') + toT(dep1 + (CAR ? 0 : du1)).replace(/\(.*/, '') + ' · 그날 일정 다시 계산', null, clash ? 4500 : 0);
 }
 // 머무는 시간 바꾸기 → 그 뒤 일정 다시 계산 (줄이면 뒤를 당김 · 늘리면 뒤가 밀림, 시간 고정 일정이 밀리면 기존 경고)
 function setStay(id, du) {
@@ -2000,7 +2007,7 @@ function setStay(id, du) {
   const nb = d.list.find(x => !bad0.has(x.id) && timeIssue(x).hard);
   if (nb) { c.du = old; recompute(d); const ti = timeIssue(nb); renderPlan(); $('#sheetIn').innerHTML = sheetHtml(d, c); toast(ti.hard + ' · 이 시간으로는 못 바꿔요'); return; }
   renderPlan(id); renderNow(); renderTrail(); $('#sheetIn').innerHTML = sheetHtml(d, c);
-  toast(clash ? '비행기 시각과 겹침 · 줄이려면 ' + (dropOf(d) || '앞 일정 빼기') : anchorWarn(d) || '머무는 시간 ' + durTx(du) + ' · 뒤 일정 다시 계산');
+  toast(clash ? '비행기 시각과 겹쳐요 · 줄이려면 ' + (dropOf(d) || '앞 일정 빼기') : anchorWarn(d) || '머무는 시간 ' + durTx(du) + ' · 뒤 일정 다시 계산');
 }
 
 /* ---------- 문 닫았어요 → 근처 대안 3곳 (같은 종류 · 그 시각 영업 중 · 가까운 순) ----------
@@ -2154,7 +2161,7 @@ function recsFor(d) {
 }
 function recsHtml(d) {
   const L = recsFor(d);
-  if (!L.length) return '<p class="sub" style="grid-column:1/-1">지금 추천할 곳 없음 · 위에서 직접 찾기</p>';
+  if (!L.length) return '<p class="sub" style="grid-column:1/-1">추천할 곳이 없어요 · 위에서 직접 찾아 보세요</p>';
   return L.map(r => '<button class="rec2" role="checkbox" aria-checked="false" data-rc="' + r.p.id + '"><i class="box"><svg viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></i>'
     + '<b class="one">' + esc(r.p.n) + '</b><span class="one">' + esc(r.p.a) + ' · ' + (r.p.o ? '<span class="on">영업 중</span>' : '영업 확인 필요') + '</span>'
     + '<span class="one">추천 <span class="tm">' + toT(r.sg.s) + '</span> · ' + durTx(r.du) + '</span></button>').join('');
@@ -2173,7 +2180,7 @@ function addSheet() {
 }
 function onAddInput() {
   const v = $('#addName').value.trim(), r = linkName(v), q = r.name;
-  $('#addErr').textContent = r.short ? '짧은 공유 링크는 앱 버전에서 자동으로 읽음 · 지금은 장소 이름으로' : '';
+  $('#addErr').textContent = r.short ? '짧은 공유 링크는 아직 지원하지 않아요 · 장소 이름으로 입력해 주세요' : '';
   const hits = findPlaces(q);
   $('#addSug').innerHTML = q ? hits.map(p => '<button data-pk="' + p.id + '"><span class="one"><b>' + esc(p.n) + '</b> <span class="muted">' + esc(p.c + ' ' + p.a) + '</span></span><span class="muted">' + (p.o ? hoursTx(p) : '') + '</span></button>').join('')
     + '<button data-pk="raw"><span class="one">‘' + esc(q) + '’ 그대로 추가</span><span class="muted">정보 없음</span></button>' : '';
@@ -2193,12 +2200,12 @@ function drawPick() {
   if (p && p.l) info.push(['현지어', '<span class="jp">' + esc(p.l) + '</span>']);
   if (p) info.push(['위치', esc(p.c + ' · ' + p.a)]);
   info.push(['영업', p && p.x.includes(wd) ? '<span class="off">' + WDK[wd] + '요일 휴무</span>' : p && p.o ? hoursTx(p) : '<span class="muted">정보 없음 · 직접 확인</span>']);
-  if (p && p.say) info.push(['한 줄', esc(p.say)]);
+  if (p && p.say) info.push(['소개', esc(p.say)]);
   $('#addPick').innerHTML = '<div class="pick"><b class="one">' + esc(a.name) + '</b><dl class="kv">' + info.map(x => '<dt>' + x[0] + '</dt><dd>' + x[1] + '</dd>').join('') + '</dl>'
     + '<div class="row2 wl"><span>시작</span><div class="chips" id="addWhen"><button aria-pressed="' + (a.when === 'sug') + '" data-v="sug">추천 ' + toT(a.sug.s) + '</button>'
     + PIECE.map((t, i) => '<button aria-pressed="' + (a.when === String(i)) + '" data-v="' + i + '">' + t + '</button>').join('') + '</div></div>'
     + '<div class="row2 wl"><span>머무는 시간</span><div class="chips" id="addDur">' + [30, 60, 90, 120].map(v => '<button aria-pressed="' + (a.du === v) + '" data-v="' + v + '">' + durTx(v) + '</button>').join('') + '</div></div>'
-    + '<p class="sub one">' + (a.when === 'sug' ? '추천 이유 · ' + a.sug.why : '고른 시간대 맨 뒤에 넣음') + '</p>'
+    + '<p class="sub one">' + (a.when === 'sug' ? '추천 이유 · ' + a.sug.why : '고른 시간대의 맨 뒤에 들어가요') + '</p>'
     + (ti0.hard || ti0.soft ? '<p class="sub off">' + esc(ti0.hard || ti0.soft) + ' · 가능한 시간 ' + esc(ti0.fix) + '</p>' : '') + '</div>'
     + '<div class="acts"><button class="btn ghost" data-pk-cancel>다시 찾기</button><button class="btn pri" id="addGo">추가</button></div>';
 }
@@ -2222,7 +2229,7 @@ function doAdd() {
   if (timeIssue(c).hard) { const ix = d.list.indexOf(c), mi = timeIssue(c); d.list.splice(ix, 1); d.slots.splice(ix, 1); recompute(d); drawPick(); toast(mi.hard + ' · ' + mi.fix + '에 넣어 주세요'); return; }
   closeAll(); renderPlan(c.id); renderNow(); renderTrail();
   const softW = timeIssue(c).soft;
-  toast(clash ? '비행기 시각과 겹침 · 옮겨 주세요' : anchorWarn(d) || (softW ? softW + ' · 확인 필요' : '') || '‘' + a.name + '’ 추가 · ' + c.s + (a.sug.push && a.when === 'sug' ? ' · 뒤 일정 밀림' : ''));
+  toast(clash ? '비행기 시각과 겹쳐요 · 옮겨 주세요' : anchorWarn(d) || (softW ? softW + ' · 확인 필요' : '') || '‘' + a.name + '’ 추가 · ' + c.s + (a.sug.push && a.when === 'sug' ? ' · 뒤 일정 밀림' : ''));
 }
 function mkAdded(p, name, du, tw, start) {
   return { s: toT(start), o: toT(start), du, du0: du, k: 'u', tw, oh: p && p.o ? [p.o[0], p.o[1]] : undefined, sh: name, n: name, l: p && p.l, say: p ? p.a + (p.t[0] ? ' · ' + p.t[0] : '') : '직접 추가', q: p ? p.q : name, id: 'u' + (++st.uid), memo: [],
@@ -2243,9 +2250,9 @@ function doAddMany() {
     added.push(c);
   });
   closeAll();
-  if (!added.length) { toast('시간이 안 맞아 추가 못 함'); return; }
+  if (!added.length) { toast('시간이 맞지 않아 추가하지 못했어요'); return; }
   renderPlan(added[0].id); renderNow(); renderTrail();
-  toast((d.clash ? '비행기 시각과 겹침 · ' : '') + added.length + '곳 추가' + (skipped.length ? ' · ' + skipped.length + '곳 제외' : ''), () => {
+  toast((d.clash ? '비행기 시각과 겹쳐요 · ' : '') + added.length + '곳 추가' + (skipped.length ? ' · ' + skipped.length + '곳 제외' : ''), () => {
     added.forEach(c => { const ix = d.list.indexOf(c); if (ix >= 0) { d.list.splice(ix, 1); d.slots.splice(ix, 1); } });
     d.clash = recompute(d); refreshAll();
   }, 5000);
@@ -2282,19 +2289,19 @@ function tripsSheet() {
   let rows = '';
   if (cur) rows += '<div class="trow now"><div class="tmain"><span class="one"><b>' + esc(planCity(cur)) + '</b></span><span class="muted one">' + esc(planDates(cur)) + '</span></div><span class="now-pill">지금</span></div>';
   a.forEach(t => { rows += '<div class="trow"><button class="tmain" data-tswap="' + esc(t.id) + '"><span class="one"><b>' + esc(planCity(t.data.plan)) + '</b></span><span class="muted one">' + esc(t.dates) + md(t.at) + '</span></button><button class="btn del xs" data-tdel="' + esc(t.id) + '">삭제</button></div>'; });
-  const h = '<div class="shd"><div><span class="eyebrow">내 여행</span><h3 id="sheetTitle">내 여행 ' + n + '</h3><p class="sub one">누르면 그 여행으로 바꿔요 · 지금 여행은 보관</p></div>' + X_BTN + '</div><div class="body"><div class="tlist">' + (rows || '<p class="sub">보관한 여행 없음</p>') + '</div></div>';
+  const h = '<div class="shd"><div><span class="eyebrow">내 여행</span><h3 id="sheetTitle">내 여행 ' + n + '</h3><p class="sub one">누르면 그 여행으로 바꿔요 · 지금 여행은 자동으로 보관돼요</p></div>' + X_BTN + '</div><div class="body"><div class="tlist">' + (rows || '<p class="sub">보관한 여행 없음</p>') + '</div></div>';
   if ($('#sheet').classList.contains('on') && sheetMode === 'trips') $('#sheetIn').innerHTML = h; else { sheetMode = 'trips'; openSheet(h); }
 }
 function swapTrip(id) {
   const a = tripsGet(), e = a.find(t => t.id === id); if (!e) return;
   const cur = snapshotCurrent(), rest = a.filter(t => t.id !== id && (!cur || t.id !== cur.id)); if (cur) rest.unshift(cur);
-  if (!tripsSet(rest.slice(0, TRIPS_MAX))) { toast('바꾸기 실패 · 저장 공간 부족'); return; }
+  if (!tripsSet(rest.slice(0, TRIPS_MAX))) { toast('바꾸지 못했어요 · 저장 공간이 부족해요'); return; }
   try {
     localStorage.setItem('gaboja-plan', JSON.stringify(e.data.plan));
     if (e.data.edits && e.data.plan.made) { let all = {}; try { all = JSON.parse(localStorage.getItem(EDIT_KEY)) || {}; } catch (_) {} all[e.data.plan.made] = { ...e.data.edits, at: Date.now() }; localStorage.setItem(EDIT_KEY, JSON.stringify(all)); }
     if (e.data.trip) localStorage.setItem('gaboja-trip', JSON.stringify(e.data.trip));
     try { sessionStorage.setItem('gaboja-flash', '‘' + planCity(e.data.plan) + '’ 여행으로 바꿈'); } catch (_) {}
-  } catch (_) { toast('바꾸기 실패'); return; }
+  } catch (_) { toast('바꾸지 못했어요'); return; }
   layerOn = false; try { history.replaceState(null, ''); } catch (_) {}
   location.reload();
 }
@@ -2343,17 +2350,17 @@ function menuSheet(k) {
   else if (k === 'link') {
     closeAll();
     const url = location.hostname === 'larchive.page' ? 'https://larchive.page/gaboja/' : 'https://claude.ai/artifact/FKawd3L992W8SqCHkfB4gU';
-    try { navigator.clipboard.writeText(url).then(() => toast('링크 복사됨'), () => toast('복사 안 됨 · 길게 눌러 복사')); } catch (_) { toast('복사 안 됨'); }
+    try { navigator.clipboard.writeText(url).then(() => toast('링크 복사됨'), () => toast('복사하지 못했어요 · 길게 눌러 복사해 주세요')); } catch (_) { toast('복사 안 됨'); }
   }
-  else if (k === 'kakao') { closeAll(); toast('시안에서는 카카오톡 공유 준비 중'); }
+  else if (k === 'kakao') { closeAll(); toast('시험판에서는 카카오톡 공유 준비 중'); }
   else if (k === 'share') {
     closeAll();
     const data = { title: '가보자 · ' + TRIP_TITLE, url: location.hostname === 'larchive.page' ? 'https://larchive.page/gaboja/' : 'https://claude.ai/artifact/FKawd3L992W8SqCHkfB4gU' };
-    if (navigator.share) navigator.share(data).catch(e => { if (e && e.name !== 'AbortError') toast('공유 창 열기 실패 · 링크 복사 이용'); });
-    else toast('공유 창 미지원 브라우저 · 링크 복사 이용');
+    if (navigator.share) navigator.share(data).catch(e => { if (e && e.name !== 'AbortError') toast('공유 창을 열지 못했어요 · 링크 복사를 이용해 주세요'); });
+    else toast('이 브라우저는 공유를 지원하지 않아요 · 링크를 복사해 주세요');
   }
   else if (k === 'pdf') { pdfSheet(); }
-  else { closeAll(); toast('시안에서는 아직 준비 중'); }
+  else { closeAll(); toast('시험판에서는 아직 준비 중'); }
 }
 
 /* ---------- PDF로 저장 (11/14) ----------
@@ -2361,7 +2368,7 @@ function menuSheet(k) {
    점검용: index.html?print=1 → 문서만 만들고 인쇄 창은 안 띄움 */
 function pdfSheet() {
   const ua = navigator.userAgent, ios = /iP(hone|od|ad)/.test(ua) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1), and = !ios && /Android/.test(ua);
-  const rows = [['ios', '아이폰·아이패드', '인쇄 화면에서 공유 버튼 → ‘파일에 저장’'], ['and', '안드로이드(크롬·삼성 인터넷)', '프린터를 ‘PDF로 저장’으로 바꾸고 저장 버튼'], ['pc', 'PC', '대상 ‘PDF로 저장’']];
+  const rows = [['ios', '아이폰·아이패드', '인쇄 화면에서 공유 버튼 → ‘파일에 저장’'], ['and', '안드로이드(크롬·삼성 인터넷)', '프린터를 ‘PDF로 저장’으로 바꾼 뒤 저장 버튼을 누르세요'], ['pc', 'PC', '대상 ‘PDF로 저장’']];
   const me = ios ? 'ios' : and ? 'and' : 'pc';
   rows.sort((a, b) => (b[0] === me) - (a[0] === me));
   openSheet('<div class="shd"><div><span class="eyebrow">PDF</span><h3 id="sheetTitle">PDF로 저장</h3></div>' + X_BTN + '</div><div class="body"><div><p class="sub">인쇄 화면이 열리면 아래처럼 저장하세요</p>'
@@ -2413,20 +2420,20 @@ function buildPrintDoc() {
     let t = '';
     [...tp.children].forEach(el => {
       if (el.tagName === 'SUMMARY') return;
-      if (el.classList.contains('grp2')) t += '<h3>' + esc(el.textContent.replace(/\s*·\s*번호를 누르면 전화/, '')) + '</h3>';
+      if (el.classList.contains('grp2')) t += '<h3>' + esc(el.textContent.replace(/\s*·\s*번호를 누르면 전화.*/, '')) + '</h3>';
       else if (el.classList.contains('crow')) { const b = el.querySelector('b'), s = el.querySelector('.src'), tl = el.querySelector('.tel'); t += '<div class="cr"><span><b>' + esc(b ? b.textContent : '') + '</b>' + (s && s.textContent ? '<span class="g"> ' + esc(s.textContent) + '</span>' : '') + '</span><span>' + esc(tl ? tl.textContent : '') + '</span></div>'; }
       else if (el.classList.contains('nrow')) { const b = el.querySelector('b'), s = el.querySelector('.src'); if (b) t += '<div class="cr"><span><b>' + esc(b.textContent) + '</b> ' + esc(s ? s.textContent : '') + '</span></div>'; else if (s && s.textContent) t += '<p class="g src">' + esc(s.textContent) + '</p>'; }
       else if (el.classList.contains('cattr')) t += '<p class="g src">' + esc(el.textContent) + '</p>';
     });
     if (t) h += '<div class="ps"><h2>현지 정보</h2>' + t + '</div>';
   }
-  // 메모 (있을 때만): 할 일 / 끝낸 것
+  // 메모 (있을 때만): 할 일 / 완료
   const tm = st.tripMemo || [], todo = [], done = [];
   tm.forEach(m => (m.done ? done : todo).push(['여행 전체', m]));
   DAYS.forEach(d => d.list.forEach(c => (c.memo || []).forEach(m => (m.done ? done : todo).push(['DAY ' + d.no + ' · ' + (c.sh || c.n), m]))));
   if (todo.length || done.length) {
     const ml = a => a.map(([w, m]) => '<div class="cr' + (m.done ? ' dn' : '') + '"><span><b>' + esc(w) + '</b> ' + esc(m.t) + '</span></div>').join('');
-    h += '<div class="ps"><h2>메모</h2>' + (todo.length ? '<h3>할 일</h3>' + ml(todo) : '') + (done.length ? '<h3>끝낸 것</h3>' + ml(done) : '') + '</div>';
+    h += '<div class="ps"><h2>메모</h2>' + (todo.length ? '<h3>할 일</h3>' + ml(todo) : '') + (done.length ? '<h3>완료</h3>' + ml(done) : '') + '</div>';
   }
   const el = document.createElement('div'); el.id = 'printDoc'; el.innerHTML = h; document.body.appendChild(el);
   return el;
@@ -2468,7 +2475,7 @@ document.addEventListener('click', e => {
   if (e.target.id === 'nextDayBtn') { const di = navDay() + 1; if (DAYS[di]) { st.cur = { day: di, id: DAYS[di].list[0].id }; st.day = di; renderDays(); refreshAll(); } return; }
   const fd = e.target.closest('[data-flyday]'); if (fd) { st.day = +fd.dataset.flyday; renderDays(); renderPlan(); itemSheet(fd.dataset.fid); return; }
   if (e.target.id === 'addGo') { doAdd(); return; }
-  if (e.target.id === 'newGo') { if (!archiveCurrent()) { toast('보관 실패 · 저장 공간 부족'); return; } goNewTrip(); return; }
+  if (e.target.id === 'newGo') { if (!archiveCurrent()) { toast('보관하지 못했어요 · 저장 공간이 부족해요'); return; } goNewTrip(); return; }
   const chip = e.target.closest('#addWhen button, #addDur button');
   if (chip && addPick) { if (chip.parentElement.id === 'addWhen') addPick.when = chip.dataset.v; else addPick.du = +chip.dataset.v; drawPick(); return; }
   if (e.target.closest('[data-pk-cancel]')) { addPick = null; $('#addPick').innerHTML = ''; $('#addRecs').hidden = false; $('#addName').value = ''; $('#addName').focus(); return; }

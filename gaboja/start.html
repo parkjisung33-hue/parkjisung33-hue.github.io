@@ -157,6 +157,7 @@ main { flex: 1; display: flex; flex-direction: column; position: relative; overf
 @keyframes flip { 0% { transform: rotateX(0); } 45% { transform: rotateX(-88deg); } 55% { transform: rotateX(88deg); } 100% { transform: rotateX(0); } }
 .flaps.big .fl { width: 2.75rem; height: 3.625rem; font-size: 1.875rem; border-radius: 0.5rem; }
 
+.cta.ghost { background: transparent; color: var(--sub); height: 2.75rem; box-shadow: none; }
 .cta { width: 100%; height: 3.5rem; border-radius: 62rem; background: var(--ink); color: var(--on-ink); font-size: 1rem; font-weight: 700; display: flex; align-items: center; justify-content: center; gap: 0.5rem; transition: transform .12s, opacity .2s; }
 .cta:active { transform: scale(.98); }
 .cta[disabled] { opacity: .3; pointer-events: none; }
@@ -338,7 +339,7 @@ main { flex: 1; display: flex; flex-direction: column; position: relative; overf
 .cal .gd button.s::before, .cal .gd button.e::before { content: ""; position: absolute; inset: 0.125rem; border-radius: 50%; background: var(--blue); z-index: -1; }
 .cal .gd button.s { background: linear-gradient(90deg, transparent 50%, var(--blue-soft) 50%); }
 .cal .gd button.e { background: linear-gradient(90deg, var(--blue-soft) 50%, transparent 50%); }
-.cal .gd button.s.e { background: none; }
+.cal .gd button.s.e, .cal .gd button.s.solo { background: none; }   /* 11/14 #13b: 하루만 고르면 그 날만 동그라미 */
 .cal .gd { isolation: isolate; }
 .sum { font-size: 0.9375rem; font-weight: 700; text-align: center; min-height: 1.5rem; }
 .sum span { color: var(--blue); }
@@ -366,7 +367,7 @@ main { flex: 1; display: flex; flex-direction: column; position: relative; overf
 .rx .near b em { font-style: normal; font-size: 0.6875rem; font-weight: 800; letter-spacing: .06em; color: var(--sub); flex: none; }
 .rx .go2 { position: relative; overflow: hidden; }
 .rx .go2 i { position: absolute; inset: 0; background: rgba(127,127,127,.28); transform: scaleX(0); transform-origin: left; }
-.rx.on .go2 i { animation: fill var(--auto, 3.2s) linear .4s forwards; }
+.rx .go2 i { display: none; } /* 11/14 #6: 게이지·자동 넘김 없앰 → '다음 질문'을 눌러야 넘어감 */
 @keyframes fill { to { transform: scaleX(1); } }
 .rx .go2 span { position: relative; display: flex; align-items: center; gap: 0.5rem; }
 .fl.lock { box-shadow: inset 0 0 0 2px var(--red); transition: box-shadow .3s; }
@@ -593,7 +594,7 @@ const HALF = 5; // 앞 묶음(여행 취향) 문항 수 = 뒤 묶음(여행 스�
 const AUTO = 3200; // 반응 시트가 떠 있다가 다음 질문으로 넘어가기까지
 /* E1 코드 칸 (10문항): 앞 묶음 5문항 동안 1·2칸(1번 → 1칸, 2번 → 2칸, 3~4번 다듬는 중, 5번 → 앞 두 칸 확정) · 뒤 묶음 5문항 동안 3·4칸(6번 → 3칸, 7번 → 4칸, 8~9번 다듬는 중, 10번 → 완성) */
 const SHOWN = [1, 2, 2, 2, 2, 3, 4, 4, 4, 4], LOCKED = [0, 0, 0, 0, 2, 2, 2, 2, 2, 4];
-const STEP_TX = ['첫 글자 등장', '두 번째 글자 등장', '앞 두 글자 다듬는 중', '앞 두 글자 다듬는 중', '앞 두 글자 확정', '세 번째 글자 등장', '네 번째 글자 등장', '뒤 두 글자 다듬는 중', '뒤 두 글자 다듬는 중', '코드 완성'];
+const STEP_TX = ['첫 글자 등장', '두 번째 글자 등장', '앞 두 글자 맞춰 보는 중', '앞 두 글자 맞춰 보는 중', '앞 두 글자 확정', '세 번째 글자 등장', '네 번째 글자 등장', '뒤 두 글자 다듬는 중', '뒤 두 글자 다듬는 중', '코드 완성'];
 // 자동 일정이 되는 곳 → 엔진 도시 키 (gen.js cfg)
 const DEST = { '오사카·교토': 'kix', '도쿄': 'tyo', '후쿠오카': 'fuk', '삿포로': 'spk', '서울': 'sel', '부산': 'bsn' };
 const AIRPORTS = { kix: [['KIX', '간사이']], tyo: [['NRT', '나리타'], ['HND', '하네다']], fuk: [['FUK', '후쿠오카']], spk: [['CTS', '신치토세']] };
@@ -696,6 +697,7 @@ function letters(v) { return AX.map(x => { const A = v[x.a[0]], B = v[x.b[0]]; r
 /* ── 화면 그리기 ── */
 const ICON = {
   check: '<svg viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>',
+  info: '<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><path d="M12 11v5"/><circle cx="12" cy="7.9" r=".6" fill="currentColor"/></svg>',   // 11/14 #14·16: 안내 문구 아이콘 = ⓘ 하나로 통일
   arrow: '<svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg>',
   share: '<svg viewBox="0 0 24 24"><path d="M12 15V4M8 8l4-4 4 4M5 12v7a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-7"/></svg>',
   link: '<svg viewBox="0 0 24 24"><path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1"/></svg>',
@@ -751,8 +753,21 @@ function back() {
 }
 function clearHash() { if (location.hash) { try { history.replaceState(null, '', location.pathname + location.search); } catch (_) { location.hash = ''; } } }
 
+// 11/14 #8: 질문 아래 안내 = 질문마다 다르게 (예전 '가장 가까운 걸 하나만 골라요' 한 줄 대신)
+const QSUB = {
+  '도착 첫날, 짐 풀고 제일 먼저 할 일은?': '고민 말고, 제일 먼저 발이 가는 쪽으로',
+  '여행 끝나고 사진첩에 제일 많은 건?': '대충 떠올려도 돼요. 제일 많을 것 같은 쪽',
+  '돌아와서 친구한테 제일 먼저 하는 말은?': '제일 자랑하고 싶은 한마디를 골라 주세요',
+  '출발 전날 밤, 내 일정표는?': '평소 내 모습에 제일 가까운 쪽으로',
+  '오후 3시, 오늘 갈 곳을 벌써 다 돌았다면?': '지도 켜기 전, 먼저 떠오르는 쪽으로',
+  '아침에 일어났더니 비가 온다면?': '창밖을 본 순간의 첫 반응으로',
+  '자유 시간이 3시간 생긴다면?': '정답은 없어요. 끌리는 대로 하나',
+  '숙소를 고를 때 제일 중요한 건?': '딱 하나만 챙긴다면 이것',
+  '가고 싶던 식당에 줄이 1시간이라면?': '그 자리에서 바로 할 것 같은 쪽으로',
+  '여행 마지막 날 오전은?': '아쉬운 마지막 오전, 하고 싶은 쪽으로',
+};
 function setBar(kind, n, total, right) {
-  const bb = $('#backBtn'); bb.disabled = false; bb.setAttribute('aria-label', S.step === 'intro' || (FROM_APP && !S.hist.length) ? '내 일정으로' : '뒤로');
+  const bb = $('#backBtn'); bb.disabled = false; bb.style.visibility = S.step === 'intro' ? 'hidden' : '';   // 11/14 #2: 첫 화면엔 뒤로 버튼 없음 bb.setAttribute('aria-label', S.step === 'intro' || (FROM_APP && !S.hist.length) ? '내 일정으로' : '뒤로');
   const p = $('#prog'); if (p.dataset.k !== String(kind)) { p.innerHTML = ''; p.dataset.k = kind; } p.className = 'prog' + (kind === 'info' ? ' blue' : '');
   if (!kind) p.innerHTML = ''; else { if (p.children.length !== total) p.innerHTML = '<i></i>'.repeat(total); [...p.children].forEach((x, i) => x.classList.toggle('on', i < n)); }
   const r = $('#barR'); r.textContent = right ? right.t : ''; r.hidden = !right; r.className = 'barR' + (right && right.fn ? ' btn' : ''); r.tabIndex = right && right.fn ? 0 : -1; r.onclick = right && right.fn || null;
@@ -818,11 +833,11 @@ function rQ(i) {
   setBar('test', i, Q.length, { t: `${i + 1} / ${Q.length}` });
   const ls = boardLetters(i - 1), known = i > 0;
   const el = screen(`
-    <div class="qh"><span class="eyebrow">${i < HALF ? '여행 취향' : '여행 스타일'}</span><h1>${esc(q.h)}</h1><p>가장 가까운 걸 하나만 골라요</p></div>
+    <div class="qh"><span class="eyebrow">${i < HALF ? '여행 취향' : '여행 스타일'}</span><h1>${esc(q.h)}</h1><p>${esc(QSUB[q.h] || '제일 끌리는 쪽 하나만 골라 주세요')}</p></div>
     <div class="opts" id="opts">${ord.map((oi, n) => `<button class="opt ${prev === oi ? 'prev' : ''}" data-oi="${oi}"><span class="top"><span class="k">${'ABCD'[n]}</span><svg class="ic" viewBox="0 0 24 24" aria-hidden="true">${QI[i][oi]}</svg></span><span class="tx">${esc(q.o[oi][0])}</span><span class="stamp">${ICON.check}</span></button>`).join('')}</div>
     <div class="board glass" id="board">
       ${flapsHtml(ls, false, i - 1)}
-      <div class="lb"><b id="bdT">${known ? `탑승권 코드 ${SHOWN[i - 1]} / 4` : '하나 고를 때마다 코드가 한 칸씩'}</b><span id="bdS">${known ? boardSub(ls) : AX.map(x => x.ax).join(' · ')}</span></div>
+      <div class="lb"><b id="bdT">${known ? `탑승권 코드 ${SHOWN[i - 1]} / 4` : '하나 고를 때마다 코드가 한 칸씩 채워져요'}</b><span id="bdS">${known ? boardSub(ls) : AX.map(x => x.ax).join(' · ')}</span></div>
     </div>`);
   el.querySelectorAll('.opt').forEach(b => b.onclick = () => choose(i, +b.dataset.oi, b));
 }
@@ -853,9 +868,22 @@ function openRx(i, oi) {
   later(() => ls.forEach((l, k) => { if (l && l !== prevLs[k]) { setFlap(fls[k], l); fls[k].classList.add('new'); } if (k < LOCKED[i]) fls[k].classList.add('lock'); }), 420);
   let done = false;
   const goOn = () => { if (done) return; done = true; closeRx(); setTimeout(() => { busy = false; go(last ? 'calc' : 'q' + (i + 1)); }, 240); };
-  $('#rxGo').onclick = goOn; sc.onclick = goOn;
-  later(goOn, AUTO + 400);
+  $('#rxGo').onclick = goOn; sc.onclick = null;   // 11/14 #6: 자동 넘김 없음, 바깥 눌러도 안 넘어감
   rx.tabIndex = -1; setTimeout(() => rx.focus({ preventScroll: true }), 60); // 시트 자체에 포커스(버튼 테두리 안 보이게), Enter = 다음
+}
+// 11/14 #13a: '같이 가면' 카드 → 아래에서 올라오는 시트(그 유형 한 줄·장면·왜 맞는지/부딪히는지) + '이 유형 자세히'
+function pairSheet(c, why, good) {
+  const t = T(c), rx = $('#rx'), sc = $('#rxScrim');
+  rx.innerHTML = `<div class="rh"><span class="step">${good ? '잘 맞아요' : '부딪힐 수 있어요'} · ${esc(t.group)}</span></div>
+    <h2 id="rxT">${c} ${esc(t.name)}</h2><p>${esc(t.line || '')}</p>
+    <div class="near"><span>${good ? '같이 가면 좋은 이유' : '같이 가면 부딪히는 부분'}</span><p style="margin:.375rem 0 0;font-size:1rem;font-weight:700;color:var(--ink);line-height:1.45">${esc(why || '')}</p></div>
+    ${(t.scenes || []).length ? `<div class="near"><span>이런 여행을 해요</span><div>${t.scenes.slice(0, 3).map(x => `<b>${esc(x)}</b>`).join('')}</div></div>` : ''}
+    <button class="cta go2" id="rxGo"><span>이 유형 자세히 보기 ${ICON.arrow}</span></button>
+    <button class="cta ghost" id="rxClose" style="margin-top:.5rem">닫기</button>`;
+  sc.hidden = false; void rx.offsetWidth; sc.classList.add('on'); rx.classList.add('on');
+  $('#rxGo').onclick = () => { closeRx(); setTimeout(() => openType(c), 240); };
+  $('#rxClose').onclick = closeRx; sc.onclick = closeRx;
+  rx.tabIndex = -1; setTimeout(() => rx.focus({ preventScroll: true }), 60);
 }
 function closeRx() { const rx = $('#rx'), sc = $('#rxScrim'); rx.classList.remove('on'); sc.classList.remove('on'); setTimeout(() => { if (!rx.classList.contains('on')) sc.hidden = true; }, 360); }
 function rxOpen() { return $('#rx').classList.contains('on'); }
@@ -864,7 +892,7 @@ function rCalc() {
   setBar('test', Q.length, Q.length);
   const v = tally(S.ans), ls = letters(v), code = ls.join('');
   S.type = code; S.votes = v; store.set('gaboja-type', { code, votes: v, at: Date.now() });
-  const lines = [`고른 답 ${Q.length}개 다시 읽기`].concat(AX.map(x => `${x.ax} · ${wa(x.a[1])} ${x.b[1]} 사이 저울질`)).concat(['16가지 탑승권 중 가장 가까운 것 찾기']);
+  const lines = [`고른 답 ${Q.length}개 다시 읽기`].concat(AX.map(x => `${x.ax} · ${wa(x.a[1])} ${x.b[1]} 사이에서 비교`)).concat(['16가지 탑승권 중 가장 가까운 것 찾기']);
   screen(`<div class="calc">
       <span class="eyebrow">분석 중</span>
       ${flapsHtml(['', '', '', ''], true)}
@@ -934,7 +962,7 @@ function rResult(c, mine) {
       ${FROM_APP && hasPlan() ? `<a class="cta" href="index.html" style="text-decoration:none">내 일정으로 돌아가기 ${ICON.arrow}</a><button class="ghost" id="nextBtn">${mine ? '이 유형으로 새 여행 만들기' : (S.type ? '내 유형으로 새 여행 만들기' : '나도 해 보기')}</button>`
         : `<button class="cta" id="nextBtn">${mine ? '이 유형으로 내 여행 만들기' : (S.type ? '내 유형으로 여행 만들기' : '나도 해 보기')} ${ICON.arrow}</button>`}
     </div>`);
-  el.querySelectorAll('.pair .mini').forEach(b => b.onclick = () => openType(b.dataset.code));
+  el.querySelectorAll('.pair .mini').forEach((b, k) => b.onclick = () => pairSheet(b.dataset.code, k === 0 ? t.bestWhy : t.clashWhy, k === 0));   // 11/14 #13a: 페이지 이동 대신 아래 시트
   $('#copyBtn').onclick = () => copyLink(c);
   $('#redoBtn').onclick = () => { S.ans = []; S.shuffle = Q.map(q => shuffled(q.o.map((_, i) => i))); S.hist = ['intro']; clearHash(); go('q0', { noHist: true }); };
   $('#allBtn2').onclick = () => go('types');
@@ -951,14 +979,14 @@ function copyLink(c) {
   const url0 = location.origin + location.pathname + '#r-' + c, t0 = T(c);
   if (navigator.share) { navigator.share({ title: '가보자 여행 유형', text: `나는 ‘${t0.name}’(${c}) 여행자래. 너는 어떤 여행자야? ${Q.length}번만 고르면 나와`, url: url0 }).catch(() => {}); return; }
   const url = url0, txt = `나는 ‘${t0.name}’(${c}) 여행자래. 너는 어떤 여행자야? ${Q.length}번만 고르면 나와 ${url}`;
-  const ok = () => toast('공유 문구 복사됨 · 친구에게 붙여 넣어 보내 보세요'), bad = () => { toast('복사할 수 없어요. 주소창 링크를 길게 눌러 복사해 주세요'); };
+  const ok = () => toast('공유 문구를 복사했어요 · 친구에게 붙여 넣어 보내 보세요'), bad = () => { toast('복사할 수 없어요. 주소창 링크를 길게 눌러 복사해 주세요'); };
   try { navigator.clipboard.writeText(txt).then(ok, bad); } catch (_) { bad(); }
 }
 
 function rTypes() {
   setBar(null, 0, 0, { t: '16가지' });
   const el = screen(`
-    <div class="qh"><span class="eyebrow">가보자 · 16가지 탑승권</span><h1>여행 유형 한눈에</h1><p>여행 취향 4묶음 × 여행 스타일 4가지. 눌러서 자세히</p></div>
+    <div class="qh"><span class="eyebrow">가보자 · 16가지 탑승권</span><h1>여행 유형 한눈에</h1><p>여행 취향 4가지 × 여행 스타일 4가지 · 눌러서 자세히 보기</p></div>
     ${Object.keys(GROUPS).map(g => `<div class="grp"><h3>${GROUPS[g][0]}<span>${GROUPS[g][1]}</span></h3><div class="g4">
       ${ORDER.filter(c => c.startsWith(g)).map(c => { const t = T(c), lab = PAIR[c.slice(2)];
         return `<button class="mini ${c === S.type ? 'me' : ''}" data-code="${c}">${c === S.type ? '<span class="me-b">나</span>' : ''}<div class="t2"><span class="cd">${c}</span><span class="nm">${esc(t.name)}</span></div><div class="pf"></div><div class="t3">${lab}</div></button>`; }).join('')}
@@ -993,7 +1021,7 @@ function rInfo(s) {
   }
   if (s === 'date') {
     if (!S.calM) { const d = new Date(); S.calM = new Date(d.getFullYear(), d.getMonth(), 1); }
-    el = screen(head('언제', '언제 가세요?', '날짜를 두 번 눌러요. 모르면 몇 박만 골라요') + `
+    el = screen(head('언제', '언제 가세요?', '날짜를 두 번 눌러 주세요. 모르면 몇 박만 골라도 돼요') + `
       <div class="cal" id="cal"></div>
       <div class="blk"><div class="sub2">날짜 미정이면</div><div class="chips" id="nights">${NIGHTS.map(x => `<button class="chip soft" data-n="${x[0]}" aria-pressed="${!tr.start && tr.nights === x[0]}">${x[1]}</button>`).join('')}</div></div>
       <div class="foot"><div class="sum" id="dSum"></div><button class="cta" id="dNext" ${tr.nights ? '' : 'disabled'}>다음</button></div>`);
@@ -1003,7 +1031,7 @@ function rInfo(s) {
   }
   if (s === 'who') {
     el = screen(head('누구와', '누구와 가세요?', '') + `<div class="pick one">${WHO.map(w => `<button class="pk" data-v="${w[0]}" aria-pressed="${tr.who === w[0]}"><b>${w[0]}</b><span>${w[1]}</span></button>`).join('')}</div>
-      <div class="note">${ICON.grid}<span>같이 가는 사람도 테스트하면 결과 화면 ‘같이 가면’에서 궁합을 볼 수 있어요</span></div>`);
+      <div class="note">${ICON.info}<span>같이 가는 사람도 테스트하면 결과 화면 ‘같이 가면’에서 궁합을 볼 수 있어요</span></div>`);
     el.querySelectorAll('.pk').forEach(b => b.onclick = () => { tr.who = b.dataset.v; el.querySelectorAll('.pk').forEach(x => x.setAttribute('aria-pressed', x === b)); tap(); later(() => next(s), 280); });
   }
   if (s === 'home') {
@@ -1011,11 +1039,11 @@ function rInfo(s) {
     el = screen(head('출발', '어디서 출발하세요?', dom ? '시·구까지만 적으면 출발 지역을 찾아 드려요' : '집에서 공항까지 가는 시간을 맞춰 드려요') + `
       <input class="in" id="homeIn" autocomplete="off" placeholder="예: 서울 마포구" value="${esc(tr.home || '')}" aria-label="출발 지역 (시·구까지만)">
       ${dom ? '<div class="blk" id="rgBox"></div>' : '<div class="blk" id="sgBox"></div>'}
-      <div class="note">${ICON.lock}<span>시·구까지만 적어요. 상세 주소는 안 받아요. 출발 주소는 가이드북을 만드는 데만 쓰고 받은 지 7일 뒤 지워요</span></div>
+      <div class="note">${ICON.info}<span>시·구까지만 입력해 주세요. 상세 주소는 받지 않고, 출발 주소는 가이드북 제작에만 쓴 뒤 7일 후 삭제해요</span></div>
       <div class="foot"><button class="cta" id="hNext">다음</button></div>`);
     tr.homeMode = 'addr';
     const drawSg = () => { const b = $('#sgBox'); if (!b) return; tr.sgg = effSgg(tr); const amb = !tr.sgg && SGG_AMB.find(w => String(tr.home || '').includes(w));
-      b.innerHTML = tr.sgg ? `<div class="rgline">출발: <em>${esc(tr.sgg)} 기준</em></div><div class="note">${ICON.check}<span>집에서 인천공항까지 차 시간을 이 기준으로 계산해요</span></div>` : tr.home ? `<div class="note">${ICON.check}<span>${amb ? '‘' + amb + '’는 같은 이름이 여러 곳이에요 · ‘서울 ' + amb + '’처럼 시·도도 적어 주세요' : '시·군·구를 못 찾았어요'} · 인천공항까지 약 75분으로 가정해요</span></div>` : ''; };
+      b.innerHTML = tr.sgg ? `<div class="rgline">출발: <em>${esc(tr.sgg)} 기준</em></div><div class="note">${ICON.info}<span>집에서 인천공항까지 차 시간을 이 기준으로 계산해요</span></div>` : tr.home ? `<div class="note">${ICON.info}<span>${amb ? '‘' + amb + '’는 같은 이름이 여러 곳이에요 · ‘서울 ' + amb + '’처럼 시·도도 적어 주세요' : '시·군·구를 못 찾았어요'} · 인천공항까지 약 75분으로 가정해요</span></div>` : ''; };
     const drawRg = () => {
       const box = $('#rgBox'); if (!box) return; const o = domOpts(tr), sk = sggMatch(tr.home), g = (sk && sggRegion(sk)) || regionOf(tr.home);
       if (!tr.regionPicked && g && o.regs.includes(g)) tr.region = g;
@@ -1024,7 +1052,7 @@ function rInfo(s) {
       const ref = refPoint(tr), found = !tr.regionPicked && g && g === tr.region;
       box.innerHTML = `<div class="rgline">출발: <em>${fromTx(tr, ref)}</em></div>
         <div class="chips" id="rgC">${o.regs.map(x => `<button class="chip soft" data-rg="${x}" aria-pressed="${tr.region === x}">${x}</button>`).join('')}</div>
-        <div class="note">${ICON.check}<span>${tr.sgg ? '시·군·구를 찾았어요 · 차 시간을 이 기준으로 계산해요' : found ? '적은 지명에서 찾았어요 · 틀리면 눌러서 바꿔요' : tr.regionPicked ? '직접 고른 지역이에요' : g ? '이 도시로 가는 노선이 없는 지역이에요 · 아래에서 골라 주세요' : tr.home ? '지명을 못 찾았어요 · 눌러서 골라 주세요' : '주소를 적으면 자동으로 골라져요 · 눌러서 바꿀 수도 있어요'}</span></div>`;
+        <div class="note">${ICON.info}<span>${tr.sgg ? '시·군·구를 찾았어요 · 차 시간을 이 기준으로 계산해요' : found ? '적은 지명에서 찾았어요 · 틀리면 눌러서 바꿔요' : tr.regionPicked ? '직접 고른 지역이에요' : g ? '이 도시로 가는 노선이 없는 지역이에요 · 아래에서 골라 주세요' : tr.home ? '지명을 못 찾았어요 · 눌러서 골라 주세요' : '주소를 적으면 자동으로 골라져요 · 눌러서 바꿀 수도 있어요'}</span></div>`;
       $('#rgC').onclick = e => { const b = e.target.closest('[data-rg]'); if (!b) return; tr.region = b.dataset.rg; tr.regionPicked = true; tr.line = 0; tap(); drawRg(); };
     };
     drawRg(); drawSg();
@@ -1051,15 +1079,15 @@ function rInfo(s) {
       $('#dBox').innerHTML = `<div class="rgline">출발: <em>${fromTx(tr, ref)}</em><button class="lnk" id="rgBack">바꾸기</button></div>
         <div class="blk"><div class="sub2">교통</div><div class="seg" id="mdSeg">${o.modes.map(m => `<button data-md="${m}" aria-pressed="${tr.mode === m}">${MODE_NM[m]}</button>`).join('')}</div>
         ${lines.length > 1 ? `<div class="seg" id="lnSeg" style="margin-top:.5rem">${lines.map((l, i) => `<button data-ln="${i}" aria-pressed="${(tr.line || 0) === i}">${tr.mode === 'air' ? l.from + ' 출발' : l.line + ' ' + l.from}</button>`).join('')}</div>` : ''}
-        ${tr.mode === 'home' ? `<div class="note">${ICON.check}<span>집에서 숙소까지 지하철로 가는 걸로 짜요</span></div>` : ''}</div>
-        ${car ? `<div class="blk"><div class="sub2">출발 시각<span>비우면 가는 날 09:00 출발로 계산</span></div>
+        ${tr.mode === 'home' ? `<div class="note">${ICON.info}<span>집에서 숙소까지 지하철 이동 기준으로 일정을 짜요</span></div>` : ''}</div>
+        ${car ? `<div class="blk"><div class="sub2">출발 시각<span>비워 두면 가는 날 09:00 출발로 계산해요</span></div>
           <div class="flbox">${['fo', 'fb'].map(k => { const f = tr[k] || {}; return `<div class="flr"><span class="fll">${k === 'fo' ? '가는 날 · 집 → 숙소' : '오는 날 · 숙소 → 집'}</span>
             <div class="tms one">${tmField(k, 'dep', f.dep, '출발 시각')}</div><div class="eta" data-eta="${k}"></div></div>`; }).join('')}
-            <div class="note">${ICON.check}<span>도착 시각은 안 물어요. 도로 거리 · 시간대 막힘 · 휴게소 쉼으로 계산해 보여 드려요</span></div></div></div>` : ride ? `<div class="blk"><div class="sub2">${tr.mode === 'air' ? '비행기' : '열차'} 시각</div><div class="seg" id="fSeg"><button data-f="no" aria-pressed="${tr.flight === 'no'}">아직 안 정했어요</button><button data-f="yes" aria-pressed="${tr.flight === 'yes'}">정했어요</button></div>
+            <div class="note">${ICON.info}<span>도착 시각은 입력하지 않아도 돼요. 거리·시간대별 교통량·휴게소 휴식을 반영해 계산해 드려요</span></div></div></div>` : ride ? `<div class="blk"><div class="sub2">${tr.mode === 'air' ? '비행기' : '열차'} 시각</div><div class="seg" id="fSeg"><button data-f="no" aria-pressed="${tr.flight === 'no'}">아직 안 정했어요</button><button data-f="yes" aria-pressed="${tr.flight === 'yes'}">정했어요</button></div>
           <div class="flbox" id="fBox" ${tr.flight === 'yes' ? '' : 'hidden'}>${['fo', 'fb'].map(k => { const f = tr[k] || {}; return `<div class="flr"><span class="fll">${car ? (k === 'fo' ? '가는 날 · 집 → 숙소' : '오는 날 · 숙소 → 집') : k === 'fo' ? '가는 ' + w + ' · ' + nm(ln.from) + ' → ' + nm(ln.to) : '오는 ' + w + ' · ' + nm(ln.to) + ' → ' + nm(ln.from)}</span>
             ${car ? '' : `<input class="in fno" data-fk="${k}" data-ff="no" placeholder="${tr.mode === 'air' ? '편명 (예: KE1101)' : '열차 번호 (예: 101)'}" value="${esc(f.no || '')}" autocomplete="off" autocapitalize="characters" maxlength="8">`}
             <div class="tms">${tmField(k, 'dep', f.dep, '출발 시각')}${tmField(k, 'arr', f.arr, '도착 시각')}</div></div>`; }).join('')}
-            </div><div class="note" id="blHint" hidden>${ICON.check}<span>비워 둔 칸은 지금 몰라도 돼요 · 나중에 앱에서 넣으면 그날 시간이 맞춰져요</span></div></div>` : ''}`;
+            </div><div class="note" id="blHint" hidden>${ICON.info}<span>모르는 칸은 비워 두셔도 돼요. 나중에 앱에서 입력하면 그날 일정이 자동으로 맞춰져요</span></div></div>` : ''}`;
       $('#rgBack').onclick = () => { if (S.editing) go('home'); else back(); };
       $('#mdSeg').onclick = e => { const b = e.target.closest('[data-md]'); if (!b) return; tr.mode = b.dataset.md; tr.line = 0; tap(); draw(); };
       const lns = $('#lnSeg'); if (lns) lns.onclick = e => { const b = e.target.closest('[data-ln]'); if (!b) return; tr.line = +b.dataset.ln; draw(); };
@@ -1080,11 +1108,11 @@ function rInfo(s) {
         <div class="flbox" id="fBox" ${tr.flight === 'yes' ? '' : 'hidden'}>${(AIRPORTS[DEST[tr.city]] || []).length > 1 ? `<div class="flr"><span class="fll">도착 공항</span><div class="seg" id="apSeg">${AIRPORTS[DEST[tr.city]].map(a => `<button data-ap="${a[0]}" aria-pressed="${(tr.airport || AIRPORTS[DEST[tr.city]][0][0]) === a[0]}">${a[1]} ${a[0]}</button>`).join('')}</div></div>` : ''}${['fo', 'fb'].map(k => { const f = tr[k] || {}, apn = apName(tr); return `<div class="flr"><span class="fll">${k === 'fo' ? '가는 편 · 인천 → ' + apn : '오는 편 · ' + apn + ' → 인천'}</span>
           <input class="in fno" data-fk="${k}" data-ff="no" placeholder="편명 (예: WE513)" value="${esc(f.no || '')}" autocomplete="off" autocapitalize="characters" maxlength="8" aria-label="${k === 'fo' ? '가는 편' : '오는 편'} 편명">
           <div class="tms">${tmField(k, 'dep', f.dep, '출발 시각')}${tmField(k, 'arr', f.arr, '도착 시각')}</div></div>`; }).join('')}
-          <div class="note">${ICON.check}<span>시각은 예약 확인 메일이나 탑승권에 있어요</span></div></div>
-        <div class="note" id="blHint" hidden>${ICON.check}<span>비워 둔 칸은 지금 몰라도 돼요 · 나중에 앱에서 넣으면 그날 시간이 맞춰져요</span></div></div>
+          <div class="note">${ICON.info}<span>편명·시각은 예약 확인 메일이나 e티켓에서 확인할 수 있어요</span></div></div>
+        <div class="note" id="blHint" hidden>${ICON.info}<span>모르는 칸은 비워 두셔도 돼요. 나중에 앱에서 입력하면 그날 일정이 자동으로 맞춰져요</span></div></div>
       <div class="blk"><div class="sub2">숙소</div><div class="seg" id="sSeg"><button data-s="no" aria-pressed="${tr.stay === 'no'}">아직</button><button data-s="area" aria-pressed="${tr.stay === 'area'}">동네만</button><button data-s="yes" aria-pressed="${tr.stay === 'yes'}">정했어요</button></div>
         <input class="in" id="sIn" value="${esc(tr.stayTx || '')}" ${tr.stay === 'no' ? 'hidden' : ''} placeholder="${tr.stay === 'area' ? '동네 이름 (예: 난바)' : '숙소 이름'}"></div>
-      <div class="note">${ICON.check}<span>체크인 시각은 안 물어요. 숙소 이름으로 찾아 넣어요</span></div>
+      <div class="note">${ICON.info}<span>체크인 시각은 입력하지 않아도 돼요. 숙소 이름으로 찾아서 넣어 드려요</span></div>
       <div class="foot"><button class="cta" id="bNext">다음</button></div>`);
     $('#fSeg').onclick = e => { const b = e.target.closest('[data-f]'); if (!b) return; tr.flight = b.dataset.f; $('#fSeg').querySelectorAll('button').forEach(x => x.setAttribute('aria-pressed', x === b)); $('#fBox').hidden = tr.flight !== 'yes'; if (tr.flight === 'yes') $('#fBox input').focus(); blankHint(); };
     $('#sSeg').onclick = e => { const b = e.target.closest('[data-s]'); if (!b) return; tr.stay = b.dataset.s; $('#sSeg').querySelectorAll('button').forEach(x => x.setAttribute('aria-pressed', x === b)); const i = $('#sIn'); i.hidden = tr.stay === 'no'; i.placeholder = tr.stay === 'area' ? '동네 이름 (예: 난바)' : '숙소 이름'; if (!i.hidden) i.focus(); };
@@ -1126,9 +1154,9 @@ function rInfo(s) {
         <p class="likes-cnt" id="likeCnt"></p></div>
       <div class="blk"><div class="sub2">피하고 싶은 것<span>여러 개 가능</span></div><div class="chips" id="avoidC">${AVOID.map(x => `<button class="chip soft" data-v="${x}" aria-pressed="${tr.avoid.includes(x)}">${x}</button>`).join('')}</div></div>
       <div class="foot"><button class="cta" id="lNext">다음</button></div>`);
-    const lcnt = () => { $('#likeCnt').textContent = '고른 것 ' + tr.likes.length + ' / 3'; }; lcnt();
+    const lcnt = () => { $('#likeCnt').textContent = '선택 ' + tr.likes.length + ' / 3'; }; lcnt();
     $('#likeC').onclick = e => { const b = e.target.closest('[data-v]'); if (!b) return; const v = b.dataset.v, i = tr.likes.indexOf(v);
-      if (i >= 0) tr.likes.splice(i, 1); else { if (tr.likes.length >= 3) { toast('최대 3개 · 하나를 먼저 빼 주세요'); return; } tr.likes.push(v); }
+      if (i >= 0) tr.likes.splice(i, 1); else { if (tr.likes.length >= 3) { toast('최대 3개까지 고를 수 있어요 · 하나를 먼저 해제해 주세요'); return; } tr.likes.push(v); }
       b.setAttribute('aria-pressed', i < 0); lcnt(); tap(); };
     $('#avoidC').onclick = e => { const b = e.target.closest('[data-v]'); if (!b) return; const v = b.dataset.v, i = tr.avoid.indexOf(v); if (i >= 0) tr.avoid.splice(i, 1); else tr.avoid.push(v); b.setAttribute('aria-pressed', i < 0); tap(); };
     $('#lNext').onclick = () => next(s);
@@ -1304,7 +1332,7 @@ function swDay() {
     <div class="foot swfoot">
       <div class="swbtns"><button class="swb undo" id="swUndo" aria-label="되돌리기" disabled><svg viewBox="0 0 24 24"><path d="M4 12a8 8 0 1 0 2.4-5.7M4 4v4h4"/></svg></button><button class="swb no" id="swNo" aria-label="패스"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg></button><button class="swb yes" id="swYes" aria-label="좋아요">${HEART}</button></div>
       <div class="swcap"><span class="u">되돌리기</span><span>패스</span><span>좋아요</span></div>
-      <button class="ghost" id="swAuto">이 날은 알아서</button>
+      <button class="ghost" id="swAuto">이 날은 자동으로</button>
     </div>`, 'swscr');
   $('#swNo').onclick = () => swDecide(-1); $('#swYes').onclick = () => swDecide(1); $('#swUndo').onclick = swUndo; $('#swAuto').onclick = () => { if (sw.busy) return; tap(); swEndDay('auto'); };
   sw.cur = swPick(sw, d, sw.cands); swShow(true);
@@ -1371,7 +1399,7 @@ function swEndDay(how) {
   sw.busy = true;
   if (how === 'auto' && !n) { swNextDay(); return; }
   const title = how === 'full' ? '오늘은 꽉 찼어요' : '하루 완성';
-  const sub = n ? `♥ ${n}곳은 DAY ${d.no}에 먼저 넣고, 나머지 시간은 알아서 채워요` : '이 날은 알아서 채워요';
+  const sub = n ? `♥ ${n}곳은 DAY ${d.no}에 먼저 넣고, 나머지 시간은 자동으로 채워요` : '이 날은 자동으로 채워요';
   ov.innerHTML = `<div class="dstamp-in"><div class="dstamp-st">${dstampSvg(d.no, d.md, Math.min(n, d.cap), d.cap)}</div><b>${title}</b><p>${esc(sub)}</p><small>${last ? '누르면 가이드북 만들기로 넘어가요' : `누르면 DAY ${sw.days[sw.di + 1].no}로 넘어가요`}</small></div>`;
   ov.hidden = false; let gone = false; const go2 = () => { if (gone) return; gone = true; ov.hidden = true; swNextDay(); };
   ov.onclick = go2; later(go2, REDUCED ? 800 : 1900);
@@ -1393,7 +1421,7 @@ function drawCal() {
   const first = new Date(y, mo, 1).getDay(), dim = new Date(y, mo + 1, 0).getDate(), now = new Date(), isNow = y === now.getFullYear() && mo === now.getMonth();
   let g = ''; for (let i = 0; i < first; i++) g += '<span></span>';
   for (let d = 1; d <= dim; d++) { const n = y * 10000 + (mo + 1) * 100 + d, c = [];
-    if (tr.start && n === tr.start) c.push('s'); if (tr.end && n === tr.end) c.push('e'); if (tr.start && tr.end && n > tr.start && n < tr.end) c.push('in-r');
+    if (tr.start && n === tr.start) c.push('s'); if (tr.start && !tr.end && n === tr.start) c.push('solo'); if (tr.end && n === tr.end) c.push('e'); if (tr.start && tr.end && n > tr.start && n < tr.end) c.push('in-r');
     g += `<button data-d="${n}" class="${c.join(' ')}" ${n < today ? 'disabled' : ''} aria-pressed="${c.includes('s') || c.includes('e')}" aria-label="${y}년 ${mo + 1}월 ${d}일${c.includes('s') ? ' 출발' : c.includes('e') ? ' 도착' : ''}">${d}</button>`; }
   $('#cal').innerHTML = `<div class="ch"><button class="ib" id="cPrev" aria-label="이전 달" ${isNow ? 'disabled' : ''}>${ICON.l}</button><b>${y}년 ${mo + 1}월</b><button class="ib" id="cNext" aria-label="다음 달">${ICON.r}</button></div>
     <div class="wk">${WD.map(w => `<span>${w}</span>`).join('')}</div><div class="gd">${g}</div>`;
@@ -1408,9 +1436,9 @@ function dateSum() {
   const tr = S.trip, el = $('#dSum'); if (!el) return;
   document.querySelectorAll('#nights .chip').forEach(c => c.setAttribute('aria-pressed', !tr.start && tr.nights === +c.dataset.n));
   if (tr.start && tr.end) el.innerHTML = `${fmt(tr.start)} → ${fmt(tr.end)} · <span>${tr.nights}박 ${tr.nights + 1}일</span>`;
-  else if (tr.start) el.innerHTML = `${fmt(tr.start)} 출발 · <span class="muted">돌아오는 날을 눌러요</span>`;
+  else if (tr.start) el.innerHTML = `${fmt(tr.start)} 출발 · <span class="muted">돌아오는 날을 눌러 주세요</span>`;
   else if (tr.nights) el.innerHTML = `날짜 미정 · <span>${NIGHTS.find(x => x[0] === tr.nights)[1]}</span>`;
-  else el.innerHTML = '<span class="muted">출발일을 눌러요</span>';
+  else el.innerHTML = '<span class="muted">출발일을 눌러 주세요</span>';
   $('#dNext').disabled = !(tr.nights && (!tr.start || tr.end));
 }
 
@@ -1492,7 +1520,7 @@ function rEdit() {
   const hasT = !!store.get('gaboja-type') || !!S.type;
   const R = (k, v, step) => `<div class="erow"><span class="k">${k}</span><b>${v}</b><button data-e="${step}" aria-label="${k} 바꾸기">바꾸기</button></div>`;
   const ok = !!(tr.city && tr.nights);
-  screen(`<div class="qh"><span class="eyebrow">여행 정보 수정</span><h1>바꿀 곳을 눌러요</h1><p>${hasT ? '유형은 그대로 두고 ' : ''}여행 정보만 바꿔서 일정을 다시 짜요</p></div>
+  screen(`<div class="qh"><span class="eyebrow">여행 정보 수정</span><h1>바꿀 항목을 눌러 주세요</h1><p>${hasT ? '유형은 그대로 두고 ' : ''}여행 정보만 바꿔서 일정을 다시 짜요</p></div>
     <div class="card">
       ${R('어디로', city ? esc(city) : '<small>도시를 골라 주세요</small>', 'city')}
       ${R('언제', when || '<small>날짜·몇 박을 골라 주세요</small>', 'date')}
@@ -1508,7 +1536,7 @@ function rEdit() {
 }
 function confirmRebuild() {
   const rx = $('#rx'), sc = $('#rxScrim'); rx.style.removeProperty('--auto');
-  rx.innerHTML = `<h2 id="rxT">일정을 다시 짜요</h2><p>옮긴 순서·바꾼 시각은 처음으로 돌아가요 · 메모도 처음으로</p>
+  rx.innerHTML = `<h2 id="rxT">일정을 다시 짜요</h2><p>옮긴 순서·바꾼 시각은 처음 상태로 돌아가요 · 메모도 초기화돼요</p>
     <button class="cta" id="rxGo">다시 짜기 ${ICON.arrow}</button><button class="ghost" id="rxNo">취소</button>`;
   sc.hidden = false; void rx.offsetWidth; void sc.offsetWidth; sc.classList.add('on'); rx.classList.add('on');
   const close = () => closeRx(); $('#rxNo').onclick = close; sc.onclick = close;
@@ -1543,10 +1571,10 @@ function rDone() {
       </div>
       <div class="barcode" aria-hidden="true">${barcode(S.type || 'GABO')}</div>
     </article>
-    ${SEND && SEND.st === 'off' ? `<div class="sent ok" style="background:var(--hair);color:var(--sub)">${ICON.lock}<span>시안이라 신청은 보내지 않았어요</span></div>`
+    ${SEND && SEND.st === 'off' ? `<div class="sent ok" style="background:var(--hair);color:var(--sub)">${ICON.lock}<span>시험판이라 신청은 보내지 않았어요</span></div>`
       : SEND && SEND.st === 'ok' ? `<div class="sent ok">${ICON.check}<span>신청 접수됨 · 받을 곳 ${esc(tr.to || '')}</span></div>`
       : `<div class="sent bad"><span>신청을 못 보냈어요 (${esc((SEND && SEND.err) || '연결 실패')})</span><button id="reSend">다시 보내기</button></div>`}
-    <div class="note">${ICON.lock}<span>${PLANNED ? `방금 만든 ${esc(PLANNED.title)} 일정이 열려요. 시험판이라 아키가 한 번 더 확인한 가이드북을 따로 보내 드려요` : '이 도시는 일정 자동 만들기 준비 중이에요. 가이드북은 아키가 만들어 보내 드리고, 지금은 오사카·교토 샘플 일정이 열려요'}</span></div>
+    <div class="note">${ICON.info}<span>${PLANNED ? `방금 만든 ${esc(PLANNED.title)} 일정이 열려요. 시험판이라 아키가 한 번 더 확인한 가이드북을 따로 보내 드려요` : '이 도시는 일정 자동 만들기 준비 중이에요. 가이드북은 아키가 만들어 보내 드리고, 지금은 오사카·교토 샘플 일정이 열려요'}</span></div>
     <div class="foot">
       <a class="cta" href="${PLANNED ? 'index.html' : 'index.html#sample'}" style="text-decoration:none">${PLANNED ? '내 일정 보기' : '샘플 일정 보기'} ${ICON.arrow}</a>
       <button class="ghost" id="dEdit">수정하기</button>
