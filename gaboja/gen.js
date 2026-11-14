@@ -114,6 +114,11 @@
     if (!start || isNaN(start)) { start = new Date(); start.setDate(start.getDate() + 21); while (start.getDay() !== 5) start.setDate(start.getDate() + 1); assumed.push('날짜 미정 → ' + (start.getMonth() + 1) + '/' + start.getDate() + '(금) 출발로 가정'); }
     const rand = rng(type + (input.start || '') + nights);
     const likes = new Set(input.likes || []), avoid = new Set(input.avoid || []);
+    // 11/14 #15 A안 '빼 주세요' (옛 이름도 받음) · '@' 좋아함 규칙: @local 덜 알려진 곳 · @famous 유명한 곳 · @night 밤 조각
+    const AV = { walk: avoid.has('많이 걷기') || avoid.has('많이 걷는 코스'), crowd: avoid.has('붐비는 관광지'), queue: avoid.has('줄 서는 맛집') || avoid.has('긴 줄'),
+      raw: avoid.has('날것·회') || avoid.has('날것 (회·스시)'), early: avoid.has('이른 아침 일정') };
+    const RAW = new Set(['스시', '카이센동', '해산물']), isRaw = tg => (tg || []).some(t => RAW.has(t));
+    const busyFood = id => { const q = PL[id]; return !!q && q.kind === 'restaurant' && (q.fame || 0) >= 2; };
     const tagW = input.tagW && typeof input.tagW === 'object' ? input.tagW : null, BLANK = input.blank === true;
     const banSet = new Set(Array.isArray(input.ban) ? input.ban : []);
     const MUSTD = {}; if (input.must && typeof input.must === 'object') Object.keys(input.must).forEach(k => { const L = [].concat(input.must[k] || []).filter(id => typeof id === 'string' && !banSet.has(id)); if (L.length) MUSTD[k] = L.filter((id, j) => L.indexOf(id) === j); });
@@ -233,7 +238,13 @@
       let s = 0;
       if (pc.fit.includes(G)) s += 6; else { if (pc.fit.some(f => f[0] === G[0])) s += 1.5; if (pc.fit.some(f => f[1] === G[1])) s += 1.5; }
       pc.tags.forEach(t => { if (likes.has(t)) s += 2; if (tagW && tagW[t]) s += tagW[t]; });
-      if (avoid.has('많이 걷기') && pc.walk === 'high') s -= 8;
+      if (AV.walk && pc.walk === 'high') s -= 8;
+      if (AV.crowd) s -= pc.fame * 1.2;
+      if (AV.raw && (isRaw(pc.tags) || pc.steps.some(st => PL[st.place] && isRaw(PL[st.place].tg)))) s -= 8;
+      if (AV.queue && pc.steps.some(st => busyFood(st.place))) s -= 4;
+      if (likes.has('@local')) s -= pc.fame * 0.8;
+      if (likes.has('@famous')) s += pc.fame * 0.8;
+      if (likes.has('@night') && pc.slots.includes('night')) s += 2;
       if (!F && pc.walk === 'low') s += 1;
       if (G[0] === 'H') s += pc.fame * 0.6; else s -= pc.fame * 0.4;
       return s + rand() * 2.2;
@@ -296,6 +307,10 @@
       if (p.kind === 'bar' && slot !== 'night') return -99;
       let s = (G[1] === 'S' ? (SEE[p.kind] ? 3 : 1) : (ENJ[p.kind] ? 3 : 1)) + (G[0] === 'H' ? p.fame * 1.2 : -p.fame * 0.8);
       (p.tg || []).forEach(x => { if (likes.has(x)) s += 2; if (tagW && tagW[x]) s += tagW[x]; });
+      if (AV.crowd) s -= (p.fame || 0) * 1.2;
+      if (AV.raw && isRaw(p.tg)) s -= 8;
+      if (likes.has('@local')) s -= (p.fame || 0) * 0.8;
+      if (likes.has('@famous')) s += (p.fame || 0) * 0.8;
       return s - (p.cl === at ? 0 : mins(at, p.cl) / 12) + rand();
     }
     function fill(city, slot, date, t, at, until) {
@@ -316,7 +331,8 @@
       if (kind === '점심' && t < toMin('11:00')) kind = '브런치';
       if (kind === '점심' || kind === '브런치') ate.l = true; else if (kind === '저녁') ate.d = true;
       const lim = kind === '저녁' ? 1260 : 870;   // 점심 ~14:30 · 저녁 ~21:00 안에 시작
-      const pool = Object.entries(PL).filter(([id, p]) => p.city === city && p.kind === 'restaurant' && !usedPlaces.has(id));
+      let pool = Object.entries(PL).filter(([id, p]) => p.city === city && p.kind === 'restaurant' && !usedPlaces.has(id) && !(AV.raw && isRaw(p.tg)));
+      if (AV.queue) { const calm = pool.filter(([id]) => !busyFood(id)); if (calm.length) pool = calm; }   // 줄 서는 맛집 빼기 = 유명한 식당(fame 2 이상) 먼저 거름
       const near = pool.filter(([id]) => cl(id) === at).concat(pool.filter(([id]) => cl(id) !== at && mins(at, cl(id)) <= 20));
       for (const [id, p] of near.sort(() => rand() - 0.5).sort((a, b) => (cl(a[0]) !== at) - (cl(b[0]) !== at))) {
         const go = cl(id) === at ? 0 : mins(at, cl(id));
@@ -421,10 +437,10 @@
         if (DT) { const ro = route; backIntl(true); title = '당일치기 — ' + (blocks[0] || '동네 산책'); route = ro.concat(route.slice(1)); }
       } else if (i === N) backIntl(false);
       else {
-        const wake = F ? '07:30' : '08:30'; let wakeM = toMin(wake);
+        const wake = AV.early ? '09:00' : F ? '07:30' : '08:30'; let wakeM = toMin(wake);   // 이른 아침 빼기 = 중간 날 09:00 기상
         if (i === 2 && carry) wakeM = Math.max(wakeM, Math.min(carry + 420, toMin('11:30')));   // 전날 한밤 도착이면 늦게 일어남
         it.push({ k: 'w', s: wakeM, n: '기상', say: city === C.side ? '편한 신발 · ' + C.side + '까지 이동' : '' });
-        t = Math.max(toMin(F ? '09:00' : '10:00'), wakeM + 45);
+        t = Math.max(toMin(AV.early ? '10:30' : F ? '09:00' : '10:00'), wakeM + 45);
         addBlock('am', toMin('13:30'));
         if (!ate.l) { t = Math.max(t, toMin('12:00')); if (t <= toMin('14:30')) addMeal('점심'); }
         addBlock('pm', toMin(F ? '18:30' : '17:00'));
@@ -432,7 +448,7 @@
         if (t + 100 <= toMin(F ? '18:30' : '16:30')) addBlock('pm', toMin(F ? '18:30' : '17:00'));
         if (!F) rest(city === C.side ? 45 : 75, '숙소 휴식');
         if (!ate.d) { t = Math.max(t, toMin('18:30')); if (t <= toMin('21:00')) addMeal('저녁'); }
-        if (F && t <= toMin('20:30')) addBlock('night', toMin('22:00'));
+        if ((F || likes.has('@night')) && t <= toMin('20:30')) addBlock('night', toMin('22:00'));   // 야경·밤 산책을 고르면 여유형도 밤 조각 하나
         if (mustQ.length) flushMust(toMin('22:00'));
         if (at !== base) { const b = mins(at, base); it.push({ k: 'm', s: t, e: t + b, mode: 'train', n: '숙소로', mv: '숙소로 · 약 ' + mnTx(b) + '' + estTx(at, base), to: BQ }); t += b; }
         title = (city === C.side ? C.side + ' — ' : '') + (blocks.slice(0, 2).join(' · ') || '자유 일정');
