@@ -242,6 +242,20 @@ h2 { margin: 0; font-size: 1.3125rem; font-weight: 800; letter-spacing: -.03em; 
 .nrow .v { font-size: 0.8125rem; color: var(--sub); white-space: nowrap; }
 .nrow .v.num { color: var(--ink); font-weight: 600; }
 .nrow .src { font-size: 0.6875rem; color: var(--sub); }
+
+.phbox { flex: none; }
+.phbox[hidden] { display: none; }
+.phfr { position: relative; aspect-ratio: 16 / 10; overflow: hidden; background: var(--canvas); }
+.phfr img, .phfr iframe { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; border: 0; display: block; }
+.phcr { font-size: 0.625rem; line-height: 1.4; color: var(--sub); padding: 0.3125rem 1.125rem 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; text-align: left; }
+.phcr a { color: inherit; text-decoration: underline; text-underline-offset: 2px; }
+.phcv { position: absolute; inset: 0; }
+.phfr.live .phcv { display: none; }
+.phlb { position: absolute; left: 0.625rem; top: 0.625rem; font-size: 0.6875rem; font-weight: 700; padding: 0.1875rem 0.5rem; border-radius: 999px; background: rgba(21,23,26,.62); color: #fff; pointer-events: none; }
+.phgo { position: absolute; right: 0.625rem; bottom: 0.625rem; font: inherit; font-size: 0.6875rem; font-weight: 700; padding: 0.375rem 0.75rem; border-radius: 999px; border: 0; background: rgba(21,23,26,.72); color: #fff; cursor: pointer; }
+.sheet .phbox { margin: 0 -1.125rem; }
+.sheet .phbox .phfr { border-radius: 0; }
+.sheet .phcr { padding: 0.375rem 1.125rem 0; }
 .cattr { font-size: 0.6875rem; line-height: 1.4; color: var(--sub); padding: 0.375rem 0 0; }   /* 차 시간 출처 표기 (현지 정보 맨 아래) */
 /* 현지 정보: 접어 두고 제목 줄을 누르면 펼침. 번호 = 전화 걸기 링크 (복사 아이콘 없음 — 번호를 누르면 바로 전화) */
 details.sec { padding-bottom: 0.875rem; }
@@ -945,6 +959,7 @@ function renderTips(L) {
   L.rows.forEach(r => { h += '<div class="crow">' + ic(r.ic) + '<span class="nm2"><b class="one">' + esc(r.n) + '</b><span class="src one">' + esc(r.sub || '') + '</span></span><a class="tel" href="' + esc(r.href || 'tel:' + r.tel) + '">' + esc(r.tel) + '</a></div>'; });
   if ((L.life || []).length) { h += '<div class="grp2">생활 정보</div>'; L.life.forEach(([b, t], i) => { h += '<div class="nrow">' + ic(i % 2 ? 'coin' : 'doc') + '<span class="one"><b>' + esc(b) + '</b> <span class="src">' + esc(t) + '</span></span><span></span></div>'; }); }
   if (L.src) h += '<div class="nrow"><span></span><span class="src one">' + esc(L.src) + '</span><span></span></div>';
+  h += '<div class="cattr">사진: Wikimedia Commons · Openverse(Flickr 등) · 각 사진의 저작자·라이선스는 사진 아래에 표기</div>';
   if (PLAN && PLAN.carAttr) h += '<div class="cattr">' + esc(PLAN.carAttr) + '</div>';
   h += wxSrcHtml();
   el.innerHTML = h;
@@ -1740,10 +1755,68 @@ function rideEditHtml(d, c) {
 // 장소 일정이 '문 닫았어요' 대상인지 (이동·비행기·숙소·집 제외)
 const canClose = c => !!c && !c.fly && ['p', 'f', 'x', 'u'].includes(c.k) && (!!c.pid || !/숙소|체크|집 도착|공항|역$|휴식|짐/.test(c.sh || c.n || ''));
 const STAYS = [30, 60, 90, 120, 180];
+/* ---------- 장소 사진 (11/14) — ① 위키·Openverse 사진(ph) → ② 구글 장소 사진(키 있을 때) → ③ 스트리트뷰 → ④ 선 아이콘.
+   사진은 원본 URL로 직접 표시(저장 안 함). 저작자·라이선스는 사진 아래 한 줄. 실패(onerror)하면 다음 단계. ---------- */
+const PH_KEY_G = () => window.GABOJA_PHOTO_KEY || '', PH_KEY_M = () => window.GABOJA_MAPS_KEY || '';
+const phCredit = (a, l) => '사진 © ' + String(a || '').slice(0, 60) + ' · ' + String(l || '').trim();
+function phGoogle(p, cb) {   // ② Places API (New) 텍스트 검색 → 사진 1장. 결과는 세션 동안만(sessionStorage)
+  const k = PH_KEY_G(), ck = 'gaboja-gph:' + (p.n || '');
+  if (!k) { cb(null); return; }
+  try { const s = sessionStorage.getItem(ck); if (s) { cb(s === '-' ? null : JSON.parse(s)); return; } } catch (_) {}
+  const body = { textQuery: p.q || p.n, languageCode: 'ko', maxResultCount: 1 };
+  if (p.ll) body.locationBias = { circle: { center: { latitude: p.ll[0], longitude: p.ll[1] }, radius: 500 } };
+  fetch('https://places.googleapis.com/v1/places:searchText', { method: 'POST', headers: { 'Content-Type': 'application/json', 'X-Goog-Api-Key': k, 'X-Goog-FieldMask': 'places.photos' }, body: JSON.stringify(body) })
+    .then(r => r.ok ? r.json() : null).then(j => {
+      const ph = j && j.places && j.places[0] && j.places[0].photos && j.places[0].photos[0];
+      const r = ph ? { u: 'https://places.googleapis.com/v1/' + ph.name + '/media?maxWidthPx=640&key=' + k, a: (ph.authorAttributions && ph.authorAttributions[0] && ph.authorAttributions[0].displayName) || 'Google' } : null;
+      try { sessionStorage.setItem(ck, r ? JSON.stringify(r) : '-'); } catch (_) {}
+      cb(r);
+    }).catch(() => cb(null));
+}
+/* host = 빈 .phbox 요소. 사진·거리 풍경이 하나라도 뜨면 host.dataset.on = '1', 전부 실패하면 host.hidden + onNone(). 스트리트뷰는 withSv 일 때만. */
+function phMount(host, p, o) {
+  o = o || {};
+  const steps = [];
+  if (p.ph) steps.push('ph'); if (PH_KEY_G()) steps.push('g'); if (o.sv !== false && PH_KEY_M() && p.ll) steps.push('sv');
+  const none = () => { host.hidden = true; host.dataset.on = ''; host.innerHTML = ''; o.onNone && o.onNone(); };
+  const show = (src, credit, link) => {
+    const im = new Image(); im.alt = ''; im.decoding = 'async'; im.loading = 'lazy'; im.referrerPolicy = 'no-referrer';
+    im.onerror = () => next();
+    im.onload = () => { host.dataset.on = '1'; };
+    im.src = src;
+    host.innerHTML = ''; host.hidden = false; host.dataset.on = '1';
+    const fr = document.createElement('div'); fr.className = 'phfr'; fr.appendChild(im); host.appendChild(fr);
+    const cr = document.createElement('div'); cr.className = 'phcr';
+    if (link) { const a = document.createElement('a'); a.href = link; a.target = '_blank'; a.rel = 'noopener'; a.textContent = credit; cr.appendChild(a); } else cr.textContent = credit;
+    host.appendChild(cr);
+  };
+  const sv = () => {
+    const u = 'https://www.google.com/maps/embed/v1/streetview?key=' + encodeURIComponent(PH_KEY_M()) + '&location=' + p.ll[0] + ',' + p.ll[1] + '&fov=80&language=ko';
+    host.innerHTML = '<div class="phfr sv"><iframe title="거리 풍경" loading="lazy" referrerpolicy="origin" allowfullscreen src="' + u + '"></iframe><div class="phcv"></div><span class="phlb">거리 풍경</span><button type="button" class="phgo">거리 둘러보기</button></div>';
+    host.hidden = false; host.dataset.on = '1';
+    const fr = host.querySelector('.phfr'), cv = fr.querySelector('.phcv'), bt = fr.querySelector('.phgo');
+    bt.onpointerdown = e => e.stopPropagation();
+    bt.onclick = e => { e.stopPropagation(); const on = !fr.classList.contains('live'); fr.classList.toggle('live', on); bt.textContent = on ? '둘러보기 끝' : '거리 둘러보기'; };
+  };
+  const next = () => {
+    const s = steps.shift();
+    if (s === 'ph') show(p.ph.u, phCredit(p.ph.a, p.ph.l), o.link ? p.ph.p : '');
+    else if (s === 'g') phGoogle(p, r => { if (r) show(r.u, '사진 · Google · ' + r.a, ''); else next(); });
+    else if (s === 'sv') sv();
+    else none();
+  };
+  next();
+}
+function phScan() {   // 시트 안 .phbox 를 찾아 사진을 붙임 (시트가 다시 그려져도 자동)
+  document.querySelectorAll('#sheetIn .phbox[data-pid]:not([data-m])').forEach(el => { el.dataset.m = '1';
+    loadGD(D => { const p = D && D.places && D.places[el.dataset.pid]; if (!p) { el.hidden = true; return; } phMount(el, p, { link: true }); }); });
+}
+try { new MutationObserver(phScan).observe(document.getElementById('sheetIn'), { childList: true }); } catch (_) {}
 function sheetHtml(d, c) {
   const fx = fixedOf(c), parts = c.n.split(' — '), key = d.no + ':' + c.id, L = c.memo || [], tb = d.tbd, ed = !c.fly && c.k !== 'm';
   let h = '<div class="shd"><div><span class="eyebrow one">DAY ' + d.no + ' · ' + (tb ? '시각 미정' : c.s + (c.est ? '' : ' – ' + c.e)) + ' · ' + KIND[c.k] + (c.chg ? '<span class="chgtag">변경됨</span>' : '') + '</span>'
-    + '<h3 class="one" id="sheetTitle">' + esc(parts[1] || parts[0]) + '</h3>' + (c.say ? '<p class="sub one">' + esc(c.say) + '</p>' : '') + '</div>' + X_BTN + '</div><div class="body">';
+    + '<h3 class="one" id="sheetTitle">' + esc(parts[1] || parts[0]) + '</h3>' + (c.say ? '<p class="sub one">' + esc(c.say) + '</p>' : '') + '</div>' + X_BTN + '</div><div class="body">'
+    + (c.pid && !c.fly ? '<div class="phbox" data-pid="' + esc(c.pid) + '"></div>' : '');
   if (c.fly) h += rideEditHtml(d, c);
   const kv = [];
   if (parts[1]) kv.push(['종류', esc(parts[0])]);
@@ -1919,7 +1992,7 @@ function setStay(id, du) {
    장소 DB = gen-data.js (처음 누를 때 불러옴). 좌표는 DB에 없어 '같은 동네 묶음 → 동네 사이 이동 분' 순 */
 function loadGD(cb) {
   if (window.GABOJA_DATA) { cb(window.GABOJA_DATA); return; }
-  try { fetch('gen-data.js?v=7').then(r => r.arrayBuffer()).then(b => { (0, eval)(new TextDecoder('utf-8').decode(b)); cb(window.GABOJA_DATA || null); }).catch(() => cb(null)); } catch (_) { cb(null); }
+  try { fetch('gen-data.js?v=8').then(r => r.arrayBuffer()).then(b => { (0, eval)(new TextDecoder('utf-8').decode(b)); cb(window.GABOJA_DATA || null); }).catch(() => cb(null)); } catch (_) { cb(null); }
 }
 const WDN = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'];
 // gen.js openAt와 같은 기준 (기간·장 서는 날·휴무 요일·n번째 요일·휴무일·영업 구간). 기다림 없이 그 시각에 열려 있는지만
@@ -2006,7 +2079,7 @@ let addPick = null;   // { p: 장소 DB 항목 또는 null, name, du, sug, when 
     PLACES = Object.entries(D.places).map(([id, p]) => { const h = p.h, o = h && h.o && h.o[0] && !/^거리/.test(p.oTx || '') ? h.o[0] : null;
       return { id, n: p.n, l: p.l || '', c: p.city, a: (D.clName && D.clName[p.cl]) || '', t: p.tg || [], o, x: (h && h.x) || [], st: p.st || 60, say: p.say || '', q: p.q || p.n, k: p.kind }; });
   };
-  if (window.GABOJA_DATA) apply(); else { try { fetch('gen-data.js?v=6').then(r => r.arrayBuffer()).then(b => { (0, eval)(new TextDecoder('utf-8').decode(b)); apply(); }).catch(() => {}); } catch (_) {} }   /* 페이지 글자 설정과 상관없이 UTF-8로 읽음 */
+  if (window.GABOJA_DATA) apply(); else { try { fetch('gen-data.js?v=8').then(r => r.arrayBuffer()).then(b => { (0, eval)(new TextDecoder('utf-8').decode(b)); apply(); }).catch(() => {}); } catch (_) {} }   /* 페이지 글자 설정과 상관없이 UTF-8로 읽음 */
 })();
 // 장소 DB 항목 → 시간대 제약 (gen.js twOf와 같은 기준: 술집·이름 글자·17시 이후에만 영업 = night / 14시 안에 영업 끝 = morning, 식당은 제약 없음)
 function twOfPlace(p) {

@@ -425,10 +425,30 @@ main { flex: 1; display: flex; flex-direction: column; position: relative; overf
 .sw-react { min-height: 2.625rem; display: flex; align-items: center; gap: 0.5rem; padding: 0.5rem 0.75rem; border-radius: var(--r-sm); background: var(--blue-soft); color: var(--blue); font-size: 0.8125rem; font-weight: 700; line-height: 1.4; text-wrap: balance; }
 .sw-react.pop { animation: rxIn .3s cubic-bezier(.2,.8,.2,1); }
 @keyframes rxIn { from { opacity: 0; transform: translateY(-0.25rem); } to { opacity: 1; transform: none; } }
-.sw-stack { position: relative; height: 24.5rem; touch-action: pan-y; user-select: none; -webkit-user-select: none; }
+.sw-stack { position: relative; height: 27rem; touch-action: pan-y; user-select: none; -webkit-user-select: none; }
 .sw-stack .swb1, .sw-stack .swb2 { position: absolute; left: 0; right: 0; top: 0; height: 100%; border-radius: var(--r-lg); background: var(--paper); box-shadow: var(--sh-xs); transform-origin: 50% 100%; }
 .sw-stack .swb1 { transform: translateY(0.625rem) scale(.955); opacity: .75; }
 .sw-stack .swb2 { transform: translateY(1.125rem) scale(.91); opacity: .45; }
+
+.phbox { flex: none; }
+.phbox[hidden] { display: none; }
+.phfr { position: relative; aspect-ratio: 16 / 10; overflow: hidden; background: var(--canvas); }
+.phfr img, .phfr iframe { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; border: 0; display: block; }
+.phcr { font-size: 0.625rem; line-height: 1.4; color: var(--sub); padding: 0.3125rem 1.125rem 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; text-align: left; }
+.phcr a { color: inherit; text-decoration: underline; text-underline-offset: 2px; }
+.phcv { position: absolute; inset: 0; }
+.phfr.live .phcv { display: none; }
+.phlb { position: absolute; left: 0.625rem; top: 0.625rem; font-size: 0.6875rem; font-weight: 700; padding: 0.1875rem 0.5rem; border-radius: 999px; background: rgba(21,23,26,.62); color: #fff; pointer-events: none; }
+.phgo { position: absolute; right: 0.625rem; bottom: 0.625rem; font: inherit; font-size: 0.6875rem; font-weight: 700; padding: 0.375rem 0.75rem; border-radius: 999px; border: 0; background: rgba(21,23,26,.72); color: #fff; cursor: pointer; }
+/* 스와이프 카드 사진 (11/14) */
+.swc .phbox { margin-top: 0.625rem; }
+.swc .phbox + .bd { padding-top: 0.75rem; }
+.swc.hasph .sw-ic { display: none; }
+.swc.hasph .sw-rows .sw-r:nth-child(3) { display: none; }   /* 사진이 자리를 차지하는 동안 '동네'(머리에 이미 있음)는 접음 */
+.swc.hasph .phfr { aspect-ratio: 16 / 9; }
+.swc.hasph .bd { padding-bottom: 0.5rem; gap: 0.5rem; }
+.swc.hasph .nm { font-size: 1.5rem; }
+.swc .phbox .phfr { margin: 0; }
 .swc { position: absolute; inset: 0; cursor: grab; animation: none; display: flex; flex-direction: column; will-change: transform; }
 .swc:active { cursor: grabbing; }
 .swc.sin { animation: rise .4s cubic-bezier(.2,.8,.2,1) both; }
@@ -1202,12 +1222,64 @@ function swReason(sw, d, id) {
   return `${d.area} 근처에서 많이 가는 곳이에요`;
 }
 function swHours(p) { const o = String(p.oTx || ''); if (!o) return '영업시간 확인 필요'; if (/^거리/.test(o)) return '거리·야외 · 언제든'; const f = o.split(' · ')[0]; return f === '00:00–24:00' ? '24시간' : f; }
+/* ---------- 장소 사진 (11/14) — ① 위키·Openverse 사진(ph) → ② 구글 장소 사진(키 있을 때) → ③ 스트리트뷰 → ④ 선 아이콘.
+   사진은 원본 URL로 직접 표시(저장 안 함). 저작자·라이선스는 사진 아래 한 줄. 실패(onerror)하면 다음 단계. ---------- */
+const PH_KEY_G = () => window.GABOJA_PHOTO_KEY || '', PH_KEY_M = () => window.GABOJA_MAPS_KEY || '';
+const phCredit = (a, l) => '사진 © ' + String(a || '').slice(0, 60) + ' · ' + String(l || '').trim();
+function phGoogle(p, cb) {   // ② Places API (New) 텍스트 검색 → 사진 1장. 결과는 세션 동안만(sessionStorage)
+  const k = PH_KEY_G(), ck = 'gaboja-gph:' + (p.n || '');
+  if (!k) { cb(null); return; }
+  try { const s = sessionStorage.getItem(ck); if (s) { cb(s === '-' ? null : JSON.parse(s)); return; } } catch (_) {}
+  const body = { textQuery: p.q || p.n, languageCode: 'ko', maxResultCount: 1 };
+  if (p.ll) body.locationBias = { circle: { center: { latitude: p.ll[0], longitude: p.ll[1] }, radius: 500 } };
+  fetch('https://places.googleapis.com/v1/places:searchText', { method: 'POST', headers: { 'Content-Type': 'application/json', 'X-Goog-Api-Key': k, 'X-Goog-FieldMask': 'places.photos' }, body: JSON.stringify(body) })
+    .then(r => r.ok ? r.json() : null).then(j => {
+      const ph = j && j.places && j.places[0] && j.places[0].photos && j.places[0].photos[0];
+      const r = ph ? { u: 'https://places.googleapis.com/v1/' + ph.name + '/media?maxWidthPx=640&key=' + k, a: (ph.authorAttributions && ph.authorAttributions[0] && ph.authorAttributions[0].displayName) || 'Google' } : null;
+      try { sessionStorage.setItem(ck, r ? JSON.stringify(r) : '-'); } catch (_) {}
+      cb(r);
+    }).catch(() => cb(null));
+}
+/* host = 빈 .phbox 요소. 사진·거리 풍경이 하나라도 뜨면 host.dataset.on = '1', 전부 실패하면 host.hidden + onNone(). 스트리트뷰는 withSv 일 때만. */
+function phMount(host, p, o) {
+  o = o || {};
+  const steps = [];
+  if (p.ph) steps.push('ph'); if (PH_KEY_G()) steps.push('g'); if (o.sv !== false && PH_KEY_M() && p.ll) steps.push('sv');
+  const none = () => { host.hidden = true; host.dataset.on = ''; host.innerHTML = ''; o.onNone && o.onNone(); };
+  const show = (src, credit, link) => {
+    const im = new Image(); im.alt = ''; im.decoding = 'async'; im.loading = 'lazy'; im.referrerPolicy = 'no-referrer';
+    im.onerror = () => next();
+    im.onload = () => { host.dataset.on = '1'; };
+    im.src = src;
+    host.innerHTML = ''; host.hidden = false; host.dataset.on = '1';
+    const fr = document.createElement('div'); fr.className = 'phfr'; fr.appendChild(im); host.appendChild(fr);
+    const cr = document.createElement('div'); cr.className = 'phcr';
+    if (link) { const a = document.createElement('a'); a.href = link; a.target = '_blank'; a.rel = 'noopener'; a.textContent = credit; cr.appendChild(a); } else cr.textContent = credit;
+    host.appendChild(cr);
+  };
+  const sv = () => {
+    const u = 'https://www.google.com/maps/embed/v1/streetview?key=' + encodeURIComponent(PH_KEY_M()) + '&location=' + p.ll[0] + ',' + p.ll[1] + '&fov=80&language=ko';
+    host.innerHTML = '<div class="phfr sv"><iframe title="거리 풍경" loading="lazy" referrerpolicy="origin" allowfullscreen src="' + u + '"></iframe><div class="phcv"></div><span class="phlb">거리 풍경</span><button type="button" class="phgo">거리 둘러보기</button></div>';
+    host.hidden = false; host.dataset.on = '1';
+    const fr = host.querySelector('.phfr'), cv = fr.querySelector('.phcv'), bt = fr.querySelector('.phgo');
+    bt.onpointerdown = e => e.stopPropagation();
+    bt.onclick = e => { e.stopPropagation(); const on = !fr.classList.contains('live'); fr.classList.toggle('live', on); bt.textContent = on ? '둘러보기 끝' : '거리 둘러보기'; };
+  };
+  const next = () => {
+    const s = steps.shift();
+    if (s === 'ph') show(p.ph.u, phCredit(p.ph.a, p.ph.l), o.link ? p.ph.p : '');
+    else if (s === 'g') phGoogle(p, r => { if (r) show(r.u, '사진 · Google · ' + r.a, ''); else next(); });
+    else if (s === 'sv') sv();
+    else none();
+  };
+  next();
+}
 function swCardHtml(sw, d, id, k) {
   const D = window.GABOJA_DATA, p = D.places[id], area = D.clName[p.cl] || '';
   const say = p.say || [KIND_LB[p.kind]].concat((p.tg || []).filter(t => t !== KIND_LB[p.kind]).slice(0, 2)).filter(Boolean).join(' · ');
   return `<div class="swc ticket sin" data-id="${esc(id)}" role="group" aria-label="${esc(p.n)}">
       <div class="hd"><b>DAY ${d.no} · ${esc(d.area)}</b><span>${k + 1} / ${d.n}</span><em>${esc(KIND_LB[p.kind] || '')}</em></div>
-      <div class="bd"><span class="sw-ic" aria-hidden="true"><svg viewBox="0 0 24 24">${KIND_IC[p.kind] || KIND_IC.sight}</svg></span><h2 class="nm">${esc(p.n)}</h2><p class="ln">${esc(say)}</p></div>
+      <div class="phbox" hidden></div><div class="bd"><span class="sw-ic" aria-hidden="true"><svg viewBox="0 0 24 24">${KIND_IC[p.kind] || KIND_IC.sight}</svg></span><h2 class="nm">${esc(p.n)}</h2><p class="ln">${esc(say)}</p></div>
       <div class="perf"></div>
       <div class="sw-rows"><div class="sw-r why"><span>추천 이유</span><b>${esc(swReason(sw, d, id))}</b></div><div class="sw-r"><span>영업</span><b>${esc(swHours(p))}</b></div><div class="sw-r"><span>동네</span><b>${esc(area)}</b></div></div>
       <span class="sw-st l" aria-hidden="true">좋아요</span><span class="sw-st r" aria-hidden="true">패스</span></div>`;
@@ -1251,6 +1323,8 @@ function swMeta() {
 function swShow(first) {
   const sw = S.sw, d = sw.days[sw.di], box = $('#swStack'); box.querySelectorAll('.swc').forEach(e => e.remove());
   box.insertAdjacentHTML('beforeend', swCardHtml(sw, d, sw.cur, sw.k)); const c = box.querySelector('.swc'); sw.busy = false; swBind(c); swMeta();
+  { const pp = window.GABOJA_DATA.places[sw.cur], hb = c.querySelector('.phbox'); box.classList.add('hasph'); c.classList.add('hasph');
+    phMount(hb, pp, { onNone: () => { box.classList.remove('hasph'); c.classList.remove('hasph'); } }); if (hb.hidden) { box.classList.remove('hasph'); c.classList.remove('hasph'); } }
   if (new URLSearchParams(location.search).get('drag') === '1' && first) { c.classList.remove('sin'); c.style.transform = 'translateX(4.5rem) rotate(5deg)'; c.querySelector('.sw-st.l').style.opacity = .85; } // 점검용: 밀리는 중인 모습
 }
 function swBind(c) {
