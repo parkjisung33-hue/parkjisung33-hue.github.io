@@ -411,6 +411,49 @@ main { flex: 1; display: flex; flex-direction: column; position: relative; overf
 @keyframes wgrow { to { transform: scaleX(1); } }
 .whyn { margin: 0; font-size: 0.71875rem; color: var(--sub); }
 
+/* ── 11/14 결과 A안 (#7·10·11·12): 묶음 아이콘 · 글자 밑 뜻 · 가운데 선 기준 게이지 · 하루 리듬 ── */
+.ticket .hd .tgrp { display: inline-flex; align-items: center; gap: 0.3125rem; letter-spacing: 0; font-size: 0.75rem; font-weight: 800; }
+.tgrp svg { width: 1.125rem; height: 1.125rem; stroke: currentColor; fill: none; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; flex: none; }
+.lfl { align-items: flex-start; }
+.lfl .lcol { display: flex; flex-direction: column; align-items: center; gap: 0.3125rem; width: 2.75rem; }
+.lfl .lb { font-size: 0.6875rem; font-weight: 700; color: var(--sub); white-space: nowrap; letter-spacing: -.02em; }
+.gz { padding: 1rem 1.125rem 0.375rem; display: flex; flex-direction: column; gap: 0.875rem; }
+.gz .g .top { display: flex; justify-content: space-between; align-items: baseline; font-size: 0.8125rem; color: var(--sub); font-weight: 500; margin-bottom: 0.4375rem; }
+.gz .g .top .w { color: var(--ink); font-weight: 800; }
+.gz .g .top em { font-style: normal; font-variant-numeric: tabular-nums; }
+.gz .g .top .l em { margin-left: 0.3125rem; } .gz .g .top .r em { margin-right: 0.3125rem; }
+.gz .bar { position: relative; height: 0.5rem; border-radius: 1rem; background: var(--hair); }
+.gz .bar::after { content: ""; position: absolute; left: 50%; top: -0.25rem; bottom: -0.25rem; width: 2px; margin-left: -1px; border-radius: 1px; background: var(--ink); }
+.gz .fill { position: absolute; top: 0; bottom: 0; background: var(--ink); transform: scaleX(0); animation: wgrow .7s cubic-bezier(.2,.8,.2,1) .25s forwards; }
+.gz .fill.l { right: 50%; border-radius: 1rem 0 0 1rem; transform-origin: right; }
+.gz .fill.r { left: 50%; border-radius: 0 1rem 1rem 0; transform-origin: left; }
+.gz .gn { margin: 0; font-size: 0.71875rem; color: var(--sub); }
+@media (prefers-reduced-motion: reduce) { .gz .fill { animation: none; transform: none; } }
+.rhy .rr { display: grid; grid-template-columns: 3.25rem minmax(0,1fr); gap: 0.75rem; padding: 0.6875rem 0; border-top: 1px solid var(--hair); align-items: baseline; }
+.rhy .rr:first-child { border-top: 0; }
+.rhy .tm { font-size: 0.875rem; font-weight: 600; color: var(--sub); font-variant-numeric: tabular-nums; }
+.rhy .tm.zone { font-size: 0.8125rem; color: var(--blue); }
+.rhy b { font-weight: 800; }
+.card.how { padding: 0.25rem 1.125rem; }
+.how .hw { display: flex; gap: 0.75rem; align-items: center; padding: 0.75rem 0; border-top: 1px solid var(--hair); }
+.how .hw:first-child { border-top: 0; }
+.how .ic { width: 2.25rem; height: 2.25rem; border-radius: 0.75rem; background: var(--blue-soft); color: var(--blue); display: grid; place-items: center; flex: none; }
+.how .ic svg { width: 1.25rem; height: 1.25rem; stroke: currentColor; fill: none; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+.how b { display: block; font-size: 0.9375rem; font-weight: 700; } .how .hw span:not(.ic) { display: block; font-size: 0.8125rem; color: var(--sub); }
+
+/* ── 11/14 시작 A안 (#4): 출발 안내판 ── */
+.intro-mid { flex: 1; display: flex; flex-direction: column; justify-content: center; gap: 0.75rem; padding: 1.75rem 0 0.25rem; }
+.dep { border-radius: var(--r-md); background: var(--flap); color: var(--flap-tx); padding: 0.875rem 1rem 0.375rem; box-shadow: var(--shadow); animation: rise .55s cubic-bezier(.2,.8,.2,1) both; }
+.dep .dh { display: flex; justify-content: space-between; align-items: center; font-size: 0.6875rem; font-weight: 800; letter-spacing: .06em; color: #8F969F; padding-bottom: 0.5rem; }
+.dep .dh em { font-style: normal; color: #F0B43C; letter-spacing: 0; }
+.dep .dr { display: grid; grid-template-columns: auto minmax(0,1fr) auto; gap: 0.75rem; align-items: center; padding: 0.5rem 0; border-top: 1px solid rgba(255,255,255,.07); }
+.dep .dr .flaps { gap: 0.1875rem; }
+.dep .dr .fl { width: 1.25rem; height: 1.625rem; font-size: 0.875rem; font-weight: 800; border-radius: 0.25rem; background: rgba(255,255,255,.09); color: var(--flap-tx); }
+.dep .dn { font-size: 0.875rem; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.dep .dg { font-size: 0.6875rem; font-weight: 700; color: #8F969F; white-space: nowrap; }
+.dep .dr.me .fl { box-shadow: inset 0 0 0 1.5px #F2675D; color: #F2675D; }
+.dep .dr.me .dn { color: #8F969F; } .dep .dr.me .dg { color: #F2675D; }
+
 /* ── E1: 스와이프 (카드 = 결과 탑승권과 같은 모양, 도장 = 질문 선택 도장·앱 조각 도장과 같은 말) ── */
 .swscr { gap: 0.75rem; }
 .swh h1 { font-size: 1.375rem; }
@@ -805,24 +848,41 @@ function miniHtml(c, sub, extra = '') { const t = T(c); return `<button class="m
 
 function rIntro() {
   setBar(null);
-  const pick = shuffled(ORDER.slice()).slice(0, 3);
+  const pick = shuffled(ORDER.slice());
   const me = S.type ? T(S.type) : null;
   screen(`
     <div class="hero">
-      <span class="eyebrow">가보자 · 여행 유형</span>
-      <h1>이번 여행, 나는 어떤 여행자일까?</h1>
-      <p>고르기만 하면 16가지 탑승권 중 내 것이 나와요. 그 유형에 맞춰 일정도 바로 짜 드려요.</p>
-      <div class="facts"><span>질문 ${Q.length}개</span><span>2분이면 끝</span><span>가입 없음</span></div>
+      <span class="eyebrow">가보자 · 여행 유형 테스트</span>
+      <h1>나는 어떤 여행자일까?</h1>
+      <p>답을 고르기만 하면 16가지 여행 유형 중 내 유형이 나와요. 유형에 맞춰 일정도 짜 드려요.</p>
+      <div class="facts"><span>질문 ${Q.length}개</span><span>약 2분</span><span>가입 없이</span></div>
     </div>
-    <div class="fan" aria-hidden="true">${pick.map(c => miniHtml(c, null, 'tabindex="-1"')).join('')}</div>
-    ${me ? `<button class="mine" id="mineBtn"><div><span>지난번 내 유형</span><b>${S.type} · ${esc(me.name)}</b></div><span class="go">다시 보기</span></button>` : ''}
+    <div class="intro-mid">
+      <div class="dep" aria-hidden="true"><div class="dh"><span>여행 유형 출발 안내</span><em>16가지</em></div>
+        ${[0, 1, 2].map(r => `<div class="dr" data-r="${r}">${flapsHtml(['', '', '', ''])}<span class="dn"></span><span class="dg"></span></div>`).join('')}
+        <div class="dr me">${flapsHtml(['?', '?', '?', '?'])}<span class="dn">나</span><span class="dg">확인 전</span></div></div>
+      ${me ? `<button class="mine" id="mineBtn"><div><span>지난번 내 유형</span><b>${S.type} · ${esc(me.name)}</b></div><span class="go">다시 보기</span></button>` : ''}
+    </div>
     <div class="foot">
-      <button class="cta" id="startBtn">시작하기 ${ICON.arrow}</button>
-      <button class="ghost" id="allBtn">16가지 유형 먼저 보기</button>
+      <button class="cta" id="startBtn">내 유형 알아보기 ${ICON.arrow}</button>
+      <button class="ghost" id="allBtn">16가지 유형 둘러보기</button>
     </div>`);
+  depRun(pick);
   $('#startBtn').onclick = () => { S.ans = []; S.shuffle = Q.map(q => shuffled(q.o.map((_, i) => i))); S.hist = []; go('q0'); };
   $('#allBtn').onclick = () => go('types');
   if (me) $('#mineBtn').onclick = () => { S.view = S.type; go('view'); };
+}
+
+/* 11/14 #4 시작 A안: 출발 안내판 — 위 세 줄이 2.4초마다 다른 유형으로 넘어감 (화면을 떠나면 멈춤) */
+let DEP_T = 0;
+function depRun(list) {
+  clearInterval(DEP_T); let k = 0;
+  const step = () => { const rows = document.querySelectorAll('.scr:not(.leaving) .dep .dr[data-r]'); if (!rows.length) { clearInterval(DEP_T); return; }
+    rows.forEach((row, r) => { const c = list[(k + r * 5) % list.length], t = T(c), g = GROUPS[c.slice(0, 2)][0];
+      row.querySelectorAll('.fl').forEach((f, j) => setTimeout(() => { if (!REDUCED) { f.classList.remove('flip', 'empty'); void f.offsetWidth; f.classList.add('flip'); } else f.classList.remove('empty'); setTimeout(() => f.textContent = c[j], REDUCED ? 0 : 170); }, REDUCED ? 0 : j * 70 + r * 120));
+      setTimeout(() => { row.querySelector('.dn').textContent = t.name; row.querySelector('.dg').textContent = g; }, REDUCED ? 0 : 400 + r * 120); });
+    k = (k + 1) % list.length; };
+  step(); if (!REDUCED) DEP_T = setInterval(step, 2400);
 }
 
 function rQ(i) {
@@ -926,31 +986,55 @@ function whyHtml(c, v) {
     return `<div class="wr"><div class="wt"><span class="ax">${x.ax}</span><span class="vs"><span class="${aw ? 'w' : ''}">${x.a[1]} ${pa}</span><i>·</i><span class="${aw ? '' : 'w'}">${x.b[1]} ${pb}</span></span></div>
       <div class="trk" role="img" aria-label="${x.ax}: ${x.a[1]} ${pa}, ${x.b[1]} ${pb}"><i class="a ${aw ? 'w' : ''}" style="flex:${pa}"></i><i class="b ${aw ? '' : 'w'}" style="flex:${pb}"></i></div></div>`; }).join('');
 }
+/* 11/14 결과 A안 */
+const GI = { LS: '<circle cx="12" cy="12" r="8.5"/><path d="M15.5 8.5l-2 5-5 2 2-5z"/>',
+  LE: '<path d="M5 8h14l-1.2 11.2a1 1 0 0 1-1 .8H7.2a1 1 0 0 1-1-.8zM9 8V6.5a3 3 0 0 1 6 0V8"/>',
+  HS: '<path d="M6 21V4M6 4h11l-2 3.5 2 3.5H6"/>',
+  HE: '<path d="M5 10h11v4a5 5 0 0 1-5 5h-1a5 5 0 0 1-5-5zM16 11h1.5a2.5 2.5 0 0 1 0 5H16M8 3.5c-.6 1 .6 1.6 0 2.8M11.5 3.5c-.6 1 .6 1.6 0 2.8"/>' };
+const grpIcon = c => `<svg viewBox="0 0 24 24" aria-hidden="true">${GI[c.slice(0, 2)]}</svg>`;
+const LMEAN = { L: '로컬', H: '핫플', S: '구경', E: '즐기기', F: '알차게', R: '여유롭게', J: '계획형', P: '즉흥형' };
+function lflapsHtml(c) { return `<div class="flaps big lfl">${c.split('').map(l => `<span class="lcol"><span class="fl">${l}</span><span class="lb">${LMEAN[l]}</span></span>`).join('')}</div>`; }
+function gaugeHtml(c, v) { // 가운데 선(50) 기준: 이긴 쪽으로만 차오름. 채움의 안쪽 끝 = 가운데 선에 딱 맞음
+  return AX.map((x, k) => { const aw = c[k] === x.a[0];
+    if (!v) return '';   // 남의 유형 보기: 글자 밑 뜻으로 충분 → 막대 없이 안내 한 줄만
+    const A = v[x.a[0]], B = v[x.b[0]], tot = A + B || 1, p = Math.round((aw ? A : B) / tot * 100);
+    return `<div class="g"><div class="top"><span class="l ${aw ? 'w' : ''}">${x.a[1]}${aw ? `<em>${p}%</em>` : ''}</span><span class="r ${aw ? '' : 'w'}">${aw ? '' : `<em>${p}%</em>`}${x.b[1]}</span></div>
+      <div class="bar" role="img" aria-label="${aw ? x.a[1] : x.b[1]} ${p}%"><i class="fill ${aw ? 'l' : 'r'}" style="width:${Math.max(0, p - 50)}%"></i></div></div>`; }).join('');
+}
+const HOW_IC = { day: '<rect x="4" y="5" width="16" height="15" rx="2"/><path d="M4 10h16M9 3v4M15 3v4"/>', clock: '<circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/>', pin: '<path d="M12 21s-7-6.1-7-11a7 7 0 0 1 14 0c0 4.9-7 11-7 11z"/><circle cx="12" cy="10" r="2.5"/>' };
+function howHtml(c) { // 엔진이 실제로 하는 것만 (gen.js: 알차게 하루 3묶음 / 여유롭게 2묶음+숙소 쉬기 · 즉흥형은 '또는' 후보 · 식사는 그 시각에 여는 곳)
+  const g = GROUPS[c.slice(0, 2)], it = [
+    ['day', c[2] === 'F' ? '하루 3묶음, 꽉 채워서' : '하루 2묶음 + 숙소에서 쉬는 시간', c[2] === 'F' ? '오전·오후·저녁을 빈틈없이 이어요' : '많이 넣기보다 한 곳에 오래 머물러요'],
+    ['clock', c[3] === 'J' ? '시각까지 정해 둔 일정' : '시간대마다 후보 하나 더', c[3] === 'J' ? '식사도 문 여는 시간에 맞춰 넣어요' : '가서 마음 가는 쪽으로 고르면 돼요'],
+    ['pin', '먼저 넣는 곳: ' + g[1], g[0] + '에 맞는 곳부터 골라요']];
+  return it.map(([i, b, s]) => `<div class="hw"><span class="ic"><svg viewBox="0 0 24 24" aria-hidden="true">${HOW_IC[i]}</svg></span><div><b>${esc(b)}</b><span>${esc(s)}</span></div></div>`).join('');
+}
+function rhythmHtml(c) { const r = (window.GABOJA_RHYTHM || {})[c]; if (!r) return '';
+  return r.map(([t, x]) => `<div class="rr"><span class="tm ${/\d/.test(t) ? '' : 'zone'}">${esc(t)}</span><span>${esc(x).replace(/\*\*(.+?)\*\*/g, '<b>$1</b>')}</span></div>`).join(''); }
 function strength(c, v) { if (!v) return ''; const soft = AX.filter((x, k) => v[c[k]] === 2).map(x => x.ax); return soft.length ? `반반에 가까운 축 · ${soft.join(' · ')}` : '네 축 모두 한쪽으로 확실'; }
 
 function rResult(c, mine) {
   const t = T(c), v = mine ? S.votes : null;
   setBar(null, 0, 0, mine ? { t: '내 결과', fn: toTicket } : null);
-  const day = (t.day || []).map(d => `<div class="row"><span class="tm ${/\d/.test(d.t) ? '' : 'zone'}">${esc(d.t)}</span><div><b>${esc(d.n)}</b><span>${esc(d.s || '')}</span></div></div>`).join('');
+  const day = rhythmHtml(c);   // 11/14 #12: 도시 이름 없는 하루 리듬
   const el = screen(`
     <article class="ticket" aria-label="${c} ${esc(t.name)}">
-      <div class="hd"><b>가보자</b><span>BOARDING PASS</span><em>GATE · ${esc(t.group)}</em></div>
+      <div class="hd"><b>가보자</b><em class="tgrp">${grpIcon(c)}${esc(t.group)}</em></div>
       <div class="bd">
-        ${flapsHtml(c.split(''), true)}
+        ${lflapsHtml(c)}
         <h1 class="nm">${esc(t.name)}</h1>
         <p class="ln">${esc(t.line)}</p>
       </div>
       <div class="perf"></div>
-      <div class="meters">${metersHtml(c, v)}</div>
-      ${v ? `<div class="note" style="padding:0 1.125rem">${esc(strength(c, v))}</div>` : ''}
+      <div class="gz">${gaugeHtml(c, v)}<p class="gn">${v ? `가운데 선이 반반이에요 · 축마다 답 ${HALF}개로 계산했어요` : '직접 해 보면 어느 쪽으로 몇 %인지 나와요'}</p></div>
       <div class="barcode" aria-hidden="true">${barcode(c)}</div>
     </article>
     ${t.scenes ? `<div class="sec"><h3>이런 장면, 익숙하죠?</h3><div class="card">${t.scenes.map(s => `<div class="scene"><span class="ck">${ICON.check}</span><span>${esc(s)}</span></div>`).join('')}</div></div>` : ''}
-    ${day ? `<div class="sec"><h3>이 유형의 오사카 하루</h3><div class="card">${day}</div></div>` : ''}
+    ${day ? `<div class="sec"><h3>이 유형의 하루</h3><div class="card rhy">${day}</div></div>` : ''}
+    <div class="sec"><h3>가보자가 일정을 짤 때</h3><div class="card how">${howHtml(c)}</div></div>
     ${t.best ? `<div class="sec"><h3>같이 가면</h3><div class="pair">
       <div><div class="lab ok">잘 맞아요</div>${miniHtml(t.best, t.bestWhy)}</div>
       <div><div class="lab no">부딪힐 수 있어요</div>${miniHtml(t.clash, t.clashWhy)}</div></div></div>` : ''}
-    ${v ? `<div class="sec"><h3>왜 이 유형인지</h3><div class="card why">${whyHtml(c, v)}<p class="whyn">축마다 답 ${HALF}개를 모아 계산했어요</p></div></div>` : ''}
     <div class="acts">
       <button id="copyBtn" class="share">${ICON.share}친구에게 공유하기</button>
       <button id="redoBtn">${ICON.redo}다시 하기</button>
