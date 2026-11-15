@@ -1,0 +1,194 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<title>가보자 캐릭터·글꼴 시안</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Do+Hyeon&family=Moirai+One&family=Orbit&display=swap" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/galmuri@2.40.3/dist/galmuri.css" rel="stylesheet">
+<style>
+@font-face { font-family: "Pretendard Variable"; font-weight: 45 920; font-display: swap; src: url("fonts/PretendardVariable.woff2") format("woff2-variations"), url("fonts/PretendardVariable.woff2") format("woff2"); }
+:root { color-scheme: light; --canvas:#EEF0F3; --ink:#15171A; --sub:#6F757D; --hair:rgba(21,23,26,.09); --paper:#FFFFFF; --blue:#3B5BDB; --blue-soft:rgba(59,91,219,.09); --past-tx:#9AA0A8;
+  --kr:"Pretendard Variable",Pretendard,-apple-system,"Apple SD Gothic Neo","Malgun Gothic",system-ui,sans-serif; --shadow:0 0.25rem 0.75rem -0.375rem rgba(24,36,60,.18); }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { color-scheme: dark; --canvas:#0E1013; --ink:#ECEEF1; --sub:#8F969F; --hair:rgba(255,255,255,.08); --paper:#1B1E23; --blue:#8095F5; --blue-soft:rgba(128,149,245,.12); --past-tx:#5F656D; --shadow:none; } }
+:root[data-theme="dark"] { color-scheme: dark; --canvas:#0E1013; --ink:#ECEEF1; --sub:#8F969F; --hair:rgba(255,255,255,.08); --paper:#1B1E23; --blue:#8095F5; --blue-soft:rgba(128,149,245,.12); --past-tx:#5F656D; --shadow:none; }
+html { font-size: clamp(13.5px, calc(100vw * 16 / 390), 18px); }
+body { margin: 0; background: var(--canvas); color: var(--ink); font-family: var(--kr); -webkit-font-smoothing: antialiased; word-break: keep-all; }
+main { max-width: 26rem; margin: 0 auto; padding: 1.25rem 1rem 4rem; }
+h1 { font-size: 1.25rem; margin: 0 0 .25rem; } .lead { color: var(--sub); font-size: .875rem; margin: 0 0 1rem; line-height: 1.55; }
+.sec { margin-top: 2.75rem; padding-top: 1.25rem; border-top: 2px solid var(--ink); scroll-margin-top: 3.5rem; }
+.sec > h2 { font-size: 1.125rem; margin: 0 0 .25rem; }
+h3 { font-size: 1rem; margin: 1.75rem 0 .375rem; } .note { color: var(--sub); font-size: .8125rem; margin: 0 0 .75rem; line-height: 1.55; } .note b { color: var(--ink); }
+.rec { display: inline-block; font-size: .6875rem; font-weight: 800; color: #fff; background: var(--blue); padding: .125rem .5rem; border-radius: 1rem; margin-left: .375rem; vertical-align: middle; }
+/* 캐릭터 2×2 */
+.cg { display: grid; grid-template-columns: 1fr 1fr; gap: .5rem; }
+.cc { background: var(--paper); border-radius: 1.125rem; overflow: hidden; box-shadow: var(--shadow); }
+.cc svg { display: block; width: 100%; height: auto; }
+.cc .cap { padding: .5rem .625rem .625rem; } .cc .cap b { display: block; font-size: .8125rem; } .cc .cap span { font-size: .75rem; color: var(--sub); line-height: 1.4; display: block; margin-top: .125rem; }
+.ex { background: var(--paper); border-radius: 1rem; padding: .75rem .875rem; font-size: .8125rem; line-height: 1.6; box-shadow: var(--shadow); }
+.ex b { font-weight: 700; } .ex div + div { margin-top: .25rem; }
+/* 글꼴 목업 */
+.fm { background: var(--paper); border-radius: 1.25rem; padding: 1rem 1.125rem 1.125rem; box-shadow: var(--shadow); }
+.fm .eb { font-size: .75rem; font-weight: 700; color: var(--blue); }
+.fm .h { font-size: 1.625rem; line-height: 1.3; margin: .375rem 0 .375rem; font-weight: 800; letter-spacing: -.02em; }
+.fm .p { font-size: .8125rem; color: var(--sub); margin: 0 0 .75rem; }
+.fm .o { display: block; width: 100%; text-align: left; border: 0; background: var(--canvas); color: var(--ink); font: 600 .9375rem var(--kr); border-radius: .875rem; padding: .75rem .875rem; margin-top: .375rem; }
+.fm .code { display: flex; gap: .25rem; margin-top: .75rem; } .fm .code i { font-style: normal; width: 2.25rem; height: 2.75rem; display: grid; place-items: center; background: var(--ink); color: var(--canvas); border-radius: .5rem; font-size: 1.375rem; }
+.fm .code i.q { background: var(--hair); color: var(--sub); }
+.f-gal .h, .f-gal .code i { font-family: Galmuri11, var(--kr); font-weight: 700; letter-spacing: 0; }
+.f-gal .h { font-size: 1.5rem; line-height: 1.45; }
+.f-orb .h, .f-orb .code i { font-family: Orbit, var(--kr); font-weight: 400; letter-spacing: -.01em; }
+.f-doh .h, .f-doh .code i { font-family: "Do Hyeon", var(--kr); font-weight: 400; letter-spacing: 0; font-size: 1.75rem; }
+.f-doh .code i { font-size: 1.5rem; }
+.f-moi .h, .f-moi .code i { font-family: "Moirai One", var(--kr); font-weight: 400; letter-spacing: 0; }
+.lic { font-size: .6875rem; color: var(--sub); margin-top: .5rem; }
+/* 보드 공통 */
+.toc { position: sticky; top: 0; z-index: 5; display: flex; gap: .375rem; overflow-x: auto; padding: .625rem 1rem; margin: 0 -1rem 1rem; background: color-mix(in srgb, var(--canvas) 88%, transparent); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); scrollbar-width: none; }
+.toc::-webkit-scrollbar { display: none; }
+.toc a { flex: none; text-decoration: none; color: var(--ink); font: 700 .8125rem var(--kr); background: var(--paper); border-radius: 1rem; padding: .4375rem .75rem; box-shadow: inset 0 0 0 1px var(--hair); }
+.toc a.ok { background: var(--blue); color: #fff; box-shadow: none; } .toc a.ok::after { content: " ✓"; }
+.how { background: var(--paper); border-radius: 1rem; padding: .75rem .875rem; font-size: .8125rem; line-height: 1.6; color: var(--sub); box-shadow: var(--shadow); } .how b { color: var(--ink); }
+.pk { margin-top: 1.5rem; background: var(--paper); border-radius: 1.25rem; padding: 1rem; box-shadow: 0 0 0 2px var(--blue); }
+.pk .q { font-weight: 800; font-size: .9375rem; margin-bottom: .625rem; } .pk .q + .opts + .q { margin-top: 1rem; }
+.opts { display: flex; flex-wrap: wrap; gap: .4375rem; }
+.opts button { border: 0; font: 700 .875rem var(--kr); border-radius: 1.25rem; padding: .625rem .875rem; background: var(--hair); color: var(--ink); min-height: 2.75rem; }
+.opts button[aria-pressed="true"] { background: var(--blue); color: #fff; }
+.opts button small { font-weight: 600; opacity: .75; margin-left: .25rem; }
+.pk textarea { display: block; width: 100%; box-sizing: border-box; margin-top: .625rem; border: 0; border-radius: .875rem; background: var(--canvas); color: var(--ink); font: 400 1rem/1.5 var(--kr); padding: .625rem .75rem; min-height: 2.75rem; resize: vertical; }
+.dock { position: sticky; bottom: 0; z-index: 5; margin: 2rem -1rem 0; padding: .75rem 1rem calc(.75rem + env(safe-area-inset-bottom)); background: color-mix(in srgb, var(--canvas) 90%, transparent); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); display: flex; gap: .625rem; align-items: center; }
+.dock .cnt { font-size: .8125rem; color: var(--sub); flex: none; } .dock .cnt b { color: var(--ink); }
+.dock button { flex: 1; border: 0; border-radius: 2rem; background: var(--ink); color: var(--canvas); font: 800 1rem var(--kr); min-height: 3.25rem; }
+#out { width: 100%; box-sizing: border-box; border: 0; border-radius: 1rem; background: var(--paper); color: var(--ink); font: 400 .875rem/1.6 var(--kr); padding: .75rem .875rem; min-height: 7rem; box-shadow: var(--shadow); }
+.toast { position: fixed; left: 50%; bottom: 6rem; transform: translateX(-50%); background: var(--ink); color: var(--canvas); font: 700 .875rem var(--kr); padding: .625rem 1rem; border-radius: 1.5rem; opacity: 0; transition: opacity .2s; pointer-events: none; z-index: 9; white-space: nowrap; }
+.toast.on { opacity: 1; }
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+<filter id="w" x="-10%" y="-10%" width="120%" height="120%"><feTurbulence type="fractalNoise" baseFrequency="0.035" numOctaves="2" seed="7"/><feDisplacementMap in="SourceGraphic" scale="3.2" xChannelSelector="R" yChannelSelector="G"/></filter>
+</defs></svg>
+<main>
+<nav class="toc" id="toc"><a href="#c1">캐릭터 방향</a><a href="#c2">캐릭터 구조</a><a href="#f1">질문 글꼴</a></nav>
+<h1>9 캐릭터 · 3 질문 글꼴</h1>
+<p class="lead">캐릭터는 아직 <b>방향만</b> 고르는 단계예요. 아래 그림은 아키가 그린 러프 스케치라, 고른 방향으로 다듬어요.</p>
+<div class="how">① 항목마다 <b>파란 상자</b>에서 고르기 (★ = 아키 추천)<br>② 하고 싶은 말은 메모 칸에<br>③ 맨 아래 <b>답 복사</b> → 채팅에 붙여넣기</div>
+
+<section class="sec" id="c1">
+<h2>9 · 캐릭터 방향 (3안)</h2>
+<p class="note">공통 규칙(취향 프로파일): <b>누구나 아는 사물·동물에 다리를 붙이고 시큰둥한 반쯤 감긴 눈</b> · 손으로 그린 떨리는 굵은 선 · 그라데이션 없는 3~4색 · 단색 배경.<br>4묶음 색: 로컬 탐험 = 라임 · 취향 수집 = 파랑 · 명소 정복 = 노랑 · 힐링 충전 = 분홍.<br>판정: 기존 캐릭터가 떠오르면 버림.</p>
+
+<h3>1 · 여행 짐이 걸어 다님 <span class="rec">아키 추천</span></h3>
+<p class="note">가방 안에 있던 물건이 주인 성향을 닮아 버림. 결과 화면 '내 짐 하나 받기' 느낌의 보상이 자연스러움.</p>
+<div class="cg" id="d1"></div>
+
+<h3>2 · 여행 종이들</h3>
+<p class="note">승차권·영수증·기념 도장·'방해 금지' 팻말. 앱 안의 탑승권·도장과 같은 세계라 통일감이 큼.</p>
+<div class="cg" id="d2"></div>
+
+<h3>3 · 도시의 새·동물</h3>
+<p class="note">여행지에서 늘 마주치는 동물이 관광객 흉내를 냄. 가장 '캐릭터'다운 안 — 대신 흔한 동물 캐릭터와 겹칠 위험이 제일 큼.</p>
+<div class="cg" id="d3"></div>
+
+<div class="pk" data-q="dir"><div class="q">어느 방향으로 다듬을까요?</div><div class="opts"><button data-v="1 여행 짐">1 짐 <small>★</small></button><button data-v="2 여행 종이">2 종이</button><button data-v="3 새·동물">3 새·동물</button><button data-v="섞기(메모에)">섞기</button><button data-v="다 별로">다 별로</button></div><textarea placeholder="메모 (선택) — 예: '1번인데 베개는 별로'" rows="1"></textarea></div>
+</section>
+
+<section class="sec" id="c2">
+<h2>9 · 16유형을 어떻게 나눌까</h2>
+<p class="note">유형은 16개, 묶음은 4개예요.</p>
+<div class="ex">
+<div><b>A · 묶음당 1캐릭터 + 유형별 소품</b> ★ — 운동화 하나에, 계획형은 접은 지도를 끈에 묶고 · 즉흥형은 끈이 풀려 있고 · 알차게형은 땀 · 여유형은 껌 밟고 멈춤. 4마리만 다듬으면 돼서 빨리 완성되고, 묶음이 한눈에 보여요.</div>
+<div><b>B · 16유형 전부 다른 캐릭터</b> — 모으는 재미(도감)가 가장 큼. 대신 16마리를 같은 수준으로 그려야 해서 시간이 훨씬 걸려요.</div>
+<div><b>C · 4캐릭터만</b> — 유형 차이는 글로만. 가장 단순하지만 '내 유형' 보상감이 약해요.</div>
+</div>
+<div class="pk" data-q="str"><div class="q">어떻게 나눌까요?</div><div class="opts"><button data-v="A 묶음 캐릭터+소품">A <small>★</small></button><button data-v="B 16개 전부">B</button><button data-v="C 4개만">C</button></div><textarea placeholder="메모 (선택)" rows="1"></textarea></div>
+</section>
+
+<section class="sec" id="f1">
+<h2>3 · 질문 화면 제목 글꼴 (4안)</h2>
+<p class="note">지난 4안(Gasoek One·나눔명조·Jua·Gaegu)은 탈락 → 이번엔 취향 프로파일의 '하지 않는 것'(장식 세리프·손글씨) 빼고, <b>출발 안내판·전광판</b>처럼 앱 세계관과 붙는 쪽으로 골랐어요. 제목과 코드 칸만 바뀌고 본문·보기는 그대로예요. 전부 무료·상업 사용 가능(SIL OFL).</p>
+
+<h3>0 · 지금 (Pretendard) — 비교용</h3>
+<div class="fm"><div class="eb">여행 취향 · 1/10</div><div class="h">도착 첫날, 짐 풀고 제일 먼저 할 일은?</div><p class="p">고민 말고, 제일 먼저 발이 가는 쪽으로</p><button class="o">지도에 없는 골목 산책</button><button class="o">그 도시 랜드마크 인증샷</button><div class="code"><i>L</i><i class="q">?</i><i class="q">?</i><i class="q">?</i></div></div>
+
+<h3>1 · 갈무리 (픽셀) <span class="rec">아키 추천</span></h3>
+<p class="note">공항 출발 안내판·전광판 도트. 첫 화면 출발 안내판과 바로 이어지고, 귀여운 캐릭터와도 잘 붙어요.</p>
+<div class="fm f-gal"><div class="eb">여행 취향 · 1/10</div><div class="h">도착 첫날, 짐 풀고 제일 먼저 할 일은?</div><p class="p">고민 말고, 제일 먼저 발이 가는 쪽으로</p><button class="o">지도에 없는 골목 산책</button><button class="o">그 도시 랜드마크 인증샷</button><div class="code"><i>L</i><i class="q">?</i><i class="q">?</i><i class="q">?</i></div><div class="lic">Galmuri11 · 이민서 · SIL OFL 1.1</div></div>
+
+<h3>2 · 오빗 (디지털 기하)</h3>
+<p class="note">디지털 시계·계기판 같은 각진 글자. 차분하지만 낯선 느낌.</p>
+<div class="fm f-orb"><div class="eb">여행 취향 · 1/10</div><div class="h">도착 첫날, 짐 풀고 제일 먼저 할 일은?</div><p class="p">고민 말고, 제일 먼저 발이 가는 쪽으로</p><button class="o">지도에 없는 골목 산책</button><button class="o">그 도시 랜드마크 인증샷</button><div class="code"><i>L</i><i class="q">?</i><i class="q">?</i><i class="q">?</i></div><div class="lic">Orbit · Google Fonts · SIL OFL 1.1</div></div>
+
+<h3>3 · 도현 (굵은 기하)</h3>
+<p class="note">간판·표지판 같은 단단한 글자. 가장 읽기 쉬움.</p>
+<div class="fm f-doh"><div class="eb">여행 취향 · 1/10</div><div class="h">도착 첫날, 짐 풀고 제일 먼저 할 일은?</div><p class="p">고민 말고, 제일 먼저 발이 가는 쪽으로</p><button class="o">지도에 없는 골목 산책</button><button class="o">그 도시 랜드마크 인증샷</button><div class="code"><i>L</i><i class="q">?</i><i class="q">?</i><i class="q">?</i></div><div class="lic">Do Hyeon · 우아한형제들 · Google Fonts · SIL OFL 1.1</div></div>
+
+<h3>4 · 모이라이 원 (실험적)</h3>
+<p class="note">속이 빈 풍선 글자. 가장 '예상 밖'이지만 긴 문장은 잘 안 읽혀요 — 코드 칸이나 짧은 제목용.</p>
+<div class="fm f-moi"><div class="eb">여행 취향 · 1/10</div><div class="h">도착 첫날, 짐 풀고 제일 먼저 할 일은?</div><p class="p">고민 말고, 제일 먼저 발이 가는 쪽으로</p><button class="o">지도에 없는 골목 산책</button><button class="o">그 도시 랜드마크 인증샷</button><div class="code"><i>L</i><i class="q">?</i><i class="q">?</i><i class="q">?</i></div><div class="lic">Moirai One · Google Fonts · SIL OFL 1.1</div></div>
+
+<div class="pk" data-q="font"><div class="q">어느 글꼴로?</div><div class="opts"><button data-v="1 갈무리">1 갈무리 <small>★</small></button><button data-v="2 오빗">2 오빗</button><button data-v="3 도현">3 도현</button><button data-v="4 모이라이 원">4 모이라이</button><button data-v="0 지금 그대로">지금 그대로</button></div><textarea placeholder="메모 (선택) — 예: '코드 칸만 1번'" rows="1"></textarea></div>
+</section>
+
+<h2 style="margin-top:2.5rem;font-size:1rem">보낼 답 (미리 보기)</h2>
+<textarea id="out" readonly></textarea>
+<div class="dock"><span class="cnt"><b id="cn">0</b>/3 고름</span><button id="cp">답 복사</button></div>
+<div class="toast" id="tt">복사했어요 · 채팅에 붙여넣기</div>
+</main>
+<script>
+/* ---- 러프 캐릭터 (손그림 떨림 = #w 필터) ---- */
+const K = '#1A1A1A', BG = { lo: '#CFE57A', co: '#9DB4FF', si: '#F6D365', he: '#F4B7C5' };
+const eye = (x, y) => `<path d="M${x-5.5} ${y} A5.5 5 0 0 0 ${x+5.5} ${y} Z" fill="#fff"/><circle cx="${x+.6}" cy="${y+2.4}" r="2" fill="${K}" stroke="none"/><path d="M${x-6.5} ${y} H${x+6.5}"/>`;
+const sleep = (x, y) => `<path d="M${x-5} ${y} q5 3.2 10 0" fill="none"/>`;
+const meh = (x, y) => `<path d="M${x-3.5} ${y} q3.5 -1.6 7 0" fill="none"/>`;
+const legs = (x, y, c) => `<path d="M${x-8} ${y} v8 M${x+8} ${y} v8" fill="none"/><ellipse cx="${x-10}" cy="${y+9}" rx="5" ry="3" fill="${c||K}"/><ellipse cx="${x+10}" cy="${y+9}" rx="5" ry="3" fill="${c||K}"/>`;
+const svg = (bg, body) => `<svg viewBox="0 0 120 112" role="img"><rect width="120" height="112" fill="${bg}"/><g fill="none" stroke="${K}" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" filter="url(#w)">${body}</g></svg>`;
+const D = {
+ d1: [
+  ['로컬 탐험형', '닳은 운동화', BG.lo, `<path d="M20 74 Q20 50 44 48 L60 48 Q68 48 74 58 Q92 60 98 70 Q100 78 94 80 L24 80 Q20 80 20 74 Z" fill="#E0453A"/><rect x="18" y="78" width="84" height="8" rx="4" fill="#fff"/><path d="M50 52 l9 6 M57 50 l9 6"/>${eye(36,62)}${eye(50,62)}${meh(43,71)}${legs(58,86)}`],
+  ['취향 수집형', '꽉 찬 장바구니', BG.co, `<path d="M70 44 L84 16" stroke-width="7" stroke="#E4B36A"/><path d="M70 44 L84 16"/><path d="M48 44 L42 22" stroke="#5DAA4E" stroke-width="5"/><path d="M42 44 Q42 28 50 28 Q58 28 58 44 M62 44 Q62 28 70 28 Q78 28 78 44"/><rect x="30" y="42" width="60" height="44" rx="6" fill="#F4E9D8"/>${eye(50,60)}${eye(70,60)}${meh(60,70)}${legs(60,86)}`],
+  ['명소 정복형', '목에 거는 카메라', BG.si, `<rect x="40" y="32" width="18" height="10" rx="2" fill="${K}"/><rect x="24" y="40" width="72" height="42" rx="8" fill="#3B5BDB"/><circle cx="60" cy="66" r="13" fill="${K}"/><circle cx="60" cy="66" r="6" fill="#8FA2E8" stroke="none"/><rect x="70" y="34" width="12" height="7" rx="1.5" fill="#fff"/>${eye(38,52)}${eye(82,52)}${legs(60,82)}`],
+  ['힐링 충전형', '안 일어나는 베개', BG.he, `<path d="M22 50 Q18 44 26 42 Q60 38 94 42 Q102 44 98 50 Q102 66 98 80 Q102 86 94 86 Q60 90 26 86 Q18 86 22 80 Q18 66 22 50 Z" fill="#fff"/>${sleep(47,62)}${sleep(73,62)}<circle cx="60" cy="72" r="2.4" fill="${K}"/><path d="M90 22 h8 l-8 8 h8 M80 30 h5 l-5 5 h5"/>${legs(60,88)}`]
+ ],
+ d2: [
+  ['로컬 탐험형', '1구간 승차권', BG.lo, `<rect x="26" y="34" width="68" height="46" rx="4" fill="#FFF6D6"/><path d="M76 36 V78" stroke-dasharray="3 4" stroke-width="2"/><circle cx="85" cy="46" r="4" fill="${BG.lo}"/><path d="M80 66 h10 M80 72 h7" stroke-width="2"/>${eye(42,54)}${eye(60,54)}${meh(51,64)}${legs(58,80)}`],
+  ['취향 수집형', '길어지는 영수증', BG.co, `<path d="M36 18 H84 V86 l-6 5 -6 -5 -6 5 -6 -5 -6 5 -6 -5 -6 5 -6 -5 Z" fill="#fff"/>${eye(50,32)}${eye(70,32)}${meh(60,42)}<path d="M44 54 H66 M74 54 H78 M44 62 H62 M74 62 H78 M44 70 H70 M74 70 H78" stroke-width="2"/><path d="M44 78 H78" stroke-width="2.4"/>${legs(60,90)}`],
+  ['명소 정복형', '기념 도장', BG.si, `<circle cx="60" cy="24" r="9" fill="#E0453A"/><rect x="54" y="32" width="12" height="10" fill="#C8874B"/><rect x="32" y="42" width="56" height="30" rx="6" fill="#C8874B"/><rect x="30" y="72" width="60" height="8" rx="2" fill="#E0453A"/>${eye(50,55)}${eye(70,55)}${meh(60,64)}<circle cx="16" cy="96" r="8" stroke="#E0453A" stroke-width="2.4"/>${legs(60,80)}`],
+  ['힐링 충전형', '방해 금지 팻말', BG.he, `<path d="M40 16 H80 V92 H40 Z" fill="#fff"/><circle cx="60" cy="30" r="9" fill="${BG.he}"/><path d="M60 39 V44"/>${sleep(52,56)}${sleep(68,56)}<circle cx="60" cy="64" r="2.2" fill="${K}"/><text x="60" y="83" text-anchor="middle" font-size="10" font-weight="800" fill="${K}" stroke="none" font-family="Pretendard Variable, sans-serif">쉬는 중</text>${legs(60,92)}`]
+ ],
+ d3: [
+  ['로컬 탐험형', '골목 비둘기', BG.lo, `<ellipse cx="56" cy="66" rx="30" ry="22" fill="#A9B1BC"/><circle cx="76" cy="44" r="15" fill="#A9B1BC"/><path d="M64 52 Q74 62 86 54 Q82 66 66 64 Z" fill="#6FBF8E"/><path d="M90 42 l9 4 -9 3 Z" fill="#F08A3C"/><path d="M34 62 Q50 70 66 64"/>${eye(79,41)}<path d="M50 86 v10 M64 86 v10 M46 96 h8 M60 96 h8" stroke="#F08A3C"/>`],
+  ['취향 수집형', '반짝이 모으는 까마귀', BG.co, `<circle cx="60" cy="58" r="30" fill="#33363D"/>${eye(48,50)}${eye(72,50)}<path d="M54 60 L66 60 L60 70 Z" fill="#8A8F98"/><circle cx="60" cy="78" r="7" fill="#F2C14E"/><path d="M55 74 l2 2 2-2 2 2 2-2" stroke-width="1.6"/><path d="M50 88 v10 M70 88 v10" stroke="#8A8F98"/>`],
+  ['명소 정복형', '셀카봉 든 갈매기', BG.si, `<path d="M84 70 L104 26" stroke-width="3"/><rect x="98" y="14" width="12" height="16" rx="2" fill="${K}"/><circle cx="56" cy="62" r="28" fill="#fff"/>${eye(46,54)}${eye(66,54)}<path d="M52 62 H62 L57 70 Z" fill="#F2C14E"/><circle cx="58" cy="66" r="1.6" fill="#E0453A" stroke="none"/><path d="M80 66 Q86 70 84 70"/><path d="M48 90 v8 M64 90 v8" stroke="#F08A3C"/>`],
+  ['힐링 충전형', '이불 속 두더지', BG.he, `<path d="M36 76 A24 24 0 0 1 84 76 Z" fill="#6B4E3D"/>${sleep(50,64)}${sleep(70,64)}<ellipse cx="60" cy="71" rx="5" ry="3.6" fill="#F4A3B5"/><rect x="18" y="74" width="84" height="28" rx="10" fill="#E86F5B"/><path d="M30 86 h20 M62 92 h24" stroke-width="2"/><ellipse cx="44" cy="76" rx="5" ry="3.4" fill="#F4A3B5"/><ellipse cx="76" cy="76" rx="5" ry="3.4" fill="#F4A3B5"/>`]
+ ]
+};
+Object.keys(D).forEach(k => { document.getElementById(k).innerHTML = D[k].map(([g, n, bg, b]) => `<div class="cc">${svg(bg, b)}<div class="cap"><b>${n}</b><span>${g}</span></div></div>`).join(''); });
+
+/* ---- 피드백 보드 ---- */
+(() => {
+  const KEY = 'gaboja-fb-p9', $ = q => document.querySelector(q), all = q => [...document.querySelectorAll(q)];
+  let st = {}; try { st = JSON.parse(localStorage.getItem(KEY) || '{}') || {}; } catch (_) {}
+  const NAME = { dir: '9 캐릭터 방향', str: '9 16유형 나누기', font: '3 질문 글꼴' }, SEC = { dir: 'c1', str: 'c2', font: 'f1' };
+  const save = () => { try { localStorage.setItem(KEY, JSON.stringify(st)); } catch (_) {} };
+  function draw() {
+    all('.pk').forEach(p => { const o = st[p.dataset.q] || {};
+      p.querySelectorAll('.opts button').forEach(b => b.setAttribute('aria-pressed', o.v === b.dataset.v));
+      const t = p.querySelector('textarea'); if (document.activeElement !== t) t.value = o.m || ''; });
+    let n = 0; const lines = [];
+    Object.keys(NAME).forEach(q => { const o = st[q] || {}; if (o.v) n++;
+      const a = document.querySelector('#toc a[href="#' + SEC[q] + '"]'); if (a) a.classList.toggle('ok', !!o.v);
+      lines.push(NAME[q] + ': ' + (o.v || '(안 고름)') + (o.m && o.m.trim() ? ' · 메모: ' + o.m.trim() : '')); });
+    $('#cn').textContent = n; $('#out').value = lines.join('\n');
+  }
+  document.addEventListener('click', e => { const b = e.target.closest('.pk .opts button'); if (!b) return; const o = st[b.closest('.pk').dataset.q] = st[b.closest('.pk').dataset.q] || {}; o.v = o.v === b.dataset.v ? '' : b.dataset.v; save(); draw(); });
+  all('.pk textarea').forEach(t => t.addEventListener('input', () => { (st[t.closest('.pk').dataset.q] = st[t.closest('.pk').dataset.q] || {}).m = t.value; save(); draw(); }));
+  $('#cp').onclick = async () => { const tx = $('#out').value; let ok = false;
+    try { await navigator.clipboard.writeText(tx); ok = true; } catch (_) { const o = $('#out'); o.removeAttribute('readonly'); o.select(); try { ok = document.execCommand('copy'); } catch (_) {} o.setAttribute('readonly', ''); }
+    const t = $('#tt'); t.textContent = ok ? '복사했어요 · 채팅에 붙여넣기' : '위 글을 길게 눌러 복사해 주세요'; t.classList.add('on'); setTimeout(() => t.classList.remove('on'), 2200); };
+  draw();
+})();
+</script>
+</body>
+</html>
