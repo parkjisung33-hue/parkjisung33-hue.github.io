@@ -1884,8 +1884,8 @@ function phMount(host, p, o) {
   const steps = [];
   if (p.ph) steps.push('ph'); if (PH_KEY_G()) steps.push('g'); if (o.sv !== false && PH_KEY_M() && p.ll) steps.push('sv');
   const none = () => { host.hidden = true; host.dataset.on = ''; host.innerHTML = ''; o.onNone && o.onNone(); };
-  const show = (src, credit, link) => {
-    const im = new Image(); im.alt = ''; im.decoding = 'async'; im.loading = 'lazy'; im.referrerPolicy = 'no-referrer';
+  const show = (src, credit, link, ref) => {   // ref: 구글 사진은 키가 사이트 제한이라 출처 주소를 보내야 함
+    const im = new Image(); im.alt = ''; im.decoding = 'async'; im.loading = 'lazy'; im.referrerPolicy = ref ? 'strict-origin-when-cross-origin' : 'no-referrer';
     im.onerror = () => next();
     im.onload = () => { host.dataset.on = '1'; };
     im.src = src;
@@ -1906,7 +1906,7 @@ function phMount(host, p, o) {
   const next = () => {
     const s = steps.shift();
     if (s === 'ph') show(p.ph.u, phCredit(p.ph.a, p.ph.l), o.link ? p.ph.p : '');
-    else if (s === 'g') phGoogle(p, r => { if (r) show(r.u, '사진 · Google · ' + r.a, ''); else next(); });
+    else if (s === 'g') phGoogle(p, r => { if (r) show(r.u, '사진 · Google · ' + r.a, '', 1); else next(); });
     else if (s === 'sv') sv();
     else none();
   };
