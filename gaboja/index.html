@@ -120,6 +120,7 @@ h2 { margin: 0; font-size: 1.3125rem; font-weight: 800; letter-spacing: -.03em; 
 .pass .to .place.pl1 { justify-content: flex-end; }
 .pass .place.pl1 .pn { overflow: hidden; text-overflow: ellipsis; min-width: 0; }
 .pass .place.pl1 .tt { flex: none; }
+.tile .t .ord { color: var(--sub); font-weight: 600; }
 .pass .place sup { font-size: 0.625rem; font-weight: 700; color: var(--blue); margin-left: 0.0625rem; vertical-align: 0.3125rem; line-height: 0; }
 .plane { padding-bottom: 0.375rem; color: var(--red); display: flex; flex-direction: column; align-items: center; gap: 2px; }
 .plane svg { width: 1.5rem; height: 1.5rem; fill: currentColor; }
@@ -1026,7 +1027,7 @@ function renderTips(L) {
   L.rows.forEach(r => { h += '<div class="crow">' + ic(r.ic) + '<span class="nm2"><b class="one">' + esc(r.n) + '</b><span class="src one">' + esc(r.sub || '') + '</span></span><a class="tel" href="' + esc(r.href || 'tel:' + r.tel) + '">' + esc(r.tel) + '</a></div>'; });
   if ((L.life || []).length) { h += '<div class="grp2">생활 정보</div>'; L.life.forEach(([b, t], i) => { h += '<div class="nrow">' + ic(i % 2 ? 'coin' : 'doc') + '<span class="one"><b>' + esc(b) + '</b> <span class="src">' + esc(t) + '</span></span><span></span></div>'; }); }
   if (L.src) h += '<div class="nrow"><span></span><span class="src one">' + esc(L.src) + '</span><span></span></div>';
-  h += '<div class="cattr">사진: Wikimedia Commons · Openverse(Flickr 등) · 각 사진의 저작자·라이선스는 사진 아래에 표기</div>';
+  h += '<div class="cattr">사진: Wikimedia Commons · Openverse(Flickr 등) · 한국관광공사(공공누리 제1유형) · 각 사진의 저작자·라이선스는 사진 아래에 표기</div>';
   if (PLAN && PLAN.carAttr) h += '<div class="cattr">' + esc(PLAN.carAttr) + '</div>';
   h += wxSrcHtml();
   el.innerHTML = h;
@@ -1317,7 +1318,8 @@ const hubName = c => /공항|역$/.test(c.fly[1]) ? c.fly[1] : c.fly[1] + '공�
 const carDurAt = (c, depMin) => c.car && c.car.d ? c.car.d[Math.min(23, Math.max(0, Math.floor(depMin / 60)))] : c.du;
 // 비행기·열차·차 일정 칸 = 탑승권 카드 (출발·도착과 시각 · 소요 · 날짜 · 공항 도착 권장 = 출발 2시간 전). 시각 미정이면 시각 대신 입력 안내
 // 공항·역 이름 + 시각 한 줄 ('01:40(다음 날)' → '01:40⁺¹')
-const plLine = (name, tx) => '<div class="place pl1">' + (name ? '<span class="pn">' + name + '</span><span class="tt">· ' : '<span class="tt">') + String(tx).replace(/\(다음 날\)/, '<sup>+1</sup>') + '</span></div>';
+// 11/15: 시각이 비면(시각 미정) 이름만 — 가운데에 '시각 미정'이 이미 있어 이름이 잘리지 않게
+const plLine = (name, tx) => '<div class="place pl1">' + (name ? '<span class="pn">' + name + '</span>' + (tx ? '<span class="tt">· ' : '') : '<span class="tt">') + (tx || !name ? String(tx).replace(/\(다음 날\)/, '<sup>+1</sup>') + '</span>' : '') + '</div>';
 function flyCard(d, c, cls, top) {
   const CAR = isCar(c), TR = c.ride === 'train', tbd = !!d.tbd, nw = nowOf(d), live = / live/.test(cls || '');
   const arr = toT(Math.max(toMin(c.s) - (c.pre || 120), 0));
@@ -1336,9 +1338,9 @@ function flyCard(d, c, cls, top) {
   const pl = tx => plLine('', tx);
   if (tbd) {
     return open + '<div class="hd">' + hdL
-      + '<div class="route"><div>' + code(0) + (CAR ? pl('출발 시각 미정') : plLine(esc(c.fly[1]), '출발 시각 미정')) + '</div>'
+      + '<div class="route"><div>' + code(0) + (CAR ? pl('출발 시각 미정') : plLine(esc(c.fly[1]), '')) + '</div>'
       + '<div class="plane' + (CAR || TR ? ' tr' : '') + '">' + ic + '<small>시각 미정</small></div>'
-      + '<div class="to">' + code(2) + (CAR ? pl('도착은 출발 시각을 입력하면 계산돼요') : plLine(esc(c.fly[3]), '도착 시각 미정')) + '</div></div></div>'
+      + '<div class="to">' + code(2) + (CAR ? pl('도착 = 출발 뒤 계산') : plLine(esc(c.fly[3]), '')) + '</div></div></div>'
       + '<div class="perf"></div><div class="tbdrow"><span>' + rideWord(c) + ' 시각을 넣으면 그날 시간이 정해져요</span><button class="btn pri sm" type="button">입력</button></div></div>';
   }
   if (CAR) {
@@ -1369,11 +1371,11 @@ function blocks(d) {
     if (!b.length) return;
     h += '<div class="band"><div class="bh"><b>' + (d.tbd ? '순서만' : PIECE[bi]) + '</b><span>' + (d.tbd ? '시각 미정' : b[0].s) + '</span></div><div class="tiles">';
     b.forEach(c => {
-      if (c.fly && isPinned(c)) { h += '<button class="tile flyref fix wide" data-key="' + c.id + '" data-fixed="1" style="flex-grow:' + c.du + '"><span class="t">' + (d.tbd ? '' : c.s) + '</span><span class="n one">' + esc(flyTx(c, 0, 2)) + '</span></button>'; return; }
+      if (c.fly && isPinned(c)) { h += '<button class="tile flyref fix wide" data-key="' + c.id + '" data-fixed="1" style="flex-grow:' + c.du + '"><span class="t">' + (d.tbd ? '<span class="ord">' + (b.indexOf(c) + 1) + '번째</span>' : c.s) + '</span><span class="n one">' + esc(flyTx(c, 0, 2)) + '</span></button>'; return; }
       if (c.fly) { h += flyCard(d, c, nw && c === nw.cur ? ' now-on' : pastOf(nw, c) ? ' past-on' : ''); return; }
       const fx = fixedOf(c), isNow = nw && c === nw.cur, pills = (isNow ? '<span class="now-pill">지금</span>' : '') + memoBadge(c);
       h += '<button class="tile ' + c.k + (fx ? ' fix' : '') + (pills ? ' wide' : '') + (isNow ? ' now-on' : pastOf(nw, c) ? ' past-on' : '') + '" data-key="' + c.id + '"' + (fx ? ' data-fixed="1"' : '') + ' style="flex-grow:' + Math.max(30, c.du) + '">'
-        + '<span class="t">' + dotHtml(d, c) + (d.tbd ? '' : c.s) + '<span class="sp"></span>' + (pills ? '<span class="pills">' + pills + '</span>' : '') + '</span>'
+        + '<span class="t">' + dotHtml(d, c) + (d.tbd ? '<span class="ord">' + (b.indexOf(c) + 1) + '번째</span>' : c.s) + '<span class="sp"></span>' + (pills ? '<span class="pills">' + pills + '</span>' : '') + '</span>'
         + '<span class="n one">' + esc(c.fly ? flyTx(c, 0, 2) : (c.sh || c.n)) + '</span></button>';
     });
     h += '</div></div>';
