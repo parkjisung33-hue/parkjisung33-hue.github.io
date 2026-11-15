@@ -255,6 +255,16 @@ main { flex: 1; display: flex; flex-direction: column; position: relative; overf
 .pair .lab.ok { color: var(--blue); } .pair .lab.no { color: var(--red); }
 .pair .mini { box-shadow: var(--sh-xs); }
 .pair .mini .t3 { white-space: normal; word-break: keep-all; }
+/* 11/15 #9: 짐 캐릭터 (chars.js) — 16Personalities처럼 유형마다 대표 그림 · 묶음 색 바탕 */
+.av { display: flex; align-items: center; justify-content: center; overflow: hidden; }
+.av svg { display: block; height: 100%; width: auto; }
+.ticket .av.hero { height: 10.5rem; border-radius: var(--r-md); margin: 0 0 -0.125rem; }
+.mini .av { height: 6.5rem; margin: 0.375rem 0.375rem 0; border-radius: calc(var(--r-md) - 0.25rem); align-self: stretch; }
+.pair .mini .av { height: 7rem; }
+.rx .av.sm { width: 4.5rem; height: 4.5rem; border-radius: 1.125rem; margin-bottom: 0.625rem; }
+@media (prefers-reduced-motion: no-preference) { .ticket .av.hero svg { animation: avpop .6s .15s cubic-bezier(.2,.9,.3,1.3) both; } }
+@keyframes avpop { from { transform: translateY(.75rem) scale(.92); opacity: 0; } to { transform: none; opacity: 1; } }
+
 .acts { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 0.5rem; }
 .acts .share { grid-column: 1 / -1; background: var(--blue); color: #fff; height: 3.25rem; font-size: 0.9375rem; }
 .acts button { height: 3rem; border-radius: var(--r-sm); background: var(--hair); font-size: 0.8125rem; font-weight: 700; display: flex; align-items: center; justify-content: center; gap: 0.375rem; white-space: nowrap; }
@@ -584,6 +594,7 @@ main { flex: 1; display: flex; flex-direction: column; position: relative; overf
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
 <script src="types.js"></script>
+<script src="chars.js"></script>
 <script src="gen-data.js"></script>
 <script src="sgg.js"></script>
 <script src="gen.js"></script>
@@ -870,7 +881,7 @@ function render() {
   if (s === 'swipe') return rSwipe();
 }
 
-function miniHtml(c, sub, extra = '') { const t = T(c); return `<button class="mini" data-code="${c}" ${extra}><div class="t1"><span>GABOJA · BOARDING PASS</span><em>${esc(t.group)}</em></div><div class="t2"><span class="cd">${c}</span><span class="nm">${esc(t.name)}</span></div><div class="pf"></div><div class="t3">${esc(sub == null ? t.line : sub)}</div></button>`; }
+function miniHtml(c, sub, extra = '') { const t = T(c); return `<button class="mini" data-code="${c}" ${extra}><div class="t1"><span>GABOJA · BOARDING PASS</span><em>${esc(t.group)}</em></div>${AV(c)}<div class="t2"><span class="cd">${c}</span><span class="nm">${esc(t.name)}</span></div><div class="pf"></div><div class="t3">${esc(sub == null ? t.line : sub)}</div></button>`; }
 
 function rIntro() {
   setBar(null);
@@ -966,7 +977,7 @@ function pairSheet(c, why, good) {
   PAIR_OPEN = true;
   const t = T(c), rx = $('#rx'), sc = $('#rxScrim');
   rx.innerHTML = `<div class="rh"><span class="step">${good ? '잘 맞아요' : '부딪힐 수 있어요'} · ${esc(t.group)}</span></div>
-    <h2 id="rxT">${c} ${esc(t.name)}</h2><p>${esc(t.line || '')}</p>
+    ${AV(c, 'sm')}<h2 id="rxT">${c} ${esc(t.name)}</h2><p>${esc(t.line || '')}</p>
     <div class="near"><span>${good ? '같이 가면 좋은 이유' : '같이 가면 부딪히는 부분'}</span><p style="margin:.375rem 0 0;font-size:1rem;font-weight:700;color:var(--ink);line-height:1.45">${esc(why || '')}</p></div>
     ${(t.scenes || []).length ? `<div class="near"><span>이런 여행을 해요</span><div>${t.scenes.slice(0, 3).map(x => `<b>${esc(x)}</b>`).join('')}</div></div>` : ''}
     <button class="cta go2" id="rxGo"><span>이 유형 자세히 보기 ${ICON.arrow}</span></button>
@@ -1024,6 +1035,7 @@ const GI = { LS: '<circle cx="12" cy="12" r="8.5"/><path d="M15.5 8.5l-2 5-5 2 2
   LE: '<path d="M5 8h14l-1.2 11.2a1 1 0 0 1-1 .8H7.2a1 1 0 0 1-1-.8zM9 8V6.5a3 3 0 0 1 6 0V8"/>',
   HS: '<path d="M6 21V4M6 4h11l-2 3.5 2 3.5H6"/>',
   HE: '<path d="M5 10h11v4a5 5 0 0 1-5 5h-1a5 5 0 0 1-5-5zM16 11h1.5a2.5 2.5 0 0 1 0 5H16M8 3.5c-.6 1 .6 1.6 0 2.8M11.5 3.5c-.6 1 .6 1.6 0 2.8"/>' };
+const AV = (c, k) => window.GABOJA_CHAR ? `<div class="av${k ? ' ' + k : ''}" style="background:${GABOJA_CHAR_BG(c)}">${GABOJA_CHAR(c, { bg: false })}</div>` : '';   // 11/15 #9 짐 캐릭터
 const grpIcon = c => `<svg viewBox="0 0 24 24" aria-hidden="true">${GI[c.slice(0, 2)]}</svg>`;
 const LMEAN = { L: '로컬', H: '핫플', S: '구경', E: '즐기기', F: '알차게', R: '여유롭게', J: '계획형', P: '즉흥형' };
 function lflapsHtml(c) { return `<div class="flaps big lfl">${c.split('').map(l => `<span class="lcol"><span class="fl">${l}</span><span class="lb">${LMEAN[l]}</span></span>`).join('')}</div>`; }
@@ -1052,8 +1064,9 @@ function rResult(c, mine) {
   const day = rhythmHtml(c);   // 11/14 #12: 도시 이름 없는 하루 리듬
   const el = screen(`
     <article class="ticket" aria-label="${c} ${esc(t.name)}">
-      <div class="hd"><b>가보자</b><em class="tgrp">${grpIcon(c)}${esc(t.group)}</em></div>
+      <div class="hd"><b>가보자</b><em class="tgrp">${esc(t.group)}</em></div>
       <div class="bd">
+        ${AV(c, 'hero')}
         ${lflapsHtml(c)}
         <h1 class="nm">${esc(t.name)}</h1>
         <p class="ln">${esc(t.line)}</p>
@@ -1104,7 +1117,7 @@ function rTypes() {
     <div class="qh"><span class="eyebrow">가보자 · 16가지 탑승권</span><h1>여행 유형 한눈에</h1><p>여행 취향 4가지 × 여행 스타일 4가지 · 눌러서 자세히 보기</p></div>
     ${Object.keys(GROUPS).map(g => `<div class="grp"><h3>${GROUPS[g][0]}<span>${GROUPS[g][1]}</span></h3><div class="g4">
       ${ORDER.filter(c => c.startsWith(g)).map(c => { const t = T(c), lab = PAIR[c.slice(2)];
-        return `<button class="mini ${c === S.type ? 'me' : ''}" data-code="${c}">${c === S.type ? '<span class="me-b">나</span>' : ''}<div class="t2"><span class="cd">${c}</span><span class="nm">${esc(t.name)}</span></div><div class="pf"></div><div class="t3">${lab}</div></button>`; }).join('')}
+        return `<button class="mini ${c === S.type ? 'me' : ''}" data-code="${c}">${c === S.type ? '<span class="me-b">나</span>' : ''}${AV(c)}<div class="t2"><span class="cd">${c}</span><span class="nm">${esc(t.name)}</span></div><div class="pf"></div><div class="t3">${lab}</div></button>`; }).join('')}
     </div></div>`).join('')}
     <div class="foot"><button class="cta" id="tStart">${S.type ? '내 결과 보기' : '내 유형 알아보기'} ${ICON.arrow}</button></div>`);
   el.querySelectorAll('.g4 .mini').forEach(b => b.onclick = () => openType(b.dataset.code));
