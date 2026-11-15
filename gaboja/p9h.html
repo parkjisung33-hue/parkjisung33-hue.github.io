@@ -1,0 +1,142 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<title>가보자 캐릭터 스타일</title>
+<style>
+@font-face { font-family: "Pretendard Variable"; font-weight: 45 920; font-display: swap; src: url("fonts/PretendardVariable.woff2") format("woff2-variations"), url("fonts/PretendardVariable.woff2") format("woff2"); }
+:root { color-scheme: light; --canvas:#EEF0F3; --ink:#15171A; --sub:#6F757D; --hair:rgba(21,23,26,.09); --paper:#FFFFFF; --blue:#3B5BDB; --blue-soft:rgba(59,91,219,.09);
+  --kr:"Pretendard Variable",Pretendard,-apple-system,"Apple SD Gothic Neo","Malgun Gothic",system-ui,sans-serif; --shadow:0 0.25rem 0.75rem -0.375rem rgba(24,36,60,.18); }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { color-scheme: dark; --canvas:#0E1013; --ink:#ECEEF1; --sub:#8F969F; --hair:rgba(255,255,255,.08); --paper:#1B1E23; --blue:#8095F5; --blue-soft:rgba(128,149,245,.12); --shadow:none; } }
+:root[data-theme="dark"] { color-scheme: dark; --canvas:#0E1013; --ink:#ECEEF1; --sub:#8F969F; --hair:rgba(255,255,255,.08); --paper:#1B1E23; --blue:#8095F5; --blue-soft:rgba(128,149,245,.12); --shadow:none; }
+html { font-size: clamp(13.5px, calc(100vw * 16 / 390), 18px); }
+body { margin: 0; background: var(--canvas); color: var(--ink); font-family: var(--kr); -webkit-font-smoothing: antialiased; word-break: keep-all; }
+main { max-width: 26rem; margin: 0 auto; padding: 1.25rem 1rem 4rem; }
+h1 { font-size: 1.25rem; margin: 0 0 .25rem; } .lead { color: var(--sub); font-size: .875rem; margin: 0 0 1rem; line-height: 1.55; } .lead b { color: var(--ink); }
+.sec { margin-top: 2.25rem; padding-top: 1.25rem; border-top: 2px solid var(--ink); scroll-margin-top: 3.5rem; }
+.sec > h2 { font-size: 1.125rem; margin: 0 0 .25rem; } .note { color: var(--sub); font-size: .8125rem; margin: 0 0 .75rem; line-height: 1.55; }
+.rec { display: inline-block; font-size: .6875rem; font-weight: 800; color: #fff; background: var(--blue); padding: .125rem .5rem; border-radius: 1rem; margin-left: .375rem; vertical-align: middle; }
+.big { display: grid; grid-template-columns: 1fr 1fr; gap: .5rem; margin-bottom: .5rem; }
+.g16 { display: grid; grid-template-columns: repeat(4, 1fr); gap: .375rem; background: var(--paper); border-radius: 1.25rem; padding: .5rem; box-shadow: var(--shadow); }
+.tile { border-radius: .875rem; overflow: hidden; aspect-ratio: 100 / 92; }
+.big .tile { border-radius: 1.25rem; box-shadow: var(--shadow); }
+.tile svg { display: block; width: 100%; height: 100%; }
+.how { background: var(--paper); border-radius: 1rem; padding: .75rem .875rem; font-size: .8125rem; line-height: 1.6; color: var(--sub); box-shadow: var(--shadow); } .how b { color: var(--ink); }
+.toc { position: sticky; top: 0; z-index: 5; display: flex; gap: .375rem; overflow-x: auto; padding: .625rem 1rem; margin: 0 -1rem 1rem; background: color-mix(in srgb, var(--canvas) 88%, transparent); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); scrollbar-width: none; }
+.toc::-webkit-scrollbar { display: none; }
+.toc a { flex: none; text-decoration: none; color: var(--ink); font: 700 .8125rem var(--kr); background: var(--paper); border-radius: 1rem; padding: .4375rem .75rem; box-shadow: inset 0 0 0 1px var(--hair); }
+.pk { margin-top: 1.5rem; background: var(--paper); border-radius: 1.25rem; padding: 1rem; box-shadow: 0 0 0 2px var(--blue); }
+.pk .q { font-weight: 800; font-size: .9375rem; margin-bottom: .625rem; }
+.opts { display: flex; flex-wrap: wrap; gap: .4375rem; }
+.opts button { border: 0; font: 700 .875rem var(--kr); border-radius: 1.25rem; padding: .625rem .875rem; background: var(--hair); color: var(--ink); min-height: 2.75rem; }
+.opts button[aria-pressed="true"] { background: var(--blue); color: #fff; }
+.opts button small { font-weight: 600; opacity: .75; margin-left: .25rem; }
+.pk textarea { display: block; width: 100%; box-sizing: border-box; margin-top: .625rem; border: 0; border-radius: .875rem; background: var(--canvas); color: var(--ink); font: 400 1rem/1.5 var(--kr); padding: .625rem .75rem; min-height: 2.75rem; resize: vertical; }
+.dock { position: sticky; bottom: 0; z-index: 5; margin: 2rem -1rem 0; padding: .75rem 1rem calc(.75rem + env(safe-area-inset-bottom)); background: color-mix(in srgb, var(--canvas) 90%, transparent); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); display: flex; }
+.dock button { flex: 1; border: 0; border-radius: 2rem; background: var(--ink); color: var(--canvas); font: 800 1rem var(--kr); min-height: 3.25rem; }
+#out { width: 100%; box-sizing: border-box; border: 0; border-radius: 1rem; background: var(--paper); color: var(--ink); font: 400 .875rem/1.6 var(--kr); padding: .75rem .875rem; min-height: 5rem; box-shadow: var(--shadow); }
+.toast { position: fixed; left: 50%; bottom: 6rem; transform: translateX(-50%); background: var(--ink); color: var(--canvas); font: 700 .875rem var(--kr); padding: .625rem 1rem; border-radius: 1.5rem; opacity: 0; transition: opacity .2s; pointer-events: none; z-index: 9; white-space: nowrap; }
+.toast.on { opacity: 1; }
+</style>
+</head>
+<body>
+<main>
+<nav class="toc"><a href="#s1">1 플랫</a><a href="#s2">2 클레이 3D</a><a href="#s3">3 플랫+입체</a><a href="#pick">고르기</a></nav>
+<h1>9 · 짐 캐릭터 스타일 3안</h1>
+<p class="lead">확정한 16개의 <b>모양·짐·점 눈은 그대로</b>, 표현만 바꿨어요. 공통: <b>검은 테두리 없음</b>, 묶음 색 한 가지를 밝은 톤·기본 톤·진한 톤 3단으로 씀(흰 부분 → 밝은 톤, 검은 부분 → 진한 톤).</p>
+<div class="how">위에 큰 그림 2개로 디테일을, 아래 16개로 전체 느낌을 보세요. 파란 상자에서 고르고 <b>답 복사</b>.</div>
+
+<section class="sec" id="s1"><h2>1 · 플랫 2톤</h2><p class="note">첫 번째 레퍼런스(Streamline Core Flat)처럼 그림자·광택 없이 색면만. 가장 깔끔하고, 작은 크기(메뉴 칸)에서도 잘 읽혀요.</p><div class="big" id="b1"></div><div class="g16" id="g1"></div></section>
+<section class="sec" id="s2"><h2>2 · 클레이 3D</h2><p class="note">두 번째 레퍼런스처럼 말랑한 입체 — 조각마다 위쪽 광택 + 부드러운 그림자. 보상 느낌은 가장 큼, 대신 앱의 납작한 UI와는 결이 가장 달라요.</p><div class="big" id="b2"></div><div class="g16" id="g2"></div></section>
+<section class="sec" id="s3"><h2>3 · 플랫 + 살짝 입체 <span class="rec">아키 추천</span></h2><p class="note">1번 색면에 아주 약한 광택과 바닥 그림자만. 앱의 깔끔한 톤을 지키면서 '받는 캐릭터' 느낌을 조금 더해요.</p><div class="big" id="b3"></div><div class="g16" id="g3"></div></section>
+
+<section class="sec" id="pick"><h2>고르기</h2>
+<div class="pk" data-q="sty"><div class="q">어느 스타일로 갈까요?</div><div class="opts"><button data-v="1 플랫 2톤">1 플랫</button><button data-v="2 클레이 3D">2 클레이 3D</button><button data-v="3 플랫+살짝 입체">3 플랫+입체 <small>★</small></button><button data-v="지금(테두리) 유지">지금 유지</button></div><textarea placeholder="메모 (선택) — 예: '2번인데 광택 조금 약하게'" rows="1"></textarea></div>
+</section>
+<h2 style="margin-top:2.5rem;font-size:1rem">보낼 답 (미리 보기)</h2>
+<textarea id="out" readonly></textarea>
+<div class="dock"><button id="cp">답 복사</button></div>
+<div class="toast" id="tt">복사했어요 · 채팅에 붙여넣기</div>
+</main>
+<script src="chars.js"></script>
+<script>
+/* 확정 v7(chars.js)을 그대로 받아 스타일만 바꿈 — 모양은 손대지 않음 */
+const CODES = ['LSFJ','LSFP','LSRJ','LSRP','LEFJ','LEFP','LERJ','LERP','HSFJ','HSFP','HSRJ','HSRP','HEFJ','HEFP','HERJ','HERP'];
+const TONE = { LS: { lt: '#A6E0C3', md: '#2F9E6E', dk: '#16603F', bg: '#E6F2EC' }, LE: { lt: '#FFCF9C', md: '#E0812E', dk: '#93450F', bg: '#FBEEE2' },
+               HS: { lt: '#B3C3FF', md: '#3B5BDB', dk: '#22389A', bg: '#E7ECFB' }, HE: { lt: '#F7BACF', md: '#D45C84', dk: '#8B2A4B', bg: '#F8E9EF' } };
+const K = '#15171A', W = '#ffffff';
+const FX = `<defs>
+<filter id="clay" x="-25%" y="-25%" width="150%" height="160%" color-interpolation-filters="sRGB">
+ <feGaussianBlur in="SourceAlpha" stdDeviation="2.4" result="b"/>
+ <feSpecularLighting in="b" surfaceScale="3.2" specularConstant=".75" specularExponent="16" lighting-color="#fff" result="s"><fePointLight x="20" y="-40" z="70"/></feSpecularLighting>
+ <feComposite in="s" in2="SourceAlpha" operator="in" result="s2"/>
+ <feGaussianBlur in="SourceAlpha" stdDeviation="3" result="ib"/><feOffset in="ib" dy="-2.2" result="io"/><feComposite in="SourceAlpha" in2="io" operator="out" result="inner"/>
+ <feFlood flood-color="#000" flood-opacity=".14"/><feComposite in2="inner" operator="in" result="innerSh"/>
+ <feMerge result="lit"><feMergeNode in="SourceGraphic"/><feMergeNode in="innerSh"/><feMergeNode in="s2"/></feMerge>
+ <feGaussianBlur in="SourceAlpha" stdDeviation="2.2" result="ds"/><feOffset in="ds" dy="2.6" result="dso"/><feFlood flood-color="#1b1f3a" flood-opacity=".16"/><feComposite in2="dso" operator="in" result="drop"/>
+ <feMerge><feMergeNode in="drop"/><feMergeNode in="lit"/></feMerge>
+</filter>
+<filter id="soft" x="-20%" y="-20%" width="140%" height="150%" color-interpolation-filters="sRGB">
+ <feGaussianBlur in="SourceAlpha" stdDeviation="1.6" result="b"/>
+ <feSpecularLighting in="b" surfaceScale="1.6" specularConstant=".42" specularExponent="22" lighting-color="#fff" result="s"><fePointLight x="20" y="-40" z="80"/></feSpecularLighting>
+ <feComposite in="s" in2="SourceAlpha" operator="in" result="s2"/>
+ <feMerge><feMergeNode in="SourceGraphic"/><feMergeNode in="s2"/></feMerge>
+</filter>
+<radialGradient id="gnd" cx="50%" cy="50%" r="50%"><stop offset="0" stop-color="#1b1f3a" stop-opacity=".18"/><stop offset="1" stop-color="#1b1f3a" stop-opacity="0"/></radialGradient>
+</defs>`;
+function restyle(code, mode) {
+  const t = TONE[code.slice(0, 2)], host = document.createElement('div');
+  host.style.cssText = 'position:absolute;left:-9999px;top:0;width:200px'; document.body.appendChild(host);
+  host.innerHTML = GABOJA_CHAR(code, { bg: true });
+  const svg = host.querySelector('svg'), bgRect = svg.querySelector('rect');
+  bgRect.setAttribute('fill', t.bg);
+  const g = svg.querySelector('g'); g.setAttribute('stroke', t.dk);
+  const els = [...g.querySelectorAll('path,rect,circle,ellipse,text')];
+  els.forEach(el => {
+    const f = (el.getAttribute('fill') || '').toLowerCase(), s = (el.getAttribute('stroke') || '').toLowerCase();
+    const filled = f && f !== 'none';
+    if (el.tagName === 'text') { if (f === K.toLowerCase()) el.setAttribute('fill', t.dk); return; }
+    if (filled) {
+      let nf = f;
+      if (f === W) { let a = 0; try { const b = el.getBBox(); a = b.width * b.height; } catch (_) {} nf = a > 420 ? t.lt : W; }
+      else if (f === K.toLowerCase() || f === '#1f2430') nf = t.dk;
+      else if (f === t.bg.toLowerCase()) nf = t.bg;
+      el.setAttribute('fill', nf);
+      if (el.getAttribute('stroke-dasharray')) el.setAttribute('stroke', t.dk); else el.setAttribute('stroke', 'none');
+      if (el.getAttribute('stroke') === 'none' && mode !== 1) { const b = el.getBBox ? el.getBBox() : null; if (!b || b.width * b.height > 30) el.setAttribute('filter', mode === 2 ? 'url(#clay)' : 'url(#soft)'); }
+    } else {
+      if (!s || s === K.toLowerCase()) el.setAttribute('stroke', t.dk);
+      else if (s === W) el.setAttribute('stroke', W);
+    }
+  });
+  if (mode === 3) g.insertAdjacentHTML('afterbegin', '<ellipse cx="50" cy="84" rx="30" ry="4.5" fill="url(#gnd)" stroke="none"/>');
+  svg.insertAdjacentHTML('afterbegin', FX);
+  const out = svg.outerHTML; host.remove(); return out;
+}
+const tile = h => `<div class="tile">${h}</div>`;
+[1, 2, 3].forEach(m => {
+  document.getElementById('b' + m).innerHTML = ['HSRJ', 'LSRP'].map(c => tile(restyle(c, m))).join('');
+  document.getElementById('g' + m).innerHTML = CODES.map(c => tile(restyle(c, m))).join('');
+});
+/* 필터 id가 여러 svg에 중복 → 첫 번째 정의를 모두가 씀(같은 내용이라 문제없음) */
+
+(() => {
+  const KEY = 'gaboja-fb-p9h', $ = q => document.querySelector(q);
+  let st = {}; try { st = JSON.parse(localStorage.getItem(KEY) || '{}') || {}; } catch (_) {}
+  const save = () => { try { localStorage.setItem(KEY, JSON.stringify(st)); } catch (_) {} };
+  function draw() { const o = st.sty || {};
+    document.querySelectorAll('.opts button').forEach(b => b.setAttribute('aria-pressed', o.v === b.dataset.v));
+    const t = $('.pk textarea'); if (document.activeElement !== t) t.value = o.m || '';
+    $('#out').value = '9 캐릭터 스타일: ' + (o.v || '(안 고름)') + (o.m && o.m.trim() ? '\n메모: ' + o.m.trim() : ''); }
+  document.addEventListener('click', e => { const b = e.target.closest('.pk .opts button'); if (!b) return; const o = st.sty = st.sty || {}; o.v = o.v === b.dataset.v ? '' : b.dataset.v; save(); draw(); });
+  $('.pk textarea').addEventListener('input', e => { (st.sty = st.sty || {}).m = e.target.value; save(); draw(); });
+  $('#cp').onclick = async () => { const tx = $('#out').value; let ok = false;
+    try { await navigator.clipboard.writeText(tx); ok = true; } catch (_) { const o = $('#out'); o.removeAttribute('readonly'); o.select(); try { ok = document.execCommand('copy'); } catch (_) {} o.setAttribute('readonly', ''); }
+    const t = $('#tt'); t.textContent = ok ? '복사했어요 · 채팅에 붙여넣기' : '위 글을 길게 눌러 복사해 주세요'; t.classList.add('on'); setTimeout(() => t.classList.remove('on'), 2200); };
+  draw();
+})();
+</script>
+</body>
+</html>
