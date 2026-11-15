@@ -1,0 +1,174 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<title>가보자 짐 캐릭터·글꼴</title>
+<link href="https://cdn.jsdelivr.net/gh/sun-typeface/SUIT@2/fonts/variable/woff2/SUIT-Variable.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/gh/wanteddev/wanted-sans@v1.0.3/packages/wanted-sans/fonts/webfonts/variable/split/WantedSansVariable.min.css" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@700&family=Gothic+A1:wght@800&display=swap" rel="stylesheet">
+<style>
+@font-face { font-family: "Pretendard Variable"; font-weight: 45 920; font-display: swap; src: url("fonts/PretendardVariable.woff2") format("woff2-variations"), url("fonts/PretendardVariable.woff2") format("woff2"); }
+:root { color-scheme: light; --canvas:#EEF0F3; --ink:#15171A; --sub:#6F757D; --hair:rgba(21,23,26,.09); --paper:#FFFFFF; --blue:#3B5BDB; --blue-soft:rgba(59,91,219,.09); --past-tx:#9AA0A8;
+  --kr:"Pretendard Variable",Pretendard,-apple-system,"Apple SD Gothic Neo","Malgun Gothic",system-ui,sans-serif; --shadow:0 0.25rem 0.75rem -0.375rem rgba(24,36,60,.18); }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { color-scheme: dark; --canvas:#0E1013; --ink:#ECEEF1; --sub:#8F969F; --hair:rgba(255,255,255,.08); --paper:#1B1E23; --blue:#8095F5; --blue-soft:rgba(128,149,245,.12); --past-tx:#5F656D; --shadow:none; } }
+:root[data-theme="dark"] { color-scheme: dark; --canvas:#0E1013; --ink:#ECEEF1; --sub:#8F969F; --hair:rgba(255,255,255,.08); --paper:#1B1E23; --blue:#8095F5; --blue-soft:rgba(128,149,245,.12); --past-tx:#5F656D; --shadow:none; }
+html { font-size: clamp(13.5px, calc(100vw * 16 / 390), 18px); }
+body { margin: 0; background: var(--canvas); color: var(--ink); font-family: var(--kr); -webkit-font-smoothing: antialiased; word-break: keep-all; }
+main { max-width: 26rem; margin: 0 auto; padding: 1.25rem 1rem 4rem; }
+h1 { font-size: 1.25rem; margin: 0 0 .25rem; } .lead { color: var(--sub); font-size: .875rem; margin: 0 0 1rem; line-height: 1.55; } .lead b { color: var(--ink); }
+.sec { margin-top: 2.25rem; padding-top: 1.25rem; border-top: 2px solid var(--ink); scroll-margin-top: 3.5rem; }
+.sec > h2 { font-size: 1.125rem; margin: 0 0 .25rem; } .note { color: var(--sub); font-size: .8125rem; margin: 0 0 .75rem; line-height: 1.55; }
+.cg { display: grid; grid-template-columns: 1fr 1fr; gap: .5rem; }
+.cc { background: var(--paper); border-radius: 1.25rem; overflow: hidden; box-shadow: var(--shadow); }
+.cc .art { border-radius: 1rem; margin: .375rem .375rem 0; }
+.cc svg { display: block; width: 100%; height: auto; }
+.cc .cap { padding: .5rem .75rem .75rem; } .cc .cap b { display: block; font-size: .875rem; } .cc .cap span { font-size: .75rem; color: var(--sub); line-height: 1.4; display: block; margin-top: .125rem; }
+/* 결과 화면에 들어간 모습 */
+.res { background: var(--paper); border-radius: 1.5rem; padding: 1.25rem; box-shadow: var(--shadow); text-align: center; }
+.res .art { width: 9rem; margin: 0 auto; border-radius: 50%; overflow: hidden; }
+.res .eb { font-size: .75rem; font-weight: 700; color: var(--blue); margin-top: .75rem; } .res .nm { font-size: 1.5rem; font-weight: 800; margin-top: .125rem; letter-spacing: -.02em; }
+.res .ln { font-size: .875rem; color: var(--sub); margin-top: .375rem; line-height: 1.5; }
+.res .get { display: inline-block; margin-top: .75rem; font-size: .75rem; font-weight: 700; color: var(--blue); background: var(--blue-soft); border-radius: 1rem; padding: .3125rem .75rem; }
+/* 보드 공통 */
+.toc { position: sticky; top: 0; z-index: 5; display: flex; gap: .375rem; overflow-x: auto; padding: .625rem 1rem; margin: 0 -1rem 1rem; background: color-mix(in srgb, var(--canvas) 88%, transparent); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); scrollbar-width: none; }
+.toc::-webkit-scrollbar { display: none; }
+.toc a { flex: none; text-decoration: none; color: var(--ink); font: 700 .8125rem var(--kr); background: var(--paper); border-radius: 1rem; padding: .4375rem .75rem; box-shadow: inset 0 0 0 1px var(--hair); }
+.how { background: var(--paper); border-radius: 1rem; padding: .75rem .875rem; font-size: .8125rem; line-height: 1.6; color: var(--sub); box-shadow: var(--shadow); } .how b { color: var(--ink); }
+.pk { margin-top: 1.5rem; background: var(--paper); border-radius: 1.25rem; padding: 1rem; box-shadow: 0 0 0 2px var(--blue); }
+.pk .q { font-weight: 800; font-size: .9375rem; margin-bottom: .625rem; } .pk .q.m { margin-top: 1rem; }
+.opts, .tog { display: flex; flex-wrap: wrap; gap: .4375rem; }
+.opts button, .tog button { border: 0; font: 700 .875rem var(--kr); border-radius: 1.25rem; padding: .625rem .875rem; background: var(--hair); color: var(--ink); min-height: 2.75rem; }
+.opts button[aria-pressed="true"] { background: var(--blue); color: #fff; }
+.tog button { font-weight: 600; font-size: .8125rem; min-height: 2.375rem; padding: .4375rem .75rem; }
+.tog button[aria-pressed="true"] { background: #E0453A; color: #fff; }
+.opts button small { font-weight: 600; opacity: .75; margin-left: .25rem; }
+.pk textarea { display: block; width: 100%; box-sizing: border-box; margin-top: .625rem; border: 0; border-radius: .875rem; background: var(--canvas); color: var(--ink); font: 400 1rem/1.5 var(--kr); padding: .625rem .75rem; min-height: 2.75rem; resize: vertical; }
+.dock { position: sticky; bottom: 0; z-index: 5; margin: 2rem -1rem 0; padding: .75rem 1rem calc(.75rem + env(safe-area-inset-bottom)); background: color-mix(in srgb, var(--canvas) 90%, transparent); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); display: flex; gap: .625rem; align-items: center; }
+.dock button { flex: 1; border: 0; border-radius: 2rem; background: var(--ink); color: var(--canvas); font: 800 1rem var(--kr); min-height: 3.25rem; }
+#out { width: 100%; box-sizing: border-box; border: 0; border-radius: 1rem; background: var(--paper); color: var(--ink); font: 400 .875rem/1.6 var(--kr); padding: .75rem .875rem; min-height: 6rem; box-shadow: var(--shadow); }
+.toast { position: fixed; left: 50%; bottom: 6rem; transform: translateX(-50%); background: var(--ink); color: var(--canvas); font: 700 .875rem var(--kr); padding: .625rem 1rem; border-radius: 1.5rem; opacity: 0; transition: opacity .2s; pointer-events: none; z-index: 9; white-space: nowrap; }
+.toast.on { opacity: 1; }
+.fm { background: var(--paper); border-radius: 1.25rem; padding: 1rem 1.125rem 1.125rem; box-shadow: var(--shadow); }
+.fm .eb { font-size: .75rem; font-weight: 700; color: var(--blue); }
+.fm .h { font-size: 1.625rem; line-height: 1.32; margin: .375rem 0; font-weight: 800; letter-spacing: -.02em; }
+.fm .p { font-size: .8125rem; color: var(--sub); margin: 0 0 .75rem; }
+.fm .o { display: block; width: 100%; text-align: left; border: 0; background: var(--canvas); color: var(--ink); font: 600 .9375rem var(--kr); border-radius: .875rem; padding: .75rem .875rem; margin-top: .375rem; }
+.fm .code { display: flex; gap: .25rem; margin-top: .75rem; } .fm .code i { font-style: normal; width: 2.25rem; height: 2.75rem; display: grid; place-items: center; background: var(--ink); color: var(--canvas); border-radius: .5rem; font-size: 1.375rem; font-weight: 800; }
+.fm .code i.q { background: var(--hair); color: var(--sub); }
+.lic { font-size: .6875rem; color: var(--sub); margin-top: .5rem; }
+.h3x { font-size: 1rem; margin: 1.25rem 0 .375rem; }
+.recx { font-size: .6875rem; font-weight: 800; color: #fff; background: var(--blue); padding: .125rem .5rem; border-radius: 1rem; margin-left: .25rem; }
+.f-wan .h, .f-wan .code i { font-family: "Wanted Sans Variable", var(--kr); font-weight: 900; }
+.f-sui .h, .f-sui .code i { font-family: "SUIT Variable", var(--kr); font-weight: 800; }
+.f-ibm .h, .f-ibm .code i { font-family: "IBM Plex Sans KR", var(--kr); font-weight: 700; letter-spacing: -.03em; }
+.f-gth .h, .f-gth .code i { font-family: "Gothic A1", var(--kr); font-weight: 800; }
+</style>
+</head>
+<body>
+<main>
+<nav class="toc"><a href="#g0">로컬 탐험</a><a href="#g1">취향 수집</a><a href="#g2">명소 정복</a><a href="#g3">힐링 충전</a><a href="#res">결과 화면</a><a href="#pick">캐릭터 고르기</a><a href="#font">글꼴</a></nav>
+<h1>9 · 짐 캐릭터 16 (v2)</h1>
+<p class="lead">피드백 반영: <b>더 귀엽고 깔끔하게</b> — 손그림 떨림·시큰둥한 눈 빼고, 동그란 눈·볼터치·작은 웃음, 앱과 같은 둥근 모서리와 묶음별 파스텔 바탕. 16유형마다 <b>다른 짐</b> 하나씩이에요.</p>
+<div class="how">① 전체 방향은 파란 상자에서 고르기<br>② 다시 그릴 캐릭터는 이름을 눌러 빨갛게<br>③ 맨 아래 <b>답 복사</b> → 채팅에 붙여넣기</div>
+<div id="groups"></div>
+
+<section class="sec" id="res">
+<h2>결과 화면에 들어가면</h2>
+<p class="note">결과 맨 위 원 안에 캐릭터 · 이름 · 한 줄. '내 짐 받기'처럼 보상 느낌으로 (지금 묶음 아이콘 자리를 대신).</p>
+<div class="res"><div class="art" id="resArt"></div><div class="eb">명소 정복형 · HSRJ</div><div class="nm">인생샷 장인</div><div class="ln">한 곳이라도 제대로. 노을 시간에 맞춰 도착</div><span class="get">내 여행 짐 · 카메라를 받았어요</span></div>
+</section>
+
+<section class="sec" id="pick">
+<h2>고르기</h2>
+<div class="pk" data-q="dir"><div class="q">이 방향(깔끔·귀여운 짐)으로 갈까요?</div><div class="opts"><button data-v="이대로 다듬기">이대로 다듬기 <small>★</small></button><button data-v="더 귀엽게">더 귀엽게</button><button data-v="더 단순하게">더 단순하게</button><button data-v="다시">다시</button></div>
+<div class="q m">다시 그릴 캐릭터 (누르면 빨강)</div><div class="tog" id="redo"></div>
+<textarea placeholder="메모 (선택) — 예: '쇼핑 마스터는 쇼핑백으로'" rows="1"></textarea></div>
+</section>
+
+<section class="sec" id="font">
+<h2>3 · 질문 제목 글꼴 (v2)</h2>
+<p class="note">피드백: 앱과 같은 결로, 혼자 튀지 않게 → 지금 글꼴(Pretendard)과 같은 <b>깔끔한 고딕 가족</b>에서 제목에 힘이 더 실리는 것만 골랐어요. 전부 무료·상업 사용 가능(SIL OFL).<br>레퍼런스: 토스는 자체 글꼴 + Pretendard 조합이라는 자료만 있고(공식 확인 못 함), 트리플·마이리얼트립·여기어때·에어비앤비 제목 글꼴은 확인 못 했어요.</p>
+<h3 class="h3x">0 · 지금 (Pretendard 800) — 비교용</h3><div class="fm "><div class="eb">여행 취향 · 1/10</div><div class="h">도착 첫날, 짐 풀고 제일 먼저 할 일은?</div><p class="p">고민 말고, 제일 먼저 발이 가는 쪽으로</p><button class="o">지도에 없는 골목 산책</button><button class="o">그 도시 랜드마크 인증샷</button><div class="code"><i>L</i><i class="q">?</i><i class="q">?</i><i class="q">?</i></div></div><h3 class="h3x">1 · 원티드 산스 900<span class="recx">아키 추천</span></h3><p class="note">Pretendard와 가장 비슷한 뼈대인데 더 굵고 단단함. 제목만 바꿔도 이질감 없음.</p><div class="fm f-wan"><div class="eb">여행 취향 · 1/10</div><div class="h">도착 첫날, 짐 풀고 제일 먼저 할 일은?</div><p class="p">고민 말고, 제일 먼저 발이 가는 쪽으로</p><button class="o">지도에 없는 골목 산책</button><button class="o">그 도시 랜드마크 인증샷</button><div class="code"><i>L</i><i class="q">?</i><i class="q">?</i><i class="q">?</i></div><div class="lic">Wanted Sans · 원티드랩 · SIL OFL 1.1</div></div><h3 class="h3x">2 · SUIT 800</h3><p class="note">글자 폭이 조금 좁고 정돈된 느낌. 가장 차분함.</p><div class="fm f-sui"><div class="eb">여행 취향 · 1/10</div><div class="h">도착 첫날, 짐 풀고 제일 먼저 할 일은?</div><p class="p">고민 말고, 제일 먼저 발이 가는 쪽으로</p><button class="o">지도에 없는 골목 산책</button><button class="o">그 도시 랜드마크 인증샷</button><div class="code"><i>L</i><i class="q">?</i><i class="q">?</i><i class="q">?</i></div><div class="lic">SUIT · sun-typeface · SIL OFL 1.1</div></div><h3 class="h3x">3 · IBM Plex Sans KR 700</h3><p class="note">살짝 각지고 기계적인 느낌. 탑승권·코드 칸과 잘 맞음.</p><div class="fm f-ibm"><div class="eb">여행 취향 · 1/10</div><div class="h">도착 첫날, 짐 풀고 제일 먼저 할 일은?</div><p class="p">고민 말고, 제일 먼저 발이 가는 쪽으로</p><button class="o">지도에 없는 골목 산책</button><button class="o">그 도시 랜드마크 인증샷</button><div class="code"><i>L</i><i class="q">?</i><i class="q">?</i><i class="q">?</i></div><div class="lic">IBM Plex Sans KR · IBM · SIL OFL 1.1</div></div><h3 class="h3x">4 · Gothic A1 800</h3><p class="note">가장 무난한 고딕. 안전하지만 차이는 작음.</p><div class="fm f-gth"><div class="eb">여행 취향 · 1/10</div><div class="h">도착 첫날, 짐 풀고 제일 먼저 할 일은?</div><p class="p">고민 말고, 제일 먼저 발이 가는 쪽으로</p><button class="o">지도에 없는 골목 산책</button><button class="o">그 도시 랜드마크 인증샷</button><div class="code"><i>L</i><i class="q">?</i><i class="q">?</i><i class="q">?</i></div><div class="lic">Gothic A1 · Google Fonts · SIL OFL 1.1</div></div><p class="note" style="margin-top:1rem">더 둥글고 친근한 쪽(페이퍼로지·G마켓 산스)도 후보인데, 웹에서 바로 불러올 공식 주소가 없어 파일을 받아 직접 올려야 해요 — 보고 싶으면 메모에 적어 주세요.</p>
+<div class="pk" data-q="font"><div class="q">어느 글꼴로?</div><div class="opts"><button data-v="1 원티드 산스">1 원티드 <small>★</small></button><button data-v="2 SUIT">2 SUIT</button><button data-v="3 IBM Plex">3 IBM</button><button data-v="4 Gothic A1">4 Gothic</button><button data-v="0 지금 그대로">지금 그대로</button></div><textarea placeholder="메모 (선택)" rows="1"></textarea></div>
+</section>
+<h2 style="margin-top:2.5rem;font-size:1rem">보낼 답 (미리 보기)</h2>
+<textarea id="out" readonly></textarea>
+<div class="dock"><button id="cp">답 복사</button></div>
+<div class="toast" id="tt">복사했어요 · 채팅에 붙여넣기</div>
+</main>
+<script>
+/* ===== 짐 캐릭터 16 (2026-11-15 v2) — 깔끔한 선 · 동그란 눈 · 볼터치 ===== */
+const K = '#1F2430', W = '#FFFFFF', PK = '#FF9FB4';
+const G = [
+  { name: '로컬 탐험형', bg: '#E2F4EA', a: '#2FB37A', b: '#9FDDBF' },
+  { name: '취향 수집형', bg: '#FFF0DC', a: '#FF9A3C', b: '#FFD3A1' },
+  { name: '명소 정복형', bg: '#E5EBFF', a: '#3B5BDB', b: '#BFCBFF' },
+  { name: '힐링 충전형', bg: '#FDE7EF', a: '#F0709E', b: '#F9C2D6' }
+];
+const face = (x, y, o = {}) => {
+  const g = o.g || 11, e = o.sleep
+    ? `<path d="M${x-g/2-3} ${y} q3 2.6 6 0 M${x+g/2-3} ${y} q3 2.6 6 0" fill="none" stroke-width="2.2"/>`
+    : `<circle cx="${x-g/2}" cy="${y}" r="3" fill="${K}" stroke="none"/><circle cx="${x+g/2}" cy="${y}" r="3" fill="${K}" stroke="none"/><circle cx="${x-g/2+1}" cy="${y-1.1}" r="1" fill="${W}" stroke="none"/><circle cx="${x+g/2+1}" cy="${y-1.1}" r="1" fill="${W}" stroke="none"/>`;
+  return e + `<ellipse cx="${x-g/2-4}" cy="${y+5}" rx="3.2" ry="1.9" fill="${PK}" stroke="none" opacity=".9"/><ellipse cx="${x+g/2+4}" cy="${y+5}" rx="3.2" ry="1.9" fill="${PK}" stroke="none" opacity=".9"/>`
+    + (o.o ? `<ellipse cx="${x}" cy="${y+5.5}" rx="1.8" ry="2.2" fill="${K}" stroke="none"/>` : `<path d="M${x-2.6} ${y+4.2} q2.6 2.8 5.2 0" fill="none" stroke-width="2"/>`);
+};
+const legs = (x, y) => `<path d="M${x-6} ${y} v5 M${x+6} ${y} v5" fill="none"/><ellipse cx="${x-7}" cy="${y+6.5}" rx="3.6" ry="2.3" fill="${K}"/><ellipse cx="${x+7}" cy="${y+6.5}" rx="3.6" ry="2.3" fill="${K}"/>`;
+const arms = (x1, x2, y) => `<path d="M${x1} ${y} q-5 1 -6 6 M${x2} ${y} q5 1 6 6" fill="none"/>`;
+const wrap = (bg, body) => `<svg viewBox="0 0 100 92" role="img"><rect width="100" height="92" fill="${bg}"/><g stroke="${K}" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">${body}</g></svg>`;
+
+const C = [
+ // 로컬 탐험형
+ ['LSFJ', '골목 탐험대장', '운동화', g => `<path d="M16 62 Q16 42 36 40 L50 40 Q57 40 61 48 Q77 50 83 58 Q85 66 79 67 L20 67 Q16 67 16 62 Z" fill="${g.a}"/><rect x="14" y="65" width="72" height="8" rx="4" fill="${W}"/><path d="M45 44 l6 4 M51 42 l6 4" stroke="${W}" stroke-width="2.2"/>${face(34,54)}${legs(50,73)}`],
+ ['LSFP', '프로 뚜벅이', '물병', g => `<rect x="41" y="12" width="18" height="10" rx="3" fill="${g.a}"/><rect x="35" y="21" width="30" height="50" rx="11" fill="${g.b}"/><path d="M37 34 q6.5 -3 13 0 t13 0" fill="none" stroke="${W}" stroke-width="2.2"/>${face(50,48)}${arms(35,65,52)}${legs(50,71)}`],
+ ['LSRJ', '골목 산책가', '접은 지도', g => `<path d="M20 26 L37 20 L63 26 L80 20 L80 64 L63 70 L37 64 L20 70 Z" fill="${W}"/><path d="M37 20 V64 M63 26 V70" fill="none" stroke-width="1.8"/><path d="M37 20 L63 26 L63 70 L37 64 Z" fill="${g.b}"/><path d="M26 58 q6 -10 12 -4 t14 -6" fill="none" stroke="${g.a}" stroke-width="2" stroke-dasharray="1 4"/><path d="M71 30 a4 4 0 1 1 0.1 0 M71 38 v-4" fill="#E0453A"/>${face(50,42)}${legs(50,70)}`],
+ ['LSRP', '동네 방랑자', '교통카드', g => `<rect x="20" y="22" width="60" height="42" rx="8" fill="${g.a}"/><rect x="27" y="29" width="13" height="10" rx="2.5" fill="#FFD66B" stroke-width="1.8"/><path d="M60 52 h12 M64 57 h8" stroke="${W}" stroke-width="2.2"/>${face(50,44)}${arms(20,80,46)}${legs(50,64)}`],
+ // 취향 수집형
+ ['LEFJ', '맛집 지도 제작자', '맛집 수첩', g => `<rect x="30" y="18" width="40" height="54" rx="6" fill="${g.a}"/><rect x="38" y="44" width="24" height="16" rx="3" fill="${W}" stroke-width="1.8"/><path d="M45 48 v8 M43.5 48 v3 q1.5 2 3 0 v-3 M55 48 q-2.5 3 0 6 v2" fill="none" stroke-width="1.6"/>${[36,44,52,60].map(x => `<circle cx="${x}" cy="18" r="2.4" fill="${W}" stroke-width="1.8"/>`).join('')}${face(50,32)}${legs(50,72)}`],
+ ['LEFP', '소품샵 헌터', '에코백', g => `<path d="M38 36 Q38 20 50 20 Q62 20 62 36" fill="none" stroke-width="3"/><path d="M42 34 L38 18" stroke="${g.a}" stroke-width="4.5"/><circle cx="62" cy="26" r="5.5" fill="#FFD66B" stroke-width="2"/><rect x="26" y="33" width="48" height="38" rx="7" fill="${g.b}"/><path d="M60 62 l2.2 -4.4 2.2 4.4 -4.4 -2.8 h4.4 Z" fill="${W}" stroke-width="1.4"/>${face(46,50)}${legs(50,71)}`],
+ ['LERJ', '현지 단골손님', '도장 쿠폰', g => `<rect x="18" y="24" width="64" height="40" rx="7" fill="${W}"/>${face(50,36)}${[30,40,50,60,70].map((x,i) => `<circle cx="${x}" cy="54" r="4" fill="${i<4?g.a:'none'}" stroke-width="1.8" ${i<4?'':'stroke-dasharray="2 2"'}/>`).join('')}${arms(18,82,44)}${legs(50,64)}`],
+ ['LERP', '반쯤 현지인', '빵 봉투', g => `<rect x="54" y="10" width="11" height="34" rx="5.5" fill="#E8A55A" transform="rotate(14 59 27)"/><path d="M56 18 l5 2 M55 25 l5 2 M54 32 l5 2" stroke-width="1.6" transform="rotate(14 59 27)"/><path d="M28 34 L72 34 L75 72 L25 72 Z" fill="#EBCB9E"/><path d="M28 34 l4 6 l4 -6 l4 6 l4 -6 l4 6 l4 -6 l4 6 l4 -6 l4 6 l4 -6" fill="none" stroke-width="1.8"/>${face(50,54)}${legs(50,72)}`],
+ // 명소 정복형
+ ['HSFJ', '명소 정복자', '알람시계', g => `<circle cx="32" cy="22" r="7" fill="${g.a}"/><circle cx="68" cy="22" r="7" fill="${g.a}"/><circle cx="50" cy="46" r="24" fill="${W}"/><path d="M50 25 v4 M50 63 v4 M29 46 h4 M67 46 h4" stroke-width="2"/>${face(50,46)}<path d="M36 68 l-5 6 M64 68 l5 6"/>`],
+ ['HSFP', '핫플 러너', '스마트폰', g => `<rect x="31" y="14" width="38" height="58" rx="9" fill="${g.a}"/><rect x="36" y="21" width="28" height="42" rx="4" fill="${g.b}" stroke="none"/><path d="M45 67 h10" stroke="${W}" stroke-width="2"/><path d="M16 36 h9 M13 44 h10 M16 52 h9" fill="none" stroke-width="2" stroke="${g.a}"/>${face(50,40)}${legs(50,72)}`],
+ ['HSRJ', '인생샷 장인', '카메라', g => `<rect x="30" y="20" width="16" height="9" rx="2.5" fill="${g.a}"/><rect x="18" y="27" width="64" height="42" rx="9" fill="${W}"/><circle cx="50" cy="49" r="17" fill="${g.a}"/><circle cx="50" cy="49" r="12.5" fill="${g.b}" stroke="none"/><rect x="66" y="33" width="9" height="6" rx="2" fill="#FFD66B" stroke-width="1.8"/>${face(50,47,{g:9})}${legs(50,69)}`],
+ ['HSRP', '뷰 맛집 감상가', '쌍안경', g => `<rect x="22" y="22" width="22" height="16" rx="5" fill="${g.a}"/><rect x="56" y="22" width="22" height="16" rx="5" fill="${g.a}"/><rect x="44" y="30" width="12" height="8" fill="${g.a}"/><circle cx="33" cy="48" r="15" fill="${g.a}"/><circle cx="67" cy="48" r="15" fill="${g.a}"/><circle cx="33" cy="48" r="10" fill="${g.b}" stroke="none"/><circle cx="67" cy="48" r="10" fill="${g.b}" stroke="none"/><circle cx="33" cy="48" r="3" fill="${K}" stroke="none"/><circle cx="67" cy="48" r="3" fill="${K}" stroke="none"/><circle cx="34" cy="46.8" r="1" fill="${W}" stroke="none"/><circle cx="68" cy="46.8" r="1" fill="${W}" stroke="none"/><ellipse cx="22" cy="58" rx="3.2" ry="1.9" fill="${PK}" stroke="none"/><ellipse cx="78" cy="58" rx="3.2" ry="1.9" fill="${PK}" stroke="none"/><path d="M47.4 58 q2.6 2.8 5.2 0" fill="none" stroke-width="2"/>${arms(18,82,50)}`],
+ // 힐링 충전형
+ ['HEFJ', '맛집 투어 대장', '도시락', g => `<path d="M30 22 L66 14 M32 27 L68 19" stroke="#C8874B" stroke-width="3"/><rect x="18" y="30" width="64" height="12" rx="5" fill="${g.a}"/><rect x="20" y="40" width="60" height="30" rx="7" fill="${g.b}"/><path d="M50 30 v12" stroke-width="1.8"/>${face(50,52)}${legs(50,70)}`],
+ ['HEFP', '쇼핑 마스터', '캐리어', g => `<path d="M42 22 V14 H58 V22" fill="none" stroke-width="3"/><rect x="28" y="20" width="44" height="50" rx="9" fill="${g.a}"/><path d="M40 24 V66 M60 24 V66" stroke="${W}" stroke-width="2" opacity=".7"/><circle cx="66" cy="30" r="5" fill="#FFD66B" stroke-width="1.8"/><rect x="31" y="56" width="11" height="7" rx="2" fill="${W}" stroke-width="1.6" transform="rotate(-10 36 59)"/>${face(50,42)}<circle cx="36" cy="73" r="3.5" fill="${K}"/><circle cx="64" cy="73" r="3.5" fill="${K}"/>`],
+ ['HERJ', '호캉스 플래너', '호텔 슬리퍼', g => `<ellipse cx="50" cy="46" rx="21" ry="31" fill="${W}"/><path d="M29.6 52 Q50 44 70.4 52 L70 64 Q50 56 30 64 Z" fill="${g.a}"/><text x="50" y="62" text-anchor="middle" font-size="6.5" font-weight="800" fill="${W}" stroke="none" font-family="Pretendard Variable, sans-serif">HOTEL</text>${face(50,32)}${arms(30,70,38)}`],
+ ['HERP', '멍때리기 고수', '목베개', g => `<path d="M28 30 Q24 66 50 68 Q76 66 72 30" fill="none" stroke="${K}" stroke-width="21"/><path d="M28 30 Q24 66 50 68 Q76 66 72 30" fill="none" stroke="${g.b}" stroke-width="16.4"/>${face(50,58,{sleep:1,o:1})}<path d="M70 12 h7 l-7 7 h7 M80 20 h4 l-4 4 h4" fill="none" stroke-width="1.8"/>`]
+];
+window.GABOJA_LUGGAGE = C;
+const art = (i) => { const g = G[Math.floor(i / 4)]; return wrap(g.bg, C[i][3](g)); };
+document.getElementById('groups').innerHTML = G.map((g, gi) => `<section class="sec" id="g${gi}"><h2>${g.name}</h2><div class="cg">${C.slice(gi*4, gi*4+4).map((c, k) => `<div class="cc"><div class="art">${art(gi*4+k)}</div><div class="cap"><b>${c[1]}</b><span>${c[2]} · ${c[0]}</span></div></div>`).join('')}</div></section>`).join('');
+document.getElementById('resArt').innerHTML = art(10);
+document.getElementById('redo').innerHTML = C.map(c => `<button data-v="${c[1]}(${c[2]})" aria-pressed="false">${c[1]}</button>`).join('');
+
+/* ---- 피드백 보드 ---- */
+(() => {
+  const KEY = 'gaboja-fb-p9v2b', $ = q => document.querySelector(q);
+  let st = {}; try { st = JSON.parse(localStorage.getItem(KEY) || '{}') || {}; } catch (_) {}
+  const save = () => { try { localStorage.setItem(KEY, JSON.stringify(st)); } catch (_) {} };
+  function draw() {
+    document.querySelectorAll('.pk').forEach(p => { const o = st[p.dataset.q] || {};
+      p.querySelectorAll('.opts button').forEach(b => b.setAttribute('aria-pressed', o.v === b.dataset.v));
+      p.querySelectorAll('.tog button').forEach(b => b.setAttribute('aria-pressed', (o.redo || []).includes(b.dataset.v)));
+      const t = p.querySelector('textarea'); if (document.activeElement !== t) t.value = o.m || ''; });
+    const d = st.dir || {}, f = st.font || {};
+    $('#out').value = '9 짐 캐릭터 v2: ' + (d.v || '(안 고름)') + ((d.redo || []).length ? '\n다시 그릴 것: ' + d.redo.join(', ') : '') + (d.m && d.m.trim() ? '\n메모: ' + d.m.trim() : '')
+      + '\n3 글꼴 v2: ' + (f.v || '(안 고름)') + (f.m && f.m.trim() ? ' · 메모: ' + f.m.trim() : '');
+  }
+  document.addEventListener('click', e => { const b = e.target.closest('.pk button'); if (!b) return; const q = b.closest('.pk').dataset.q, o = st[q] = st[q] || {};
+    if (b.closest('.tog')) { const s2 = new Set(o.redo || []); s2.has(b.dataset.v) ? s2.delete(b.dataset.v) : s2.add(b.dataset.v); o.redo = [...s2]; } else o.v = o.v === b.dataset.v ? '' : b.dataset.v;
+    save(); draw(); });
+  document.querySelectorAll('.pk textarea').forEach(t => t.addEventListener('input', () => { const q = t.closest('.pk').dataset.q; (st[q] = st[q] || {}).m = t.value; save(); draw(); }));
+  $('#cp').onclick = async () => { const tx = $('#out').value; let ok = false;
+    try { await navigator.clipboard.writeText(tx); ok = true; } catch (_) { const o = $('#out'); o.removeAttribute('readonly'); o.select(); try { ok = document.execCommand('copy'); } catch (_) {} o.setAttribute('readonly', ''); }
+    const t = $('#tt'); t.textContent = ok ? '복사했어요 · 채팅에 붙여넣기' : '위 글을 길게 눌러 복사해 주세요'; t.classList.add('on'); setTimeout(() => t.classList.remove('on'), 2200); };
+  draw();
+})();
+</script>
+</body>
+</html>
