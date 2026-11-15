@@ -43,10 +43,10 @@ const grp = code => G[Math.floor(IDX[code] / 4)];
    선 원본(검은 테두리) = GABOJA_CHAR_LINE · 화면에는 GABOJA_CHAR(스타일 3) */
 
 /* 11/15: 크기 맞춤 — 외곽 상자 면적이 비슷하게(부분 보정, 0.88~1.12배) · 가로 가운데 · 바닥선 y77로 정렬. [배율, x이동, y이동] */
-const NORM = {"LSFJ":[1.091,-4.55,-2.64],"LSFP":[1.12,-6.0,-3.64],"LSRJ":[1.016,-1.83,1.8],"LSRP":[1.008,-0.39,5.94],"LEFJ":[0.993,0.34,1.52],"LEFP":[1.108,-5.38,0.57],"LERJ":[0.996,0.18,5.26],"LERP":[0.935,3.24,5.93],"HSFJ":[1.061,-0.94,-3.65],"HSFP":[0.979,1.07,-3.24],"HSRJ":[1.02,-1.02,2.51],"HSRP":[0.92,4.0,7.08],"HEFJ":[1.004,-0.18,8.75],"HEFP":[0.983,0.85,-1.65],"HERJ":[0.977,0.18,2.76],"HERP":[0.962,1.9,2.45]};
+const NORM = {"LSFJ":[1.091,-4.55,-2.64,50.2],"LSFP":[1.12,-6.0,-3.64,76.2],"LSRJ":[1.016,-1.83,1.8,56.9],"LSRP":[1.008,-0.39,5.94,76.6],"LEFJ":[0.993,0.34,1.52,63.6],"LEFP":[1.108,-5.38,0.57,66.5],"LERJ":[0.996,0.18,5.26,67.7],"LERP":[0.935,3.24,5.93,56.1],"HSFJ":[1.061,-0.94,-3.65,31.2,35.1],"HSFP":[0.979,1.07,-3.24,50.9],"HSRJ":[1.02,-1.02,2.51,65.3],"HSRP":[0.92,4.0,7.08,58.9],"HEFJ":[1.004,-0.18,8.75,64.3],"HEFP":[0.983,0.85,-1.65,59.0],"HERJ":[0.977,0.18,2.76,72.3],"HERP":[0.962,1.9,2.45,61.6]};
 const body = (code, g) => { const n = NORM[code], b = C[IDX[code]][3](g); return n ? `<g transform="translate(${n[1]} ${n[2]}) scale(${n[0]})">${b}</g>` : b; };
 const TONE = { LS: { lt: '#A6E0C3', dk: '#16603F' }, LE: { lt: '#FFCF9C', dk: '#93450F' }, HS: { lt: '#B3C3FF', dk: '#22389A' }, HE: { lt: '#F7BACF', dk: '#8B2A4B' } };
-const FXDEFS = '<defs><filter id="gbjSoft" x="-20%" y="-20%" width="140%" height="150%" color-interpolation-filters="sRGB"><feGaussianBlur in="SourceAlpha" stdDeviation="1.6" result="b"/><feSpecularLighting in="b" surfaceScale="1.6" specularConstant=".42" specularExponent="22" lighting-color="#fff" result="s"><fePointLight x="20" y="-40" z="80"/></feSpecularLighting><feComposite in="s" in2="SourceAlpha" operator="in" result="s2"/><feMerge><feMergeNode in="SourceGraphic"/><feMergeNode in="s2"/></feMerge></filter><radialGradient id="gbjGnd" cx="50%" cy="50%" r="50%"><stop offset="0" stop-color="#1b1f3a" stop-opacity=".18"/><stop offset="1" stop-color="#1b1f3a" stop-opacity="0"/></radialGradient></defs>';
+const FXDEFS = '<defs><filter id="gbjSoft" x="-20%" y="-20%" width="140%" height="150%" color-interpolation-filters="sRGB"><feGaussianBlur in="SourceAlpha" stdDeviation="1.6" result="b"/><feSpecularLighting in="b" surfaceScale="1.6" specularConstant=".42" specularExponent="22" lighting-color="#fff" result="s"><fePointLight x="20" y="-40" z="80"/></feSpecularLighting><feComposite in="s" in2="SourceAlpha" operator="in" result="s2"/><feMerge><feMergeNode in="SourceGraphic"/><feMergeNode in="s2"/></feMerge></filter><radialGradient id="gbjGnd" cx="50%" cy="50%" r="50%"><stop offset="0" stop-color="#1b1f3a" stop-opacity=".22"/><stop offset="1" stop-color="#1b1f3a" stop-opacity="0"/></radialGradient></defs>';
 const ensureFx = () => { if (document.getElementById('gbjFx') || !document.body) return; const d = document.createElement('div'); d.innerHTML = '<svg id="gbjFx" width="0" height="0" style="position:absolute;width:0;height:0" aria-hidden="true">' + FXDEFS + '</svg>'; document.body.appendChild(d.firstChild); };
 const CACHE = {};
 function soft(code, bg) {
@@ -68,7 +68,8 @@ function soft(code, bg) {
       if (el.getAttribute('stroke') === 'none' && a > 30) el.setAttribute('filter', 'url(#gbjSoft)');
     } else if (!st || st === KL) el.setAttribute('stroke', t.dk);
   });
-  gg.insertAdjacentHTML('afterbegin', '<ellipse cx="50" cy="84" rx="30" ry="4.5" fill="url(#gbjGnd)" stroke="none"/>');
+  { const n = NORM[code] || [1, 0, 0, 60], rx = Math.max(13, Math.min(30, n[3] * 0.4));   // 11/15: 그림자 = 그림 폭에 맞춰 바로 아래(바닥선 y77) · 넓고 옅은 그림자 + 좁고 진한 접지 그림자
+    gg.insertAdjacentHTML('afterbegin', `<ellipse cx="${n[4] || 50}" cy="78.6" rx="${rx.toFixed(1)}" ry="3.4" fill="url(#gbjGnd)" stroke="none"/><ellipse cx="${n[4] || 50}" cy="78" rx="${(rx * 0.62).toFixed(1)}" ry="1.5" fill="#1b1f3a" opacity=".12" stroke="none"/>`); }
   const out = svg.outerHTML; host.remove(); return (CACHE[key] = out);
 }
 window.GABOJA_CHAR_LINE = (code, o = {}) => { if (!(code in IDX)) return ''; const g = grp(code); return wrap(o.bg === false ? 'none' : g.bg, body(code, g)).replace('<svg ', '<svg aria-hidden="true" focusable="false" '); };
