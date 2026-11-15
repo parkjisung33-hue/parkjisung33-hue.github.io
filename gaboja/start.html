@@ -1384,7 +1384,7 @@ function phGoogle(p, cb) {   // ② Places API (New) 텍스트 검색 → 사진
 function phMount(host, p, o) {
   o = o || {};
   const steps = [];
-  if (p.ph) steps.push('ph'); if (PH_KEY_G()) steps.push('g'); if (o.sv !== false && PH_KEY_M() && p.ll) steps.push('sv');
+  if (p.ph) steps.push('ph'); if (PH_KEY_G() && !p.ng) steps.push('g'); if (o.sv !== false && PH_KEY_M() && p.ll) steps.push('sv');
   const none = () => { host.hidden = true; host.dataset.on = ''; host.innerHTML = ''; o.onNone && o.onNone(); };
   const show = (src, credit, link, ref) => {   // ref: 구글 사진은 키가 사이트 제한이라 출처 주소를 보내야 함
     const im = new Image(); im.alt = ''; im.decoding = 'async'; im.loading = 'lazy'; im.referrerPolicy = ref ? 'strict-origin-when-cross-origin' : 'no-referrer';
