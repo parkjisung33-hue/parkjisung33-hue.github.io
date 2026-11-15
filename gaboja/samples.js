@@ -1,6 +1,7 @@
 // 공유용 샘플 가이드북 (2026-11-14 밤): index.html#sample=키 로 열면 실제 엔진(gen.js)으로 그 자리에서 만든 일정을 보여 줌.
 // 저장 안 함 — 내 일정(gaboja-plan)·편집 저장본을 건드리지 않음 (made 없음 → saveEdits 안 함)
 window.GABOJA_SAMPLE_INPUTS = {
+  'air-tbd':  { label: '일본 · 비행기 시각 미정 (후쿠오카 2박)', inp: { type: 'LEFJ', start: '2026-12-04', nights: 2, dest: 'fuk', fo: { no: '' }, fb: { no: '' } } },   // 피드백용: 비행기 정보 없이 만든 가이드북
   'air-jp':   { label: '일본 · 비행기 (오사카·교토 3박)', inp: { type: 'LEFJ', start: '2026-12-04', nights: 3, dest: 'kix', fo: { no: 'KE723', dep: '09:00', arr: '10:50' }, fb: { no: 'KE724', dep: '15:00', arr: '16:50' }, likes: ['맛집', '카페', '빵', '말차'] } },
   'day-jp':   { label: '일본 · 비행기 당일치기 (후쿠오카)', inp: { type: 'HSRP', start: '2026-12-05', daytrip: true, nights: 0, dest: 'fuk', fo: { no: '7C1401', dep: '07:30', arr: '08:55' }, fb: { no: '7C1402', dep: '20:10', arr: '21:40' } } },
   'air-kr':   { label: '국내 · 비행기 (김포 → 부산 2박)', inp: { type: 'HEFP', start: '2026-12-11', nights: 2, dest: 'bsn', region: '수도권', mode: 'air', fo: { no: 'KE1101', dep: '09:00', arr: '10:05' }, fb: { no: 'KE1112', dep: '17:00', arr: '18:05' } } },

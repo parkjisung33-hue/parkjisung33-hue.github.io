@@ -1777,6 +1777,7 @@ else if (qsS && (/^q[0-9]$/.test(qsS) || ['intro', 'result', 'types', 'method', 
   if (qsS[0] === 'q') for (let k = 0; k < +qsS[1]; k++) S.ans[k] = (k * 3) % 4;
   if (!S.type && !qsS.startsWith('q') && qsS !== 'intro' && qsS !== 'types') { S.type = 'LSRP'; S.votes = { L: 4, H: 1, S: 3, E: 2, F: 2, R: 3, J: 1, P: 4 }; }
   if (qsS === 'done') { Object.assign(S.trip, { city: '오사카·교토', start: 20261204, end: 20261207, nights: 3, who: '친구', home: '올림픽로 300', method: QS.get('method') || 'auto', likes: ['자연·산책', '카페'] }); if (QS.get('method')) { buildPlan(); SEND = { st: 'off' }; } } // ?method=self|blocks 이면 일정도 만들어 저장(점검용: index.html 확인)
+  if (qsS === 'result') { const want = ['LS', 'LS', 'LE', 'HS', 'LS', 'RP', 'RP', 'FP', 'RP', 'RJ']; S.ans = Q.map((q, i) => Math.max(0, q.o.findIndex(o => o[1] === want[i]))); S.votes = tally(S.ans); S.type = letters(S.votes).join(''); }   // 피드백용: 내 결과(게이지·내가 고른 답)
   if (qsS === 'build') Object.assign(S.trip, { city: '오사카·교토', nights: 3, who: '친구', home: '올림픽로 300' });
   if (qsS === 'swipe') { Object.assign(S.trip, { city: QS.get('city') || '오사카·교토', start: 20261204, end: 20261207, nights: 3, who: '친구', method: 'blocks', likes: ['카페', '쇼핑'] }); if (!S.type) { S.type = 'LERJ'; } }
   S.hist = ['intro']; S.step = qsS; render();
