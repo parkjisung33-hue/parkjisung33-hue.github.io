@@ -1,4 +1,4 @@
-// 가보자 짐 캐릭터 16 (2026-11-15 확정 v7) — 16유형마다 다른 여행 짐. 정본 시안 = preview/2026-11-15_9_짐캐릭터16_시안_v7.html
+// 가보자 짐 캐릭터 16 (2026-11-15 확정 v7 → 스타일 3: 테두리 없음·3톤·약한 입체, p9h) — 16유형마다 다른 여행 짐. 정본 시안 = preview/2026-11-15_9_짐캐릭터16_시안_v7.html
 // 사용: GABOJA_CHAR(code, {bg:true}) → <svg> 문자열 · GABOJA_CHAR_BG(code) → 묶음 바탕색 · GABOJA_CHAR_ITEM(code) → 짐 이름
 (() => {
 /* ===== 짐 캐릭터 16 (2026-11-15 v3) — 더 단순하게: 점 눈 · 볼터치·입 없음 · 선 하나 굵기 · 묶음 색 하나 ===== */
@@ -16,7 +16,7 @@ const C = [
  // 로컬 탐험형
  ['LSFJ', '골목 탐험대장', '나침반', g => `<rect x="46" y="14" width="8" height="6" rx="2" fill="${W}"/><circle cx="50" cy="44" r="23" fill="${W}"/><circle cx="50" cy="44" r="18.5" fill="none" stroke-width="1.4"/><path d="M50 25.5 v3 M50 59.5 v3 M31.5 44 h3 M65.5 44 h3" stroke-width="1.6"/><text x="50" y="35" text-anchor="middle" font-size="7" font-weight="800" fill="${K}" stroke="none" font-family="Pretendard Variable, sans-serif">N</text><path d="M50 37 L54 46 L46 46 Z" fill="${g.a}" stroke-width="1.6"/><path d="M50 55 L54 46 L46 46 Z" fill="${W}" stroke-width="1.6"/><circle cx="50" cy="46" r="1.6" fill="${K}" stroke="none"/>${eyes(50,52,22)}${legs(50,67)}`],
  ['LSFP', '프로 뚜벅이', '운동화', g => `<path d="M18 58 Q18 40 36 38 L48 38 Q55 38 59 45 Q75 47 81 54 Q83 60 78 60 L22 60 Z" fill="${g.a}"/><rect x="16" y="58" width="68" height="8" rx="4" fill="${W}"/><path d="M45 42 l6 4 M51 40 l6 4" stroke="${W}" stroke-width="2"/>${eyes(33,50)}${legs(50,66)}`],
- ['LSRJ', '골목 산책가', '이정표', g => `<path d="M50 16 V74"/><path d="M50 24 H74 L80 30 L74 36 H50 Z" fill="${g.a}"/><path d="M50 42 H28 L22 48 L28 54 H50 Z" fill="${W}"/>${eyes(64,30,8)}<path d="M40 74 H60"/>`],
+ ['LSRJ', '골목 산책가', '이정표', g => `<path d="M50 18 V74" stroke-width="3"/><circle cx="50" cy="16" r="3.4" fill="${g.a}"/><path d="M50 24 H72 a2 2 0 0 1 1.5 .7 L79 31 L73.5 37.3 a2 2 0 0 1 -1.5 .7 H50 Z" fill="${g.a}"/><path d="M50 43 H30 a2 2 0 0 0 -1.5 .7 L23 50 L28.5 56.3 a2 2 0 0 0 1.5 .7 H50 Z" fill="#A6E0C3"/><path d="M33 50 H44" stroke="${W}" stroke-width="2"/>${eyes(63,31,8)}<path d="M40 74 H60" stroke-width="3"/>`],
  ['LSRP', '동네 방랑자', '버스', g => `<rect x="12" y="24" width="76" height="40" rx="8" fill="${g.a}"/><rect x="18" y="30" width="12" height="13" rx="2" fill="${W}" stroke-width="1.6"/><rect x="34" y="30" width="12" height="13" rx="2" fill="${W}" stroke-width="1.6"/><rect x="50" y="30" width="12" height="13" rx="2" fill="${W}" stroke-width="1.6"/><rect x="67" y="30" width="15" height="19" rx="3" fill="${W}"/>${eyes(74.5,40,7)}<text x="40.6" y="50.5" text-anchor="middle" dominant-baseline="central" font-size="7.4" font-weight="800" letter-spacing=".14em" fill="${W}" stroke="none" font-family="Pretendard Variable, sans-serif">BUS</text><circle cx="85" cy="56" r="1.8" fill="#FFD66B" stroke="none"/><circle cx="28" cy="64" r="6.5" fill="${K}"/><circle cx="28" cy="64" r="2.4" fill="${W}" stroke="none"/><circle cx="72" cy="64" r="6.5" fill="${K}"/><circle cx="72" cy="64" r="2.4" fill="${W}" stroke="none"/>`],
  // 취향 수집형
  ['LEFJ', '맛집 지도 제작자', '맛집 지도', g => `<path d="M18 26 L36 20 L64 26 L82 20 V64 L64 70 L36 64 L18 70 Z" fill="${W}"/><path d="M36 20 V64 M64 26 V70" fill="none" stroke-width="1.6"/><path d="M50 18 a11 11 0 0 1 11 11 c0 8 -11 18 -11 18 s-11 -10 -11 -18 a11 11 0 0 1 11 -11 Z" fill="${g.a}"/><path d="M44.5 23 v4.6 a1.6 1.6 0 0 0 1.6 1.6 h1.8 a1.6 1.6 0 0 0 1.6 -1.6 V23 M47 23 v13" fill="none" stroke="${W}" stroke-width="1.4"/><path d="M55.5 36 V23 a3.4 3.4 0 0 0 -3 3.4 v4.2 a1.2 1.2 0 0 0 1.2 1.2 h1.8" fill="none" stroke="${W}" stroke-width="1.4"/>${eyes(50,55)}${legs(50,70)}`],
@@ -25,9 +25,9 @@ const C = [
  ['LERP', '반쯤 현지인', '동네 장바구니', g => `<g transform="rotate(16 58 27)"><path d="M56 12 q-6 -6 -3 -11 M58 12 q0 -8 3 -11 M60 12 q5 -6 10 -7" fill="none" stroke="#3FA34D" stroke-width="3.6"/><rect x="54.5" y="12" width="7" height="32" rx="3.5" fill="${W}"/><path d="M54.5 18 h7" stroke="#3FA34D" stroke-width="2.4"/></g><g transform="rotate(-14 42 28)"><rect x="37" y="12" width="11" height="30" rx="5.5" fill="${g.a}"/><path d="M40 20.5 q2.5 -2.4 5 -2.6 M40 27.5 q2.5 -2.4 5 -2.6 M40 34.5 q2.5 -2.4 5 -2.6" fill="none" stroke="#9A4A12" stroke-width="1.7"/></g><path d="M28 40 Q50 18 72 40" fill="none" stroke-width="2.6"/><path d="M20 40 H80 L74 70 H26 Z" fill="${W}"/><path d="M23 50 H77" stroke-width="1.4"/>${eyes(50,59)}${legs(50,70)}`],
  // 명소 정복형
  ['HSFJ', '명소 정복자', '깃발', g => `<path d="M34 14 V76"/><path d="M34 18 H72 L64 30 L72 42 H34 Z" fill="${g.a}"/>${eyes(50,30)}<path d="M24 76 H44"/>`],
- ['HSFP', '핫플 러너', '스마트폰', g => `<path d="M10 30 h13 M6 39 h15 M10 48 h11" stroke="${g.a}" stroke-width="2.2"/><path d="M47 69 l-5 7 l-9 2" fill="none" stroke-width="2.6"/><path d="M55 68 l8 5 l-2 9 h4" fill="none" stroke-width="2.6"/><g transform="rotate(12 50 42)"><rect x="32" y="10" width="36" height="58" rx="8" fill="${W}"/><path d="M45 16 H55" stroke-width="1.6"/><path d="M50 24 a8 8 0 0 1 8 8 c0 6 -8 13 -8 13 s-8 -7 -8 -13 a8 8 0 0 1 8 -8 Z" fill="${g.a}"/><circle cx="50" cy="32" r="2.8" fill="${W}" stroke="none"/>${eyes(50,56)}</g><path d="M30 44 l-6 4 M70 40 l6 -5" fill="none" stroke-width="2.2"/>`],
+ ['HSFP', '핫플 러너', '스마트폰', g => `<path d="M47 69 l-5 7 l-9 2" fill="none" stroke-width="2.6"/><path d="M55 68 l8 5 l-2 9 h4" fill="none" stroke-width="2.6"/><g transform="rotate(12 50 42)"><rect x="32" y="10" width="36" height="58" rx="8" fill="${W}"/><path d="M45 16 H55" stroke-width="1.6"/><path d="M50 24 a8 8 0 0 1 8 8 c0 6 -8 13 -8 13 s-8 -7 -8 -13 a8 8 0 0 1 8 -8 Z" fill="${g.a}"/><circle cx="50" cy="32" r="2.8" fill="${W}" stroke="none"/>${eyes(50,56)}</g><path d="M30 44 l-6 4 M70 40 l6 -5" fill="none" stroke-width="2.2"/>`],
  ['HSRJ', '인생샷 장인', '카메라', g => `<rect x="30" y="20" width="14" height="8" rx="2" fill="${W}"/><rect x="18" y="27" width="64" height="40" rx="8" fill="${W}"/><circle cx="50" cy="47" r="15" fill="${g.a}"/><circle cx="50" cy="47" r="9" fill="${W}" stroke="none"/>${eyes(50,47,8)}${legs(50,67)}`],
- ['HSRP', '뷰 맛집 감상가', '쌍안경', g => `<rect x="24" y="22" width="18" height="14" rx="4" fill="${W}"/><rect x="58" y="22" width="18" height="14" rx="4" fill="${W}"/><path d="M42 30 H58"/><circle cx="33" cy="48" r="14" fill="${g.a}"/><circle cx="67" cy="48" r="14" fill="${g.a}"/><circle cx="33" cy="48" r="8" fill="${W}" stroke="none"/><circle cx="67" cy="48" r="8" fill="${W}" stroke="none"/><circle cx="33" cy="48" r="2.3" fill="${K}" stroke="none"/><circle cx="67" cy="48" r="2.3" fill="${K}" stroke="none"/>${legs(50,62)}`],
+ ['HSRP', '뷰 맛집 감상가', '쌍안경', g => `<rect x="25" y="12" width="18" height="12" rx="4" fill="${g.a}"/><rect x="57" y="12" width="18" height="12" rx="4" fill="${g.a}"/><rect x="21" y="22" width="26" height="30" rx="7" fill="${g.a}"/><rect x="53" y="22" width="26" height="30" rx="7" fill="${g.a}"/><rect x="45" y="28" width="10" height="12" rx="2" fill="${g.a}"/><circle cx="34" cy="56" r="14" fill="${g.a}"/><circle cx="66" cy="56" r="14" fill="${g.a}"/><circle cx="34" cy="56" r="8.6" fill="#B3C3FF" stroke="none"/><circle cx="66" cy="56" r="8.6" fill="#B3C3FF" stroke="none"/><circle cx="34" cy="56" r="2.6" fill="${K}" stroke="none"/><circle cx="66" cy="56" r="2.6" fill="${K}" stroke="none"/>`],
  // 힐링 충전형
  ['HEFJ', '맛집 투어 대장', '라멘 그릇', g => `<path d="M58 12 L46 40 M66 14 L52 40" stroke-width="2.4"/><path d="M18 40 H82 Q80 66 50 68 Q20 66 18 40 Z" fill="${W}"/><path d="M22 48 H78" stroke="${g.a}" stroke-width="3"/>${eyes(50,57)}<path d="M40 68 H60"/>`],
  ['HEFP', '쇼핑 마스터', '쇼핑백', g => `<path d="M40 34 V26 a10 10 0 0 1 20 0 V34" fill="none" stroke-width="2.6"/><path d="M24 30 H76 L80 74 H20 Z" fill="${g.a}"/><path d="M24 30 H76 L76.6 37 H23.4 Z" fill="${W}" stroke-width="1.8"/><circle cx="40" cy="33.5" r="1.8" fill="${K}" stroke="none"/><circle cx="60" cy="33.5" r="1.8" fill="${K}" stroke="none"/><rect x="38" y="46" width="24" height="16" rx="3" fill="${W}" stroke="none"/>${eyes(50,54)}${legs(50,74)}`],
@@ -38,7 +38,37 @@ const C = [
 
 const IDX = {}; C.forEach((c, i) => IDX[c[0]] = i);
 const grp = code => G[Math.floor(IDX[code] / 4)];
-window.GABOJA_CHAR = (code, o = {}) => { if (!(code in IDX)) return ''; const g = grp(code), svg = wrap(o.bg === false ? 'none' : g.bg, C[IDX[code]][3](g)); return svg.replace('<svg ', '<svg aria-hidden="true" focusable="false" '); };
+
+/* ===== 11/15 스타일 3 확정: 테두리 없음 · 묶음 색 3톤(밝은·기본·진한) · 약한 광택 + 바닥 그림자 =====
+   선 원본(검은 테두리) = GABOJA_CHAR_LINE · 화면에는 GABOJA_CHAR(스타일 3) */
+const TONE = { LS: { lt: '#A6E0C3', dk: '#16603F' }, LE: { lt: '#FFCF9C', dk: '#93450F' }, HS: { lt: '#B3C3FF', dk: '#22389A' }, HE: { lt: '#F7BACF', dk: '#8B2A4B' } };
+const FXDEFS = '<defs><filter id="gbjSoft" x="-20%" y="-20%" width="140%" height="150%" color-interpolation-filters="sRGB"><feGaussianBlur in="SourceAlpha" stdDeviation="1.6" result="b"/><feSpecularLighting in="b" surfaceScale="1.6" specularConstant=".42" specularExponent="22" lighting-color="#fff" result="s"><fePointLight x="20" y="-40" z="80"/></feSpecularLighting><feComposite in="s" in2="SourceAlpha" operator="in" result="s2"/><feMerge><feMergeNode in="SourceGraphic"/><feMergeNode in="s2"/></feMerge></filter><radialGradient id="gbjGnd" cx="50%" cy="50%" r="50%"><stop offset="0" stop-color="#1b1f3a" stop-opacity=".18"/><stop offset="1" stop-color="#1b1f3a" stop-opacity="0"/></radialGradient></defs>';
+const ensureFx = () => { if (document.getElementById('gbjFx') || !document.body) return; const d = document.createElement('div'); d.innerHTML = '<svg id="gbjFx" width="0" height="0" style="position:absolute;width:0;height:0" aria-hidden="true">' + FXDEFS + '</svg>'; document.body.appendChild(d.firstChild); };
+const CACHE = {};
+function soft(code, bg) {
+  const key = code + (bg ? 1 : 0); if (CACHE[key]) return CACHE[key];
+  const g = grp(code), t = TONE[code.slice(0, 2)], raw = wrap(bg ? g.bg : 'none', C[IDX[code]][3](g));
+  if (!document.body) return raw;
+  ensureFx();
+  const host = document.createElement('div'); host.style.cssText = 'position:absolute;left:-9999px;top:0;width:200px;visibility:hidden'; host.innerHTML = raw; document.body.appendChild(host);
+  const svg = host.querySelector('svg'), gg = svg.querySelector('g'), KL = K.toLowerCase();
+  gg.setAttribute('stroke', t.dk);
+  gg.querySelectorAll('path,rect,circle,ellipse,text').forEach(el => {
+    const f = (el.getAttribute('fill') || '').toLowerCase(), st = (el.getAttribute('stroke') || '').toLowerCase();
+    if (el.tagName === 'text') { if (f === KL) el.setAttribute('fill', t.dk); return; }
+    if (f && f !== 'none') {
+      let nf = f, a = 0; try { const b = el.getBBox(); a = b.width * b.height; } catch (_) {}
+      if (f === W.toLowerCase()) nf = a > 420 ? t.lt : '#ffffff'; else if (f === KL) nf = t.dk;
+      el.setAttribute('fill', nf);
+      el.setAttribute('stroke', el.getAttribute('stroke-dasharray') ? t.dk : 'none');
+      if (el.getAttribute('stroke') === 'none' && a > 30) el.setAttribute('filter', 'url(#gbjSoft)');
+    } else if (!st || st === KL) el.setAttribute('stroke', t.dk);
+  });
+  gg.insertAdjacentHTML('afterbegin', '<ellipse cx="50" cy="84" rx="30" ry="4.5" fill="url(#gbjGnd)" stroke="none"/>');
+  const out = svg.outerHTML; host.remove(); return (CACHE[key] = out);
+}
+window.GABOJA_CHAR_LINE = (code, o = {}) => { if (!(code in IDX)) return ''; const g = grp(code); return wrap(o.bg === false ? 'none' : g.bg, C[IDX[code]][3](g)).replace('<svg ', '<svg aria-hidden="true" focusable="false" '); };
+window.GABOJA_CHAR = (code, o = {}) => { if (!(code in IDX)) return ''; return soft(code, o.bg !== false).replace('<svg ', '<svg aria-hidden="true" focusable="false" '); };
 window.GABOJA_CHAR_BG = code => code in IDX ? grp(code).bg : '';
 window.GABOJA_CHAR_ITEM = code => code in IDX ? C[IDX[code]][2] : '';
 })();
