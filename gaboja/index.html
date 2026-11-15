@@ -1433,7 +1433,7 @@ function fitTiles() {
     while (n.scrollHeight > lh * 1.4 && fs > 12) { fs -= 0.5; n.style.fontSize = fs + 'px'; } });
   if (!window.GABOJA_DATA && !thLoading && document.querySelector('#dayBody .ti:not([data-th])')) { thLoading = true; loadGD(D => { if (D) renderPlan(); }); }
 }
-addEventListener('resize', () => { if (st.mode === 'simple' && !$('#v-plan').hidden) fitTiles(); });
+let fitW = innerWidth; addEventListener('resize', () => { if (innerWidth === fitW) return; fitW = innerWidth; if (st.mode === 'simple' && !$('#v-plan').hidden) fitTiles(); });   // 폭이 바뀔 때만 (사파리 주소창 접힘은 높이만 바뀜)
 /* ---------- 간단히: 블록 ---------- */
 function blocks(d) {
   const bands = [[], [], []];
