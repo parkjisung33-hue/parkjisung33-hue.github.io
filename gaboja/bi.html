@@ -1,0 +1,222 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<title>VZTR BI 시안</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;600;800&family=Inter+Tight:wght@400;600;800&family=Unbounded:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+@font-face { font-family: "Pretendard Variable"; font-weight: 45 920; font-display: swap; src: url("fonts/PretendardVariable.woff2") format("woff2-variations"), url("../app/fonts/PretendardVariable.woff2") format("woff2-variations"); }
+/* ===== 브랜드 토큰 — 이 묶음만 바꾸면 보드 전체(로고·아이콘·첫 화면·탑승권)가 따라 바뀜 ===== */
+:root { color-scheme: light;
+  --kr: "Pretendard Variable", Pretendard, -apple-system, "Apple SD Gothic Neo", "Malgun Gothic", system-ui, sans-serif;
+  --lat: "Figtree"; --lat-w: 800;
+  --paper: #F5F8FA; --ink: #0A1F33; --sub: #5B6B7A; --sea: #0F5E8C; --deep: #0A2C4A; --sky: #CFE8F3; --accent: #FF5B2E; --seab: #0A2C4A; --on-sea: #FFFFFF;
+  --hair: rgba(10, 31, 51, .1);
+  --board: #ECEEF0; }
+[data-pal="sand"] { --paper: #EFE3D3; --ink: #3A1E12; --sub: #7A5A48; --sea: #0C45B0; --deep: #7A3E26; --sky: #E3CFB6; --accent: #0C45B0; --seab: #072A6B; --on-sea: #FFF8EE; --hair: rgba(58, 30, 18, .12); }
+[data-pal="sky"] { --paper: #FDFDFE; --ink: #0B0F14; --sub: #5E6670; --sea: #0099FF; --deep: #0057B8; --sky: #DDF0FF; --accent: #FF3B1F; --seab: #0057B8; --on-sea: #FFFFFF; --hair: rgba(11, 15, 20, .1); }
+[data-font="swiss"] { --lat: "Inter Tight"; --lat-w: 800; }
+[data-font="bold"] { --lat: "Unbounded"; --lat-w: 600; }
+
+html { font-size: clamp(13.5px, calc(100vw * 16 / 390), 17px); }
+* { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+body { margin: 0; background: var(--board); color: #15171A; font-family: var(--kr); -webkit-font-smoothing: antialiased; word-break: keep-all; }
+main { max-width: 34rem; margin: 0 auto; padding: 1.25rem 1rem 7rem; }
+h1 { font-size: 1.375rem; margin: 0 0 .375rem; letter-spacing: -.01em; }
+.lead { color: #6F757D; font-size: .875rem; line-height: 1.6; margin: 0 0 1rem; }
+.refs { font-size: .8125rem; line-height: 1.65; background: #fff; border-radius: 1rem; padding: .875rem 1rem; margin-bottom: 1rem; }
+.refs b { font-weight: 800; }
+.refs ul { margin: .25rem 0 0; padding-left: 1.1rem; }
+
+/* 고정 조절판 */
+.ctl { position: sticky; top: 0; z-index: 5; background: color-mix(in srgb, var(--board) 90%, transparent); -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px); margin: 0 -1rem 1rem; padding: .625rem 1rem; border-bottom: 1px solid rgba(0,0,0,.06); display: grid; gap: .5rem; }
+.row { display: flex; align-items: center; gap: .5rem; }
+.row > span { font-size: .75rem; font-weight: 800; color: #6F757D; width: 2.5rem; flex: none; }
+.seg { display: flex; gap: .25rem; flex: 1; min-width: 0; }
+.seg button { flex: 1; min-width: 0; border: 0; background: #fff; color: #15171A; font: 700 .75rem var(--kr); border-radius: .75rem; padding: .5rem .25rem; display: flex; align-items: center; justify-content: center; gap: .3rem; white-space: nowrap; }
+.seg button[aria-pressed="true"] { background: #15171A; color: #fff; }
+.sw { display: inline-flex; } .sw i { width: .55rem; height: .55rem; border-radius: 50%; margin-left: -.15rem; box-shadow: 0 0 0 1.5px #fff; }
+
+/* 로고 카드 */
+.card { background: #fff; border-radius: 1.5rem; padding: 1rem; margin-bottom: 1.25rem; box-shadow: 0 .25rem .75rem -.375rem rgba(24,36,60,.18); }
+.ch { display: flex; align-items: baseline; gap: .5rem; margin-bottom: .25rem; }
+.ch b { font-size: 1rem; } .ch em { font-style: normal; font-size: .75rem; font-weight: 800; color: #fff; background: #15171A; border-radius: 1rem; padding: .0625rem .5rem; }
+.why { font-size: .8125rem; color: #6F757D; line-height: 1.55; margin: 0 0 .75rem; }
+.stage { background: var(--paper); border-radius: 1.125rem; padding: 2rem 1.25rem; display: grid; place-items: center; min-height: 9rem; }
+.stage svg { width: 100%; max-width: 17rem; height: auto; display: block; }
+.wordD { font-family: var(--lat), var(--kr); font-weight: var(--lat-w); color: var(--ink); line-height: 1; }
+.dict { width: 100%; max-width: 15rem; }
+.dict .w { font-size: 3.4rem; letter-spacing: -.02em; }
+.dict hr { border: 0; border-top: 1.5px solid var(--ink); opacity: .55; margin: .625rem 0 .5rem; }
+.dict .p { font: italic 400 .8125rem var(--lat), var(--kr); color: var(--sub); }
+.dict .d { font: 400 .8125rem/1.45 var(--lat), var(--kr); color: var(--ink); margin-top: .125rem; }
+.dict .d span { color: var(--accent); font-weight: 700; }
+
+/* 미리보기 3종 */
+.pv { display: grid; grid-template-columns: .82fr 1fr 1.25fr; gap: .5rem; margin-top: .625rem; align-items: start; }
+.pv > div { min-width: 0; } .pv label { display: block; font-size: .6875rem; color: #8A9099; font-weight: 700; margin-top: .3rem; text-align: center; }
+.icon { aspect-ratio: 1; border-radius: 22.5%; overflow: hidden; position: relative; display: grid; place-items: center; }
+.icon svg.sea, .phone svg.sea { position: absolute; inset: 0; width: 100%; height: 100%; }
+.icon .mk { position: relative; width: 66%; color: var(--on-sea); }
+.icon .mk svg { width: 100%; height: auto; display: block; }
+.icon .mkD { position: relative; color: var(--on-sea); font-size: 1.05rem; }
+.phone { aspect-ratio: 9 / 16; border-radius: .875rem; overflow: hidden; position: relative; color: var(--on-sea); }
+.phone .ov { position: absolute; left: 9%; right: 9%; bottom: 9%; }
+.phone .ov .lg { width: 62%; } .phone .ov .lg svg { width: 100%; height: auto; display: block; }
+.phone .ov .lgD { font-size: 1.15rem; }
+.phone .ov hr { border: 0; border-top: 1px solid currentColor; opacity: .6; margin: .3rem 0 .25rem; }
+.phone .ov p { margin: 0; font: 400 .4375rem/1.4 var(--lat), var(--kr); opacity: .92; }
+.pass { background: var(--paper); border-radius: .75rem; padding: .5rem .5rem .55rem; color: var(--ink); border: 1px solid var(--hair); }
+.pass .t { display: flex; align-items: center; justify-content: space-between; }
+.pass .t .lg { width: 46%; } .pass .t .lg svg { width: 100%; height: auto; display: block; }
+.pass .t .lgD { font-size: .8rem; }
+.pass .t small { font: 700 .4375rem var(--lat), var(--kr); color: var(--sub); letter-spacing: .08em; }
+.pass .rt { display: flex; align-items: center; justify-content: space-between; margin: .55rem 0 .15rem; font: var(--lat-w) 1.05rem var(--lat), var(--kr); }
+.pass .rt i { flex: 1; height: 0; border-top: 1.5px dashed var(--sub); margin: 0 .35rem; opacity: .6; }
+.pass .cy { display: flex; justify-content: space-between; font-size: .5rem; color: var(--sub); }
+.pass .perf { border-top: 1.5px dashed var(--hair); margin: .5rem -.5rem .45rem; }
+.pass .btn { background: var(--accent); color: #fff; border-radius: 2rem; font-size: .5625rem; font-weight: 800; text-align: center; padding: .35rem 0; }
+[data-pal="sand"] .pass .btn { color: #FFF8EE; }
+
+/* 피드백 */
+.opts { display: grid; grid-template-columns: repeat(3, 1fr); gap: .3rem; margin-top: .875rem; }
+.opts button { border: 0; background: #EEF0F2; color: #15171A; font: 700 .75rem var(--kr); border-radius: .75rem; padding: .55rem .25rem; }
+.opts button[aria-pressed="true"] { background: #15171A; color: #fff; }
+textarea { width: 100%; resize: vertical; border: 1px solid rgba(0,0,0,.1); background: #F6F7F8; color: #15171A; border-radius: .75rem; padding: .45rem .6rem; font: .8125rem/1.45 var(--kr); margin-top: .375rem; }
+.sec { font-size: .9375rem; margin: 2rem 0 .5rem; }
+.note { font-size: .8125rem; color: #6F757D; line-height: 1.6; background: #fff; border-radius: 1rem; padding: .875rem 1rem; }
+#out { min-height: 9rem; }
+.dock { position: fixed; left: 0; right: 0; bottom: 0; padding: .625rem 1rem calc(.625rem + env(safe-area-inset-bottom, 0px)); display: flex; align-items: center; gap: .75rem; justify-content: center; background: color-mix(in srgb, var(--board) 88%, transparent); -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px); border-top: 1px solid rgba(0,0,0,.06); }
+.dock .cnt { font-size: .8125rem; color: #6F757D; } .dock button { border: 0; background: #15171A; color: #fff; font: 800 .9375rem var(--kr); border-radius: 2rem; padding: .75rem 1.5rem; }
+.toast { position: fixed; left: 50%; bottom: 5rem; transform: translate(-50%, 1rem); opacity: 0; transition: .25s; background: #15171A; color: #fff; font-size: .8125rem; padding: .5rem 1rem; border-radius: 2rem; pointer-events: none; }
+.toast.on { opacity: 1; transform: translate(-50%, 0); }
+</style>
+</head>
+<body>
+<main id="root">
+<h1>VZTR · BI 시안 1차</h1>
+<p class="lead">동우님 레퍼런스로 만든 로고 4안이에요. 위의 <b>색 · 글꼴</b>을 바꾸면 로고·앱 아이콘·첫 화면·탑승권이 한꺼번에 바뀌어요(브랜드 토큰). 마음에 드는 조합을 고르고 맨 아래 <b>답 복사</b>로 보내 주세요.</p>
+<div class="refs"><b>레퍼런스에서 가져온 것</b>
+<ul>
+<li>바다·하늘 사진 + 사전 표기(‘sea /sē/ noun’) → 첫 화면 문법, D안</li>
+<li>글자 하나가 길·비행기·가방이 되는 워드마크(TRAVEL·TOUR·fly) → A·B·C안</li>
+<li>‘조용한 색 둘 + 시끄러운 색 하나’, ‘차가운 바탕엔 따뜻한 강조’ → 색 3벌</li>
+<li>친근 / 스위스 / 개성 글꼴 → 무료 글꼴로 대신(아래 메모)</li>
+</ul></div>
+
+<div class="ctl">
+  <div class="row"><span>색</span><div class="seg" id="segPal">
+    <button data-v="deep"><span class="sw"><i style="background:#0A2C4A"></i><i style="background:#0F5E8C"></i><i style="background:#FF5B2E"></i></span>깊은 바다</button>
+    <button data-v="sand"><span class="sw"><i style="background:#EFE3D3"></i><i style="background:#7A3E26"></i><i style="background:#0C45B0"></i></span>모래·코발트</button>
+    <button data-v="sky"><span class="sw"><i style="background:#FDFDFE"></i><i style="background:#0099FF"></i><i style="background:#FF3B1F"></i></span>하늘·신호</button>
+  </div></div>
+  <div class="row"><span>글꼴</span><div class="seg" id="segFont">
+    <button data-v="friendly" style="font-family:Figtree;font-weight:800">Figtree</button>
+    <button data-v="swiss" style="font-family:'Inter Tight';font-weight:800">Inter Tight</button>
+    <button data-v="bold" style="font-family:Unbounded;font-weight:600">Unbounded</button>
+  </div></div>
+</div>
+
+<div id="cards"></div>
+
+<h2 class="sec">색 · 글꼴 메모</h2>
+<textarea id="memoAll" rows="2" placeholder="색·글꼴에 대해 하고 싶은 말 (선택)"></textarea>
+
+<h2 class="sec">참고</h2>
+<div class="note">
+• 레퍼런스의 유료 글꼴(Circular·GT Walsheim·ABC Diatype·Obviously 등)은 사서 써야 해서, 비슷한 무료 글꼴로 대신했어요. 친근 = Figtree(Circular 계열), 스위스 = Inter Tight, 개성 = Unbounded. 한글은 지금처럼 Pretendard.<br>
+• 첫 화면 바다는 사진 대신 그린 그림이에요. 실제 사진은 브랜드 정한 뒤 무료 사진으로 바꿔요.<br>
+• A·B·C 로고는 선 하나 굵기(둥근 끝)로 그려서, 글꼴을 바꿔도 로고 모양은 그대로예요. D만 글꼴 따라 바뀌어요.<br>
+• 레퍼런스 중 ‘타이포 규칙’은 화면 다듬을 때, ‘출시 전 점검 20가지’는 서버 단계(E0) 때 쓸게요.
+</div>
+
+<h2 class="sec">보낼 답 (미리 보기)</h2>
+<textarea id="out" readonly></textarea>
+</main>
+<div class="dock"><span class="cnt"><b id="cn">0</b>/4 고름</span><button id="cp">답 복사</button></div>
+<div class="toast" id="tt">복사했어요 · 채팅에 붙여넣기</div>
+
+<script>
+(() => {
+  /* ===== 선 로고 (캡 높이 100, 선 16, 둥근 끝) ===== */
+  const S = 'fill="none" stroke="currentColor" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"';
+  const A_ = 'stroke="var(--accent)"';
+  const V = 'M8 8 L40 92 L72 8', Z = 'M98 8 H162 L98 92 H162', T = 'M188 8 H252 M220 8 V92', Rb = 'M278 92 V8 H312 A22 22 0 0 1 312 52 H278', Rl = 'M304 52 L340 92';
+  const svg = (vb, body) => `<svg viewBox="${vb}" aria-hidden="true">${body}</svg>`;
+  const LOGO = {
+    A: svg('0 0 566 108', `<g ${S}><path d="${V} M${Z.slice(1)} M${T.slice(1)} M${Rb.slice(1)}"/><path d="M304 52 Q326 52 334 74 Q342 92 364 92 H530"/></g><circle cx="548" cy="92" r="13" fill="var(--accent)"/>`),
+    B: svg('0 0 350 100', `<g ${S}><path d="${V} M98 8 H162 M98 92 H162 M${T.slice(1)} M${Rb.slice(1)} ${Rl}"/></g><path d="M162 8 L98 92" ${S.replace('currentColor', 'var(--accent)').replace('16', '15')} stroke-dasharray="0.1 23.5"/>`),
+    C: svg('0 0 350 100', `<g ${S}><path d="${Z} M${T.slice(1)} M${Rb.slice(1)} ${Rl}"/></g><path d="M8 54 L32 92 L72 8" ${S.replace('currentColor', 'var(--accent)')}/>`)
+  };
+  const MARK = {
+    A: svg('262 -6 300 116', `<g ${S}><path d="${Rb}"/><path d="M304 52 Q326 52 334 74 Q342 92 364 92 H520"/></g><circle cx="540" cy="92" r="14" fill="var(--accent)"/>`),
+    B: svg('84 -6 92 112', `<g ${S}><path d="M98 8 H162 M98 92 H162"/></g><path d="M162 8 L98 92" ${S.replace('currentColor', 'var(--accent)').replace('16', '15')} stroke-dasharray="0.1 23.5"/>`),
+    C: svg('-6 -6 92 112', `<path d="M8 54 L32 92 L72 8" ${S.replace('currentColor', 'var(--accent)')}/>`)
+  };
+  const D_WORD = 'vztr';
+  let seaN = 0;
+  const sea = () => { const i = ++seaN; return `<svg class="sea" viewBox="0 0 90 160" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><defs>
+    <linearGradient id="sk${i}" x1="0" y1="0" x2="0" y2="1"><stop offset="0" style="stop-color:var(--sea)" stop-opacity=".55"/><stop offset="1" style="stop-color:var(--sky)"/></linearGradient>
+    <linearGradient id="sw${i}" x1="0" y1="0" x2="0" y2="1"><stop offset="0" style="stop-color:var(--sea)"/><stop offset="1" style="stop-color:var(--seab)"/></linearGradient>
+    <filter id="wv${i}" x="0" y="0" width="1" height="1"><feTurbulence type="fractalNoise" baseFrequency=".03 .55" numOctaves="3" seed="${i}"/><feColorMatrix values="0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 .7 -.3"/></filter></defs>
+    <rect width="90" height="96" fill="url(#sk${i})"/><ellipse cx="62" cy="70" rx="16" ry="3" fill="#fff" opacity=".45"/><ellipse cx="26" cy="58" rx="11" ry="2.4" fill="#fff" opacity=".35"/>
+    <rect y="96" width="90" height="64" fill="url(#sw${i})"/><rect y="96" width="90" height="64" filter="url(#wv${i})"/><rect y="95.6" width="90" height=".7" fill="#fff" opacity=".35"/></svg>`; };
+
+  const CARDS = [
+    { k: 'A', name: '길이 되는 R', why: 'R의 다리가 쭉 뻗어 길이 되고, 끝에 도착 점. ‘문 앞에서 문 앞까지’를 글자 하나로. (TRAVEL 레퍼런스)' },
+    { k: 'B', name: '점선 Z', why: 'Z의 대각선이 이동 경로 점선. 출발 → 도착을 한 번에 이어 주는 앱이라는 뜻. (READY FOR TAKE OFF 레퍼런스)' },
+    { k: 'C', name: '체크 V', why: '첫 글자 V가 체크 표시. ‘검색 말고 정답부터’ — 확인된 일정이라는 약속. (fly 레퍼런스)' },
+    { k: 'D', name: '사전 표기', why: '소문자 vztr + 발음 기호 + 뜻. 모음을 뺀 이름을 사전처럼 풀어 줘서 ‘비지터’로 읽히게. 바다 사진 위 문법 그대로. (sea 레퍼런스)' }
+  ];
+  const logoHtml = (k, cls) => k === 'D' ? `<div class="wordD ${cls}D">${D_WORD}</div>` : `<div class="${cls}">${LOGO[k]}</div>`;
+  const stage = k => k === 'D'
+    ? `<div class="dict"><div class="wordD w">${D_WORD}</div><hr><div class="p">/ˈvɪz.ɪ.tər/ noun</div><div class="d">one who goes, without the searching. <span>검색 말고, 그냥 가요.</span></div></div>`
+    : LOGO[k];
+  const icon = k => `<div class="icon">${sea()}${k === 'D' ? `<div class="wordD mkD">${D_WORD}</div>` : `<div class="mk">${MARK[k]}</div>`}</div>`;
+  const phone = k => `<div class="phone">${sea()}<div class="ov">${logoHtml(k, 'lg')}<hr><p>/ˈvɪz.ɪ.tər/ noun<br>Stop searching. Start going.</p></div></div>`;
+  const pass = k => `<div class="pass"><div class="t">${logoHtml(k, 'lg')}<small>BOARDING</small></div><div class="rt"><span>ICN</span><i></i><span>KIX</span></div><div class="cy"><span>인천</span><span>오사카</span></div><div class="perf"></div><div class="btn">일정 만들기</div></div>`;
+
+  document.getElementById('cards').innerHTML = CARDS.map(c => `<section class="card" data-k="${c.k}">
+    <div class="ch"><em>${c.k}</em><b>${c.name}</b></div><p class="why">${c.why}</p>
+    <div class="stage">${stage(c.k)}</div>
+    <div class="pv"><div>${icon(c.k)}<label>앱 아이콘</label></div><div>${phone(c.k)}<label>첫 화면</label></div><div>${pass(c.k)}<label>탑승권</label></div></div>
+    <div class="opts"><button data-v="이걸로">이걸로</button><button data-v="고쳐서">고쳐서 쓰기</button><button data-v="별로">별로</button></div>
+    <textarea rows="1" placeholder="메모 (선택)"></textarea></section>`).join('');
+
+  /* ===== 상태 · 답 ===== */
+  const KEY = 'vztr-bi-1', root = document.documentElement;
+  let st = { pal: 'deep', font: 'friendly', c: {}, m: '' };
+  try { Object.assign(st, JSON.parse(localStorage.getItem(KEY) || '{}') || {}); } catch (_) {}
+  const save = () => { try { localStorage.setItem(KEY, JSON.stringify(st)); } catch (_) {} };
+  const PALN = { deep: '깊은 바다', sand: '모래·코발트', sky: '하늘·신호' }, FONTN = { friendly: '친근 Figtree', swiss: '스위스 Inter Tight', bold: '개성 Unbounded' };
+  function draw() {
+    root.dataset.pal = st.pal; root.dataset.font = st.font;
+    document.querySelectorAll('#segPal button').forEach(b => b.setAttribute('aria-pressed', b.dataset.v === st.pal));
+    document.querySelectorAll('#segFont button').forEach(b => b.setAttribute('aria-pressed', b.dataset.v === st.font));
+    let n = 0; const L = ['VZTR BI 시안 1차 피드백', `색: ${PALN[st.pal]} · 글꼴: ${FONTN[st.font]}`];
+    if (st.m && st.m.trim()) L.push('색·글꼴 메모: ' + st.m.trim());
+    CARDS.forEach(c => { const o = st.c[c.k] || {}; if (o.v) n++;
+      const el = document.querySelector(`.card[data-k="${c.k}"]`);
+      el.querySelectorAll('.opts button').forEach(b => b.setAttribute('aria-pressed', o.v === b.dataset.v));
+      const t = el.querySelector('textarea'); if (document.activeElement !== t) t.value = o.m || '';
+      L.push(`${c.k} ${c.name}: ${o.v || '(안 고름)'}${o.m && o.m.trim() ? ' · 메모: ' + o.m.trim() : ''}`); });
+    const ma = document.getElementById('memoAll'); if (document.activeElement !== ma) ma.value = st.m || '';
+    document.getElementById('cn').textContent = n; document.getElementById('out').value = L.join('\n');
+  }
+  document.getElementById('segPal').onclick = e => { const b = e.target.closest('button'); if (!b) return; st.pal = b.dataset.v; save(); draw(); };
+  document.getElementById('segFont').onclick = e => { const b = e.target.closest('button'); if (!b) return; st.font = b.dataset.v; save(); draw(); };
+  document.addEventListener('click', e => { const b = e.target.closest('.opts button'); if (!b) return; const k = b.closest('.card').dataset.k, o = st.c[k] = st.c[k] || {}; o.v = o.v === b.dataset.v ? '' : b.dataset.v; save(); draw(); });
+  document.querySelectorAll('.card textarea').forEach(t => t.addEventListener('input', () => { const k = t.closest('.card').dataset.k; (st.c[k] = st.c[k] || {}).m = t.value; save(); draw(); }));
+  document.getElementById('memoAll').addEventListener('input', e => { st.m = e.target.value; save(); draw(); });
+  document.getElementById('cp').onclick = async () => { const tx = document.getElementById('out').value; let ok = false;
+    try { await navigator.clipboard.writeText(tx); ok = true; } catch (_) { const o = document.getElementById('out'); o.removeAttribute('readonly'); o.select(); try { ok = document.execCommand('copy'); } catch (_) {} o.setAttribute('readonly', ''); }
+    const t = document.getElementById('tt'); t.textContent = ok ? '복사했어요 · 채팅에 붙여넣기' : '위 글을 길게 눌러 복사해 주세요'; t.classList.add('on'); setTimeout(() => t.classList.remove('on'), 2200); };
+  draw();
+})();
+</script>
+</body>
+</html>
