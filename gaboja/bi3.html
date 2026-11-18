@@ -1,0 +1,177 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<title>VZTR BI 시안 3차</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+@font-face { font-family: "Pretendard Variable"; font-weight: 45 920; font-display: swap; src: url("fonts/PretendardVariable.woff2") format("woff2-variations"), url("../app/fonts/PretendardVariable.woff2") format("woff2-variations"); }
+/* ===== 브랜드 토큰: 깊은 바다 · Inter Tight (확정). 카드마다 --accent · --on-accent · --tint 만 바뀜 ===== */
+:root { color-scheme: light;
+  --kr: "Pretendard Variable", Pretendard, -apple-system, "Apple SD Gothic Neo", "Malgun Gothic", system-ui, sans-serif;
+  --lat: "Inter Tight";
+  --ink: #0A1F33; --sub: #5B6B7A; --deep: #0A2C4A; --white: #FFFFFF; --hair: rgba(10, 31, 51, .1); --board: #ECEEF0;
+  --accent: #2F5BFF; --on-accent: #FFFFFF; --tint: #E6E9ED; }
+html { font-size: clamp(13.5px, calc(100vw * 16 / 390), 17px); }
+* { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+body { margin: 0; background: var(--board); color: #15171A; font-family: var(--kr); -webkit-font-smoothing: antialiased; word-break: keep-all; }
+main { max-width: 34rem; margin: 0 auto; padding: 1.25rem 1rem 7rem; }
+h1 { font-size: 1.375rem; margin: 0 0 .375rem; letter-spacing: -.01em; }
+.lead { color: #6F757D; font-size: .875rem; line-height: 1.6; margin: 0 0 1rem; }
+.fixed { display: flex; flex-wrap: wrap; gap: .375rem; margin-bottom: 1.25rem; }
+.fixed span { font-size: .75rem; font-weight: 700; background: #fff; border-radius: 2rem; padding: .3rem .7rem; display: inline-flex; align-items: center; gap: .35rem; }
+.fixed i { width: .7rem; height: .7rem; border-radius: 50%; display: inline-block; }
+
+.card { background: #fff; border-radius: 1.5rem; padding: 1rem; margin-bottom: 1.25rem; box-shadow: 0 .25rem .75rem -.375rem rgba(24,36,60,.18); }
+.ch { display: flex; align-items: center; gap: .5rem; margin-bottom: .25rem; flex-wrap: wrap; }
+.ch b { font-size: 1rem; } .ch em { font-style: normal; font-size: .75rem; font-weight: 800; color: #fff; background: #15171A; border-radius: 1rem; padding: .0625rem .5rem; }
+.ch .acc { font-size: .6875rem; font-weight: 700; color: #6F757D; display: inline-flex; align-items: center; gap: .3rem; margin-left: auto; }
+.ch .acc i { width: .75rem; height: .75rem; border-radius: 50%; background: var(--accent); }
+.why { font-size: .8125rem; color: #6F757D; line-height: 1.55; margin: 0 0 .75rem; }
+.grad { background: linear-gradient(165deg, var(--tint) 0%, var(--white) 78%); }
+.stage { border-radius: 1.125rem; padding: 3rem 1rem; display: grid; place-items: center; color: var(--ink); box-shadow: inset 0 0 0 1px var(--hair); }
+
+/* 워드마크 (em 기준 — 어디서든 비율 그대로) */
+.wm { font-family: var(--lat), var(--kr); font-weight: 800; line-height: 1; white-space: nowrap; display: inline-block; letter-spacing: -.035em; color: var(--ink); }
+.wm b { color: var(--accent); }
+.wm .o { display: inline-block; width: .17em; height: .17em; border-radius: 50%; background: var(--accent); margin: 0 .06em; vertical-align: .08em; }
+.wm.cap { letter-spacing: -.02em; }
+.big { font-size: 4.2rem; }
+
+/* 미리보기 */
+.pv { display: grid; grid-template-columns: .9fr 1fr 1.25fr; gap: .5rem; margin-top: .625rem; align-items: start; }
+.pv > div { min-width: 0; } .pv label { display: block; font-size: .6875rem; color: #8A9099; font-weight: 700; margin-top: .3rem; text-align: center; }
+.icon { aspect-ratio: 1; border-radius: 22.5%; overflow: hidden; display: grid; place-items: center; box-shadow: inset 0 0 0 1px var(--hair); container-type: inline-size; }
+.icon .wm { font-size: 27cqw; }            /* 아이콘 폭의 약 80%를 워드마크가 채움 */
+.icon .wm.cap { font-size: 23cqw; }
+.phone { aspect-ratio: 9 / 16; border-radius: .875rem; overflow: hidden; position: relative; box-shadow: inset 0 0 0 1px var(--hair); container-type: inline-size; display: grid; place-items: center; }
+.phone .wm { font-size: 22cqw; }
+.phone .wm.cap { font-size: 19cqw; }
+.phone small { position: absolute; left: 0; right: 0; bottom: 8%; text-align: center; font: 600 .4375rem var(--lat), var(--kr); color: var(--sub); letter-spacing: .02em; }
+.pass { background: var(--white); border-radius: .75rem; padding: .5rem .5rem .55rem; color: var(--ink); box-shadow: inset 0 0 0 1px var(--hair); }
+.pass .t { display: flex; align-items: center; justify-content: space-between; font-size: .85rem; }
+.pass .t small { font: 700 .4375rem var(--lat), var(--kr); color: var(--sub); letter-spacing: .08em; }
+.pass .rt { display: flex; align-items: center; justify-content: space-between; margin: .55rem 0 .15rem; font: 800 1.05rem var(--lat), var(--kr); }
+.pass .rt i { flex: 1; height: 0; border-top: 1.5px dashed var(--sub); margin: 0 .35rem; opacity: .6; }
+.pass .cy { display: flex; justify-content: space-between; font-size: .5rem; color: var(--sub); }
+.pass .perf { border-top: 1.5px dashed var(--hair); margin: .5rem -.5rem .45rem; }
+.pass .btn { background: var(--accent); color: var(--on-accent); border-radius: 2rem; font-size: .5625rem; font-weight: 800; text-align: center; padding: .35rem 0; }
+
+.opts { display: grid; grid-template-columns: repeat(3, 1fr); gap: .3rem; margin-top: .875rem; }
+.opts button { border: 0; background: #EEF0F2; color: #15171A; font: 700 .75rem var(--kr); border-radius: .75rem; padding: .55rem .25rem; }
+.opts button[aria-pressed="true"] { background: #15171A; color: #fff; }
+.acc-ok { display: flex; align-items: center; gap: .4rem; margin-top: .4rem; font-size: .75rem; color: #6F757D; }
+.acc-ok button { border: 0; background: #EEF0F2; color: #15171A; font: 700 .75rem var(--kr); border-radius: .75rem; padding: .4rem .7rem; }
+.acc-ok button[aria-pressed="true"] { background: var(--accent); color: var(--on-accent); }
+textarea { width: 100%; resize: vertical; border: 1px solid rgba(0,0,0,.1); background: #F6F7F8; color: #15171A; border-radius: .75rem; padding: .45rem .6rem; font: .8125rem/1.45 var(--kr); margin-top: .375rem; }
+.sec { font-size: .9375rem; margin: 2rem 0 .5rem; }
+.note { font-size: .8125rem; color: #6F757D; line-height: 1.6; background: #fff; border-radius: 1rem; padding: .875rem 1rem; }
+#out { min-height: 9rem; }
+.dock { position: fixed; left: 0; right: 0; bottom: 0; padding: .625rem 1rem calc(.625rem + env(safe-area-inset-bottom, 0px)); display: flex; align-items: center; gap: .75rem; justify-content: center; background: color-mix(in srgb, var(--board) 88%, transparent); -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px); border-top: 1px solid rgba(0,0,0,.06); }
+.dock .cnt { font-size: .8125rem; color: #6F757D; } .dock button { border: 0; background: #15171A; color: #fff; font: 800 .9375rem var(--kr); border-radius: 2rem; padding: .75rem 1.5rem; }
+.toast { position: fixed; left: 50%; bottom: 5rem; transform: translate(-50%, 1rem); opacity: 0; transition: .25s; background: #15171A; color: #fff; font-size: .8125rem; padding: .5rem 1rem; border-radius: 2rem; pointer-events: none; }
+.toast.on { opacity: 1; transform: translate(-50%, 0); }
+</style>
+</head>
+<body>
+<main>
+<h1>VZTR · BI 시안 3차</h1>
+<p class="lead">2차 피드백 반영: <b>사전 뜻 전부 삭제</b> · E2 마침표 / E3 숨은 모음 결로 <b>더 단순하게</b> · 바탕은 <b>연한 색 + 흰색 그라디언트</b> · 앱 아이콘 글자 <b>크게</b>(아이콘 폭의 82%) · 주황 대신 <b>새 포인트 색 5개</b>를 안마다 하나씩.</p>
+<div class="fixed">
+  <span><i style="background:#0A1F33"></i>글자 남색 (깊은 바다)</span>
+  <span style="font-family:'Inter Tight';font-weight:800">Inter Tight</span>
+</div>
+
+<div id="cards"></div>
+
+<h2 class="sec">전체 메모</h2>
+<textarea id="memoAll" rows="2" placeholder="하고 싶은 말 (선택) — 예: F1 모양 + F4 색"></textarea>
+
+<h2 class="sec">참고</h2>
+<div class="note">
+• 포인트 색은 주황·빨강 계열을 통째로 뺐어요. 국내 항공사 브랜드 색과 겹치는지는 검색으로 확인하지 못했어요(공식 브랜드 가이드를 못 찾음) — 고르신 색만 따로 확인할게요.<br>
+• 모양과 색은 따로 골라도 돼요. 카드마다 <b>‘이 색 좋아요’</b> 버튼이 따로 있어요.<br>
+• 노랑(F5)은 흰 바탕에서 작은 글자로 쓰면 안 읽혀서 점·버튼에만 쓰고, 버튼 글자는 남색이에요.
+</div>
+
+<h2 class="sec">보낼 답 (미리 보기)</h2>
+<textarea id="out" readonly></textarea>
+</main>
+<div class="dock"><span class="cnt"><b id="cn">0</b>/5 고름</span><button id="cp">답 복사</button></div>
+<div class="toast" id="tt">복사했어요 · 채팅에 붙여넣기</div>
+
+<script>
+(() => {
+  const W = {
+    dot: '<span class="wm">vztr<b>.</b></span>',
+    vow: '<span class="wm">v<i class="o"></i>z<i class="o"></i>t<i class="o"></i>r</span>',
+    DOT: '<span class="wm cap">VZTR<b>.</b></span>',
+    VOW: '<span class="wm cap">V<i class="o"></i>Z<i class="o"></i>T<i class="o"></i>R</span>',
+    one: '<span class="wm">vz<i class="o"></i>tr</span>'
+  };
+  const CARDS = [
+    { k: 'F1', w: 'dot', name: '마침표 · 소문자', acc: '#2F5BFF', on: '#FFFFFF', accN: '전기 파랑', tint: '#E3E6EA', tintN: '회색',
+      why: 'E2를 더 덜어냄. 남색 소문자 + 파랑 마침표 하나. 남색과 같은 계열이라 가장 조용한 조합.' },
+    { k: 'F2', w: 'vow', name: '숨은 모음 · 소문자', acc: '#FF5C8A', on: '#FFFFFF', accN: '코랄 핑크', tint: '#F4E4E8', tintN: '연분홍',
+      why: 'E3 그대로, 점만 핑크. 차가운 남색 위의 따뜻한 강조(레퍼런스 ‘차가운 바탕엔 따뜻한 강조’).' },
+    { k: 'F3', w: 'DOT', name: '마침표 · 대문자', acc: '#12B886', on: '#FFFFFF', accN: '민트', tint: '#DDEFEA', tintN: '연민트',
+      why: '대문자로 단단하게. 민트는 여행·출발의 산뜻함, 남색 바다와도 이어짐.' },
+    { k: 'F4', w: 'VOW', name: '숨은 모음 · 대문자', acc: '#6D4AFF', on: '#FFFFFF', accN: '바이올렛', tint: '#E6E3F3', tintN: '라벤더',
+      why: '대문자 + 점 세 개. 바이올렛은 여행 앱에서 드문 색이라 눈에 남음(예상 밖 조합).' },
+    { k: 'F5', w: 'one', name: '가운데 점 하나', acc: '#FFB800', on: '#0A1F33', accN: '해 노랑', tint: '#EFE9DF', tintN: '모래',
+      why: '점 세 개 대신 가운데 하나만(vz·tr). 마침표와 숨은 모음의 중간 — 가장 짧고 단순.' }
+  ];
+  document.getElementById('cards').innerHTML = CARDS.map(c => {
+    const st = `--accent:${c.acc};--on-accent:${c.on};--tint:${c.tint}`;
+    return `<section class="card" data-k="${c.k}" style="${st}">
+    <div class="ch"><em>${c.k}</em><b>${c.name}</b><span class="acc"><i></i>${c.accN} ${c.acc} · 바탕 ${c.tintN}+흰</span></div><p class="why">${c.why}</p>
+    <div class="stage grad"><div class="big">${W[c.w]}</div></div>
+    <div class="pv"><div><div class="icon grad">${W[c.w]}</div><label>앱 아이콘</label></div>
+      <div><div class="phone grad">${W[c.w]}<small>Stop searching. Start going.</small></div><label>첫 화면</label></div>
+      <div><div class="pass"><div class="t">${W[c.w]}<small>BOARDING</small></div><div class="rt"><span>ICN</span><i></i><span>KIX</span></div><div class="cy"><span>인천</span><span>오사카</span></div><div class="perf"></div><div class="btn">일정 만들기</div></div><label>탑승권</label></div></div>
+    <div class="opts"><button data-v="이걸로">이걸로</button><button data-v="고쳐서">고쳐서 쓰기</button><button data-v="별로">별로</button></div>
+    <div class="acc-ok"><button class="ac" aria-pressed="false">이 색 좋아요</button><span>${c.accN}</span></div>
+    <textarea rows="1" placeholder="메모 (선택)"></textarea></section>`; }).join('');
+
+  const KEY = 'vztr-bi-3';
+  let st = { c: {}, m: '' };
+  try { Object.assign(st, JSON.parse(localStorage.getItem(KEY) || '{}') || {}); } catch (_) {}
+  const save = () => { try { localStorage.setItem(KEY, JSON.stringify(st)); } catch (_) {} };
+  function draw() {
+    let n = 0; const L = ['VZTR BI 시안 3차 피드백'], likes = [];
+    CARDS.forEach(c => { const o = st.c[c.k] || {}; if (o.v) n++; if (o.a) likes.push(`${c.accN} ${c.acc}`);
+      const el = document.querySelector(`.card[data-k="${c.k}"]`);
+      el.querySelectorAll('.opts button').forEach(b => b.setAttribute('aria-pressed', o.v === b.dataset.v));
+      el.querySelector('.ac').setAttribute('aria-pressed', !!o.a);
+      const t = el.querySelector('textarea'); if (document.activeElement !== t) t.value = o.m || '';
+      L.push(`${c.k} ${c.name}: ${o.v || '(안 고름)'}${o.m && o.m.trim() ? ' · 메모: ' + o.m.trim() : ''}`); });
+    L.push('좋은 색: ' + (likes.length ? likes.join(', ') : '(안 고름)'));
+    if (st.m && st.m.trim()) L.push('전체 메모: ' + st.m.trim());
+    const ma = document.getElementById('memoAll'); if (document.activeElement !== ma) ma.value = st.m || '';
+    document.getElementById('cn').textContent = n; document.getElementById('out').value = L.join('\n');
+  }
+  document.addEventListener('click', e => {
+    const b = e.target.closest('.opts button, .ac'); if (!b) return;
+    const k = b.closest('.card').dataset.k, o = st.c[k] = st.c[k] || {};
+    if (b.classList.contains('ac')) o.a = !o.a; else o.v = o.v === b.dataset.v ? '' : b.dataset.v;
+    save(); draw(); });
+  document.querySelectorAll('.card textarea').forEach(t => t.addEventListener('input', () => { const k = t.closest('.card').dataset.k; (st.c[k] = st.c[k] || {}).m = t.value; save(); draw(); }));
+  document.getElementById('memoAll').addEventListener('input', e => { st.m = e.target.value; save(); draw(); });
+  document.getElementById('cp').onclick = async () => { const tx = document.getElementById('out').value; let ok = false;
+    try { await navigator.clipboard.writeText(tx); ok = true; } catch (_) { const o = document.getElementById('out'); o.removeAttribute('readonly'); o.select(); try { ok = document.execCommand('copy'); } catch (_) {} o.setAttribute('readonly', ''); }
+    const t = document.getElementById('tt'); t.textContent = ok ? '복사했어요 · 채팅에 붙여넣기' : '위 글을 길게 눌러 복사해 주세요'; t.classList.add('on'); setTimeout(() => t.classList.remove('on'), 2200); };
+  draw();
+  // 워드마크를 칸 폭의 일정 비율로 맞춤 (아이콘 82% · 첫 화면 64%) — 글자 수·대소문자와 상관없이 같은 크기감
+  const fit = () => [['.icon', .82], ['.phone', .64]].forEach(([q, r]) => document.querySelectorAll(q).forEach(box => {
+    const wm = box.querySelector('.wm'); wm.style.fontSize = '100px';
+    const k = box.getBoundingClientRect().width * r / wm.getBoundingClientRect().width; wm.style.fontSize = (100 * k) + 'px'; }));
+  (document.fonts && document.fonts.ready ? document.fonts.ready : Promise.resolve()).then(fit);
+  addEventListener('resize', fit);
+})();
+</script>
+</body>
+</html>
