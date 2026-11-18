@@ -1122,7 +1122,7 @@ const GI = { LS: '<circle cx="12" cy="12" r="8.5"/><path d="M15.5 8.5l-2 5-5 2 2
   LE: '<path d="M5 8h14l-1.2 11.2a1 1 0 0 1-1 .8H7.2a1 1 0 0 1-1-.8zM9 8V6.5a3 3 0 0 1 6 0V8"/>',
   HS: '<path d="M6 21V4M6 4h11l-2 3.5 2 3.5H6"/>',
   HE: '<path d="M5 10h11v4a5 5 0 0 1-5 5h-1a5 5 0 0 1-5-5zM16 11h1.5a2.5 2.5 0 0 1 0 5H16M8 3.5c-.6 1 .6 1.6 0 2.8M11.5 3.5c-.6 1 .6 1.6 0 2.8"/>' };
-const AV = (c, k) => window.GABOJA_CHAR ? `<div class="av${k ? ' ' + k : ''}" style="background:${GABOJA_CHAR_BG(c)}">${GABOJA_CHAR(c, { bg: false })}</div>` : '';   // 11/15 #9 짐 캐릭터
+const AV = (c, k) => window.GABOJA_CHAR ? `<div class="av gfx${k ? ' ' + k : ''}" data-c="${c}"${k === 'hero' ? ' data-fxd="650"' : ''} style="background:${GABOJA_CHAR_BG(c)}">${GABOJA_CHAR(c, { bg: false })}</div>` : '';   // 11/15 #9 짐 캐릭터
 const grpIcon = c => `<svg viewBox="0 0 24 24" aria-hidden="true">${GI[c.slice(0, 2)]}</svg>`;
 const LMEAN = { L: '로컬', H: '핫플', S: '구경', E: '즐기기', F: '알차게', R: '여유롭게', J: '계획형', P: '즉흥형' };
 function lflapsHtml(c) { return `<div class="flaps big lfl">${c.split('').map(l => `<span class="lcol"><span class="fl">${l}</span><span class="lb">${LMEAN[l]}</span></span>`).join('')}</div>`; }

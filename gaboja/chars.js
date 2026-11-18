@@ -47,7 +47,7 @@ const NORM = {"LSFJ":[1.091,-4.55,-2.64,50.2],"LSFP":[1.12,-6.0,-3.64,76.2],"LSR
 const body = (code, g) => { const n = NORM[code], b = C[IDX[code]][3](g); return '<g class="fx-b">' + (n ? `<g transform="translate(${n[1]} ${n[2]}) scale(${n[0]})">${b}</g>` : b) + '</g>'; };   // 11/18 T7: fx-* = 등장 이펙트 걸 자리(CSS 없으면 그대로)
 const TONE = { LS: { lt: '#A6E0C3', dk: '#16603F' }, LE: { lt: '#FFCF9C', dk: '#93450F' }, HS: { lt: '#B3C3FF', dk: '#22389A' }, HE: { lt: '#F7BACF', dk: '#8B2A4B' } };
 const FXDEFS = '<defs><filter id="gbjSoft" x="-20%" y="-20%" width="140%" height="150%" color-interpolation-filters="sRGB"><feGaussianBlur in="SourceAlpha" stdDeviation="1.6" result="b"/><feSpecularLighting in="b" surfaceScale="1.6" specularConstant=".42" specularExponent="22" lighting-color="#fff" result="s"><fePointLight x="20" y="-40" z="80"/></feSpecularLighting><feComposite in="s" in2="SourceAlpha" operator="in" result="s2"/><feMerge><feMergeNode in="SourceGraphic"/><feMergeNode in="s2"/></feMerge></filter><radialGradient id="gbjGnd" cx="50%" cy="50%" r="50%"><stop offset="0" stop-color="#1b1f3a" stop-opacity=".22"/><stop offset="1" stop-color="#1b1f3a" stop-opacity="0"/></radialGradient></defs>';
-const ensureFx = () => { if (document.getElementById('gbjFx') || !document.body) return; const d = document.createElement('div'); d.innerHTML = '<svg id="gbjFx" width="0" height="0" style="position:absolute;width:0;height:0" aria-hidden="true">' + FXDEFS + '</svg>'; document.body.appendChild(d.firstChild); };
+const ensureFx = () => { if (document.getElementById('gbjFxCss') || !document.body) return; const d = document.createElement('div'); d.innerHTML = '<svg id="gbjFx" width="0" height="0" style="position:absolute;width:0;height:0" aria-hidden="true">' + FXDEFS + '</svg>'; document.body.appendChild(d.firstChild); };
 const CACHE = {};
 function soft(code, bg) {
   const key = code + (bg ? 1 : 0); if (CACHE[key]) return CACHE[key];
@@ -76,4 +76,92 @@ window.GABOJA_CHAR_LINE = (code, o = {}) => { if (!(code in IDX)) return ''; con
 window.GABOJA_CHAR = (code, o = {}) => { if (!(code in IDX)) return ''; return soft(code, o.bg !== false).replace('<svg ', '<svg aria-hidden="true" focusable="false" '); };
 window.GABOJA_CHAR_BG = code => code in IDX ? grp(code).bg : '';
 window.GABOJA_CHAR_ITEM = code => code in IDX ? C[IDX[code]][2] : '';
+/* ===== 등장 이펙트 (2026-11-18 확정, 정본 시안 = preview/2026-11-18_7_캐릭터이펙트_시안_v1.html 3차) =====
+   쓰는 법: 캐릭터를 감싼 칸에 class="gfx" data-c="코드" (선택: data-fxd="지연 ms"). 화면에 보이면 한 번 재생.
+   GABOJA_CHAR_PLAY(el) = 다시 재생 */
+const FXCSS = `/* ===== 이펙트 (재생 = .gfx.play) — 등장할 때 한 번, 1~1.6초, 그 짐만의 동작 ===== */
+.gfx svg [class*="fx-"], .gfx svg .fx-puff > g { transform-box: fill-box; }   /* 이펙트 조각에만 (transform 속성이 있는 몸통·회전 묶음은 건드리지 않음) */
+.gfx.play .fx-ndl { transform-origin: center; animation: ndl 1.5s cubic-bezier(.2,.75,.25,1) both; }
+@keyframes ndl { 0% { transform: rotate(0); } 62% { transform: rotate(570deg); } 78% { transform: rotate(528deg); } 90% { transform: rotate(546deg); } 100% { transform: rotate(540deg); } }
+/* 운동화: 좌우로 뒤뚱 + 두 발 번갈아 들기 (걸음) */
+.gfx.play[data-c="LSFP"] .fx-b { transform-origin: 50% 100%; animation: waddle 1.3s ease-in-out both; }
+@keyframes waddle { 0%, 100% { transform: none; } 15% { transform: translateX(-2px) rotate(-4deg); } 40% { transform: translateX(2px) rotate(4deg); } 65% { transform: translateX(-1px) rotate(-2.5deg); } 85% { transform: translateX(.5px) rotate(1deg); } }
+.gfx.play .fx-l1 { animation: step 1.3s ease-in-out both; } .gfx.play .fx-l2 { animation: step 1.3s ease-in-out .25s both; }
+@keyframes step { 0%, 50%, 100% { transform: none; } 12% { transform: translateY(-3px); } 62% { transform: translateY(-2px); } 75% { transform: none; } }
+/* 이정표: "어느 길로 갈래?" — 팔이 번갈아 은은하게 커졌다 작아짐 */
+.gfx.play .fx-s1 { transform-origin: 0% 50%; animation: ask 1.6s ease-in-out both; }
+.gfx.play .fx-s2 { transform-origin: 100% 50%; animation: ask 1.6s ease-in-out .4s both; }
+@keyframes ask { 0%, 50%, 100% { transform: none; } 22% { transform: scale(1.14); } 72% { transform: scale(1.05); } 88% { transform: none; } }
+/* 버스: 부르릉(살짝 떨림) + 뒤 배기구 연기 붕 */
+.gfx.play[data-c="LSRP"] .fx-b { animation: rumble 1.3s linear both; }
+@keyframes rumble { 0%, 40%, 100% { transform: none; } 8%, 24% { transform: translateY(-1px); } 16%, 32% { transform: translateY(.6px); } 55% { transform: translateX(1.5px); } 75% { transform: translateX(-.5px); } }
+.gfx.play .fx-puff { animation: show 1.6s ease-out both; }
+@keyframes show { 0%, 100% { opacity: 0; } 12%, 70% { opacity: 1; } }
+.gfx.play .fx-puff > g { transform-origin: center; animation: puff 1.6s cubic-bezier(.2,.7,.3,1) both; }
+.gfx.play .fx-puff .p2 { animation-delay: .12s; } .gfx.play .fx-puff .p3 { animation-delay: .24s; }
+@keyframes puff { 0% { transform: translate(6px, 3px) scale(.25); opacity: .9; } 60% { opacity: .8; } 100% { transform: translate(-3px, -5px) scale(1.5); opacity: 0; } }
+
+/* 맛집 지도: 지도가 펼쳐지고 핀이 톡 꽂힘 */
+.gfx.play .fx-map { transform-origin: center; animation: unfold .55s cubic-bezier(.2,.8,.2,1) both; }
+@keyframes unfold { from { transform: scaleX(.12); } to { transform: none; } }
+.gfx.play .fx-pin { animation: pin .7s cubic-bezier(.3,.6,.3,1.4) .4s both; }
+@keyframes pin { 0% { transform: translateY(-16px); opacity: 0; } 55% { transform: translateY(1.5px); opacity: 1; } 75% { transform: translateY(-1.5px); } 100% { transform: none; } }
+/* 가격표: 매달린 줄에서 흔들 */
+.gfx.play .fx-tag { transform-origin: 23% 50%; animation: swing 1.6s cubic-bezier(.3,.6,.4,1) both; }
+@keyframes swing { 0% { transform: rotate(-14deg); } 25% { transform: rotate(9deg); } 45% { transform: rotate(-5deg); } 65% { transform: rotate(2.5deg); } 82% { transform: rotate(-1deg); } 100% { transform: none; } }
+/* 쿠폰: 도장이 하나씩 쾅 */
+.gfx.play .fx-st { transform-origin: center; animation: stamp .38s cubic-bezier(.3,.6,.3,1.5) calc(var(--i) * .18s + .1s) both; }
+@keyframes stamp { 0% { transform: scale(1.9) rotate(-18deg); opacity: 0; } 70% { transform: scale(.92); opacity: 1; } 100% { transform: none; } }
+/* 장바구니: 채소가 쏙 */
+.gfx.play .fx-veg { animation: veg .8s cubic-bezier(.3,.6,.3,1.5) .1s both; }
+@keyframes veg { 0% { transform: translateY(-20px); opacity: 0; } 30% { opacity: 1; } 62% { transform: translateY(2px); } 80% { transform: translateY(-1px); } 100% { transform: none; } }
+/* 깃발: 종이처럼 휘며 펄럭 — 모양 자체가 바뀜(SVG animate, 재생 때 시작) + 살짝 기울기 */
+.gfx.play .fx-flag { transform-origin: 0% 50%; animation: flagtilt 1.6s ease-in-out both; }
+@keyframes flagtilt { 0%, 100% { transform: none; } 25% { transform: rotate(-2deg); } 55% { transform: rotate(1.5deg); } }
+/* 스마트폰: 화면 속 핀이 톡 */
+.gfx.play .fx-pin2 { transform-origin: 50% 100%; animation: topin 1.8s ease-in-out both; }
+@keyframes topin { 0%, 42% { opacity: 0; transform: scale(.7); } 70% { opacity: 1; transform: scale(1.06); } 85% { transform: scale(.98); } 100% { opacity: 1; transform: none; } }
+.gfx.play .fx-fire { transform-origin: 50% 100%; animation: fire 1.8s ease-in-out both; }
+@keyframes fire { 0% { opacity: 0; transform: scale(.2); } 14% { opacity: 1; transform: scale(1.12); } 24% { transform: scale(.95, 1.06); } 34% { transform: scale(1.04, .96); } 44% { opacity: 1; transform: scale(1); } 66% { opacity: 0; transform: scale(.8) translateY(-3px); } 100% { opacity: 0; } }
+.gfx.play[data-c="HSFP"] .fx-b { transform-origin: 50% 100%; animation: tilt 1s ease-out both; }
+@keyframes tilt { 0% { transform: rotate(-4deg); } 50% { transform: rotate(2deg); } 100% { transform: none; } }
+/* 카메라: 찰칵 (렌즈 조였다 펴짐 + 플래시) */
+.gfx.play .fx-lens { transform-origin: center; animation: snap .55s cubic-bezier(.3,.6,.3,1.4) .25s both; }
+@keyframes snap { 0% { transform: none; } 40% { transform: scale(.82); } 100% { transform: none; } }
+.gfx.play .fx-flash { animation: flash .7s ease-out .35s both; }
+@keyframes flash { 0% { opacity: 0; } 20% { opacity: 1; } 100% { opacity: 0; } }
+/* 쌍안경: 들어 올리고 렌즈에 빛이 스침 */
+.gfx.play[data-c="HSRP"] .fx-b { transform-origin: 50% 100%; animation: lift 1.4s ease-in-out both; }
+@keyframes lift { 0%, 100% { transform: none; } 20% { transform: translateX(-3px) rotate(-4deg); } 50% { transform: translateX(3px) rotate(4deg); } 75% { transform: translateX(-1px) rotate(-1.5deg); } }
+.gfx.play .fx-gl { animation: glint .9s ease-out .9s both; } .gfx.play .fx-gl.g2 { animation-delay: 1s; }
+@keyframes glint { 0% { transform: translate(-6px, 6px); opacity: 0; } 50% { transform: translate(3px, -3px); opacity: 1; } 100% { transform: none; opacity: 1; } }
+/* 라멘: 젓가락이 쏙 들어갔다 나오고 김이 피어오름 */
+.gfx.play .fx-chop { animation: dip 1.2s ease-in-out both; }
+@keyframes dip { 0%, 100% { transform: none; } 30% { transform: translate(-2px, 5px); } 55% { transform: translate(1px, -3px); } 75% { transform: translate(0, 1px); } }
+.gfx.play .fx-steam2 { animation: steam 1.6s ease-out .3s both; }
+@keyframes steam { 0% { opacity: 0; transform: translateY(5px); } 35% { opacity: 1; } 100% { opacity: 0; transform: translateY(-6px); } }
+/* 쇼핑백: 통통 + 반짝 */
+.gfx.play[data-c="HEFP"] .fx-b { transform-origin: 50% 100%; animation: squash .9s cubic-bezier(.3,.6,.3,1.3) both; }
+@keyframes squash { 0% { transform: scale(1.08, .86); } 45% { transform: scale(.96, 1.05); } 75% { transform: scale(1.02, .98); } 100% { transform: none; } }
+.gfx.play .fx-pop { animation: peek 1.3s cubic-bezier(.3,.6,.3,1.3) .2s both; }
+@keyframes peek { 0%, 100% { transform: none; } 35%, 60% { transform: translateY(-15px) rotate(-6deg); } 48% { transform: translateY(-15px) rotate(5deg); } 85% { transform: translateY(1px); } }
+/* 호텔 침대: zZ가 둥실 */
+.gfx.play .fx-z1 { animation: zz 1.2s ease-out .1s both; } .gfx.play .fx-z2 { animation: zz 1.2s ease-out .45s both; }
+@keyframes zz { 0% { opacity: 0; transform: translate(-4px, 6px) scale(.6); } 60% { opacity: 1; transform: translate(1px, -2px); } 100% { opacity: 1; transform: none; } }
+/* 커피잔: 김이 하나씩 피어오름 */
+.gfx.play .fx-sm { animation: rise 1.1s ease-out calc(var(--i) * .18s + .1s) both; }
+@keyframes rise { 0% { opacity: 0; transform: translateY(6px); } 70% { opacity: 1; transform: translateY(-1.5px); } 100% { opacity: 1; transform: none; } }
+@media (prefers-reduced-motion: reduce) { .gfx.play * { animation: none !important; } }
+`;
+const reduced = () => { try { return matchMedia('(prefers-reduced-motion: reduce)').matches; } catch (_) { return false; } };
+const play = el => { el.classList.remove('play'); void el.offsetWidth; el.classList.add('play'); if (!reduced()) el.querySelectorAll('animate').forEach(m => { try { m.beginElement(); } catch (_) {} }); };
+window.GABOJA_CHAR_PLAY = play;
+const boot = () => {
+  if (!document.getElementById('gbjFxCss')) { const st = document.createElement('style'); st.id = 'gbjFxCss'; st.textContent = FXCSS; document.head.appendChild(st); }
+  if (!('IntersectionObserver' in window)) return;
+  const io = new IntersectionObserver(es => es.forEach(e => { if (!e.isIntersecting) return; const el = e.target; io.unobserve(el); setTimeout(() => play(el), +el.dataset.fxd || 0); }), { threshold: .6 });
+  const scan = () => document.querySelectorAll('.gfx:not([data-fxw])').forEach(el => { if (!el.querySelector('svg')) return; el.dataset.fxw = '1'; io.observe(el); });
+  scan(); new MutationObserver(scan).observe(document.documentElement, { childList: true, subtree: true, attributes: true, attributeFilter: ['class'] });
+};
+if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot); else boot();
 })();
