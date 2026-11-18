@@ -38,7 +38,7 @@ textarea { width: 100%; resize: none; border: 1px solid var(--hair); background:
 .toast.on { opacity: 1; transform: translate(-50%, 0); }
 
 /* ===== 이펙트 (재생 = .av.play) — 등장할 때 한 번, 1~1.6초, 그 짐만의 동작 ===== */
-.av svg * { transform-box: fill-box; }
+.av svg [class*="fx-"], .av svg .fx-puff > g { transform-box: fill-box; }   /* 이펙트 조각에만 (transform 속성이 있는 몸통·회전 묶음은 건드리지 않음) */
 .av.play .fx-ndl { transform-origin: center; animation: ndl 1.5s cubic-bezier(.2,.75,.25,1) both; }
 @keyframes ndl { 0% { transform: rotate(0); } 62% { transform: rotate(570deg); } 78% { transform: rotate(528deg); } 90% { transform: rotate(546deg); } 100% { transform: rotate(540deg); } }
 /* 운동화: 좌우로 뒤뚱 + 두 발 번갈아 들기 (걸음) */
@@ -125,7 +125,7 @@ body.frame main { padding: 0; } body.frame .nm { display: none; } body.frame .gr
 </main>
 <div class="dock"><span class="cnt"><b id="cn">0</b>/16 고름</span><button id="cp">답 복사</button></div>
 <div class="toast" id="tt">복사했어요 · 채팅에 붙여넣기</div>
-<script src="chars.js?v=20261118c"></script>
+<script src="chars.js?v=20261118d"></script>
 <script src="types.js"></script>
 <script>
 (() => {
@@ -147,7 +147,7 @@ body.frame main { padding: 0; } body.frame .nm { display: none; } body.frame .gr
       <textarea rows="1" placeholder="메모 (선택)"></textarea></div>`;
   });
   $('#board').innerHTML = h + '</div>';
-  const play = av => { av.classList.remove('play'); void av.offsetWidth; av.classList.add('play'); av.querySelectorAll('animate').forEach(m => { try { m.beginElement(); } catch (_) {} }); };
+  const play = av => { av.classList.remove('play'); void av.offsetWidth; av.classList.add('play'); if (!matchMedia('(prefers-reduced-motion: reduce)').matches) av.querySelectorAll('animate').forEach(m => { try { m.beginElement(); } catch (_) {} }); };
   const io = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { play(e.target); io.unobserve(e.target); } }), { threshold: .6 });
   all('.av').forEach(av => { io.observe(av); av.onclick = () => play(av); });
   $('#all').onclick = () => all('.av').forEach((av, i) => setTimeout(() => play(av), i * 60));
