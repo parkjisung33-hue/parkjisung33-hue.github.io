@@ -1258,7 +1258,7 @@ const minFixNotes = N => Object.values(N || {}).forEach(a => (a || []).forEach(n
 try { if (PLAN) { PLAN.days.forEach(d => minFixItems(d.items)); minFixNotes(PLAN.notes); PLAN.assumed = (PLAN.assumed || []).map(minFix); } } catch (_) {}
 if (PLAN) { DAYS.length = 0; PLAN.days.forEach(d => DAYS.push(d)); Object.keys(NOTES).forEach(k => delete NOTES[k]); Object.assign(NOTES, PLAN.notes || {}); }
 const T0 = PLAN ? PLAN.title : '오사카·교토 3박 4일', TM = T0.match(/^(.+?) (\d+)박 (\d+)일$/), TD = T0.match(/^(.+?) 당일치기$/);   // 13b 당일치기 제목
-const TRIP_TITLE = TM ? TM[1] + '에서 ' + TM[3] + '일' : TD ? TD[1] + ' 당일치기' : T0, TRIP_NIGHTS = TM ? TM[2] + '박 ' + TM[3] + '일' : TD ? '당일치기' : '';
+const TRIP_TITLE = PLAN && PLAN.myTitle ? String(PLAN.myTitle).slice(0, 16) : TM ? TM[1] + '에서 ' + TM[3] + '일' : TD ? TD[1] + ' 당일치기' : T0, TRIP_NIGHTS = TM ? TM[2] + '박 ' + TM[3] + '일' : TD ? '당일치기' : '';
 const TRIP_SUB = PLAN ? PLAN.sub : '12. 4 – 12. 7 · 집에서 집까지', TRIP_DATES = TRIP_SUB.split(' · ')[0];
 if (PLAN) CHECKS.ok = { t:'영업시간 확인 11.11~11.13', s:'확인 11.13' }, CHECKS.no = { t:'영업시간 확인 못 함 · 가기 전 확인', s:'확인 필요' };
 const $ = s => document.querySelector(s);
@@ -2319,7 +2319,11 @@ $('#sheet').addEventListener('click', e => {
     return;
   }
   const mk = e.target.closest('[data-mck]'), mr = e.target.closest('[data-mrm]'), ma = e.target.closest('[data-madd]'), mo = e.target.closest('[data-mopen]');
-  if (mk || mr) { const [key, i] = (mk ? mk.dataset.mck : mr.dataset.mrm).split('|'), L = memoOf(key); if (!L) return; if (mk) L[+i].done = !L[+i].done; else L.splice(+i, 1); memoChanged(); return; }
+  if (mk || mr) {   // 11/19 G62: 완료 표시·지우기 뒤 4.5초 동안 '되돌리기' (완료 칸에서 체크를 다시 누르면 완료 취소)
+    const [key, i] = (mk ? mk.dataset.mck : mr.dataset.mrm).split('|'), L = memoOf(key); if (!L || !L[+i]) return; const m = L[+i];
+    if (mk) { m.done = !m.done; memoChanged(); if (m.done) toast('완료로 옮겼어요', () => { m.done = false; memoChanged(); }); else toast('할 일로 돌려놨어요'); }
+    else { L.splice(+i, 1); memoChanged(); toast('메모를 지웠어요', () => { const L2 = memoOf(key); if (!L2) return; L2.splice(Math.min(+i, L2.length), 0, m); memoChanged(); }); }
+    return; }
   if (ma) { addMemo(ma.dataset.madd); return; }
   if (mo) { const [dn, id] = mo.dataset.mopen.split(':'); st.day = +dn - 1; renderDays(); renderPlan(); sheetId = id; sheetMode = 'item'; $('#sheetIn').innerHTML = sheetHtml(DAYS[st.day], findIt(DAYS[st.day], id)); $('#sheet').scrollTop = 0; return; }
   const pk = e.target.closest('[data-pk]'); if (pk) { pickPlace(pk.dataset.pk); return; }
@@ -2733,13 +2737,13 @@ const tripsSet = a => { try { localStorage.setItem(TRIPS_KEY, JSON.stringify(a))
 function rawPlan() { try { const p = JSON.parse(localStorage.getItem('gaboja-plan')); return p && p.v === 1 && Array.isArray(p.days) && p.days.length ? p : null; } catch (_) { return null; } }
 const planId = p => p.made || ('x' + (p.start || '') + (p.title || ''));
 const planDates = p => String(p.sub || '').split(' · ')[0];
-const planCity = p => { const m = String(p.title || '').match(/^(.+?) (?:\d+박 \d+일|당일치기)$/); return m ? m[1] : (p.title || '여행'); };
+const planCity = p => { if (p && p.myTitle) return String(p.myTitle).slice(0, 16); const m = String(p.title || '').match(/^(.+?) (?:\d+박 \d+일|당일치기)$/); return m ? m[1] : (p.title || '여행'); };
 function snapshotCurrent() {
   const p = rawPlan(); if (!p) return null;
   if (PLAN && PLAN.made === p.made) saveEdits(true);   // 방금 고친 것까지
   let ed = null, tr = null; try { const all = JSON.parse(localStorage.getItem(EDIT_KEY)) || {}; ed = all[p.made] || null; } catch (_) {}
   try { tr = JSON.parse(localStorage.getItem('gaboja-trip')); } catch (_) {}
-  return { id: planId(p), title: p.title || '여행', dates: planDates(p), at: new Date().toISOString(), data: { plan: p, edits: ed, trip: tr } };
+  return { id: planId(p), title: p.myTitle || p.title || '여행', dates: planDates(p), at: new Date().toISOString(), data: { plan: p, edits: ed, trip: tr } };
 }
 function archiveCurrent() {   // 지금 여행을 목록에 보관 (같은 여행이면 갱신). 저장 공간이 모자라면 false
   const e = snapshotCurrent(); if (!e) return true;

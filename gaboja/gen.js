@@ -105,6 +105,12 @@
     return { ok: false, why: '영업시간 밖' };
   }
 
+  // 11/19 I48: 옆 도시만 갈 때 숙소 동네·공항→숙소 이동 (gen-data cfg에 없는 값이라 여기 둠)
+  //   [추정] 간사이공항→교토역 하루카 80분: JR West 공식 페이지엔 분 수가 없음(직통·운임만), 비공식 75~80분 → 긴 쪽. 가와라마치 = +20분(교토역↔가와라마치 areas 표 값)
+  const SIDE_ONLY = {
+    kix: { bases: [{ key: 'kyo-station', name: '교토역', re: '' }, { key: 'kyo-center', name: '가와라마치', re: '가와라마치|기온|시조|산조|河原町|祇園|四条' }],
+      toBase: { KIX: { 'kyo-station': [80, 'JR 특급 하루카'], 'kyo-center': [100, 'JR 하루카 + 지하철·버스'] } }, say: { KIX: '입국 심사 → JR 표지판 · 하루카 타는 곳' } }
+  };
   function make(input) {
     const type = /^[LH][SE][FR][JP]$/.test(input.type || '') ? input.type : 'LSRP';
     const G = type.slice(0, 2), F = type[2] === 'F', J = type[3] === 'J';
@@ -128,7 +134,11 @@
     const tm = String(input.flightTx || '').match(/(\d{1,2}):(\d{2})/g);
     const fo = input.fo || {}, fb = input.fb || {};
     // 도시 설정 (gen-data.js의 cfg: 공항·숙소 동네·공항↔숙소 이동) — kix = 오사카·교토, tyo = 도쿄
-    const C = (D.cfg || {})[input.dest] || (D.cfg || {}).kix;
+    const C0 = (D.cfg || {})[input.dest] || (D.cfg || {}).kix;
+    // 11/19 I48: 오사카·교토 묶음 안에서 고르기 input.part = 'main'(오사카만) · 'side'(교토만) · 없음(둘 다 = 기존과 같음)
+    //   main = 옆 도시 가는 날 없음 / side = 숙소·공항 이동 기준을 옆 도시(SIDE_ONLY)로 바꾸고 모든 날을 옆 도시에서
+    const PART = C0.side && (input.part === 'main' || (input.part === 'side' && SIDE_ONLY[input.dest || 'kix'])) ? input.part : '';
+    const C = PART === 'main' ? { ...C0, side: null, label: C0.main } : PART === 'side' ? { ...C0, ...SIDE_ONLY[input.dest || 'kix'], airports: Object.fromEntries(Object.entries(C0.airports || {}).map(([k, a]) => [k, { ...a, say: (SIDE_ONLY[input.dest || 'kix'].say || {})[k] || a.say }])), main: C0.side, side: null, label: C0.side } : C0;
     const DOM = !!C.domestic;   // 국내(서울·부산): 비행기 대신 기차·국내선·차·집에서 바로
     // 시·군·구 출발 (input.sgg = '서울 마포구' 같은 키, 표 = gen-data sgg): 집→공항·국내 차 구간을 그 시·군·구 중심점 기준으로 계산. 표에 없으면 null = 기존 가정값
     const SG = input.sgg && D.sgg && D.sgg[input.sgg] ? { name: input.sgg, ...D.sgg[input.sgg] } : null; let sgUsed = false;
@@ -573,7 +583,7 @@
     if (stayUnknown) notes[1].push({ lv: 'gray', t: stayUnknown });
     const end = new Date(start); end.setDate(start.getDate() + nights);
     const f2 = d => (d.getMonth() + 1) + '. ' + d.getDate();
-    return { v: 1, type, title: (input.cityLabel || C.label) + (DT ? ' 당일치기' : ' ' + nights + '박 ' + N + '일'), sub: (DT ? f2(start) : f2(start) + ' – ' + f2(end)) + ' · 집에서 집까지', start: start.getFullYear() + '-' + String(start.getMonth() + 1).padStart(2, '0') + '-' + String(start.getDate()).padStart(2, '0'), days, notes, assumed, local: C.local || null, sgg: SG && sgUsed ? SG.name : null, dest: input.dest || 'kix', go: DOM ? { mode, line: R.lineTx || null, region: R.region } : { mode: 'intl', airport: apK }, carAttr, ...(BLANK ? { blank: true } : {}), inp: JSON.parse(JSON.stringify(input)), made: new Date().toISOString() };   // inp = 11/14 #28: 앱에서 비행기 시각을 바꾸면 그날을 다시 짤 때 씀
+    return { v: 1, type, title: (PART ? C.label : input.cityLabel || C.label) + (DT ? ' 당일치기' : ' ' + nights + '박 ' + N + '일'), sub: (DT ? f2(start) : f2(start) + ' – ' + f2(end)) + ' · 집에서 집까지', start: start.getFullYear() + '-' + String(start.getMonth() + 1).padStart(2, '0') + '-' + String(start.getDate()).padStart(2, '0'), days, notes, assumed, local: C.local || null, sgg: SG && sgUsed ? SG.name : null, dest: input.dest || 'kix', ...(PART ? { part: PART } : {}), go: DOM ? { mode, line: R.lineTx || null, region: R.region } : { mode: 'intl', airport: apK }, carAttr, ...(BLANK ? { blank: true } : {}), inp: JSON.parse(JSON.stringify(input)), made: new Date().toISOString() };   // inp = 11/14 #28: 앱에서 비행기 시각을 바꾸면 그날을 다시 짤 때 씀
   }
   // 차 예상 도착 (질문지 start.html도 이 함수를 씀): key 'pt>base' 또는 'sgg:서울 마포구>base' · dep 'HH:MM' · date Date · dest 도시코드 → { dep, arr 'HH:MM', next(다음 날), dur(분), rest(휴게소 쉼 포함) } 또는 null(표에 없음)
   function carEta(key, dep, date, dest) {
