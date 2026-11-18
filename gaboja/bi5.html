@@ -1,0 +1,217 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<title>VZTR BI 시안 5차</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@800&family=Geist:wght@800&family=Quicksand:wght@700&family=M+PLUS+Rounded+1c:wght@800&family=Rubik:wght@800&family=Comfortaa:wght@700&family=Zen+Maru+Gothic:wght@900&display=swap" rel="stylesheet">
+<style>
+@font-face { font-family: "Pretendard Variable"; font-weight: 45 920; font-display: swap; src: url("fonts/PretendardVariable.woff2") format("woff2-variations"), url("../app/fonts/PretendardVariable.woff2") format("woff2-variations"); }
+:root { color-scheme: light;
+  --kr: "Pretendard Variable", Pretendard, -apple-system, "Apple SD Gothic Neo", "Malgun Gothic", system-ui, sans-serif;
+  --ink: #0A1F33; --sub: #5B6B7A; --accent: #2F5BFF; --white: #FFFFFF; --hair: rgba(10, 31, 51, .08); --board: #ECEEF0; }
+html { font-size: clamp(13.5px, calc(100vw * 16 / 390), 17px); }
+* { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+body { margin: 0; background: var(--board); color: #15171A; font-family: var(--kr); -webkit-font-smoothing: antialiased; word-break: keep-all; }
+main { max-width: 34rem; margin: 0 auto; padding: 1.25rem 1rem 7rem; }
+h1 { font-size: 1.375rem; margin: 0 0 .375rem; letter-spacing: -.01em; }
+.lead { color: #6F757D; font-size: .875rem; line-height: 1.6; margin: 0 0 1rem; }
+.sec { font-size: 1rem; margin: 2.25rem 0 .25rem; } .sub { font-size: .8125rem; color: #6F757D; margin: 0 0 .75rem; line-height: 1.55; }
+
+/* 조절판 */
+.ctl { position: sticky; top: 0; z-index: 5; background: color-mix(in srgb, var(--board) 90%, transparent); -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px); margin: 0 -1rem 1rem; padding: .625rem 1rem; border-bottom: 1px solid rgba(0,0,0,.06); display: grid; gap: .45rem; }
+.row { display: flex; align-items: center; gap: .5rem; } .row > span { font-size: .75rem; font-weight: 800; color: #6F757D; width: 2.75rem; flex: none; }
+.seg { display: flex; gap: .25rem; flex: 1; min-width: 0; }
+.seg button { flex: 1; min-width: 0; border: 0; background: #fff; color: #15171A; font: 700 .75rem var(--kr); border-radius: .75rem; padding: .5rem .25rem; white-space: nowrap; }
+.seg button[aria-pressed="true"] { background: #15171A; color: #fff; }
+
+/* ===== 바탕 2가지 ===== */
+.soft { position: relative; isolation: isolate; overflow: hidden; }
+/* A. 그레이 + 화이트만 (기본) — 둥글게 번지는 아주 연한 회색 */
+[data-bg="gray"] .soft { background:
+    radial-gradient(ellipse 75% 65% at 20% 10%, #ECEEF1 0%, transparent 70%),
+    radial-gradient(ellipse 65% 60% at 90% 85%, #EFF0F2 0%, transparent 70%),
+    #FBFBFC; }
+/* B. 4차 여러 색 (비교용) */
+[data-bg="tint"] .soft { background:
+    radial-gradient(ellipse 70% 60% at 18% 12%, #E8EDF7 0%, transparent 70%),
+    radial-gradient(ellipse 60% 55% at 88% 28%, #EFEBF6 0%, transparent 70%),
+    radial-gradient(ellipse 80% 60% at 60% 105%, #E6F0F3 0%, transparent 70%),
+    radial-gradient(ellipse 50% 40% at 10% 85%, #F2F0EC 0%, transparent 70%),
+    #FAFBFC; }
+.soft::after { content: ""; position: absolute; inset: 0; z-index: -1; opacity: .45; mix-blend-mode: multiply; pointer-events: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .5  0 0 0 0 .52  0 0 0 0 .55  0 0 0 .08 0'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E"); }
+
+/* ===== 워드마크 — 점의 간격(--gap)·높이(--dy)는 글꼴마다 JS가 실제 'r' 모양을 재서 넣음 ===== */
+.wm { font-weight: var(--w, 800); line-height: 1; white-space: nowrap; display: inline-block; letter-spacing: -.035em; color: var(--ink); font-family: var(--f, "Inter Tight"), var(--kr); position: relative; }
+.wm .dt { display: inline-block; width: .2em; height: .2em; border-radius: 50%; background: var(--accent); margin-left: var(--gap, 0em); vertical-align: var(--dy, 0em); }
+/* 정렬선 (점검용) */
+.guides .wm::after { content: ""; position: absolute; left: -4%; right: -4%; bottom: var(--blb, 0); border-top: 1px solid #FF2D55; }
+
+.card { background: #fff; border-radius: 1.5rem; padding: 1rem; margin-bottom: 1rem; box-shadow: 0 .25rem .75rem -.375rem rgba(24,36,60,.18); }
+.ch { display: flex; align-items: center; gap: .5rem; margin-bottom: .5rem; flex-wrap: wrap; }
+.ch b { font-size: .9375rem; } .ch em { font-style: normal; font-size: .6875rem; font-weight: 800; color: #fff; background: #15171A; border-radius: 1rem; padding: .0625rem .5rem; }
+.ch small { font-size: .6875rem; color: #8A9099; margin-left: auto; }
+.stage { border-radius: 1.125rem; display: grid; place-items: center; aspect-ratio: 16 / 9; box-shadow: inset 0 0 0 1px var(--hair); }
+.pv { display: grid; grid-template-columns: .9fr 1fr 1.25fr; gap: .5rem; margin-top: .5rem; align-items: start; }
+.pv > div { min-width: 0; } .pv label { display: block; font-size: .6875rem; color: #8A9099; font-weight: 700; margin-top: .3rem; text-align: center; }
+.icon { aspect-ratio: 1; border-radius: 22.5%; display: grid; place-items: center; box-shadow: inset 0 0 0 1px var(--hair); }
+.phone { aspect-ratio: 9 / 16; border-radius: .875rem; display: grid; place-items: center; box-shadow: inset 0 0 0 1px var(--hair); }
+.phone small { position: absolute; left: 0; right: 0; bottom: 8%; text-align: center; font: 600 .4375rem "Inter Tight", var(--kr); color: var(--sub); }
+.pass { background: var(--white); border-radius: .75rem; padding: .5rem .5rem .55rem; color: var(--ink); box-shadow: inset 0 0 0 1px var(--hair); }
+.pass .t { display: flex; align-items: center; justify-content: space-between; font-size: .9rem; }
+.pass .t small { font: 700 .4375rem "Inter Tight", var(--kr); color: var(--sub); letter-spacing: .08em; }
+.pass .rt { display: flex; align-items: center; justify-content: space-between; margin: .55rem 0 .15rem; font: 800 1.05rem "Inter Tight", var(--kr); }
+.pass .rt i { flex: 1; height: 0; border-top: 1.5px dashed var(--sub); margin: 0 .35rem; opacity: .6; }
+.pass .cy { display: flex; justify-content: space-between; font-size: .5rem; color: var(--sub); }
+.pass .perf { border-top: 1.5px dashed var(--hair); margin: .5rem -.5rem .45rem; }
+.pass .btn { background: var(--accent); color: #fff; border-radius: 2rem; font-size: .5625rem; font-weight: 800; text-align: center; padding: .35rem 0; }
+.grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: .625rem; }
+.mini { background: #fff; border-radius: 1.25rem; padding: .625rem; box-shadow: 0 .25rem .75rem -.375rem rgba(24,36,60,.18); display: flex; flex-direction: column; gap: .4rem; min-width: 0; }
+.mini .stage { aspect-ratio: 4 / 3; }
+.mini .nm { font-size: .8125rem; font-weight: 800; }
+.mini .rw { display: flex; gap: .4rem; align-items: center; } .mini .rw .icon { width: 3rem; flex: none; }
+.mini .rw p { margin: 0; font-size: .6875rem; color: #6F757D; line-height: 1.4; }
+.like { border: 0; background: #EEF0F2; color: #15171A; font: 700 .75rem var(--kr); border-radius: .75rem; padding: .5rem .25rem; width: 100%; }
+.like[aria-pressed="true"] { background: var(--accent); color: #fff; }
+.opts { display: grid; grid-template-columns: repeat(3, 1fr); gap: .3rem; margin-top: .75rem; }
+.opts button { border: 0; background: #EEF0F2; color: #15171A; font: 700 .75rem var(--kr); border-radius: .75rem; padding: .55rem .25rem; }
+.opts button[aria-pressed="true"] { background: #15171A; color: #fff; }
+textarea { width: 100%; resize: vertical; border: 1px solid rgba(0,0,0,.1); background: #F6F7F8; color: #15171A; border-radius: .75rem; padding: .45rem .6rem; font: .8125rem/1.45 var(--kr); margin-top: .375rem; }
+.note { font-size: .8125rem; color: #6F757D; line-height: 1.6; background: #fff; border-radius: 1rem; padding: .875rem 1rem; }
+.note table { width: 100%; border-collapse: collapse; font-size: .75rem; margin-top: .375rem; } .note td, .note th { padding: .2rem .25rem; text-align: left; border-bottom: 1px solid #EEF0F2; }
+#out { min-height: 9rem; }
+.dock { position: fixed; left: 0; right: 0; bottom: 0; padding: .625rem 1rem calc(.625rem + env(safe-area-inset-bottom, 0px)); display: flex; align-items: center; gap: .75rem; justify-content: center; background: color-mix(in srgb, var(--board) 88%, transparent); -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px); border-top: 1px solid rgba(0,0,0,.06); z-index: 6; }
+.dock .cnt { font-size: .8125rem; color: #6F757D; } .dock button { border: 0; background: #15171A; color: #fff; font: 800 .9375rem var(--kr); border-radius: 2rem; padding: .75rem 1.5rem; }
+.toast { position: fixed; left: 50%; bottom: 5rem; transform: translate(-50%, 1rem); opacity: 0; transition: .25s; background: #15171A; color: #fff; font-size: .8125rem; padding: .5rem 1rem; border-radius: 2rem; pointer-events: none; z-index: 7; }
+.toast.on { opacity: 1; transform: translate(-50%, 0); }
+</style>
+</head>
+<body>
+<main>
+<h1>VZTR · BI 시안 5차</h1>
+<p class="lead">Inter Tight 유지. 마침표를 r에 <b>조금 더</b> 붙이고(r 기둥과의 간격 16% → 12%, 모든 글꼴 같게), 글꼴마다 <b>‘r’의 실제 바닥과 점의 바닥을 재서 맞췄어요</b>(위 ‘정렬선’을 켜면 빨간 선으로 확인). 바탕은 <b>연한 회색 + 흰색만</b>으로도 보여 드려요. 아래에 <b>둥근 글꼴 5개</b> 더.</p>
+
+<div class="ctl">
+  <div class="row"><span>바탕</span><div class="seg" id="segBg"><button data-v="gray">회색·흰색만</button><button data-v="tint">4차 여러 색</button></div></div>
+  <div class="row"><span>정렬선</span><div class="seg" id="segGd"><button data-v="off">끄기</button><button data-v="on">켜기 (점검)</button></div></div>
+</div>
+
+<h2 class="sec">① 기준 — Inter Tight</h2>
+<div class="card" data-k="기준 Inter Tight" id="base"></div>
+
+<h2 class="sec">② 좋아요 하신 Geist</h2>
+<div class="card" data-k="Geist" id="geist"></div>
+
+<h2 class="sec">③ 딱딱하지 않은 글꼴 5 (새로)</h2>
+<p class="sub">전부 구글 폰트. 4차의 Nunito·Fredoka·Baloo 2는 bi4.html에 그대로 있어요.</p>
+<div class="grid2" id="g2"></div>
+
+<h2 class="sec">점 맞춤 수치</h2>
+<div class="note" id="meas">계산 중…</div>
+
+<h2 class="sec">전체 메모</h2>
+<textarea id="memoAll" rows="2" placeholder="하고 싶은 말 (선택)"></textarea>
+
+<h2 class="sec">보낼 답 (미리 보기)</h2>
+<textarea id="out" readonly></textarea>
+</main>
+<div class="dock"><span class="cnt">좋아요 <b id="cn">0</b></span><button id="cp">답 복사</button></div>
+<div class="toast" id="tt">복사했어요 · 채팅에 붙여넣기</div>
+
+<script>
+(() => {
+  /* 점과 r 기둥 아랫부분 사이 보이는 간격 (글자 크기 대비). 4차 Inter Tight = 0.158em → 5차 0.12em (조금 더 가깝게), 모든 글꼴 같은 값 */
+  const GAP = 0.12;
+  const FONTS = { 'Inter Tight': 800, 'Geist': 800, 'Quicksand': 700, 'M PLUS Rounded 1c': 800, 'Rubik': 800, 'Comfortaa': 700, 'Zen Maru Gothic': 900 };
+  const wm = f => `<span class="wm" data-f="${f}" style="--f:'${f}';--w:${FONTS[f]}">vztr<i class="dt"></i></span>`;
+  const passH = f => `<div class="pass"><div class="t">${wm(f)}<small>BOARDING</small></div><div class="rt"><span>ICN</span><i></i><span>KIX</span></div><div class="cy"><span>인천</span><span>오사카</span></div><div class="perf"></div><div class="btn">일정 만들기</div></div>`;
+  const opts = `<div class="opts"><button data-v="이걸로">이걸로</button><button data-v="고쳐서">고쳐서 쓰기</button><button data-v="별로">별로</button></div><textarea rows="1" placeholder="메모 (선택)"></textarea>`;
+  const full = (f, tag, note) => `<div class="ch"><em>${tag}</em><b style="font-family:'${f}'">${f}</b><small>${note}</small></div>
+    <div class="stage soft" data-fit=".5">${wm(f)}</div>
+    <div class="pv"><div><div class="icon soft" data-fit=".82">${wm(f)}</div><label>앱 아이콘</label></div>
+    <div><div class="phone soft" data-fit=".64" style="position:relative">${wm(f)}<small>Stop searching. Start going.</small></div><label>첫 화면</label></div>
+    <div>${passH(f)}<label>탑승권</label></div></div>${opts}`;
+  document.getElementById('base').innerHTML = full('Inter Tight', '기준', '유지');
+  document.getElementById('geist').innerHTML = full('Geist', '비교', '4차 좋아요');
+  const G2 = [['Quicksand', '가늘고 둥근 기하학, 가장 가볍고 산뜻'], ['M PLUS Rounded 1c', '일본어까지 있는 둥근 고딕 — 일본 여행 화면과 결이 맞음'],
+    ['Rubik', '모서리만 살짝 둥근, 반듯함과 친근함의 중간'], ['Comfortaa', '완전한 원 기반, 장식적·개성 강함'], ['Zen Maru Gothic', '일본 둥근 고딕, 두툼하고 차분']];
+  document.getElementById('g2').innerHTML = G2.map(([f, d]) => `<div class="mini" data-k="${f}"><div class="stage soft" data-fit=".62">${wm(f)}</div>
+    <div class="nm" style="font-family:'${f}'">${f}</div><div class="rw"><div class="icon soft" data-fit=".82">${wm(f)}</div><p>${d}</p></div>
+    <button class="like" aria-pressed="false">좋아요</button></div>`).join('');
+
+  /* ===== 점 맞춤: 캔버스에 'r'을 실제로 그려 픽셀을 셈 =====
+     · 바닥: r 잉크의 가장 아래 줄 = 점의 바닥 (기준선 아래로 내려가면 그만큼 점도 내림)
+     · 간격: 점이 놓이는 높이(기준선 위 0.2em 구간)에서 r 기둥의 오른쪽 끝 → 글자 폭까지(rsb). r의 팔은 점 위로 지나가니 제외 */
+  const M = {};
+  function measure() {
+    const S = 400, LS = -0.035, c = document.createElement('canvas'); c.width = S * 2; c.height = S * 2; const x = c.getContext('2d', { willReadFrequently: true });
+    Object.entries(FONTS).forEach(([f, w]) => {
+      x.clearRect(0, 0, c.width, c.height); x.font = `${w} ${S}px "${f}"`; const X0 = S * .25, B = S * 1.3; x.fillText('r', X0, B);
+      const adv = x.measureText('r').width, d = x.getImageData(0, 0, c.width, c.height).data;
+      let br = -1, bot = -1;
+      for (let y = 0; y < c.height; y++) for (let X = 0; X < c.width; X++) if (d[(y * c.width + X) * 4 + 3] > 127) { if (y > bot) bot = y; if (y >= B - S * .2 && y < B + S * .05 && X > br) br = X; }
+      const rsb = (X0 + adv - (br + 1)) / S, desc = (bot + 1 - B) / S;
+      M[f] = { rsb, desc, gap: GAP - (rsb + LS), dy: -desc };
+    });
+    document.querySelectorAll('.wm').forEach(el => { const m = M[el.dataset.f]; el.style.setProperty('--gap', m.gap.toFixed(4) + 'em'); el.style.setProperty('--dy', m.dy.toFixed(4) + 'em'); });
+  }
+  /* 실제 화면에서 점 바닥 vs r 잉크 바닥 차이(px)를 다시 재서 표로 */
+  function verify() {
+    const rows = Object.keys(FONTS).map(f => {
+      const el = document.querySelector(`.stage .wm[data-f="${f}"]`); if (!el) return '';
+      const fs = parseFloat(getComputedStyle(el).fontSize), dot = el.querySelector('.dt').getBoundingClientRect();
+      const probe = document.createElement('i'); probe.style.cssText = 'display:inline-block;width:0;height:0;vertical-align:baseline'; el.insertBefore(probe, el.querySelector('.dt'));
+      const base = probe.getBoundingClientRect().bottom; probe.remove();
+      const rBottom = base + M[f].desc * fs, diff = dot.bottom - rBottom;
+      el.style.setProperty('--blb', (el.getBoundingClientRect().bottom - rBottom) + 'px');
+      return `<tr><td>${f}</td><td>${(M[f].rsb).toFixed(3)}em</td><td>${(M[f].desc * 100).toFixed(1)}%</td><td>${diff.toFixed(2)}px</td></tr>`; }).join('');
+    document.getElementById('meas').innerHTML = `r 기둥과 점 사이 보이는 간격 = 글자 크기의 ${Math.round(GAP * 100)}%로 모든 글꼴 통일 (4차 Inter Tight는 약 16%). ‘바닥 차이’ = 화면에 그려진 점 바닥 − r 바닥, 0이면 같은 선.<table><tr><th>글꼴</th><th>r 아래쪽 오른쪽 여백</th><th>r 바닥(기준선 아래)</th><th>바닥 차이</th></tr>${rows}</table>`;
+    document.querySelectorAll('.wm').forEach(el => { if (!el.closest('.stage')) { const m = M[el.dataset.f], fs = parseFloat(getComputedStyle(el).fontSize);
+      const probe = document.createElement('i'); probe.style.cssText = 'display:inline-block;width:0;height:0;vertical-align:baseline'; el.insertBefore(probe, el.querySelector('.dt'));
+      const base = probe.getBoundingClientRect().bottom; probe.remove(); el.style.setProperty('--blb', (el.getBoundingClientRect().bottom - (base + m.desc * fs)) + 'px'); } });
+  }
+  const fit = () => document.querySelectorAll('[data-fit]').forEach(box => { const w = box.querySelector('.wm'); w.style.fontSize = '100px';
+    w.style.fontSize = (100 * box.clientWidth * +box.dataset.fit / w.getBoundingClientRect().width) + 'px'; });
+  const all = () => { measure(); fit(); verify(); };
+  (document.fonts && document.fonts.ready ? document.fonts.ready : Promise.resolve()).then(() => Promise.all(Object.entries(FONTS).map(([f, w]) => document.fonts.load(`${w} 40px "${f}"`, 'vztr')))).then(all, all);
+  addEventListener('resize', () => { fit(); verify(); });
+
+  // 조절판 · 피드백
+  const KEY = 'vztr-bi-5'; let st = { bg: 'gray', gd: 'off', likes: {}, c: {}, m: '' };
+  try { Object.assign(st, JSON.parse(localStorage.getItem(KEY) || '{}') || {}); } catch (_) {}
+  const save = () => { try { localStorage.setItem(KEY, JSON.stringify(st)); } catch (_) {} };
+  function draw() {
+    document.documentElement.dataset.bg = st.bg; document.body.classList.toggle('guides', st.gd === 'on');
+    document.querySelectorAll('#segBg button').forEach(b => b.setAttribute('aria-pressed', b.dataset.v === st.bg));
+    document.querySelectorAll('#segGd button').forEach(b => b.setAttribute('aria-pressed', b.dataset.v === st.gd));
+    const L = ['VZTR BI 시안 5차 피드백', '바탕: ' + (st.bg === 'gray' ? '회색·흰색만' : '4차 여러 색')];
+    document.querySelectorAll('.card[data-k]').forEach(el => { const k = el.dataset.k, o = st.c[k] || {};
+      el.querySelectorAll('.opts button').forEach(b => b.setAttribute('aria-pressed', o.v === b.dataset.v));
+      const t = el.querySelector('textarea'); if (document.activeElement !== t) t.value = o.m || '';
+      L.push(`${k}: ${o.v || '(안 고름)'}${o.m && o.m.trim() ? ' · 메모: ' + o.m.trim() : ''}`); });
+    const liked = Object.keys(st.likes).filter(k => st.likes[k]);
+    document.querySelectorAll('.mini').forEach(m => m.querySelector('.like').setAttribute('aria-pressed', !!st.likes[m.dataset.k]));
+    L.push('좋아요 둥근 글꼴: ' + (liked.length ? liked.join(', ') : '(없음)'));
+    if (st.m && st.m.trim()) L.push('전체 메모: ' + st.m.trim());
+    const ma = document.getElementById('memoAll'); if (document.activeElement !== ma) ma.value = st.m || '';
+    document.getElementById('cn').textContent = liked.length; document.getElementById('out').value = L.join('\n');
+  }
+  document.getElementById('segBg').onclick = e => { const b = e.target.closest('button'); if (b) { st.bg = b.dataset.v; save(); draw(); } };
+  document.getElementById('segGd').onclick = e => { const b = e.target.closest('button'); if (b) { st.gd = b.dataset.v; save(); draw(); } };
+  document.addEventListener('click', e => {
+    const lk = e.target.closest('.like'); if (lk) { const k = lk.closest('.mini').dataset.k; st.likes[k] = !st.likes[k]; save(); draw(); return; }
+    const b = e.target.closest('.opts button'); if (!b) return; const k = b.closest('.card').dataset.k, o = st.c[k] = st.c[k] || {}; o.v = o.v === b.dataset.v ? '' : b.dataset.v; save(); draw(); });
+  document.querySelectorAll('.card textarea').forEach(t => t.addEventListener('input', () => { const k = t.closest('.card').dataset.k; (st.c[k] = st.c[k] || {}).m = t.value; save(); draw(); }));
+  document.getElementById('memoAll').addEventListener('input', e => { st.m = e.target.value; save(); draw(); });
+  document.getElementById('cp').onclick = async () => { const tx = document.getElementById('out').value; let ok = false;
+    try { await navigator.clipboard.writeText(tx); ok = true; } catch (_) { const o = document.getElementById('out'); o.removeAttribute('readonly'); o.select(); try { ok = document.execCommand('copy'); } catch (_) {} o.setAttribute('readonly', ''); }
+    const t = document.getElementById('tt'); t.textContent = ok ? '복사했어요 · 채팅에 붙여넣기' : '위 글을 길게 눌러 복사해 주세요'; t.classList.add('on'); setTimeout(() => t.classList.remove('on'), 2200); };
+  draw();
+})();
+</script>
+</body>
+</html>
