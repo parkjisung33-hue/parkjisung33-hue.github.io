@@ -1,0 +1,178 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<title>VZTR BI 시안 2차</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:ital,wght@0,300;0,400;0,600;0,800;1,400&display=swap" rel="stylesheet">
+<style>
+@font-face { font-family: "Pretendard Variable"; font-weight: 45 920; font-display: swap; src: url("fonts/PretendardVariable.woff2") format("woff2-variations"), url("../app/fonts/PretendardVariable.woff2") format("woff2-variations"); }
+/* ===== 브랜드 토큰 (1차에서 확정: 깊은 바다 · Inter Tight) ===== */
+:root { color-scheme: light;
+  --kr: "Pretendard Variable", Pretendard, -apple-system, "Apple SD Gothic Neo", "Malgun Gothic", system-ui, sans-serif;
+  --lat: "Inter Tight";
+  --paper: #F5F8FA; --ink: #0A1F33; --sub: #5B6B7A; --sea: #0F5E8C; --deep: #0A2C4A; --sky: #CFE8F3; --accent: #FF5B2E; --white: #FFFFFF;
+  --hair: rgba(10, 31, 51, .1); --board: #ECEEF0; }
+html { font-size: clamp(13.5px, calc(100vw * 16 / 390), 17px); }
+* { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+body { margin: 0; background: var(--board); color: #15171A; font-family: var(--kr); -webkit-font-smoothing: antialiased; word-break: keep-all; }
+main { max-width: 34rem; margin: 0 auto; padding: 1.25rem 1rem 7rem; }
+h1 { font-size: 1.375rem; margin: 0 0 .375rem; letter-spacing: -.01em; }
+.lead { color: #6F757D; font-size: .875rem; line-height: 1.6; margin: 0 0 1rem; }
+.fixed { display: flex; flex-wrap: wrap; gap: .375rem; margin-bottom: 1.25rem; }
+.fixed span { font-size: .75rem; font-weight: 700; background: #fff; border-radius: 2rem; padding: .3rem .7rem; display: inline-flex; align-items: center; gap: .35rem; }
+.fixed i { width: .7rem; height: .7rem; border-radius: 50%; display: inline-block; }
+
+.card { background: #fff; border-radius: 1.5rem; padding: 1rem; margin-bottom: 1.25rem; box-shadow: 0 .25rem .75rem -.375rem rgba(24,36,60,.18); }
+.ch { display: flex; align-items: baseline; gap: .5rem; margin-bottom: .25rem; }
+.ch b { font-size: 1rem; } .ch em { font-style: normal; font-size: .75rem; font-weight: 800; color: #fff; background: #15171A; border-radius: 1rem; padding: .0625rem .5rem; }
+.why { font-size: .8125rem; color: #6F757D; line-height: 1.55; margin: 0 0 .75rem; }
+.stage { background: var(--paper); border-radius: 1.125rem; padding: 2.25rem 1.25rem; display: grid; place-items: center; min-height: 9.5rem; color: var(--ink); }
+
+/* 워드마크 — 글자 크기는 em 기준이라 어디 넣어도 비율 유지 */
+.wm { font-family: var(--lat), var(--kr); line-height: 1; white-space: nowrap; display: inline-block; }
+.wm.k1 { font-weight: 800; letter-spacing: -.03em; }
+.wm.k2 { font-weight: 800; letter-spacing: -.03em; } .wm.k2 b { color: var(--accent); font-weight: 800; }
+.wm.k3 { font-weight: 800; letter-spacing: -.02em; } .wm.k3 b { display: inline-block; width: .17em; height: .17em; border-radius: 50%; background: var(--accent); margin: 0 .07em; vertical-align: .09em; }
+.wm.k4 { font-weight: 300; letter-spacing: .42em; margin-right: -.42em; text-transform: uppercase; font-size: .62em; }
+.wm.k5 { font-weight: 800; letter-spacing: -.02em; background: var(--accent); color: var(--white); border-radius: .3em; padding: .12em .32em .17em; }
+.big { font-size: 3.6rem; }
+.dict { width: 100%; max-width: 15rem; }
+.dict hr { border: 0; border-top: 1.5px solid currentColor; opacity: .5; margin: .7rem 0 .5rem; }
+.dict .p { font: italic 400 .8125rem var(--lat), var(--kr); opacity: .7; }
+.dict .d { font: 400 .8125rem/1.45 var(--lat), var(--kr); margin-top: .125rem; }
+.dict .d span { color: var(--accent); font-weight: 700; }
+.ctr { text-align: center; }
+
+/* 미리보기 */
+.pv { display: grid; grid-template-columns: .82fr 1fr 1.25fr; gap: .5rem; margin-top: .625rem; align-items: start; }
+.pv > div { min-width: 0; } .pv label { display: block; font-size: .6875rem; color: #8A9099; font-weight: 700; margin-top: .3rem; text-align: center; }
+.icon { aspect-ratio: 1; border-radius: 22.5%; overflow: hidden; display: grid; place-items: center; }
+.phone { aspect-ratio: 9 / 16; border-radius: .875rem; overflow: hidden; position: relative; }
+.phone .ov { position: absolute; left: 9%; right: 9%; bottom: 9%; }
+.phone .ov.mid { top: 50%; bottom: auto; transform: translateY(-50%); text-align: center; }
+.phone .ov hr { border: 0; border-top: 1px solid currentColor; opacity: .5; margin: .35rem 0 .25rem; }
+.phone .ov p { margin: 0; font: 400 .4375rem/1.45 var(--lat), var(--kr); opacity: .85; }
+.phone .hz { position: absolute; left: 0; right: 0; }
+.pass { background: var(--paper); border-radius: .75rem; padding: .5rem .5rem .55rem; color: var(--ink); border: 1px solid var(--hair); }
+.pass .t { display: flex; align-items: center; justify-content: space-between; font-size: .8rem; }
+.pass .t small { font: 700 .4375rem var(--lat), var(--kr); color: var(--sub); letter-spacing: .08em; }
+.pass .rt { display: flex; align-items: center; justify-content: space-between; margin: .55rem 0 .15rem; font: 800 1.05rem var(--lat), var(--kr); }
+.pass .rt i { flex: 1; height: 0; border-top: 1.5px dashed var(--sub); margin: 0 .35rem; opacity: .6; }
+.pass .cy { display: flex; justify-content: space-between; font-size: .5rem; color: var(--sub); }
+.pass .perf { border-top: 1.5px dashed var(--hair); margin: .5rem -.5rem .45rem; }
+.pass .btn { background: var(--accent); color: #fff; border-radius: 2rem; font-size: .5625rem; font-weight: 800; text-align: center; padding: .35rem 0; }
+.pass.dark { background: var(--deep); color: var(--white); border-color: transparent; } .pass.dark .t small, .pass.dark .cy { color: var(--sky); } .pass.dark .rt i { border-color: var(--sky); } .pass.dark .perf { border-color: rgba(255,255,255,.18); }
+
+.opts { display: grid; grid-template-columns: repeat(3, 1fr); gap: .3rem; margin-top: .875rem; }
+.opts button { border: 0; background: #EEF0F2; color: #15171A; font: 700 .75rem var(--kr); border-radius: .75rem; padding: .55rem .25rem; }
+.opts button[aria-pressed="true"] { background: #15171A; color: #fff; }
+textarea { width: 100%; resize: vertical; border: 1px solid rgba(0,0,0,.1); background: #F6F7F8; color: #15171A; border-radius: .75rem; padding: .45rem .6rem; font: .8125rem/1.45 var(--kr); margin-top: .375rem; }
+.sec { font-size: .9375rem; margin: 2rem 0 .5rem; }
+.note { font-size: .8125rem; color: #6F757D; line-height: 1.6; background: #fff; border-radius: 1rem; padding: .875rem 1rem; }
+#out { min-height: 9rem; }
+.dock { position: fixed; left: 0; right: 0; bottom: 0; padding: .625rem 1rem calc(.625rem + env(safe-area-inset-bottom, 0px)); display: flex; align-items: center; gap: .75rem; justify-content: center; background: color-mix(in srgb, var(--board) 88%, transparent); -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px); border-top: 1px solid rgba(0,0,0,.06); }
+.dock .cnt { font-size: .8125rem; color: #6F757D; } .dock button { border: 0; background: #15171A; color: #fff; font: 800 .9375rem var(--kr); border-radius: 2rem; padding: .75rem 1.5rem; }
+.toast { position: fixed; left: 50%; bottom: 5rem; transform: translate(-50%, 1rem); opacity: 0; transition: .25s; background: #15171A; color: #fff; font-size: .8125rem; padding: .5rem 1rem; border-radius: 2rem; pointer-events: none; }
+.toast.on { opacity: 1; transform: translate(-50%, 0); }
+</style>
+</head>
+<body>
+<main>
+<h1>VZTR · BI 시안 2차</h1>
+<p class="lead">1차에서 고르신 <b>D 사전 표기</b> 결로 5안 더 만들었어요. 바다 그림은 빼고 <b>색면만</b> 써요. 안마다 첫 화면 바탕 처리도 다르게 해 봤어요(남색 한 면 · 수평선 두 색 · 흰 바탕 · 주황 한 면 · 바다색 한 면).</p>
+<div class="fixed">
+  <span><i style="background:#0A2C4A"></i><i style="background:#0F5E8C"></i><i style="background:#CFE8F3"></i><i style="background:#FF5B2E"></i>깊은 바다 (확정)</span>
+  <span style="font-family:'Inter Tight';font-weight:800">Inter Tight (확정)</span>
+</div>
+
+<div id="cards"></div>
+
+<h2 class="sec">전체 메모</h2>
+<textarea id="memoAll" rows="2" placeholder="하고 싶은 말 (선택)"></textarea>
+
+<h2 class="sec">참고</h2>
+<div class="note">
+• 발음 기호(/ˈvɪz.ɪ.tər/)는 ‘비지터’로 읽히게 하려는 장치라 다섯 안 모두 첫 화면에 넣었어요.<br>
+• E3(숨은 모음)의 주황 점 세 개는 빠진 모음 i·i·o 자리예요.<br>
+• 고르신 안으로 다음 단계에서 앱 아이콘 실제 크기(홈 화면)와 앱 화면 전체에 입혀 볼게요.
+</div>
+
+<h2 class="sec">보낼 답 (미리 보기)</h2>
+<textarea id="out" readonly></textarea>
+</main>
+<div class="dock"><span class="cnt"><b id="cn">0</b>/5 고름</span><button id="cp">답 복사</button></div>
+<div class="toast" id="tt">복사했어요 · 채팅에 붙여넣기</div>
+
+<script>
+(() => {
+  const W = {
+    k1: () => '<span class="wm k1">vztr</span>',
+    k2: () => '<span class="wm k2">vztr<b>.</b></span>',
+    k3: () => '<span class="wm k3">v<b></b>z<b></b>t<b></b>r</span>',
+    k4: () => '<span class="wm k4">vztr</span>',
+    k5: () => '<span class="wm k5">vztr</span>'
+  };
+  const DEF = '<div class="p">/ˈvɪz.ɪ.tər/ noun</div><div class="d">one who goes, without the searching. <span>검색 말고, 그냥 가요.</span></div>';
+  // 안마다: 워드마크 · 아이콘(바탕·글자색·크기) · 첫 화면(바탕) · 탑승권(밝음/어두움)
+  const CARDS = [
+    { k: 'E1', w: 'k1', name: '사전 정리판', why: '1차 D를 그대로 다듬은 기준안. 굵은 소문자 + 가는 선 + 발음 기호. 가장 조용하고 깔끔.',
+      icon: { bg: 'var(--deep)', c: 'var(--white)', fs: '1.25rem' }, phone: 'solid-deep', pass: '' },
+    { k: 'E2', w: 'k2', name: '마침표', why: 'vztr 뒤에 주황 마침표 하나. ‘검색 끝.’이라는 뜻. 강조색 하나가 일을 다 함(레퍼런스 pause.).',
+      icon: { bg: 'var(--deep)', c: 'var(--white)', fs: '1.15rem' }, phone: 'horizon', pass: '' },
+    { k: 'E3', w: 'k3', name: '숨은 모음', why: '빠진 모음 i·i·o 자리에 주황 점. 이름을 몰라도 ‘뭔가 빠졌다 → visitor’로 읽히게 하는 장치.',
+      icon: { bg: 'var(--paper)', c: 'var(--ink)', fs: '1.05rem' }, phone: 'solid-paper', pass: '' },
+    { k: 'E4', w: 'k4', name: '자간 넓힘', why: '가는 대문자를 넓게 띄움(레퍼런스 O C E A N · S E A). 고급 여행 브랜드처럼 차분.',
+      icon: { bg: 'var(--sea)', c: 'var(--white)', fs: '1.7rem' }, phone: 'solid-sea', pass: 'dark' },
+    { k: 'E5', w: 'k5', name: '주황 짐표', why: '워드마크를 주황 이름표 안에. 짐에 붙이는 태그처럼 — 짐 캐릭터 16과도 이어짐. 어디 붙여도 눈에 띔.',
+      icon: { bg: 'var(--accent)', c: 'var(--white)', fs: '1.2rem', raw: true }, phone: 'solid-accent', pass: '' }
+  ];
+  const PH = {
+    'solid-deep': { bg: 'var(--deep)', c: 'var(--white)', mid: false, label: '남색 한 면' },
+    'horizon': { bg: 'linear-gradient(var(--sky) 0 58%, var(--sea) 58% 100%)', c: 'var(--white)', mid: false, label: '수평선 두 색' },
+    'solid-paper': { bg: 'var(--paper)', c: 'var(--ink)', mid: true, label: '흰 바탕' },
+    'solid-sea': { bg: 'var(--sea)', c: 'var(--white)', mid: true, label: '바다색 한 면' },
+    'solid-accent': { bg: 'var(--accent)', c: 'var(--white)', mid: false, label: '주황 한 면' }
+  };
+  const iconHtml = c => { const i = c.icon;
+    const inner = i.raw ? `<span class="wm k1" style="color:${i.c}">vztr</span>` : W[c.w]();
+    return `<div class="icon" style="background:${i.bg};color:${i.c};font-size:${i.fs}">${inner}</div>`; };
+  const phoneHtml = c => { const p = PH[c.phone]; const wm = c.w === 'k5' && c.phone === 'solid-accent' ? '<span class="wm k1">vztr</span>' : W[c.w]();
+    return `<div class="phone" style="background:${p.bg};color:${p.c}"><div class="ov${p.mid ? ' mid' : ''}"><div style="font-size:1.25rem">${wm}</div><hr><p>/ˈvɪz.ɪ.tər/ noun<br>Stop searching. Start going.</p></div></div>`; };
+  const passHtml = c => `<div class="pass ${c.pass}"><div class="t">${W[c.w]()}<small>BOARDING</small></div><div class="rt"><span>ICN</span><i></i><span>KIX</span></div><div class="cy"><span>인천</span><span>오사카</span></div><div class="perf"></div><div class="btn">일정 만들기</div></div>`;
+  document.getElementById('cards').innerHTML = CARDS.map(c => `<section class="card" data-k="${c.k}">
+    <div class="ch"><em>${c.k}</em><b>${c.name}</b></div><p class="why">${c.why}</p>
+    <div class="stage"><div class="dict${c.w === 'k4' ? ' ctr' : ''}"><div class="big">${W[c.w]()}</div><hr>${DEF}</div></div>
+    <div class="pv"><div>${iconHtml(c)}<label>앱 아이콘</label></div><div>${phoneHtml(c)}<label>첫 화면 · ${PH[c.phone].label}</label></div><div>${passHtml(c)}<label>탑승권</label></div></div>
+    <div class="opts"><button data-v="이걸로">이걸로</button><button data-v="고쳐서">고쳐서 쓰기</button><button data-v="별로">별로</button></div>
+    <textarea rows="1" placeholder="메모 (선택)"></textarea></section>`).join('');
+
+  const KEY = 'vztr-bi-2';
+  let st = { c: {}, m: '' };
+  try { Object.assign(st, JSON.parse(localStorage.getItem(KEY) || '{}') || {}); } catch (_) {}
+  const save = () => { try { localStorage.setItem(KEY, JSON.stringify(st)); } catch (_) {} };
+  function draw() {
+    let n = 0; const L = ['VZTR BI 시안 2차 피드백 (깊은 바다 · Inter Tight)'];
+    CARDS.forEach(c => { const o = st.c[c.k] || {}; if (o.v) n++;
+      const el = document.querySelector(`.card[data-k="${c.k}"]`);
+      el.querySelectorAll('.opts button').forEach(b => b.setAttribute('aria-pressed', o.v === b.dataset.v));
+      const t = el.querySelector('textarea'); if (document.activeElement !== t) t.value = o.m || '';
+      L.push(`${c.k} ${c.name}: ${o.v || '(안 고름)'}${o.m && o.m.trim() ? ' · 메모: ' + o.m.trim() : ''}`); });
+    if (st.m && st.m.trim()) L.push('전체 메모: ' + st.m.trim());
+    const ma = document.getElementById('memoAll'); if (document.activeElement !== ma) ma.value = st.m || '';
+    document.getElementById('cn').textContent = n; document.getElementById('out').value = L.join('\n');
+  }
+  document.addEventListener('click', e => { const b = e.target.closest('.opts button'); if (!b) return; const k = b.closest('.card').dataset.k, o = st.c[k] = st.c[k] || {}; o.v = o.v === b.dataset.v ? '' : b.dataset.v; save(); draw(); });
+  document.querySelectorAll('.card textarea').forEach(t => t.addEventListener('input', () => { const k = t.closest('.card').dataset.k; (st.c[k] = st.c[k] || {}).m = t.value; save(); draw(); }));
+  document.getElementById('memoAll').addEventListener('input', e => { st.m = e.target.value; save(); draw(); });
+  document.getElementById('cp').onclick = async () => { const tx = document.getElementById('out').value; let ok = false;
+    try { await navigator.clipboard.writeText(tx); ok = true; } catch (_) { const o = document.getElementById('out'); o.removeAttribute('readonly'); o.select(); try { ok = document.execCommand('copy'); } catch (_) {} o.setAttribute('readonly', ''); }
+    const t = document.getElementById('tt'); t.textContent = ok ? '복사했어요 · 채팅에 붙여넣기' : '위 글을 길게 눌러 복사해 주세요'; t.classList.add('on'); setTimeout(() => t.classList.remove('on'), 2200); };
+  draw();
+})();
+</script>
+</body>
+</html>
