@@ -1,0 +1,365 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>가이드북 상세 시안</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400..800&display=swap">
+<style>
+@font-face { font-family: "Pretendard Variable"; font-weight: 45 920; font-display: swap; src: url("fonts/PretendardVariable.woff2") format("woff2-variations"), url("fonts/PretendardVariable.woff2") format("woff2"); }
+:root {
+  color-scheme: light;
+  --kr: "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
+  --lat: "Inter Tight", var(--kr);
+  --canvas: #EEF0F3; --ink: #0A1F33; --sub: #5B6B7A; --hair: rgba(10,31,51,.09); --hair2: rgba(10,31,51,.16); --paper: #FFFFFF; --field: #FFFFFF;
+  --blue: #2F5BFF; --on-blue: #FFFFFF; --blue-soft: rgba(47,91,255,.09); --green: #2F9E6E; --amber: #E8912A; --amber-soft: rgba(232,145,42,.10); --red: #CF3F66;
+  --shadow: 0 1.375rem 2.75rem -1.375rem rgba(24,36,60,.32), 0 2px 0.375rem -2px rgba(24,36,60,.10);
+  --sh-xs: 0 1px 2px rgba(24,36,60,.06), 0 0.25rem 0.75rem -0.375rem rgba(24,36,60,.14);
+  --r-lg: 1.625rem; --r-md: 1.25rem;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  color-scheme: dark; --canvas: #0E1013; --ink: #ECEEF1; --sub: #8F969F; --hair: rgba(255,255,255,.08); --hair2: rgba(255,255,255,.18); --paper: #1B1E23; --field: #15181C;
+  --blue: #7C95FF; --on-blue: #0A1F33; --blue-soft: rgba(124,149,255,.12); --green: #4CC08E; --amber: #F0A84A; --amber-soft: rgba(240,168,74,.12); --red: #F06A8A;
+  --shadow: 0 1.375rem 2.75rem -1.375rem rgba(0,0,0,.7), 0 2px 0.375rem -2px rgba(0,0,0,.4); --sh-xs: 0 1px 2px rgba(0,0,0,.3), 0 0.25rem 0.75rem -0.375rem rgba(0,0,0,.5);
+} }
+:root[data-theme="dark"] {
+  color-scheme: dark; --canvas: #0E1013; --ink: #ECEEF1; --sub: #8F969F; --hair: rgba(255,255,255,.08); --hair2: rgba(255,255,255,.18); --paper: #1B1E23; --field: #15181C;
+  --blue: #7C95FF; --on-blue: #0A1F33; --blue-soft: rgba(124,149,255,.12); --green: #4CC08E; --amber: #F0A84A; --amber-soft: rgba(240,168,74,.12); --red: #F06A8A;
+  --shadow: 0 1.375rem 2.75rem -1.375rem rgba(0,0,0,.7), 0 2px 0.375rem -2px rgba(0,0,0,.4); --sh-xs: 0 1px 2px rgba(0,0,0,.3), 0 0.25rem 0.75rem -0.375rem rgba(0,0,0,.5);
+}
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; background: var(--canvas); }
+body { margin: 0; background: var(--canvas); color: var(--ink); font-family: var(--kr); font-size: 15px; line-height: 1.5; letter-spacing: -.01em; word-break: keep-all; overflow-wrap: anywhere; font-variant-numeric: tabular-nums; }
+button { font: inherit; color: inherit; border: 0; background: none; padding: 0; cursor: pointer; -webkit-tap-highlight-color: transparent; }
+svg { display: block; }
+.ic { width: 18px; height: 18px; stroke: currentColor; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; flex: none; }
+.lat { font-family: var(--lat); }
+
+/* 보드 */
+.board { max-width: 1320px; margin: 0 auto; padding: 20px 16px 140px; }
+.board > h1 { margin: 4px 0 4px; font-size: 22px; font-weight: 700; letter-spacing: -.03em; }
+.lead { margin: 0 0 14px; color: var(--sub); font-size: 13.5px; } .lead b { color: var(--ink); }
+.ctl { display: flex; flex-wrap: wrap; gap: 8px 14px; align-items: center; margin-bottom: 8px; font-size: 13px; position: sticky; top: 0; z-index: 20; padding: 8px 0; background: var(--canvas); }
+.seg { display: inline-flex; padding: 3px; border-radius: 999px; background: var(--hair); }
+.seg button { padding: 6px 12px; border-radius: 999px; font-size: 12.5px; font-weight: 600; color: var(--sub); }
+.seg button[aria-pressed="true"] { background: var(--paper); color: var(--ink); box-shadow: var(--sh-xs); }
+.ctl .lb { font-weight: 700; color: var(--sub); }
+.toc { display: flex; flex-wrap: wrap; gap: 6px; } .toc a { font-size: 12px; font-weight: 600; color: var(--blue); text-decoration: none; padding: 4px 9px; border-radius: 999px; background: var(--blue-soft); }
+section.s { margin-top: 34px; scroll-margin-top: 60px; }
+section.s > h2 { margin: 0 0 4px; font-size: 19px; font-weight: 700; letter-spacing: -.03em; }
+section.s > h2 small { font: 700 12px var(--lat); color: var(--blue); margin-right: 6px; }
+section.s > p { margin: 0 0 14px; font-size: 13px; color: var(--sub); } section.s > p b { color: var(--ink); }
+.now0 { font-size: 12.5px; color: var(--sub); margin: 0 0 12px; padding: 8px 12px; border-radius: 12px; background: var(--hair); }
+.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 360px), 1fr)); gap: 22px 18px; align-items: start; }
+.opt { display: flex; flex-direction: column; gap: 10px; }
+.opt h3 { margin: 0; font-size: 15.5px; font-weight: 700; display: flex; gap: 8px; align-items: baseline; }
+.opt h3 .k { font-family: var(--lat); font-weight: 800; color: var(--blue); }
+.opt ul { margin: 0; padding-left: 18px; font-size: 12.5px; color: var(--sub); }
+.ph { width: min(390px, 100%); margin: 0 auto; background: var(--canvas); border-radius: 26px; padding: 12px; box-shadow: 0 0 0 1px var(--hair2); }
+.pk { background: var(--paper); border-radius: var(--r-md); padding: 10px 12px; box-shadow: var(--sh-xs); display: flex; flex-direction: column; gap: 8px; }
+.pk .row { display: flex; gap: 6px; flex-wrap: wrap; }
+.pk .row button { padding: 6px 11px; border-radius: 999px; font-size: 12.5px; font-weight: 600; background: var(--hair); color: var(--sub); }
+.pk .row button[aria-pressed="true"] { background: var(--blue); color: var(--on-blue); }
+.pk .q { font-size: 13px; font-weight: 700; }
+textarea { width: 100%; resize: vertical; border: 1px solid var(--hair); background: var(--field); color: var(--ink); border-radius: 12px; padding: 7px 10px; font: 13px/1.45 var(--kr); }
+.dock { position: fixed; left: 0; right: 0; bottom: 0; padding: 10px 16px calc(10px + env(safe-area-inset-bottom)); background: color-mix(in srgb, var(--canvas) 88%, transparent); -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px); display: flex; gap: 10px; justify-content: center; align-items: center; border-top: 1px solid var(--hair); z-index: 50; }
+.dock button { padding: 11px 18px; border-radius: 999px; background: var(--blue); color: var(--on-blue); font-weight: 700; font-size: 14px; }
+.dock span { font-size: 12.5px; color: var(--sub); }
+#out { position: absolute; left: -9999px; }
+
+/* ---------- 앱 조각 공통 ---------- */
+.card { background: var(--paper); border-radius: var(--r-lg); box-shadow: var(--sh-xs); }
+.sheet { background: var(--paper); border-radius: 24px 24px 0 0; box-shadow: var(--shadow); padding: 8px 18px 18px; position: relative; }
+.sheet .grab { width: 36px; height: 4px; border-radius: 4px; background: var(--hair2); margin: 0 auto 10px; }
+.sheet .x { position: absolute; right: 14px; top: 16px; width: 34px; height: 34px; border-radius: 50%; background: var(--hair); display: grid; place-items: center; }
+.sheet .x .ic { width: 16px; height: 16px; }
+.eb { font: 700 11.5px var(--lat); letter-spacing: .04em; color: var(--sub); }
+.t1 { margin: 2px 0 0; font-size: 21px; font-weight: 700; letter-spacing: -.035em; line-height: 1.25; }
+.subt { margin: 2px 0 0; font-size: 13.5px; color: var(--sub); }
+.chip { display: inline-flex; align-items: center; gap: 5px; padding: 4px 10px; border-radius: 999px; background: var(--hair); font-size: 12.5px; font-weight: 600; white-space: nowrap; }
+.chip .ic { width: 14px; height: 14px; }
+.chip.b { background: var(--blue-soft); color: var(--blue); }
+.btn { height: 46px; border-radius: 999px; display: inline-flex; align-items: center; justify-content: center; gap: 7px; font-weight: 700; font-size: 14.5px; }
+.btn.pri { background: var(--ink); color: var(--paper); } .btn.sec { background: var(--hair); color: var(--ink); } .btn .ic { width: 17px; height: 17px; }
+.tm { font: 600 13.5px var(--lat); }
+.mv { color: var(--sub); font-size: 12.5px; display: inline-flex; align-items: center; gap: 5px; }
+.mv .ic { width: 14px; height: 14px; }
+
+/* S1 하루 요약 */
+.s1a .hd { display: flex; align-items: baseline; gap: 8px; flex-wrap: wrap; }
+.s1a .hd .d { font: 800 15px var(--lat); color: var(--blue); }
+.s1a .hd .dt { font-size: 14px; font-weight: 600; }
+.s1a .rng { display: flex; gap: 6px; margin-top: 10px; }
+.route { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 4px; margin: 14px 0 4px; }
+.route .p { font-size: 13px; font-weight: 600; padding: 5px 10px; border-radius: 999px; background: var(--canvas); }
+.route .p.m { background: var(--blue-soft); color: var(--blue); }
+.route .ar { width: 12px; height: 12px; stroke: var(--sub); fill: none; stroke-width: 2; }
+.rlist { margin: 14px 0 0; padding: 0; list-style: none; display: grid; gap: 0; }
+.rlist li { display: grid; grid-template-columns: 44px 18px minmax(0,1fr); gap: 8px; align-items: center; min-height: 34px; position: relative; font-size: 14px; }
+.rlist li .tm { color: var(--sub); font-size: 12.5px; }
+.rlist li i { width: 10px; height: 10px; border-radius: 50%; border: 2px solid var(--blue); background: var(--paper); justify-self: center; z-index: 1; }
+.rlist li::before { content: ""; position: absolute; left: 60px; top: 0; bottom: 0; width: 2px; background: var(--hair); margin-left: 0; }
+.rlist li:first-child::before { top: 50%; } .rlist li:last-child::before { bottom: 50%; }
+.rlist li b { font-weight: 600; }
+.rlist li.fly b { color: var(--blue); }
+.s1c .hd2 { display: grid; grid-template-columns: auto minmax(0,1fr); gap: 2px 12px; align-items: center; }
+.s1c .bigd { grid-row: span 2; width: 54px; height: 54px; border-radius: 16px; background: var(--ink); color: var(--paper); display: flex; flex-direction: column; align-items: center; justify-content: center; line-height: 1; }
+.s1c .bigd small { font: 700 9.5px var(--lat); letter-spacing: .1em; opacity: .7; } .s1c .bigd b { font: 800 22px var(--lat); }
+.s1c .meta { font-size: 13px; color: var(--sub); } .s1c .meta b { color: var(--ink); font-weight: 600; }
+.nums { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 6px 10px; margin-top: 14px; padding: 0; list-style: none; counter-reset: n; }
+.nums li { display: grid; grid-template-columns: 22px minmax(0,1fr); gap: 6px; align-items: start; font-size: 13.5px; font-weight: 600; line-height: 1.35; counter-increment: n; }
+.nums li::before { content: counter(n); width: 20px; height: 20px; border-radius: 50%; background: var(--blue-soft); color: var(--blue); font: 700 11px/20px var(--lat); text-align: center; }
+
+/* S2 상세 타임라인 */
+.tl { padding: 6px 16px; }
+.s2a .r { display: grid; grid-template-columns: 50px minmax(0,1fr) auto; gap: 10px; align-items: center; padding: 12px 0; }
+.s2a .r b { font-size: 15px; font-weight: 600; } .s2a .r .tm { color: var(--ink); }
+.s2a .r .go { width: 32px; height: 32px; border-radius: 50%; display: grid; place-items: center; color: var(--sub); }
+.s2a .mvr { padding: 0 0 0 60px; height: 22px; display: flex; align-items: center; }
+.s2a .mvr .mv { position: relative; }
+.s2b .r { display: grid; grid-template-columns: 46px 16px minmax(0,1fr) auto; gap: 8px; align-items: start; position: relative; }
+.s2b .r::before { content: ""; position: absolute; left: 61px; top: 0; bottom: 0; width: 2px; background: var(--hair); }
+.s2b .r:first-child::before { top: 18px; } .s2b .r.last::before { bottom: calc(100% - 18px); }
+.s2b .r .tm { padding-top: 10px; } .s2b .r i { width: 12px; height: 12px; border-radius: 50%; border: 2.5px solid var(--ink); background: var(--paper); margin-top: 13px; z-index: 1; justify-self: center; }
+.s2b .r .bd { padding: 8px 0 10px; display: flex; flex-direction: column; gap: 1px; } .s2b .r .bd b { font-size: 15px; font-weight: 600; } .s2b .r .bd span { font-size: 12.5px; color: var(--sub); }
+.s2b .r .pin { margin-top: 6px; width: 34px; height: 34px; border-radius: 50%; background: var(--canvas); display: grid; place-items: center; color: var(--blue); }
+.s2b .r .pin .ic { width: 16px; height: 16px; }
+.s2b .r.m { min-height: 28px; } .s2b .r.m i { width: 6px; height: 6px; border: 0; background: var(--hair2); margin-top: 8px; } .s2b .r.m .mv { padding-top: 3px; } .s2b .r.m .tm { padding-top: 3px; font-size: 12px; color: var(--sub); }
+.ev { border: 1.5px dashed var(--hair2); border-radius: 14px; padding: 9px 12px; margin: 6px 0 8px; display: flex; gap: 10px; align-items: center; font-size: 13px; }
+.ev.a { border-color: color-mix(in srgb, var(--amber) 70%, transparent); background: var(--amber-soft); }
+.ev.b { border: 1.5px solid var(--hair2); border-left: 4px solid var(--amber); }
+.ev .ic { color: var(--amber); }
+.ev b { font-weight: 700; } .ev span { color: var(--sub); }
+.cur0 { opacity: .4; }
+
+/* S3 장소 상세 */
+.s3 .open { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 10px; }
+.open .chip .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--green); }
+.stay { display: grid; grid-template-columns: auto minmax(0,1fr) auto; align-items: center; gap: 12px; margin-top: 14px; padding: 10px 12px; border-radius: 16px; background: var(--canvas); }
+.stay .lb { font-size: 13px; font-weight: 600; color: var(--sub); }
+.step { display: inline-flex; align-items: center; gap: 4px; }
+.step button { width: 34px; height: 34px; border-radius: 50%; background: var(--paper); box-shadow: var(--sh-xs); font: 700 18px var(--lat); display: grid; place-items: center; }
+.step b { min-width: 74px; text-align: center; font: 700 16px var(--kr); }
+.stay .tx { font-size: 12px; color: var(--sub); }
+.memo { margin-top: 10px; border-radius: 14px; border: 1px dashed var(--hair2); padding: 10px 12px; font-size: 13px; color: var(--sub); display: flex; gap: 8px; align-items: center; }
+.acts2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 14px; }
+.order { display: flex; justify-content: center; gap: 4px; margin-top: 10px; }
+.order button { font-size: 13px; font-weight: 600; color: var(--sub); padding: 6px 12px; border-radius: 999px; }
+.order i { width: 1px; background: var(--hair2); margin: 8px 0; }
+.chipsH { display: flex; gap: 6px; overflow-x: auto; scrollbar-width: none; margin: 8px -18px 0; padding: 0 18px; }
+.chipsH::-webkit-scrollbar { display: none; }
+.chipsH .c { flex: none; padding: 7px 13px; border-radius: 999px; background: var(--canvas); font-size: 13.5px; font-weight: 600; }
+.chipsH .c.on { background: var(--ink); color: var(--paper); }
+.info4 { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 14px; }
+.info4 > div { background: var(--canvas); border-radius: 14px; padding: 9px 11px; display: flex; flex-direction: column; gap: 1px; }
+.info4 small { font-size: 11.5px; font-weight: 600; color: var(--sub); } .info4 b { font-size: 14px; font-weight: 700; }
+.icn4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-top: 14px; }
+.icn4 button { display: flex; flex-direction: column; align-items: center; gap: 5px; font-size: 12px; font-weight: 600; color: var(--sub); }
+.icn4 button span { width: 52px; height: 52px; border-radius: 18px; background: var(--canvas); display: grid; place-items: center; color: var(--ink); }
+.icn4 button.p span { background: var(--ink); color: var(--paper); }
+.icn4 .ic { width: 21px; height: 21px; }
+
+/* S4 길안내 */
+.nowA { padding: 16px 18px 16px; }
+.nowA .eb2 { display: flex; justify-content: space-between; align-items: center; }
+.nowA .big { font: 800 40px/1.05 var(--lat); letter-spacing: -.03em; margin-top: 6px; }
+.nowA .ttl { font-size: 19px; font-weight: 700; letter-spacing: -.03em; line-height: 1.3; margin-top: 4px; }
+.nowA .ttl small { display: block; font-size: 13px; font-weight: 500; color: var(--sub); margin-top: 2px; }
+.nowA .btns { display: grid; grid-template-columns: minmax(0,1fr) auto; gap: 8px; margin-top: 14px; }
+.adj { margin-top: 12px; display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 8px 8px 8px 14px; border-radius: 999px; background: var(--canvas); }
+.adj span { font-size: 12.5px; font-weight: 600; color: var(--sub); }
+.adj .step button { width: 30px; height: 30px; font-size: 16px; } .adj .step b { min-width: 58px; font: 700 13.5px var(--kr); }
+.ntl { padding: 8px 16px; }
+.ntl .r { display: grid; grid-template-columns: 46px 16px minmax(0,1fr); gap: 8px; align-items: center; min-height: 40px; position: relative; }
+.ntl .r::before { content: ""; position: absolute; left: 61px; top: 0; bottom: 0; width: 2px; background: var(--hair); }
+.ntl .r.past::before { background: var(--blue); }
+.ntl .r i { width: 11px; height: 11px; border-radius: 50%; border: 2.5px solid var(--hair2); background: var(--paper); justify-self: center; z-index: 1; }
+.ntl .r.past i { border-color: var(--blue); background: var(--blue); }
+.ntl .r.now i { width: 15px; height: 15px; border: 3px solid var(--blue); box-shadow: 0 0 0 5px var(--blue-soft); }
+.ntl .r b { font-size: 14.5px; font-weight: 600; } .ntl .r.past b, .ntl .r.past .tm { color: var(--sub); font-weight: 500; }
+.ntl .mvp { margin-left: 70px; display: inline-flex; padding: 2px 9px; border-radius: 999px; background: var(--canvas); font-size: 12px; color: var(--sub); gap: 4px; align-items: center; position: relative; z-index: 1; }
+.ntl .mvrow { display: grid; grid-template-columns: 46px 16px minmax(0,1fr); gap: 8px; height: 26px; align-items: center; position: relative; }
+.ntl .mvrow::before { content: ""; position: absolute; left: 61px; top: 0; bottom: 0; width: 2px; background: var(--hair); }
+.ntl .mvrow .mvp { margin: 0; grid-column: 3; justify-self: start; }
+.sumA { display: flex; align-items: center; justify-content: space-between; padding: 12px 16px; border-radius: 999px; background: var(--paper); box-shadow: var(--sh-xs); font-size: 13px; }
+.sumA div { display: flex; flex-direction: column; align-items: center; line-height: 1.2; flex: 1; }
+.sumA div + div { border-left: 1px solid var(--hair); }
+.sumA b { font: 700 15px var(--lat); } .sumA small { font-size: 11px; color: var(--sub); font-weight: 600; }
+.sumB { padding: 12px 16px; border-radius: 18px; background: var(--paper); box-shadow: var(--sh-xs); display: flex; flex-direction: column; gap: 8px; }
+.sumB .l { display: flex; justify-content: space-between; font-size: 13px; } .sumB .l b { font-weight: 700; } .sumB .l span { color: var(--sub); }
+.sumB .bar { height: 6px; border-radius: 6px; background: var(--hair); overflow: hidden; } .sumB .bar i { display: block; height: 100%; width: 30%; background: var(--blue); border-radius: 6px; }
+.nowB { padding: 14px 16px; display: grid; grid-template-columns: auto minmax(0,1fr); gap: 4px 14px; align-items: center; }
+.nowB .tbox { grid-row: span 2; display: flex; flex-direction: column; align-items: center; justify-content: center; width: 78px; height: 78px; border-radius: 20px; background: var(--blue-soft); color: var(--blue); line-height: 1.05; }
+.nowB .tbox small { font-size: 11px; font-weight: 700; } .nowB .tbox b { font: 800 22px var(--lat); letter-spacing: -.02em; }
+.nowB .ttl { font-size: 17px; font-weight: 700; letter-spacing: -.03em; line-height: 1.3; }
+.nowB .ttl2 { font-size: 13px; color: var(--sub); }
+.nowB .btns { grid-column: 1 / -1; display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 10px; }
+.nowB .late { grid-column: 1 / -1; text-align: center; font-size: 12.5px; font-weight: 600; color: var(--sub); margin-top: 4px; padding: 6px; }
+
+/* S5 기록 */
+.logA { padding: 14px 16px; display: grid; grid-template-columns: minmax(0,1fr) 62px; gap: 6px 10px; }
+.logA .eb { grid-column: 1; } .logA .t1 { font-size: 17px; grid-column: 1; }
+.logA .stp { grid-column: 2; grid-row: 1 / span 2; width: 62px; height: 62px; border-radius: 50%; border: 2.5px solid var(--blue); color: var(--blue); display: grid; place-items: center; font: 800 12px/1.1 var(--lat); text-align: center; transform: rotate(-8deg); }
+.logA .route { grid-column: 1 / -1; margin: 6px 0 0; }
+.logA .route .p { font-size: 12.5px; padding: 4px 9px; }
+.logB { padding: 14px 16px; }
+.logB .hd { display: flex; justify-content: space-between; align-items: center; }
+.logB .t1 { font-size: 17px; }
+.logB ol { margin: 10px 0 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 6px; }
+.logB li { display: grid; grid-template-columns: 44px minmax(0,1fr) auto; gap: 8px; font-size: 13.5px; align-items: center; }
+.logB li .tm { font-size: 12.5px; color: var(--sub); } .logB li b { font-weight: 600; }
+.logB li .ok { color: var(--green); } .logB li .ok .ic { width: 16px; height: 16px; stroke-width: 2.6; }
+.logB li.skip b { color: var(--sub); text-decoration: line-through; font-weight: 500; }
+.logB .ft { margin-top: 10px; padding-top: 10px; border-top: 1px dashed var(--hair2); display: flex; justify-content: space-between; font-size: 12.5px; color: var(--sub); }
+.logB .ft b { color: var(--ink); }
+</style>
+</head>
+<body>
+<main class="board">
+  <h1>D-4 · 가이드북 상세 · 길안내 · 기록 시안</h1>
+  <p class="lead">화면마다 2~3안을 나란히 놓았습니다. 각 칸에서 고르시고 메모를 남겨 주세요. 예시는 <b>오사카·교토 샘플 DAY 1(12. 4 금)</b>입니다. 피드백 원문이 <b>‘-’</b>로만 적힌 G69·G71은 ‘레이아웃 다시’로 이해하고 만들었습니다(아니면 메모로 알려 주세요).</p>
+  <div class="ctl">
+    <span class="lb">화면</span><div class="seg" id="thSeg"><button data-t="light" aria-pressed="true">라이트</button><button data-t="dark">다크</button></div>
+    <div class="toc"><a href="#s1">① 하루 요약</a><a href="#s2">② 상세 일정</a><a href="#s3">③ 장소 상세</a><a href="#s4">④ 길안내</a><a href="#s5">⑤ 기록</a></div>
+  </div>
+  <div id="secs"></div>
+  <section class="s"><div class="pk" data-q="all"><span class="q">전체 메모</span><textarea rows="3" placeholder="섞고 싶은 부분, 이상한 곳 등"></textarea></div></section>
+</main>
+<div class="dock"><span id="cnt">고른 것 0</span><button id="copy">답 복사하기</button></div>
+<textarea id="out" readonly></textarea>
+<script>
+(() => {
+const $ = (s, r = document) => r.querySelector(s), all = (s, r = document) => Array.from(r.querySelectorAll(s));
+const KEY = 'vztr-d4-guide-v1';
+const I = {
+  x: '<svg class="ic" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg>',
+  ar: '<svg class="ar" viewBox="0 0 12 12"><path d="M2 6h8M7 3l3 3-3 3"/></svg>',
+  clock: '<svg class="ic" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/></svg>',
+  sun: '<svg class="ic" viewBox="0 0 24 24"><path d="M7 17a4 4 0 0 1 .5-8A5.5 5.5 0 0 1 18 10.5 3.5 3.5 0 0 1 17.5 17z"/></svg>',
+  pin: '<svg class="ic" viewBox="0 0 24 24"><path d="M12 21s-7-6.1-7-11a7 7 0 0 1 14 0c0 4.9-7 11-7 11z"/><circle cx="12" cy="10" r="2.5"/></svg>',
+  nav: '<svg class="ic" viewBox="0 0 24 24"><path d="M12 3l7 17-7-4-7 4z"/></svg>',
+  walk: '<svg class="ic" viewBox="0 0 24 24"><circle cx="13" cy="4.5" r="1.8"/><path d="M10 21l2-6 3 3v3M9 11l2-3 4 1 2 3M11 8l-1 6"/></svg>',
+  train: '<svg class="ic" viewBox="0 0 24 24"><rect x="6" y="3" width="12" height="14" rx="3"/><path d="M6 11h12M9 21l1.5-4M15 21l-1.5-4M9.5 14h.01M14.5 14h.01"/></svg>',
+  chev: '<svg class="ic" viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg>',
+  memo: '<svg class="ic" viewBox="0 0 24 24"><path d="M5 4h14v12l-4 4H5zM15 20v-4h4M8 9h8M8 13h5"/></svg>',
+  up: '<svg class="ic" viewBox="0 0 24 24"><path d="M12 19V5M6 11l6-6 6 6"/></svg>',
+  box: '<svg class="ic" viewBox="0 0 24 24"><path d="M4 8h16v12H4zM3 4h18v4H3zM10 12h4"/></svg>',
+  star: '<svg class="ic" viewBox="0 0 24 24"><path d="M12 3l2.6 5.6 6 .7-4.5 4.1 1.2 6L12 16.4 6.7 19.4l1.2-6L3.4 9.3l6-.7z"/></svg>',
+  check: '<svg class="ic" viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>',
+  plane: '✈'
+};
+const RT = [['05:45', '집'], ['07:00', '인천공항'], ['09:00', '인천 ✈ 간사이', 'fly'], ['10:50', '간사이공항'], ['12:30', '숙소 · 짐 맡기기'], ['13:17', '나카자키초 골목'], ['14:57', '카페 태양의 탑'], ['15:47', '체크인'], ['18:00', '고가류 아메리카무라 본점'], ['18:30', '도톤보리'], ['19:25', '쿠쿠루 도톤보리 본점']];
+const MAIN = ['인천공항', '간사이공항', '나카자키초 골목', '카페 태양의 탑', '고가류 아메리카무라 본점', '도톤보리', '쿠쿠루 도톤보리 본점'];
+const route = (list, mark) => `<div class="route">${list.map((p, i) => `${i ? I.ar : ''}<span class="p ${mark && mark.includes(p) ? 'm' : ''}">${p}</span>`).join('')}</div>`;
+
+const S = [
+ { id: 's1', no: '①', t: '하루 요약 시트', fb: '<b>G58</b> 머리 ‘DAY 1 · 12. 4 금 · 05:45 – 19:55’ 한 줄이 작고 빽빽함 · <b>G61</b> 장소 이름이 ‘…’로 잘림 → 주요 장소 다 보이게', now: '지금: 작은 회색 한 줄 머리 + 점 5개 가로 경로(이름 잘림) + 시각 목록',
+   opts: [
+    ['A', '날짜 크게 + 경로 칩 줄바꿈', ['DAY 1(파랑) · 12. 4 금 한 줄, 시간은 칩 두 개(시작·끝)', '경로는 이름 그대로 칩으로 줄바꿈 → 안 잘림'],
+      `<div class="sheet s1a"><div class="grab"></div><span class="x">${I.x}</span><div class="hd"><span class="d">DAY 1</span><span class="dt">12. 4 금</span></div><h3 class="t1">오사카 도착, 산책과 맛집</h3>
+       <div class="rng"><span class="chip">${I.clock}<span class="lat">05:45</span> 시작</span><span class="chip"><span class="lat">19:55</span> 마무리</span><span class="chip">${I.sun}13°/5°</span></div>
+       ${route(['집', ...MAIN], MAIN.slice(2))}</div>`],
+    ['B', '세로 경로(시각 + 점)', ['머리는 A와 같음', '경로를 세로 한 줄씩: 시각 · 점 · 이름 → 긴 이름도 다 보임, 비행기는 파랑'],
+      `<div class="sheet s1a"><div class="grab"></div><span class="x">${I.x}</span><div class="hd"><span class="d">DAY 1</span><span class="dt">12. 4 금</span><span class="eb" style="margin-left:auto;margin-right:40px">05:45 – 19:55</span></div><h3 class="t1">오사카 도착, 산책과 맛집</h3>
+       <ul class="rlist">${RT.filter(r => r[1] !== '체크인' && r[1] !== '숙소 · 짐 맡기기').map(r => `<li class="${r[2] || ''}"><span class="tm">${r[0]}</span><i></i><b>${r[1]}</b></li>`).join('')}</ul></div>`],
+    ['C', 'DAY 상자 + 번호 2칸', ['왼쪽 DAY 1 상자, 오른쪽 제목·날짜·시간', '주요 장소만 번호 붙여 2칸으로(이동·짐은 뺌)'],
+      `<div class="sheet s1c"><div class="grab"></div><span class="x">${I.x}</span><div class="hd2"><div class="bigd"><small>DAY</small><b>1</b></div><h3 class="t1" style="margin:0">오사카 도착, 산책과 맛집</h3><span class="meta"><b>12. 4 금</b> · <span class="lat">05:45 – 19:55</span> · 13°/5°</span></div>
+       <ol class="nums">${MAIN.map(p => `<li>${p}</li>`).join('')}</ol></div>`]
+   ] },
+ { id: 's2', no: '②', t: '상세 일정(상세 보기)', fb: '<b>G67</b> 상세 타임라인 단순하게 · <b>G55</b> 점선 이벤트 상자가 너무 연함', now: '지금: 시각 | 이름+설명 | ‘지도’ 글자, 그 아래 ‘↓ 이동 · 길찾기’ 줄이 장소마다 반복',
+   opts: [
+    ['A', '이름만 크게, 링크는 시트로', ['한 줄 = 시각 · 이름 · › (누르면 장소 상세에서 지도·길찾기)', '이동은 가운데 회색 한 줄(아이콘 + 시간)', '이벤트 = 주황 점선 + 연한 주황 바탕'],
+      `<div class="card tl s2a">${[['07:00', '인천공항'], ['m', I.train, '전철 · 약 1시간 15분'], ['10:50', '간사이공항 도착'], ['m', I.train, '난카이 라피트 · 약 40분'], ['12:30', '난바 · 숙소에 짐 맡기기'], ['m', I.walk, '걸어서 · 약 17분'], ['13:17', '나카자키초 골목']].map(r => r[0] === 'm' ? `<div class="mvr"><span class="mv">${r[1]}${r[2]}</span></div>` : `<div class="r"><span class="tm">${r[0]}</span><b>${r[1]}</b><span class="go">${I.chev}</span></div>`).join('')}
+       <div class="ev a">${I.star}<div><b>미도스지 일루미네이션</b> <span>· 17:00부터 · 근처 행사</span></div></div></div>`],
+    ['B', '세로 선 타임라인 + 핀 하나', ['길안내와 같은 세로 선·점으로 통일', '이름 아래 설명 한 줄, 오른쪽엔 핀 버튼 하나(지도·길찾기 합침)', '이동은 작은 점 + 회색 글자', '이벤트 = 실선 + 왼쪽 주황 띠'],
+      `<div class="card tl s2b">${[['07:00', '인천공항', '체크인·출국 심사 먼저'], ['m', '08:15', '전철 · 약 1시간 15분'], ['10:50', '간사이공항 도착', '입국 심사 → 南海なんば 표지판'], ['m', '11:50', '난카이 라피트 · 약 40분'], ['12:30', '난바 · 숙소에 짐 맡기기', '체크인 전 짐만 보관'], ['m', '13:00', '걸어서 · 약 17분'], ['13:17', '나카자키초 골목', '목조 골목 카페·구제']].map((r, i, a) => r[0] === 'm' ? `<div class="r m"><span class="tm">${r[1]}</span><i></i><span class="mv">${r[2]}</span></div>` : `<div class="r ${i === a.length - 1 ? 'last' : ''}"><span class="tm">${r[0]}</span><i></i><div class="bd"><b>${r[1]}</b><span>${r[2]}</span></div><span class="pin">${I.pin}</span></div>`).join('')}
+       <div class="ev b">${I.star}<div><b>미도스지 일루미네이션</b> <span>· 17:00부터 · 근처 행사</span></div></div></div>`]
+   ] },
+ { id: 's3', no: '③', t: '장소 상세 시트', fb: '<b>G65</b> 스크롤 없이 한 화면 · 머무는 시간 한 줄 · 영업시간 위치 · <b>G76</b> 지도/길찾기 버튼이 붙어 있음', now: '지금: 머무는 시간 칩 2줄(30분~3시간 + −15/+15) · 메모 · 지도/길찾기 큰 버튼 · 앞으로/뒤로/보관',
+   opts: [
+    ['A', '− 2시간 + 한 줄', ['제목 아래 영업시간 칩(지금 열림)', '머무는 시간 = − / + 한 줄(15분씩)', '지도·길찾기 두 버튼 사이 띄움, 순서·보관은 아래 작은 글자'],
+      `<div class="sheet s3"><div class="grab"></div><span class="x">${I.x}</span><span class="eb">DAY 1 · 07:00 – 09:00</span><h3 class="t1">인천공항</h3><p class="subt">체크인·출국 심사 먼저</p>
+       <div class="open"><span class="chip"><i class="dot"></i>지금 열림 · 24시간</span></div>
+       <div class="stay"><span class="lb">머무는 시간</span><span></span><span class="step"><button>−</button><b>2시간</b><button>+</button></span></div>
+       <div class="memo">${I.memo}메모 남기기</div>
+       <div class="acts2"><span class="btn sec">${I.pin}지도</span><span class="btn pri">${I.nav}길찾기</span></div>
+       <div class="order"><button>↑ 앞으로</button><i></i><button>↓ 뒤로</button><i></i><button>보관</button></div></div>`],
+    ['B', '정보 4칸 + 아이콘 버튼', ['영업시간·머무는 시간·다음 이동·메모를 2×2 칸으로', '머무는 시간은 칸을 누르면 바꿈', '아래 버튼 4개를 같은 간격 아이콘으로(지도·길찾기·순서·보관)'],
+      `<div class="sheet s3"><div class="grab"></div><span class="x">${I.x}</span><span class="eb">DAY 1 · 07:00 – 09:00</span><h3 class="t1">인천공항</h3><p class="subt">체크인·출국 심사 먼저</p>
+       <div class="info4"><div><small>영업</small><b>24시간 · 열림</b></div><div><small>머무는 시간</small><b>2시간 ›</b></div><div><small>다음</small><b>✈ 09:00 출발</b></div><div><small>메모</small><b style="color:var(--sub);font-weight:500">없음 ›</b></div></div>
+       <div class="icn4"><button class="p"><span>${I.nav}</span>길찾기</button><button><span>${I.pin}</span>지도</button><button><span>${I.up}</span>순서</button><button><span>${I.box}</span>보관</button></div></div>`],
+    ['C', '시간 칩 가로 한 줄', ['머무는 시간 칩을 한 줄로 밀어서 고름', '영업시간은 제목 오른쪽 위', '지도·길찾기 같은 크기, 사이 10px'],
+      `<div class="sheet s3"><div class="grab"></div><span class="x">${I.x}</span><span class="eb">DAY 1 · 07:00 – 09:00</span><h3 class="t1">인천공항</h3><p class="subt">체크인·출국 심사 먼저 · <span style="color:var(--green);font-weight:600">24시간 열림</span></p>
+       <div style="margin-top:14px;font-size:13px;font-weight:600;color:var(--sub)">머무는 시간</div>
+       <div class="chipsH">${['30분', '1시간', '1시간 30분', '2시간', '2시간 30분', '3시간', '4시간'].map(c => `<span class="c ${c === '2시간' ? 'on' : ''}">${c}</span>`).join('')}</div>
+       <div class="memo">${I.memo}메모 남기기</div>
+       <div class="acts2"><span class="btn sec">${I.pin}지도</span><span class="btn pri">${I.nav}길찾기</span></div>
+       <div class="order"><button>↑ 앞으로</button><i></i><button>↓ 뒤로</button><i></i><button>보관</button></div></div>`]
+   ] },
+ { id: 's4', no: '④', t: '길안내', fb: '<b>G76</b> 지금 칸이 빡빡함 · <b>G69</b> 타임라인 다시 · <b>G74b</b> 아래 요약 줄(상자 3개) 레이아웃', now: '지금: 05:45 크게 + 제목 한 줄(‘…’ 잘림) + 출발 + 일찍/늦게 버튼 6개 · 타임라인 · 아래 상자 3개',
+   opts: [
+    ['A', '제목 두 줄 + 시간 조정 한 줄', ['제목이 잘리지 않게 두 줄(장소 / 이동 수단·시간)', '버튼 6개 → ‘시간 조정 − 지금대로 +’ 한 줄', '타임라인: 지난 곳은 파란 선·흐리게, 지금은 큰 점, 이동은 작은 알약', '아래 요약 = 한 줄 막대 안에 3칸'],
+      `<div style="display:flex;flex-direction:column;gap:10px"><div class="card nowA"><div class="eb2"><span class="eb">다음 · 13:17 도착 예정</span><span class="chip b">${I.nav}길찾기</span></div>
+        <div class="big">13:00</div><div class="ttl">나카자키초 골목으로<small>걸어서 · 약 17분</small></div>
+        <div class="btns"><span class="btn pri">출발했어요</span><span class="btn sec" style="padding:0 16px">건너뛰기</span></div>
+        <div class="adj"><span>시간 조정</span><span class="step"><button>−</button><b>지금대로</b><button>+</button></span></div></div>
+       <div class="card ntl">
+        <div class="r past"><span class="tm">10:50</span><i></i><b>간사이공항</b></div><div class="mvrow"><span></span><span></span><span class="mvp">${I.train}라피트 40분</span></div>
+        <div class="r past"><span class="tm">12:30</span><i></i><b>숙소 · 짐 맡기기</b></div><div class="mvrow"><span></span><span></span><span class="mvp">${I.walk}17분</span></div>
+        <div class="r now"><span class="tm">13:17</span><i></i><b>나카자키초 골목</b></div><div class="mvrow"><span></span><span></span><span class="mvp">${I.walk}10분</span></div>
+        <div class="r"><span class="tm">14:57</span><i></i><b>카페 태양의 탑</b></div>
+        <div class="r"><span class="tm">18:00</span><i></i><b>고가류 아메리카무라 본점</b></div></div>
+       <div class="sumA"><div><b>05:45</b><small>시작</small></div><div><b>7곳</b><small>남음</small></div><div><b>19:55</b><small>마무리</small></div></div></div>`],
+    ['B', '시각 상자 + 진행 막대', ['왼쪽 파란 시각 상자, 오른쪽 제목 두 줄', '출발·길찾기 같은 크기 두 버튼, 늦어짐은 아래 글자 버튼 하나(누르면 시트)', '아래 요약 = ‘3 / 10곳’ 진행 막대 + 마무리 시각'],
+      `<div style="display:flex;flex-direction:column;gap:10px"><div class="card nowB"><div class="tbox"><small>출발</small><b>13:00</b></div><div class="ttl">나카자키초 골목으로</div><div class="ttl2">걸어서 약 17분 · 13:17 도착</div>
+        <div class="btns"><span class="btn pri">출발했어요</span><span class="btn sec">${I.nav}길찾기</span></div><button class="late">늦어지거나 일찍 끝났나요?</button></div>
+       <div class="card ntl">
+        <div class="r past"><span class="tm">12:30</span><i></i><b>숙소 · 짐 맡기기</b></div><div class="mvrow"><span></span><span></span><span class="mvp">${I.walk}17분</span></div>
+        <div class="r now"><span class="tm">13:17</span><i></i><b>나카자키초 골목</b></div><div class="mvrow"><span></span><span></span><span class="mvp">${I.walk}10분</span></div>
+        <div class="r"><span class="tm">14:57</span><i></i><b>카페 태양의 탑</b></div>
+        <div class="r"><span class="tm">18:00</span><i></i><b>고가류 아메리카무라 본점</b></div></div>
+       <div class="sumB"><div class="l"><b>3 / 10곳</b><span>19:55 일정 마무리</span></div><div class="bar"><i></i></div></div></div>`]
+   ] },
+ { id: 's5', no: '⑤', t: '기록 — 하루 카드', fb: '<b>G71</b> 기록 하루 시트 다시 · <b>G61</b>과 같은 ‘…’ 잘림(장소 경로)', now: '지금: 하루 카드에 경로 한 줄 ‘집 → 인천공항 → 간사이공항 …’ 잘림 + 연한 도장',
+   opts: [
+    ['A', '경로 칩 + 진한 도장', ['갔던 곳을 칩으로 줄바꿈(안 잘림)', '도장은 파랑으로 진하게 오른쪽 위'],
+      `<div class="card logA"><span class="eb">DAY 1 · 12. 4 금</span><h3 class="t1">오사카 도착, 산책과 맛집</h3><div class="stp">DAY 1<br>DONE</div>${route(MAIN)}</div>`],
+    ['B', '시각 목록 + 체크', ['간 곳은 초록 체크, 건너뛴 곳은 줄 긋기', '아래 한 줄: 걸은 곳 수 · 마무리 시각'],
+      `<div class="card logB"><div class="hd"><span class="eb">DAY 1 · 12. 4 금</span><span class="chip b">${I.check}완료</span></div><h3 class="t1" style="margin-top:4px">오사카 도착, 산책과 맛집</h3>
+       <ol>${[['07:00', '인천공항'], ['10:50', '간사이공항'], ['13:17', '나카자키초 골목'], ['14:57', '카페 태양의 탑', 'skip'], ['18:00', '고가류 아메리카무라 본점'], ['18:30', '도톤보리'], ['19:25', '쿠쿠루 도톤보리 본점']].map(r => `<li class="${r[2] || ''}"><span class="tm">${r[0]}</span><b>${r[1]}</b><span class="ok">${r[2] ? '' : I.check}</span></li>`).join('')}</ol>
+       <div class="ft"><span><b>6곳</b> 다녀옴 · 1곳 건너뜀</span><span>19:55 마무리</span></div></div>`]
+   ] }
+];
+
+$('#secs').innerHTML = S.map(s => `<section class="s" id="${s.id}"><h2><small>${s.no}</small>${s.t}</h2><p>${s.fb}</p><div class="now0">${s.now}</div>
+  <div class="grid">${s.opts.map(([k, t, pts, html]) => `<div class="opt"><h3><span class="k">${k}</span>${t}</h3><ul>${pts.map(x => `<li>${x}</li>`).join('')}</ul><div class="ph">${html}</div></div>`).join('')}</div>
+  <div class="pk" data-q="${s.id}" style="margin-top:14px"><span class="q">${s.no} ${s.t} — 어느 안으로?</span><div class="row">${s.opts.map(o => `<button data-a="${o[0]}">${o[0]}</button>`).join('')}<button data-a="섞어서">섞어서</button></div><textarea rows="2" placeholder="메모 (선택) — 예: A인데 경로는 B처럼"></textarea></div></section>`).join('');
+
+let st = {}; try { st = JSON.parse(localStorage.getItem(KEY) || '{}') || {}; } catch (_) {}
+const save = () => { try { localStorage.setItem(KEY, JSON.stringify(st)); } catch (_) {} };
+const theme = t => { document.documentElement.dataset.theme = t; all('#thSeg button').forEach(b => b.setAttribute('aria-pressed', b.dataset.t === t)); };
+const qs = new URLSearchParams(location.search);
+if (qs.get('t')) theme(qs.get('t')); else if (matchMedia('(prefers-color-scheme: dark)').matches) theme('dark');
+$('#thSeg').onclick = e => { const b = e.target.closest('[data-t]'); if (b) theme(b.dataset.t); };
+const drawPk = () => { all('.pk').forEach(p => { const o = st[p.dataset.q] || {}; all('.row button', p).forEach(b => b.setAttribute('aria-pressed', o.a === b.dataset.a)); const t = $('textarea', p); if (document.activeElement !== t) t.value = o.m || ''; });
+  $('#cnt').textContent = '고른 것 ' + Object.values(st).filter(o => o.a || o.m).length; };
+all('.pk').forEach(p => { const q = p.dataset.q;
+  p.addEventListener('click', e => { const b = e.target.closest('.row button'); if (!b) return; const o = st[q] = st[q] || {}; o.a = o.a === b.dataset.a ? '' : b.dataset.a; save(); drawPk(); });
+  $('textarea', p).addEventListener('input', e => { (st[q] = st[q] || {}).m = e.target.value; save(); drawPk(); }); });
+drawPk();
+const NAME = Object.fromEntries(S.map(s => [s.id, s.no + ' ' + s.t])); NAME.all = '전체 메모';
+$('#copy').onclick = async () => {
+  const lines = ['[D-4 가이드북 상세·길안내·기록 시안 답]'];
+  Object.keys(NAME).forEach(q => { const o = st[q]; if (!o || !(o.a || o.m)) return; lines.push(`- ${NAME[q]}: ${[o.a, o.m].filter(Boolean).join(' / ')}`); });
+  if (lines.length === 1) lines.push('- (아직 고른 것 없음)');
+  const tx = lines.join('\n'); let ok = false;
+  try { await navigator.clipboard.writeText(tx); ok = true; } catch (_) { const o = $('#out'); o.value = tx; o.removeAttribute('readonly'); o.select(); try { ok = document.execCommand('copy'); } catch (_) {} o.setAttribute('readonly', ''); }
+  $('#copy').textContent = ok ? '복사했어요 · 채팅에 붙여 주세요' : '복사 실패 — 길게 눌러 복사';
+  setTimeout(() => $('#copy').textContent = '답 복사하기', 2600);
+};
+})();
+</script>
+</body>
+</html>
