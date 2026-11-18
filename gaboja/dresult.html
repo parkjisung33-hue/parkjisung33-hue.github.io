@@ -1,0 +1,324 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>결과 화면 시안</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400..800&display=swap">
+<style>
+@font-face { font-family: "Pretendard Variable"; font-weight: 45 920; font-display: swap; src: url("fonts/PretendardVariable.woff2") format("woff2-variations"), url("fonts/PretendardVariable.woff2") format("woff2"); }
+:root {
+  color-scheme: light;
+  --kr: "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
+  --lat: "Inter Tight", var(--kr);
+  --canvas: #EEF0F3; --ink: #0A1F33; --sub: #5B6B7A; --hair: rgba(10,31,51,.09); --paper: #FFFFFF; --field: #FFFFFF;
+  --blue: #2F5BFF; --on-blue: #FFFFFF; --blue-soft: rgba(47,91,255,.09); --green: #2F9E6E; --red: #CF3F66;
+  --flap: #1B1E23; --flap-tx: #F4F5F7;
+  --shadow: 0 1.375rem 2.75rem -1.375rem rgba(24,36,60,.32), 0 2px 0.375rem -2px rgba(24,36,60,.10);
+  --sh-xs: 0 1px 2px rgba(24,36,60,.06), 0 0.25rem 0.75rem -0.375rem rgba(24,36,60,.14);
+  --r-lg: 1.625rem; --r-md: 1.25rem; --r-sm: 0.875rem;
+  --bgsoft: radial-gradient(60% 40% at 12% 8%, rgba(255,255,255,.95), transparent 70%), radial-gradient(50% 35% at 90% 30%, rgba(214,220,229,.55), transparent 70%), #EEF0F3;
+  --gmix: 100%;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  color-scheme: dark; --canvas: #0E1013; --ink: #ECEEF1; --sub: #8F969F; --hair: rgba(255,255,255,.08); --paper: #1B1E23; --field: #15181C;
+  --blue: #7C95FF; --on-blue: #0A1F33; --blue-soft: rgba(124,149,255,.12); --green: #4CC08E; --red: #F06A8A; --flap: #05070A; --flap-tx: #F4F5F7;
+  --shadow: 0 1.375rem 2.75rem -1.375rem rgba(0,0,0,.7), 0 2px 0.375rem -2px rgba(0,0,0,.4); --sh-xs: 0 1px 2px rgba(0,0,0,.3), 0 0.25rem 0.75rem -0.375rem rgba(0,0,0,.5);
+  --bgsoft: radial-gradient(60% 40% at 12% 8%, rgba(255,255,255,.05), transparent 70%), #0E1013; --gmix: 26%;
+} }
+:root[data-theme="dark"] {
+  color-scheme: dark; --canvas: #0E1013; --ink: #ECEEF1; --sub: #8F969F; --hair: rgba(255,255,255,.08); --paper: #1B1E23; --field: #15181C;
+  --blue: #7C95FF; --on-blue: #0A1F33; --blue-soft: rgba(124,149,255,.12); --green: #4CC08E; --red: #F06A8A; --flap: #05070A; --flap-tx: #F4F5F7;
+  --shadow: 0 1.375rem 2.75rem -1.375rem rgba(0,0,0,.7), 0 2px 0.375rem -2px rgba(0,0,0,.4); --sh-xs: 0 1px 2px rgba(0,0,0,.3), 0 0.25rem 0.75rem -0.375rem rgba(0,0,0,.5);
+  --bgsoft: radial-gradient(60% 40% at 12% 8%, rgba(255,255,255,.05), transparent 70%), #0E1013; --gmix: 26%;
+}
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; background: var(--canvas); }
+body { margin: 0; background: var(--canvas); color: var(--ink); font-family: var(--kr); font-size: 15px; line-height: 1.5; letter-spacing: -.01em; word-break: keep-all; overflow-wrap: anywhere; font-variant-numeric: tabular-nums; }
+button { font: inherit; color: inherit; border: 0; background: none; padding: 0; cursor: pointer; -webkit-tap-highlight-color: transparent; }
+svg { display: block; }
+
+/* 보드 */
+.board { max-width: 1320px; margin: 0 auto; padding: 20px 16px 140px; }
+.board > h1 { margin: 4px 0 4px; font-size: 22px; font-weight: 700; letter-spacing: -.03em; }
+.lead { margin: 0 0 14px; color: var(--sub); font-size: 13.5px; } .lead b { color: var(--ink); }
+.ctl { display: flex; flex-wrap: wrap; gap: 8px 14px; align-items: center; margin-bottom: 18px; font-size: 13px; }
+.seg { display: inline-flex; flex-wrap: wrap; padding: 3px; border-radius: 18px; background: var(--hair); }
+.seg button { padding: 6px 12px; border-radius: 999px; font-size: 12.5px; font-weight: 600; color: var(--sub); }
+.seg button[aria-pressed="true"] { background: var(--paper); color: var(--ink); box-shadow: var(--sh-xs); }
+.ctl .lb { font-weight: 700; color: var(--sub); }
+.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 410px), 1fr)); gap: 28px 20px; align-items: start; }
+.opt { display: flex; flex-direction: column; gap: 10px; }
+.opt h2 { margin: 0; font-size: 17px; font-weight: 700; letter-spacing: -.02em; display: flex; gap: 8px; align-items: baseline; }
+.opt h2 .k { font-family: var(--lat); font-weight: 800; color: var(--blue); }
+.opt ul { margin: 0; padding-left: 18px; font-size: 13px; color: var(--sub); } .opt ul b { color: var(--ink); font-weight: 600; }
+.frame { width: min(390px, 100%); height: 760px; margin: 0 auto; border-radius: 34px; overflow: hidden; box-shadow: 0 0 0 8px #1B1E23, 0 0 0 9px #3A3F47, var(--shadow); position: relative; }
+.frame .scr { position: absolute; inset: 0; overflow-y: auto; overscroll-behavior: contain; -webkit-overflow-scrolling: touch; }
+.acts { display: flex; gap: 8px; justify-content: center; }
+.acts a { font-size: 12.5px; font-weight: 600; padding: 7px 12px; border-radius: 999px; background: var(--paper); box-shadow: var(--sh-xs); color: var(--ink); text-decoration: none; }
+.pk { background: var(--paper); border-radius: var(--r-md); padding: 12px; box-shadow: var(--sh-xs); display: flex; flex-direction: column; gap: 8px; }
+.pk .row { display: flex; gap: 6px; flex-wrap: wrap; }
+.pk .row button { padding: 7px 12px; border-radius: 999px; font-size: 13px; font-weight: 600; background: var(--hair); color: var(--sub); }
+.pk .row button[aria-pressed="true"] { background: var(--blue); color: var(--on-blue); }
+.pk .q { font-size: 13px; font-weight: 700; }
+textarea { width: 100%; resize: vertical; border: 1px solid var(--hair); background: var(--field); color: var(--ink); border-radius: 12px; padding: 8px 10px; font: 13px/1.45 var(--kr); }
+.common { margin-top: 30px; display: grid; gap: 12px; max-width: 760px; } .common h2 { margin: 0; font-size: 17px; }
+.dock { position: fixed; left: 0; right: 0; bottom: 0; padding: 10px 16px calc(10px + env(safe-area-inset-bottom)); background: color-mix(in srgb, var(--canvas) 88%, transparent); -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px); display: flex; gap: 10px; justify-content: center; align-items: center; border-top: 1px solid var(--hair); z-index: 50; }
+.dock button { padding: 11px 18px; border-radius: 999px; background: var(--blue); color: var(--on-blue); font-weight: 700; font-size: 14px; }
+.dock span { font-size: 12.5px; color: var(--sub); }
+#out { position: absolute; left: -9999px; }
+
+/* ---------- 결과 화면 공통 ---------- */
+.res { min-height: 100%; background: var(--bgsoft); padding: 14px 16px 28px; display: flex; flex-direction: column; gap: 14px; }
+.res .bar { display: flex; align-items: center; justify-content: space-between; height: 36px; }
+.res .bar .x { font: 600 12.5px var(--lat); color: var(--sub); }
+.vz { font-family: "Inter Tight", var(--kr); font-weight: 800; letter-spacing: -.035em; line-height: 1; color: var(--ink); white-space: nowrap; }
+.vz i { display: inline-block; width: .2em; height: .2em; border-radius: 50%; background: var(--blue); margin-left: .12em; }
+.tk { border-radius: var(--r-lg); background: var(--paper); box-shadow: var(--shadow); overflow: hidden; }
+.perf { position: relative; height: 18px; }
+.perf::before { content: ""; position: absolute; left: 18px; right: 18px; top: 50%; border-top: 2px dashed var(--hair); }
+.perf::after { content: ""; position: absolute; inset: 0 -9px; background: radial-gradient(circle at 0 50%, var(--canvas) 9px, transparent 9.5px), radial-gradient(circle at 100% 50%, var(--canvas) 9px, transparent 9.5px); }
+.flaps { display: flex; gap: 5px; }
+.fl { width: 40px; height: 52px; border-radius: 8px; background: var(--flap); color: var(--flap-tx); display: grid; place-items: center; font: 700 27px var(--lat); position: relative; overflow: hidden; }
+.fl::after { content: ""; position: absolute; left: 0; right: 0; top: 50%; height: 1px; background: rgba(0,0,0,.55); }
+.lcol { display: flex; flex-direction: column; align-items: center; gap: 4px; width: 40px; }
+.lcol .lb { font-size: 11px; font-weight: 700; color: var(--sub); white-space: nowrap; letter-spacing: -.02em; }
+.nm { margin: 0; font-size: 28px; font-weight: 700; letter-spacing: -.04em; line-height: 1.18; }
+.ln { margin: 0; font-size: 14.5px; line-height: 1.5; text-wrap: balance; }
+.av { display: flex; align-items: center; justify-content: center; overflow: hidden; }
+.av svg { height: 100%; width: auto; }
+.gchip { display: inline-flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 700; color: var(--ink); }
+.gchip i { width: 8px; height: 8px; border-radius: 50%; background: var(--ga); }
+/* 게이지 */
+.gz { padding: 4px 18px 6px; display: flex; flex-direction: column; gap: 14px; }
+.g .top { display: flex; justify-content: space-between; font-size: 13px; color: var(--sub); margin-bottom: 6px; }
+.g .top .w { color: var(--ink); font-weight: 700; }
+.g .line { position: relative; height: 14px; margin: 0 6px 18px; }
+.g .line::before { content: ""; position: absolute; left: 0; right: 0; top: 50%; height: 2px; margin-top: -1px; background: var(--hair); border-radius: 1px; }
+.g .line .c { position: absolute; left: 50%; top: 50%; width: 2px; height: 12px; margin: -6px 0 0 -1px; background: var(--sub); opacity: .5; }
+.g .line .f { position: absolute; top: 50%; height: 3px; margin-top: -1.5px; border-radius: 2px; background: var(--gf, var(--ink)); }
+.g .line .d { position: absolute; top: 50%; width: 14px; height: 14px; margin: -7px 0 0 -7px; border-radius: 50%; background: var(--paper); border: 3px solid var(--gf, var(--ink)); }
+.g .line .p { position: absolute; top: 15px; transform: translateX(var(--tx,-50%)); white-space: nowrap; font: 700 11.5px var(--lat); color: var(--gf, var(--ink)); }
+.gn { margin: 0 0 6px; font-size: 12px; color: var(--sub); text-align: center; }
+.foot { display: flex; flex-direction: column; gap: 6px; }
+.cta { height: 54px; border-radius: 999px; background: var(--ink); color: var(--paper); font-weight: 700; font-size: 15.5px; display: flex; align-items: center; justify-content: center; }
+.ghost { height: 44px; color: var(--sub); font-weight: 600; font-size: 14px; }
+.sec h3 { margin: 4px 2px 8px; font-size: 16px; font-weight: 700; letter-spacing: -.02em; }
+.card { background: var(--paper); border-radius: var(--r-md); box-shadow: var(--sh-xs); padding: 12px 14px; display: flex; flex-direction: column; gap: 8px; font-size: 14px; }
+.scene { display: flex; gap: 8px; align-items: flex-start; }
+.scene svg { flex: none; width: 18px; height: 18px; margin-top: 1px; stroke: var(--green); fill: none; stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; }
+
+/* 내가 고른 답 공통 */
+.ans { padding: 2px 18px 16px; }
+.ans summary { list-style: none; display: flex; align-items: center; gap: 8px; cursor: pointer; font-size: 14px; font-weight: 700; padding: 8px 0; }
+.ans summary::-webkit-details-marker { display: none; }
+.ans summary .sp { flex: 1; }
+.ans summary .ch { width: 18px; height: 18px; stroke: var(--sub); fill: none; stroke-width: 2; transition: transform .2s; }
+.ans[open] summary .ch { transform: rotate(180deg); }
+.lt { display: inline-grid; place-items: center; min-width: 20px; height: 20px; padding: 0 4px; border-radius: 6px; font: 700 11.5px var(--lat); background: var(--hair); color: var(--sub); }
+.lt.m { background: var(--ink); color: var(--paper); }
+
+/* ----- A: 코드 옆 캐릭터 · 묶음 색은 캐릭터 칸만 ----- */
+.vA .hd { padding: 16px 18px 0; display: flex; justify-content: space-between; align-items: center; font-size: 12px; color: var(--sub); }
+.vA .hd .vz { font-size: 18px; }
+.vA .bd { padding: 14px 18px 16px; display: flex; flex-direction: column; gap: 10px; }
+.vA .top2 { display: grid; grid-template-columns: minmax(0,1fr) 112px; gap: 12px; align-items: end; }
+.vA .top2 .av { width: 112px; height: 112px; border-radius: 22px; }
+.vA .axg { margin-top: 4px; }
+.vA .axg h4 { margin: 10px 0 2px; font: 700 11px var(--lat); letter-spacing: .08em; color: var(--sub); display: flex; gap: 6px; align-items: center; }
+.vA .axg h4::after { content: ""; flex: 1; height: 1px; background: var(--hair); }
+.vA .qa { display: grid; grid-template-columns: 22px minmax(0,1fr) auto; gap: 2px 10px; padding: 9px 0; border-bottom: 1px solid var(--hair); align-items: start; }
+.vA .qa:last-child { border-bottom: 0; }
+.vA .qa .n { font: 700 12px/20px var(--lat); color: var(--sub); }
+.vA .qa .q { font-size: 12.5px; color: var(--sub); line-height: 1.4; }
+.vA .qa .a { grid-column: 2; font-size: 15px; font-weight: 600; line-height: 1.4; }
+.vA .qa .ls { grid-row: 1 / span 2; grid-column: 3; display: flex; gap: 3px; align-self: center; }
+
+/* ----- B: 큰 캐릭터 + 묶음 색 띠 ----- */
+.vB .band { position: relative; background: color-mix(in srgb, var(--gbg) var(--gmix), var(--paper)); padding: 14px 18px 0; display: flex; flex-direction: column; align-items: center; }
+.vB .band .row1 { width: 100%; display: flex; justify-content: space-between; align-items: center; font-size: 12px; }
+.vB .band .vz { font-size: 18px; }
+.vB .band .av { width: 100%; height: 170px; margin-top: 4px; }
+.vB .band .gchip { color: var(--gdk); } :root[data-theme="dark"] .vB .band .gchip { color: var(--ink); }
+.vB .flaps { justify-content: center; margin-top: -26px; position: relative; }
+.vB .bd { padding: 12px 18px 16px; display: flex; flex-direction: column; gap: 8px; text-align: center; align-items: center; }
+.vB .g { --gf: var(--ga); }
+.vB .agrid { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 8px; margin-top: 4px; }
+.vB .ac { background: var(--canvas); border-radius: 14px; padding: 10px 11px; display: flex; flex-direction: column; gap: 3px; }
+.vB .ac .h { display: flex; justify-content: space-between; align-items: center; }
+.vB .ac .n { font: 700 11.5px var(--lat); color: var(--sub); }
+.vB .ac .a { font-size: 14px; font-weight: 700; line-height: 1.35; }
+.vB .ac .q { font-size: 11.5px; color: var(--sub); line-height: 1.35; }
+.vB .lt.m { background: var(--ga); color: #fff; }
+
+/* ----- C: 가로 탑승권 · 묶음 색 꼬리표 ----- */
+.vC .tk { display: grid; grid-template-columns: 112px minmax(0,1fr); }
+.vC .stub { background: color-mix(in srgb, var(--gbg) var(--gmix), var(--paper)); display: flex; flex-direction: column; align-items: center; justify-content: space-between; padding: 14px 6px 12px; position: relative; border-right: 2px dashed color-mix(in srgb, var(--gdk) 25%, transparent); }
+.vC .stub .av { width: 100px; height: 100px; }
+.vC .stub .cd { font: 800 22px var(--lat); letter-spacing: .02em; color: var(--gdk); }
+:root[data-theme="dark"] .vC .stub .cd { color: var(--ink); }
+.vC .stub .gp { font-size: 11px; font-weight: 700; color: var(--gdk); text-align: center; line-height: 1.3; }
+:root[data-theme="dark"] .vC .stub .gp { color: var(--sub); }
+.vC .main { padding: 14px 16px 14px; display: flex; flex-direction: column; gap: 8px; min-width: 0; }
+.vC .main .hd { display: flex; justify-content: space-between; align-items: center; font: 700 10.5px var(--lat); letter-spacing: .1em; color: var(--sub); }
+.vC .main .vz { font-size: 16px; letter-spacing: -.035em; }
+.vC .nm { font-size: 24px; }
+.vC .ln { font-size: 13.5px; }
+.vC .lets { display: flex; gap: 4px; flex-wrap: wrap; }
+.vC .lets span { font-size: 11.5px; font-weight: 700; padding: 3px 8px; border-radius: 999px; background: var(--hair); }
+.vC .lets b { font-family: var(--lat); margin-right: 3px; }
+.vC .full { border-radius: var(--r-lg); background: var(--paper); box-shadow: var(--sh-xs); overflow: hidden; }
+.vC .chat { display: flex; flex-direction: column; gap: 10px; padding-top: 4px; }
+.vC .chat .q { font-size: 12.5px; color: var(--sub); display: flex; gap: 6px; } .vC .chat .q b { font: 700 12px var(--lat); color: var(--sub); flex: none; }
+.vC .chat .a { align-self: flex-end; max-width: 86%; background: var(--blue-soft); color: var(--ink); border-radius: 16px 16px 4px 16px; padding: 8px 12px; font-size: 14.5px; font-weight: 600; line-height: 1.4; display: flex; gap: 8px; align-items: center; margin-top: 4px; }
+.vC .chat .a .lt.m { background: var(--blue); color: var(--on-blue); }
+.vC .chat .it { display: flex; flex-direction: column; }
+
+html.solo, html.solo body { height: auto; }
+html.solo .board, html.solo .dock { display: none; }
+html.solo .res { min-height: 100dvh; padding-top: calc(14px + env(safe-area-inset-top)); padding-bottom: calc(28px + env(safe-area-inset-bottom)); }
+</style>
+</head>
+<body>
+<div id="soloHost"></div>
+<main class="board">
+  <h1>D-2 · 결과 화면 시안</h1>
+  <p class="lead">피드백 <b>T22 캐릭터 자리 · T23 4묶음 색 · T25 ‘고른 답 10개’ 가독성</b>을 반영한 3안입니다. 폰 안에서 스크롤하고 ‘내가 고른 답’을 눌러 볼 수 있습니다. 위에서 유형을 바꾸면 묶음 색이 바뀝니다. 캐릭터·유형 문장은 앱의 실제 데이터입니다.</p>
+  <div class="ctl">
+    <span class="lb">유형</span><div class="seg" id="tySeg"></div>
+    <span class="lb">화면</span><div class="seg" id="thSeg"><button data-t="light" aria-pressed="true">라이트</button><button data-t="dark">다크</button></div>
+  </div>
+  <div class="grid" id="grid"></div>
+  <section class="common">
+    <h2>공통으로 여쭤볼 것</h2>
+    <div class="pk" data-q="color"><span class="q">묶음 색 범위 — BI 규칙은 ‘캐릭터 4색은 캐릭터 안에서만’이고, T23은 ‘결과에 4묶음 색 쓰기’라서 서로 걸립니다. A = 캐릭터 칸만 · B = 위쪽 띠까지 · C = 탑승권 꼬리표까지</span>
+      <div class="row"><button data-a="캐릭터 칸만(A)">캐릭터 칸만(A)</button><button data-a="띠까지(B)">띠까지(B)</button><button data-a="꼬리표까지(C)">꼬리표까지(C)</button></div>
+      <textarea rows="1" placeholder="메모 (선택)"></textarea></div>
+    <div class="pk" data-q="ans"><span class="q">고른 답 (T25) — 처음부터 펼쳐 둘까요?</span>
+      <div class="row"><button data-a="접어 두기">접어 두기</button><button data-a="펼쳐 두기">펼쳐 두기</button></div>
+      <textarea rows="1" placeholder="메모 (선택)"></textarea></div>
+    <div class="pk" data-q="all"><span class="q">전체 메모</span><textarea rows="3" placeholder="섞고 싶은 부분, 이상한 곳 등"></textarea></div>
+  </section>
+</main>
+<div class="dock"><span id="cnt">고른 것 0</span><button id="copy">답 복사하기</button></div>
+<textarea id="out" readonly></textarea>
+
+<script>
+/* 앱 실제 데이터: 배포 폴더(gaboja/)에선 같은 폴더, 로컬 preview/ 에선 ../app/ */
+function loadJs(n) { return new Promise(r => { const s = document.createElement('script'); s.src = n; s.onload = () => r(true); s.onerror = () => { const t = document.createElement('script'); t.src = '../app/' + n; t.onload = () => r(true); t.onerror = () => r(false); document.head.appendChild(t); }; document.head.appendChild(s); }); }
+Promise.all([loadJs('chars.js'), loadJs('types.js')]).then(main);
+
+function main() {
+const $ = (s, r = document) => r.querySelector(s), all = (s, r = document) => Array.from(r.querySelectorAll(s));
+const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+const plain = t => String(t).replace(/\|/g, ' ').replace(/ {2,}/g, ' ');
+const TY = window.GABOJA_TYPES || {};
+const KEY = 'vztr-d2-result-v1';
+
+/* app/start.html 과 같은 질문·순서 (QSEQ) */
+const Q = [
+  { h: '도착 첫날, 짐 풀고 제일 먼저 할 일은?', o: [['지도에 없는 골목 산책', 'LS'], ['현지인 가는|시장에서 군것질', 'LE'], ['그 도시|랜드마크에서 인증샷', 'HS'], ['평점 좋은 카페에서 커피 한 잔', 'HE']] },
+  { h: '여행 끝나고 사진첩에 제일 많은 건?', o: [['처음 보는 골목·간판', 'LS'], ['시장·소품샵에서 건진 것들', 'LE'], ['랜드마크·야경', 'HS'], ['호텔 뷰·디저트', 'HE']] },
+  { h: '돌아와서 친구한테 제일 먼저 하는 말은?', o: [['“관광객 하나도 없는 동네 찾았어”', 'LS'], ['“이거 거기서만 파는 거야”', 'LE'], ['“사진으로만 보던 곳,|진짜 가 봤어”', 'HS'], ['“진짜 푹 쉬다 왔어”', 'HE']] },
+  { h: '자유 시간이 3시간 생긴다면?', o: [['안 가 본 동네 골목 걷기', 'LS'], ['현지 마트·시장 장보기', 'LE'], ['전망대나|유명 명소 하나 더', 'HS'], ['소문난|디저트 가게나 스파', 'HE']] },
+  { h: '숙소를 고를 때 제일 중요한 건?', o: [['주택가 골목 안, 동네 분위기', 'LS'], ['걸어서 가는|시장과 단골 식당', 'LE'], ['명소까지|걸어서 가는 위치', 'HS'], ['뷰 좋은 방·푹신한 침대', 'HE']] },
+  { h: '출발 전날 밤, 내 일정표는?', o: [['시간 단위로 정리 끝, 동선까지 확인', 'FJ'], ['가고 싶은 곳만 잔뜩, 순서는 가서', 'FP'], ['하루 두세 곳만, 예약까지 완료', 'RJ'], ['항공·숙소만. 나머진 가서 생각', 'RP']] },
+  { h: '오후 3시, 오늘 갈 곳을 벌써 다 돌았다면?', o: [['미리 찾아 둔|플랜 B로 이동', 'FJ'], ['지도 켜고 근처 한 곳 더', 'FP'], ['숙소에서 쉬다가|저녁 예약 시간에 출발', 'RJ'], ['눈에 띄는 카페에서|멍때리기', 'RP']] },
+  { h: '아침에 일어났더니 비가 온다면?', o: [['준비해 둔|실내 코스로 그대로', 'FJ'], ['우산 쓰고 일단 출발', 'FP'], ['오전은 숙소, 오후 일정만 살리기', 'RJ'], ['오늘은 쉬는 날. 계획은 이따가', 'RP']] },
+  { h: '가고 싶던 식당에 줄이 1시간이라면?', o: [['예약해 둔|다른 식당으로 바로', 'FJ'], ['근처 다른 곳|찾아서 바로 이동', 'FP'], ['기다린다.|시간은 비워 뒀으니까', 'RJ'], ['줄 서다 옆 가게가 끌리면 거기로', 'RP']] },
+  { h: '여행 마지막 날 오전은?', o: [['체크아웃 전까지|계획한 곳 하나 더', 'FJ'], ['공항 가는 길에 들를 곳 찾기', 'FP'], ['늦잠 자고|미리 찜해 둔 브런치', 'RJ'], ['늦잠, 짐 싸고 동네 한 바퀴', 'RP']] } ];
+const AX = [{ ax: '어디로', a: ['L', '로컬'], b: ['H', '핫플'] }, { ax: '무엇을', a: ['S', '구경'], b: ['E', '즐기기'] }, { ax: '얼마나', a: ['F', '알차게'], b: ['R', '여유롭게'] }, { ax: '어떻게', a: ['J', '계획형'], b: ['P', '즉흥형'] }];
+const LMEAN = { L: '로컬', H: '핫플', S: '구경', E: '즐기기', F: '알차게', R: '여유롭게', J: '계획형', P: '즉흥형' };
+/* 묶음 색 = chars.js G·TONE 값 */
+const GC = { LS: { bg: '#E6F2EC', a: '#2F9E6E', dk: '#16603F' }, LE: { bg: '#FBEEE2', a: '#E0812E', dk: '#93450F' }, HS: { bg: '#E7ECFB', a: '#3B5BDB', dk: '#22389A' }, HE: { bg: '#F8E9EF', a: '#D45C84', dk: '#8B2A4B' } };
+const SAMPLES = ['LEFJ', 'LSFP', 'HSRJ', 'HERP'];
+/* 예시 답: 대부분 내 유형 쪽, 2개는 다른 쪽 (실제처럼 반반 축이 생기게) */
+function answersFor(c) { const a = c.slice(0, 2), b = c.slice(2), oth = { LS: 'LE', LE: 'HE', HS: 'LS', HE: 'HS', FJ: 'RJ', FP: 'FJ', RJ: 'RP', RP: 'FP' };
+  return Q.map((q, i) => { const want = i < 5 ? (i === 3 ? oth[a] : a) : (i === 7 ? oth[b] : b); return q.o.findIndex(o => o[1] === want); }); }
+function votes(ans) { const v = { L: 0, H: 0, S: 0, E: 0, F: 0, R: 0, J: 0, P: 0 }; ans.forEach((oi, i) => Q[i].o[oi][1].split('').forEach(l => v[l]++)); return v; }
+const AV = (c, cls) => window.GABOJA_CHAR ? `<div class="av ${cls || ''}" style="background:${GABOJA_CHAR_BG(c)}">${GABOJA_CHAR(c, { bg: false })}</div>` : `<div class="av ${cls || ''}" style="background:${GC[c.slice(0, 2)].bg}"></div>`;
+const AVnb = c => window.GABOJA_CHAR ? `<div class="av">${GABOJA_CHAR(c, { bg: false })}</div>` : '<div class="av"></div>';
+const flaps = c => `<div class="flaps">${c.split('').map(l => `<span class="lcol"><span class="fl">${l}</span><span class="lb">${LMEAN[l]}</span></span>`).join('')}</div>`;
+function gauges(c, v) { return AX.map((x, k) => { const aw = c[k] === x.a[0], A = v[x.a[0]], B = v[x.b[0]], tot = A + B || 1, p = Math.round((aw ? A : B) / tot * 100), pos = aw ? 100 - p : p, sv = Math.min(100, Math.abs(p - 50) * 2), lo = Math.min(50, pos), wd = Math.abs(pos - 50);
+  return `<div class="g"><div class="top"><span class="${aw ? 'w' : ''}">${x.a[1]}</span><span class="${aw ? '' : 'w'}">${x.b[1]}</span></div><div class="line"><i class="c"></i><i class="f" style="left:${lo}%;width:${wd}%"></i><i class="d" style="left:${pos}%"></i><span class="p" style="left:${pos}%;--tx:${pos >= 95 ? '-100%' : pos <= 5 ? '0%' : '-50%'}">${sv}%</span></div></div>`; }).join(''); }
+const lets = (code, me) => code.split('').map(l => `<span class="lt ${me.includes(l) ? 'm' : ''}">${l}</span>`).join('');
+const CHV = '<svg class="ch" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>';
+const CHK = '<svg viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>';
+const scenes = t => t.scenes ? `<div class="sec"><h3>이런 장면, 익숙하죠?</h3><div class="card">${t.scenes.map(s => `<div class="scene">${CHK}<span>${esc(s)}</span></div>`).join('')}</div></div>` : '';
+const foot = `<div class="foot"><button class="cta">이 유형으로 내 여행 만들기 →</button><button class="ghost">친구에게 공유하기</button></div>`;
+const bar = `<div class="bar"><span class="x">RESULT</span><span class="x">10 / 10</span></div>`;
+
+const V = {
+  A: { t: '코드 옆 캐릭터', pts: ['<b>T22</b> 캐릭터 = 코드 글자 오른쪽 네모 칸(112px)', '<b>T23</b> 묶음 색은 캐릭터 칸 배경 + 묶음 이름 앞 점만 (BI 규칙 그대로)', '<b>T25</b> 답을 축 두 묶음으로 나눔 · 질문 작게 위, 내 답 크게 아래 · 오른쪽에 반영된 글자'],
+    html: (c, t, v, ans, g) => `${bar}<article class="tk">
+      <div class="hd"><b class="vz" style="font-size:18px">vztr<i></i></b><span class="gchip"><i></i>${esc(t.group)}</span></div>
+      <div class="bd"><div class="top2"><div>${flaps(c)}</div>${AV(c)}</div><h1 class="nm">${esc(t.name)}</h1><p class="ln">${esc(t.line)}</p></div>
+      <div class="perf"></div><div class="gz">${gauges(c, v)}</div><p class="gn">점이 끝으로 갈수록 그쪽 성향이 강해요</p>
+      <details class="ans" open><summary>내가 고른 답 10개<span class="sp"></span>${CHV}</summary><div class="axg">
+        ${[[0, 5, '어디로 · 무엇을'], [5, 10, '얼마나 · 어떻게']].map(([s, e, h]) => `<h4>${h}</h4>` + Q.slice(s, e).map((q, k) => { const i = s + k, o = q.o[ans[i]]; return `<div class="qa"><span class="n">${String(i + 1).padStart(2, '0')}</span><span class="q">${esc(q.h)}</span><span class="ls">${lets(o[1], c)}</span><span class="a">${esc(plain(o[0]))}</span></div>`; }).join('')).join('')}
+      </div></details></article>${scenes(t)}${foot}` },
+  B: { t: '큰 캐릭터 + 묶음 색 띠', pts: ['<b>T22</b> 캐릭터를 맨 위 크게, 코드 글자가 띠 아래에 걸침', '<b>T23</b> 위쪽 띠 = 묶음 연한 색 · 게이지 점·답 글자 = 묶음 진한 색', '<b>T25</b> 답 10개를 2칸 카드로 · 답 먼저 크게, 질문은 아래 작게'],
+    html: (c, t, v, ans, g) => `${bar}<article class="tk">
+      <div class="band"><div class="row1"><b class="vz">vztr<i></i></b><span class="gchip"><i></i>${esc(t.group)}</span></div>${AVnb(c)}</div>
+      ${flaps(c)}
+      <div class="bd"><h1 class="nm">${esc(t.name)}</h1><p class="ln">${esc(t.line)}</p></div>
+      <div class="perf"></div><div class="gz">${gauges(c, v)}</div>
+      <details class="ans" open><summary>내가 고른 답 10개<span class="sp"></span>${CHV}</summary><div class="agrid">
+        ${Q.map((q, i) => { const o = q.o[ans[i]]; return `<div class="ac"><div class="h"><span class="n">Q${i + 1}</span><span style="display:flex;gap:3px">${lets(o[1], c)}</span></div><span class="a">${esc(plain(o[0]))}</span><span class="q">${esc(q.h)}</span></div>`; }).join('')}
+      </div></details></article>${scenes(t)}${foot}` },
+  C: { t: '가로 탑승권 + 묶음 꼬리표', pts: ['<b>T22</b> 캐릭터 = 탑승권 왼쪽 꼬리표 안 (코드는 그 아래)', '<b>T23</b> 꼬리표 전체 = 묶음 연한 색 · 오른쪽 본문은 BI 그대로', '<b>T25</b> 답은 대화처럼: 질문 회색 한 줄 → 내 답 말풍선(오른쪽)'],
+    html: (c, t, v, ans, g) => `${bar}<article class="tk">
+      <div class="stub">${AVnb(c)}<span class="cd">${c}</span><span class="gp">${esc(t.group)}</span></div>
+      <div class="main"><div class="hd"><b class="vz">vztr<i></i></b><span>BOARDING PASS</span></div><h1 class="nm">${esc(t.name)}</h1><p class="ln">${esc(t.line)}</p>
+        <div class="lets">${c.split('').map(l => `<span><b>${l}</b>${LMEAN[l]}</span>`).join('')}</div></div></article>
+      <div class="full"><div class="gz" style="padding-top:16px">${gauges(c, v)}</div><p class="gn">점이 끝으로 갈수록 그쪽 성향이 강해요</p></div>
+      <div class="full"><details class="ans" open><summary>내가 고른 답 10개<span class="sp"></span>${CHV}</summary><div class="chat">
+        ${Q.map((q, i) => { const o = q.o[ans[i]]; return `<div class="it"><span class="q"><b>${i + 1}</b>${esc(q.h)}</span><span class="a">${esc(plain(o[0]))}<span style="display:flex;gap:3px">${lets(o[1], c)}</span></span></div>`; }).join('')}
+      </div></details></div>${scenes(t)}${foot}` }
+};
+
+function render(host, v, code) {
+  const t = TY[code] || { name: code, group: '', line: '' }, ans = answersFor(code), vt = votes(ans), g = GC[code.slice(0, 2)];
+  host.innerHTML = `<div class="res v${v}" style="--gbg:${g.bg};--ga:${g.a};--gdk:${g.dk}">${V[v].html(code, t, vt, ans, g)}</div>`;
+}
+
+const qs = new URLSearchParams(location.search), solo = qs.get('v');
+let st = {}; try { st = JSON.parse(localStorage.getItem(KEY) || '{}') || {}; } catch (_) {}
+const save = () => { try { localStorage.setItem(KEY, JSON.stringify(st)); } catch (_) {} };
+const theme = t => { document.documentElement.dataset.theme = t; all('#thSeg button').forEach(b => b.setAttribute('aria-pressed', b.dataset.t === t)); };
+if (qs.get('t')) theme(qs.get('t')); else if (matchMedia('(prefers-color-scheme: dark)').matches) theme('dark');
+let code = SAMPLES.includes(qs.get('c')) ? qs.get('c') : 'LEFJ';
+if (solo && V[solo]) { document.documentElement.classList.add('solo'); render($('#soloHost'), solo, code); return; }
+
+$('#tySeg').innerHTML = SAMPLES.map(c => `<button data-c="${c}">${c} ${esc((TY[c] || {}).group || '')}</button>`).join('');
+$('#grid').innerHTML = Object.keys(V).map(k => `<section class="opt"><h2><span class="k">${k}</span>${V[k].t}</h2><ul>${V[k].pts.map(x => `<li>${x}</li>`).join('')}</ul>
+  <div class="frame"><div class="scr" data-host="${k}"></div></div>
+  <div class="acts"><a data-solo="${k}" href="?v=${k}" target="_blank" rel="noopener">폰 전체 화면으로</a></div>
+  <div class="pk" data-q="${k}"><div class="row"><button data-a="이걸로">이걸로</button><button data-a="섞어서">일부만 가져가기</button><button data-a="별로">별로</button></div><textarea rows="2" placeholder="메모 (선택) — 예: 답 목록은 C처럼"></textarea></div></section>`).join('');
+const draw = () => { all('[data-host]').forEach(h => render(h, h.dataset.host, code)); all('#tySeg button').forEach(b => b.setAttribute('aria-pressed', b.dataset.c === code)); all('[data-solo]').forEach(a => a.href = `?v=${a.dataset.solo}&c=${code}`); };
+draw();
+$('#tySeg').onclick = e => { const b = e.target.closest('[data-c]'); if (b) { code = b.dataset.c; draw(); } };
+$('#thSeg').onclick = e => { const b = e.target.closest('[data-t]'); if (b) theme(b.dataset.t); };
+
+const drawPk = () => { all('.pk').forEach(p => { const o = st[p.dataset.q] || {}; all('.row button', p).forEach(b => b.setAttribute('aria-pressed', o.a === b.dataset.a)); const t = $('textarea', p); if (document.activeElement !== t) t.value = o.m || ''; });
+  $('#cnt').textContent = '고른 것 ' + Object.values(st).filter(o => o.a || o.m).length; };
+all('.pk').forEach(p => { const q = p.dataset.q;
+  p.addEventListener('click', e => { const b = e.target.closest('.row button'); if (!b) return; const o = st[q] = st[q] || {}; o.a = o.a === b.dataset.a ? '' : b.dataset.a; save(); drawPk(); });
+  $('textarea', p).addEventListener('input', e => { (st[q] = st[q] || {}).m = e.target.value; save(); drawPk(); }); });
+drawPk();
+const NAME = { A: 'A 코드 옆 캐릭터', B: 'B 큰 캐릭터 + 띠', C: 'C 가로 탑승권', color: '묶음 색 범위', ans: '고른 답 펼침', all: '전체 메모' };
+$('#copy').onclick = async () => {
+  const lines = ['[D-2 결과 화면 시안 답]'];
+  Object.keys(NAME).forEach(q => { const o = st[q]; if (!o || !(o.a || o.m)) return; lines.push(`- ${NAME[q]}: ${[o.a, o.m].filter(Boolean).join(' / ')}`); });
+  if (lines.length === 1) lines.push('- (아직 고른 것 없음)');
+  const tx = lines.join('\n'); let ok = false;
+  try { await navigator.clipboard.writeText(tx); ok = true; } catch (_) { const o = $('#out'); o.value = tx; o.removeAttribute('readonly'); o.select(); try { ok = document.execCommand('copy'); } catch (_) {} o.setAttribute('readonly', ''); }
+  $('#copy').textContent = ok ? '복사했어요 · 채팅에 붙여 주세요' : '복사 실패 — 길게 눌러 복사';
+  setTimeout(() => $('#copy').textContent = '답 복사하기', 2600);
+};
+}
+</script>
+</body>
+</html>
