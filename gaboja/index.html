@@ -396,7 +396,6 @@ details.sec > summary + * { margin-top: 0.375rem; }
 /* 늦어짐: 누를 때마다 더해짐 (+10 · +15 · +30 · +1시간), 되돌리기(지금 일정 조정만)는 알림 줄 안에 */
 .late { display: flex; flex-direction: column; gap: 0.4375rem; }
 .late > span { font-size: 0.75rem; color: var(--sub); padding: 0 0.25rem; }
-.late .g { display: grid; grid-template-columns: repeat(4, minmax(0,1fr)); gap: 0.4375rem; }
 .late .btn { padding: 0 0.375rem; }
 .track { border-radius: var(--r-lg); padding: 0.625rem 1.125rem; }
 .stop { display: grid; grid-template-columns: 1.375rem 3.125rem minmax(0,1fr); gap: 0.625rem; align-items: start; position: relative; padding: 0.6875rem 0; }
@@ -643,7 +642,6 @@ body { letter-spacing: 0; }
 .stop.m .t { font-size: 0.8125rem; font-weight: 400; color: var(--sub); }
 .stop.m { padding: 0.375rem 0; } .stop.m .rail::before { top: -0.375rem; bottom: -0.375rem; } .stop.m .pt { width: 0.375rem; height: 0.375rem; margin-top: 0.5625rem; border-width: 0; background: color-mix(in srgb, var(--sub) 45%, transparent); }
 .stop .moved.ok { color: var(--sub); }
-#lateBtns button:disabled { opacity: .4; }
 @media (prefers-reduced-motion: reduce) { .pass.live, .pass.live::after { animation: none; } }
 /* 칩·배지·버튼 글자 정렬 (11/13): 가로·세로 가운데. 줄 높이 1 + flex 가운데 맞춤, 자간(letter-spacing) 끝 여백은 왼쪽에 같은 만큼 더해 상쇄.
    DAY 바 = 날짜가 길어져도(11. 29) 글자가 칩 밖으로 새지 않게 칩 폭이 글자에 맞춰 늘고, 넘치면 바가 옆으로 밀림 */
@@ -669,13 +667,7 @@ body { letter-spacing: 0; }
 .btn.xs { height: 1.875rem; padding: 0 0.75rem; font-size: 0.75rem; font-weight: 700; }
 .next .hrow { display: flex; align-items: center; justify-content: space-between; gap: 0.5rem; min-height: 1.875rem; }
 /* 11/14 #25: 한 줄 = −15 −10 −5 | +5 +10 +15 (분), 알림 줄은 버튼 아래 */
-.late .g1 { display: flex; align-items: center; gap: 0.375rem; }
-.late .g1 .g, .late .g1 .g.e { display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 0.375rem; flex: 1; }
-.late .g1 .gsep { width: 1px; align-self: stretch; margin: 0.375rem 0.125rem; background: var(--hair); }
-.late .g1cap { display: flex; align-items: center; gap: 0.375rem; font-size: 0.71875rem; font-weight: 600; color: var(--sub); }
-.late .g1cap span { flex: 1; text-align: center; } .late .g1cap i { width: 1px; margin: 0 0.125rem; }
 #lateHint { text-align: center; }
-.late .g1 .btn { padding: 0; font-variant-numeric: tabular-nums; }
 .row2 input { flex: 1; min-width: 0; height: 2.5rem; border-radius: var(--r-sm); border: 1px solid var(--hair); background: var(--field); color: var(--ink); padding: 0 0.75rem; font: inherit; font-size: max(16px, 0.875rem); }
 .row2 b { font-weight: 700; font-size: 0.9375rem; }
 .rideedit { display: flex; flex-direction: column; gap: 0.625rem; padding: 0.875rem; border-radius: var(--r-md); background: var(--field); border: 1px solid var(--hair); }
@@ -922,6 +914,164 @@ body { letter-spacing: 0; }
 /* -- 11/18 VZTR 워드마크 (BI Master v1): Inter Tight 800 / 자간 -0.035em / 점 0.2em(--blue) / r 기둥과 0.12em / 점 바닥 = 기준선 -- */
 .vz { font-family: "Inter Tight", var(--kr); font-weight: 800; font-style: normal; letter-spacing: -.035em; line-height: 1; white-space: nowrap; color: var(--ink); }
 .vz i { display: inline-block; width: .2em; height: .2em; border-radius: 50%; background: var(--blue); margin-left: -.023em; vertical-align: baseline; }
+
+/* ══ 11/18 D-4 가이드북 상세·길안내·기록 (시안 D4 ① B · ② A+핀 · ③ A · ④ A · ⑤ B) ══ */
+/* ① 하루 요약: 머리 한 줄 + 세로 목록(시각 · 점 · 이름) */
+.dsh { display: flex; align-items: baseline; gap: 0.5rem; min-width: 0; padding-right: 0.25rem; }
+.dsh .dn { font-family: var(--mono); font-weight: 800; font-size: 0.9375rem; color: var(--blue); flex: none; }
+.dsh .dd { font-size: 0.875rem; font-weight: 600; white-space: nowrap; }
+.dsh .dr { margin-left: auto; font-family: var(--mono); font-size: 0.78125rem; color: var(--sub); white-space: nowrap; }
+.sheet h3.dstt { font-size: 1.3125rem; font-weight: 700; letter-spacing: -.035em; line-height: 1.25; margin: 0.25rem 0 0; }
+#sheet .body:has(> .rlist) { margin-top: 1.25rem; }
+.rlist { list-style: none; margin: 0; padding: 0; }
+.rlist li { display: grid; grid-template-columns: 3rem 1rem minmax(0,1fr) auto; gap: 0 0.5rem; align-items: center; min-height: 2.5rem; position: relative; font-size: 0.875rem; }
+.rlist li::before { content: ""; position: absolute; left: calc(3rem + 1rem - 1px); top: 0; bottom: 0; width: 2px; background: var(--hair); }
+.rlist li:first-child::before { top: 50%; } .rlist li:last-child::before { bottom: 50%; } .rlist li:only-child::before { display: none; }
+.rlist .tm { font-family: var(--mono); font-size: 0.78125rem; color: var(--sub); }
+.rlist li > i { width: 0.625rem; height: 0.625rem; border-radius: 50%; border: 2px solid var(--blue); background: var(--paper); justify-self: center; position: relative; z-index: 1; box-sizing: content-box; }
+.rlist .nm { text-align: left; font-weight: 600; font-size: 0.9375rem; line-height: 1.35; padding: 0.4375rem 0; word-break: keep-all; overflow-wrap: anywhere; }
+.rlist .nm em { font-style: normal; font-size: 0.6875rem; font-weight: 700; color: var(--blue); margin-left: 0.375rem; }
+.rlist li.fly .nm { color: var(--blue); }
+.rlist li.past-on { opacity: .5; }
+.rlist li.now-row .tm { color: var(--blue); }
+.rlist .pin { width: 2.25rem; height: 2.25rem; display: grid; place-items: center; color: var(--blue); }
+.rlist .pin svg, .li .pin svg { width: 1.125rem; height: 1.125rem; stroke: currentColor; fill: none; stroke-width: 1.9; stroke-linecap: round; stroke-linejoin: round; }
+/* ② 상세 보기: 시각 · 이름 · 핀 한 줄 / 이동 = 들여쓴 회색 한 줄 */
+.li:not(.m):not(.w) .nm { font-size: 0.9375rem; font-weight: 600; letter-spacing: -.01em; }
+.li .pin { width: 2.25rem; height: 2.25rem; margin: -0.375rem -0.375rem -0.375rem 0; display: grid; place-items: center; align-self: center; color: var(--blue); text-decoration: none; }
+.li .s { font-size: 0.71875rem; }
+.li.m .c::before { content: none; }
+.li.m .c, .li.m .c.one { display: flex; flex-direction: row; align-items: center; gap: 0.375rem; white-space: nowrap; }
+.mic { display: inline-flex; flex: none; } .mic svg { width: 0.875rem; height: 0.875rem; stroke: currentColor; fill: none; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+.li.ev { border: 1.5px dashed color-mix(in srgb, var(--amber) 70%, transparent); background: color-mix(in srgb, var(--amber) 10%, transparent); border-radius: 0.875rem; margin-block: 0.375rem; padding-inline: 0.75rem; width: calc(100% + 0.75rem); }
+.evs { width: 1rem; height: 1rem; flex: none; color: var(--amber); fill: none; stroke: currentColor; stroke-width: 2; stroke-linejoin: round; }
+/* ③ 장소 상세 시트 */
+.openrow { margin-top: 0.625rem; }
+.ochip { display: inline-flex; align-items: center; gap: 0.375rem; padding: 0.25rem 0.625rem; border-radius: 62.4375rem; background: var(--hair); font-size: 0.78125rem; font-weight: 600; }
+.ochip i { width: 0.4375rem; height: 0.4375rem; border-radius: 50%; background: var(--green); }
+.ochip.no i { background: var(--amber); }
+.stayrow2 { display: flex; align-items: center; justify-content: space-between; gap: 0.75rem; padding: 0.625rem 0.75rem; border-radius: 1rem; background: var(--field); }
+.stayrow2 .lb { font-size: 0.8125rem; font-weight: 600; color: var(--sub); display: flex; flex-direction: column; line-height: 1.25; }
+.stayrow2 .lb small { font-size: 0.6875rem; font-weight: 500; }
+.step { display: inline-flex; align-items: center; gap: 0.25rem; flex: none; }
+.step button { width: 2.125rem; height: 2.125rem; border-radius: 50%; background: var(--paper); box-shadow: var(--sh-xs); font-family: var(--mono); font-weight: 700; font-size: 1.125rem; line-height: 1; display: grid; place-items: center; }
+.step button:disabled { opacity: .35; box-shadow: none; cursor: default; }
+.step b { min-width: 4.5rem; text-align: center; font-size: 0.9375rem; font-weight: 700; white-space: nowrap; }
+.acts.two { gap: 0.625rem; }
+.acts.two .btn { gap: 0.4375rem; text-decoration: none; }
+.acts.two .btn svg { width: 1.0625rem; height: 1.0625rem; stroke: currentColor; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; flex: none; }
+.acts.two .btn.sec { background: var(--hair); border-color: transparent; }
+.ordrow { display: flex; justify-content: center; gap: 0.25rem; margin-top: -0.25rem; }
+.ordrow button { font-size: 0.8125rem; font-weight: 600; color: var(--sub); padding: 0.375rem 0.75rem; border-radius: 62.4375rem; }
+.ordrow i { width: 1px; background: var(--hair); margin: 0.5rem 0; }
+/* ④ 길안내 */
+.next .when .big { font-size: 2.5rem; font-weight: 800; letter-spacing: -.03em; }
+.next .nm { font-size: 1.1875rem; font-weight: 700; letter-spacing: -.03em; line-height: 1.3; word-break: keep-all; overflow-wrap: anywhere; }
+.next .when + .nm { margin-top: -0.125rem; }
+.next .nm + .lo { margin-top: -0.375rem; font-size: 0.8125rem; font-weight: 500; }
+.next .acts.nowacts { display: grid; grid-template-columns: minmax(0,1fr) auto; gap: 0.5rem; margin-top: 0.5rem; }
+.next .acts.nowacts > .btn:only-child { grid-column: 1 / -1; }
+.next .acts.nowacts .btn.sec { padding: 0 1.125rem; }
+.late .adj { display: flex; align-items: center; justify-content: space-between; gap: 0.625rem; padding: 0.4375rem 0.4375rem 0.4375rem 1rem; border-radius: 62.4375rem; background: var(--hair); }
+.late .adj .adjl { font-size: 0.78125rem; font-weight: 600; color: var(--sub); padding: 0; }
+.late .adj .step button { width: 1.875rem; height: 1.875rem; font-size: 1rem; }
+.late .adj .step b { min-width: 4.25rem; font-size: 0.84375rem; font-variant-numeric: tabular-nums; }
+.stop.now .pt { width: 0.9375rem; height: 0.9375rem; margin-top: 0.1875rem; border: 0.1875rem solid var(--blue); background: var(--paper); box-shadow: 0 0 0 0.3125rem color-mix(in srgb, var(--blue) 16%, transparent); }
+.stop.m .pt { display: none; }
+.stop .mvp { display: inline-flex; align-items: center; gap: 0.3125rem; padding: 0.125rem 0.5625rem; border-radius: 62.4375rem; background: var(--canvas); color: var(--sub); font-size: 0.75rem; font-weight: 500; line-height: 1.4; position: relative; z-index: 1; }
+.stop.now.m .mvp { color: var(--blue); background: color-mix(in srgb, var(--blue) 12%, transparent); }
+.stop.past.m .mvp { color: var(--past-tx); }
+.stop.m { padding: 0.25rem 0; }
+.stop.m .nmc { display: flex; align-items: center; min-height: 1.5rem; }
+.navnote { display: flex; align-items: stretch; justify-content: stretch; gap: 0; padding: 0.75rem 0; border-radius: 62.4375rem; background: var(--paper); box-shadow: var(--sh-xs); }
+.navnote > span { flex: 1 1 0; max-width: none; display: flex; flex-direction: column; align-items: center; gap: 0.0625rem; line-height: 1.2; min-width: 0; padding: 0; border: 0; border-radius: 0; background: none; }
+.navnote > span + span { border-left: 1px solid var(--hair); }
+.navnote b { font-family: var(--mono); font-size: 0.9375rem; font-weight: 700; color: var(--ink); }
+.navnote small { font-size: 0.6875rem; font-weight: 600; color: var(--sub); }
+/* ⑤ 기록: 하루 시트 = 길안내와 같은 점·세로 선 / 카드 = 요약 한 줄 */
+.ldlist li { grid-template-columns: 3rem 1rem minmax(0,1fr); gap: 0 0.5rem; padding: 0; min-height: 2.5rem; position: relative; border-top: 0; }
+.ldlist li::before { content: ""; position: absolute; left: calc(3rem + 1rem - 1px); top: 0; bottom: 0; width: 2px; background: var(--hair); }
+.ldlist li.dn::before { background: var(--blue); }
+.ldlist li:first-child::before { top: 50%; } .ldlist li:last-child::before { bottom: 50%; } .ldlist li:only-child::before { display: none; }
+.ldlist li > i { width: 0.75rem; height: 0.75rem; border-radius: 50%; border: 0.1875rem solid color-mix(in srgb, var(--sub) 55%, transparent); background: var(--paper); justify-self: center; position: relative; z-index: 1; box-sizing: border-box; }
+.ldlist li.dn > i { border-color: var(--paper); background: var(--blue); }
+.ldlist li.nw > i { width: 0.9375rem; height: 0.9375rem; border-color: var(--blue); box-shadow: 0 0 0 0.3125rem color-mix(in srgb, var(--blue) 16%, transparent); }
+.ldlist .nm { padding: 0.4375rem 0; font-size: 0.9375rem; }
+.ldlist .dn .nm { font-weight: 600; }
+.ldlist .sk .nm, .ldlist .sk .tm { color: var(--sub); } .ldlist .sk .nm { font-weight: 500; text-decoration: line-through; }
+.ldlist .sk .nm em { text-decoration: none; display: inline-block; }
+.ldft { display: flex; justify-content: space-between; gap: 0.5rem; flex-wrap: wrap; margin-top: 0.25rem; padding-top: 0.75rem; border-top: 1px dashed var(--hair); font-size: 0.78125rem; color: var(--sub); }
+.ldft b { color: var(--ink); font-weight: 700; }
+
+/* ══ 11/18 피드백 18개 (index) ══ */
+/* 7: 머리 날짜 + 작은 칩 */
+.pill .ttl > span#topSub { display: flex; align-items: center; gap: 0.375rem; font-family: var(--kr); font-size: 0.78125rem; font-weight: 600; letter-spacing: 0; color: var(--sub); white-space: nowrap; overflow: hidden; }
+.tchip { flex: none; font-family: var(--mono); font-size: 0.6875rem; font-weight: 700; line-height: 1; padding: 0.1875rem 0.4375rem; border-radius: 62.4375rem; background: var(--hair); color: var(--sub); letter-spacing: 0; }
+.tchip:nth-of-type(n+2) { background: color-mix(in srgb, var(--blue) 12%, transparent); color: var(--blue); }
+.tchip:empty { display: none; }
+/* 6: 길안내 제목·이름 한 줄 */
+.next .nm { white-space: nowrap; overflow: hidden; text-overflow: clip; }
+.stop b { display: block; white-space: nowrap; overflow: hidden; text-overflow: clip; -webkit-line-clamp: unset; }
+.next .lo.one { white-space: nowrap; }
+/* 9: 날씨 아이콘 색 */
+.wxl svg.wi-sun { color: var(--amber); } .wxl svg.wi-cloud, .wxl svg.wi-rain { color: var(--blue); } .wxl svg.wi-snow { color: color-mix(in srgb, var(--blue) 60%, var(--canvas)); }
+/* 8: 기록 도장 = 내 성향 묶음 색 (라이트 a · 다크 lt · 유형 모르면 Blue) */
+:root { --g-ls-a: #2F9E6E; --g-ls-lt: #A6E0C3; --g-le-a: #E0812E; --g-le-lt: #FFCF9C; --g-hs-a: #3B5BDB; --g-hs-lt: #B3C3FF; --g-he-a: #D45C84; --g-he-lt: #F7BACF; --stamp: var(--stamp-a, var(--blue)); }
+html[data-grp="LS"] { --stamp-a: var(--g-ls-a); --stamp-lt: var(--g-ls-lt); } html[data-grp="LE"] { --stamp-a: var(--g-le-a); --stamp-lt: var(--g-le-lt); }
+html[data-grp="HS"] { --stamp-a: var(--g-hs-a); --stamp-lt: var(--g-hs-lt); } html[data-grp="HE"] { --stamp-a: var(--g-he-a); --stamp-lt: var(--g-he-lt); }
+.stamp .f { fill: var(--stamp); } .stamp .ln, .stamp .gh { stroke: var(--stamp); } .stamp .tx, .stamp .cnt { fill: var(--stamp); }
+.cele-st::after { border-color: var(--stamp); }
+/* 13: 화면 문장 속 인라인 워드마크 + 워드마크 자간 */
+.vz { letter-spacing: -.05em; }
+.vz.vzi { font-size: 1.05em; color: var(--ink); }
+/* 10: 다크 깊이 3단 — 바탕 + 옅은 위쪽 번짐 / 카드 #1B1E23 + 위 1px 하이라이트 + 테두리 / 떠 있는 것 #22262C */
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --stamp: var(--stamp-lt, var(--blue)); --glass: #1B1E23; --glass-edge: rgba(255,255,255,.06); --glass-hl: rgba(255,255,255,.05); --sheet: #22262C; --float: #22262C; }
+  :root:not([data-theme="light"]) body { background: radial-gradient(120% 38% at 50% 0, rgba(255,255,255,.04), transparent 70%) no-repeat fixed, var(--canvas); }
+  :root:not([data-theme="light"]) .pill.glass, :root:not([data-theme="light"]) .tabs.glass { background: var(--float); } }
+:root[data-theme="dark"] { --stamp: var(--stamp-lt, var(--blue)); --glass: #1B1E23; --glass-edge: rgba(255,255,255,.06); --glass-hl: rgba(255,255,255,.05); --sheet: #22262C; --float: #22262C; }
+:root[data-theme="dark"] body { background: radial-gradient(120% 38% at 50% 0, rgba(255,255,255,.04), transparent 70%) no-repeat fixed, var(--canvas); }
+:root[data-theme="dark"] .pill.glass, :root[data-theme="dark"] .tabs.glass { background: var(--float); }
+/* 피드백1: 메뉴 '내 유형' 캐릭터 = 상자 선·배경 네모·바닥 그림자 없이 캐릭터만, 1.4배, 세로 가운데 (바깥 svg가 물려받던 stroke가 배경 rect에 테두리를 그렸음) */
+.drawer .tcard[data-m] { align-items: center; }
+.drawer .tcard .tav { width: 4.2rem; height: 4.2rem; margin: -0.75rem -0.25rem -0.75rem -0.5rem; display: grid; place-items: center; background: none; border: 0; box-shadow: none; overflow: visible; }
+.drawer .tcard .tav svg { width: 100%; height: 100%; margin: 0; stroke: none; fill: none; }
+.drawer .tcard .tav svg > rect:first-child { display: none; }
+.drawer .tcard .tav svg > g > ellipse:nth-child(-n+2) { display: none; }
+/* 피드백5: 탑승권 반원 홈 = 진짜 구멍(mask) — 바탕·안쪽 링·그림자(drop-shadow)가 모두 홈 모양을 따라감. 홈 높이(--ny)는 JS(fixNotches)가 점선 위치로 넣음 */
+.pass.flycard { --nr: 0.6875rem; --ringc: var(--glass-edge); --fcbg: var(--glass); background: none !important; -webkit-backdrop-filter: none; backdrop-filter: none; border: 0; box-shadow: none !important; animation: none !important;
+  filter: drop-shadow(0 0.5rem 0.625rem rgba(24,36,60,.11)) drop-shadow(0 0.0625rem 0.1875rem rgba(24,36,60,.07)); }
+.list .pass.flycard { --fcbg: var(--paper); }
+.pass.flycard.live { --ringc: var(--c, var(--blue)); }
+.pass.flycard::before { content: ""; position: absolute; inset: 0; z-index: -1; border-radius: inherit; pointer-events: none;
+  background: radial-gradient(circle at 0 var(--ny, 50%), transparent var(--nr), var(--ringc) var(--nr), var(--ringc) calc(var(--nr) + 1.5px), transparent calc(var(--nr) + 1.5px)),
+    radial-gradient(circle at 100% var(--ny, 50%), transparent var(--nr), var(--ringc) var(--nr), var(--ringc) calc(var(--nr) + 1.5px), transparent calc(var(--nr) + 1.5px)),
+    linear-gradient(var(--fcbg), var(--fcbg));
+  box-shadow: inset 0 0 0 1px var(--glass-edge), inset 0 1px 0 var(--glass-hl);
+  -webkit-mask: radial-gradient(circle at 0 var(--ny, 50%), transparent var(--nr), #000 calc(var(--nr) + .5px)), radial-gradient(circle at 100% var(--ny, 50%), transparent var(--nr), #000 calc(var(--nr) + .5px)); -webkit-mask-composite: source-in;
+  mask: radial-gradient(circle at 0 var(--ny, 50%), transparent var(--nr), #000 calc(var(--nr) + .5px)), radial-gradient(circle at 100% var(--ny, 50%), transparent var(--nr), #000 calc(var(--nr) + .5px)); mask-composite: intersect; }
+.pass.flycard.live::before { box-shadow: inset 0 0 0 1.5px var(--c, var(--blue)); animation: passglow2 2.2s ease-in-out infinite; }
+@keyframes passglow2 { 0%, 100% { box-shadow: inset 0 0 0 1.5px var(--c, var(--blue)), inset 0 0 0 0 transparent; } 50% { box-shadow: inset 0 0 0 1.5px var(--c, var(--blue)), inset 0 0 1.25rem 0 color-mix(in srgb, var(--c, var(--blue)) 22%, transparent); } }
+.pass.flycard .perf::before, .pass.flycard .perf::after { display: none; }
+.flycard .band.l { -webkit-mask: radial-gradient(circle at 0 var(--ny, 50%), transparent var(--nr), #000 calc(var(--nr) + .5px)); mask: radial-gradient(circle at 0 var(--ny, 50%), transparent var(--nr), #000 calc(var(--nr) + .5px)); }
+.flycard .band.r { -webkit-mask: radial-gradient(circle at 100% var(--ny, 50%), transparent var(--nr), #000 calc(var(--nr) + .5px)); mask: radial-gradient(circle at 100% var(--ny, 50%), transparent var(--nr), #000 calc(var(--nr) + .5px)); }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .pass.flycard { filter: drop-shadow(0 0.5rem 0.625rem rgba(0,0,0,.45)) drop-shadow(0 0.0625rem 0.1875rem rgba(0,0,0,.35)); } }
+:root[data-theme="dark"] .pass.flycard { filter: drop-shadow(0 0.5rem 0.625rem rgba(0,0,0,.45)) drop-shadow(0 0.0625rem 0.1875rem rgba(0,0,0,.35)); }
+@media (prefers-reduced-motion: reduce) { .pass.flycard.live::before { animation: none; } }
+/* 11/18 '…' 없음: 제목·이름은 줄바꿈(최대 2줄 안팎) — 말줄임은 보조 글자(사진 출처·토스트·버튼·탑승권 태그)에만 남김 */
+.sheet .one, .trip .one, .dcard .one, .drawer .tcard .one, .pill .ttl .one, .stateline .tx, .kv dd, .sgrid b, .nowbar .cur, .nowbar .nx, .next .lo.one, .li .nm .one, .tile .n.one, #warn .nt, .path .sn, .dayline .one, .nrow .one, .crow .one, .arow .one, .mgo .one, .altrow .one {
+  white-space: normal; overflow: visible; text-overflow: clip; -webkit-line-clamp: unset; display: block; word-break: keep-all; overflow-wrap: anywhere; line-height: 1.3; }
+.stateline .tx, .nowbar .cur, .nowbar .nx { display: inline; }
+.nowbar { height: auto; min-height: 2.75rem; padding-block: 0.4375rem; flex-wrap: wrap; row-gap: 0.125rem; }
+.nowbar .cur { flex: 1 1 auto; } .nowbar .nx { margin-left: auto; }
+.trip .ttl2 { line-height: 1.3; }
+.trip .codes { line-height: 1.3; padding-right: 4.5rem; }
+.code.k { white-space: normal; overflow: visible; text-overflow: clip; overflow-wrap: anywhere; word-break: keep-all; line-height: 1.15; }
+.li .nm { align-items: flex-start; }
+.li .nm .one { flex: 1; }
+/* 머리 날짜+칩: 좁으면 칩이 아랫줄로(잘리지 않게) */
+.pill { height: auto; min-height: 3.5rem; padding-block: 0.25rem; }
+.pill .ttl > span#topSub { flex-wrap: wrap; row-gap: 0.1875rem; overflow: visible; }
 </style>
 
 <div class="app">
@@ -964,8 +1114,8 @@ body { letter-spacing: 0; }
   <section class="view" id="v-now" aria-label="오늘" hidden>
     <div class="nextwrap card glass">
     <div class="next" id="nextCard"></div>
-    <div class="late"><span id="lateHint" hidden></span><div class="g1cap" aria-hidden="true"><span>일찍 끝났어요</span><i></i><span>늦어지고 있어요</span></div>
-      <div class="g1"><span class="g e" id="earlyBtns"><button class="btn sec sm" data-early="15">−15</button><button class="btn sec sm" data-early="10">−10</button><button class="btn sec sm" data-early="5">−5</button></span><i class="gsep" aria-hidden="true"></i><span class="g" id="lateBtns"><button class="btn sec sm" data-late="5">+5</button><button class="btn sec sm" data-late="10">+10</button><button class="btn sec sm" data-late="15">+15</button></span></div>
+    <div class="late"><span id="lateHint" hidden></span>
+      <div class="adj"><span class="adjl">시간 조정</span><span class="step"><button type="button" class="adjb" data-early="5" aria-label="5분 일찍 끝났어요">−</button><b id="adjV">지금대로</b><button type="button" class="adjb" data-late="5" aria-label="5분 늦어지고 있어요">+</button></span></div>
     </div>
     <div class="banner" id="banner" hidden><i></i><span id="bannerTx"></span><button class="rs" id="resetBtn">되돌리기</button></div>
     </div>
@@ -1183,9 +1333,9 @@ setTimeout(() => {
   document.body.appendChild(a); requestAnimationFrame(() => a.classList.add('on'));
   a.onclick = e => { const b = e.target.closest('[data-a]'); if (!b) return; if (b.dataset.a === 'dark') setTheme('dark', true); else { try { localStorage.setItem('gaboja-theme', 'light'); } catch (_) {} } a.classList.remove('on'); setTimeout(() => a.remove(), 300); };
 }, 2800);
-try { const ty = JSON.parse(localStorage.getItem('gaboja-type')); if (ty && /^[LH][SE][FR][JP]$/.test(ty.code)) { const tn = document.getElementById('typeN'); tn.textContent = ty.code; tn.hidden = false; const av = document.getElementById('typeAv'); if (av && window.GABOJA_CHAR) { av.innerHTML = GABOJA_CHAR(ty.code, { bg: false }); av.dataset.c = ty.code; av.classList.add('gfx'); av.hidden = false; } const TY = window.GABOJA_TYPES && window.GABOJA_TYPES[ty.code]; document.getElementById('typeNm').textContent = TY && TY.name ? TY.name : '내 여행 유형'; document.querySelector('[data-m="type"]').href = 'start.html?from=app#r-' + ty.code; } } catch (_) {}
+try { const ty = JSON.parse(localStorage.getItem('gaboja-type')); if (ty && /^[LH][SE][FR][JP]$/.test(ty.code)) { document.documentElement.dataset.grp = ty.code.slice(0, 2); const tn = document.getElementById('typeN'); tn.textContent = ty.code; tn.hidden = false; const av = document.getElementById('typeAv'); if (av && window.GABOJA_CHAR) { av.innerHTML = GABOJA_CHAR(ty.code, { bg: false }); av.dataset.c = ty.code; av.classList.add('gfx'); av.hidden = false; } const TY = window.GABOJA_TYPES && window.GABOJA_TYPES[ty.code]; document.getElementById('typeNm').textContent = TY && TY.name ? TY.name : '내 여행 유형'; document.querySelector('[data-m="type"]').href = 'start.html?from=app#r-' + ty.code; } } catch (_) {}
 document.querySelector('.pill .ttl b').textContent = TRIP_TITLE;
-{ const lg = document.querySelector('#v-log .dmeta span:nth-child(2)'); if (lg) lg.textContent = DAYS.length + '일 · ' + TRIP_DATES; }
+
 $('#themeSeg').onclick = e => { const b = e.target.closest('[data-th]'); if (b) setTheme(b.dataset.th, true); };
 
 /* ---------- 고칠 수 있는 하루 목록 ---------- */
@@ -1289,6 +1439,13 @@ const dateOfDay = d => { const t = new Date(TRIP0); t.setDate(TRIP0.getDate() + 
 // 날짜 글자는 한 곳에서: 여행 첫날(TRIP0) + DAY 번호로 계산 → DAY 바·하루 머리·요약·탑승권·기록·메모가 전부 같은 날짜 (월·연 넘김 포함). 'MM. D 요일'. 짧게 = 요일 뺀 앞부분
 DAYS.forEach(d => { const t = dateOfDay(d); d.date = (t.getMonth() + 1) + '. ' + t.getDate() + ' ' + WDF[t.getDay()]; });
 const dShort = d => d.date.replace(/\s\S$/, '');
+/* 11/18 피드백7: 여행 날짜 = '11월 19일 목 – 21일 토' (달이 바뀌면 '11월 30일 일 – 12월 2일 화') · 한 곳에서 만들어 머리·기록·요약이 같은 글자 */
+const mdw = t => (t.getMonth() + 1) + '월 ' + t.getDate() + '일 ' + WDF[t.getDay()];
+function tripDates() {
+  const a = dateOfDay(DAYS[0]), b = dateOfDay(DAYS[DAYS.length - 1]);
+  if (DAYS.length < 2 || (a.getMonth() === b.getMonth() && a.getDate() === b.getDate())) return mdw(a);
+  return mdw(a) + ' – ' + (a.getMonth() === b.getMonth() ? b.getDate() + '일 ' + WDF[b.getDay()] : mdw(b));
+}
 /* ---------- 날씨 (평년 = weather.js · 오늘부터 16일 안이면 Open-Meteo 예보로 교체, 실패하면 조용히 평년) ---------- */
 const WX = window.GABOJA_WEATHER || null;
 const WX_KEY = { '오사카': 'kix', '교토': 'kyo', '도쿄': 'tyo', '후쿠오카': 'fuk', '삿포로': 'spk', '서울': 'sel', '부산': 'bsn' };
@@ -1324,7 +1481,7 @@ function wxOf(d) {
 }
 function wxLine(d) {
   const w = wxOf(d); if (!w) return ''; const [hi, lo, pr, g] = w.v;
-  return '<div class="wxl" aria-label="날씨 ' + (w.n ? '평년 ' : '') + hi + '도 ' + lo + '도"><svg viewBox="0 0 24 24">' + (WX_IC[WX_GRP[g]] || WX_IC.cloud) + '</svg><b>' + hi + '°/' + lo + '°</b>' + (pr != null ? '<span>비 ' + Math.round(pr) + '%</span>' : '') + '</div>';   // 11/15 #20: 16일 밖(평년값)이어도 '평년' 배지 안 붙임
+  return '<div class="wxl" aria-label="날씨 ' + (w.n ? '평년 ' : '') + hi + '도 ' + lo + '도"><svg class="wi wi-' + (WX_GRP[g] || 'cloud') + '" viewBox="0 0 24 24">' + (WX_IC[WX_GRP[g]] || WX_IC.cloud) + '</svg><b>' + hi + '°/' + lo + '°</b>' + (pr != null ? '<span>비 ' + Math.round(pr) + '%</span>' : '') + '</div>';   // 11/15 #20: 16일 밖(평년값)이어도 '평년' 배지 안 붙임
 }
 wxFetch();
 function nowRef() {
@@ -1370,16 +1527,17 @@ function liveTop() {
   let h;
   if (n.phase === 'before') h = '<div class="stateline"><span class="stc">출발 전</span><span class="dd">D-' + n.left + '</span><span class="tx">오늘 ' + fullDate(n.t) + '</span></div>';
   else if (n.phase === 'during') h = '<div class="stateline"><span class="stc">여행 중</span><span class="dd">DAY ' + (n.day + 1) + '</span><span class="tx">' + fullDate(n.t) + ' · ' + toT(n.min) + '</span></div>';
-  else h = '<div class="stateline"><span class="stc end">여행 끝</span><span class="tx">' + TRIP_DATES + ' · 기록에 저장됨</span></div>';
+  else h = '<div class="stateline"><span class="stc end">여행 끝</span><span class="tx">' + tripDates() + ' · 기록에 저장됨</span></div>';
   // 11/14 #17: 탑승권은 그 비행기 타는 날(출발일·돌아오는 날)을 볼 때만 맨 위에. 다른 날엔 상태 줄만
   return h + (lf && DAYS.indexOf(lf.d) === st.day ? flyCard(lf.d, lf.c, ' live', true) : '');
 }
-function subOf(tab) {
-  const n = nowRef();
+function subOf(tab) {   // 11/18 피드백7: 날짜 글자 + 작은 칩(박수 · D-n · 여행 중) — HTML로 돌려줌
+  const n = nowRef(), chip = t => '<small class="tchip">' + t + '</small>';
   if (tab === 'v-now') { const di = navDay(); return 'DAY ' + DAYS[di].no + ' · 현재 시각 ' + toT(n.min); }
-  if (tab === 'v-log') return TRIP_DATES + (TRIP_NIGHTS ? ' · ' + TRIP_NIGHTS : '');
-  return (n.phase === 'before' ? 'D-' + n.left + ' · ' : n.phase === 'during' ? '여행 중 · ' : '여행 끝 · ') + TRIP_DATES + (TRIP_NIGHTS && n.phase === 'before' ? ' · ' + TRIP_NIGHTS : '');
+  if (tab === 'v-log') return tripDates() + (TRIP_NIGHTS ? chip(TRIP_NIGHTS) : '');
+  return tripDates() + (n.phase === 'before' ? chip(TRIP_NIGHTS || '') + chip('D-' + n.left) : n.phase === 'during' ? chip('여행 중') : chip('여행 끝'));
 }
+const setSub = tab => { $('#topSub').innerHTML = subOf(tab); };
 
 /* ---------- 하루 머리: DAY 칩·도시 / 제목 / 날짜 줄 + 지금 줄 ---------- */
 function dayHead(d) {
@@ -1398,20 +1556,18 @@ function dayHead(d) {
   }
   return h;
 }
-function daySumSheet() {
+function daySumSheet() {   /* 11/18 D-4 ①: 머리 한 줄(DAY·날짜·시각 범위) + 세로 목록(시각 · 점 · 이름, 안 잘림) */
   const d = DAYS[st.day], nw = nowOf(d), first = d.list[0], last = d.list[d.list.length - 1];
   const range = d.tbd ? '시각 미정' : first ? first.s + ' – ' + (last.est ? last.s : last.e) : '일정 없음';
-  const stops = routeOf(d, 5), allStops = routeOf(d);
-  let h = '<div class="shd"><div><span class="eyebrow">DAY ' + d.no + ' · ' + d.date + ' · ' + range + '</span><h3 id="sheetTitle" class="one">' + esc(d.title) + '</h3>'
-    + '</div>' + X_BTN + '</div><div class="body">'
-    + '<div class="path" aria-label="동선: ' + esc(allStops.join(' → ')) + '">' + stops.map(s => '<span class="stop2"><i></i><span class="sn">' + esc(s) + '</span></span>').join('') + '</div><div class="sumlist sumscroll">';
+  let h = '<div class="shd"><div><div class="dsh"><b class="dn">DAY ' + d.no + '</b><span class="dd">' + esc(d.date) + '</span><span class="dr">' + range + '</span></div><h3 id="sheetTitle" class="dstt">' + esc(d.title) + '</h3>'
+    + '</div>' + X_BTN + '</div><div class="body"><ul class="rlist sumscroll" aria-label="동선: ' + esc(routeOf(d).join(' → ')) + '">';
   d.list.filter(c => c.k !== 'm').forEach(c => {   // 11/15 #11: 요약엔 이동 시간 빼고 일정만
-    const cls = nw && c === nw.cur ? 'now-row' : pastOf(nw, c) ? 'past-on' : '';
-    const nm0 = c.k === 'm' ? c.mv : c.fly ? flyTx(c, 1, 3) : (c.n.split(' — ')[1] || c.n), mu = canClose(c) ? mapUrl(d, c) : '';
-    h += '<div class="' + cls + '"><span class="tm">' + tmx(d, c) + '</span><span class="one">' + esc(nm0) + (cls === 'now-row' ? ' · 지금' : '') + '</span>'
-      + (mu ? '<a class="pin" href="' + mu + '" target="_blank" rel="noopener" aria-label="' + esc(nm0) + ' 구글 지도에서 열기">' + PIN_SVG + '</a>' : '<span></span>') + '</div>';
+    const isNow = nw && c === nw.cur, cls = (c.fly ? 'fly ' : '') + (isNow ? 'now-row' : pastOf(nw, c) ? 'past-on' : '');
+    const nm0 = c.fly ? flyTx(c, 1, 3) : (c.n.split(' — ')[1] || c.n), mu = canClose(c) ? mapUrl(d, c) : '';
+    h += '<li class="' + cls + '"><span class="tm">' + tmx(d, c) + '</span><i aria-hidden="true"></i><button type="button" class="nm" data-open="' + c.id + '">' + esc(nm0) + (isNow ? '<em>지금</em>' : '') + '</button>'
+      + (mu ? '<a class="pin" href="' + mu + '" target="_blank" rel="noopener" aria-label="' + esc(nm0) + ' 구글 지도에서 열기">' + PIN_SVG + '</a>' : '<span></span>') + '</li>';
   });
-  sheetMode = 'daysum'; openSheet(h + '</div></div>');
+  sheetMode = 'daysum'; openSheet(h + '</ul></div>');
 }
 const PIN_SVG = '<svg viewBox="0 0 24 24"><path d="M12 21s-6.5-5.7-6.5-10.5a6.5 6.5 0 0 1 13 0C18.5 15.3 12 21 12 21z"/><circle cx="12" cy="10.5" r="2.3"/></svg>';
 const PLANE_SVG = '<svg viewBox="0 0 24 24"><path d="M21 15.5v-1.6l-8-5V3.6a1.5 1.5 0 0 0-3 0v5.3l-8 5v1.6l8-2.5v5.4l-2 1.5v1.3l3.5-1 3.5 1v-1.3l-2-1.5V13z"/></svg>';
@@ -1526,31 +1682,28 @@ function blankCard(d) {
     + '<div class="bacts"><button class="btn pri" data-blank="recs">추천 블록 보기</button><button class="btn sec" data-blank="find">장소 검색</button></div></div>';
 }
 /* ---------- 자세히: 목록 ---------- */
+const WALK_SVG = '<svg viewBox="0 0 24 24"><circle cx="13" cy="4.5" r="1.8"/><path d="M10 21l2-6 3 3v3M9 11l2-3 4 1 2 3M11 8l-1 6"/></svg>';
+const EV_STAR = '<svg class="evs" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l2.6 5.6 6 .7-4.5 4.1 1.2 6L12 16.4 6.7 19.4l1.2-6L3.4 9.3l6-.7z"/></svg>';
+const mvIc = c => '<i class="mic">' + (c.mode === 'walk' || (!c.mode && /걸어서|도보/.test(c.mv || '')) ? WALK_SVG : c.mode === 'car' ? CAR_SVG : /비행기/.test(c.mv || '') ? PLANE_SVG : TRAIN_SVG) + '</i>';
 function list(d) {
   let h = tbdNote(d) + '<div class="list glass">', wi = 0;
   const nw = nowOf(d), nowCls = c => nw && c === nw.cur ? ' now-on' : pastOf(nw, c) ? ' past-on' : '';
   const flush = upto => { if (d.tbd) { wi = d.wake.length; return; } while (wi < d.wake.length && toMin(d.wake[wi].s) <= upto) { const w = d.wake[wi++]; h += '<div class="li w' + (nw && toMin(w.s) < nw.min ? ' past-on' : '') + '"><span class="tm">' + w.s + '</span><span class="c one">' + esc(w.n) + (w.say ? ' · ' + esc(w.say) : '') + '</span><span></span></div>'; } };
   d.list.forEach(c => {
     flush(toMin(c.s));
-    if (c.k === 'm') {
-      h += '<div class="li m' + nowCls(c) + '" data-key="' + c.id + '" data-fixed="1"><span class="tm">' + tmx(d, c) + '</span><span class="c one">' + esc(c.mv) + '</span>'
-        + (navUrl(d, c) ? '<a class="go" href="' + navUrl(d, c) + '" target="_blank" rel="noopener">길찾기</a>' : '<span></span>') + '</div>';
+    if (c.k === 'm') {   /* 11/18 D-4 ②: 이동 = 들여쓴 회색 한 줄 [수단 아이콘] 문구 (길찾기 글자 링크 없음 · 길찾기는 장소 상세·길안내에서) */
+      h += '<div class="li m' + nowCls(c) + '" data-key="' + c.id + '" data-fixed="1"><span class="tm">' + tmx(d, c) + '</span><span class="c one">' + mvIc(c) + esc(c.mv) + '</span><span></span></div>';
       return;
     }
     if (c.fly && isPinned(c)) { h += '<div class="li m" data-key="' + c.id + '" data-fixed="1"><span class="tm">' + tmx(d, c) + '</span><span class="c one" style="color:var(--blue);font-weight:600">' + flyHtml(c, 1, 3) + ' · 위 ' + (c.ride === 'train' ? '승차권' : '탑승권') + '</span><span></span></div>'; return; }
     if (c.fly) { h += flyCard(d, c, nowCls(c)); return; }
-    const sub = [], parts = c.n.split(' — '), main = parts[1] || parts[0];
-    if (parts[1]) sub.push(esc(parts[0]));
-    if (c.fly) sub.push('도착 ' + c.e + ' · 출발 ' + ((c.pre || 120) >= 60 ? (c.pre || 120) / 60 + '시간' : durTx(c.pre)) + ' 전 ' + (c.ride === 'train' ? '역' : '공항'));
-    if (c.say) sub.push(esc(c.say));
-    if (c.k === 'u') sub.push('직접 추가');
-    { const ti = timeIssue(c); if (ti.hard || ti.soft) sub.unshift('<span class="off">' + (ti.hard ? '시간대 안 맞음' : '영업시간 밖') + '</span>'); }
-    const fx = fixedOf(c);
-    h += '<div class="li ' + c.k + nowCls(c) + '" data-key="' + c.id + '"' + (fx ? ' data-fixed="1"' : '') + ' role="button" tabindex="0">'
+    const parts = c.n.split(' — '), main = parts[1] || parts[0], ti = timeIssue(c);   /* 11/18 D-4 ②: 설명 줄 없음(장소 상세에서 봄) · 시간 문제만 작은 글자로 남김 */
+    const fx = fixedOf(c), mu = mapUrl(d, c), P = window.GABOJA_DATA && GABOJA_DATA.places, ev = !!(c.pid && P && P[c.pid] && P[c.pid].kind === 'event');
+    h += '<div class="li ' + c.k + (ev ? ' ev' : '') + nowCls(c) + '" data-key="' + c.id + '"' + (fx ? ' data-fixed="1"' : '') + ' role="button" tabindex="0">'
       + '<span class="tm">' + tmx(d, c) + '</span>'
-      + '<span class="c"><span class="nm">' + dotHtml(d, c) + '<span class="one">' + esc(main) + '</span>' + (nw && c === nw.cur ? '<span class="now-pill">지금</span>' : '') + memoBadge(c) + (c.ck ? '<i class="ckd' + (c.ck === 'ok' ? '' : ' no') + '" role="img" aria-label="' + (c.ck === 'ok' ? '영업시간 확인' : '확인 필요') + '"></i>' : '') + '</span>'
-      + (sub.length ? '<span class="s one">' + sub.join(' · ') + '</span>' : '') + '</span>'
-      + (mapUrl(d, c) ? '<a class="go" href="' + mapUrl(d, c) + '" target="_blank" rel="noopener">지도</a>' : '<span></span>') + '</div>';
+      + '<span class="c"><span class="nm">' + (ev ? EV_STAR : dotHtml(d, c)) + '<span class="one">' + esc(main) + '</span>' + (nw && c === nw.cur ? '<span class="now-pill">지금</span>' : '') + memoBadge(c) + (c.ck ? '<i class="ckd' + (c.ck === 'ok' ? '' : ' no') + '" role="img" aria-label="' + (c.ck === 'ok' ? '영업시간 확인' : '확인 필요') + '"></i>' : '') + '</span>'
+      + (ti.hard || ti.soft ? '<span class="s one"><span class="off">' + (ti.hard ? '시간대 안 맞음' : '영업시간 밖') + '</span></span>' : '') + '</span>'
+      + (mu ? '<a class="pin" href="' + mu + '" target="_blank" rel="noopener" aria-label="' + esc(main) + ' 지도">' + PIN_SVG + '</a>' : '<span></span>') + '</div>';
   });
   flush(24*60);
   return h + '</div>' + blankCard(d);
@@ -1574,12 +1727,15 @@ function flip(root, before, skip) {
     el.animate([{ transform: 'translate(' + dx + 'px,' + dy + 'px)' }, { transform: 'none' }], { duration: 300, easing: 'cubic-bezier(.2,.8,.2,1)' });
   });
 }
+// 11/18 피드백5: 탑승권 홈(반원) 높이 = 점선 위치 → CSS 변수 --ny (카드 위에서부터)
+function fixNotches() { document.querySelectorAll('.flycard').forEach(c => { const pf = c.querySelector('.perf'); if (pf) c.style.setProperty('--ny', (pf.offsetTop + pf.offsetHeight / 2) + 'px'); }); }
+addEventListener('resize', () => { try { fixNotches(); } catch (_) {} }); try { document.fonts && document.fonts.ready.then(() => fixNotches()); } catch (_) {}
 let lastView = '';
 function renderPlan(flashId) {
   const d = DAYS[st.day], view = st.day + st.mode;
   const before = view === lastView ? snapRects($('#dayBody')) : null; lastView = view;
   $('#liveTop').innerHTML = liveTop();
-  if (!$('#v-plan').hidden) $('#topSub').textContent = subOf('v-plan');
+  if (!$('#v-plan').hidden) setSub('v-plan');
   $('#dayHead').innerHTML = dayHead(d);
   const W = { red:'시간 고정', amber:'확인 필요', gray:'알아 두기' };
   $('#warn').innerHTML = '<h4 class="warnh">' + NICON.amber + '주의</h4>' + (NOTES[d.no] || []).map(n0 => {
@@ -1591,6 +1747,7 @@ function renderPlan(flashId) {
   if (st.mode === 'simple') fitTiles();
   flip($('#dayBody'), before);
   if (flashId) { const el = document.querySelector('#dayBody [data-key="' + flashId + '"]'); el && el.classList.add('just'); }
+  fixNotches();
   saveEdits();
 }
 
@@ -1773,38 +1930,51 @@ document.addEventListener('contextmenu', e => { if (e.target.closest('#dayBody [
 /* ---------- 길안내 ---------- */
 // 보는 날 = 도착 표시 중인 날 > 오늘 > (출발 전) DAY 1 > (여행 끝) 마지막 날
 function navDay() { const n = nowRef(); if (st.cur) return st.cur.day; return n.phase === 'during' ? n.day : n.phase === 'before' ? 0 : DAYS.length - 1; }
+/* 11/18 피드백6: 길안내 제목·타임라인 이름은 한 줄('…' 없음) — 넘치면 글자를 0.5px씩 줄임(최소 11px) */
+function fitNow() {
+  if ($('#v-now').hidden) return;
+  document.querySelectorAll('#nextCard .nm, #track .stop b').forEach(n => { n.style.fontSize = ''; if (!n.clientWidth) return; let fs = parseFloat(getComputedStyle(n).fontSize); while (n.scrollWidth > n.clientWidth + 1 && fs > 11) { fs -= 0.5; n.style.fontSize = fs + 'px'; } });
+}
+addEventListener('resize', () => { try { fitNow(); } catch (_) {} });
+const roTx = w => { const c = String(w).replace(/[^가-힣]+$/, '').slice(-1).charCodeAt(0) - 0xAC00; return c >= 0 && c < 11172 ? (c % 28 && c % 28 !== 8 ? '으로' : '로') : '(으)로'; };   // 받침 없거나 ㄹ이면 '로', 있으면 '으로', 한글 아니면 '(으)로'
 function renderNow() {
   const di = navDay(), d = DAYS[di], n = nowRef(), p = posOf(di), L = d.list, tb = !!d.tbd;
   const nx = L[p.i + 1], lts = Object.values(d.lates || {}), net = lts.reduce((a, b) => a + b, 0), totLate = lts.filter(v => v > 0).reduce((a, b) => a + b, 0);
-  const head = st.cur ? '다음 일정 · DAY ' + d.no : n.phase === 'before' ? '출발 전 · D-' + n.left + ' · 첫 일정' : n.phase === 'after' ? '여행 끝' : '다음 일정 · DAY ' + d.no;
+  let head = st.cur ? '다음 일정 · DAY ' + d.no : n.phase === 'before' ? '출발 전 · D-' + n.left + ' · 첫 일정' : n.phase === 'after' ? '여행 끝' : '다음 일정 · DAY ' + d.no;
+  if (nx && nx.k === 'm' && !tb && nx.e && (st.cur || n.phase === 'during')) head = '다음 · ' + nx.e + ' 도착 예정';   // 11/18 D-4 ④: 이동 차례면 도착 예정 시각
   const canPrev = p.i > 0 || (!!st.cur && st.cur.day === di && st.cur.id !== '__pre' && p.i >= 0);   // 잘못 눌렀을 때 지난 일정으로 한 칸
   const nu0 = nx && navUrl(d, nx);
   let h = '<div class="hrow"><span class="eyebrow">' + head + '</span><span class="rt">' + (canPrev ? '<button class="btn ghost xs" id="prevBtn" type="button">← 이전</button>' : '')
     + (nu0 ? '<a class="navs" href="' + nu0 + '" target="_blank" rel="noopener"><svg viewBox="0 0 24 24"><path d="M12 3l7 17-7-4-7 4z"/></svg>길찾기</a>' : '') + '</span></div>';
   const ct = p.at && canClose(L[p.i]) ? L[p.i] : canClose(nx) ? nx : null;
   const closedBtn = ct ? '<div class="acts"><button class="btn ghost sm" data-closed-now="' + ct.id + '">‘' + esc((ct.sh || ct.n).split(' — ').pop()) + '’ 닫혀 있나요? 다른 곳 보기</button></div>' : '';
-  if (nx) {
-    const parts = nx.n.split(' — '), sh = tb ? 0 : toMin(nx.s) - nx.b;
+  if (nx) {   // 11/18 D-4 ④: 큰 시각 40px → 제목(줄바꿈 허용, '…' 없음) → 작은 보조 줄 → 주 버튼(+보조)
+    const parts = nx.n.split(' — '), sh = tb ? 0 : toMin(nx.s) - nx.b, dst = nx.k === 'm' ? L.slice(p.i + 2).find(x => x.k !== 'm') : null;
+    const dn = dst ? (dst.sh || dst.n).split(' — ').pop() : '';
+    const mvp = String(nx.mv || '').split(' · '), ttl = nx.k === 'm' ? (dn ? dn + roTx(dn) : mvp[0]) : nx.fly ? flyTx(nx, 1, 3) : (nx.sh || parts[1] || parts[0]);   // 11/18 피드백6: 짧은 이름(sh) 우선 · 덧말은 작은 줄로
     h += '<div class="when">' + (tb ? '<span class="big" style="font-size:1.5rem">다음 순서</span>' : '<span class="big">' + nx.s + '</span>') + (sh > 0 ? '<span class="chk">예정 ' + toT(nx.b) + '</span>' : sh < 0 ? '<span class="chk no">예정 ' + toT(nx.b) + ' · ' + durTx(-sh) + ' 일찍</span>' : '') + '</div>'
-      + '<div class="nm one">' + esc(nx.k === 'm' ? nx.mv : nx.fly ? flyTx(nx, 1, 3) + (nx.fno ? ' · ' + nx.fno : '') : (parts[1] || parts[0])) + '</div>'
+      + '<div class="nm">' + esc(ttl) + '</div>'
+      + (nx.k === 'm' ? '<div class="lo">' + esc(dn ? nx.mv : mvp.slice(1).join(' · ')) + '</div>' : nx.fly && nx.fno ? '<div class="lo">' + esc(nx.fno) + '</div>' : '')
       + (nx.l ? '<div class="lo one"><span class="jp">' + esc(nx.l) + '</span>' + (nx.r ? ' · ' + esc(nx.r) : '') + '</div>' : '')
       + (nx.say ? '<div class="lo one">' + esc(nx.say) + '</div>' : '')
-      + '<div class="acts">' + (canSkip(nx) ? '<button class="btn sec" type="button" data-skip="' + nx.id + '">건너뛰기</button>' : '')
-      + '<button class="btn pri" id="arriveBtn">' + (nx.k === 'm' || isCar(nx) ? '출발' : '도착') + '</button></div>' + closedBtn;
+      + '<div class="acts nowacts"><button class="btn pri" id="arriveBtn">' + (nx.k === 'm' || isCar(nx) ? '출발' : '도착') + '</button>'
+      + (canSkip(nx) ? '<button class="btn sec" type="button" data-skip="' + nx.id + '">건너뛰기</button>' : '') + '</div>' + closedBtn;
   } else if (p.at) { const c = L[p.i]; h += '<div class="nm one">마지막 · ' + esc(c.k === 'm' ? c.mv : (c.sh || c.n)) + '</div><div class="lo">끝나면 눌러서 하루 도장 완성</div><div class="acts"><button class="btn pri" id="endDayBtn">오늘 일정 끝</button></div>' + closedBtn; }
   else h += '<div class="nm">' + (n.phase === 'after' && !st.cur ? '다녀왔어요' : '오늘 일정 끝') + '</div><div class="lo">기록에 DAY ' + d.no + ' 저장</div>'
       + (di < DAYS.length - 1 ? '<div class="acts"><button class="btn sec" id="nextDayBtn">DAY ' + (d.no + 1) + ' 미리 따라가기</button></div>' : '');
   $('#nextCard').innerHTML = h;
+  fitNow();
   // 지나온 길 / 남은 길 = 일정 탭과 같은 목록(추가·옮김·보관·늦어짐·일찍 그대로)
-  $('#track').innerHTML = L.map((x, i) => {
+  $('#track').innerHTML = L.map((x, i) => {   // 11/18 D-4 ④: 이동 = 시각 없이 작은 알약 [아이콘] 17분 · 장소 = 시각 + 이름(안 잘림)
     const cls = (i < p.i || (i === p.i && !p.at)) ? 'past' : i === p.i ? 'now' : '', sh = tb ? 0 : toMin(x.s) - x.b;
     const nm = x.k === 'm' ? x.mv : x.fly ? flyTx(x, 1, 3) : (x.sh || x.n);
     const fl = cls === 'now' && (x.k === 'm' || x.fly) && i < L.length - 1 ? '<span class="fl" aria-hidden="true"><i></i><i></i><i></i></span>' : '';
     const can = i > p.i && canSkip(x);
     return (can ? '<div class="stopw" data-sw="' + x.id + '"><div class="swb"><button class="sk" data-skip="' + x.id + '">건너뛰기</button><button class="rm" data-rmv="' + x.id + '">빼기</button></div>' : '')
-      + '<div class="stop ' + cls + (x.k === 'm' ? ' m' : '') + (can ? ' can' : '') + '"><span class="rail"><span class="pt"></span>' + fl + '</span><span class="t">' + tmx(d, x) + '</span><span class="nmc"><b>' + esc(nm) + '</b>'
+      + '<div class="stop ' + cls + (x.k === 'm' ? ' m' : '') + (can ? ' can' : '') + '"><span class="rail"><span class="pt"></span>' + fl + '</span><span class="t">' + (x.k === 'm' ? '' : tmx(d, x)) + '</span><span class="nmc">'
+      + (x.k === 'm' ? '<span class="mvp" aria-label="' + esc(x.mv) + '">' + mvIc(x) + (x.du ? durTx(x.du) : esc(nm)) + '</span>' : '<b>' + esc(nm) + '</b>')
       + (x.k === 'u' ? '<span class="s2">직접 추가</span>' : '')
-      + (sh && !cls ? '<span class="moved">처음 예정 ' + toT(x.b) + '</span>' : '')   /* 11/15 #18: 밀림·당겨짐 문구 없이 처음 시각만 */ + '</span>'
+      + (sh && !cls && x.k !== 'm' ? '<span class="moved">처음 예정 ' + toT(x.b) + '</span>' : '')   /* 11/15 #18: 밀림·당겨짐 문구 없이 처음 시각만 */ + '</span>'
       + (can ? '<button class="more" type="button" data-stopm="' + x.id + '" aria-label="건너뛰기·빼기">···</button></div></div>' : '</div>');
   }).join('');
   const b = $('#banner');
@@ -1819,16 +1989,18 @@ function renderNow() {
       : durTx(-net) + ' 일찍 → ' + (early.length ? '뒤 일정 ' + early.length + '개 당김' : '뒤 일정 그대로 (영업 시작·시간 고정)');
   }
   const cur0 = L[p.i], curLate = cur0 && d.lates ? d.lates[cur0.id] || 0 : 0, off = p.i < 0 || p.i >= L.length;
-  document.querySelectorAll('#lateBtns [data-late]').forEach(x => { x.disabled = off || totLate >= 180; });
-  document.querySelectorAll('#earlyBtns [data-early]').forEach(x => { x.disabled = off || !cur0 || cur0.fly || cur0.du + curLate - +x.dataset.early < 10; });
+  document.querySelectorAll('.late [data-late]').forEach(x => { x.disabled = off || totLate >= 180; });   // 11/18 D-4 ④: 6버튼 → 시간 조정 − 지금대로 + (5분 단위)
+  document.querySelectorAll('.late [data-early]').forEach(x => { x.disabled = off || !cur0 || cur0.fly || cur0.du + curLate - +x.dataset.early < 10; });
+  $('#adjV').textContent = !curLate || off ? '지금대로' : curLate > 0 ? '+' + durTx(curLate) : '−' + durTx(-curLate);
   { const pre = p.i < 0; $('#lateHint').hidden = !pre; $('#lateHint').textContent = pre ? '출발한 뒤에 쓸 수 있어요' : ''; }   // 11/15 #7: 평소엔 버튼 위 짧은 이름만
   { // 11/15 #8: '지금 HH:MM · 남은 일정 N곳 · 오늘 끝 HH:MM' (쓸모 있는 정보만)
     const rest = L.slice(Math.max(p.i + 1, 0)).filter(c => c.k !== 'm'), lastC = L.length ? L[L.length - 1] : null;
     const endT = lastC ? (lastC.e || lastC.s) : '';
     const over = p.i >= L.length || (!rest.length && p.i >= 0);   // 11/18 G74: 숫자 한 줄 나열 → 칸(숫자 크게, 설명 작게)
-    $('#navNote').innerHTML = over ? '<span><b>오늘 일정</b>모두 끝났어요</span>' : (p.i < 0 && L[0] ? '<span><b>' + L[0].s + '</b>첫 일정 시작</span>' : '') + (rest.length ? '<span><b>' + rest.length + '곳</b>남은 일정</span>' : '') + (endT ? '<span><b>' + endT + '</b>일정 마무리</span>' : '');
+    const cell = (b, sm) => '<span><b>' + b + '</b><small>' + sm + '</small></span>';   // 11/18 D-4 ④: 한 줄 알약 막대 안 3칸
+    $('#navNote').innerHTML = over ? cell('오늘 일정', '모두 끝났어요') : (!tb && L[0] ? cell(L[0].s, '시작') : '') + (rest.length ? cell(rest.length + '곳', '남음') : '') + (endT && !tb ? cell(endT, '마무리') : '');
   }
-  if (!$('#v-now').hidden) $('#topSub').textContent = subOf('v-now');
+  if (!$('#v-now').hidden) setSub('v-now');
   saveEdits();
 }
 // 일찍 출발: 지금 일정을 N분 줄여 뒤를 당김. 시간 고정·영업 시작 전·비행기로는 못 당김 (안 당겨지면 이유를 알림)
@@ -1917,6 +2089,8 @@ function stampSvg(d, done, total, from) {
     : done ? '<text class="cnt" x="50" y="55" font-size="13">' + done + '/' + N + '</text>' : '';
   return '<div class="stamp" role="img" aria-label="DAY ' + d.no + ' ' + (all ? '완료' : done + ' / ' + N + ' 진행') + '"><svg viewBox="0 0 100 100"><g filter="url(#gbRough)">' + h + '</g></svg></div>';
 }
+const dayEndT = d => { const l = d.list[d.list.length - 1]; return d.tbd || !l ? '' : l.est ? l.s : (l.e || l.s); };
+const logSum = (d, n, done) => { const e = dayEndT(d); return (done ? done + '곳 다녀옴' : n + '곳 예정') + (e ? ' · ' + e + ' 마무리' : ''); };
 function renderTrail() {
   st.stampDone = st.stampDone || {};
   let h = '';
@@ -1926,7 +2100,7 @@ function renderTrail() {
     // 11/14 #27 C안: 카드 사이 발자국 점 3개 뺌 (뜻이 안 읽힘) → 간격만
     const started = done > 0 || p.at;
     h += '<div class="trip glass' + (started ? '' : ' later') + '" data-tday="' + i + '" role="button" tabindex="0" aria-label="DAY ' + d.no + ' 일정 보기"><div class="d"><b>DAY ' + d.no + '</b><span>' + d.date + '</span></div><div style="min-width:0">'
-      + '<div class="ttl2 one">' + esc(d.title) + '</div><div class="codes one">' + esc(routeOf(d).join(' → ')) + '</div>'
+      + '<div class="ttl2 one">' + esc(d.title) + '</div><div class="codes one">' + logSum(d, V.length, done) + '</div>'   /* 11/18 D-4 ⑤: 잘리던 경로 한 줄 → 요약 한 줄 */
       + (started ? '<div class="prog" aria-label="다녀온 비율"><i style="width:' + Math.round(done / V.length * 100) + '%"></i></div>' : '') + '</div>'
       + stampSvg(d, done, V.length, st.stampDone[i] ?? done) + '</div>';
     if (!$('#v-log').hidden) st.stampDone[i] = done;   // 기록 탭을 볼 때만 기억 → 다른 탭에서 끝낸 조각은 기록 탭을 열 때 '쾅'
@@ -1935,15 +2109,18 @@ function renderTrail() {
   saveEdits();
 }
 // 11/15 #16: 기록 카드 누르면 그날 한 일만 깔끔하게 (지난 일정 ✓ · 지금 · 남은 일정 흐리게 · 메모 수 · 건너뜀은 보관함에서)
-function logDaySheet(i) {
+function logDaySheet(i) {   /* 11/18 D-4 ⑤: 머리 DAY · 날짜 + 제목 / 시각 · 점(길안내와 같은 세로 선) · 이름 / 아래 한 줄 요약 */
   const d = DAYS[i], p = posOf(i), V = [];
   d.list.forEach((c, k) => { if (c.k === 'm') return; V.push({ c, done: k < p.i || (k === p.i && !p.at), now: k === p.i && p.at }); });
   const done = V.filter(v => v.done).length, sk = (st.archive || []).filter(r => r.d && r.d.no === d.no && r.skip);
-  let h = '<div class="shd"><div><span class="eyebrow">DAY ' + d.no + ' · ' + d.date + ' · ' + done + ' / ' + V.length + '곳</span><h3 id="sheetTitle" class="one">' + esc(d.title) + '</h3></div>' + X_BTN + '</div><div class="body">'
-    + (done ? '<div class="ldstamp">' + stampSvg(d, done, V.length, done) + '</div>' : '') + '<ol class="ldlist">';
+  sk.slice().reverse().forEach(r => {   // 건너뜀 = 원래 자리(시각 순)에 회색 점 + 줄 긋기
+    const at = d.tbd ? -1 : V.findIndex(v => toMin(v.c.s) > r.sl), v = { c: r.it, skip: true, tm: d.tbd ? '–' : toT(r.sl) }; if (at < 0) V.push(v); else V.splice(at, 0, v);
+  });
+  const rest = V.filter(v => !v.done && !v.skip).length, e = dayEndT(d);
+  let h = '<div class="shd"><div><span class="eyebrow">DAY ' + d.no + ' · ' + esc(d.date) + '</span><h3 id="sheetTitle" class="dstt">' + esc(d.title) + '</h3></div>' + X_BTN + '</div><div class="body"><ol class="ldlist">';
   V.forEach(v => { const c = v.c, nm = c.fly ? flyTx(c, 1, 3) : (c.n.split(' — ')[1] || c.sh || c.n), m = (c.memo || []).length;
-    h += '<li class="' + (v.done ? 'dn' : v.now ? 'nw' : 'td') + '"><span class="ck" aria-hidden="true">' + (v.done ? '<svg viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>' : '') + '</span><span class="tm">' + tmx(d, c) + '</span><span class="nm">' + esc(nm) + (m ? '<em>메모 ' + m + '</em>' : '') + '</span></li>'; });
-  h += '</ol>' + (sk.length ? '<p class="sub">건너뜀 ' + sk.length + '곳 · ' + esc(sk.map(r => r.it.sh || r.it.n).join(', ')) + '</p>' : '') + '</div>';
+    h += '<li class="' + (v.skip ? 'sk' : v.done ? 'dn' : v.now ? 'nw' : 'td') + '"><span class="tm">' + (v.tm || tmx(d, c)) + '</span><i aria-hidden="true"></i><span class="nm">' + esc(nm) + (v.skip ? '<em>건너뜀</em>' : m ? '<em>메모 ' + m + '</em>' : '') + '</span></li>'; });
+  h += '</ol><div class="ldft"><span><b>' + done + '곳</b> 다녀옴' + (rest ? ' · ' + rest + '곳 남음' : '') + (sk.length ? ' · ' + sk.length + '곳 건너뜀' : '') + '</span>' + (e ? '<span>' + e + ' 마무리</span>' : '') + '</div></div>';
   sheetMode = 'logday'; openSheet(h);
 }
 $('#trips').addEventListener('click', e => { const t = e.target.closest('[data-tday]'); if (t) logDaySheet(+t.dataset.tday); });
@@ -2071,10 +2248,19 @@ function phScan() {   // 시트 안 .phbox 를 찾아 사진을 붙임 (시트�
     loadGD(D => { const p = D && D.places && D.places[el.dataset.pid]; if (!p) { el.hidden = true; return; } phMount(el, p, { link: true }); }); });
 }
 try { new MutationObserver(phScan).observe(document.getElementById('sheetIn'), { childList: true }); } catch (_) {}
+/* 11/18 D-4 ③: 영업시간 칩 — 영업 구간(oh)이 있으면 '그 시각에 열림/밖'(timeIssue 재사용), 없고 info에 영업 글자만 있으면 그 글자. 데이터 없으면 칩 없음 */
+function openChip(d, c) {
+  if (c.fly || c.k === 'm' || c.k === 'w') return '';
+  const chip = (cls, tx) => '<div class="openrow"><span class="ochip ' + cls + '"><i></i>' + tx + '</span></div>';
+  if (c.oh && c.oh.length === 2) { const rg = c.oh[0] === '00:00' && toMin(c.oh[1]) >= 1440 ? '24시간' : hhTx(c.oh[0]) + '–' + hhTx(c.oh[1]); return chip(timeIssue(c).soft ? 'no' : '', (timeIssue(c).soft ? '영업시간 밖' : '영업 중') + ' · ' + rg); }
+  const f = (c.info || []).find(x => x[0] === '영업');
+  return f ? chip(c.ck === 'no' ? 'no' : '', '영업 · ' + esc(f[1])) : '';
+}
 function sheetHtml(d, c) {
   const fx = fixedOf(c), parts = c.n.split(' — '), key = d.no + ':' + c.id, L = c.memo || [], tb = d.tbd, ed = !c.fly && c.k !== 'm';
-  let h = '<div class="shd"><div><span class="eyebrow one">DAY ' + d.no + ' · ' + (tb ? '시각 미정' : c.s + (c.est ? '' : ' – ' + c.e)) + ' · ' + KIND[c.k] + (c.chg ? '<span class="chgtag">변경됨</span>' : '') + '</span>'
-    + '<h3 class="one" id="sheetTitle">' + esc(parts[1] || parts[0]) + '</h3>' + (c.say ? '<p class="sub one">' + esc(c.say) + '</p>' : '') + '</div>' + X_BTN + '</div><div class="body">'
+  /* 11/18 D-4 ③: 머리 = 작은 줄(DAY · 시각) / 이름 / 설명 / 영업시간 칩 (종류 글자는 뺌) */
+  let h = '<div class="shd"><div><span class="eyebrow one">DAY ' + d.no + ' · ' + (tb ? '시각 미정' : c.s + (c.est ? '' : ' – ' + c.e)) + (c.chg ? '<span class="chgtag">변경됨</span>' : '') + '</span>'
+    + '<h3 class="one" id="sheetTitle">' + esc(parts[1] || parts[0]) + '</h3>' + (c.say ? '<p class="sub one">' + esc(c.say) + '</p>' : '') + openChip(d, c) + '</div>' + X_BTN + '</div><div class="body">'
     + (c.pid && !c.fly ? '<div class="phbox" data-pid="' + esc(c.pid) + '"></div>' : '');
   if (c.fly) h += rideEditHtml(d, c);
   const kv = [];
@@ -2082,19 +2268,18 @@ function sheetHtml(d, c) {
   if (!c.est && c.k !== 'm' && !ed && !isCar(c) && !tb) kv.push([c.fly ? '소요' : '머무는 시간', durTx(c.du)]);
   if (c.l) kv.push(['현지어', '<span class="jp">' + esc(c.l) + '</span> <span class="muted">' + esc(c.r || '') + '</span>']);
   if (c.mv && !c.fly) kv.push(['이동', esc(c.mv)]);   // 11/15 #19: 탑승권 시트엔 '이동 · 비행기' 줄 없음 → 바로 메모
-  (c.info || []).forEach(x => kv.push([x[0], esc(x[1])]));
+  (c.info || []).forEach(x => { if (x[0] === '영업' && !c.fly && c.k !== 'm') return; kv.push([x[0], esc(x[1])]); });   // 영업시간은 위 칩으로
   if (kv.length) h += '<dl class="kv">' + kv.map(x => '<dt>' + x[0] + '</dt><dd>' + x[1] + '</dd>').join('') + '</dl>';
-  if (ed) h += '<div class="stayrow"><span class="mh">머무는 시간 · ' + durTx(c.du) + (c.du !== c.du0 ? ' (원래 ' + durTx(c.du0) + ')' : '') + '</span><div class="chips wrap" id="stayChips">'
-    + STAYS.map(v => '<button aria-pressed="' + (c.du === v) + '" data-stay="' + v + '">' + durTx(v) + '</button>').join('') + '<button data-stay-d="-15">−15분</button><button data-stay-d="15">+15분</button></div></div>';
+  if (ed) h += '<div class="stayrow2"><span class="lb">머무는 시간' + (c.du !== c.du0 ? '<small>원래 ' + durTx(c.du0) + '</small>' : '') + '</span><span class="step"><button type="button" data-stay-d="-15" aria-label="15분 줄이기"' + (c.du - 15 < 30 ? ' disabled' : '') + '>−</button><b>' + durTx(c.du) + '</b><button type="button" data-stay-d="15" aria-label="15분 늘리기"' + (c.du + 15 > 360 ? ' disabled' : '') + '>+</button></span></div>';   // 11/18 D-4 ③: 칩 2줄 → 한 줄 스테퍼(15분 단위 · 30분~6시간)
   if (c.ck) h += '<p class="ckline"><i class="ckd' + (c.ck === 'ok' ? '' : ' no') + '"></i>' + esc(CHECKS[c.ck].t) + '</p>';
   { const ti = timeIssue(c); if (ti.hard || ti.soft) h += '<p class="sub off">' + esc(ti.hard || ti.soft) + ' · 가능한 시간 ' + esc(ti.fix) + '</p>'; }
   h += '<div class="memos"><span class="mh">메모' + (L.length ? ' ' + L.length : '') + '</span>' + memoLines(L, key) + memoAdd(key, '예: 여기선 셔츠 보기') + '</div>';
   const nu = navUrl(d, c), mu = c.k === 'm' ? '' : mapUrl(d, c);
-  if (nu || mu) h += '<div class="acts">' + (mu ? '<a class="btn pri" href="' + mu + '" target="_blank" rel="noopener">지도</a>' : '')
-    + (nu ? '<a class="btn sec" href="' + nu + '" target="_blank" rel="noopener">길찾기</a>' : '') + '</div>';
+  if (nu || mu) h += '<div class="acts two">' + (mu ? '<a class="btn sec" href="' + mu + '" target="_blank" rel="noopener">' + PIN_SVG + '지도</a>' : '')
+    + (nu ? '<a class="btn pri" href="' + nu + '" target="_blank" rel="noopener"><svg viewBox="0 0 24 24"><path d="M12 3l7 17-7-4-7 4z"/></svg>길찾기</a>' : '') + '</div>';   // 11/18 D-4 ③: 지도(회색) · 길찾기(잉크) 2칸
   if (canClose(c)) h += '<div class="acts"><button class="btn sec sm" data-closed="' + c.id + '">닫혀 있나요? 근처 다른 곳 보기</button></div>';
   h += fx ? '<p class="sub">고정된 일정이에요 · 옮기거나 삭제할 수 없어요</p>'
-    : '<div class="acts"><button class="btn ghost sm" data-ord="-1">↑ 앞으로</button><button class="btn ghost sm" data-ord="1">↓ 뒤로</button><button class="btn ghost sm" data-del>보관</button></div>';
+    : '<div class="ordrow"><button type="button" data-ord="-1">↑ 앞으로</button><i></i><button type="button" data-ord="1">↓ 뒤로</button><i></i><button type="button" data-del>보관</button></div>';
   return h + '</div>';
 }
 const memoTotal = () => DAYS.reduce((a, d) => a + d.list.reduce((b, c) => b + (c.memo ? c.memo.length : 0), 0), 0) + (st.tripMemo || []).length;
@@ -2666,7 +2851,7 @@ function buildPrintDoc() {
   // 표지
   const fl = []; DAYS.forEach(d => d.list.forEach(c => { if (c.fly && !isCar(c) && c.ride !== 'train') fl.push([d, c]); }));
   const flTx = (lb, d, c) => '<p>' + lb + ' · ' + esc(wd(d)) + (d.tbd ? '' : ' ' + c.s) + ' · ' + esc(c.fly[0] + ' ' + c.fly[1] + ' → ' + c.fly[2] + ' ' + c.fly[3]) + (c.fno ? ' · ' + esc(c.fno) : '') + '</p>';
-  let h = '<div class="ps cover"><div class="ctop"><span class="eb">VZTR</span><h1>' + esc(TRIP_TITLE) + '</h1><p class="sb">' + esc(TRIP_DATES + (TRIP_NIGHTS ? ' · ' + TRIP_NIGHTS : '')) + '</p>'
+  let h = '<div class="ps cover"><div class="ctop"><span class="eb">VZTR</span><h1>' + esc(TRIP_TITLE) + '</h1><p class="sb">' + esc(tripDates() + (TRIP_NIGHTS ? ' · ' + TRIP_NIGHTS : '')) + '</p>'
     + (fl.length ? '<div class="dep">' + flTx('가는 편', fl[0][0], fl[0][1]) + (fl.length > 1 ? flTx('오는 편', fl[fl.length - 1][0], fl[fl.length - 1][1]) : '') + '</div>' : '')
     + '</div><p class="foot">VZTR로 만든 일정 · 만든 날 ' + made + '</p></div>';
   // 한눈에 보기
@@ -2773,8 +2958,8 @@ document.querySelector('.tabs').onclick = e => {
   const onPlan = b.dataset.v === 'v-plan';
   $('#modeSeg').style.visibility = onPlan ? 'visible' : 'hidden';
   $('#dayBtns').hidden = !onPlan;
-  if (b.dataset.v === 'v-now') renderNow(); else if (b.dataset.v === 'v-log') renderTrail(); else renderPlan();
-  $('#topSub').textContent = subOf(b.dataset.v);
+  if (b.dataset.v === 'v-now') { renderNow(); fitNow(); } else if (b.dataset.v === 'v-log') renderTrail(); else renderPlan();
+  setSub(b.dataset.v);
   setFab(b.dataset.v);
   if (b.dataset.v === 'v-log' && endGet() === 'new') { endSet('seen'); endBadge(); }
   window.scrollTo({ top: 0 });
@@ -2832,13 +3017,14 @@ setInterval(() => {
   if (!$('#v-plan').hidden) renderPlan(); else if (!$('#v-now').hidden) renderNow(); else renderTrail();
 }, 30000);
 { const n = nowRef(); if (n.phase === 'during') st.day = n.day; }
-$('#topSub').textContent = subOf('v-plan');
+setSub('v-plan');
 document.addEventListener('input', e => {
   if (e.target.dataset && e.target.dataset.rf === 'dep') { const c = findIt(DAYS[st.day], sheetId), el = $('#rfArr'); if (c && isCar(c) && el && /^\d{1,2}:\d{2}$/.test(e.target.value)) { const dp = toMin(e.target.value); el.textContent = toT(dp + carDurAt(c, dp)).replace(/\(.*/, '') + ' · 자동 계산 (추정) · 약 ' + durTx(carDurAt(c, dp)); } }
   if (e.target.id === 'addName') { addPick = null; $('#addPick').innerHTML = ''; $('#addRecs').hidden = false; onAddInput(); } });
 loadEdits();
 DAYS.forEach(d => { if (!d.slots) d.slots = d.list.map(c => toMin(c.s)); });
 { const n = nowRef(); if (n.phase === 'during') st.day = n.day; }
+{ const lg = document.querySelector('#v-log .dmeta span:nth-child(2)'); if (lg) lg.textContent = DAYS.length + '일 · ' + tripDates(); }
 renderDays(); renderPlan(); renderNow(); renderTrail(); arcCount(); memoCount(); syncBar(); tripsCount(); endBadge();
 window.addEventListener('beforeprint', () => { try { buildPrintDoc(); } catch (_) {} });   // 브라우저 메뉴·Ctrl+P로 인쇄해도 빈 쪽 안 나오게
 try { if (new URLSearchParams(location.search).get('print') === '1') { buildPrintDoc(); } } catch (_) {}   // 점검용: 인쇄 문서만 만듦 (인쇄 창 안 띄움)
