@@ -5,18 +5,18 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="robots" content="noindex, nofollow">
 <meta name="theme-color" content="#EEF0F3">
-<link rel="icon" href="icons/icon-192.png">
+<link rel="icon" href="icons/favicon-32.png">
 <link rel="apple-touch-icon" href="icons/icon-180.png">
 <link rel="manifest" href="manifest.webmanifest">
-<meta name="apple-mobile-web-app-title" content="가보자">
+<meta name="apple-mobile-web-app-title" content="VZTR">
 <style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
-<title>가보자 앱 시안</title>
+<title>VZTR</title>
 </head>
 <body>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+New:wght@400;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400..800&family=Zen+Kaku+Gothic+New:wght@400;700&display=swap">
 <style>
 /* Pretendard 1.3.9 (SIL OFL 1.1) — 공식 배포본(orioncactus/pretendard)을 fonts/에 함께 올림 */
 @font-face { font-family: "Pretendard Variable"; font-weight: 45 920; font-style: normal; font-display: swap;
@@ -27,15 +27,15 @@
    손동작: 꾹 눌러 옮기기(다른 일정이 비켜남, 요약·상세) · 상세 목록만 왼쪽으로 밀면 '보관' 버튼 → 눌러야 보관(11/14) · 눌러서 라벨/색. 비행기·이동은 고정. 라이트/다크/시스템은 메뉴 맨 아래 */
 :root {
   color-scheme: light;
-  --canvas: #EEF0F3; --ink: #15171A; --sub: #6F757D; --hair: rgba(21,23,26,.09); --on-ink: #FFFFFF;
+  --canvas: #EEF0F3; --ink: #0A1F33; --sub: #5B6B7A; --hair: rgba(10,31,51,.09); --on-ink: #FFFFFF;
   --glass: rgba(255,255,255,.62); --glass-hi: rgba(255,255,255,.94); --glass-edge: rgba(255,255,255,.85); --glass-hl: rgba(255,255,255,.9);
   --paper: #FFFFFF; --tile: rgba(255,255,255,.86); --tile-edge: rgba(255,255,255,.98); --field: #FFFFFF; --sheet: rgba(255,255,255,.9);
-  --red: #E0453A; --amber: #E8A317; --blue: #3B5BDB; --past: #C9CDD3; --past-tx: #A3A8AF;
-  --toast-bg: rgba(21,23,26,.92); --toast-fg: #FFFFFF; --toast-act: #9DB2FF; --scrim: rgba(20,24,30,.28);
+  --red: #CF3F66; --amber: #E8912A; --blue: #2F5BFF; --on-blue: #FFFFFF; --past: #C9CDD3; --past-tx: #A3A8AF;
+  --toast-bg: rgba(10,31,51,.94); --toast-fg: #FFFFFF; --toast-act: #A9B9FF; --scrim: rgba(20,24,30,.28);
   --shadow: 0 1.375rem 2.75rem -1.375rem rgba(24,36,60,.32), 0 2px 0.375rem -2px rgba(24,36,60,.10);
   --sh-xs: 0 1px 2px rgba(24,36,60,.05), 0 0.25rem 0.75rem -0.375rem rgba(24,36,60,.14);
   --kr: "Pretendard Variable", Pretendard, -apple-system, "Apple SD Gothic Neo", "Malgun Gothic", system-ui, sans-serif;
-  --mono: "Pretendard Variable", Pretendard, -apple-system, "Malgun Gothic", system-ui, sans-serif; /* 시각·숫자도 Pretendard(고정폭 숫자) */
+  --mono: "Inter Tight", "Pretendard Variable", Pretendard, -apple-system, "Malgun Gothic", system-ui, sans-serif; /* 11/18 BI: 시각·숫자·영문 코드 = Inter Tight(고정폭 숫자), 한글은 Pretendard로 넘어감 */
   --jp: "Zen Kaku Gothic New", "Yu Gothic", sans-serif;
   --r-lg: 1.625rem; --r-md: 1.25rem; --r-sm: 0.875rem;
 }
@@ -44,8 +44,8 @@
   --canvas: #0E1013; --ink: #ECEEF1; --sub: #8F969F; --hair: rgba(255,255,255,.08); --on-ink: #0E1013;
   --glass: rgba(30,33,38,.62); --glass-hi: rgba(255,255,255,.14); --glass-edge: rgba(255,255,255,.08); --glass-hl: rgba(255,255,255,.06);
   --paper: #1B1E23; --tile: rgba(36,40,46,.9); --tile-edge: rgba(255,255,255,.06); --field: #15181C; --sheet: rgba(24,27,31,.94);
-  --red: #F2675D; --amber: #F0B43C; --blue: #8095F5; --past: #3A3F46; --past-tx: #646B75;
-  --toast-bg: rgba(236,238,241,.95); --toast-fg: #15171A; --toast-act: #3B5BDB; --scrim: rgba(0,0,0,.5);
+  --red: #F06A8A; --amber: #F0A84A; --blue: #7C95FF; --on-blue: #0A1F33; --past: #3A3F46; --past-tx: #646B75;
+  --toast-bg: rgba(236,238,241,.95); --toast-fg: #0A1F33; --toast-act: #2F5BFF; --scrim: rgba(0,0,0,.5);
   --shadow: 0 1.375rem 2.75rem -1.375rem rgba(0,0,0,.7), 0 2px 0.375rem -2px rgba(0,0,0,.4);
   --sh-xs: 0 1px 2px rgba(0,0,0,.35), 0 0.25rem 0.75rem -0.375rem rgba(0,0,0,.55); } }
 :root[data-theme="dark"] {
@@ -53,8 +53,8 @@
   --canvas: #0E1013; --ink: #ECEEF1; --sub: #8F969F; --hair: rgba(255,255,255,.08); --on-ink: #0E1013;
   --glass: rgba(30,33,38,.62); --glass-hi: rgba(255,255,255,.14); --glass-edge: rgba(255,255,255,.08); --glass-hl: rgba(255,255,255,.06);
   --paper: #1B1E23; --tile: rgba(36,40,46,.9); --tile-edge: rgba(255,255,255,.06); --field: #15181C; --sheet: rgba(24,27,31,.94);
-  --red: #F2675D; --amber: #F0B43C; --blue: #8095F5; --past: #3A3F46; --past-tx: #646B75;
-  --toast-bg: rgba(236,238,241,.95); --toast-fg: #15171A; --toast-act: #3B5BDB; --scrim: rgba(0,0,0,.5);
+  --red: #F06A8A; --amber: #F0A84A; --blue: #7C95FF; --on-blue: #0A1F33; --past: #3A3F46; --past-tx: #646B75;
+  --toast-bg: rgba(236,238,241,.95); --toast-fg: #0A1F33; --toast-act: #2F5BFF; --scrim: rgba(0,0,0,.5);
   --shadow: 0 1.375rem 2.75rem -1.375rem rgba(0,0,0,.7), 0 2px 0.375rem -2px rgba(0,0,0,.4);
   --sh-xs: 0 1px 2px rgba(0,0,0,.35), 0 0.25rem 0.75rem -0.375rem rgba(0,0,0,.55); }
 html { font-size: clamp(13.5px, calc(100vw * 16 / 390), 18px); -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
@@ -192,11 +192,11 @@ html.ios-tab.ios26 .thask { bottom: calc(9.75rem + env(safe-area-inset-bottom, 0
 .swbg { position: absolute; z-index: 0; pointer-events: none; display: flex; align-items: center; gap: 0.3125rem; padding: 0 0.875rem; border-radius: 0.875rem;
   font-size: 0.8125rem; font-weight: 700; color: var(--blue); background: color-mix(in srgb, var(--blue) 14%, var(--paper)); transition: background .15s, color .15s; }
 .swbg.r { justify-content: flex-end; }
-.swbg.go { background: var(--blue); color: #fff; }
+.swbg.go { background: var(--blue); color: var(--on-blue); }
 .swbg svg { width: 1.125rem; height: 1.125rem; stroke: currentColor; fill: none; stroke-width: 1.9; stroke-linecap: round; stroke-linejoin: round; flex: none; transition: transform .15s; }
 .swbg.go svg { transform: scale(1.15); }
 .swbg.r { padding: 0; overflow: hidden; }
-.swbtn { margin-left: auto; height: 100%; width: 5.25rem; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 0.1875rem; border: 0; background: var(--blue); color: #fff; font: inherit; font-size: 0.75rem; font-weight: 700; border-radius: 0 0.875rem 0.875rem 0; }
+.swbtn { margin-left: auto; height: 100%; width: 5.25rem; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 0.1875rem; border: 0; background: var(--blue); color: var(--on-blue); font: inherit; font-size: 0.75rem; font-weight: 700; border-radius: 0 0.875rem 0.875rem 0; }
 .swbg.open { pointer-events: auto; }
 /* 날짜 칩 (11/14 D1-A): 두 줄 — 위 DAY 작게 · 아래 날짜+요일 크게. 좁은 폰에서도 날짜 안 숨김 */
 .days { border-radius: 1.375rem !important; }
@@ -217,7 +217,7 @@ html.ios-tab.ios26 .thask { bottom: calc(9.75rem + env(safe-area-inset-bottom, 0
 /* !important 를 쓰면 애니메이션이 덮이지 못해 pulse가 안 보임(v9 버그) → 선택자 우선순위로 이김 */
 .tile.now-on, .li.now-on { box-shadow: 0 0 0 1.5px var(--blue); animation: glow 1.8s ease-out infinite; }
 @keyframes glow { 0% { box-shadow: 0 0 0 1.5px var(--blue), 0 0 0 1.5px color-mix(in srgb, var(--blue) 45%, transparent); } 100% { box-shadow: 0 0 0 1.5px var(--blue), 0 0 0 0.5625rem transparent; } }
-.now-pill { flex: none; font-size: 0.65625rem; font-weight: 700; line-height: 1; padding: 0.25rem 0.4375rem; border-radius: 62.4375rem; background: var(--blue); color: #fff; white-space: nowrap; }
+.now-pill { flex: none; font-size: 0.65625rem; font-weight: 700; line-height: 1; padding: 0.25rem 0.4375rem; border-radius: 62.4375rem; background: var(--blue); color: var(--on-blue); white-space: nowrap; }
 .past-on { opacity: .5; }
 .kd { width: 0.375rem; height: 0.375rem; border-radius: 50%; flex: none; }
 .kd.red { background: var(--red); } .kd.amber { background: var(--amber); }
@@ -522,7 +522,8 @@ html.locked, html.locked body { overflow: hidden; }
   border-radius: 0 1.75rem 1.75rem 0; padding: calc(1.375rem + env(safe-area-inset-top, 0px)) 0.75rem calc(1.125rem + env(safe-area-inset-bottom, 0px)) max(0.75rem, env(safe-area-inset-left, 0px));
   display: flex; flex-direction: column; gap: 2px; background: var(--sheet); overflow-y: auto; overscroll-behavior: contain; }
 .drawer.on { transform: translateX(0); }
-.drawer .brand { font-weight: 800; font-size: 1.4375rem; letter-spacing: -.04em; padding: 0.25rem 0.75rem 0.75rem; }
+.drawer .brand { font-size: 1.625rem; padding: 0.25rem 0.75rem 0.75rem; }
+.drawer .brand span { margin-top: 0.4375rem; }
 .drawer .brand span { font-family: var(--mono); font-weight: 400; font-size: 0.71875rem; letter-spacing: .1em; color: var(--sub); display: block; }
 .drawer .grp { font-size: 0.71875rem; color: var(--sub); padding: 0.75rem 0.875rem 0.25rem; }
 .drawer a[data-m] { text-decoration: none; color: inherit; }
@@ -545,7 +546,7 @@ html.locked, html.locked body { overflow: hidden; }
 @media (prefers-reduced-motion: reduce) { * { transition: none !important; animation: none !important; } }
 
 /* ---------- v12 (11/12 밤, 동우님 피드백 16개) ---------- */
-:root { --green: #23945F; }
+:root { --green: #2F9E6E; }
 @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --green: #4CC38A; } }
 :root[data-theme="dark"] { --green: #4CC38A; }
 /* 14. 맨 위에서 위로 당길 때 새로고침·튕김 막기 (Chrome overscroll-behavior: contain = 새로고침만 막고 글로우는 유지) */
@@ -576,7 +577,7 @@ body { letter-spacing: 0; }
 #liveTop { display: flex; flex-direction: column; gap: 0.75rem; }
 #liveTop:empty { display: none; }
 .stateline { display: flex; align-items: center; gap: 0.5rem; padding: 0 0.25rem; font-size: 0.8125rem; color: var(--sub); white-space: nowrap; min-width: 0; }
-.stateline .stc { flex: none; font-size: 0.75rem; font-weight: 700; padding: 0.25rem 0.625rem; border-radius: 62rem; background: var(--blue); color: #fff; line-height: 1; }
+.stateline .stc { flex: none; font-size: 0.75rem; font-weight: 700; padding: 0.25rem 0.625rem; border-radius: 62rem; background: var(--blue); color: var(--on-blue); line-height: 1; }
 .stateline .stc.end { background: var(--ink); color: var(--on-ink); }
 .stateline .dd { flex: none; font-size: 1rem; font-weight: 800; color: var(--ink); letter-spacing: -.02em; }
 .stateline .tx { min-width: 0; overflow: hidden; text-overflow: ellipsis; }
@@ -704,9 +705,9 @@ body { letter-spacing: 0; }
 @media (prefers-reduced-motion: reduce) { .cele, .cele-in, .cele-st .stamp, .cele-st::after { animation: none !important; } }
 
 /* ---------- 11/14 D2·D3·D4 적용 (동우님이 고른 안) ---------- */
-:root { --note: #FFF4C2; --note-ink: #5A4A10; }
-@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --note: #3A3318; --note-ink: #F1E3A0; } }
-:root[data-theme="dark"] { --note: #3A3318; --note-ink: #F1E3A0; }
+:root { --note: #FCEFD9; --note-ink: #6B4512; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --note: #3A2D19; --note-ink: #F3D3A3; } }
+:root[data-theme="dark"] { --note: #3A2D19; --note-ink: #F3D3A3; }
 /* D2-1 탑승권: 처음 한 번 빛줄기 → 고정 파란 테두리 · 출발 24시간 안이면 느린 맥박 + '곧 출발' 줄 */
 .pass.live.sheen1::after { animation: sheen 1.8s ease-in-out .4s 1 both; }
 /* 11/14 #17: 빛줄기는 앱 열 때 한 번, 그 뒤엔 테두리 pulse만 계속 (24시간 안 여부와 상관없이) */
@@ -748,7 +749,7 @@ body { letter-spacing: 0; }
 .drawer .hr { height: 1px; background: var(--hair); margin: 0.375rem 0.5rem; flex: none; }
 .drawer .tcard[data-m] { gap: 0.625rem; margin: 0.125rem 0.25rem 0.5rem; padding: 0.625rem 0.75rem; border-radius: 0.875rem; background: color-mix(in srgb, var(--blue) 12%, transparent); font-weight: 700; }
 .drawer .tcard[data-m]:hover { background: color-mix(in srgb, var(--blue) 18%, transparent); }
-.drawer .tcard b { flex: none; background: var(--blue); color: #fff; border-radius: 0.5rem; padding: 0.125rem 0.5rem; font-family: var(--mono); font-size: 0.8125rem; font-weight: 700; line-height: 1.3; letter-spacing: .04em; }
+.drawer .tcard b { flex: none; background: var(--blue); color: var(--on-blue); border-radius: 0.5rem; padding: 0.125rem 0.5rem; font-family: var(--mono); font-size: 0.8125rem; font-weight: 700; line-height: 1.3; letter-spacing: .04em; }
 .drawer .tcard .one { flex: 1; }
 .drawer .tcard .tav { flex: none; width: 2.5rem; height: 2.5rem; border-radius: 0.75rem; overflow: hidden; } .drawer .tcard .tav svg { display: block; width: 100%; height: 100%; }   /* 11/15 #9 짐 캐릭터 */
 .drawer .tcard svg { margin-left: auto; }
@@ -835,26 +836,26 @@ body { letter-spacing: 0; }
   @page { size: 110mm 200mm; margin: 9mm 8mm; }
   html, body { background: #fff !important; overflow: visible !important; height: auto !important; scrollbar-gutter: auto; }
   body > *:not(#printDoc) { display: none !important; }
-  #printDoc { display: block; color: #111; background: #fff; font-family: var(--kr); font-size: 10.5pt; line-height: 1.5; letter-spacing: -.01em; font-variant-numeric: normal; font-feature-settings: normal; width: 100%; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  #printDoc { display: block; color: #0A1F33; background: #fff; font-family: var(--kr); font-size: 10.5pt; line-height: 1.5; letter-spacing: -.01em; font-variant-numeric: normal; font-feature-settings: normal; width: 100%; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
   #printDoc * { box-sizing: border-box; }
   #printDoc .ps { break-before: page; }
   #printDoc .ps:first-child { break-before: auto; }
   #printDoc .g { color: #6b6b6b; font-size: 9pt; font-weight: 400; }
   #printDoc h1 { font-size: 15pt; font-weight: 800; line-height: 1.3; margin: 0.5em 0 0.3em; }
   #printDoc h2 { font-size: 15pt; font-weight: 800; line-height: 1.3; margin: 0.15em 0 0.5em; }
-  #printDoc h3 { font-size: 10.5pt; font-weight: 800; margin: 1.1em 0 0.3em; padding-top: 0.5em; border-top: 1px solid #111; }
+  #printDoc h3 { font-size: 10.5pt; font-weight: 800; margin: 1.1em 0 0.3em; padding-top: 0.5em; border-top: 1px solid #0A1F33; }
   #printDoc p { margin: 0; }
   #printDoc .cover { height: 176mm; display: flex; flex-direction: column; justify-content: space-between; }
   #printDoc .cover .ctop { padding-top: 38mm; }
-  #printDoc .eb { font-size: 9pt; letter-spacing: .18em; color: #6b6b6b; }
+  #printDoc .eb { font-size: 9pt; letter-spacing: .18em; color: #5B6B7A; }
   #printDoc .cover .sb { margin: 0 0 1.4em; }
-  #printDoc .dep { border-top: 1px solid #111; padding-top: 0.6em; }
+  #printDoc .dep { border-top: 1px solid #0A1F33; padding-top: 0.6em; }
   #printDoc .dep p { margin: 0 0 0.3em; }
   #printDoc .foot { font-size: 9pt; color: #6b6b6b; }
   #printDoc .ov { padding: 0.55em 0; border-top: 1px solid #d4d4d4; break-inside: avoid; }
   #printDoc .ov b { display: block; font-weight: 700; }
   #printDoc .ov .g { display: block; }
-  #printDoc .dh { padding-bottom: 0.6em; margin-bottom: 0.4em; border-bottom: 1px solid #111; }
+  #printDoc .dh { padding-bottom: 0.6em; margin-bottom: 0.4em; border-bottom: 1px solid #0A1F33; }
   #printDoc .dh .g { display: block; }
   #printDoc .it { padding: 0.45em 0; border-top: 1px solid #e3e3e3; break-inside: avoid; }
   #printDoc .it.mv { padding: 0.15em 0; border-top: 0; }
@@ -917,6 +918,10 @@ body { letter-spacing: 0; }
 .navnote { display: flex; justify-content: center; gap: 0.5rem; }
 .navnote span { flex: 1 1 0; max-width: 8rem; display: flex; flex-direction: column; align-items: center; gap: 0.125rem; padding: 0.5rem 0.25rem; border-radius: 0.875rem; background: var(--field); border: 1px solid var(--hair); font-size: 0.71875rem; color: var(--sub); line-height: 1.2; }
 .navnote b { font-family: var(--mono); font-size: 0.9375rem; font-weight: 600; color: var(--ink); }
+
+/* -- 11/18 VZTR 워드마크 (BI Master v1): Inter Tight 800 / 자간 -0.035em / 점 0.2em(--blue) / r 기둥과 0.12em / 점 바닥 = 기준선 -- */
+.vz { font-family: "Inter Tight", var(--kr); font-weight: 800; font-style: normal; letter-spacing: -.035em; line-height: 1; white-space: nowrap; color: var(--ink); }
+.vz i { display: inline-block; width: .2em; height: .2em; border-radius: 50%; background: var(--blue); margin-left: -.023em; vertical-align: baseline; }
 </style>
 
 <div class="app">
@@ -987,7 +992,7 @@ body { letter-spacing: 0; }
 <div class="scrim" id="scrim" hidden></div>
 <div class="sheet glass" id="sheet" role="dialog" aria-modal="true" aria-labelledby="sheetTitle"><div class="grab"></div><div id="sheetIn"></div></div>
 <nav class="drawer glass" id="drawer" aria-label="메뉴">
-  <div class="brand">가보자<span>GABOJA</span></div>
+  <div class="brand"><b class="vz">vztr<i></i></b><span>TRAVEL PLANNER</span></div>
   <a class="tcard" data-m="type" href="start.html?from=app#types"><span class="tav" id="typeAv" hidden></span><b id="typeN" hidden></b><span class="one" id="typeNm">내 여행 유형 알아보기</span><svg viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg></a>
   <button class="nbtn" data-m="new"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>새 여행</button>
   <button data-m="trips" id="tripsRow" hidden><svg viewBox="0 0 24 24"><rect x="4" y="8" width="16" height="11" rx="2"/><path d="M9 8V6a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2M4 13h16"/></svg><span>내 여행</span><span class="muted" id="tripsN" style="margin-left:auto;font-weight:500"></span></button>
@@ -2632,7 +2637,7 @@ function menuSheet(k) {
   else if (k === 'kakao') { closeAll(); toast('시험판에서는 카카오톡 공유 준비 중'); }
   else if (k === 'share') {
     closeAll();
-    const data = { title: '가보자 · ' + TRIP_TITLE, url: location.hostname === 'larchive.page' ? 'https://larchive.page/gaboja/' : 'https://claude.ai/artifact/FKawd3L992W8SqCHkfB4gU' };
+    const data = { title: 'VZTR · ' + TRIP_TITLE, url: location.hostname === 'larchive.page' ? 'https://larchive.page/gaboja/' : 'https://claude.ai/artifact/FKawd3L992W8SqCHkfB4gU' };
     if (navigator.share) navigator.share(data).catch(e => { if (e && e.name !== 'AbortError') toast('공유 창을 열지 못했어요 · 링크 복사를 이용해 주세요'); });
     else toast('이 브라우저는 공유를 지원하지 않아요 · 링크를 복사해 주세요');
   }
@@ -2661,9 +2666,9 @@ function buildPrintDoc() {
   // 표지
   const fl = []; DAYS.forEach(d => d.list.forEach(c => { if (c.fly && !isCar(c) && c.ride !== 'train') fl.push([d, c]); }));
   const flTx = (lb, d, c) => '<p>' + lb + ' · ' + esc(wd(d)) + (d.tbd ? '' : ' ' + c.s) + ' · ' + esc(c.fly[0] + ' ' + c.fly[1] + ' → ' + c.fly[2] + ' ' + c.fly[3]) + (c.fno ? ' · ' + esc(c.fno) : '') + '</p>';
-  let h = '<div class="ps cover"><div class="ctop"><span class="eb">GABOJA</span><h1>' + esc(TRIP_TITLE) + '</h1><p class="sb">' + esc(TRIP_DATES + (TRIP_NIGHTS ? ' · ' + TRIP_NIGHTS : '')) + '</p>'
+  let h = '<div class="ps cover"><div class="ctop"><span class="eb">VZTR</span><h1>' + esc(TRIP_TITLE) + '</h1><p class="sb">' + esc(TRIP_DATES + (TRIP_NIGHTS ? ' · ' + TRIP_NIGHTS : '')) + '</p>'
     + (fl.length ? '<div class="dep">' + flTx('가는 편', fl[0][0], fl[0][1]) + (fl.length > 1 ? flTx('오는 편', fl[fl.length - 1][0], fl[fl.length - 1][1]) : '') + '</div>' : '')
-    + '</div><p class="foot">가보자로 만든 일정 · 만든 날 ' + made + '</p></div>';
+    + '</div><p class="foot">VZTR로 만든 일정 · 만든 날 ' + made + '</p></div>';
   // 한눈에 보기
   h += '<div class="ps"><h2>한눈에 보기</h2>';
   DAYS.forEach(d => {

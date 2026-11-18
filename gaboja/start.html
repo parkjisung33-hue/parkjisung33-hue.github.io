@@ -2,13 +2,15 @@
 <html lang="ko">
 <head>
 <meta charset="utf-8">
-<title>가보자 여행 유형</title>
+<title>VZTR 여행 유형</title>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="claude:viewport-fit-sides" content="cover">
 <meta name="robots" content="noindex, nofollow">
 <meta name="theme-color" content="#EEF0F3">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/wanteddev/wanted-sans@v1.0.3/packages/wanted-sans/fonts/webfonts/variable/split/WantedSansVariable.min.css">
-<link rel="icon" href="icons/icon-192.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400..800&display=swap">
+<link rel="icon" href="icons/favicon-32.png">
 <link rel="apple-touch-icon" href="icons/icon-180.png">
 <style>
 /* Pretendard 1.3.9 (SIL OFL 1.1) — 앱 시안과 같은 fonts/ 파일 */
@@ -18,12 +20,12 @@
    크기는 전부 rem (390px 폰 = 16px 기준, 앱과 같은 규칙) */
 :root {
   color-scheme: light;
-  --canvas: #EEF0F3; --ink: #15171A; --sub: #6F757D; --hair: rgba(21,23,26,.09); --on-ink: #FFFFFF;
+  --canvas: #EEF0F3; --ink: #0A1F33; --sub: #5B6B7A; --hair: rgba(10,31,51,.09); --on-ink: #FFFFFF;
   --glass: rgba(255,255,255,.62); --glass-hi: rgba(255,255,255,.94); --glass-edge: rgba(255,255,255,.85); --glass-hl: rgba(255,255,255,.9);
   --paper: #FFFFFF; --tile: rgba(255,255,255,.86); --tile-edge: rgba(255,255,255,.98); --field: #FFFFFF;
-  --red: #E0453A; --amber: #E8A317; --blue: #3B5BDB; --blue-soft: rgba(59,91,219,.09);
+  --red: #CF3F66; --amber: #E8912A; --blue: #2F5BFF; --on-blue: #FFFFFF; --blue-soft: rgba(47,91,255,.09);
   --flap: #1B1E23; --flap-tx: #F4F5F7; --flap-dim: #5B616A;
-  --toast-bg: rgba(21,23,26,.92); --toast-fg: #FFFFFF;
+  --toast-bg: rgba(10,31,51,.94); --toast-fg: #FFFFFF;
   --shadow: 0 1.375rem 2.75rem -1.375rem rgba(24,36,60,.32), 0 2px 0.375rem -2px rgba(24,36,60,.10);
   --sh-xs: 0 1px 2px rgba(24,36,60,.05), 0 0.25rem 0.75rem -0.375rem rgba(24,36,60,.14);
   --kr: "Pretendard Variable", Pretendard, -apple-system, "Apple SD Gothic Neo", "Malgun Gothic", system-ui, sans-serif;
@@ -35,9 +37,9 @@
   --canvas: #0E1013; --ink: #ECEEF1; --sub: #8F969F; --hair: rgba(255,255,255,.08); --on-ink: #0E1013;
   --glass: rgba(30,33,38,.62); --glass-hi: rgba(255,255,255,.14); --glass-edge: rgba(255,255,255,.08); --glass-hl: rgba(255,255,255,.06);
   --paper: #1B1E23; --tile: rgba(36,40,46,.9); --tile-edge: rgba(255,255,255,.06); --field: #15181C;
-  --red: #F2675D; --amber: #F0B43C; --blue: #8095F5; --blue-soft: rgba(128,149,245,.12);
+  --red: #F06A8A; --amber: #F0A84A; --blue: #7C95FF; --on-blue: #0A1F33; --blue-soft: rgba(124,149,255,.12);
   --flap: #05070A; --flap-tx: #F4F5F7; --flap-dim: #4A5058;
-  --toast-bg: rgba(236,238,241,.95); --toast-fg: #15171A;
+  --toast-bg: rgba(236,238,241,.95); --toast-fg: #0A1F33;
   --shadow: 0 1.375rem 2.75rem -1.375rem rgba(0,0,0,.7), 0 2px 0.375rem -2px rgba(0,0,0,.4);
   --sh-xs: 0 1px 2px rgba(0,0,0,.35), 0 0.25rem 0.75rem -0.375rem rgba(0,0,0,.55); } }
 :root[data-theme="dark"] {
@@ -45,16 +47,16 @@
   --canvas: #0E1013; --ink: #ECEEF1; --sub: #8F969F; --hair: rgba(255,255,255,.08); --on-ink: #0E1013;
   --glass: rgba(30,33,38,.62); --glass-hi: rgba(255,255,255,.14); --glass-edge: rgba(255,255,255,.08); --glass-hl: rgba(255,255,255,.06);
   --paper: #1B1E23; --tile: rgba(36,40,46,.9); --tile-edge: rgba(255,255,255,.06); --field: #15181C;
-  --red: #F2675D; --amber: #F0B43C; --blue: #8095F5; --blue-soft: rgba(128,149,245,.12);
+  --red: #F06A8A; --amber: #F0A84A; --blue: #7C95FF; --on-blue: #0A1F33; --blue-soft: rgba(124,149,255,.12);
   --flap: #05070A; --flap-tx: #F4F5F7; --flap-dim: #4A5058;
-  --toast-bg: rgba(236,238,241,.95); --toast-fg: #15171A;
+  --toast-bg: rgba(236,238,241,.95); --toast-fg: #0A1F33;
   --shadow: 0 1.375rem 2.75rem -1.375rem rgba(0,0,0,.7), 0 2px 0.375rem -2px rgba(0,0,0,.4);
   --sh-xs: 0 1px 2px rgba(0,0,0,.35), 0 0.25rem 0.75rem -0.375rem rgba(0,0,0,.55); }
 
 html { font-size: clamp(13.5px, calc(100vw * 16 / 390), 18px); -webkit-text-size-adjust: 100%; text-size-adjust: 100%; background: var(--canvas); }
 * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
 body { margin: 0; word-break: keep-all; overflow-wrap: anywhere; background: var(--canvas); color: var(--ink); font-family: var(--kr); font-size: 0.9375rem; line-height: 1.5; letter-spacing: -.01em; font-variant-numeric: tabular-nums; }
-body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 10; background: var(--canvas); }
+body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 10; background: var(--bgtop, var(--canvas)); }
 button { font: inherit; color: inherit; background: none; border: 0; padding: 0; cursor: pointer; letter-spacing: inherit; text-align: inherit; }
 /* 포커스 테두리는 안쪽으로 (바깥으로 그리면 main의 overflow-x: clip에 좌우가 잘림) */
 button:focus-visible, a:focus-visible, input:focus-visible { outline: 2px solid var(--blue); outline-offset: -2px; }
@@ -125,7 +127,7 @@ main { flex: 1; display: flex; flex-direction: column; position: relative; overf
 .scr.qs .opts { margin-top: clamp(1.25rem, 4.5svh, 2.75rem); }
 .scr.qs .board { margin-top: clamp(1.25rem, 4.5svh, 2.75rem); }
 .scr.qs .opt { min-height: clamp(9.25rem, 24svh, 12.5rem); }   /* 11/18 T10: 큰 폰에서 남는 아래 여백 → 보기 카드가 조금 커짐 (작은 폰은 그대로) */
-.qh h1 { margin: 0; word-break: keep-all; overflow-wrap: break-word; font-family: "Wanted Sans Variable", var(--kr); font-size: 1.625rem; font-weight: 800; letter-spacing: -.02em; line-height: 1.3; text-wrap: balance; }   /* 11/15: 제목 = 원티드 산스(OFL) · 어절 단위 + 줄 길이 맞춤 */
+.qh h1 { margin: 0; word-break: keep-all; overflow-wrap: break-word; font-family: var(--kr); font-size: 1.625rem; font-weight: 700; letter-spacing: -.03em; line-height: 1.34; text-wrap: balance; }   /* 11/15: 제목 = 원티드 산스(OFL) · 어절 단위 + 줄 길이 맞춤 */
 .qh p { margin: 0; font-size: 0.875rem; color: var(--sub); }
 /* 11/18 T10: 묶음 이름–제목은 붙이고, 제목–설명은 한 칸 띄움 (gap 하나로 두면 셋이 따로 노는 느낌) */
 .qh { gap: 0; }
@@ -147,8 +149,8 @@ main { flex: 1; display: flex; flex-direction: column; position: relative; overf
 .opt .stamp { position: absolute; right: 0.75rem; top: 0.75rem; width: 2.25rem; height: 2.25rem; border-radius: 50%; border: 2px solid currentColor; display: grid; place-items: center; opacity: 0; transform: scale(1.6) rotate(-24deg); }
 .opt .stamp svg { width: 1.125rem; height: 1.125rem; stroke: currentColor; fill: none; stroke-width: 2.4; stroke-linecap: round; stroke-linejoin: round; }
 .opts.done .opt { opacity: .35; pointer-events: none; }
-.opts.done .opt.chosen { opacity: 1; background: var(--ink); color: var(--on-ink); border-color: var(--ink); box-shadow: var(--shadow); }
-.opts.done .opt.chosen .ic { stroke: var(--on-ink); }
+.opts.done .opt.chosen { opacity: 1; background: var(--blue); color: var(--on-blue); border-color: var(--blue); box-shadow: var(--shadow); }   /* 11/18 BI: 선택 = Blue (로고 점과 같은 색) */
+.opts.done .opt.chosen .ic { stroke: var(--on-blue); }
 .opts.done .opt.chosen .k { background: rgba(127,127,127,.25); color: inherit; }
 .opts.done .opt.chosen .stamp { animation: stamp .34s cubic-bezier(.2,.9,.3,1.4) forwards; }
 @keyframes stamp { to { opacity: 1; transform: scale(1) rotate(-12deg); } }
@@ -199,7 +201,7 @@ html.ios26 .foot, html.ios26 .board { bottom: calc(max(0.75rem, env(safe-area-in
 /* 작은 탑승권 (시작 화면·16유형·궁합) */
 .mini { border-radius: var(--r-md); background: var(--paper); box-shadow: var(--shadow); overflow: hidden; display: block; width: 100%; text-align: left; }
 .mini .t1 { display: flex; justify-content: space-between; align-items: center; padding: 0.75rem 0.875rem 0; font-size: 0.65625rem; font-weight: 700; letter-spacing: .1em; color: var(--sub); }
-.mini .t1 em { font-style: normal; color: var(--red); white-space: nowrap; }
+.mini .t1 em { font-style: normal; color: var(--sub); white-space: nowrap; }
 .mini .t1 span { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-width: 0; }
 .pair .mini .t1 span { display: none; }
 .mini .t2 { padding: 0.375rem 0.875rem 0.75rem; display: flex; flex-direction: column; gap: 0.125rem; }
@@ -218,12 +220,13 @@ html.ios26 .foot, html.ios26 .board { bottom: calc(max(0.75rem, env(safe-area-in
 
 /* 결과: 큰 탑승권 */
 .ticket { border-radius: var(--r-lg); background: var(--paper); box-shadow: var(--shadow); overflow: hidden; animation: rise .55s cubic-bezier(.2,.8,.2,1) both; }
-@keyframes pulseT { 0% { box-shadow: var(--shadow), 0 0 0 0 rgba(59,91,219,.5); } 40% { box-shadow: var(--shadow), 0 0 0 0.375rem rgba(59,91,219,.28); } 100% { box-shadow: var(--shadow), 0 0 0 0 rgba(59,91,219,0); } }
+@keyframes pulseT { 0% { box-shadow: var(--shadow), 0 0 0 0 rgba(47,91,255,.5); } 40% { box-shadow: var(--shadow), 0 0 0 0.375rem rgba(47,91,255,.28); } 100% { box-shadow: var(--shadow), 0 0 0 0 rgba(47,91,255,0); } }
 .ticket.pulse { animation: pulseT .7s ease-out; }
 @keyframes rise { from { opacity: 0; transform: translateY(1.25rem) scale(.98); } to { opacity: 1; transform: none; } }
 .ticket .hd { padding: 1rem 1.125rem 0; display: flex; justify-content: space-between; align-items: center; font-size: 0.6875rem; font-weight: 700; letter-spacing: .1em; color: var(--sub); }
 .ticket .hd b { color: var(--ink); letter-spacing: .02em; font-size: 0.8125rem; }
-.ticket .hd em { font-style: normal; color: var(--red); }
+.ticket .hd b.vz { font-size: 1.125rem; letter-spacing: -.035em; }
+.ticket .hd em { font-style: normal; color: var(--sub); }
 .ticket .bd { padding: 1rem 1.125rem 1.125rem; display: flex; flex-direction: column; gap: 0.875rem; }
 .ticket .nm { margin: 0; font-size: 2rem; font-weight: 800; letter-spacing: -.045em; line-height: 1.15; }
 .ticket .ln { text-wrap: balance; margin: 0; font-size: 0.9375rem; line-height: 1.5; word-break: keep-all; }
@@ -258,7 +261,7 @@ html.ios26 .foot, html.ios26 .board { bottom: calc(max(0.75rem, env(safe-area-in
 .card { border-radius: var(--r-lg); background: var(--glass); border: 1px solid var(--glass-edge); box-shadow: var(--sh-xs); padding: 0.375rem 1.125rem; }
 .scene { display: flex; gap: 0.75rem; align-items: center; padding: 0.75rem 0; border-top: 1px solid var(--hair); }
 .scene:first-child { border-top: 0; }
-.scene .ck { width: 1.5rem; height: 1.5rem; border-radius: 50%; border: 1.8px solid var(--red); color: var(--red); display: grid; place-items: center; flex: none; transform: rotate(-10deg); }
+.scene .ck { width: 1.5rem; height: 1.5rem; border-radius: 50%; border: 1.8px solid var(--blue); color: var(--blue); display: grid; place-items: center; flex: none; transform: rotate(-10deg); }
 .scene .ck svg { width: 0.875rem; height: 0.875rem; stroke: currentColor; fill: none; stroke-width: 2.6; stroke-linecap: round; stroke-linejoin: round; }
 .scene span { font-weight: 600; text-wrap: balance; }
 .row { display: grid; grid-template-columns: 3.5rem minmax(0,1fr); gap: 0.75rem; padding: 0.6875rem 0; border-top: 1px solid var(--hair); align-items: baseline; }
@@ -283,7 +286,7 @@ html.ios26 .foot, html.ios26 .board { bottom: calc(max(0.75rem, env(safe-area-in
 @keyframes avpop { from { transform: translateY(.75rem) scale(.92); opacity: 0; } to { transform: none; opacity: 1; } }
 
 .acts { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 0.5rem; }
-.acts .share { grid-column: 1 / -1; background: var(--blue); color: #fff; height: 3.25rem; font-size: 0.9375rem; }
+.acts .share { grid-column: 1 / -1; background: var(--blue); color: var(--on-blue); height: 3.25rem; font-size: 0.9375rem; }
 .acts button { height: 3rem; border-radius: var(--r-sm); background: var(--hair); font-size: 0.8125rem; font-weight: 700; display: flex; align-items: center; justify-content: center; gap: 0.375rem; white-space: nowrap; }
 .acts svg { width: 1rem; height: 1rem; stroke: currentColor; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
 
@@ -354,7 +357,7 @@ html.ios26 .foot, html.ios26 .board { bottom: calc(max(0.75rem, env(safe-area-in
 .agree small { font-size: 0.75rem; color: var(--sub); line-height: 1.5; text-wrap: pretty; }
 .sent { display: flex; gap: 0.625rem; align-items: center; padding: 0.75rem 1rem; border-radius: var(--r-md); font-size: 0.875rem; font-weight: 600; }
 .sent.ok { background: var(--blue-soft); color: var(--blue); }
-.sent.bad { background: rgba(224,69,58,.1); color: var(--red); }
+.sent.bad { background: color-mix(in srgb, var(--red) 10%, transparent); color: var(--red); }
 .sent svg { width: 1.125rem; height: 1.125rem; stroke: currentColor; fill: none; stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; flex: none; }
 .sent button { margin-left: auto; font-weight: 700; text-decoration: underline; white-space: nowrap; }
 .note span { text-wrap: balance; }
@@ -412,7 +415,7 @@ html.ios26 .foot, html.ios26 .board { bottom: calc(max(0.75rem, env(safe-area-in
 .rx .go2 span { position: relative; display: flex; align-items: center; gap: 0.5rem; }
 .fl.lock { box-shadow: inset 0 0 0 2px var(--red); transition: box-shadow .3s; }
 .fl.new { animation: flip .38s cubic-bezier(.3,.7,.3,1), glowN 1.2s ease-out .38s; }
-@keyframes glowN { 0% { box-shadow: 0 0 0 0 rgba(59,91,219,.55); } 100% { box-shadow: 0 0 0 0.5rem rgba(59,91,219,0); } }
+@keyframes glowN { 0% { box-shadow: 0 0 0 0 rgba(47,91,255,.55); } 100% { box-shadow: 0 0 0 0.5rem rgba(47,91,255,0); } }
 /* 분석·가이드북 만드는 화면 */
 .calc .meter { width: min(15rem, 80%); height: 0.375rem; border-radius: 1rem; background: var(--hair); overflow: hidden; margin-top: -0.5rem; }
 .calc .meter i { display: block; height: 100%; width: 100%; background: var(--blue); transform: scaleX(0); transform-origin: left; transition: transform .6s cubic-bezier(.3,.7,.3,1); }
@@ -494,15 +497,15 @@ html.ios26 .foot, html.ios26 .board { bottom: calc(max(0.75rem, env(safe-area-in
 .intro-mid { flex: 1 1 0; min-height: 0; display: flex; flex-direction: column; justify-content: center; gap: 0.75rem; padding-block: 1rem; }
 .dep { flex: 0 1 auto; min-height: 0; overflow: hidden; display: flex; flex-direction: column; border-radius: var(--r-md); background: var(--flap); color: var(--flap-tx); padding: 0.875rem 1rem 0.375rem; box-shadow: var(--shadow); animation: rise .55s cubic-bezier(.2,.8,.2,1) both; }
 .dep .dh { display: flex; justify-content: space-between; align-items: center; font-size: 0.6875rem; font-weight: 800; letter-spacing: .06em; color: #8F969F; padding-bottom: 0.5rem; }
-.dep .dh em { font-style: normal; color: #F0B43C; letter-spacing: 0; }
+.dep .dh em { font-style: normal; color: #F0A84A; letter-spacing: 0; }
 .dep .dr[hidden] { display: none; }
 .dep .dr { flex: none; height: 2.875rem; display: grid; grid-template-columns: auto minmax(0,1fr) auto; gap: 0.75rem; align-items: center; padding: 0.5rem 0; border-top: 1px solid rgba(255,255,255,.07); }
 .dep .dr .flaps { gap: 0.1875rem; }
 .dep .dr .fl { width: 1.25rem; height: 1.625rem; font-size: 0.875rem; font-weight: 800; border-radius: 0.25rem; background: rgba(255,255,255,.09); color: var(--flap-tx); }
 .dep .dn { font-size: 0.875rem; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .dep .dg { font-size: 0.6875rem; font-weight: 700; color: #8F969F; white-space: nowrap; }
-.dep .dr.me .fl { box-shadow: inset 0 0 0 1.5px #F2675D; color: #F2675D; }
-.dep .dr.me .dn { color: #8F969F; } .dep .dr.me .dg { color: #F2675D; }
+.dep .dr.me .fl { box-shadow: inset 0 0 0 1.5px #F0A84A; color: #F0A84A; }
+.dep .dr.me .dn { color: #8F969F; } .dep .dr.me .dg { color: #F0A84A; }
 
 /* ── E1: 스와이프 (카드 = 결과 탑승권과 같은 모양, 도장 = 질문 선택 도장·앱 조각 도장과 같은 말) ── */
 .swscr { gap: 0.75rem; }
@@ -568,7 +571,7 @@ html.ios26 .foot, html.ios26 .board { bottom: calc(max(0.75rem, env(safe-area-in
 .swb:active { transform: scale(.92); }
 .swb svg { width: 1.75rem; height: 1.75rem; stroke: currentColor; fill: none; stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; }
 .swb.no { color: var(--red); }
-.swb.yes { background: var(--blue); color: #fff; border-color: var(--blue); }
+.swb.yes { background: var(--blue); color: var(--on-blue); border-color: var(--blue); }
 .swb.yes svg { fill: currentColor; stroke-width: 1.6; }
 .swb.undo { width: 2.75rem; height: 2.75rem; color: var(--sub); box-shadow: var(--sh-xs); }
 .swb.undo svg { width: 1.25rem; height: 1.25rem; stroke-width: 2; }
@@ -638,6 +641,22 @@ html.fit .foot::before { display: none; }
 .rgsub { margin: 0.25rem 0 0; font-size: 0.8125rem; color: var(--sub); }
 /* 11/18 T9: 반응 시트 오른쪽 위 문구가 길어지면 두 줄까지 */
 .rx .rh .step { white-space: normal; text-align: right; line-height: 1.3; max-width: 11rem; }
+
+/* -- 11/18 VZTR 워드마크 (BI Master v1): Inter Tight 800 / 자간 -0.035em / 점 0.2em(--blue) / r 기둥과 0.12em / 점 바닥 = 기준선 -- */
+.vz { font-family: "Inter Tight", var(--kr); font-weight: 800; font-style: normal; letter-spacing: -.035em; line-height: 1; white-space: nowrap; color: var(--ink); }
+.vz i { display: inline-block; width: .2em; height: .2em; border-radius: 50%; background: var(--blue); margin-left: -.023em; vertical-align: baseline; }
+
+/* -- 11/18 BI: 영문 코드·라벨·큰 숫자 = Inter Tight (한글은 Pretendard로 넘어감) -- */
+:root { --lat: "Inter Tight", var(--kr); }
+.eyebrow, .mini .t1, .mini .cd, .ticket .hd, .flr .in.tm, .dep .dh, .dep .dg, .rx .near b em { font-family: var(--lat); }
+.mini .t1 .vz { font-size: 0.875rem; letter-spacing: -.035em; vertical-align: -0.0625rem; }
+/* -- 11/18 BI: 화면 바탕 = 아주 연한 회색 + 흰 번짐 (거의 안 보일 만큼) -- */
+:root { --bgsoft: radial-gradient(ellipse 90% 60% at 12% 0%, #EBEDF0 0%, transparent 72%), radial-gradient(ellipse 80% 55% at 100% 100%, #EDEFF2 0%, transparent 72%), #F4F5F7; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --bgsoft: radial-gradient(ellipse 90% 60% at 12% 0%, #15181D 0%, transparent 72%), radial-gradient(ellipse 80% 55% at 100% 100%, #13161A 0%, transparent 72%), #0E1013; } }
+:root[data-theme="dark"] { --bgsoft: radial-gradient(ellipse 90% 60% at 12% 0%, #15181D 0%, transparent 72%), radial-gradient(ellipse 80% 55% at 100% 100%, #13161A 0%, transparent 72%), #0E1013; }
+html { background: var(--bgsoft); min-height: 100%; }
+:root { --bgtop: #F2F3F5; } @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --bgtop: #0F1215; } } :root[data-theme="dark"] { --bgtop: #0F1215; }
+body { background: transparent; }
 </style>
 </head>
 <body>
@@ -959,7 +978,7 @@ function render() {
   if (s === 'swipe') return rSwipe();
 }
 
-function miniHtml(c, sub, extra = '') { const t = T(c); return `<button class="mini" data-code="${c}" ${extra}><div class="t1"><span>GABOJA · BOARDING PASS</span><em>${esc(t.group)}</em></div>${AV(c)}<div class="t2"><span class="cd">${c}</span><span class="nm">${esc(t.name)}</span></div><div class="pf"></div><div class="t3">${esc(sub == null ? t.line : sub)}</div></button>`; }
+function miniHtml(c, sub, extra = '') { const t = T(c); return `<button class="mini" data-code="${c}" ${extra}><div class="t1"><span><b class="vz">vztr<i></i></b> · BOARDING PASS</span><em>${esc(t.group)}</em></div>${AV(c)}<div class="t2"><span class="cd">${c}</span><span class="nm">${esc(t.name)}</span></div><div class="pf"></div><div class="t3">${esc(sub == null ? t.line : sub)}</div></button>`; }
 
 function rIntro() {
   setBar(null);
@@ -967,7 +986,7 @@ function rIntro() {
   const me = S.type ? T(S.type) : null;
   screen(`
     <div class="hero">
-      <span class="eyebrow">가보자 여행 성향 테스트</span>
+      <span class="eyebrow">VZTR 여행 성향 테스트</span>
       <h1>나는 어떤 여행자일까?</h1>
       <p>16가지 여행 성향 중 나는 어떤 쪽일까요? 찾아보고, 내 성향에 맞는 여행 일정도 받아 보세요.</p>
       <div class="facts"><span>${Q.length}문항</span><span>2분이면 끝</span><span>가입 없이 바로</span></div>
@@ -1159,7 +1178,7 @@ function rResult(c, mine) {
   const day = rhythmHtml(c);   // 11/14 #12: 도시 이름 없는 하루 리듬
   const el = screen(`
     <article class="ticket" aria-label="${c} ${esc(t.name)}">
-      <div class="hd"><b>가보자</b><em class="tgrp">${esc(t.group)}</em></div>
+      <div class="hd"><b class="vz">vztr<i></i></b><em class="tgrp">${esc(t.group)}</em></div>
       <div class="bd">
         ${AV(c, 'hero')}
         ${lflapsHtml(c)}
@@ -1195,7 +1214,7 @@ function hasPlan() { try { return !!JSON.parse(localStorage.getItem('gaboja-plan
 function openType(c) { if (S.step === 'view') { S.viewStack.push(S.view); S.hist.push('view'); } S.view = c; go('view', { noHist: S.step === 'view' }); try { history.replaceState(null, '', '#r-' + c); } catch (_) {} }
 function copyLink(c) {
   const url0 = location.origin + location.pathname + '#r-' + c, t0 = T(c);
-  if (navigator.share) { navigator.share({ title: '가보자 여행 유형', text: `나는 ‘${t0.name}’(${c}) 여행자래. 너는 어떤 여행자야? ${Q.length}번만 고르면 나와`, url: url0 }).catch(() => {}); return; }
+  if (navigator.share) { navigator.share({ title: 'VZTR 여행 유형', text: `나는 ‘${t0.name}’(${c}) 여행자래. 너는 어떤 여행자야? ${Q.length}번만 고르면 나와`, url: url0 }).catch(() => {}); return; }
   const url = url0, txt = `나는 ‘${t0.name}’(${c}) 여행자래. 너는 어떤 여행자야? ${Q.length}번만 고르면 나와 ${url}`;
   const ok = () => toast('공유 문구를 복사했어요 · 친구에게 붙여 넣어 보내 보세요'), bad = () => { toast('복사할 수 없어요. 주소창 링크를 길게 눌러 복사해 주세요'); };
   try { navigator.clipboard.writeText(txt).then(ok, bad); } catch (_) { bad(); }
@@ -1204,7 +1223,7 @@ function copyLink(c) {
 function rTypes() {
   setBar(null, 0, 0, null);
   const el = screen(`
-    <div class="qh"><span class="eyebrow">가보자 여행 성향</span><h1>한눈에 보는 여행 성향 16</h1><p>이런 여행자들이 있어요. 궁금한 성향을 눌러 자세히 보세요</p></div>
+    <div class="qh"><span class="eyebrow">VZTR 여행 성향</span><h1>한눈에 보는 여행 성향 16</h1><p>이런 여행자들이 있어요. 궁금한 성향을 눌러 자세히 보세요</p></div>
     ${Object.keys(GROUPS).map(g => `<div class="grp"><h3>${GROUPS[g][0]}<span>${GROUPS[g][1]}</span></h3><div class="g4">
       ${ORDER.filter(c => c.startsWith(g)).map(c => { const t = T(c), lab = PAIR[c.slice(2)];
         return `<button class="mini ${c === S.type ? 'me' : ''}" data-code="${c}">${c === S.type ? '<span class="me-b">나</span>' : ''}${AV(c)}<div class="t2"><span class="cd">${c}</span><span class="nm">${esc(t.name)}</span></div><div class="pf"></div><div class="t3">${lab}</div></button>`; }).join('')}
@@ -1231,7 +1250,7 @@ function rInfo(s) {
   const head = (e, h, p) => `<div class="qh"><span class="eyebrow">여행 정보 · ${e}</span><h1>${h}</h1>${p ? `<p>${p}</p>` : ''}</div>`;
   let el;
   if (s === 'city') {
-    el = screen(head('어디로', '어디로 가세요?', '지역만 고르면 동선은 가보자가 짜 드려요') + `<div class="pick">${CITIES.map(c => `<button class="pk" data-v="${c[0]}" aria-pressed="${tr.city === c[0]}"><b>${c[0]}</b><span>${c[1]}</span></button>`).join('')}</div>
+    el = screen(head('어디로', '어디로 가세요?', '지역만 고르면 동선은 VZTR가 짜 드려요') + `<div class="pick">${CITIES.map(c => `<button class="pk" data-v="${c[0]}" aria-pressed="${tr.city === c[0]}"><b>${c[0]}</b><span>${c[1]}</span></button>`).join('')}</div>
       <div class="blk" id="cityEtc" ${tr.city === '다른 곳' ? '' : 'hidden'}><input class="in" id="cityIn" placeholder="예: 다낭, 타이베이" value="${esc(tr.cityEtc || '')}"><button class="cta" id="cityNext">다음</button></div>`);
     el.querySelectorAll('.pk').forEach(b => b.onclick = () => { tr.city = b.dataset.v; el.querySelectorAll('.pk').forEach(x => x.setAttribute('aria-pressed', x === b)); tap();
       if (tr.city === '다른 곳') { $('#cityEtc').hidden = false; $('#cityIn').focus(); } else later(() => next(s), 280); });
@@ -1779,7 +1798,7 @@ function rDone() {
   const f = (k, v) => `<div class="row"><span class="tm zone" style="color:var(--sub)">${k}</span><div><b>${esc(v)}</b></div></div>`;
   screen(`
     <article class="ticket">
-      <div class="hd"><b>가보자</b><span>BOARDING PASS</span><em>발급 완료</em></div>
+      <div class="hd"><b class="vz">vztr<i></i></b><span>BOARDING PASS</span><em>발급 완료</em></div>
       <div class="bd">${S.type ? flapsHtml(S.type.split(''), true) : ''}
         <h1 class="nm">${esc(tr.city === '다른 곳' ? (tr.cityEtc || '다른 곳') : (tr.city || '여행지 미정'))}</h1>
         <p class="ln">${esc(when)}${tr.who ? ' · ' + esc(tr.who) : ''}</p></div>
