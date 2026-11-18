@@ -1191,10 +1191,6 @@ function rResult(c, mine) {
   $('#allBtn2').onclick = () => go('types');
   $('#nextBtn').onclick = () => { if (S.type) { clearHash(); go('method'); } else { S.ans = []; S.hist = ['intro']; clearHash(); go('q0', { noHist: true }); } };
 }
-  if (window.scrollY > 8) { window.scrollTo({ top: 0, behavior: REDUCED ? 'auto' : 'smooth' }); return; }
-  const t = document.querySelector('.scr:not(.leaving) .ticket'); if (!t) return;
-  t.classList.remove('pulse'); void t.offsetWidth; t.classList.add('pulse');
-}
 function hasPlan() { try { return !!JSON.parse(localStorage.getItem('gaboja-plan')); } catch (_) { return false; } }
 function openType(c) { if (S.step === 'view') { S.viewStack.push(S.view); S.hist.push('view'); } S.view = c; go('view', { noHist: S.step === 'view' }); try { history.replaceState(null, '', '#r-' + c); } catch (_) {} }
 function copyLink(c) {
