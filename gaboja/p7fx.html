@@ -54,10 +54,11 @@ textarea { width: 100%; resize: none; border: 1px solid var(--hair); background:
 .av.play[data-c="LSRP"] .fx-b { animation: rumble 1.3s linear both; }
 @keyframes rumble { 0%, 40%, 100% { transform: none; } 8%, 24% { transform: translateY(-1px); } 16%, 32% { transform: translateY(.6px); } 55% { transform: translateX(1.5px); } 75% { transform: translateX(-.5px); } }
 .av.play .fx-puff { animation: show 1.6s ease-out both; }
+@keyframes show { 0%, 100% { opacity: 0; } 12%, 70% { opacity: 1; } }
 .av.play .fx-puff > g { transform-origin: center; animation: puff 1.6s cubic-bezier(.2,.7,.3,1) both; }
 .av.play .fx-puff .p2 { animation-delay: .12s; } .av.play .fx-puff .p3 { animation-delay: .24s; }
 @keyframes puff { 0% { transform: translate(6px, 3px) scale(.25); opacity: .9; } 60% { opacity: .8; } 100% { transform: translate(-3px, -5px) scale(1.5); opacity: 0; } }
-.av.play .fx-puff g { filter: blur(.4px); }
+
 /* 맛집 지도: 지도가 펼쳐지고 핀이 톡 꽂힘 */
 .av.play .fx-map { transform-origin: center; animation: unfold .55s cubic-bezier(.2,.8,.2,1) both; }
 @keyframes unfold { from { transform: scaleX(.12); } to { transform: none; } }
@@ -71,14 +72,15 @@ textarea { width: 100%; resize: none; border: 1px solid var(--hair); background:
 @keyframes stamp { 0% { transform: scale(1.9) rotate(-18deg); opacity: 0; } 70% { transform: scale(.92); opacity: 1; } 100% { transform: none; } }
 /* 장바구니: 채소가 쏙 */
 .av.play .fx-veg { animation: veg .8s cubic-bezier(.3,.6,.3,1.5) .1s both; }
-@keyframes veg { 0% { transform: translateY(-22px); opacity: 0; } 45% { opacity: 1; } 65% { transform: translateY(3px); } 82% { transform: translateY(-1px); } 100% { transform: none; } }
+@keyframes veg { 0% { transform: translateY(-20px); opacity: 0; } 30% { opacity: 1; } 62% { transform: translateY(2px); } 80% { transform: translateY(-1px); } 100% { transform: none; } }
 /* 깃발: 종이처럼 휘며 펄럭 — 모양 자체가 바뀜(SVG animate, 재생 때 시작) + 살짝 기울기 */
 .av.play .fx-flag { transform-origin: 0% 50%; animation: flagtilt 1.6s ease-in-out both; }
 @keyframes flagtilt { 0%, 100% { transform: none; } 25% { transform: rotate(-2deg); } 55% { transform: rotate(1.5deg); } }
 /* 스마트폰: 화면 속 핀이 톡 */
-.av.play .fx-pin2 { animation: pin .7s cubic-bezier(.3,.6,.3,1.4) .15s both; }
-.av.play .fx-fire { transform-origin: 50% 100%; animation: fire 1.5s ease-out .6s both; }
-@keyframes fire { 0% { opacity: 0; transform: scale(.2); } 18% { opacity: 1; transform: scale(1.12); } 32% { transform: scale(.95, 1.05); } 46% { transform: scale(1.04, .96); } 60% { transform: scale(.98, 1.03); } 78% { opacity: 1; transform: none; } 100% { opacity: 0; transform: scale(.85) translateY(-2px); } }
+.av.play .fx-pin2 { transform-origin: 50% 100%; animation: topin 1.8s ease-in-out both; }
+@keyframes topin { 0%, 42% { opacity: 0; transform: scale(.7); } 70% { opacity: 1; transform: scale(1.06); } 85% { transform: scale(.98); } 100% { opacity: 1; transform: none; } }
+.av.play .fx-fire { transform-origin: 50% 100%; animation: fire 1.8s ease-in-out both; }
+@keyframes fire { 0% { opacity: 0; transform: scale(.2); } 14% { opacity: 1; transform: scale(1.12); } 24% { transform: scale(.95, 1.06); } 34% { transform: scale(1.04, .96); } 44% { opacity: 1; transform: scale(1); } 66% { opacity: 0; transform: scale(.8) translateY(-3px); } 100% { opacity: 0; } }
 .av.play[data-c="HSFP"] .fx-b { transform-origin: 50% 100%; animation: tilt 1s ease-out both; }
 @keyframes tilt { 0% { transform: rotate(-4deg); } 50% { transform: rotate(2deg); } 100% { transform: none; } }
 /* 카메라: 찰칵 (렌즈 조였다 펴짐 + 플래시) */
@@ -114,8 +116,8 @@ body.frame main { padding: 0; } body.frame .nm { display: none; } body.frame .gr
 </head>
 <body>
 <main>
-<h1>캐릭터 등장 이펙트 · 16개 (2차)</h1>
-<p class="lead">1차 피드백 8개를 고쳤어요(파란 <b>수정</b> 표시). 나머지 8개는 1차 그대로예요. 아래서 뿅 나오는 대신, 그 짐만 할 수 있는 작은 동작 하나씩. 화면에 보이면 한 번 재생되고(1~1.6초), 그림을 누르면 다시 봐요.</p>
+<h1>캐릭터 등장 이펙트 · 16개 (3차)</h1>
+<p class="lead">2차 피드백 4개를 고쳤어요(파란 <b>수정</b> 표시). 나머지는 2차 그대로예요. 아래서 뿅 나오는 대신, 그 짐만 할 수 있는 작은 동작 하나씩. 화면에 보이면 한 번 재생되고(1~1.6초), 그림을 누르면 다시 봐요.</p>
 <div class="how">① 카드마다 <b>좋아요 / 더 은은하게 / 더 크게 / 다른 동작</b> 중 하나<br>② 하고 싶은 말은 메모 칸에<br>③ 맨 아래 <b>답 복사</b> → 채팅에 붙여넣기<br><button class="allbtn" id="all">전체 다시 재생</button></div>
 <div id="board"></div>
 <h2 style="margin-top:2.5rem;font-size:1rem">보낼 답 (미리 보기)</h2>
@@ -123,16 +125,16 @@ body.frame main { padding: 0; } body.frame .nm { display: none; } body.frame .gr
 </main>
 <div class="dock"><span class="cnt"><b id="cn">0</b>/16 고름</span><button id="cp">답 복사</button></div>
 <div class="toast" id="tt">복사했어요 · 채팅에 붙여넣기</div>
-<script src="chars.js?v=20261118b"></script>
+<script src="chars.js?v=20261118c"></script>
 <script src="types.js"></script>
 <script>
 (() => {
   const FX = { LSFJ: '나침반 바늘이 휘리릭 돌다가 북쪽에서 멈춤', LSFP: '좌우로 뒤뚱, 두 발을 번갈아 들며 걸음', LSRJ: '“어느 길로 갈래?” 두 팔이 번갈아 커졌다 작아짐', LSRP: '부르릉 떨리고 뒤 배기구에서 뭉게 연기 붕',
     LEFJ: '접힌 지도가 펼쳐지고 핀이 톡 꽂힘', LEFP: '매달린 가격표가 흔들흔들', LERJ: '쿠폰 도장이 하나씩 쾅쾅', LERP: '채소가 위에서 장바구니 안으로 쏙',
-    HSFJ: '깃발이 종이처럼 휘며 펄럭', HSFP: '핀이 톡 떨어지고 불꽃이 확 — 핫플', HSRJ: '렌즈가 찰칵 조였다 펴지고 플래시', HSRP: '좌우로 두리번 둘러보고 렌즈에 빛',
+    HSFJ: '깃발이 종이처럼 휘며 펄럭', HSFP: '불꽃이 톡 나타났다가 사르륵 핀으로 바뀜', HSRJ: '렌즈가 찰칵 조였다 펴지고 플래시', HSRP: '좌우로 두리번, 렌즈에 둥근 빛이 스침',
     HEFJ: '젓가락이 쏙 들어갔다 나오고 김이 모락', HEFP: '쇼핑백이 통통, 선물 상자가 빼꼼', HERJ: 'zZ가 하나씩 둥실', HERP: '커피 김이 하나씩 피어오름' };
   const GN = ['로컬 탐험형', '취향 수집형', '명소 정복형', '힐링 충전형'], CODES = Object.keys(FX), OPT = ['좋아요', '더 은은하게', '더 크게', '다른 동작'];
-  const KEY = 'gaboja-fb-p7fx2', CHG = ['LSFP','LSRJ','LSRP','LERP','HSFJ','HSFP','HSRP','HEFP'], $ = q => document.querySelector(q), all = q => [...document.querySelectorAll(q)];
+  const KEY = 'gaboja-fb-p7fx3', CHG = ['LSRP','LERP','HSFP','HSRP'], $ = q => document.querySelector(q), all = q => [...document.querySelectorAll(q)];
   let st = {}; try { st = JSON.parse(localStorage.getItem(KEY) || '{}') || {}; } catch (_) {}
   const save = () => { try { localStorage.setItem(KEY, JSON.stringify(st)); } catch (_) {} };
   const nameOf = c => (window.GABOJA_TYPES && GABOJA_TYPES[c] && GABOJA_TYPES[c].name) || c;
