@@ -773,10 +773,7 @@ body { background: transparent; }
 /* 11/20 동우님 질문 화면: 제목–설명 10 → 6px · 설명–보기 간격 = 보기–탑승권 코드 간격(눈으로 같게: 설명 글줄 아래 빈 줄 높이 약 4px만큼 빼 줌) */
 .qh p { margin-top: 0.375rem; }
 .scr.qs .opts { margin-top: calc(clamp(1.25rem, 4.5svh, 2.75rem) - 0.25rem); }
-/* 11/20 동우님: 선택지 = 파스텔(캐릭터 팔레트). 고르기 전 연한 바탕 · 고르면 한 단계 진한 바탕 + 진한 글자 */
-.opt[style*="--gx-soft"] { background: var(--gx-soft); border-color: color-mix(in srgb, var(--gx-edge) 14%, transparent); }
-.opt[style*="--gx-soft"] .k { background: color-mix(in srgb, var(--gx-edge) 16%, transparent); color: var(--gx-ink); }
-.opt[style*="--gx-soft"] .ic { stroke: var(--gx-ink); opacity: .75; }
+/* 11/20 동우님: 선택지 파스텔은 고른 뒤에만(고르기 전엔 흰 카드 그대로) — 고르면 묶음 파스텔 바탕 + 진한 글자 */
 .opts.done .opt.chosen .k { background: color-mix(in srgb, var(--gx-ink) 14%, transparent); }
 /* 11/20 질문 간격을 다른 질문형 화면(방법·입력·수정)에도: 묶음 사이 = clamp, 제목 묶음 아래만 4px 덜(설명 글줄 아래 빈 줄) */
 .scr:not(.qs):has(> .qh) { --scr-g: clamp(1.25rem, 4.5svh, 2.75rem); gap: var(--scr-g); }
