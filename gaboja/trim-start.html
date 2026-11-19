@@ -546,7 +546,8 @@ html.ios26 .foot, html.ios26 .board { bottom: calc(max(0.75rem, env(safe-area-in
 .swhd .eb { font: 700 0.75rem var(--lat); letter-spacing: .02em; color: var(--blue); }
 .swhd .eb em { font: 600 0.75rem var(--kr); font-style: normal; color: var(--sub); letter-spacing: 0; }
 .swhd h1 { margin: 0.125rem 0 0; font-size: 1.625rem; font-weight: 700; letter-spacing: -.035em; line-height: 1.2; }
-.swhd .dt { font: 600 0.8125rem var(--lat); color: var(--sub); }
+.swhd .dt { font: 600 0.75rem var(--lat); color: var(--sub); letter-spacing: 0; }
+.swhd h1 { margin-top: 0.3125rem; }   /* 11/21 동우님 #6: 왼쪽 위 3줄(DAY / 동네 / 날짜) → 2줄(DAY · 날짜 · 도착하는 날 / 동네), 사이 숨 조금 */
 .swhz { display: flex; flex-direction: column; align-items: flex-end; gap: 0.1875rem; flex: none; }
 .swhz .hz { display: inline-flex; gap: 0.25rem; align-items: center; }
 .swhz .hz svg { display: block; width: 1.125rem; height: 1.125rem; fill: none; stroke: var(--blue); stroke-width: 1.8; stroke-linejoin: round; transition: transform .25s; }
@@ -1790,7 +1791,7 @@ function swDay() {
   setBar('info', sw.di, sw.days.length, { t: `DAY ${d.no} / ${sw.days.length}` });
   const hint = sw.di === 0 ? '오른쪽으로 밀면 ♥ · 왼쪽으로 밀면 패스예요' : swTaste(sw);
   screen(`
-    <div class="swhd"><div><div class="eb">DAY ${d.no}${d.edge ? ` <em>· ${d.no === 1 ? '도착하는 날' : '떠나는 날'}</em>` : ''}</div><h1>${esc(d.area)}</h1><div class="dt">${d.date.getMonth() + 1}. ${d.date.getDate()} ${WD[d.date.getDay()]}</div></div>
+    <div class="swhd"><div><div class="eb">DAY ${d.no}<span class="dt"> · ${d.date.getMonth() + 1}. ${d.date.getDate()} ${WD[d.date.getDay()]}</span>${d.edge ? ` <em>· ${d.no === 1 ? '도착하는 날' : '떠나는 날'}</em>` : ''}</div><h1>${esc(d.area)}</h1></div>
       <div class="swhz"><span class="hz" id="swHs"></span><small id="swCap"></small></div></div>
     <div class="sw-stack" id="swStack"><div class="sw-react" id="swRx" role="status" aria-live="polite"></div></div>
     <div class="foot swfoot">
