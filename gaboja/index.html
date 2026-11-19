@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="robots" content="noindex, nofollow">
-<meta name="theme-color" content="#EEF0F3">
+<meta name="theme-color" content="#EFEFF1">
 <link rel="icon" href="icons/favicon-32.png">
 <link rel="apple-touch-icon" href="icons/icon-180.png">
 <link rel="manifest" href="manifest.webmanifest">
@@ -29,13 +29,13 @@
    손동작: 꾹 눌러 옮기기(다른 일정이 비켜남, 요약·상세) · 상세 목록만 왼쪽으로 밀면 '보관' 버튼 → 눌러야 보관(11/14) · 눌러서 라벨/색. 비행기·이동은 고정. 라이트/다크/시스템은 메뉴 맨 아래 */
 :root {
   color-scheme: light;
-  --canvas: #EEF0F3; --ink: #0A1F33; --sub: #5B6B7A; --hair: rgba(10,31,51,.09); --on-ink: #FFFFFF;
+  --canvas: #EFEFF1; --ink: #16171A; --sub: #6B6E75; --hair: rgba(22,23,26,.09); --on-ink: #FFFFFF;
   --glass: rgba(255,255,255,.62); --glass-hi: rgba(255,255,255,.94); --glass-edge: rgba(255,255,255,.85); --glass-hl: rgba(255,255,255,.9);
   --paper: #FFFFFF; --tile: rgba(255,255,255,.86); --tile-edge: rgba(255,255,255,.98); --field: #FFFFFF; --sheet: rgba(255,255,255,.9);
-  --red: #CF3F66; --amber: #E8912A; --blue: #2571DD; --on-blue: #FFFFFF; --past: #C9CDD3; --past-tx: #A3A8AF;
-  --toast-bg: rgba(10,31,51,.94); --toast-fg: #FFFFFF; --toast-act: #A9B9FF; --scrim: rgba(20,24,30,.28);
-  --shadow: 0 1.375rem 2.75rem -1.375rem rgba(24,36,60,.32), 0 2px 0.375rem -2px rgba(24,36,60,.10);
-  --sh-xs: 0 1px 2px rgba(24,36,60,.05), 0 0.25rem 0.75rem -0.375rem rgba(24,36,60,.14);
+  --red: #CF3F66; --amber: #E8912A; --blue: #1F5FE0; --on-blue: #FFFFFF; --past: #C9CDD3; --past-tx: #A3A8AF;
+  --toast-bg: rgba(22,23,26,.94); --toast-fg: #FFFFFF; --toast-act: #8FB0F0; --scrim: rgba(22,23,26,.28);
+  --shadow: 0 1.375rem 2.75rem -1.375rem rgba(22,23,26,.32), 0 2px 0.375rem -2px rgba(22,23,26,.10);
+  --sh-xs: 0 1px 2px rgba(22,23,26,.05), 0 0.25rem 0.75rem -0.375rem rgba(22,23,26,.14);
   --kr: "VZTR KR", "Pretendard Variable", Pretendard, -apple-system, "Apple SD Gothic Neo", "Malgun Gothic", system-ui, sans-serif;
   --mono: "VZTR EN", "VZTR KR", "Pretendard Variable", Pretendard, -apple-system, "Malgun Gothic", system-ui, sans-serif; /* 11/18 BI: 시각·숫자·영문 코드 = Inter Tight(고정폭 숫자), 한글은 Pretendard로 넘어감 */
   --jp: "Zen Kaku Gothic New", "Yu Gothic", sans-serif;
@@ -46,8 +46,8 @@
   --canvas: #0E1013; --ink: #ECEEF1; --sub: #8F969F; --hair: rgba(255,255,255,.08); --on-ink: #0E1013;
   --glass: rgba(30,33,38,.62); --glass-hi: rgba(255,255,255,.14); --glass-edge: rgba(255,255,255,.08); --glass-hl: rgba(255,255,255,.06);
   --paper: #1B1E23; --tile: rgba(36,40,46,.9); --tile-edge: rgba(255,255,255,.06); --field: #15181C; --sheet: rgba(24,27,31,.94);
-  --red: #F06A8A; --amber: #F0A84A; --blue: #49BDF6; --on-blue: #0A1F33; --past: #3A3F46; --past-tx: #646B75;
-  --toast-bg: rgba(236,238,241,.95); --toast-fg: #0A1F33; --toast-act: #2571DD; --scrim: rgba(0,0,0,.5);
+  --red: #F06A8A; --amber: #F0A84A; --blue: #6D97EB; --on-blue: #16171A; --past: #3A3F46; --past-tx: #646B75;
+  --toast-bg: rgba(236,238,241,.95); --toast-fg: #16171A; --toast-act: #1F5FE0; --scrim: rgba(0,0,0,.5);
   --shadow: 0 1.375rem 2.75rem -1.375rem rgba(0,0,0,.7), 0 2px 0.375rem -2px rgba(0,0,0,.4);
   --sh-xs: 0 1px 2px rgba(0,0,0,.35), 0 0.25rem 0.75rem -0.375rem rgba(0,0,0,.55); } }
 :root[data-theme="dark"] {
@@ -55,8 +55,8 @@
   --canvas: #0E1013; --ink: #ECEEF1; --sub: #8F969F; --hair: rgba(255,255,255,.08); --on-ink: #0E1013;
   --glass: rgba(30,33,38,.62); --glass-hi: rgba(255,255,255,.14); --glass-edge: rgba(255,255,255,.08); --glass-hl: rgba(255,255,255,.06);
   --paper: #1B1E23; --tile: rgba(36,40,46,.9); --tile-edge: rgba(255,255,255,.06); --field: #15181C; --sheet: rgba(24,27,31,.94);
-  --red: #F06A8A; --amber: #F0A84A; --blue: #49BDF6; --on-blue: #0A1F33; --past: #3A3F46; --past-tx: #646B75;
-  --toast-bg: rgba(236,238,241,.95); --toast-fg: #0A1F33; --toast-act: #2571DD; --scrim: rgba(0,0,0,.5);
+  --red: #F06A8A; --amber: #F0A84A; --blue: #6D97EB; --on-blue: #16171A; --past: #3A3F46; --past-tx: #646B75;
+  --toast-bg: rgba(236,238,241,.95); --toast-fg: #16171A; --toast-act: #1F5FE0; --scrim: rgba(0,0,0,.5);
   --shadow: 0 1.375rem 2.75rem -1.375rem rgba(0,0,0,.7), 0 2px 0.375rem -2px rgba(0,0,0,.4);
   --sh-xs: 0 1px 2px rgba(0,0,0,.35), 0 0.25rem 0.75rem -0.375rem rgba(0,0,0,.55); }
 html { font-size: clamp(13.5px, calc(100vw * 16 / 390), 18px); -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
@@ -836,26 +836,26 @@ body { letter-spacing: 0; }
   @page { size: 110mm 200mm; margin: 9mm 8mm; }
   html, body { background: #fff !important; overflow: visible !important; height: auto !important; scrollbar-gutter: auto; }
   body > *:not(#printDoc) { display: none !important; }
-  #printDoc { display: block; color: #0A1F33; background: #fff; font-family: var(--kr); font-size: 10.5pt; line-height: 1.5; letter-spacing: -.01em; font-variant-numeric: normal; font-feature-settings: normal; width: 100%; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  #printDoc { display: block; color: #16171A; background: #fff; font-family: var(--kr); font-size: 10.5pt; line-height: 1.5; letter-spacing: -.01em; font-variant-numeric: normal; font-feature-settings: normal; width: 100%; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
   #printDoc * { box-sizing: border-box; }
   #printDoc .ps { break-before: page; }
   #printDoc .ps:first-child { break-before: auto; }
   #printDoc .g { color: #6b6b6b; font-size: 9pt; font-weight: 400; }
   #printDoc h1 { font-size: 15pt; font-weight: 800; line-height: 1.3; margin: 0.5em 0 0.3em; }
   #printDoc h2 { font-size: 15pt; font-weight: 800; line-height: 1.3; margin: 0.15em 0 0.5em; }
-  #printDoc h3 { font-size: 10.5pt; font-weight: 800; margin: 1.1em 0 0.3em; padding-top: 0.5em; border-top: 1px solid #0A1F33; }
+  #printDoc h3 { font-size: 10.5pt; font-weight: 800; margin: 1.1em 0 0.3em; padding-top: 0.5em; border-top: 1px solid #16171A; }
   #printDoc p { margin: 0; }
   #printDoc .cover { height: 176mm; display: flex; flex-direction: column; justify-content: space-between; }
   #printDoc .cover .ctop { padding-top: 38mm; }
-  #printDoc .eb { font-size: 9pt; letter-spacing: .18em; color: #5B6B7A; }
+  #printDoc .eb { font-size: 9pt; letter-spacing: .18em; color: #6B6E75; }
   #printDoc .cover .sb { margin: 0 0 1.4em; }
-  #printDoc .dep { border-top: 1px solid #0A1F33; padding-top: 0.6em; }
+  #printDoc .dep { border-top: 1px solid #16171A; padding-top: 0.6em; }
   #printDoc .dep p { margin: 0 0 0.3em; }
   #printDoc .foot { font-size: 9pt; color: #6b6b6b; }
   #printDoc .ov { padding: 0.55em 0; border-top: 1px solid #d4d4d4; break-inside: avoid; }
   #printDoc .ov b { display: block; font-weight: 700; }
   #printDoc .ov .g { display: block; }
-  #printDoc .dh { padding-bottom: 0.6em; margin-bottom: 0.4em; border-bottom: 1px solid #0A1F33; }
+  #printDoc .dh { padding-bottom: 0.6em; margin-bottom: 0.4em; border-bottom: 1px solid #16171A; }
   #printDoc .dh .g { display: block; }
   #printDoc .it { padding: 0.45em 0; border-top: 1px solid #e3e3e3; break-inside: avoid; }
   #printDoc .it.mv { padding: 0.15em 0; border-top: 0; }
@@ -1048,7 +1048,7 @@ html[data-grp="HS"] { --stamp-a: var(--g-hs-a); --stamp-lt: var(--g-hs-lt); } ht
 .drawer .tcard .tav svg > g > ellipse:nth-child(-n+2) { display: none; }
 /* 피드백5: 탑승권 반원 홈 = 진짜 구멍(mask) — 바탕·안쪽 링·그림자(drop-shadow)가 모두 홈 모양을 따라감. 홈 높이(--ny)는 JS(fixNotches)가 점선 위치로 넣음 */
 .pass.flycard { --nr: 0.2062rem; --ringc: var(--glass-edge); --fcbg: var(--glass); background: none !important; -webkit-backdrop-filter: none; backdrop-filter: none; border: 0; box-shadow: none; animation: none !important;
-  filter: drop-shadow(0 0.5rem 0.625rem rgba(24,36,60,.11)) drop-shadow(0 0.0625rem 0.1875rem rgba(24,36,60,.07)); }
+  filter: drop-shadow(0 0.5rem 0.625rem rgba(22,23,26,.11)) drop-shadow(0 0.0625rem 0.1875rem rgba(22,23,26,.07)); }
 .list .pass.flycard { --fcbg: var(--paper); }
 .pass.flycard.live { --ringc: var(--c, var(--blue)); }
 .pass.flycard::before { content: ""; position: absolute; inset: 0; z-index: -1; border-radius: inherit; pointer-events: none;
@@ -1163,7 +1163,7 @@ html[data-grp="HS"] { --stamp-a: var(--g-hs-a); --stamp-lt: var(--g-hs-lt); } ht
 .dock .tabs { height: 100%; padding: 0; gap: 0.25rem; background: none; border: 0; box-shadow: none; border-radius: 999px; }
 .dock .tabs button { border-radius: 999px; font-size: 0; gap: 0; transition: background .15s, color .15s; }
 .dock .tabs button svg { width: 1.375rem; height: 1.375rem; stroke-width: 1.9; transition: width .3s, height .3s; }
-.dock .tabs button[aria-selected="true"] { background: rgba(10,31,51,.07); box-shadow: none; color: var(--ink); }
+.dock .tabs button[aria-selected="true"] { background: rgba(22,23,26,.07); box-shadow: none; color: var(--ink); }
 .dock .tabs button[aria-selected="true"] svg { stroke-width: 2.2; }
 .dock .fab { width: auto; height: 100%; aspect-ratio: 1; box-shadow: none; transition: transform .12s, opacity .2s; }
 .dock .fab svg { width: 1.375rem; height: 1.375rem; transition: width .3s, height .3s; }
@@ -1178,7 +1178,7 @@ html[data-grp="HS"] { --stamp-a: var(--g-hs-a); --stamp-lt: var(--g-hs-lt); } ht
 /* ---------- 11/19 그림자·간격 (동우님) ----------
    그림자: 떠 있는 상자(.glass: 주의·현지 정보·탑승권·목록 등) 그림자를 일정 카드(--sh-xs)와 같은 결로 은은하게 통일. 맨 위 머리·아래 메뉴만 한 단계 더(떠 있음)
    간격: 주의 ↔ 현지 정보 = 일정 카드 사이 간격(0.4375rem) · 현지 정보 아래 = 묶음 사이(1.5rem) + 메뉴 높이 */
-:root { --shadow: 0 1px 2px rgba(24,36,60,.05), 0 0.375rem 1rem -0.5rem rgba(24,36,60,.16); --sh-float: 0 1px 2px rgba(24,36,60,.06), 0 0.625rem 1.5rem -0.75rem rgba(24,36,60,.24); }
+:root { --shadow: 0 1px 2px rgba(22,23,26,.05), 0 0.375rem 1rem -0.5rem rgba(22,23,26,.16); --sh-float: 0 1px 2px rgba(22,23,26,.06), 0 0.625rem 1.5rem -0.75rem rgba(22,23,26,.24); }
 .hbox, .dock { box-shadow: var(--sh-float), inset 0 1px 0 var(--glass-hl); }
 #warn:not(:empty):not([hidden]) + #tips { margin-top: calc(0.4375rem - 1.5rem); }
 .app { padding-bottom: calc(3.375rem + 1rem + 1.5rem + env(safe-area-inset-bottom, 0px)); }
@@ -1206,16 +1206,16 @@ html[data-grp="HS"] { --stamp-a: var(--g-hs-a); --stamp-lt: var(--g-hs-lt); } ht
 @media (prefers-reduced-motion: reduce) { .pass.flycard.live { animation: none !important; } }
 
 /* ---------- 11/19 다크 배경 = A 연하게 (동우님, 레퍼런스 Midnight Embrace를 연하게) ----------
-   가운데 #1A1E22 → 55% #1F2328 → 가장자리 #23272D 타원 그라디언트, 화면에 고정(.bgfx). 카드는 배경에 안 묻히게 #262A30 */
+   가운데 #18191C → 55% #1D1E22 → 가장자리 #232428 타원 그라디언트, 화면에 고정(.bgfx). 카드는 배경에 안 묻히게 #27282C */
 /* 11/19 밝은 모드도 같은 깊이 그라디언트(동우님): 연한 회색, 다크와 같은 모양·같은 단계(가운데 → 55% → 가장자리, 밝기 차 약 4%) · 밝은 모드는 가운데가 밝고 바깥이 살짝 어두움 */
-html { background: #EEF0F3; } body { background: transparent; }
-.bgfx { display: block; position: fixed; inset: 0; z-index: -1; pointer-events: none; background: radial-gradient(ellipse at 50% 50%, #F3F4F6, #EEF0F3 55%, #E8EBEE); }
-@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --canvas: #1F2328; --glass: #262A30; --paper: #262A30; --float: #262A30; --sheet: #262A30; --tile: rgba(42,46,53,.92); --field: #1C2025; }
-  :root:not([data-theme="light"]) { background: #1A1E22; } :root:not([data-theme="light"]) body { background: transparent; }
-  :root:not([data-theme="light"]) .bgfx { display: block; position: fixed; inset: 0; z-index: -1; pointer-events: none; background: radial-gradient(ellipse at 50% 50%, #1A1E22, #1F2328 55%, #23272D); } }
-html:root[data-theme="dark"] { --canvas: #1F2328; --glass: #262A30; --paper: #262A30; --float: #262A30; --sheet: #262A30; --tile: rgba(42,46,53,.92); --field: #1C2025; background: #1A1E22; }
+html { background: #EFEFF1; } body { background: transparent; }
+.bgfx { display: block; position: fixed; inset: 0; z-index: -1; pointer-events: none; background: radial-gradient(ellipse at 50% 50%, #F4F4F5, #EFEFF1 55%, #E9EAEC); }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --canvas: #1D1E22; --glass: #27282C; --paper: #27282C; --float: #27282C; --sheet: #27282C; --tile: rgba(42,43,47,.92); --field: #1C1D20; }
+  :root:not([data-theme="light"]) { background: #18191C; } :root:not([data-theme="light"]) body { background: transparent; }
+  :root:not([data-theme="light"]) .bgfx { display: block; position: fixed; inset: 0; z-index: -1; pointer-events: none; background: radial-gradient(ellipse at 50% 50%, #18191C, #1D1E22 55%, #232428); } }
+html:root[data-theme="dark"] { --canvas: #1D1E22; --glass: #27282C; --paper: #27282C; --float: #27282C; --sheet: #27282C; --tile: rgba(42,43,47,.92); --field: #1C1D20; background: #18191C; }
 :root[data-theme="dark"] body { background: transparent; }
-:root[data-theme="dark"] .bgfx { display: block; position: fixed; inset: 0; z-index: -1; pointer-events: none; background: radial-gradient(ellipse at 50% 50%, #1A1E22, #1F2328 55%, #23272D); }
+:root[data-theme="dark"] .bgfx { display: block; position: fixed; inset: 0; z-index: -1; pointer-events: none; background: radial-gradient(ellipse at 50% 50%, #18191C, #1D1E22 55%, #232428); }
 
 /* ---------- 11/19 글꼴 A (동우님): 굵은 한글 = IBM Plex Sans KR(700) · 보통·작은·연한 한글 = Pretendard · 영문·숫자 = IBM Plex Sans ---------- */
 :root { --kr-plain: "Pretendard Variable", Pretendard, -apple-system, "Apple SD Gothic Neo", "Malgun Gothic", system-ui, sans-serif; }
@@ -1228,11 +1228,11 @@ html:root[data-theme="dark"] { --canvas: #1F2328; --glass: #262A30; --paper: #26
 .pill .ttl b, .dayline h2 { letter-spacing: -.02em; }
 
 /* 11/19 리뷰: 맨 위 가림 띠·안전 영역 색 = 배경 그라디언트 가장자리(화면 맨 위) 색과 같게 · 다크 떠 있는 그림자 */
-:root { --canvas-top: #E8EBEE; }
+:root { --canvas-top: #E9EAEC; }
 .top::before { background: linear-gradient(var(--canvas-top) 72%, transparent) !important; }
 body::before { background: var(--canvas-top) !important; }
-html:root[data-theme="dark"] { --canvas-top: #23272D; --sh-float: 0 1px 2px rgba(0,0,0,.3), 0 0.625rem 1.5rem -0.75rem rgba(0,0,0,.6); }
-@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --canvas-top: #23272D; --sh-float: 0 1px 2px rgba(0,0,0,.3), 0 0.625rem 1.5rem -0.75rem rgba(0,0,0,.6); } }
+html:root[data-theme="dark"] { --canvas-top: #232428; --sh-float: 0 1px 2px rgba(0,0,0,.3), 0 0.625rem 1.5rem -0.75rem rgba(0,0,0,.6); }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --canvas-top: #232428; --sh-float: 0 1px 2px rgba(0,0,0,.3), 0 0.625rem 1.5rem -0.75rem rgba(0,0,0,.6); } }
 /* ---------- 11/19 최종 검수 (동우님: '…' 없게, 너무 작은 글자 없게) ----------
    ① 작은 글자 바닥 = 0.8125rem(360폭에서 약 11px) · 날짜 칸 DAY 0.75rem
    ② '…'로 잘리던 곳은 한 줄에 들어가면 한 줄, 안 들어가면 자연스럽게 줄바꿈(내용이 잘리지 않게) */
@@ -1491,7 +1491,7 @@ const st = { day: 0, mode: 'simple', cur: null, uid: 0, last: null };
 
 /* ---------- 화면 모드 (시스템 / 라이트 / 다크) ---------- */
 // 폰 상단 상태줄 색을 화면 모드에 맞춤 (배포 페이지의 theme-color meta가 있을 때만)
-function syncBar() { const m = document.querySelector('meta[name="theme-color"]'); if (m) m.content = getComputedStyle(document.documentElement).getPropertyValue('--canvas').trim() || '#EEF0F3'; }
+function syncBar() { const m = document.querySelector('meta[name="theme-color"]'); if (m) m.content = getComputedStyle(document.documentElement).getPropertyValue('--canvas').trim() || '#EFEFF1'; }
 try { matchMedia('(prefers-color-scheme: dark)').addEventListener('change', syncBar); } catch (_) {}
 function setTheme(t, save) {
   if (t === 'system') document.documentElement.removeAttribute('data-theme'); else document.documentElement.setAttribute('data-theme', t);

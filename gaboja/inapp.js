@@ -18,7 +18,7 @@
     if (document.getElementById('vzExt')) return;
     var go = function () {
       var b = document.createElement('div'); b.id = 'vzExt';
-      b.setAttribute('style', 'position:fixed;left:12px;right:12px;top:calc(10px + env(safe-area-inset-top,0px));z-index:2147483000;background:#0A1F33;color:#fff;border-radius:10px;padding:11px 14px;font:600 13px/1.45 system-ui,sans-serif;display:flex;gap:10px;align-items:center;box-shadow:0 8px 24px -10px rgba(0,0,0,.5)');
+      b.setAttribute('style', 'position:fixed;left:12px;right:12px;top:calc(10px + env(safe-area-inset-top,0px));z-index:2147483000;background:#16171A;color:#fff;border-radius:10px;padding:11px 14px;font:600 13px/1.45 system-ui,sans-serif;display:flex;gap:10px;align-items:center;box-shadow:0 8px 24px -10px rgba(0,0,0,.5)');
       b.innerHTML = '<span style="flex:1">' + (ios ? '오른쪽 위 <b>···</b> 또는 공유 버튼 → <b>Safari로 열기</b>를 누르면 더 잘 보여요' : '오른쪽 위 <b>⋮</b> → <b>다른 브라우저로 열기</b>를 누르면 더 잘 보여요') + '</span><button style="all:unset;cursor:pointer;opacity:.7;font-size:18px;padding:0 4px" aria-label="닫기">×</button>';
       b.querySelector('button').onclick = function () { b.remove(); };
       document.body.appendChild(b);

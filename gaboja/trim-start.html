@@ -6,7 +6,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="claude:viewport-fit-sides" content="cover">
 <meta name="robots" content="noindex, nofollow">
-<meta name="theme-color" content="#EEF0F3">
+<meta name="theme-color" content="#EFEFF1">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400..800&display=swap">
@@ -22,10 +22,10 @@
    크기는 전부 rem (390px 폰 = 16px 기준, 앱과 같은 규칙) */
 :root {
   color-scheme: light;
-  --canvas: #EEF0F3; --ink: #0A1F33; --sub: #5B6B7A; --hair: rgba(10,31,51,.09); --on-ink: #FFFFFF;
+  --canvas: #EFEFF1; --ink: #16171A; --sub: #6B6E75; --hair: rgba(22,23,26,.09); --on-ink: #FFFFFF;
   --glass: rgba(255,255,255,.62); --glass-hi: rgba(255,255,255,.94); --glass-edge: rgba(255,255,255,.85); --glass-hl: rgba(255,255,255,.9);
   --paper: #FFFFFF; --tile: rgba(255,255,255,.86); --tile-edge: rgba(255,255,255,.98); --field: #FFFFFF;
-  --red: #CF3F66; --amber: #E8912A; --blue: #2571DD; --on-blue: #FFFFFF; --blue-soft: rgba(37,113,221,.09);
+  --red: #CF3F66; --amber: #E8912A; --blue: #1F5FE0; --on-blue: #FFFFFF; --blue-soft: rgba(31,95,224,.09);
   --float: #FFFFFF;   /* 떠 있는 것(시트) */
   --g-ls-soft: #E4F3F5; --g-ls-fill: #C4E5E9; --g-ls-ink: #2F6B73; --g-ls-edge: #6099A0;   /* 11/20 파스텔 */
   --g-le-soft: #FEF2F5; --g-le-fill: #FADCE4; --g-le-ink: #9A4A62; --g-le-edge: #C78297;   /* 11/20 파스텔 */
@@ -33,9 +33,9 @@
   --g-he-soft: #FFE7EF; --g-he-fill: #FFD2E0; --g-he-ink: #8E3A63; --g-he-edge: #C17192;   /* 11/20 파스텔 */
   --green: #2F9E6E; --gmix: 100%;   /* 11/18 D: 발급 완료 글자 · 결과 탑승권 묶음 색 띠 세기(라이트 100%) */
   --flap: #1B1E23; --flap-tx: #F4F5F7; --flap-dim: #5B616A;
-  --toast-bg: rgba(10,31,51,.94); --toast-fg: #FFFFFF;
-  --shadow: 0 1.375rem 2.75rem -1.375rem rgba(24,36,60,.32), 0 2px 0.375rem -2px rgba(24,36,60,.10);
-  --sh-xs: 0 1px 2px rgba(24,36,60,.05), 0 0.25rem 0.75rem -0.375rem rgba(24,36,60,.14);
+  --toast-bg: rgba(22,23,26,.94); --toast-fg: #FFFFFF;
+  --shadow: 0 1.375rem 2.75rem -1.375rem rgba(22,23,26,.32), 0 2px 0.375rem -2px rgba(22,23,26,.10);
+  --sh-xs: 0 1px 2px rgba(22,23,26,.05), 0 0.25rem 0.75rem -0.375rem rgba(22,23,26,.14);
   --kr: "VZTR KR", "Pretendard Variable", Pretendard, -apple-system, "Apple SD Gothic Neo", "Malgun Gothic", system-ui, sans-serif;
   --r-lg: 0.6438rem; --r-md: 0.5312rem; --r-sm: 0.4188rem;
   padding-top: env(safe-area-inset-top, 0px); padding-bottom: env(safe-area-inset-bottom, 0px);
@@ -45,7 +45,7 @@
   --canvas: #0E1013; --ink: #ECEEF1; --sub: #8F969F; --hair: rgba(255,255,255,.08); --on-ink: #0E1013;
   --glass: rgba(30,33,38,.62); --glass-hi: rgba(255,255,255,.14); --glass-edge: rgba(255,255,255,.08); --glass-hl: rgba(255,255,255,.06);
   --paper: #1B1E23; --tile: rgba(36,40,46,.9); --tile-edge: rgba(255,255,255,.06); --field: #15181C;
-  --red: #F06A8A; --amber: #F0A84A; --blue: #49BDF6; --on-blue: #0A1F33; --blue-soft: rgba(73,189,246,.12);
+  --red: #F06A8A; --amber: #F0A84A; --blue: #6D97EB; --on-blue: #16171A; --blue-soft: rgba(109,151,235,.12);
   --green: #4CC08E; --gmix: 38%;   /* 11/18 D: 다크 = 묶음 색 38% + paper */
   --float: #22262C;   /* 11/18 10: 다크 깊이 3단 — 바탕 / 카드 paper(+위 하이라이트·테두리) / 떠 있는 것 */
   --g-ls-soft: color-mix(in srgb, #6099A0 22%, var(--paper)); --g-ls-fill: color-mix(in srgb, #6099A0 30%, var(--paper)); --g-ls-ink: #C4E5E9; --g-ls-edge: #6099A0;
@@ -54,7 +54,7 @@
   --g-he-soft: color-mix(in srgb, #C17192 22%, var(--paper)); --g-he-fill: color-mix(in srgb, #C17192 30%, var(--paper)); --g-he-ink: #FFD2E0; --g-he-edge: #C17192;
 
   --flap: #05070A; --flap-tx: #F4F5F7; --flap-dim: #4A5058;
-  --toast-bg: rgba(236,238,241,.95); --toast-fg: #0A1F33;
+  --toast-bg: rgba(236,238,241,.95); --toast-fg: #16171A;
   --shadow: 0 1.375rem 2.75rem -1.375rem rgba(0,0,0,.7), 0 2px 0.375rem -2px rgba(0,0,0,.4), inset 0 1px 0 rgba(255,255,255,.05), 0 0 0 1px rgba(255,255,255,.06);
   --sh-xs: 0 1px 2px rgba(0,0,0,.35), 0 0.25rem 0.75rem -0.375rem rgba(0,0,0,.55), inset 0 1px 0 rgba(255,255,255,.05), 0 0 0 1px rgba(255,255,255,.06); } }
 :root[data-theme="dark"] {
@@ -62,7 +62,7 @@
   --canvas: #0E1013; --ink: #ECEEF1; --sub: #8F969F; --hair: rgba(255,255,255,.08); --on-ink: #0E1013;
   --glass: rgba(30,33,38,.62); --glass-hi: rgba(255,255,255,.14); --glass-edge: rgba(255,255,255,.08); --glass-hl: rgba(255,255,255,.06);
   --paper: #1B1E23; --tile: rgba(36,40,46,.9); --tile-edge: rgba(255,255,255,.06); --field: #15181C;
-  --red: #F06A8A; --amber: #F0A84A; --blue: #49BDF6; --on-blue: #0A1F33; --blue-soft: rgba(73,189,246,.12);
+  --red: #F06A8A; --amber: #F0A84A; --blue: #6D97EB; --on-blue: #16171A; --blue-soft: rgba(109,151,235,.12);
   --green: #4CC08E; --gmix: 38%;   /* 11/18 D: 다크 = 묶음 색 38% + paper */
   --float: #22262C;   /* 11/18 10: 다크 깊이 3단 — 바탕 / 카드 paper(+위 하이라이트·테두리) / 떠 있는 것 */
   --g-ls-soft: color-mix(in srgb, #6099A0 22%, var(--paper)); --g-ls-fill: color-mix(in srgb, #6099A0 30%, var(--paper)); --g-ls-ink: #C4E5E9; --g-ls-edge: #6099A0;
@@ -71,7 +71,7 @@
   --g-he-soft: color-mix(in srgb, #C17192 22%, var(--paper)); --g-he-fill: color-mix(in srgb, #C17192 30%, var(--paper)); --g-he-ink: #FFD2E0; --g-he-edge: #C17192;
 
   --flap: #05070A; --flap-tx: #F4F5F7; --flap-dim: #4A5058;
-  --toast-bg: rgba(236,238,241,.95); --toast-fg: #0A1F33;
+  --toast-bg: rgba(236,238,241,.95); --toast-fg: #16171A;
   --shadow: 0 1.375rem 2.75rem -1.375rem rgba(0,0,0,.7), 0 2px 0.375rem -2px rgba(0,0,0,.4), inset 0 1px 0 rgba(255,255,255,.05), 0 0 0 1px rgba(255,255,255,.06);
   --sh-xs: 0 1px 2px rgba(0,0,0,.35), 0 0.25rem 0.75rem -0.375rem rgba(0,0,0,.55), inset 0 1px 0 rgba(255,255,255,.05), 0 0 0 1px rgba(255,255,255,.06); }
 
@@ -243,7 +243,7 @@ html.ios26 .foot, html.ios26 .board { bottom: calc(max(0.75rem, env(safe-area-in
 
 /* 결과: 큰 탑승권 */
 .ticket { border-radius: var(--r-lg); background: var(--paper); box-shadow: var(--shadow); overflow: hidden; animation: rise .55s cubic-bezier(.2,.8,.2,1) both; }
-@keyframes pulseT { 0% { box-shadow: var(--shadow), 0 0 0 0 rgba(37,113,221,.5); } 40% { box-shadow: var(--shadow), 0 0 0 0.375rem rgba(37,113,221,.28); } 100% { box-shadow: var(--shadow), 0 0 0 0 rgba(37,113,221,0); } }
+@keyframes pulseT { 0% { box-shadow: var(--shadow), 0 0 0 0 rgba(31,95,224,.5); } 40% { box-shadow: var(--shadow), 0 0 0 0.375rem rgba(31,95,224,.28); } 100% { box-shadow: var(--shadow), 0 0 0 0 rgba(31,95,224,0); } }
 .ticket.pulse { animation: pulseT .7s ease-out; }
 @keyframes rise { from { opacity: 0; transform: translateY(1.25rem) scale(.98); } to { opacity: 1; transform: none; } }
 .ticket .hd { padding: 1rem 1.125rem 0; display: flex; justify-content: space-between; align-items: center; font-size: 0.6875rem; font-weight: 700; letter-spacing: .1em; color: var(--sub); }
@@ -423,7 +423,7 @@ html.ios26 .foot, html.ios26 .board { bottom: calc(max(0.75rem, env(safe-area-in
 .toast.on { opacity: 1; transform: translate(-50%, 0); }
 
 /* 답 고른 뒤 반응 시트: 아래에서 올라와 새 코드 칸이 넘어가고, 멘트·설명·가까운 유형 → '다음 질문'(3.2초 뒤 자동, 누르면 바로) */
-.rx-scrim { position: fixed; inset: 0; z-index: 20; background: rgba(20,24,30,.28); opacity: 0; transition: opacity .3s ease; }
+.rx-scrim { position: fixed; inset: 0; z-index: 20; background: rgba(22,23,26,.28); opacity: 0; transition: opacity .3s ease; }
 .rx-scrim.on { opacity: 1; }
 .rx { position: fixed; left: 50%; bottom: 0; z-index: 21; width: min(27.5rem, 100%); transform: translate(-50%, 104%); visibility: hidden;
   border-radius: 0.6813rem 0.6813rem 0 0; background: var(--float); box-shadow: var(--shadow);
@@ -446,7 +446,7 @@ html.ios26 .foot, html.ios26 .board { bottom: calc(max(0.75rem, env(safe-area-in
 .rx .go2 span { position: relative; display: flex; align-items: center; gap: 0.5rem; }
 .fl.lock { box-shadow: inset 0 0 0 2px var(--red); transition: box-shadow .3s; }
 .fl.new { animation: flip .38s cubic-bezier(.3,.7,.3,1), glowN 1.2s ease-out .38s; }
-@keyframes glowN { 0% { box-shadow: 0 0 0 0 rgba(37,113,221,.55); } 100% { box-shadow: 0 0 0 0.5rem rgba(37,113,221,0); } }
+@keyframes glowN { 0% { box-shadow: 0 0 0 0 rgba(31,95,224,.55); } 100% { box-shadow: 0 0 0 0.5rem rgba(31,95,224,0); } }
 /* 분석·가이드북 만드는 화면 */
 .calc .meter { width: min(15rem, 80%); height: 0.375rem; border-radius: 0.4562rem; background: var(--hair); overflow: hidden; margin-top: -0.5rem; }
 .calc .meter i { display: block; height: 100%; width: 100%; background: var(--blue); transform: scaleX(0); transform-origin: left; transition: transform .6s cubic-bezier(.3,.7,.3,1); }
@@ -579,7 +579,7 @@ html.ios26 .foot, html.ios26 .board { bottom: calc(max(0.75rem, env(safe-area-in
 .swph .phfr { position: absolute; inset: 0; aspect-ratio: auto; margin: 0; }
 .swph .phcr { position: absolute; right: 0.5rem; bottom: 0.375rem; padding: 0; max-width: 80%; text-align: right; color: rgba(255,255,255,.85); text-shadow: 0 1px 2px rgba(0,0,0,.5); }
 .swph .phlb { left: auto; right: 0.625rem; }
-.swkd { position: absolute; left: 0.75rem; top: 0.75rem; z-index: 2; display: inline-flex; align-items: center; gap: 0.25rem; font-size: 0.75rem; font-weight: 700; padding: 0.1875rem 0.5625rem; border-radius: 0.625rem; background: rgba(10,31,51,.62); color: #fff; -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px); white-space: nowrap; }
+.swkd { position: absolute; left: 0.75rem; top: 0.75rem; z-index: 2; display: inline-flex; align-items: center; gap: 0.25rem; font-size: 0.75rem; font-weight: 700; padding: 0.1875rem 0.5625rem; border-radius: 0.625rem; background: rgba(22,23,26,.62); color: #fff; -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px); white-space: nowrap; }
 .swkd svg { width: 0.875rem; height: 0.875rem; flex: none; stroke: currentColor; fill: none; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
 .swinf { flex: none; padding: 0.75rem 1rem 0.875rem; display: flex; flex-direction: column; gap: 0.3125rem; }
 .swinf .nm { margin: 0; font-size: 1.4375rem; font-weight: 700; letter-spacing: -.03em; line-height: 1.25; }
@@ -781,9 +781,18 @@ body { background: transparent; }
 /* 11/20 질문 간격을 다른 질문형 화면(방법·입력·수정)에도: 묶음 사이 = clamp, 제목 묶음 아래만 4px 덜(설명 글줄 아래 빈 줄) */
 .scr:not(.qs):has(> .qh) { --scr-g: clamp(1.25rem, 4.5svh, 2.75rem); gap: var(--scr-g); }
 .scr:not(.qs) > .qh + * { margin-top: -0.25rem; }
+/* 11/20 코발트 × 잉크 블랙: 배경 = 가이드북과 같은 깊이 그라디언트(가운데 → 55% → 가장자리, 화면 고정 .bgfx)
+   밝은 = 가운데 밝고 바깥 살짝 어둡게 · 다크 = 동우님 다크 A(Midnight Embrace 연하게)를 잉크 블랙 무채색으로 */
+html { background: #EFEFF1; } body { background: transparent; }
+.bgfx { display: block; position: fixed; inset: 0; z-index: -1; pointer-events: none; background: radial-gradient(ellipse at 50% 50%, #F4F4F5, #EFEFF1 55%, #E9EAEC); }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --canvas: #1D1E22; --paper: #27282C; --float: #2C2D31; --tile: rgba(42,43,47,.92); --field: #1C1D20; --glass: rgba(39,40,44,.72); background: #18191C; }
+  :root:not([data-theme="light"]) .bgfx { background: radial-gradient(ellipse at 50% 50%, #18191C, #1D1E22 55%, #232428); } }
+html:root[data-theme="dark"] { --canvas: #1D1E22; --paper: #27282C; --float: #2C2D31; --tile: rgba(42,43,47,.92); --field: #1C1D20; --glass: rgba(39,40,44,.72); background: #18191C; }
+:root[data-theme="dark"] .bgfx { background: radial-gradient(ellipse at 50% 50%, #18191C, #1D1E22 55%, #232428); }
 </style>
 </head>
 <body>
+<div class="bgfx" aria-hidden="true"></div>
 <div class="wrap">
   <header class="bar">
     <button class="ib" id="backBtn" aria-label="뒤로"><svg viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7"/></svg></button>
@@ -2075,6 +2084,6 @@ else if (qsS && (/^q[0-9]$/.test(qsS) || ['intro', 'result', 'types', 'method', 
 } else if (location.hash) route(); else render();
 S.booted = true;
 </script>
-<script src="trim.js?v=013a5fdb"></script>
+<script src="trim.js?v=08a929b3"></script>
 </body>
 </html>
