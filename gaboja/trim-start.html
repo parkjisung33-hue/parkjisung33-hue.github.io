@@ -637,7 +637,7 @@ html.fit, html.fit body { height: 100%; overflow: hidden; overscroll-behavior: n
 /* :root가 이미 안전 영역(노치·홈 막대)만큼 위아래 여백을 가짐 → 높이에서 빼야 아이폰에서 아래 버튼이 안 잘림 */
 html.fit .wrap { height: calc(100vh - env(safe-area-inset-top, 0px) - env(safe-area-inset-bottom, 0px)); height: calc(var(--app-h, 100dvh) - env(safe-area-inset-top, 0px) - env(safe-area-inset-bottom, 0px)); min-height: 0; overflow: hidden; padding-bottom: 0.75rem; }
 html.introfit .bar { display: none; }   /* 11/18 14: 첫 화면은 뒤로 버튼이 없으니 위 막대를 빼고 위·아래 여백을 같게(둘 다 1.25rem + 안전 영역) */
-html.introfit .wrap { padding-top: 1.25rem; padding-bottom: 1.25rem; }
+html.introfit .wrap { padding-top: clamp(1.75rem, 7svh, 4rem); padding-bottom: clamp(1.5rem, 5svh, 3rem); }   /* 11/20 동우님: 꽉 채우지 말고 맨 위·맨 아래 여백 넉넉히 */
 html.ios26.fit .wrap { padding-bottom: 4.25rem; }
 html.fit main, html.fit .scr { min-height: 0; }
 html.fit .scr.intro { padding-top: 0; gap: 0; }
@@ -1144,10 +1144,10 @@ function depRun(list) {
 function depFit() { // 11/18 T1: 줄 높이는 고정, 남은 높이에 들어가는 줄만 보임 (늘어나지 않음). '나' 줄은 항상, 그것도 안 들어가면 안내판 숨김
   const mid = document.querySelector('.scr:not(.leaving) .intro-mid'), dep = mid && mid.querySelector('.dep'); if (!dep) return;
   const rows = [...dep.querySelectorAll('.dr[data-r]')], mine = mid.querySelector('.mine');
-  rows.forEach(r => r.hidden = false); dep.hidden = false;
+  const cap = innerHeight < 740 ? 2 : 3;   // 11/20 동우님: 큰 폰도 '나' 포함 최대 4줄, 작은 폰 3줄 — 남는 높이는 위·아래 여백으로
+  rows.forEach((r, i) => r.hidden = i >= cap); dep.hidden = false;
   const cs = getComputedStyle(mid), room = mid.clientHeight - parseFloat(cs.paddingTop) - parseFloat(cs.paddingBottom) - (mine ? mine.offsetHeight + 12 : 0);
-  let n = rows.length; for (; n > 0 && dep.scrollHeight > room + 1; n--) rows[n - 1].hidden = true;
-  if (n > 2) rows[n - 1].hidden = true;   // 11/20 보드: 꽉 채우지 않고 한 줄 덜 → 안내판이 숨 쉬게
+  for (let n = cap; n > 0 && dep.scrollHeight > room + 1; n--) rows[n - 1].hidden = true;
   if (dep.scrollHeight > room + 1) dep.hidden = true;
 }
 function setAppH() { document.documentElement.style.setProperty('--app-h', window.innerHeight + 'px'); }
