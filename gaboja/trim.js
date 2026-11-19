@@ -302,7 +302,7 @@
     'html.trim-on body{padding-bottom:150px!important}',
     'html.trim-mode *{cursor:crosshair!important;-webkit-user-select:none!important;user-select:none!important;-webkit-touch-callout:none!important}',
     '#trimVer{font-size:10px;opacity:.5;align-self:center}',
-    '#trimPick{max-height:62vh;overflow:auto}',
+    '#trimPick{max-height:46vh;overflow:auto;padding:8px 10px!important}','#trimPick .ar,#trimPick .mv{margin-top:3px!important}','#trimPick .ar button,#trimPick .mv button{padding:5px 0!important}',
     '#trimPick.top{top:calc(8px + env(safe-area-inset-top,0px));bottom:auto!important}',
     '#trimPick .tabs{display:flex;gap:6px;margin-bottom:8px}',
     '#trimPick .tabs button{flex:1;padding:8px;background:#EEF0F3;color:#5B6B7A}',
