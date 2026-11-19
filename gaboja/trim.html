@@ -1374,7 +1374,7 @@ html[data-theme="dark"][data-grp="HE"] { --me-soft: color-mix(in srgb, #C17192 2
 
 <script src="weather.js"></script>
 <script src="types.js"></script>
-<script src="chars.js?v=fit2"></script>
+<script src="chars.js?v=fit3"></script>
 <script>/* 공유용 샘플(#sample=키): 엔진·장소 DB·샘플 입력을 바로 불러와 그 자리에서 일정을 만듦 (저장 안 함) */ if (/#sample=[\w-]+/.test(location.hash)) document.write('<script src="gen-data.js?v=8"><\/script><script src="gen.js?v=9"><\/script><script src="samples.js?v=2"><\/script>');</script>
 <script>
 // k: m 이동 · p 장소 · f 식사 · x 꼭 지킬 것 · w 기상·취침(자세히에서만) · u 직접 추가
@@ -1532,7 +1532,7 @@ setTimeout(() => {
   document.body.appendChild(a); requestAnimationFrame(() => a.classList.add('on'));
   a.onclick = e => { const b = e.target.closest('[data-a]'); if (!b) return; if (b.dataset.a === 'dark') setTheme('dark', true); else { try { localStorage.setItem('gaboja-theme', 'light'); } catch (_) {} } a.classList.remove('on'); setTimeout(() => a.remove(), 300); };
 }, 2800);
-try { const ty = JSON.parse(localStorage.getItem('gaboja-type')); if (ty && /^[LH][SE][FR][JP]$/.test(ty.code)) { document.documentElement.dataset.grp = ty.code.slice(0, 2); const tn = document.getElementById('typeN'); tn.textContent = ty.code; tn.hidden = false; const av = document.getElementById('typeAv'); if (av && window.GABOJA_CHAR) { av.innerHTML = GABOJA_CHAR(ty.code, { bg: false }); if (window.GABOJA_FIT) requestAnimationFrame(() => GABOJA_FIT(av.querySelector('svg'), 6)); av.dataset.c = ty.code; av.classList.add('gfx'); av.hidden = false; } const TY = window.GABOJA_TYPES && window.GABOJA_TYPES[ty.code]; document.getElementById('typeNm').textContent = TY && TY.name ? TY.name : '내 여행 유형'; document.querySelector('[data-m="type"]').href = 'start.html?from=app#r-' + ty.code; } } catch (_) {}
+try { const ty = JSON.parse(localStorage.getItem('gaboja-type')); if (ty && /^[LH][SE][FR][JP]$/.test(ty.code)) { document.documentElement.dataset.grp = ty.code.slice(0, 2); const tn = document.getElementById('typeN'); tn.textContent = ty.code; tn.hidden = false; const av = document.getElementById('typeAv'); if (av && window.GABOJA_CHAR) { av.innerHTML = GABOJA_CHAR(ty.code, { bg: false }); if (window.GABOJA_FIT) requestAnimationFrame(() => GABOJA_FIT(av.querySelector('svg'), 1.5)); av.dataset.c = ty.code; av.classList.add('gfx'); av.hidden = false; } const TY = window.GABOJA_TYPES && window.GABOJA_TYPES[ty.code]; document.getElementById('typeNm').textContent = TY && TY.name ? TY.name : '내 여행 유형'; document.querySelector('[data-m="type"]').href = 'start.html?from=app#r-' + ty.code; } } catch (_) {}
 document.querySelector('.pill .ttl b').textContent = TRIP_TITLE;
 
 $('#themeSeg').onclick = e => { const b = e.target.closest('[data-th]'); if (b) setTheme(b.dataset.th, true); };

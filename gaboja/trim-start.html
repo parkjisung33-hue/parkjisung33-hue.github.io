@@ -715,7 +715,7 @@ body { background: transparent; }
 .pass .city { margin: 0; font-size: 1.875rem; font-weight: 700; letter-spacing: -.045em; line-height: 1.15; }
 .pass .flaps { gap: 0.1875rem; }
 .pass .flaps .fl { width: 1.375rem; height: 1.8125rem; font-size: 0.9375rem; border-radius: 0.25rem; }
-.pass .av.sm { width: 7.25rem; height: 7.25rem; flex: none; }   /* 11/20 #4: 6.25 → 7.25rem, 그림은 fitChar로 칸에 꽉 */
+.pass .av.sm { width: 8.5rem; height: 8.5rem; flex: none; margin: -0.5rem 0; }   /* 11/20 #4: 6.25 → 7.25rem, 그림은 fitChar로 칸에 꽉 */
 .pass .ft { display: grid; grid-template-columns: 1fr auto 1fr; gap: 0.625rem; align-items: end; padding: 0.625rem 1.125rem 1rem; }
 .pass .ft small { display: block; font: 700 0.65625rem var(--lat); letter-spacing: .1em; color: var(--sub); }
 .pass .ft b { display: block; font: 800 1.625rem/1.1 var(--lat); letter-spacing: -.02em; }
@@ -838,9 +838,10 @@ html[data-theme="dark"][data-grp="HE"] { --me-soft: color-mix(in srgb, #C17192 2
 .pair .mini .pf { display: none; }
 .pair .mini .t3 { grid-area: t3; padding: 0.125rem 0.375rem 0.125rem; align-self: start; white-space: nowrap !important; overflow: hidden !important; font-size: 0.78125rem; }
 /* 11/20 동우님: 결과 탑승권 머리 — 캐릭터가 글자판과 가운데 정렬(fitChar) · 칸 140 → 112px 정사각형 · 위아래 여백 줄여 촘촘하게 */
-.rt .rtop { grid-template-columns: minmax(0,1fr) 6.5rem; padding: 0.5rem 1.125rem 0; align-items: center; }
-.ticket .av.hero { width: 6.5rem; height: 6.5rem; margin: -0.875rem 0; overflow: visible; padding: 0; gap: 0; }   /* padding 0: 첫 화면 .hero(위 0.5rem)가 이 칸에도 걸려 캐릭터가 8px 내려가 있던 것 */   /* 캐릭터는 크게 두고, 칸 높이는 글자판 블록(72px)에 맞춤 → 머리 띠 약 40px 줄어듦 */
+.rt .rtop { grid-template-columns: minmax(0,1fr) 8.25rem; padding: 0.5rem 1.125rem 0; align-items: center; }
+.ticket .av.hero { width: 8.25rem; height: 8.25rem; margin: -1.25rem 0; overflow: visible; padding: 0; gap: 0; }   /* padding 0: 첫 화면 .hero(위 0.5rem)가 이 칸에도 걸려 캐릭터가 8px 내려가 있던 것 */   /* 캐릭터는 크게 두고, 칸 높이는 글자판 블록(72px)에 맞춤 → 머리 띠 약 40px 줄어듦 */
 .ticket.rt .rband { padding-bottom: 0.625rem; }
+.av svg { overflow: visible; }   /* 11/20 바닥 그림자·이펙트가 잘린 viewBox 밖으로 조금 나가도 보이게 */
 </style>
 </head>
 <body>
@@ -868,7 +869,7 @@ html[data-theme="dark"][data-grp="HE"] { --me-soft: color-mix(in srgb, #C17192 2
 
 <script>/* 11/15 #23: 아이폰 사파리 26(떠 있는 아래 주소창) = 아래 고정 버튼을 그만큼 올림 */ (function () { try { const ua = navigator.userAgent, ios = /iP(hone|od|ad)/.test(ua) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1), solo = navigator.standalone === true || matchMedia('(display-mode: standalone)').matches, v = +((ua.match(/Version\/(\d+)/) || [])[1] || 0); if (ios && !solo && v >= 26) document.documentElement.classList.add('ios26'); } catch (_) {} })();</script>
 <script src="types.js"></script>
-<script src="chars.js?v=fit2"></script>
+<script src="chars.js?v=fit3"></script>
 <script src="gen-data.js"></script>
 <script src="sgg.js"></script>
 <script src="gen.js"></script>
@@ -1148,7 +1149,7 @@ function screen(html, cls = '') {
   if (old && !REDUCED) { const oh = old.offsetHeight, ot = old.offsetTop - window.scrollY; old.style.height = oh + 'px'; old.style.top = ot + 'px'; old.classList.add('leaving', dir < 0 ? 'toR' : 'toL');   /* 11/20 동우님 #1: 나갈 때 높이를 잡아 둠 — 가운데 정렬 여백이 접히며 위로 뚝 튀던 것 */ old.setAttribute('aria-hidden', 'true'); old.inert = true; setTimeout(() => old.remove(), 280); }
   else if (old) old.remove();
   const sec = document.createElement('section'); sec.className = `scr ${dir < 0 ? 'back' : ''} ${cls}`; sec.innerHTML = html; m.appendChild(sec);
-  sec.querySelectorAll('.av svg').forEach(v => fitChar(v, v.closest('.pass') ? 4 : 7));   // 11/20 캐릭터 = 칸 가운데(옆 글자와 정렬)
+  sec.querySelectorAll('.av svg').forEach(v => fitChar(v, v.closest('.pass, .rtop') ? 1.42 : 1.55));   // 11/20 캐릭터 = 칸 가운데(옆 글자와 정렬)
   return sec;
 }
 const REDUCED = matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -1290,7 +1291,7 @@ function pairSheet(c, why, good) {
     ${(t.scenes || []).length ? `<div class="near"><span>이런 여행을 해요</span><div>${t.scenes.slice(0, 3).map(x => `<b>${esc(x)}</b>`).join('')}</div></div>` : ''}
     <button class="cta go2" id="rxGo"><span>이 유형 자세히 보기 ${ICON.arrow}</span></button>
     <button class="cta ghost" id="rxClose" style="margin-top:.5rem">닫기</button>`;
-  rx.querySelectorAll('.av svg').forEach(v => fitChar(v, 7));
+  rx.querySelectorAll('.av svg').forEach(v => fitChar(v, 1.55));
   sc.hidden = false; void rx.offsetWidth; sc.classList.add('on'); rx.classList.add('on');
   $('#rxGo').onclick = () => { closeRx(); setTimeout(() => openType(c), 240); };
   $('#rxClose').onclick = closeRx; sc.onclick = closeRx;
@@ -1347,7 +1348,7 @@ const AV = (c, k) => window.GABOJA_CHAR ? `<div class="av gfx${k ? ' ' + k : ''}
 /* 11/18 D-2·D-3: 배경 칸 없이 캐릭터만 (fx = 등장 이펙트 켬). 묶음 색 = chars.js G 값 */
 const GRPC = { LS: { bg: '#E4F3F5', a: '#6099A0' }, LE: { bg: '#FEF2F5', a: '#C78297' }, HS: { bg: '#E4EEF7', a: '#6086A9' }, HE: { bg: '#FFE7EF', a: '#C17192' } };   // 11/20 파스텔
 /* 11/20 동우님 #4: 짐 캐릭터는 키(38~73)·좌우가 제각각이라 같은 칸에 넣으면 낮게/높게 보임 → 그림 둘레에 같은 여백을 두고 정사각형으로 잘라 가운데에 (발급 완료 탑승권) */
-function fitChar(svg, pad) { if (window.GABOJA_FIT) GABOJA_FIT(svg, pad == null ? 4 : pad); }
+function fitChar(svg, k) { if (window.GABOJA_FIT) GABOJA_FIT(svg, k == null ? 1.45 : k); }
 const AVnb = (c, k, fx) => window.GABOJA_CHAR ? `<div class="av${fx ? ' gfx' : ''} ${k || ''}"${fx ? ` data-c="${c}" data-fxd="650"` : ''}>${GABOJA_CHAR(c, { bg: false })}</div>` : '';
 const grpIcon = c => `<svg viewBox="0 0 24 24" aria-hidden="true">${GI[c.slice(0, 2)]}</svg>`;
 const LMEAN = { L: '로컬', H: '핫플', S: '구경', E: '즐기기', F: '알차게', R: '여유롭게', J: '계획형', P: '즉흥형' };
