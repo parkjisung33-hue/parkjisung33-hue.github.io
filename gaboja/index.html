@@ -1044,7 +1044,7 @@ html[data-grp="HS"] { --stamp-a: var(--g-hs-a); --stamp-lt: var(--g-hs-lt); } ht
 .drawer .tcard .tav svg > rect:first-child { display: none; }
 .drawer .tcard .tav svg > g > ellipse:nth-child(-n+2) { display: none; }
 /* 피드백5: 탑승권 반원 홈 = 진짜 구멍(mask) — 바탕·안쪽 링·그림자(drop-shadow)가 모두 홈 모양을 따라감. 홈 높이(--ny)는 JS(fixNotches)가 점선 위치로 넣음 */
-.pass.flycard { --nr: 0.2062rem; --ringc: var(--glass-edge); --fcbg: var(--glass); background: none !important; -webkit-backdrop-filter: none; backdrop-filter: none; border: 0; box-shadow: none !important; animation: none !important;
+.pass.flycard { --nr: 0.2062rem; --ringc: var(--glass-edge); --fcbg: var(--glass); background: none !important; -webkit-backdrop-filter: none; backdrop-filter: none; border: 0; box-shadow: none; animation: none !important;
   filter: drop-shadow(0 0.5rem 0.625rem rgba(24,36,60,.11)) drop-shadow(0 0.0625rem 0.1875rem rgba(24,36,60,.07)); }
 .list .pass.flycard { --fcbg: var(--paper); }
 .pass.flycard.live { --ringc: var(--c, var(--blue)); }
@@ -1194,15 +1194,11 @@ html[data-grp="HS"] { --stamp-a: var(--g-hs-a); --stamp-lt: var(--g-hs-lt); } ht
 /* 7. 탑승권: 편명 칸 오른쪽 정렬 · 살아 있는 탑승권 빛은 바깥으로 은은하게 */
 .flycard .fields .fld:last-child { text-align: right; }
 .flycard .fields .fld:nth-child(2) { text-align: center; }   /* 공항 도착 = 가운데 */
-/* 살아 있는 탑승권 빛: 바깥 테두리에만, 투명도(opacity)만 움직여서 부드럽게(필터 애니메이션은 폰에서 튐)
-   1분마다 화면을 다시 그려도 빛이 처음부터 다시 시작하지 않게 시각에 맞춘 지연(passSync) */
-.pass.flycard.live::before { animation: none; }
-.pass.flycard.live { overflow: visible; }
-.pass.flycard.live::after { content: ""; position: absolute; inset: 0; z-index: -2; border-radius: inherit; pointer-events: none;
-  box-shadow: 0 0 0 1px color-mix(in srgb, var(--c, var(--blue)) 30%, transparent), 0 0 1rem 0.1875rem color-mix(in srgb, var(--c, var(--blue)) 38%, transparent);
-  opacity: 0; will-change: opacity; animation: passOut 2.8s ease-in-out infinite; animation-delay: var(--pd, 0s); }
-@keyframes passOut { 0%, 100% { opacity: 0; } 50% { opacity: 1; } }
-@media (prefers-reduced-motion: reduce) { .pass.flycard.live::after { animation: none; opacity: .5; } }
+/* 살아 있는 탑승권 빛: 바깥 테두리에만 은은하게. 카드 자체의 그림자를 숨 쉬게 함(::after는 '처음 한 번 빛줄기'가 쓰고 있어 겹치면 PC에서 왼쪽에 빈 상자가 보였음 → 11/19 수정)
+   1분마다 화면을 다시 그려도 빛이 처음부터 다시 시작하지 않게 시각에 맞춘 지연(--pd, fitTiles) */
+.pass.flycard.live { animation: passOut 2.8s ease-in-out var(--pd, 0s) infinite !important; }
+@keyframes passOut { 0%, 100% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--c, var(--blue)) 0%, transparent); } 50% { box-shadow: 0 0 1rem 0.1875rem color-mix(in srgb, var(--c, var(--blue)) 30%, transparent); } }
+@media (prefers-reduced-motion: reduce) { .pass.flycard.live { animation: none !important; } }
 
 /* ---------- 11/19 글꼴 A (동우님): 굵은 한글 = IBM Plex Sans KR(700) · 보통·작은·연한 한글 = Pretendard · 영문·숫자 = IBM Plex Sans ---------- */
 :root { --kr-plain: "Pretendard Variable", Pretendard, -apple-system, "Apple SD Gothic Neo", "Malgun Gothic", system-ui, sans-serif; }
