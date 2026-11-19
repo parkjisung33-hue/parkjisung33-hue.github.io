@@ -736,9 +736,10 @@ body { background: transparent; }
 /* ---------- 11/19 여백 조금 더 (동우님): 좌우 1.375 → 1.625rem(.wrap) · 화면 안 묶음 사이 1.25 → 1.5rem · 맨 위 숨 ---------- */
 .scr { gap: 1.5rem; padding-top: 0.75rem; }
 /* 11/19 한 줄로 (동우님): 카드 속 짧은 설명·만드는 중 목록·결과 미니 카드는 한 줄 + 넘치면 '…' */
-.pk span { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 100%; }
-.ticks div > span:last-child { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-width: 0; }
-.pair .mini .t3 { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+/* (11/19 최종 검수: '…' 대신 들어가면 한 줄, 안 들어가면 자연스럽게 줄바꿈 — 내용이 잘리지 않게) */
+.pk span, .ticks div > span:last-child, .mini .t3, .pair .mini .t3 { white-space: normal !important; overflow: visible !important; text-overflow: clip !important; word-break: keep-all; min-width: 0; }
+/* 작은 글자 바닥 = 약 11px (360폭) */
+.scr small, .ticket h4, .ans h4, .mini .t1 em, .board .lb span, .rx .near span, .rx .rh .step, .gn, .flaps.big .lb, .phgo, .phlb, .rec, .mini .t3 { font-size: max(0.8125rem, 11px) !important; }
 
 /* 11/19 사진 고르기: 사진 불러오는 동안 은은한 반짝임 + 사진은 다 받으면 부드럽게 나타남 */
 .swph::after { content: ""; position: absolute; inset: 0; z-index: 1; pointer-events: none; opacity: 0; transition: opacity .3s ease;
@@ -787,7 +788,7 @@ body { background: transparent; }
 
 <script>/* 11/15 #23: 아이폰 사파리 26(떠 있는 아래 주소창) = 아래 고정 버튼을 그만큼 올림 */ (function () { try { const ua = navigator.userAgent, ios = /iP(hone|od|ad)/.test(ua) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1), solo = navigator.standalone === true || matchMedia('(display-mode: standalone)').matches, v = +((ua.match(/Version\/(\d+)/) || [])[1] || 0); if (ios && !solo && v >= 26) document.documentElement.classList.add('ios26'); } catch (_) {} })();</script>
 <script src="types.js"></script>
-<script src="chars.js"></script>
+<script src="chars.js?v=pastel2"></script>
 <script src="gen-data.js"></script>
 <script src="sgg.js"></script>
 <script src="gen.js"></script>
@@ -1648,7 +1649,7 @@ function phMount(host, p, o) {
   const steps = [];
   if (p.ph) steps.push('ph'); if (PH_KEY_G() && !p.ng) steps.push('g'); if (o.sv !== false && PH_KEY_M() && p.ll) steps.push('sv');
   host.dataset.ld = '1';   // 11/19: 사진 불러오는 중 표시(.swph 반짝임)
-  setTimeout(() => { if (host.isConnected) host.dataset.ld = ''; }, 6000);   // 거리 풍경 등 load 신호가 안 오는 경우 대비
+  clearTimeout(host._ldT); host._ldT = setTimeout(() => { if (host.isConnected) host.dataset.ld = ''; }, 6000);   // 거리 풍경 등 load 신호가 안 오는 경우 대비(다시 불러오면 옛 타이머 지움)
   const none = () => { host.hidden = true; host.dataset.on = ''; host.dataset.ld = ''; host.innerHTML = ''; o.onNone && o.onNone(); };
   const show = (src, credit, link, ref) => {   // ref: 구글 사진은 키가 사이트 제한이라 출처 주소를 보내야 함
     const im = new Image(); im.alt = ''; im.decoding = 'async'; im.loading = 'lazy'; im.referrerPolicy = ref ? 'strict-origin-when-cross-origin' : 'no-referrer';

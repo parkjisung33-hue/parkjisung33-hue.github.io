@@ -1,17 +1,20 @@
+// 11/19 파스텔 팔레트 확정(동우님): 메인 #9DD2D8·#FADCE4·#9DC3E2·#FFB5CC + 몸·바탕 그라디언트. 옛 색 = history/2026-11-19_chars_파스텔전.js
 // 가보자 짐 캐릭터 16 (2026-11-15 확정 v7 → 스타일 3: 테두리 없음·3톤·약한 입체, p9h) — 16유형마다 다른 여행 짐. 정본 시안 = preview/2026-11-15_9_짐캐릭터16_시안_v7.html
 // 사용: GABOJA_CHAR(code, {bg:true}) → <svg> 문자열 · GABOJA_CHAR_BG(code) → 묶음 바탕색 · GABOJA_CHAR_ITEM(code) → 짐 이름
 (() => {
 /* ===== 짐 캐릭터 16 (2026-11-15 v3) — 더 단순하게: 점 눈 · 볼터치·입 없음 · 선 하나 굵기 · 묶음 색 하나 ===== */
 const K = '#15171A', W = '#FFFFFF';
-const G = [
-  { name: '로컬 탐험형', bg: '#E6F2EC', a: '#2F9E6E' },
-  { name: '취향 수집형', bg: '#FBEEE2', a: '#E0812E' },
-  { name: '명소 정복형', bg: '#E7ECFB', a: '#3B5BDB' },
-  { name: '힐링 충전형', bg: '#F8E9EF', a: '#D45C84' }
+const G = [   // 11/19 파스텔 시안(동우님 팔레트): 메인 = 위 4색, 몸·바탕 그라디언트 = 아래 동그라미 4개
+  { name: '로컬 탐험형', bg: '#E4F3F5', a: 'url(#vzals)', grad: ['#9DD2D8', '#9DC3E2'], bgGrad: ['#E2F3F5', '#E3EDF8'] },
+  { name: '취향 수집형', bg: '#FEF2F5', a: 'url(#vzale)', grad: ['#FADCE4', '#FFC6D7'], bgGrad: ['#FFFAFB', '#FFEEF3'] },
+  { name: '명소 정복형', bg: '#E4EEF7', a: 'url(#vzahs)', grad: ['#9DC3E2', '#B8CCE0'], bgGrad: ['#E3EDF8', '#F6EEF4'] },
+  { name: '힐링 충전형', bg: '#FFE7EF', a: 'url(#vzahe)', grad: ['#FFB5CC', '#E9BCE0'], bgGrad: ['#FFE6EE', '#F5E5F3'] }
 ];
+const GK = ['LS', 'LE', 'HS', 'HE'];
 const eyes = (x, y, g = 10) => `<circle cx="${x-g/2}" cy="${y}" r="2.1" fill="${K}" stroke="none"/><circle cx="${x+g/2}" cy="${y}" r="2.1" fill="${K}" stroke="none"/>`;
 const legs = (x, y) => `<path d="M${x-6} ${y} v6 h-3 M${x+6} ${y} v6 h3" fill="none"/>`;
-const wrap = (bg, body) => `<svg viewBox="0 0 100 92"><rect width="100" height="92" fill="${bg}"/><g stroke="${K}" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">${body}</g></svg>`;
+const DEFS = g => { const k = GK[G.indexOf(g)].toLowerCase(); /* 아이디 소문자(soft()가 fill 값을 소문자로 바꿈) */ return `<defs><linearGradient id="vza${k}" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="${g.grad[0]}"/><stop offset="1" stop-color="${g.grad[1]}"/></linearGradient><linearGradient id="vzb${k}" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="${g.bgGrad[0]}"/><stop offset="1" stop-color="${g.bgGrad[1]}"/></linearGradient></defs>`; };
+const wrap = (bg, body, g) => `<svg viewBox="0 0 100 92"><rect width="100" height="92" fill="${bg === 'none' || !g ? bg : 'url(#vzb' + GK[G.indexOf(g)].toLowerCase() + ')'}"/><g stroke="${K}" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">${body}</g></svg>`;
 const C = [
  // 로컬 탐험형
  ['LSFJ', '골목 탐험대장', '나침반', g => `<rect x="46" y="14" width="8" height="6" rx="2" fill="${W}"/><circle cx="50" cy="44" r="23" fill="${W}"/><circle cx="50" cy="44" r="18.5" fill="none" stroke-width="1.4"/><path d="M50 25.5 v3 M50 59.5 v3 M31.5 44 h3 M65.5 44 h3" stroke-width="1.6"/><text x="50" y="35" text-anchor="middle" font-size="7" font-weight="800" fill="${K}" stroke="none" font-family="Pretendard Variable, sans-serif">N</text><g class="fx-ndl"><path d="M50 37 L54 46 L46 46 Z" fill="${g.a}" stroke-width="1.6"/><path d="M50 55 L54 46 L46 46 Z" fill="${W}" stroke-width="1.6"/><circle cx="50" cy="46" r="1.6" fill="${K}" stroke="none"/></g>${eyes(50,52,22)}${legs(50,67)}`],
@@ -45,13 +48,14 @@ const grp = code => G[Math.floor(IDX[code] / 4)];
 /* 11/15: 크기 맞춤 — 외곽 상자 면적이 비슷하게(부분 보정, 0.88~1.12배) · 가로 가운데 · 바닥선 y77로 정렬. [배율, x이동, y이동] */
 const NORM = {"LSFJ":[1.091,-4.55,-2.64,50.2],"LSFP":[1.12,-6.0,-3.64,76.2],"LSRJ":[1.016,-1.83,1.8,56.9],"LSRP":[1.008,-0.39,5.94,76.6],"LEFJ":[0.993,0.34,1.52,63.6],"LEFP":[1.108,-5.38,0.57,66.5],"LERJ":[0.996,0.18,5.26,67.7],"LERP":[0.935,3.24,5.93,56.1],"HSFJ":[1.061,-0.94,-3.65,31.2,35.1],"HSFP":[0.979,1.07,-3.24,50.9],"HSRJ":[1.02,-1.02,2.51,65.3],"HSRP":[0.92,4.0,7.08,58.9],"HEFJ":[1.004,-0.18,8.75,64.3],"HEFP":[0.983,0.85,-1.65,59.0],"HERJ":[0.977,0.18,2.76,72.3],"HERP":[0.962,1.9,2.45,61.6]};
 const body = (code, g) => { const n = NORM[code], b = C[IDX[code]][3](g); return '<g class="fx-b">' + (n ? `<g transform="translate(${n[1]} ${n[2]}) scale(${n[0]})">${b}</g>` : b) + '</g>'; };   // 11/18 T7: fx-* = 등장 이펙트 걸 자리(CSS 없으면 그대로)
-const TONE = { LS: { lt: '#A6E0C3', dk: '#16603F' }, LE: { lt: '#FFCF9C', dk: '#93450F' }, HS: { lt: '#B3C3FF', dk: '#22389A' }, HE: { lt: '#F7BACF', dk: '#8B2A4B' } };
+const TONE = { LS: { lt: '#C4E5E9', dk: '#2F6B73' }, LE: { lt: '#FCE6EC', dk: '#9A4A62' }, HS: { lt: '#C6DBEE', dk: '#2F557A' }, HE: { lt: '#FFD2E0', dk: '#8E3A63' } };   // 11/19 파스텔: lt = 넓은 흰 면, dk = 선·눈
 const FXDEFS = '<defs><filter id="gbjSoft" x="-20%" y="-20%" width="140%" height="150%" color-interpolation-filters="sRGB"><feGaussianBlur in="SourceAlpha" stdDeviation="1.6" result="b"/><feSpecularLighting in="b" surfaceScale="1.6" specularConstant=".42" specularExponent="22" lighting-color="#fff" result="s"><fePointLight x="20" y="-40" z="80"/></feSpecularLighting><feComposite in="s" in2="SourceAlpha" operator="in" result="s2"/><feMerge><feMergeNode in="SourceGraphic"/><feMergeNode in="s2"/></feMerge></filter><radialGradient id="gbjGnd" cx="50%" cy="50%" r="50%"><stop offset="0" stop-color="#1b1f3a" stop-opacity=".22"/><stop offset="1" stop-color="#1b1f3a" stop-opacity="0"/></radialGradient></defs>';
-const ensureFx = () => { if (document.getElementById('gbjFxCss') || !document.body) return; const d = document.createElement('div'); d.innerHTML = '<svg id="gbjFx" width="0" height="0" style="position:absolute;width:0;height:0" aria-hidden="true">' + FXDEFS + '</svg>'; document.body.appendChild(d.firstChild); };
+const ALLDEFS = () => G.map(DEFS).join('').replace(/<\/?defs>/g, '');   // 11/19 리뷰: 묶음 그라디언트 8개는 전역 #gbjFx 한 곳에만(숨은 화면의 캐릭터가 먼저 나와도 색이 빠지지 않게)
+const ensureFx = () => { if (document.getElementById('gbjFxCss') || !document.body) return; const d = document.createElement('div'); d.innerHTML = '<svg id="gbjFx" width="0" height="0" style="position:absolute;width:0;height:0" aria-hidden="true">' + FXDEFS.replace('</defs>', ALLDEFS() + '</defs>') + '</svg>'; document.body.appendChild(d.firstChild); };
 const CACHE = {};
 function soft(code, bg) {
   const key = code + (bg ? 1 : 0); if (CACHE[key]) return CACHE[key];
-  const g = grp(code), t = TONE[code.slice(0, 2)], raw = wrap(bg ? g.bg : 'none', body(code, g));
+  const g = grp(code), t = TONE[code.slice(0, 2)], raw = wrap(bg ? g.bg : 'none', body(code, g), g);
   if (!document.body) return raw;
   ensureFx();
   const host = document.createElement('div'); host.style.cssText = 'position:absolute;left:-9999px;top:0;width:200px;visibility:hidden'; host.innerHTML = raw; document.body.appendChild(host);
@@ -72,7 +76,7 @@ function soft(code, bg) {
     gg.insertAdjacentHTML('afterbegin', `<ellipse cx="${n[4] || 50}" cy="78.6" rx="${rx.toFixed(1)}" ry="3.4" fill="url(#gbjGnd)" stroke="none"/><ellipse cx="${n[4] || 50}" cy="78" rx="${(rx * 0.62).toFixed(1)}" ry="1.5" fill="#1b1f3a" opacity=".12" stroke="none"/>`); }
   const out = svg.outerHTML; host.remove(); return (CACHE[key] = out);
 }
-window.GABOJA_CHAR_LINE = (code, o = {}) => { if (!(code in IDX)) return ''; const g = grp(code); return wrap(o.bg === false ? 'none' : g.bg, body(code, g)).replace('<svg ', '<svg aria-hidden="true" focusable="false" '); };
+window.GABOJA_CHAR_LINE = (code, o = {}) => { if (!(code in IDX)) return ''; ensureFx(); const g = grp(code); return wrap(o.bg === false ? 'none' : g.bg, body(code, g), g).replace('<svg ', '<svg aria-hidden="true" focusable="false" '); };
 window.GABOJA_CHAR = (code, o = {}) => { if (!(code in IDX)) return ''; return soft(code, o.bg !== false).replace('<svg ', '<svg aria-hidden="true" focusable="false" '); };
 window.GABOJA_CHAR_BG = code => code in IDX ? grp(code).bg : '';
 window.GABOJA_CHAR_ITEM = code => code in IDX ? C[IDX[code]][2] : '';
