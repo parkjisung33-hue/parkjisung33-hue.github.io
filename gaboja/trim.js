@@ -180,7 +180,8 @@
     '#trimList .fb{font-size:12px;color:#5B6B7A;background:#F5F6F8;border-radius:10px;padding:10px;margin-bottom:12px;line-height:1.55}',
     '#trimList .btns{display:flex;gap:8px;flex-wrap:wrap}',
     'html.trim-on body{padding-bottom:150px!important}',
-    'html.trim-mode *{cursor:crosshair!important}'
+    'html.trim-mode *{cursor:crosshair!important;-webkit-user-select:none!important;user-select:none!important;-webkit-touch-callout:none!important}',
+    '#trimVer{font-size:10px;opacity:.5;align-self:center}'
   ].join('\n');
 
   var FB = PAGE === 'start'
@@ -196,7 +197,7 @@
       '<div id="trimBar">' +
         '<div class="row k"><span class="kl">상자·이벤트</span><input id="trimK" type="range" min="0" max="150" step="5"><span class="kl" id="trimKv"></span></div>' +
         '<div class="row k"><span class="kl">머리·탭바·버튼</span><input id="trimP" type="range" min="0" max="100" step="5"><span class="kl" id="trimPv"></span></div>' +
-        '<div class="row"><button id="trimMode">✂ 빼기</button><button id="trimGhost">흐리게</button><button id="trimOpen">목록 <span id="trimN">0</span></button><button id="trimFold" style="margin-left:auto">곡률 접기</button></div>' +
+        '<div class="row"><button id="trimMode">✂ 빼기</button><button id="trimGhost">흐리게</button><button id="trimOpen">목록 <span id="trimN">0</span></button><span id="trimVer">v3</span><button id="trimFold" style="margin-left:auto">곡률 접기</button></div>' +
       '</div>' +
       '<div id="trimPick"><div class="t" id="trimPt"></div><div class="g">' +
         '<button id="trimUp">↑ 더 큰 덩어리</button><button id="trimDn">↓ 더 작게</button>' +
@@ -264,7 +265,7 @@
     if (!mode || ours(e.target)) return;
     e.stopPropagation(); e.stopImmediatePropagation();
   }
-  ['mousedown', 'mouseup', 'touchstart', 'touchmove', 'touchend', 'dblclick', 'contextmenu', 'change', 'input', 'keydown'].forEach(function (t) {
+  ['mousedown', 'mouseup', 'touchmove', 'dblclick', 'contextmenu', 'change', 'input', 'keydown'].forEach(function (t) {
     window.addEventListener(t, stop, { capture: true, passive: true });
   });
   ['submit', 'contextmenu', 'dragstart', 'selectstart'].forEach(function (t) {
@@ -287,6 +288,20 @@
     if (d && Math.hypot(e.clientX - d.x, e.clientY - d.y) > 10) return;   // 스크롤
     pickAt(e.clientX, e.clientY);
   }, true);
+  /* 폰 예비 길: touchend로도 고른다(pointerup이 안 오거나 pointercancel로 끝나는 브라우저) */
+  var tdown = null;
+  window.addEventListener('touchstart', function (e) {
+    if (!mode || ours(e.target)) return;
+    var t = e.touches[0]; tdown = t && { x: t.clientX, y: t.clientY };
+    e.stopPropagation(); e.stopImmediatePropagation();
+  }, { capture: true, passive: true });
+  window.addEventListener('touchend', function (e) {
+    if (!mode || ours(e.target)) return;
+    e.stopPropagation(); e.stopImmediatePropagation();
+    var t = e.changedTouches[0], d = tdown; tdown = null;
+    if (!t || (d && Math.hypot(t.clientX - d.x, t.clientY - d.y) > 10)) return;
+    if (Date.now() - lastPick > 400) pickAt(t.clientX, t.clientY);
+  }, { capture: true, passive: true });
   window.addEventListener('click', function (e) {
     if (!mode || ours(e.target)) return;
     e.preventDefault(); e.stopPropagation(); e.stopImmediatePropagation();   // 링크·버튼 동작 막기
