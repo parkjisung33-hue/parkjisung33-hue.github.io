@@ -25,7 +25,7 @@
   --canvas: #EEF0F3; --ink: #0A1F33; --sub: #5B6B7A; --hair: rgba(10,31,51,.09); --on-ink: #FFFFFF;
   --glass: rgba(255,255,255,.62); --glass-hi: rgba(255,255,255,.94); --glass-edge: rgba(255,255,255,.85); --glass-hl: rgba(255,255,255,.9);
   --paper: #FFFFFF; --tile: rgba(255,255,255,.86); --tile-edge: rgba(255,255,255,.98); --field: #FFFFFF;
-  --red: #CF3F66; --amber: #E8912A; --blue: #2F5BFF; --on-blue: #FFFFFF; --blue-soft: rgba(47,91,255,.09);
+  --red: #CF3F66; --amber: #E8912A; --blue: #2571DD; --on-blue: #FFFFFF; --blue-soft: rgba(37,113,221,.09);
   --float: #FFFFFF;   /* 떠 있는 것(시트) */
   --g-ls-soft: #E4F3F5; --g-ls-fill: #C4E5E9; --g-ls-ink: #2F6B73; --g-ls-edge: #6099A0;   /* 11/20 파스텔 */
   --g-le-soft: #FEF2F5; --g-le-fill: #FADCE4; --g-le-ink: #9A4A62; --g-le-edge: #C78297;   /* 11/20 파스텔 */
@@ -45,7 +45,7 @@
   --canvas: #0E1013; --ink: #ECEEF1; --sub: #8F969F; --hair: rgba(255,255,255,.08); --on-ink: #0E1013;
   --glass: rgba(30,33,38,.62); --glass-hi: rgba(255,255,255,.14); --glass-edge: rgba(255,255,255,.08); --glass-hl: rgba(255,255,255,.06);
   --paper: #1B1E23; --tile: rgba(36,40,46,.9); --tile-edge: rgba(255,255,255,.06); --field: #15181C;
-  --red: #F06A8A; --amber: #F0A84A; --blue: #7C95FF; --on-blue: #0A1F33; --blue-soft: rgba(124,149,255,.12);
+  --red: #F06A8A; --amber: #F0A84A; --blue: #49BDF6; --on-blue: #0A1F33; --blue-soft: rgba(73,189,246,.12);
   --green: #4CC08E; --gmix: 38%;   /* 11/18 D: 다크 = 묶음 색 38% + paper */
   --float: #22262C;   /* 11/18 10: 다크 깊이 3단 — 바탕 / 카드 paper(+위 하이라이트·테두리) / 떠 있는 것 */
   --g-ls-soft: color-mix(in srgb, #6099A0 22%, var(--paper)); --g-ls-fill: color-mix(in srgb, #6099A0 30%, var(--paper)); --g-ls-ink: #C4E5E9; --g-ls-edge: #6099A0;
@@ -62,7 +62,7 @@
   --canvas: #0E1013; --ink: #ECEEF1; --sub: #8F969F; --hair: rgba(255,255,255,.08); --on-ink: #0E1013;
   --glass: rgba(30,33,38,.62); --glass-hi: rgba(255,255,255,.14); --glass-edge: rgba(255,255,255,.08); --glass-hl: rgba(255,255,255,.06);
   --paper: #1B1E23; --tile: rgba(36,40,46,.9); --tile-edge: rgba(255,255,255,.06); --field: #15181C;
-  --red: #F06A8A; --amber: #F0A84A; --blue: #7C95FF; --on-blue: #0A1F33; --blue-soft: rgba(124,149,255,.12);
+  --red: #F06A8A; --amber: #F0A84A; --blue: #49BDF6; --on-blue: #0A1F33; --blue-soft: rgba(73,189,246,.12);
   --green: #4CC08E; --gmix: 38%;   /* 11/18 D: 다크 = 묶음 색 38% + paper */
   --float: #22262C;   /* 11/18 10: 다크 깊이 3단 — 바탕 / 카드 paper(+위 하이라이트·테두리) / 떠 있는 것 */
   --g-ls-soft: color-mix(in srgb, #6099A0 22%, var(--paper)); --g-ls-fill: color-mix(in srgb, #6099A0 30%, var(--paper)); --g-ls-ink: #C4E5E9; --g-ls-edge: #6099A0;
@@ -243,7 +243,7 @@ html.ios26 .foot, html.ios26 .board { bottom: calc(max(0.75rem, env(safe-area-in
 
 /* 결과: 큰 탑승권 */
 .ticket { border-radius: var(--r-lg); background: var(--paper); box-shadow: var(--shadow); overflow: hidden; animation: rise .55s cubic-bezier(.2,.8,.2,1) both; }
-@keyframes pulseT { 0% { box-shadow: var(--shadow), 0 0 0 0 rgba(47,91,255,.5); } 40% { box-shadow: var(--shadow), 0 0 0 0.375rem rgba(47,91,255,.28); } 100% { box-shadow: var(--shadow), 0 0 0 0 rgba(47,91,255,0); } }
+@keyframes pulseT { 0% { box-shadow: var(--shadow), 0 0 0 0 rgba(37,113,221,.5); } 40% { box-shadow: var(--shadow), 0 0 0 0.375rem rgba(37,113,221,.28); } 100% { box-shadow: var(--shadow), 0 0 0 0 rgba(37,113,221,0); } }
 .ticket.pulse { animation: pulseT .7s ease-out; }
 @keyframes rise { from { opacity: 0; transform: translateY(1.25rem) scale(.98); } to { opacity: 1; transform: none; } }
 .ticket .hd { padding: 1rem 1.125rem 0; display: flex; justify-content: space-between; align-items: center; font-size: 0.6875rem; font-weight: 700; letter-spacing: .1em; color: var(--sub); }
@@ -446,7 +446,7 @@ html.ios26 .foot, html.ios26 .board { bottom: calc(max(0.75rem, env(safe-area-in
 .rx .go2 span { position: relative; display: flex; align-items: center; gap: 0.5rem; }
 .fl.lock { box-shadow: inset 0 0 0 2px var(--red); transition: box-shadow .3s; }
 .fl.new { animation: flip .38s cubic-bezier(.3,.7,.3,1), glowN 1.2s ease-out .38s; }
-@keyframes glowN { 0% { box-shadow: 0 0 0 0 rgba(47,91,255,.55); } 100% { box-shadow: 0 0 0 0.5rem rgba(47,91,255,0); } }
+@keyframes glowN { 0% { box-shadow: 0 0 0 0 rgba(37,113,221,.55); } 100% { box-shadow: 0 0 0 0.5rem rgba(37,113,221,0); } }
 /* 분석·가이드북 만드는 화면 */
 .calc .meter { width: min(15rem, 80%); height: 0.375rem; border-radius: 0.4562rem; background: var(--hair); overflow: hidden; margin-top: -0.5rem; }
 .calc .meter i { display: block; height: 100%; width: 100%; background: var(--blue); transform: scaleX(0); transform-origin: left; transition: transform .6s cubic-bezier(.3,.7,.3,1); }
@@ -2075,6 +2075,6 @@ else if (qsS && (/^q[0-9]$/.test(qsS) || ['intro', 'result', 'types', 'method', 
 } else if (location.hash) route(); else render();
 S.booted = true;
 </script>
-<script src="trim.js?v=ef8a103d"></script>
+<script src="trim.js?v=013a5fdb"></script>
 </body>
 </html>
