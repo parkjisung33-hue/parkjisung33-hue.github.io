@@ -6,15 +6,69 @@
    저장 = 이 브라우저 localStorage (페이지별) */
 (function () {
   'use strict';
+  /* 11/20 화면별 보드(trim-board.html): 대표 화면마다 따로 저장 · 자간·행간·여백·위치 조절 */
+  var SCREENS = [
+    { g: 'start', s: 'intro', n: '첫 페이지' },
+    { g: 'start', s: 'q3', n: '질문 (4번째)' },
+    { g: 'start', s: 'result', n: '유형 결과' },
+    { g: 'start', s: 'method', n: '일정 만드는 방법' },
+    { g: 'start', s: 'city', n: '입력 — 어디로' },
+    { g: 'start', s: 'date', n: '입력 — 날짜' },
+    { g: 'start', s: 'likes', n: '입력 — 좋아하는 것' },
+    { g: 'start', s: 'swipe', n: '장소 고르기' },
+    { g: 'start', s: 'done', n: '발급 완료' },
+    { g: 'guide', s: 'plan', n: '가이드북 — 일정(요약)' },
+    { g: 'guide', s: 'detail', n: '가이드북 — 상세', act: function () { click('#modeDetail'); } },
+    { g: 'guide', s: 'pass', n: '탑승권', act: function () { var f = document.querySelector('.flycard'); if (f) f.scrollIntoView({ block: 'center' }); } },
+    { g: 'guide', s: 'daysum', n: '하루 일정 요약', act: function () { click('[data-daysum]'); } },
+    { g: 'guide', s: 'tripsum', n: '여행 요약', act: function () { click('[data-m="sum"]'); } },
+    { g: 'guide', s: 'now', n: '길 안내', act: function () { click('[data-v="v-now"]'); } },
+    { g: 'guide', s: 'log', n: '기록', act: function () { click('#tabLog'); } },
+    { g: 'guide', s: 'add', n: '일정 추가', act: function () { click('#addBtn'); } },
+    { g: 'guide', s: 'menu', n: '메뉴', act: function () { click('#menuBtn'); } }
+  ];
+  function click(q) { var e = document.querySelector(q); if (e) e.click(); }
+  function keyOf(g, s) { return 'vztr-trim2-' + g + (s ? '-' + s : ''); }
   var PRE = window.TRIM_PRESET || {};          // 시안 페이지(g1 등)가 정해 둔 곡률·이름
   var PAGE = PRE.page || (/start/.test(location.pathname) ? 'start' : 'guide');
-  var PAGE_TX = PRE.tx || (PAGE === 'start' ? '시작·질문·입력·발급' : '가이드북');
-  var KEY = 'vztr-trim2-' + PAGE, KKEY = 'vztr-trim2-k' + (PRE.page ? '-' + PRE.page : '');   // 11/19 1차안 합침 뒤 새 키(앱 곡률이 이미 30%·8px로 고정됨)
+  var QS = new URLSearchParams(location.search);
+  var SCR = QS.get('scr') || '', SDEF = SCREENS.filter(function (x) { return x.g === PAGE && x.s === SCR; })[0];
+  var PAGE_TX = PRE.tx || (SDEF ? SDEF.n : PAGE === 'start' ? '시작·질문·입력·발급' : '가이드북');
+  var KEY = keyOf(PAGE, SCR), KKEY = 'vztr-trim2-k' + (PRE.page ? '-' + PRE.page : '');   // 11/19 1차안 합침 뒤 새 키(앱 곡률이 이미 30%·8px로 고정됨)
+
+  /* 보드(허브)용: UI 없이 목록·답 글자만 */
+  var ADJ_TX = { ls: '자간', lh: '행간', mt: '위 여백', mb: '아래 여백', gap: '사이 간격', pl: '왼쪽 안쪽', pr: '오른쪽 안쪽', x: '가로 위치', y: '세로 위치' };
+  function fmtV(k, v) { return k === 'ls' ? (+v).toFixed(3).replace(/0+$/, '').replace(/\.$/, '') + 'em' : k === 'lh' ? (v === 0 ? '보통' : (+v).toFixed(2)) : Math.round(v) + 'px'; }
+  function adjLine(it) {
+    return Object.keys(ADJ_TX).filter(function (k) { return it.v && it.v[k] !== it.b[k]; }).map(function (k) {
+      return ADJ_TX[k] + ' ' + fmtV(k, it.b[k]) + '→' + fmtV(k, it.v[k]);
+    }).join(' · ');
+  }
+  function fmtState(st, title) {
+    var lines = [];
+    (st.items || []).forEach(function (it, i) {
+      lines.push('빼기 ' + (i + 1) + '. “' + it.tx + '”' + (it.all ? ' (같은 것 전부 ' + it.n + ')' : ''));
+      lines.push('   ' + it.sel);
+    });
+    (st.adj || []).forEach(function (it, i) {
+      var l = adjLine(it); if (!l) return;
+      lines.push('조절 ' + (i + 1) + '. “' + it.tx + '”' + (it.all ? ' (같은 것 전부 ' + it.n + ')' : '') + ' — ' + l);
+      lines.push('   ' + it.sel);
+    });
+    if (st.memo) lines.push('메모: ' + st.memo);
+    return lines.length ? ['■ ' + title].concat(lines).join('\n') : '';
+  }
+  if (window.TRIM_HUB) {
+    window.VZTR_TRIM = { screens: SCREENS, key: keyOf, fmt: fmtState, count: function (st) { return { cut: (st.items || []).length, adj: (st.adj || []).filter(function (x) { return adjLine(x); }).length, memo: !!st.memo }; } };
+    return;
+  }
   var STATE_CLS = /^(on|off|play|now|live|sel|selected|active|show|shown|open|done|hide|hidden|in|out|go|cur|past|fit|is-|has-|js-|trim-)/;
   function load(k, d) { try { var v = localStorage.getItem(k); return v == null ? d : JSON.parse(v); } catch (e) { return d; } }
   function save(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} }
 
   var S = load(KEY, { items: [], memo: '' });
+  if (!S.adj) S.adj = [];
+  var scope = 'all';                             // 조절 범위: 'all' 같은 것 전부 / 'one' 이것만
   var K = load(KKEY, PRE.k != null ? PRE.k : 1);   // 기본 = 지금 앱 그대로(100%)
   var P = load(KKEY + '-pill', PRE.p != null ? PRE.p : 1);
   var ghost = false, mode = false, pick = null;
@@ -140,8 +194,73 @@
     }).join('\n');
     hideCss.textContent = css;
     var n = document.getElementById('trimN');
-    if (n) n.textContent = S.items.length;
+    if (n) n.textContent = S.items.length + S.adj.filter(function (x) { return adjLine(x); }).length;
     save(KEY, S);
+  }
+
+  /* ---------- 조절: 자간·행간·여백·위치 → 선택자별 CSS ---------- */
+  var adjCss;
+  var ADJ_CSS = { ls: function (v) { return 'letter-spacing:' + v + 'em'; }, lh: function (v) { return 'line-height:' + (v === 0 ? 'normal' : v); },
+    mt: function (v) { return 'margin-top:' + v + 'px'; }, mb: function (v) { return 'margin-bottom:' + v + 'px'; },
+    gap: function (v) { return 'gap:' + v + 'px'; }, pl: function (v) { return 'padding-left:' + v + 'px'; }, pr: function (v) { return 'padding-right:' + v + 'px'; } };
+  function applyAdj() {
+    adjCss.textContent = S.adj.map(function (it) {
+      var d = Object.keys(ADJ_CSS).filter(function (k) { return it.v[k] !== it.b[k]; }).map(function (k) { return ADJ_CSS[k](it.v[k]) + '!important'; });
+      if (it.v.x || it.v.y) d.push('translate:' + (it.v.x || 0) + 'px ' + (it.v.y || 0) + 'px!important');
+      return d.length ? it.sel + '{' + d.join(';') + '}' : '';
+    }).join('\n');
+    applyHide();
+  }
+  function px(v) { var n = parseFloat(v); return isNaN(n) ? 0 : n; }
+  function baseOf(el) {
+    var cs = getComputedStyle(el), fs = px(cs.fontSize) || 16;
+    var ls = cs.letterSpacing === 'normal' ? 0 : Math.round(px(cs.letterSpacing) / fs * 1000) / 1000;
+    var lh = cs.lineHeight === 'normal' ? 0 : Math.round(px(cs.lineHeight) / fs * 100) / 100;
+    var flex = /flex|grid/.test(cs.display);
+    return { ls: ls, lh: lh, mt: Math.round(px(cs.marginTop)), mb: Math.round(px(cs.marginBottom)), gap: flex ? Math.round(px(cs.rowGap) || px(cs.columnGap)) : null,
+      pl: Math.round(px(cs.paddingLeft)), pr: Math.round(px(cs.paddingRight)), x: 0, y: 0 };
+  }
+  function adjSel() { var a = selAll(pick); return scope === 'all' && a && safeCount(a) > 1 ? a : selOne(pick); }
+  function adjItem(make) {
+    if (!pick) return null;
+    var sel = adjSel(), it = S.adj.filter(function (x) { return x.sel === sel; })[0];
+    if (!it && make) {
+      var b = baseOf(pick);
+      it = { sel: sel, tx: label(pick), all: sel !== selOne(pick), n: safeCount(sel) || 1, scr: screenTx(), b: b, v: JSON.parse(JSON.stringify(b)) };
+      S.adj.push(it);
+    }
+    return it;
+  }
+  var STEP = { ls: 0.005, lh: 0.05, mt: 2, mb: 2, gap: 2, pl: 2, pr: 2, x: 2, y: 2 };
+  function bump(k, dir) {
+    var it = adjItem(true); if (!it) return;
+    if (k === 'lh' && it.v.lh === 0) it.v.lh = 1.2;   // '보통' → 1.2부터
+    if (k === 'gap' && it.v.gap == null) return;
+    it.v[k] = Math.round((it.v[k] + dir * STEP[k]) * 1000) / 1000;
+    applyAdj(); paintAdj(); setTimeout(function () { if (pick) boxTo(pick); }, 30);
+  }
+  function resetAdj() {
+    var it = adjItem(false); if (!it) return;
+    S.adj.splice(S.adj.indexOf(it), 1); applyAdj(); paintAdj(); setTimeout(function () { if (pick) boxTo(pick); }, 30);
+  }
+  function paintAdj() {
+    if (!pick) return;
+    var it = adjItem(false), b = it ? it.v : baseOf(pick), base = it ? it.b : b;
+    ['ls', 'lh', 'mt', 'mb', 'gap', 'pl', 'pr'].forEach(function (k) {
+      var el = document.getElementById('trimA-' + k); if (!el) return;
+      var row = el.closest('.ar');
+      if (k === 'gap') row.style.display = b.gap == null ? 'none' : '';
+      if (b[k] == null) return;
+      el.textContent = fmtV(k, b[k]);
+      el.classList.toggle('ch', b[k] !== base[k]);
+    });
+    var xy = document.getElementById('trimA-xy');
+    xy.textContent = (b.x || 0) + ', ' + (b.y || 0) + 'px';
+    xy.classList.toggle('ch', !!(b.x || b.y));
+    var all = selAll(pick), n = all ? safeCount(all) : 0;
+    var sc = document.getElementById('trimScope');
+    sc.style.display = n > 1 ? '' : 'none';
+    sc.textContent = scope === 'all' && n > 1 ? '범위: 같은 것 전부 ' + n + '개 ⇄' : '범위: 이것만 ⇄';
   }
 
   /* ---------- UI ---------- */
@@ -182,7 +301,25 @@
     '#trimList .btns{display:flex;gap:8px;flex-wrap:wrap}',
     'html.trim-on body{padding-bottom:150px!important}',
     'html.trim-mode *{cursor:crosshair!important;-webkit-user-select:none!important;user-select:none!important;-webkit-touch-callout:none!important}',
-    '#trimVer{font-size:10px;opacity:.5;align-self:center}'
+    '#trimVer{font-size:10px;opacity:.5;align-self:center}',
+    '#trimPick{max-height:62vh;overflow:auto}',
+    '#trimPick.top{top:calc(8px + env(safe-area-inset-top,0px));bottom:auto!important}',
+    '#trimPick .tabs{display:flex;gap:6px;margin-bottom:8px}',
+    '#trimPick .tabs button{flex:1;padding:8px;background:#EEF0F3;color:#5B6B7A}',
+    '#trimPick .tabs button.on{background:#0A1F33;color:#fff}',
+    '#trimPick .adj{display:none}',
+    '#trimPick.a .adj{display:block}#trimPick.a .cutg{display:none}',
+    '#trimPick .ar{display:grid;grid-template-columns:72px 44px 1fr 44px;gap:6px;align-items:center;margin-top:5px}',
+    '#trimPick .lb{font-size:12px;font-weight:700;color:#5B6B7A}',
+    '#trimPick .vl{text-align:center;font-size:13px;font-weight:700;font-variant-numeric:tabular-nums}',
+    '#trimPick .vl.ch{color:#2F5BFF}',
+    '#trimPick .ar button{padding:7px 0;font-size:16px;line-height:1}',
+    '#trimPick .mv{display:grid;grid-template-columns:72px 1fr 1fr 1fr 1fr;gap:6px;align-items:center;margin-top:5px}',
+    '#trimPick .mv button{padding:7px 0;font-size:15px}',
+    '#trimPick .mv .lb .vl{display:block!important;text-align:left;font-size:11px!important}',
+    '#trimPick .sc{width:100%!important;margin-top:8px;background:#E8EEFF!important;color:#2F5BFF!important}',
+    '#trimBack{color:#fff;text-decoration:none;font-weight:700;font-size:13px;background:rgba(255,255,255,.12);border-radius:9px;padding:8px 10px;white-space:nowrap}',
+    '#trimTitle{font-size:12px;font-weight:700;opacity:.85;flex:1;min-width:0;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}'
   ].join('\n');
 
   var FB = PAGE === 'start'
@@ -192,20 +329,31 @@
   function build() {
     var st = document.createElement('style'); st.id = 'trimCss'; st.textContent = CSS_UI; document.head.appendChild(st);
     hideCss = document.createElement('style'); hideCss.id = 'trimHide'; document.head.appendChild(hideCss);
+    adjCss = document.createElement('style'); adjCss.id = 'trimAdjCss'; document.head.appendChild(adjCss);
     var ui = document.createElement('div'); ui.id = 'trimUi';
     ui.innerHTML =
       '<div id="trimBox"></div>' +
       '<div id="trimBar">' +
+        (SDEF ? '<div class="row" style="margin-bottom:6px"><a id="trimBack" href="trim-board.html">← 보드</a><span id="trimTitle">' + SDEF.n + '</span></div>' : '') +
         '<div class="row k"><span class="kl">상자·이벤트</span><input id="trimK" type="range" min="0" max="150" step="5"><span class="kl" id="trimKv"></span></div>' +
         '<div class="row k"><span class="kl">머리·탭바·버튼</span><input id="trimP" type="range" min="0" max="100" step="5"><span class="kl" id="trimPv"></span></div>' +
-        '<div class="row"><button id="trimMode">✂ 빼기</button><button id="trimGhost">흐리게</button><button id="trimOpen">목록 <span id="trimN">0</span></button><span id="trimVer">v3</span><button id="trimFold" style="margin-left:auto">곡률 접기</button></div>' +
+        '<div class="row"><button id="trimMode">✂ 고르기</button><button id="trimGhost">흐리게</button><button id="trimOpen">목록 <span id="trimN">0</span></button><span id="trimVer">v4</span><button id="trimFold" style="margin-left:auto">곡률 접기</button></div>' +
       '</div>' +
-      '<div id="trimPick"><div class="t" id="trimPt"></div><div class="g">' +
-        '<button id="trimUp">↑ 더 큰 덩어리</button><button id="trimDn">↓ 더 작게</button>' +
-        '<button class="x" id="trimCut">이것 빼기</button><button class="x2" id="trimCutAll">같은 것 전부 빼기</button>' +
-      '</div><div class="g" style="margin-top:6px;grid-template-columns:1fr"><button id="trimCancel">닫기</button></div></div>' +
+      '<div id="trimPick"><div class="t" id="trimPt"></div>' +
+        '<div class="tabs"><button id="trimTCut" class="on">빼기</button><button id="trimTAdj">간격·위치</button></div>' +
+        '<div class="g"><button id="trimUp">↑ 더 큰 덩어리</button><button id="trimDn">↓ 더 작게</button></div>' +
+        '<div class="g cutg" style="margin-top:6px"><button class="x" id="trimCut">이것 빼기</button><button class="x2" id="trimCutAll">같은 것 전부 빼기</button></div>' +
+        '<div class="adj">' +
+          [['ls', '자간'], ['lh', '행간'], ['mt', '위 여백'], ['mb', '아래 여백'], ['gap', '사이 간격'], ['pl', '왼쪽 안쪽'], ['pr', '오른쪽 안쪽']].map(function (a) {
+            return '<div class="ar"><span class="lb">' + a[1] + '</span><button data-a="' + a[0] + '" data-d="-1">−</button><span class="vl" id="trimA-' + a[0] + '"></span><button data-a="' + a[0] + '" data-d="1">+</button></div>';
+          }).join('') +
+          '<div class="mv"><span class="lb">위치<span id="trimA-xy" class="vl"></span></span><button data-a="x" data-d="-1">←</button><button data-a="y" data-d="-1">↑</button><button data-a="y" data-d="1">↓</button><button data-a="x" data-d="1">→</button></div>' +
+          '<button class="sc" id="trimScope"></button>' +
+          '<div class="g" style="margin-top:6px;grid-template-columns:1fr"><button id="trimAReset">이 조절 되돌리기</button></div>' +
+        '</div>' +
+      '<div class="g" style="margin-top:6px;grid-template-columns:1fr"><button id="trimCancel">닫기</button></div></div>' +
       '<div id="trimList"><div class="sh">' +
-        '<h3>덜어내기 — ' + PAGE_TX + '</h3><p class="sub">뺀 것 목록 · 되살리기 · 메모 → 답 복사해서 아키에게 보내 주세요</p>' +
+        '<h3>덜어내기·간격 — ' + PAGE_TX + '</h3><p class="sub">고친 것 목록 · 되돌리기 · 메모' + (SDEF ? ' → 보드에서 전체 한 번에 복사' : ' → 답 복사해서 아키에게') + '</p>' +
         '<div class="fb">' + FB + '</div>' +
         '<div id="trimItems"></div>' +
         '<textarea id="trimMemo" placeholder="메모 (예: 요일 줄은 첫날만, 날씨는 상세에서만)"></textarea>' +
@@ -236,18 +384,28 @@
     on('trimCut', function () { cut(false); });
     on('trimCutAll', function () { cut(true); });
     on('trimCancel', function () { setPick(null); });
+    on('trimTCut', function () { tab(false); });
+    on('trimTAdj', function () { tab(true); });
+    on('trimScope', function () { scope = scope === 'all' ? 'one' : 'all'; paintAdj(); });
+    on('trimAReset', resetAdj);
+    [].forEach.call(document.querySelectorAll('#trimPick [data-a]'), function (b) {
+      b.addEventListener('click', function (e) { e.stopPropagation(); bump(b.dataset.a, +b.dataset.d); });
+    });
     on('trimClose', function () { document.getElementById('trimList').style.display = 'none'; });
-    on('trimReset', function () { if (confirm('뺀 것을 전부 되살릴까요?')) { S.items = []; applyHide(); renderList(); } });
+    on('trimReset', function () { if (confirm('이 화면에서 뺀 것·조절한 것을 전부 되돌릴까요?')) { S.items = []; S.adj = []; applyAdj(); renderList(); } });
     on('trimCopy', copy);
     document.getElementById('trimList').addEventListener('click', function (e) {
       if (e.target === this) this.style.display = 'none';
       var b = e.target.closest('[data-i]');
       if (b) { S.items.splice(+b.dataset.i, 1); applyHide(); renderList(); }
+      var j = e.target.closest('[data-j]');
+      if (j) { S.adj.splice(+j.dataset.j, 1); applyAdj(); renderList(); }
     });
     var memo = document.getElementById('trimMemo');
     memo.value = S.memo || '';
     memo.addEventListener('input', function () { S.memo = memo.value; save(KEY, S); });
-    applyHide();
+    applyAdj();
+    if (SDEF) { [].forEach.call(document.querySelectorAll('#trimBar .row.k'), function (r) { r.classList.add('hide'); }); document.getElementById('trimFold').textContent = '곡률 열기'; }
   }
   function on(id, fn) { document.getElementById(id).addEventListener('click', function (e) { e.stopPropagation(); fn.call(this, e); }); }
 
@@ -255,7 +413,7 @@
   function setMode(v) {
     mode = v;
     document.getElementById('trimMode').classList.toggle('on', v);
-    document.getElementById('trimMode').textContent = v ? '✂ 빼기 켜짐' : '✂ 빼기';
+    document.getElementById('trimMode').textContent = v ? '✂ 고르기 켜짐' : '✂ 고르기';
     document.documentElement.classList.toggle('trim-mode', v);
     if (!v) setPick(null);
   }
@@ -314,15 +472,27 @@
     var box = document.getElementById('trimBox'), pp = document.getElementById('trimPick');
     if (!el) { box.style.display = 'none'; pp.style.display = 'none'; return; }
     if (from) el._from = from;
-    var r = el.getBoundingClientRect();
-    box.style.display = 'block';
-    box.style.left = r.left + 'px'; box.style.top = r.top + 'px';
-    box.style.width = r.width + 'px'; box.style.height = r.height + 'px';
+    var r = boxTo(el);
     pp.style.display = 'block';
     pp.style.bottom = (document.getElementById('trimBar').getBoundingClientRect().height + 16) + 'px';
+    pp.classList.toggle('top', r.top + r.height / 2 > innerHeight * 0.45);   // 고른 것이 아래쪽이면 판을 위로
+    paintAdj();
     var all = selAll(el), n = all ? safeCount(all) : 0;
     document.getElementById('trimPt').innerHTML = '“' + esc(label(el)) + '”<small>' + Math.round(r.width) + '×' + Math.round(r.height) + ' · 같은 것 ' + (n || 1) + '개</small>';
     document.getElementById('trimCutAll').style.display = all && n > 1 ? '' : 'none';
+  }
+  function boxTo(el) {
+    var box = document.getElementById('trimBox'), r = el.getBoundingClientRect();
+    box.style.display = 'block';
+    box.style.left = r.left + 'px'; box.style.top = r.top + 'px';
+    box.style.width = r.width + 'px'; box.style.height = r.height + 'px';
+    return r;
+  }
+  function tab(a) {
+    document.getElementById('trimPick').classList.toggle('a', a);
+    document.getElementById('trimTCut').classList.toggle('on', !a);
+    document.getElementById('trimTAdj').classList.toggle('on', a);
+    paintAdj();
   }
   function safeCount(s) { try { return document.querySelectorAll(s).length; } catch (e) { return 0; } }
   function cut(all) {
@@ -338,18 +508,16 @@
   function openList() { renderList(); document.getElementById('trimList').style.display = 'block'; }
   function renderList() {
     var box = document.getElementById('trimItems');
-    box.innerHTML = S.items.length ? S.items.map(function (it, i) {
-      return '<div class="it"><div class="nm">' + esc(it.tx) + '<small>' + esc(it.scr) + (it.all ? ' · 같은 것 전부(' + it.n + ')' : '') + '</small></div><button data-i="' + i + '">되살리기</button></div>';
-    }).join('') : '<p class="sub">아직 뺀 것이 없습니다. 아래 \'✂ 빼기 모드\'를 켜고 화면을 눌러 보세요.</p>';
+    var adj = S.adj.filter(function (x) { return adjLine(x); });
+    box.innerHTML = (S.items.length ? S.items.map(function (it, i) {
+      return '<div class="it"><div class="nm">✂ ' + esc(it.tx) + '<small>' + esc(it.scr) + (it.all ? ' · 같은 것 전부(' + it.n + ')' : '') + '</small></div><button data-i="' + i + '">되살리기</button></div>';
+    }).join('') : '') + adj.map(function (it) {
+      return '<div class="it"><div class="nm">↕ ' + esc(it.tx) + '<small>' + esc(adjLine(it)) + (it.all ? ' · 같은 것 전부(' + it.n + ')' : '') + '</small></div><button data-j="' + S.adj.indexOf(it) + '">되돌리기</button></div>';
+    }).join('') || '<p class="sub">아직 고친 것이 없습니다. 아래 \'✂ 고르기\'를 켜고 화면을 눌러 보세요.</p>';
   }
   function copy() {
     var lines = ['[VZTR 덜어내기] ' + PAGE_TX, '곡률 상자·이벤트 ' + Math.round(K * 100) + '% (큰 상자 ' + Math.round(26 * K) + 'px) · 머리·탭바·버튼 ' + (P >= 1 ? '100%(지금)' : Math.round(P * 32) + 'px'), ''];
-    S.items.forEach(function (it, i) {
-      lines.push((i + 1) + '. ' + it.scr + ' — “' + it.tx + '”' + (it.all ? ' (같은 것 전부 ' + it.n + ')' : ''));
-      lines.push('   ' + it.sel);
-    });
-    if (S.memo) lines.push('', '메모: ' + S.memo);
-    var t = lines.join('\n');
+    var t = lines.join('\n') + (fmtState(S, PAGE_TX) || '(고친 것 없음)');
     var b = document.getElementById('trimCopy');
     function ok() { b.textContent = '복사됨 ✓'; setTimeout(function () { b.textContent = '답 복사'; }, 1600); }
     if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(t).then(ok, fallback); else fallback();
@@ -368,7 +536,8 @@
         if (n.tagName === 'STYLE' || n.tagName === 'LINK') { setTimeout(patchSheets, 50); return; }
       }
     }).observe(document.head, { childList: true });
-    window.addEventListener('scroll', function () { if (pick) setPick(pick); }, { passive: true, capture: true });
+    window.addEventListener('scroll', function () { if (pick) boxTo(pick); }, { passive: true, capture: true });
+    if (SDEF && SDEF.act) setTimeout(function () { try { SDEF.act(); } catch (e) {} }, 700);
   }
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', start); else start();
 })();
