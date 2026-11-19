@@ -740,6 +740,19 @@ body { background: transparent; }
 .ticks div > span:last-child { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-width: 0; }
 .pair .mini .t3 { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
+/* 11/19 사진 고르기: 사진 불러오는 동안 은은한 반짝임 + 사진은 다 받으면 부드럽게 나타남 */
+.swph::after { content: ""; position: absolute; inset: 0; z-index: 1; pointer-events: none; opacity: 0; transition: opacity .3s ease;
+  background: linear-gradient(105deg, transparent 30%, rgba(255,255,255,.55) 50%, transparent 70%) 0 0 / 250% 100% no-repeat; }
+.swph:has(.phbox[data-ld="1"])::after { opacity: 1; animation: phShim 1.3s linear infinite; }
+.swph:has(.phbox[data-ld="1"]) .noph svg { animation: phBreath 1.3s ease-in-out infinite; }
+@keyframes phShim { from { background-position: 130% 0; } to { background-position: -30% 0; } }
+@keyframes phBreath { 0%, 100% { opacity: .45; } 50% { opacity: .8; } }
+.swph .phfr img { opacity: 0; transition: opacity .35s ease; } .swph .phfr img.ok { opacity: 1; }
+.swph .swkd { z-index: 2; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .swph::after { background-image: linear-gradient(105deg, transparent 30%, rgba(255,255,255,.08) 50%, transparent 70%); } }
+:root[data-theme="dark"] .swph::after { background-image: linear-gradient(105deg, transparent 30%, rgba(255,255,255,.08) 50%, transparent 70%); }
+@media (prefers-reduced-motion: reduce) { .swph::after, .swph .noph svg { animation: none !important; } }
+
 /* (11/19 곡률 고정: 가이드북과 같게 = 상자 원래 값의 30% · 알약 모양 0.5rem, 동우님) */
 /* ---------- 11/19 글꼴 A (동우님): 굵은 한글 = IBM Plex Sans KR(700) · 보통·작은·연한 한글 = Pretendard · 영문·숫자 = IBM Plex Sans ---------- */
 :root { --kr-plain: "Pretendard Variable", Pretendard, -apple-system, "Apple SD Gothic Neo", "Malgun Gothic", system-ui, sans-serif; }
@@ -1634,11 +1647,13 @@ function phMount(host, p, o) {
   o = o || {};
   const steps = [];
   if (p.ph) steps.push('ph'); if (PH_KEY_G() && !p.ng) steps.push('g'); if (o.sv !== false && PH_KEY_M() && p.ll) steps.push('sv');
-  const none = () => { host.hidden = true; host.dataset.on = ''; host.innerHTML = ''; o.onNone && o.onNone(); };
+  host.dataset.ld = '1';   // 11/19: 사진 불러오는 중 표시(.swph 반짝임)
+  setTimeout(() => { if (host.isConnected) host.dataset.ld = ''; }, 6000);   // 거리 풍경 등 load 신호가 안 오는 경우 대비
+  const none = () => { host.hidden = true; host.dataset.on = ''; host.dataset.ld = ''; host.innerHTML = ''; o.onNone && o.onNone(); };
   const show = (src, credit, link, ref) => {   // ref: 구글 사진은 키가 사이트 제한이라 출처 주소를 보내야 함
     const im = new Image(); im.alt = ''; im.decoding = 'async'; im.loading = 'lazy'; im.referrerPolicy = ref ? 'strict-origin-when-cross-origin' : 'no-referrer';
     im.onerror = () => next();
-    im.onload = () => { host.dataset.on = '1'; };
+    im.onload = () => { host.dataset.on = '1'; host.dataset.ld = ''; im.classList.add('ok'); };
     im.src = src;
     host.innerHTML = ''; host.hidden = false; host.dataset.on = '1';
     const fr = document.createElement('div'); fr.className = 'phfr'; fr.appendChild(im); host.appendChild(fr);
@@ -1651,6 +1666,7 @@ function phMount(host, p, o) {
     host.innerHTML = '<div class="phfr sv"><iframe title="거리 풍경" loading="lazy" referrerpolicy="origin" allowfullscreen src="' + u + '"></iframe><div class="phcv"></div><span class="phlb">거리 풍경</span><button type="button" class="phgo">거리 둘러보기</button></div>';
     host.hidden = false; host.dataset.on = '1';
     const fr = host.querySelector('.phfr'), cv = fr.querySelector('.phcv'), bt = fr.querySelector('.phgo');
+    const ifr = fr.querySelector('iframe'); if (ifr) ifr.onload = () => { host.dataset.ld = ''; }; else host.dataset.ld = '';
     bt.onpointerdown = e => e.stopPropagation();
     bt.onclick = e => { e.stopPropagation(); const on = !fr.classList.contains('live'); fr.classList.toggle('live', on); bt.textContent = on ? '둘러보기 끝' : '거리 둘러보기'; };
   };
