@@ -512,6 +512,7 @@ html.ios26 .foot, html.ios26 .board { bottom: calc(max(0.75rem, env(safe-area-in
 @keyframes dotgo { from { left: 50%; } to { left: var(--to); } }
 @media (prefers-reduced-motion: reduce) { .gz .dot { animation: none; } }
 .gz .gn { margin: 0; font-size: 0.71875rem; color: var(--sub); }
+.gz { padding-bottom: 0.875rem; }   /* 11/20 설명 줄 뺌 → 마지막 숫자 아래 여백 ≈ 위 여백 */
 .rhy .rr { display: grid; grid-template-columns: 3.25rem minmax(0,1fr); gap: 0.75rem; padding: 0.6875rem 0; border-top: 1px solid var(--hair); align-items: baseline; }
 .rhy .rr:first-child { border-top: 0; }
 .rhy .tm { font-size: 0.875rem; font-weight: 600; color: var(--sub); font-variant-numeric: tabular-nums; }
@@ -1139,7 +1140,8 @@ function depFit() { // 11/18 T1: 줄 높이는 고정, 남은 높이에 들어�
   const rows = [...dep.querySelectorAll('.dr[data-r]')], mine = mid.querySelector('.mine');
   rows.forEach(r => r.hidden = false); dep.hidden = false;
   const cs = getComputedStyle(mid), room = mid.clientHeight - parseFloat(cs.paddingTop) - parseFloat(cs.paddingBottom) - (mine ? mine.offsetHeight + 12 : 0);
-  for (let n = rows.length; n > 0 && dep.scrollHeight > room + 1; n--) rows[n - 1].hidden = true;
+  let n = rows.length; for (; n > 0 && dep.scrollHeight > room + 1; n--) rows[n - 1].hidden = true;
+  if (n > 2) rows[n - 1].hidden = true;   // 11/20 보드: 꽉 채우지 않고 한 줄 덜 → 안내판이 숨 쉬게
   if (dep.scrollHeight > room + 1) dep.hidden = true;
 }
 function setAppH() { document.documentElement.style.setProperty('--app-h', window.innerHeight + 'px'); }
@@ -1153,7 +1155,7 @@ function rQ(i) {
   setBar('test', i, Q.length, { t: `${i + 1} / ${Q.length}` });
   const ls = boardLetters(i - 1), known = i > 0;
   const el = screen(`
-    <div class="qh"><span class="eyebrow">${i < HALF ? '여행 취향' : '여행 스타일'}</span><h1>${esc(q.h)}</h1><p>${esc(QSUB[q.h] || '제일 끌리는 쪽 하나만 골라 주세요')}</p></div>
+    <div class="qh"><h1>${esc(q.h)}</h1><p>${esc(QSUB[q.h] || '제일 끌리는 쪽 하나만 골라 주세요')}</p></div>
     <div class="opts" id="opts">${ord.map((oi, n) => `<button class="opt ${prev === oi ? 'prev' : ''}" data-oi="${oi}"${gStyle(q.o[oi][1])}><span class="top"><span class="k">${'ABCD'[n]}</span><svg class="ic" viewBox="0 0 24 24" aria-hidden="true">${QI[i][oi]}</svg></span><span class="tx">${brk(q.o[oi][0])}</span><span class="stamp">${ICON.check}</span></button>`).join('')}</div>
     <div class="board glass" id="board">
       ${flapsHtml(ls, false, i - 1)}
@@ -1307,7 +1309,7 @@ function rResult(c, mine) {
         <p class="ln">${esc(t.line)}</p>
       </div>
       ${v ? `<div class="perf"></div>
-      <div class="gz">${gaugeHtml(c, v)}<p class="gn">점이 끝으로 갈수록 그쪽 성향이 강해요</p></div>
+      <div class="gz">${gaugeHtml(c, v)}</div>
       ${ansHtml(c)}` : ''}
     </article>
     ${t.scenes ? `<div class="sec"><h3>이런 장면, 익숙하죠?</h3><div class="card">${t.scenes.map(s => `<div class="scene"><span class="ck">${ICON.check}</span><span>${esc(s)}</span></div>`).join('')}</div></div>` : ''}
@@ -1367,7 +1369,7 @@ function rMethod() {
   setBar('info', 0, INFO.length + 1, { t: '일정 방식' });
   const rec = S.type && S.type[3] === 'J' ? 'blocks' : 'auto', cur = S.trip.method;
   const el = screen(`
-    <div class="qh"><span class="eyebrow">${esc(T(S.type).name)} 맞춤</span><h1>일정은 어떻게 받을까요?</h1><p>나중에 언제든 바꿀 수 있어요</p></div>
+    <div class="qh"><h1>일정은 어떻게 받을까요?</h1><p>나중에 언제든 바꿀 수 있어요</p></div>
     <div class="pick one big">${METHOD.map(m => `<button class="pk" data-m="${m[0]}" aria-pressed="${cur === m[0]}">${m[0] === rec ? '<span class="rec">추천</span>' : ''}<b>${m[1]}</b><span>${m[2]}</span></button>`).join('')}</div>`);
   el.querySelectorAll('.pk').forEach(b => b.onclick = () => { S.trip.method = b.dataset.m; el.querySelectorAll('.pk').forEach(x => x.setAttribute('aria-pressed', x === b)); tap(); later(() => go('city'), 300); });
 }
@@ -1377,7 +1379,7 @@ function rInfo(s) {
   const n = INFO.indexOf(s) + 1, tr = S.trip;
   const optional = s === 'home' || s === 'book' || s === 'likes'; // send(받을 곳)는 필수
   setBar('info', n, INFO.length + 1, optional ? { t: '건너뛰기', fn: () => next(s) } : { t: S.editing ? '수정' : `${n} / ${INFO.length}` });
-  const head = (e, h, p) => `<div class="qh"><span class="eyebrow">여행 정보 · ${e}</span><h1>${h}</h1>${p ? `<p>${p}</p>` : ''}</div>`;
+  const head = (e, h, p) => `<div class="qh"><h1>${h}</h1>${p ? `<p>${p}</p>` : ''}</div>`;
   let el;
   if (s === 'city') {
     el = screen(head('어디로', '어디로 가세요?', '지역만 고르면 동선은 <b class="vz vzi">vztr<i></i></b>가 짜 드려요<br><span class="soon">가는 곳은 계속 늘려 갈게요</span>')   /* 11/19 #4 */ + `<div class="pick">${CITIES.map(c => `<button class="pk" data-v="${c[0]}" aria-pressed="${tr.city === c[0]}"><b>${c[0]}</b><span>${c[1]}</span></button>`).join('')}</div>
@@ -1915,7 +1917,7 @@ function rEdit() {
   const hasT = !!store.get('gaboja-type') || !!S.type;
   const R = (k, v, step) => `<div class="erow"><span class="k">${k}</span><b>${v}</b><button data-e="${step}" aria-label="${k} 바꾸기">바꾸기</button></div>`;
   const ok = !!(tr.city && hasN(tr));
-  screen(`<div class="qh"><span class="eyebrow">여행 정보 수정</span><h1>바꿀 항목을 눌러 주세요</h1><p>${hasT ? '유형은 그대로 두고 ' : ''}여행 정보만 바꿔서 일정을 다시 짜요</p></div>
+  screen(`<div class="qh"><h1>바꿀 항목을 눌러 주세요</h1><p>${hasT ? '유형은 그대로 두고 ' : ''}여행 정보만 바꿔서 일정을 다시 짜요</p></div>
     <div class="card">
       ${R('어디로', city ? esc(city) : '<small>도시를 골라 주세요</small>', 'city')}
       ${R('제목', myTitle(tr) ? esc(myTitle(tr)) : '<small>자동으로 지어요</small>', 'ttl')}

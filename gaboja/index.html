@@ -299,6 +299,9 @@ details.sec > summary + * { margin-top: 0.375rem; }
 .grp2 { font-size: 0.71875rem; color: var(--sub); padding: 0.625rem 0 2px; }
 .crow { display: grid; grid-template-columns: 1.375rem minmax(0,1fr) auto; gap: 0.5rem; align-items: center; padding: 0.5rem 0; border-top: 1px solid var(--hair); font-size: 0.84375rem; }
 .grp2 + .crow { border-top: 0; }
+/* 11/20 보드: 묶음 머리 줄 숨김(제목 줄 '긴급 연락처 6 · 생활 정보 2'가 대신 말해 줌, PDF는 grp2 글자를 그대로 씀) */
+#tips .grp2 { display: none; }
+#tips .grp2 + .nrow { margin-top: 0.375rem; border-top: 1px solid var(--hair); }
 .crow .ic { width: 1.375rem; height: 1.375rem; display: grid; place-items: center; color: var(--sub); }
 .crow .ic svg { width: 1.1875rem; height: 1.1875rem; stroke: currentColor; fill: none; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
 .crow b { font-weight: 600; }
@@ -1269,7 +1272,7 @@ html:root[data-theme="dark"] { --canvas-top: #23272D; --sh-float: 0 1px 2px rgba
     <details class="sec glass" id="tips">
       <summary><svg viewBox="0 0 24 24"><path d="M12 3l7 3v5c0 4.5-3 8-7 10-4-2-7-5.5-7-10V6z"/></svg>현지 정보<span class="cnt">긴급 연락처 6 · 생활 정보 2</span><svg class="chev" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg></summary>
       <div class="grp2">긴급 연락처 · 번호를 누르면 전화가 걸려요</div>
-      <div class="crow"><span class="ic"><svg viewBox="0 0 24 24"><path d="M12 3l7 3v5c0 4.5-3 8-7 10-4-2-7-5.5-7-10V6z"/></svg></span><span class="nm2"><b class="one">경찰</b><span class="src one">일본</span></span><a class="tel" href="tel:110">110</a></div>
+      <div class="crow"><span class="ic"><svg viewBox="0 0 24 24"><path d="M7 17v-5a5 5 0 0 1 10 0v5"/><path d="M5 17h14v3H5z"/><path d="M12 3v1.5M5.2 5.7l1 1M18.8 5.7l-1 1M3 11.5h1.5M19.5 11.5H21"/></svg></span><span class="nm2"><b class="one">경찰</b><span class="src one">일본</span></span><a class="tel" href="tel:110">110</a></div>
       <div class="crow"><span class="ic"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></span><span class="nm2"><b class="one">구급·소방</b><span class="src one">일본</span></span><a class="tel" href="tel:119">119</a></div>
       <div class="crow"><span class="ic"><svg viewBox="0 0 24 24"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a1 1 0 0 1-1 1A16 16 0 0 1 4 5a1 1 0 0 1 1-1"/></svg></span><span class="nm2"><b class="one">관광객 핫라인</b><span class="src one">JNTO · 24시간 · 한국어</span></span><a class="tel" href="tel:+81-50-3816-2787">050-3816-2787</a></div>
       <div class="crow"><span class="ic"><svg viewBox="0 0 24 24"><path d="M4 20h16M6 20V10M10 20V10M14 20V10M18 20V10M3 10l9-6 9 6"/></svg></span><span class="nm2"><b class="one">주오사카 총영사관</b><span class="src one">평일 근무시간</span></span><a class="tel" href="tel:+81-6-4256-2345">06-4256-2345</a></div>
@@ -1436,7 +1439,7 @@ if (PLAN) CHECKS.ok = { t:'영업시간 확인 11.11~11.13', s:'확인 11.13' },
 const $ = s => document.querySelector(s);
 const esc = s => String(s ?? '').replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 // 현지 정보 = 도시마다 (내 일정의 PLAN.local, gen.js가 도시 설정 cfg.local에서 넣음). 샘플은 위 HTML(오사카) 그대로
-const TIP_IC = { police: '<path d="M12 3l7 3v5c0 4.5-3 8-7 10-4-2-7-5.5-7-10V6z"/>', plus: '<path d="M12 5v14M5 12h14"/>', phone: '<path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a1 1 0 0 1-1 1A16 16 0 0 1 4 5a1 1 0 0 1 1-1"/>', bldg: '<path d="M4 20h16M6 20V10M10 20V10M14 20V10M18 20V10M3 10l9-6 9 6"/>', globe: '<circle cx="12" cy="12" r="8.5"/><path d="M3.5 12h17M12 3.5c2.5 3 2.5 14 0 17M12 3.5c-2.5 3-2.5 14 0 17"/>', doc: '<rect x="5" y="4" width="14" height="16" rx="2"/><path d="M9 9h6M9 13h6M9 17h3"/>', coin: '<circle cx="12" cy="12" r="8.5"/><path d="M9 9l3 4 3-4M9 13h6M12 13v4"/>' };
+const TIP_IC = { police: '<path d="M7 17v-5a5 5 0 0 1 10 0v5"/><path d="M5 17h14v3H5z"/><path d="M12 3v1.5M5.2 5.7l1 1M18.8 5.7l-1 1M3 11.5h1.5M19.5 11.5H21"/>', plus: '<path d="M12 5v14M5 12h14"/>', phone: '<path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a1 1 0 0 1-1 1A16 16 0 0 1 4 5a1 1 0 0 1 1-1"/>', bldg: '<path d="M4 20h16M6 20V10M10 20V10M14 20V10M18 20V10M3 10l9-6 9 6"/>', globe: '<circle cx="12" cy="12" r="8.5"/><path d="M3.5 12h17M12 3.5c2.5 3 2.5 14 0 17M12 3.5c-2.5 3-2.5 14 0 17"/>', doc: '<rect x="5" y="4" width="14" height="16" rx="2"/><path d="M9 9h6M9 13h6M9 17h3"/>', coin: '<circle cx="12" cy="12" r="8.5"/><path d="M9 9l3 4 3-4M9 13h6M12 13v4"/>' };
 const wxSrcHtml = () => '<div class="cattr" data-wxsrc>날씨 · Open-Meteo (CC BY 4.0) · 평년 = 2016–2025 평균</div>';
 function renderTips(L) {
   const el = document.getElementById('tips'); if (!el || !L || !Array.isArray(L.rows)) return;
@@ -1730,8 +1733,7 @@ function dayHead(d) {
 }
 function daySumSheet() {   /* 11/18 D-4 ①: 머리 한 줄(DAY·날짜·시각 범위) + 세로 목록(시각 · 점 · 이름, 안 잘림) */
   const d = DAYS[st.day], nw = nowOf(d), first = d.list[0], last = d.list[d.list.length - 1];
-  const range = d.tbd ? '시각 미정' : first ? first.s + ' – ' + (last.est ? last.s : last.e) : '일정 없음';
-  let h = '<div class="shd"><div><div class="dsh"><b class="dn">DAY ' + d.no + '</b><span class="dd">' + esc(d.date) + '</span><span class="dr">' + range + '</span></div><h3 id="sheetTitle" class="dstt">' + esc(d.title) + '</h3>'
+  let h = '<div class="shd"><div><div class="dsh"><b class="dn">DAY ' + d.no + '</b><span class="dd">' + esc(d.date) + '</span></div><h3 id="sheetTitle" class="dstt">' + esc(d.title) + '</h3>'
     + '</div>' + X_BTN + '</div><div class="body"><ul class="rlist sumscroll" aria-label="동선: ' + esc(routeOf(d).join(' → ')) + '">';
   d.list.filter(c => c.k !== 'm').forEach(c => {   // 11/15 #11: 요약엔 이동 시간 빼고 일정만
     const isNow = nw && c === nw.cur, cls = (c.fly ? 'fly ' : '') + (isNow ? 'now-row' : pastOf(nw, c) ? 'past-on' : '');
@@ -2821,7 +2823,7 @@ function updAddBar() {
 function addSheet() {
   const d = DAYS[st.day]; addPick = null;
   if (d.tbd) { const rc = d.list.find(x => x.fly); toast((rc ? rideWord(rc) : '이동') + ' 시각을 넣으면 일정을 추가할 수 있어요'); return; }
-  openSheet('<div class="shd"><div><span class="eyebrow">DAY ' + d.no + ' · ' + d.date + ' · ' + d.city + '</span><h3 id="sheetTitle">일정 추가</h3><p class="sub one">장소 이름 또는 구글 지도 링크 붙여넣기</p></div>' + X_BTN + '</div><div class="body">'
+  openSheet('<div class="shd"><div><h3 id="sheetTitle">일정 추가</h3><p class="sub one">장소 이름 또는 구글 지도 링크 붙여넣기</p></div>' + X_BTN + '</div><div class="body">'
     + '<div class="field"><input id="addName" placeholder="예: 구로몬 시장 · 지도 링크" autocomplete="off" enterkeyhint="search" aria-label="장소 이름 또는 구글 지도 링크"><span class="err" id="addErr"></span></div>'
     + '<div class="sugg" id="addSug"></div><div id="addPick" class="body0"></div>'
     + '<div class="memos" id="addRecs"><span class="mh">이 시간에 갈 만한 곳 · 골라서 한 번에 추가</span><div class="recs" id="recList">' + recsHtml(d) + '</div><div class="addbar" id="addBar" hidden><button class="btn pri" id="addMultiGo">0곳 추가</button></div></div></div>');
@@ -2975,7 +2977,7 @@ function menuSheet(k) {
       let nm = routeOf(d).filter(x => x !== '집' && x !== baseOf(d)); if (!nm.length) nm = routeOf(d);
       const rt = nm.length > 3 ? nm.slice(0, 3).join(' → ') + ' 외 ' + (nm.length - 3) + '곳' : nm.join(' → '), bs = baseOf(d);
       h += '<div class="dcard"><div class="tt"><span class="dchip">DAY ' + d.no + '</span><span class="one"><span class="muted">' + esc(dShort(d)) + '</span> · ' + esc(d.title) + '</span></div><div class="rt one">' + esc(rt || '일정 없음') + '</div>'
-        + '<div class="hs one"><svg viewBox="0 0 24 24"><path d="M3 18.5v-12M3 14.5h18v4M21 14.5v-2a3 3 0 0 0-3-3h-8.5v5"/><circle cx="6.5" cy="11.75" r="1.75"/></svg>' + (d.no === DAYS.length ? '숙소 없음' : bs === '숙소' ? '숙소' : esc(bs) + ' 숙소') + '</div></div>';
+        + '</div>';
     });
     openSheet(h + '</div></div>');
   } else if (k === 'arc') { arcSheet(); }
