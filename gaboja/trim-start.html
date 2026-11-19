@@ -855,6 +855,14 @@ html[data-theme="dark"][data-grp="HE"] { --me-soft: color-mix(in srgb, #C17192 2
 :root { --t-q: 1.6875rem; --s-qdesc: 0.84375rem; }   /* 질문·화면 제목 27 (전 26) · 설명 13.5 (전 14) */
 .qh h1 { font-size: var(--t-q); font-weight: 800; }
 .qh p { font-size: var(--s-qdesc); color: var(--sub); }
+
+/* 11/19 W7·M33 출발지 검색 결과 */
+.adr { display: flex; flex-direction: column; margin-top: calc(0.5rem - clamp(1.25rem, 4.5svh, 2.75rem));   /* 화면 간격(.scr:has(> .qh) gap)만큼 당겨 입력칸에 붙임 */ border-radius: var(--r-lg, 0.65rem); overflow: hidden; background: var(--paper, #fff); box-shadow: 0 1px 2px rgba(22,23,26,.06), 0 0.25rem 0.75rem -0.375rem rgba(22,23,26,.16); }
+.adr button { display: flex; flex-direction: column; gap: 0.125rem; padding: 0.625rem 0.875rem; text-align: left; border-top: 1px solid var(--hair, rgba(22,23,26,.08)); }
+.adr button:first-child { border-top: 0; }
+.adr b { font-size: 0.9375rem; font-weight: 600; color: var(--ink); }
+.adr span { font-size: 0.78125rem; color: var(--sub); }
+.rgline .rgsm { font-size: 0.78125rem; font-weight: 500; color: var(--sub); }
 </style>
 </head>
 <body>
@@ -1506,14 +1514,15 @@ function rInfo(s) {
   }
   if (s === 'home') {
     const dom = isDom(tr);
-    el = screen(head('출발', '어디서 출발하세요?', dom ? '시·구까지만 적으면 출발 지역을 찾아 드려요' : '집에서 공항까지 가는 시간을 맞춰 드려요') + `
-      <input class="in" id="homeIn" autocomplete="off" placeholder="예: 서울 마포구" value="${esc(tr.home || '')}" aria-label="출발 지역 (시·구까지만)">
+    el = screen(head('출발', '어디서 출발하세요?', '아파트·건물 이름이나 도로명 주소로 찾아요') + `
+      <input class="in" id="homeIn" autocomplete="off" enterkeyhint="search" placeholder="예: 마포래미안푸르지오 · 마포대로 195" value="${esc(tr.homeName ? tr.homeName + ' · ' + (tr.home || '') : tr.home || '')}" aria-label="출발지 (건물 이름이나 주소)">
+      <div class="adr" id="adrList" hidden></div>
       ${dom ? '<div class="blk" id="rgBox"></div>' : '<div class="blk" id="sgBox"></div>'}
-      <div class="note">${ICON.info}<span>시·구까지만 적어 주세요. 출발지는 일정 계산에만 쓰고 7일 뒤 지워요.</span></div>
+      <div class="note">${ICON.info}<span>정확한 주소는 이 폰에만 저장해요<br>신청서에는 시·구까지만 보내고 7일 뒤 지워요</span></div>
       <div class="foot"><button class="cta" id="hNext">다음</button></div>`);
     tr.homeMode = 'addr';
     const drawSg = () => { const b = $('#sgBox'); if (!b) return; tr.sgg = effSgg(tr); const amb = !tr.sgg && SGG_AMB.find(w => String(tr.home || '').includes(w));
-      b.innerHTML = tr.sgg ? `<div class="rgline">출발: <em>${esc(tr.sgg)}</em></div><p class="rgsub">여기서 공항까지 걸리는 시간을 계산해요</p>` : tr.home ? `<div class="note">${ICON.info}<span>${amb ? '‘' + amb + '’는 같은 이름이 여러 곳이에요 · ‘서울 ' + amb + '’처럼 시·도도 적어 주세요' : '시·군·구를 못 찾았어요'} · 인천공항까지 약 75분으로 가정해요</span></div>` : ''; };
+      b.innerHTML = tr.sgg ? `<div class="rgline">출발: <em>${esc(tr.homeName || tr.sgg)}</em>${tr.homeName ? ' <small class="rgsm">' + esc(tr.sgg) + ' 기준</small>' : ''}</div><p class="rgsub">여기서 공항까지 걸리는 시간을 계산해요</p>` : tr.home ? `<div class="note">${ICON.info}<span>${amb ? '‘' + amb + '’는 같은 이름이 여러 곳이에요 · ‘서울 ' + amb + '’처럼 시·도도 적어 주세요' : '시·군·구를 못 찾았어요'} · 인천공항까지 약 75분으로 가정해요</span></div>` : ''; };
     const drawRg = () => {
       const box = $('#rgBox'); if (!box) return; const o = domOpts(tr), sk = sggMatch(tr.home), g = (sk && sggRegion(sk)) || regionOf(tr.home);
       if (!tr.regionPicked && g && o.regs.includes(g)) tr.region = g;
@@ -1526,7 +1535,16 @@ function rInfo(s) {
       $('#rgC').onclick = e => { const b = e.target.closest('[data-rg]'); if (!b) return; tr.region = b.dataset.rg; tr.regionPicked = true; tr.line = 0; tap(); drawRg(); };
     };
     drawRg(); drawSg();
-    $('#homeIn').oninput = e => { tr.home = e.target.value; drawRg(); drawSg(); };
+    /* 11/19 W7·M33: 건물·주소 검색(우리 서버 /addr → 카카오 로컬). 고르면 도로명 주소 + 좌표, 시·군·구는 주소에서 찾음. 그냥 적어도 전처럼 시·구로 계산 */
+    let adrT = 0, adrN = 0; const adrBox = $('#adrList');
+    const adrFind = q => { const my = ++adrN; if (q.trim().length < 2 || !PH_KEY_G()) { adrBox.hidden = true; return; }
+      fetch(VZTR_API + '/addr?q=' + encodeURIComponent(q.trim())).then(r => r.json()).then(j => { if (my !== adrN) return; const L = (j && j.list) || [];
+        adrBox.hidden = !L.length; adrBox.innerHTML = L.map((a, i) => `<button type="button" data-ai="${i}"><b>${esc(a.name || a.road || a.jibun)}</b><span>${esc(a.name ? (a.road || a.jibun) : a.jibun)}</span></button>`).join('');
+        adrBox.onclick = e => { const b = e.target.closest('[data-ai]'); if (!b) return; const a = L[+b.dataset.ai];
+          tr.home = a.road || a.jibun; tr.homeName = a.name || ''; tr.homeLL = [a.lat, a.lng]; $('#homeIn').value = (tr.homeName ? tr.homeName + ' · ' : '') + tr.home;
+          adrBox.hidden = true; adrN++; tap(); drawRg(); drawSg(); };
+      }).catch(() => { if (my === adrN) adrBox.hidden = true; }); };
+    $('#homeIn').oninput = e => { tr.home = e.target.value; tr.homeName = ''; tr.homeLL = null; drawRg(); drawSg(); clearTimeout(adrT); adrT = setTimeout(() => adrFind(e.target.value), 280); };
     $('#homeIn').onkeydown = e => { if (e.key === 'Enter') next(s); };
     $('#hNext').onclick = () => next(s);
   }
@@ -1604,7 +1622,7 @@ function rInfo(s) {
         <input class="in" id="toIn" autocomplete="off" value="${esc(tr.to || '')}"><span class="err" id="toErr"></span></div>
       <input id="hpIn" name="website" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;width:1px;height:1px;opacity:0">
       <label class="agree" id="agBox"><input type="checkbox" id="agIn" ${tr.agree ? 'checked' : ''}><span><b>개인정보 수집·이용에 동의해요</b>
-        <ul class="pv"><li>${PV_IC.use}<span>닉네임·받을 곳·여행 정보는 가이드북에만 써요</span></li><li>${PV_IC.clock}<span>출발지는 7일, 나머지는 1년 뒤 지워요</span></li><li>${PV_IC.mail}<span>‘삭제해 주세요’ 답장 한 번이면 바로 지워요</span></li></ul></span></label>
+        <ul class="pv"><li>${PV_IC.use}<span>닉네임·받을 곳·여행 정보는 가이드북에만 써요</span></li><li>${PV_IC.clock}<span>출발지는 시·구까지만 받아 7일, 나머지는 1년 뒤 지워요</span></li><li>${PV_IC.mail}<span>‘삭제해 주세요’ 답장 한 번이면 바로 지워요</span></li></ul></span></label>
       <div class="foot"><button class="cta" id="sNext" disabled>가이드북 신청하기 ${ICON.arrow}</button></div>`);
     const toIn = $('#toIn'), ph = () => { toIn.placeholder = tr.toKind === 'mail' ? '예: name@gmail.com' : '예: gaboja_trip'; toIn.type = tr.toKind === 'mail' ? 'email' : 'text'; toIn.inputMode = tr.toKind === 'mail' ? 'email' : 'text'; };
     const ok = () => { const v = (tr.to || '').trim(); return tr.toKind === 'mail' ? RE_MAIL.test(v) : RE_KAKAO.test(v); };
@@ -1952,7 +1970,7 @@ function payload() {
     type: S.type || '', typeName: S.type ? T(S.type).name : '', votes: S.votes ? JSON.stringify(S.votes) : '',
     answers: S.ans.map((oi, i) => oi == null ? '' : `${i + 1}.${plain(Q[i].o[oi][0])}`).filter(Boolean).join(' / '),
     method: (METHOD.find(m => m[0] === tr.method) || ['', ''])[1], city: cityTx(tr, '') + (myTitle(tr) ? ' · 제목 ‘' + myTitle(tr) + '’' : ''),   // 시트 칸은 그대로(Apps Script 안 바꿈) → 묶음 선택·제목은 도시 칸에 붙임
-    start: d(tr.start), end: d(tr.end), nights: tr.day ? '당일치기' : tr.nights || '', who: tr.who || '', homeMode: tr.home ? '시·구' : '', home: tr.home || '',
+    start: d(tr.start), end: d(tr.end), nights: tr.day ? '당일치기' : tr.nights || '', who: tr.who || '', homeMode: tr.home ? '시·구' : '', home: tr.sgg || String(tr.home || '').split(' ').slice(0, 2).join(' '),   /* 11/19 M34: 신청서엔 시·구까지만 (정확한 주소는 폰에만) */
     flight: tr.flight === 'yes' ? '정함' : '미정', flightTx: isDom(tr) ? flightText(tr) : tr.flight === 'yes' ? (tr.flightTx || '') : '', stay: { no: '미정', area: '동네만', yes: '정함' }[tr.stay] || '', stayTx: tr.stay === 'no' ? '' : (tr.stayTx || ''),
     likes: tr.likes.join(', '), avoid: tr.avoid.join(', '), page: location.origin + location.pathname };
 }

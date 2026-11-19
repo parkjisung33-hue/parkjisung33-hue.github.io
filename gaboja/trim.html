@@ -2523,6 +2523,7 @@ async function cloudPush() {
   const p = rawPlan(); if (!p || !p.made) return;
   let ed = null, tr = null; try { ed = (JSON.parse(localStorage.getItem(EDIT_KEY)) || {})[p.made] || null; } catch (_) {}
   try { tr = JSON.parse(localStorage.getItem('gaboja-trip')); } catch (_) {}
+  if (tr) { tr = { ...tr }; ['home', 'homeName', 'homeLL', 'to', 'hp'].forEach(k => delete tr[k]); }   // 11/19 M34: 집 주소·연락처는 서버에 안 올림
   const body = JSON.stringify({ data: { plan: p, edits: ed, trip: tr } }), h = cloudHash(body), all = cloudGet(), m = all[p.made];
   if (m && m.h === h) return;
   cloudBusy = true;
