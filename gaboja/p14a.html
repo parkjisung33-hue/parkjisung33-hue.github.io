@@ -1,0 +1,218 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<title>VZTR 머리·DAY A 디벨롭</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400..800&display=swap">
+<style>
+/* 14번 피드백: 가이드북 맨 위 메뉴 + DAY 메뉴 통합 — 시안 5 (2026-11-19)
+   곡률 = 1차안 기준(상자 8px · 알약 8px). 앱 토큰 그대로 */
+@font-face { font-family: "Pretendard Variable"; font-weight: 45 920; font-display: swap;
+  src: url("fonts/PretendardVariable.woff2") format("woff2-variations"), url("../app/fonts/PretendardVariable.woff2") format("woff2-variations"); }
+:root {
+  --canvas: #EEF0F3; --ink: #0A1F33; --sub: #5B6B7A; --hair: rgba(10,31,51,.09); --paper: #fff;
+  --blue: #2F5BFF; --blue-soft: rgba(47,91,255,.09); --green: #2F9E6E; --amber: #E8912A;
+  --glass: rgba(255,255,255,.78); --edge: rgba(255,255,255,.95);
+  --sh: 0 1px 2px rgba(24,36,60,.05), 0 .25rem .75rem -.375rem rgba(24,36,60,.14);
+  --r: 8px; --kr: "Pretendard Variable", Pretendard, system-ui, sans-serif; --mono: "Inter Tight", var(--kr);
+}
+* { box-sizing: border-box; }
+html, body { overflow-x: hidden; margin: 0; background: #E4E7EB; color: var(--ink); font-family: var(--kr); -webkit-text-size-adjust: 100%; }
+button { font: inherit; color: inherit; background: none; border: 0; padding: 0; cursor: pointer; -webkit-tap-highlight-color: transparent; }
+svg { stroke: currentColor; fill: none; stroke-width: 1.9; stroke-linecap: round; stroke-linejoin: round; }
+
+.intro { max-width: 1240px; margin: 0 auto; padding: 28px 16px 8px; }
+.intro h1 { margin: 0 0 6px; font-size: 22px; letter-spacing: -.02em; }
+.intro p { margin: 0; color: var(--sub); font-size: 14px; line-height: 1.6; word-break: keep-all; }
+.intro .rule { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; }
+.intro .rule span { font-size: 12px; font-weight: 600; padding: 4px 9px; border-radius: 8px; background: #fff; color: var(--sub); }
+
+.grid { max-width: 1240px; margin: 0 auto; padding: 16px; display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 24px 20px; padding-bottom: 140px; }
+.opt { display: flex; flex-direction: column; gap: 10px; }
+.opt .hd { display: flex; align-items: baseline; gap: 8px; }
+.opt .hd b { font-family: var(--mono); font-size: 15px; font-weight: 800; color: var(--blue); }
+.opt .hd h2 { margin: 0; font-size: 16px; letter-spacing: -.01em; }
+.opt .why { margin: 0; font-size: 13px; color: var(--sub); line-height: 1.55; word-break: keep-all; min-height: 3.1em; }
+
+/* 폰 화면 틀 */
+.phone { position: relative; width: 100%; max-width: 375px; height: 400px; margin: 0 auto; border-radius: 22px; background: var(--canvas); overflow: hidden; box-shadow: 0 10px 30px -14px rgba(10,31,51,.35); border: 1px solid rgba(10,31,51,.06); }
+.scr { position: absolute; inset: 0; overflow: hidden; padding: 12px 12px 0; }
+.glass { background: var(--glass); -webkit-backdrop-filter: blur(16px); backdrop-filter: blur(16px); box-shadow: var(--sh); border: 1px solid var(--edge); }
+.ib { width: 40px; height: 40px; display: grid; place-items: center; border-radius: var(--r); flex: none; }
+.ib svg { width: 22px; height: 22px; }
+.seg { display: flex; background: rgba(10,31,51,.06); border-radius: var(--r); padding: 3px; flex: none; }
+.seg button { font-size: 13px; font-weight: 700; padding: 6px 10px; border-radius: 6px; color: var(--sub); }
+.seg button[aria-pressed="true"] { background: #fff; color: var(--ink); box-shadow: 0 1px 3px rgba(10,31,51,.12); }
+.ttl { flex: 1; min-width: 0; font-size: 17px; font-weight: 700; letter-spacing: -.01em; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.mono { font-family: var(--mono); font-variant-numeric: tabular-nums; }
+.today { color: var(--blue); }
+
+/* 아래 내용(공통): 하루 머리 + 일정 2칸 */
+.body { padding: 14px 4px 0; }
+.dh .city { font-size: 13px; font-weight: 600; color: var(--sub); }
+.dh h3 { margin: 4px 0 6px; font-size: 22px; letter-spacing: -.015em; line-height: 1.3; }
+.dh .wx { font-size: 14px; color: var(--sub); display: flex; gap: 6px; align-items: center; }
+.dh .wx b { color: var(--ink); font-weight: 600; }
+.cards { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 14px; }
+.cards div { background: #fff; border-radius: var(--r); padding: 11px 12px; box-shadow: var(--sh); }
+.cards small { display: block; font-family: var(--mono); font-size: 12px; color: var(--sub); margin-bottom: 3px; }
+.cards b { font-size: 15px; }
+
+/* ── A: 한 상자 두 줄 ── */
+.A .box { border-radius: var(--r); padding: 6px; }
+.A .r1 { display: flex; align-items: center; gap: 6px; }
+.A .r2 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 4px; margin-top: 6px; padding-top: 6px; border-top: 1px solid var(--hair); }
+.A .r2 button { height: 44px; border-radius: 6px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1px; }
+.A .r2 b { font-family: var(--mono); font-size: 11px; font-weight: 600; letter-spacing: .04em; color: var(--sub); }
+.A .r2 span { font-size: 14px; font-weight: 700; }
+.A .r2 button[aria-pressed="true"] { background: var(--ink); color: #fff; }
+.A .r2 button[aria-pressed="true"] b { color: rgba(255,255,255,.7); }
+
+/* ── A1: 날짜 + 그날 도시 (DAY 번호는 아래 하루 머리로) ── */
+.A1 .r2 button { height: 50px; gap: 2px; }
+.A1 .r2 b { font-family: var(--mono); font-size: 15px; font-weight: 700; color: var(--ink); letter-spacing: 0; }
+.A1 .r2 b em { font-style: normal; font-family: var(--kr); font-size: 13px; font-weight: 600; margin-left: 2px; }
+.A1 .r2 span { font-size: 12px; font-weight: 600; color: var(--sub); }
+.A1 .r2 button[aria-pressed="true"] b { color: #fff; }
+.A1 .r2 button[aria-pressed="true"] span { color: rgba(255,255,255,.72); }
+.A1 .r2 button { position: relative; }
+.A1 .r2 button.td::after { content: ""; position: absolute; top: 5px; right: 8px; width: 5px; height: 5px; border-radius: 3px; background: var(--blue); }
+.A1 .dno { font-family: var(--mono); font-size: 13px; font-weight: 700; color: var(--blue); margin-right: 6px; }
+
+/* ── A2: 내리면 한 줄로 접힘 ── */
+.A2 { overflow-y: auto !important; overscroll-behavior: contain; }
+.A2 .box { position: sticky; top: 0; z-index: 3; transition: padding .2s; box-shadow: 0 -14px 0 2px var(--canvas), var(--sh); }
+.A2 .r1, .A2 .r2 { transition: all .22s cubic-bezier(.2,.8,.2,1); }
+.A2 .r2 button { transition: height .22s, background .15s; }
+.A2.mini .r1 .ttl { font-size: 15px; }
+.A2.mini .r1 .ib, .A2.mini .r1 .seg { transform: scale(.92); }
+.A2.mini .r2 { margin-top: 2px; padding-top: 4px; }
+.A2.mini .r2 button { height: 30px; flex-direction: row; gap: 4px; }
+.A2.mini .r2 b { display: none; }
+.A2.mini .r2 span { font-size: 13px; }
+.A2 .more { display: grid; gap: 8px; margin: 10px 0 24px; }
+.A2 .more div { background: #fff; border-radius: var(--r); padding: 11px 12px; box-shadow: var(--sh); }
+.A2 .more small { display: block; font-family: var(--mono); font-size: 12px; color: var(--sub); margin-bottom: 3px; }
+.A2 .more b { font-size: 15px; }
+.A2 .hintx { text-align: center; font-size: 12px; color: var(--sub); margin: 10px 0 0; }
+
+/* ── A3: 가벼운 트랙 (요약/상세와 같은 말투, 남색 덩어리 없음) ── */
+.A3 .box { padding: 6px 6px 8px; }
+.A3 .r2 { border-top: 0; padding: 3px; margin-top: 4px; background: rgba(10,31,51,.06); border-radius: var(--r); gap: 2px; }
+.A3 .r2 button { height: 46px; border-radius: 6px; }
+.A3 .r2 b { color: var(--sub); }
+.A3 .r2 span { color: var(--sub); font-weight: 600; }
+.A3 .r2 button[aria-pressed="true"] { background: #fff; color: var(--ink); box-shadow: 0 1px 3px rgba(10,31,51,.14); }
+.A3 .r2 button[aria-pressed="true"] b { color: var(--blue); }
+.A3 .r2 button[aria-pressed="true"] span { color: var(--ink); font-weight: 800; }
+
+/* 고르기 */
+.pick { display: flex; gap: 8px; align-items: center; justify-content: center; max-width: 375px; margin: 0 auto; width: 100%; }
+.pick button { flex: 1; height: 42px; border-radius: 8px; background: #fff; font-weight: 700; font-size: 14px; box-shadow: var(--sh); }
+.pick button[aria-pressed="true"] { background: var(--blue); color: #fff; }
+.memo { max-width: 375px; margin: 0 auto; width: 100%; }
+.memo textarea { width: 100%; min-height: 44px; border: 1px solid rgba(10,31,51,.12); border-radius: 8px; padding: 10px; font: inherit; font-size: 14px; resize: vertical; background: #fff; }
+
+.dock { position: fixed; left: 0; right: 0; bottom: 0; padding: 12px 16px calc(12px + env(safe-area-inset-bottom, 0px)); background: rgba(10,31,51,.96); color: #fff; display: flex; gap: 10px; align-items: center; z-index: 50; }
+.dock .s { flex: 1; min-width: 0; font-size: 13px; line-height: 1.4; word-break: keep-all; }
+.dock button { background: var(--blue); color: #fff; border-radius: 8px; padding: 11px 16px; font-weight: 700; font-size: 14px; white-space: nowrap; }
+@media (max-width: 420px) { .grid { padding: 12px 12px 140px; grid-template-columns: 1fr; } .phone { height: 390px; } }
+</style>
+</head>
+<body>
+<div class="intro">
+  <h1>맨 위 + DAY 합치기 — A 디벨롭 3</h1>
+  <p>A안을 바탕으로 <b>편의성 · 가독성 · 심플함</b> 쪽으로 세 갈래 더 갔습니다. 맨 앞은 비교용 원안. 각 화면에서 날짜를 눌러 보고(A2는 화면을 아래로 내려 보세요), 고르기·메모 후 <b>답 복사</b>로 보내 주세요.</p>
+  <div class="rule"><span>가독성</span><span>심플</span><span>필요한 정보만</span><span>곡률 = 1차안 8px</span></div>
+</div>
+<div class="grid" id="grid"></div>
+<div class="dock"><div class="s" id="dockTx">아직 고른 시안이 없어요</div><button id="copy">답 복사</button></div>
+
+<script>
+const DAYS = [
+  { no: 1, md: '12.4', dd: '4', wd: '금', city: '오사카', t: '도착하자마자 도톤보리', wx: '15°/12°', rain: '비 29%', tbd: false },
+  { no: 2, md: '12.5', dd: '5', wd: '토', city: '교토', t: '교토 골목 하루 산책', wx: '13°/6°', rain: '맑음', tbd: false },
+  { no: 3, md: '12.6', dd: '6', wd: '일', city: '오사카', t: '우메다 쇼핑 데이', wx: '14°/8°', rain: '구름', tbd: true },
+  { no: 4, md: '12.7', dd: '7', wd: '월', city: '오사카', t: '공항 가는 날', wx: '12°/7°', rain: '맑음', tbd: false },
+];
+const TITLE = '오사카·교토에서 4일', STATUS = '출발 15일 전', DD = 'D-15';
+const MENU = '<button class="ib" aria-label="메뉴"><svg viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h10"/></svg></button>';
+const SEG = '<div class="seg"><button aria-pressed="true">요약</button><button aria-pressed="false">상세</button></div>';
+const CHEV = '<svg viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>';
+const L = '<svg viewBox="0 0 24 24"><path d="M15 6l-6 6 6 6"/></svg>', R = '<svg viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg>';
+const CLOUD = '<svg viewBox="0 0 24 24" width="18" height="18"><path d="M7 18h10a4 4 0 0 0 .4-8A6 6 0 0 0 6 11a3.5 3.5 0 0 0 1 7z"/></svg>';
+const body = d => '<div class="body"><div class="dh"><div class="city">' + d.city + '</div><h3>' + d.t + '</h3><div class="wx">' + CLOUD + '<b class="mono">' + d.wx + '</b>' + d.rain + '</div></div>'
+  + '<div class="cards"><div><small>' + (d.tbd ? '1번째' : '06:45') + '</small><b>' + (d.no === 2 ? '교토역' : '인천공항 T1') + '</b></div><div><small>' + (d.tbd ? '2번째' : '09:00') + '</small><b>' + (d.no === 2 ? '기요미즈데라' : '난바 · 짐') + '</b></div></div></div>';
+
+const ROW = (d, cell) => '<div class="r2">' + DAYS.map(x => '<button data-d="' + x.no + '" aria-pressed="' + (x === d) + '"' + (x.no === 2 ? ' class="td"' : '') + '>' + cell(x) + '</button>').join('') + '</div>';
+const R1 = '<div class="r1">' + MENU + '<div class="ttl">' + TITLE + '</div>' + SEG + '</div>';
+const cellA = x => '<b>DAY ' + x.no + '</b><span>' + x.md + ' ' + x.wd + '</span>';
+const OPTS = [
+  { k: 'A', name: '원안 (지난번 A)', why: '비교용. 두 상자를 하나로 붙이고 아래 줄에 DAY·날짜.',
+    html: d => '<div class="box glass">' + R1 + ROW(d, cellA) + '</div>' + body(d) },
+  { k: 'A1', name: '날짜 + 그날 도시', why: '칸마다 \'DAY 1\' 대신 날짜(크게)와 그날 도시(작게). 어디 가는 날인지 바로 찾음. DAY 번호는 아래 하루 머리로 옮김. 여행 중엔 오늘 칸에 파란 점(예시: 12.5).',
+    html: d => '<div class="box glass">' + R1 + ROW(d, x => '<b>' + x.md + '<em>' + x.wd + '</em></b><span>' + x.city + '</span>') + '</div>'
+      + body(d).replace('<div class="city">' + d.city + '</div>', '<div class="city"><span class="dno">DAY ' + d.no + '</span>' + d.city + '</div>') },
+  { k: 'A2', name: '내리면 한 줄로 접힘', why: '처음엔 A 그대로, 일정을 내리면 날짜 칸이 얇은 한 줄로 접혀 화면을 덜 가림. 올리면 다시 펼쳐짐. 날짜는 접힌 상태에서도 바로 누를 수 있음. 이 화면을 직접 내려 보세요.',
+    html: d => '<div class="box glass">' + R1 + ROW(d, cellA) + '</div>' + body(d)
+      + '<div class="more">' + ['12:30|난바 · 숙소에 짐 맡기기', '13:00|와나카 센니치마에 본점', '14:00|도톤보리 산책', '15:30|숙소 체크인 · 휴식', '17:00|후쿠타로 본점', '18:30|도톤보리 야경'].map(s => '<div><small>' + s.split('|')[0] + '</small><b>' + s.split('|')[1] + '</b></div>').join('') + '</div>' },
+  { k: 'A3', name: '가벼운 트랙', why: '날짜 줄을 요약/상세와 같은 회색 트랙 + 흰 칸으로. 남색 덩어리가 없어 맨 위가 가벼워지고, 고른 날은 파란 DAY 글자로 구분. 제목이 가장 먼저 읽힘.',
+    html: d => '<div class="box glass">' + R1 + ROW(d, cellA) + '</div>' + body(d) },
+];
+
+const S = { day: {}, pick: {}, memo: {} };
+try { Object.assign(S, JSON.parse(localStorage.getItem('vztr-p14a') || '{}')); } catch (e) {}
+const save = () => { try { localStorage.setItem('vztr-p14a', JSON.stringify(S)); } catch (e) {} dock(); };
+
+const grid = document.getElementById('grid');
+grid.innerHTML = OPTS.map(o => '<section class="opt" data-k="' + o.k + '"><div class="hd"><b>' + o.k + '</b><h2>' + o.name + '</h2></div><p class="why">' + o.why + '</p>'
+  + '<div class="phone"><div class="scr A ' + o.k + '"></div></div>'
+  + '<div class="pick"><button data-pick>이걸로</button></div>'
+  + '<div class="memo"><textarea placeholder="' + o.k + ' 메모"></textarea></div></section>').join('');
+
+function draw(k) {
+  const o = OPTS.find(x => x.k === k), sec = grid.querySelector('[data-k="' + k + '"]');
+  const d = DAYS[(S.day[k] || 1) - 1];
+  sec.querySelector('.scr').innerHTML = o.html(d);
+  sec.querySelector('[data-pick]').setAttribute('aria-pressed', !!S.pick[k]);
+  sec.querySelector('[data-pick]').textContent = S.pick[k] ? '✓ 골랐어요' : '이걸로';
+}
+OPTS.forEach(o => { draw(o.k); grid.querySelector('[data-k="' + o.k + '"] textarea').value = S.memo[o.k] || ''; });
+
+grid.addEventListener('click', e => {
+  const sec = e.target.closest('.opt'); if (!sec) return; const k = sec.dataset.k, scr = sec.querySelector('.scr');
+  const b = e.target.closest('button'); if (!b) return;
+  if (b.hasAttribute('data-pick')) { S.pick[k] = !S.pick[k]; save(); draw(k); return; }
+  if (b.hasAttribute('data-open')) { scr.classList.toggle('open'); return; }
+  if (b.dataset.d) { S.day[k] = +b.dataset.d; scr.classList.remove('open'); save(); draw(k); return; }
+  if (b.dataset.step) { S.day[k] = Math.max(1, Math.min(DAYS.length, (S.day[k] || 1) + +b.dataset.step)); save(); draw(k); return; }
+  if (b.closest('.seg')) { b.parentElement.querySelectorAll('button').forEach(x => x.setAttribute('aria-pressed', x === b)); }
+});
+grid.addEventListener('input', e => { const sec = e.target.closest('.opt'); if (sec && e.target.tagName === 'TEXTAREA') { S.memo[sec.dataset.k] = e.target.value; save(); } });
+/* A2안: 내리면 접힘 */
+(function () {
+  const scr = grid.querySelector('.scr.A2');
+  scr.addEventListener('scroll', () => scr.classList.toggle('mini', scr.scrollTop > 24), { passive: true });
+})();
+
+function dock() {
+  const p = OPTS.filter(o => S.pick[o.k]).map(o => o.k);
+  document.getElementById('dockTx').textContent = p.length ? '고른 시안: ' + p.join(' · ') : '아직 고른 시안이 없어요';
+}
+dock();
+document.getElementById('copy').addEventListener('click', function () {
+  const p = OPTS.filter(o => S.pick[o.k]);
+  const lines = ['[VZTR 14 A 디벨롭] 고른 시안: ' + (p.length ? p.map(o => o.k + ' ' + o.name).join(' / ') : '없음')];
+  OPTS.forEach(o => { if (S.memo[o.k]) lines.push(o.k + ' 메모: ' + S.memo[o.k]); });
+  const t = lines.join('\n'), btn = this;
+  const ok = () => { btn.textContent = '복사됨 ✓'; setTimeout(() => btn.textContent = '답 복사', 1600); };
+  const fb = () => { const ta = document.createElement('textarea'); ta.value = t; document.body.appendChild(ta); ta.select(); try { document.execCommand('copy'); ok(); } catch (e) {} ta.remove(); };
+  navigator.clipboard && navigator.clipboard.writeText ? navigator.clipboard.writeText(t).then(ok, fb) : fb();
+});
+</script>
+</body>
+</html>
