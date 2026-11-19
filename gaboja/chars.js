@@ -79,6 +79,10 @@ function soft(code, bg) {
   const out = svg.outerHTML; host.remove(); return (CACHE[key] = out);
 }
 window.GABOJA_CHAR_LINE = (code, o = {}) => { if (!(code in IDX)) return ''; ensureFx(); const g = grp(code); return wrap(o.bg === false ? 'none' : g.bg, body(code, g), g).replace('<svg ', '<svg aria-hidden="true" focusable="false" '); };
+/* 11/20 동우님: 짐마다 키·좌우가 달라(바닥선 기준으로 그려 위가 비어 있음) 옆 글자와 가운데가 안 맞음 → 그림 둘레에 같은 여백을 두고 정사각형으로 잘라 칸 가운데에. pad = 그림 크기 대비 여백(이펙트 자리) */
+window.GABOJA_FIT = (svg, pad = 6) => { if (!svg || svg.dataset.fit) return; const g = svg.querySelector('.fx-b'); if (!g) return; let b; try { b = g.getBBox(); } catch (_) { return; } if (!b.width) return;
+  const bot = Math.max(b.y + b.height, 79.5), w = b.width + pad * 2, h = bot - b.y + pad * 2, sz = Math.max(w, h);
+  svg.setAttribute('viewBox', `${(b.x - pad - (sz - w) / 2).toFixed(1)} ${(b.y - pad - (sz - h) / 2).toFixed(1)} ${sz.toFixed(1)} ${sz.toFixed(1)}`); svg.dataset.fit = '1'; };
 window.GABOJA_CHAR = (code, o = {}) => { if (!(code in IDX)) return ''; return soft(code, o.bg !== false).replace('<svg ', '<svg aria-hidden="true" focusable="false" '); };
 window.GABOJA_CHAR_BG = code => code in IDX ? grp(code).bg : '';
 window.GABOJA_CHAR_ITEM = code => code in IDX ? C[IDX[code]][2] : '';

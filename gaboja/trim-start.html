@@ -837,6 +837,10 @@ html[data-theme="dark"][data-grp="HE"] { --me-soft: color-mix(in srgb, #C17192 2
 .pair .mini .cd { font-size: 1.125rem; }
 .pair .mini .pf { display: none; }
 .pair .mini .t3 { grid-area: t3; padding: 0.125rem 0.375rem 0.125rem; align-self: start; white-space: nowrap !important; overflow: hidden !important; font-size: 0.78125rem; }
+/* 11/20 동우님: 결과 탑승권 머리 — 캐릭터가 글자판과 가운데 정렬(fitChar) · 칸 140 → 112px 정사각형 · 위아래 여백 줄여 촘촘하게 */
+.rt .rtop { grid-template-columns: minmax(0,1fr) 7rem; padding: 0.25rem 1.125rem 0; align-items: center; }
+.ticket .av.hero { width: 7rem; height: 7rem; }
+.ticket.rt .rband { padding-bottom: 0.625rem; }
 </style>
 </head>
 <body>
@@ -864,7 +868,7 @@ html[data-theme="dark"][data-grp="HE"] { --me-soft: color-mix(in srgb, #C17192 2
 
 <script>/* 11/15 #23: 아이폰 사파리 26(떠 있는 아래 주소창) = 아래 고정 버튼을 그만큼 올림 */ (function () { try { const ua = navigator.userAgent, ios = /iP(hone|od|ad)/.test(ua) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1), solo = navigator.standalone === true || matchMedia('(display-mode: standalone)').matches, v = +((ua.match(/Version\/(\d+)/) || [])[1] || 0); if (ios && !solo && v >= 26) document.documentElement.classList.add('ios26'); } catch (_) {} })();</script>
 <script src="types.js"></script>
-<script src="chars.js?v=wk1"></script>
+<script src="chars.js?v=fit1"></script>
 <script src="gen-data.js"></script>
 <script src="sgg.js"></script>
 <script src="gen.js"></script>
@@ -1143,7 +1147,9 @@ function screen(html, cls = '') {
   if (old) old.querySelectorAll('[id]').forEach(e => e.removeAttribute('id')); // 새 화면의 같은 id와 안 겹치게
   if (old && !REDUCED) { const oh = old.offsetHeight, ot = old.offsetTop - window.scrollY; old.style.height = oh + 'px'; old.style.top = ot + 'px'; old.classList.add('leaving', dir < 0 ? 'toR' : 'toL');   /* 11/20 동우님 #1: 나갈 때 높이를 잡아 둠 — 가운데 정렬 여백이 접히며 위로 뚝 튀던 것 */ old.setAttribute('aria-hidden', 'true'); old.inert = true; setTimeout(() => old.remove(), 280); }
   else if (old) old.remove();
-  const sec = document.createElement('section'); sec.className = `scr ${dir < 0 ? 'back' : ''} ${cls}`; sec.innerHTML = html; m.appendChild(sec); return sec;
+  const sec = document.createElement('section'); sec.className = `scr ${dir < 0 ? 'back' : ''} ${cls}`; sec.innerHTML = html; m.appendChild(sec);
+  sec.querySelectorAll('.av svg').forEach(v => fitChar(v, v.closest('.pass') ? 4 : 7));   // 11/20 캐릭터 = 칸 가운데(옆 글자와 정렬)
+  return sec;
 }
 const REDUCED = matchMedia('(prefers-reduced-motion: reduce)').matches;
 function flapsHtml(ls, big, qi = -1) { const lk = qi >= 0 ? LOCKED[qi] : 0; return `<div class="flaps${big ? ' big' : ''}">${ls.map((l, i) => `<span class="fl ${l ? '' : 'empty'} ${i < lk ? 'lock' : ''}" data-i="${i}">${l || '·'}</span>`).join('')}</div>`; }
@@ -1284,6 +1290,7 @@ function pairSheet(c, why, good) {
     ${(t.scenes || []).length ? `<div class="near"><span>이런 여행을 해요</span><div>${t.scenes.slice(0, 3).map(x => `<b>${esc(x)}</b>`).join('')}</div></div>` : ''}
     <button class="cta go2" id="rxGo"><span>이 유형 자세히 보기 ${ICON.arrow}</span></button>
     <button class="cta ghost" id="rxClose" style="margin-top:.5rem">닫기</button>`;
+  rx.querySelectorAll('.av svg').forEach(v => fitChar(v, 7));
   sc.hidden = false; void rx.offsetWidth; sc.classList.add('on'); rx.classList.add('on');
   $('#rxGo').onclick = () => { closeRx(); setTimeout(() => openType(c), 240); };
   $('#rxClose').onclick = closeRx; sc.onclick = closeRx;
@@ -1340,9 +1347,7 @@ const AV = (c, k) => window.GABOJA_CHAR ? `<div class="av gfx${k ? ' ' + k : ''}
 /* 11/18 D-2·D-3: 배경 칸 없이 캐릭터만 (fx = 등장 이펙트 켬). 묶음 색 = chars.js G 값 */
 const GRPC = { LS: { bg: '#E4F3F5', a: '#6099A0' }, LE: { bg: '#FEF2F5', a: '#C78297' }, HS: { bg: '#E4EEF7', a: '#6086A9' }, HE: { bg: '#FFE7EF', a: '#C17192' } };   // 11/20 파스텔
 /* 11/20 동우님 #4: 짐 캐릭터는 키(38~73)·좌우가 제각각이라 같은 칸에 넣으면 낮게/높게 보임 → 그림 둘레에 같은 여백을 두고 정사각형으로 잘라 가운데에 (발급 완료 탑승권) */
-function fitChar(svg) { if (!svg) return; const g = svg.querySelector('.fx-b'); if (!g) return; let b; try { b = g.getBBox(); } catch (_) { return; } if (!b.width) return;
-  const pad = 4, bot = Math.max(b.y + b.height, 80), w = b.width + pad * 2, h = bot - b.y + pad * 2, sz = Math.max(w, h);
-  svg.setAttribute('viewBox', `${(b.x - pad - (sz - w) / 2).toFixed(1)} ${(b.y - pad - (sz - h) / 2).toFixed(1)} ${sz.toFixed(1)} ${sz.toFixed(1)}`); }
+function fitChar(svg, pad) { if (window.GABOJA_FIT) GABOJA_FIT(svg, pad == null ? 4 : pad); }
 const AVnb = (c, k, fx) => window.GABOJA_CHAR ? `<div class="av${fx ? ' gfx' : ''} ${k || ''}"${fx ? ` data-c="${c}" data-fxd="650"` : ''}>${GABOJA_CHAR(c, { bg: false })}</div>` : '';
 const grpIcon = c => `<svg viewBox="0 0 24 24" aria-hidden="true">${GI[c.slice(0, 2)]}</svg>`;
 const LMEAN = { L: '로컬', H: '핫플', S: '구경', E: '즐기기', F: '알차게', R: '여유롭게', J: '계획형', P: '즉흥형' };
