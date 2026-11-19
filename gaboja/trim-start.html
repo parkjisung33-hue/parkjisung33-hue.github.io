@@ -729,7 +729,8 @@ body { background: transparent; }
 .pass .todo .t { display: grid; grid-template-columns: 1.375rem minmax(0,1fr) auto; gap: 0.625rem; align-items: center; font-size: 0.875rem; min-height: 2.25rem; }
 .pass .todo .bx { width: 1.375rem; height: 1.375rem; border-radius: 0.2875rem; border: 1.8px solid color-mix(in srgb, var(--sub) 45%, transparent); }
 .pass .todo .t b { font-weight: 600; }
-.pass .todo .t button { font-size: 0.78125rem; font-weight: 700; color: var(--blue); padding: 0.5rem 0 0.5rem 0.75rem; }
+.pass .todo .t button { font-size: 0.78125rem; font-weight: 700; color: color-mix(in srgb, var(--amber) 55%, var(--ink)); padding: 0.5rem 0 0.5rem 0.75rem; }   /* 11/21 #8: 가이드북 주의 글자 색과 같게 */
+.pass .tnm { margin-top: -0.125rem; font-size: 0.875rem; font-weight: 700; color: var(--me-ink, var(--ink)); letter-spacing: -.01em; }   /* 11/21 #8 A: 글자판 아래 빈칸 = 유형 이름(동행 줄에서 옮김) */
 .pass .todo .okl { display: flex; gap: 0.5rem; align-items: center; font-size: 0.875rem; font-weight: 600; min-height: 2.25rem; }
 .pass .todo .okl svg { flex: none; width: 1.125rem; height: 1.125rem; stroke: var(--green); fill: none; stroke-width: 2.6; stroke-linecap: round; stroke-linejoin: round; }
 /* ---------- 11/19 여백 조금 더 (동우님): 좌우 1.375 → 1.625rem(.wrap) · 화면 안 묶음 사이 1.25 → 1.5rem · 맨 위 숨 ---------- */
@@ -2067,11 +2068,11 @@ function rDone() {
   screen(`
     <article class="ticket pass">
       <div class="hd"><b class="vz">vztr<i></i></b><button class="ed" id="dEdit" aria-label="수정하기"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20h4L19 9l-4-4L4 16zM13.5 6.5l4 4"/></svg>수정</button></div>
-      <div class="ptop"><div class="pl"><span class="pok">${ICON.check}발급 완료</span><h1 class="city">${esc(city)}</h1>${S.type ? flapsHtml(S.type.split(''), false) : ''}</div>${S.type ? AVnb(S.type, 'sm', true) : ''}</div>
+      <div class="ptop"><div class="pl"><span class="pok">${ICON.check}발급 완료</span><h1 class="city">${esc(city)}</h1>${S.type ? flapsHtml(S.type.split(''), false) : ''}${t ? `<span class="tnm">${esc(t.name)}</span>` : ''}</div>${S.type ? AVnb(S.type, 'sm', true) : ''}</div>
       <div class="ft">${col('FROM', tr.start)}<div class="mid"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 15.5v-2l-8-5V3.5a1.5 1.5 0 0 0-3 0v5l-8 5v2l8-2.5V18l-2 1.5V21l3.5-1 3.5 1v-1.5L13 18v-5z"/></svg>${esc(mid)}</div>${col('TO', to, 'e')}</div>
       <div class="perf"></div>
       <div class="card" style="background:none;border:0;box-shadow:none">
-        ${f('동행', [tr.who, t && t.name].filter(Boolean).join(' · ') || '정하지 않았어요')}
+        ${f('동행', tr.who || '정하지 않았어요')}
         ${f('일정', (METHOD.find(m => m[0] === tr.method) || METHOD[0])[1])}
         ${f('출발', tr.home ? tr.home : '나중에 입력')}
         ${f('취향', tr.likes.length ? tr.likes.join(' · ') : '고르지 않음')}
