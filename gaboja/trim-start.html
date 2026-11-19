@@ -766,10 +766,10 @@ body { background: transparent; }
 
 /* 11/20 동우님: 스크롤 없는 화면은 위로 쏠리지 않게 — 내용 묶음을 화면 가운데보다 살짝 위(위 2 : 아래 3)에.
    빈 공간만 나눠 가지므로(flex-basis 0) 내용이 넘쳐 스크롤되는 화면에선 0 → 원래대로. 첫 화면(intro)·장소 고르기(swscr)·계산 화면(.calc)은 이미 화면을 채워서 제외 */
-.scr:not(.intro):not(.swscr):not(:has(> .calc))::before { content: ""; flex: 2 1 0; margin-bottom: -1.5rem; }
+.scr:not(.intro):not(.swscr):not(:has(> .calc))::before { content: ""; flex: 2 1 0; margin-bottom: calc(-1 * var(--scr-g, 1.5rem)); }
 .scr:not(.intro):not(.swscr):not(:has(> .calc)) > .foot { flex: 3 1 0; justify-content: flex-end; margin-top: 0; }
-.scr:not(.intro):not(.swscr):not(:has(> .calc)):not(:has(> .foot))::after { content: ""; flex: 3 1 0; margin-top: -1.5rem; }
-.scr.qs::before, .scr.qs::after { margin: 0; }
+.scr:not(.intro):not(.swscr):not(:has(> .calc)):not(:has(> .foot))::after { content: ""; flex: 3 1 0; margin-top: calc(-1 * var(--scr-g, 1.5rem)); }
+.scr.qs { --scr-g: 0px; }   /* 질문 화면은 gap 0 */
 </style>
 </head>
 <body>
