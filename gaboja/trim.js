@@ -9,13 +9,13 @@
   var PRE = window.TRIM_PRESET || {};          // 시안 페이지(g1 등)가 정해 둔 곡률·이름
   var PAGE = PRE.page || (/start/.test(location.pathname) ? 'start' : 'guide');
   var PAGE_TX = PRE.tx || (PAGE === 'start' ? '시작·질문·입력·발급' : '가이드북');
-  var KEY = 'vztr-trim-' + PAGE, KKEY = 'vztr-trim-k' + (PRE.page ? '-' + PRE.page : '');
+  var KEY = 'vztr-trim2-' + PAGE, KKEY = 'vztr-trim2-k' + (PRE.page ? '-' + PRE.page : '');   // 11/19 1차안 합침 뒤 새 키(앱 곡률이 이미 30%·8px로 고정됨)
   var STATE_CLS = /^(on|off|play|now|live|sel|selected|active|show|shown|open|done|hide|hidden|in|out|go|cur|past|fit|is-|has-|js-|trim-)/;
   function load(k, d) { try { var v = localStorage.getItem(k); return v == null ? d : JSON.parse(v); } catch (e) { return d; } }
   function save(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} }
 
   var S = load(KEY, { items: [], memo: '' });
-  var K = load(KKEY, PRE.k != null ? PRE.k : 0.35);   // 기본 = '조금 더 직각에 가까운 둥근형' 시험값
+  var K = load(KKEY, PRE.k != null ? PRE.k : 1);   // 기본 = 지금 앱 그대로(100%)
   var P = load(KKEY + '-pill', PRE.p != null ? PRE.p : 1);
   var ghost = false, mode = false, pick = null;
 
@@ -72,7 +72,7 @@
     document.documentElement.style.setProperty('--trim-k', K);
     save(KKEY, K);
     var lab = document.getElementById('trimKv');
-    if (lab) lab.textContent = Math.round(K * 100) + '% · 상자 ' + Math.round(26 * K) + 'px';
+    if (lab) lab.textContent = Math.round(K * 100) + '% (지금 앱 기준)';
     if (typeof window.fixNotches === 'function') try { window.fixNotches(); } catch (e) {}
   }
 
