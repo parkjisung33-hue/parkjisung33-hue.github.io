@@ -1203,7 +1203,9 @@ html[data-grp="HS"] { --stamp-a: var(--g-hs-a); --stamp-lt: var(--g-hs-lt); } ht
 
 /* ---------- 11/19 다크 배경 = A 연하게 (동우님, 레퍼런스 Midnight Embrace를 연하게) ----------
    가운데 #1A1E22 → 55% #1F2328 → 가장자리 #23272D 타원 그라디언트, 화면에 고정(.bgfx). 카드는 배경에 안 묻히게 #262A30 */
-.bgfx { display: none; }
+/* 11/19 밝은 모드도 같은 깊이 그라디언트(동우님): 연한 회색, 다크와 같은 모양·같은 단계(가운데 → 55% → 가장자리, 밝기 차 약 4%) · 밝은 모드는 가운데가 밝고 바깥이 살짝 어두움 */
+html { background: #EEF0F3; } body { background: transparent; }
+.bgfx { display: block; position: fixed; inset: 0; z-index: -1; pointer-events: none; background: radial-gradient(ellipse at 50% 50%, #F3F4F6, #EEF0F3 55%, #E8EBEE); }
 @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --canvas: #1F2328; --glass: #262A30; --paper: #262A30; --float: #262A30; --sheet: #262A30; --tile: rgba(42,46,53,.92); --field: #1C2025; }
   :root:not([data-theme="light"]) { background: #1A1E22; } :root:not([data-theme="light"]) body { background: transparent; }
   :root:not([data-theme="light"]) .bgfx { display: block; position: fixed; inset: 0; z-index: -1; pointer-events: none; background: radial-gradient(ellipse at 50% 50%, #1A1E22, #1F2328 55%, #23272D); } }
