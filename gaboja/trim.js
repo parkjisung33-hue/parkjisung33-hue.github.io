@@ -6,16 +6,17 @@
    저장 = 이 브라우저 localStorage (페이지별) */
 (function () {
   'use strict';
-  var PAGE = /start/.test(location.pathname) ? 'start' : 'guide';
-  var PAGE_TX = PAGE === 'start' ? '시작·질문·입력·발급' : '가이드북';
-  var KEY = 'vztr-trim-' + PAGE, KKEY = 'vztr-trim-k';
+  var PRE = window.TRIM_PRESET || {};          // 시안 페이지(g1 등)가 정해 둔 곡률·이름
+  var PAGE = PRE.page || (/start/.test(location.pathname) ? 'start' : 'guide');
+  var PAGE_TX = PRE.tx || (PAGE === 'start' ? '시작·질문·입력·발급' : '가이드북');
+  var KEY = 'vztr-trim-' + PAGE, KKEY = 'vztr-trim-k' + (PRE.page ? '-' + PRE.page : '');
   var STATE_CLS = /^(on|off|play|now|live|sel|selected|active|show|shown|open|done|hide|hidden|in|out|go|cur|past|fit|is-|has-|js-|trim-)/;
   function load(k, d) { try { var v = localStorage.getItem(k); return v == null ? d : JSON.parse(v); } catch (e) { return d; } }
   function save(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} }
 
   var S = load(KEY, { items: [], memo: '' });
-  var K = load(KKEY, 0.35);   // 기본 = '조금 더 직각에 가까운 둥근형' 시험값
-  var P = load(KKEY + '-pill', 1);
+  var K = load(KKEY, PRE.k != null ? PRE.k : 0.35);   // 기본 = '조금 더 직각에 가까운 둥근형' 시험값
+  var P = load(KKEY + '-pill', PRE.p != null ? PRE.p : 1);
   var ghost = false, mode = false, pick = null;
 
   /* ---------- 곡률: 스타일시트의 border-radius를 calc(값 * k)로 바꿔 둔다 ---------- */

@@ -1,0 +1,27 @@
+/* VZTR 가이드북 덜어내기 1차안 (2026-11-19, 동우님 덜어내기 6개 + 가독성 조정)
+   앱 index.html 위에 덮는 시안용 CSS. 확정되면 index.html에 옮긴다.
+   곡률 = 상자·이벤트 30% · 머리·탭바·버튼 8px (trim.js 프리셋) */
+
+/* ── 뺀 것 ── */
+#topSub { display: none !important; }                         /* 머리: 날짜·박수·D-day */
+.dmrow .dmeta2 > span.one, .dmrow .dmeta2 > i { display: none !important; }   /* 하루 머리: 시간대·장소 수 ('오늘' 표시는 남김) */
+#v-plan > .hint { display: none !important; }                 /* 조작 안내 한 줄 */
+
+/* ── 머리: 메뉴 · 제목 · 요약/상세만 → 제목을 주인공으로 ── */
+.pill { min-height: 3.25rem !important; height: auto !important; padding: 0.375rem 0.375rem 0.375rem 0.25rem !important; }
+.pill .ttl { display: flex; align-items: center; padding: 0 0.125rem !important; }
+.pill .ttl b { font-size: 1.0625rem !important; font-weight: 700; line-height: 1.3; letter-spacing: -0.01em; }
+
+/* ── 하루 머리: 도시 / 제목 / 날씨 3줄, 위계 = 제목 > 날씨 > 도시 ── */
+.dayline { gap: 0.25rem !important; padding: 0 0.25rem; }
+.dayline .r1 { min-height: 1.75rem; }
+.dayline .r1 .city { font-size: 0.8125rem; font-weight: 600; color: var(--sub) !important; letter-spacing: 0.01em; }
+.dayline h2 { font-size: 1.5rem !important; line-height: 1.3 !important; margin-top: 0 !important; letter-spacing: -0.015em; }
+.dmrow { margin-top: 0.25rem !important; gap: 0.25rem 0.5rem !important; }
+.dmrow .dmeta2:not(:has(> :not(span.one):not(i))) { display: none !important; }   /* 비면 자리도 빼기 */
+.dmrow .wxl { padding-left: 0 !important; border-left: 0 !important; font-size: 0.875rem !important; }
+.dmrow .wxl svg { width: 1.25rem; height: 1.25rem; }
+
+/* 하루 머리 아래 → 일정 사이 숨 (안내 한 줄 빠진 자리) */
+#dayHead { margin-bottom: 0.375rem; }
+#dayBody + #warn, #v-plan > #warn { margin-top: 0.5rem; }
