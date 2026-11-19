@@ -53,6 +53,8 @@ const FXDEFS = '<defs><filter id="gbjSoft" x="-20%" y="-20%" width="140%" height
 const ALLDEFS = () => G.map(DEFS).join('').replace(/<\/?defs>/g, '');   // 11/19 리뷰: 묶음 그라디언트 8개는 전역 #gbjFx 한 곳에만(숨은 화면의 캐릭터가 먼저 나와도 색이 빠지지 않게)
 const ensureFx = () => { if (document.getElementById('gbjFxCss') || !document.body) return; const d = document.createElement('div'); d.innerHTML = '<svg id="gbjFx" width="0" height="0" style="position:absolute;width:0;height:0" aria-hidden="true">' + FXDEFS.replace('</defs>', ALLDEFS() + '</defs>') + '</svg>'; document.body.appendChild(d.firstChild); };
 const CACHE = {};
+/* 11/20 동우님 폰: 사파리(아이폰은 모든 브라우저가 WebKit)는 SVG 필터를 낮은 해상도로 그려 몸 테두리가 거칠어짐 → 거기선 입체 필터를 빼고 그라디언트 면만(가장자리 선명) */
+const WK_LOWRES = (() => { try { const u = navigator.userAgent; return /iP(hone|ad|od)/.test(u) || (/Macintosh/.test(u) && navigator.maxTouchPoints > 1) || (/Safari\//.test(u) && !/Chrome|Chromium|Edg|OPR|Android/.test(u)); } catch (_) { return false; } })();
 function soft(code, bg) {
   const key = code + (bg ? 1 : 0); if (CACHE[key]) return CACHE[key];
   const g = grp(code), t = TONE[code.slice(0, 2)], raw = wrap(bg ? g.bg : 'none', body(code, g), g);
@@ -69,7 +71,7 @@ function soft(code, bg) {
       if (f === W.toLowerCase()) nf = a > 420 ? t.lt : '#ffffff'; else if (f === KL) nf = t.dk;
       el.setAttribute('fill', nf);
       el.setAttribute('stroke', el.getAttribute('stroke-dasharray') ? t.dk : 'none');
-      if (el.getAttribute('stroke') === 'none' && a > 30 && !el.closest('.fx-puff,.fx-fire,.fx-pop')) el.setAttribute('filter', 'url(#gbjSoft)');
+      if (!WK_LOWRES && el.getAttribute('stroke') === 'none' && a > 30 && !el.closest('.fx-puff,.fx-fire,.fx-pop')) el.setAttribute('filter', 'url(#gbjSoft)');
     } else if (!st || st === KL) el.setAttribute('stroke', t.dk);
   });
   { const n = NORM[code] || [1, 0, 0, 60], rx = Math.max(13, Math.min(30, n[3] * 0.4));   // 11/15: 그림자 = 그림 폭에 맞춰 바로 아래(바닥선 y77) · 넓고 옅은 그림자 + 좁고 진한 접지 그림자

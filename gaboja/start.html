@@ -715,7 +715,7 @@ body { background: transparent; }
 .pass .city { margin: 0; font-size: 1.875rem; font-weight: 700; letter-spacing: -.045em; line-height: 1.15; }
 .pass .flaps { gap: 0.1875rem; }
 .pass .flaps .fl { width: 1.375rem; height: 1.8125rem; font-size: 0.9375rem; border-radius: 0.25rem; }
-.pass .av.sm { width: 6.25rem; height: 6.25rem; flex: none; }
+.pass .av.sm { width: 7.25rem; height: 7.25rem; flex: none; }   /* 11/20 #4: 6.25 → 7.25rem, 그림은 fitChar로 칸에 꽉 */
 .pass .ft { display: grid; grid-template-columns: 1fr auto 1fr; gap: 0.625rem; align-items: end; padding: 0.625rem 1.125rem 1rem; }
 .pass .ft small { display: block; font: 700 0.65625rem var(--lat); letter-spacing: .1em; color: var(--sub); }
 .pass .ft b { display: block; font: 800 1.625rem/1.1 var(--lat); letter-spacing: -.02em; }
@@ -793,6 +793,49 @@ html:root[data-theme="dark"] { --canvas: #1D1E22; --paper: #27282C; --float: #2C
 .dep .dr.me .fl { box-shadow: inset 0 0 0 1.5px rgba(255,255,255,.55); color: var(--flap-tx); }   /* 11/20 동우님: 색이 많아 '?' 칸은 흰색 하나로 */
 .dep .dr.me .dn { color: var(--flap-tx); }
 .dep .dr.me .dg { color: #8F969F; }
+/* 11/20 동우님 #3 '언제 가세요?' = 스크롤 없이 한 화면: 날짜 미정 = 한 줄(− 3박 4일 +), 달력 칸 높이 조금 줄임 → 남는 높이는 위아래 여백 */
+.nrow { display: flex; align-items: center; justify-content: space-between; gap: 0.75rem; }
+.nrow .nl { font-size: 0.875rem; font-weight: 600; color: var(--sub); }
+.nstep { display: flex; align-items: center; height: 2.625rem; border-radius: 0.625rem; background: var(--tile); border: 1px solid var(--tile-edge); box-shadow: var(--sh-xs); overflow: hidden; }
+.nstep .ns { width: 2.625rem; height: 100%; font-size: 1.125rem; font-weight: 600; color: var(--ink); }
+.nstep .ns[disabled] { opacity: .3; }
+.nstep .nv { min-width: 5.5rem; height: 100%; padding: 0 0.25rem; font-size: 0.875rem; font-weight: 600; color: var(--sub); border-inline: 1px solid var(--hair); }
+.nrow.on .nstep { border-color: var(--blue); box-shadow: 0 0 0 1px var(--blue), var(--sh-xs); }
+.nrow.on .nstep .nv { color: var(--blue); font-weight: 700; }
+.cal .gd button, .cal .gd span { height: 2.375rem; }
+.cal .gd button::after { height: 2.125rem; }
+.cal { padding: 0.625rem 0.75rem 0.75rem; }
+.cal .ch { padding-bottom: 0.25rem; }
+/* 11/20 동우님 #4: 성향이 정해진 뒤 '내 성향' 표기는 전부 그 묶음 파스텔 (--me-*: soft 바탕 · ink 진한 글자/칩 · edge 테두리 · on = ink 위 글자) */
+html[data-grp="LS"] { --me-soft: #E4F3F5; --me-ink: #2F6B73; --me-edge: #6099A0; --me-on: #FFFFFF; }
+html[data-grp="LE"] { --me-soft: #FEF2F5; --me-ink: #9A4A62; --me-edge: #C78297; --me-on: #FFFFFF; }
+html[data-grp="HS"] { --me-soft: #E4EEF7; --me-ink: #2F557A; --me-edge: #6086A9; --me-on: #FFFFFF; }
+html[data-grp="HE"] { --me-soft: #FFE7EF; --me-ink: #8E3A63; --me-edge: #C17192; --me-on: #FFFFFF; }
+@media (prefers-color-scheme: dark) { html:not([data-theme="light"])[data-grp="LS"] { --me-soft: color-mix(in srgb, #6099A0 22%, var(--paper)); --me-ink: #C4E5E9; --me-edge: #6099A0; --me-on: #16171A; } html:not([data-theme="light"])[data-grp="LE"] { --me-soft: color-mix(in srgb, #C78297 22%, var(--paper)); --me-ink: #FCE6EC; --me-edge: #C78297; --me-on: #16171A; } html:not([data-theme="light"])[data-grp="HS"] { --me-soft: color-mix(in srgb, #6086A9 22%, var(--paper)); --me-ink: #C6DBEE; --me-edge: #6086A9; --me-on: #16171A; } html:not([data-theme="light"])[data-grp="HE"] { --me-soft: color-mix(in srgb, #C17192 22%, var(--paper)); --me-ink: #FFD2E0; --me-edge: #C17192; --me-on: #16171A; } }
+html[data-theme="dark"][data-grp="LS"] { --me-soft: color-mix(in srgb, #6099A0 22%, var(--paper)); --me-ink: #C4E5E9; --me-edge: #6099A0; --me-on: #16171A; }
+html[data-theme="dark"][data-grp="LE"] { --me-soft: color-mix(in srgb, #C78297 22%, var(--paper)); --me-ink: #FCE6EC; --me-edge: #C78297; --me-on: #16171A; }
+html[data-theme="dark"][data-grp="HS"] { --me-soft: color-mix(in srgb, #6086A9 22%, var(--paper)); --me-ink: #C6DBEE; --me-edge: #6086A9; --me-on: #16171A; }
+html[data-theme="dark"][data-grp="HE"] { --me-soft: color-mix(in srgb, #C17192 22%, var(--paper)); --me-ink: #FFD2E0; --me-edge: #C17192; --me-on: #16171A; }
+.mine { background: var(--me-soft, var(--blue-soft)); }
+.mine .go { color: var(--me-ink, var(--blue)); }
+.g4 .mini.me { box-shadow: inset 0 0 0 2px var(--me-edge, var(--blue)), var(--sh-xs); }
+.g4 .mini .me-b { background: var(--me-ink, var(--blue)); color: var(--me-on, var(--on-ink)); }
+.pass .flaps .fl { background: var(--me-ink, var(--flap)); color: var(--me-on, var(--flap-tx)); }
+.rt .rtop .flaps.big .fl { background: var(--gi, var(--flap)); color: var(--gon, var(--flap-tx)); }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .rt .rtop .flaps.big .fl { color: #16171A; } }
+:root[data-theme="dark"] .rt .rtop .flaps.big .fl { color: #16171A; }
+/* 11/20 동우님 #5: NEXT 위가 점선에 붙어 있던 것 → 위 점선 아래 정보 줄처럼 숨 (점선 ↔ 글자 약 14px) */
+.pass .todo { padding-top: 0.875rem; }
+.pass .todo h4 { margin-bottom: 0.25rem; }
+/* 11/20 동우님 #6: 여행 메이트 두 칸 = 같은 모양 가로 줄(캐릭터 왼쪽 · 코드·이름·이유 한 줄) — 반 칸에선 이유(14~20자)가 들쭉날쭉 줄바꿈되던 것 */
+.pair { grid-template-columns: minmax(0,1fr); gap: 0.875rem; }
+.pair .mini { display: grid; grid-template-columns: 5.5rem minmax(0,1fr); grid-template-areas: "av t1" "av t2" "av t3"; align-items: center; column-gap: 0.25rem; padding: 0.5rem 0.5rem 0.5rem 0.5rem; }
+.pair .mini .av { grid-area: av; height: 5.5rem; width: 5.5rem; margin: 0; align-self: center; }
+.pair .mini .t1 { grid-area: t1; padding: 0.125rem 0.375rem 0; align-self: end; }
+.pair .mini .t2 { grid-area: t2; padding: 0.125rem 0.375rem 0; flex-direction: row; align-items: baseline; gap: 0.5rem; }
+.pair .mini .cd { font-size: 1.125rem; }
+.pair .mini .pf { display: none; }
+.pair .mini .t3 { grid-area: t3; padding: 0.125rem 0.375rem 0.125rem; align-self: start; white-space: nowrap !important; overflow: hidden !important; font-size: 0.78125rem; }
 </style>
 </head>
 <body>
@@ -820,7 +863,7 @@ html:root[data-theme="dark"] { --canvas: #1D1E22; --paper: #27282C; --float: #2C
 
 <script>/* 11/15 #23: 아이폰 사파리 26(떠 있는 아래 주소창) = 아래 고정 버튼을 그만큼 올림 */ (function () { try { const ua = navigator.userAgent, ios = /iP(hone|od|ad)/.test(ua) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1), solo = navigator.standalone === true || matchMedia('(display-mode: standalone)').matches, v = +((ua.match(/Version\/(\d+)/) || [])[1] || 0); if (ios && !solo && v >= 26) document.documentElement.classList.add('ios26'); } catch (_) {} })();</script>
 <script src="types.js"></script>
-<script src="chars.js?v=pastel2"></script>
+<script src="chars.js?v=wk1"></script>
 <script src="gen-data.js"></script>
 <script src="sgg.js"></script>
 <script src="gen.js"></script>
@@ -1111,6 +1154,7 @@ function render() {
   const s = S.step;
   document.documentElement.classList.toggle('fit', s === 'intro' || s === 'swipe' || s === 'calc' || s === 'build');   // 11/18 D-1·18: 고르기·로딩 화면도 스크롤 없는 한 화면
   document.documentElement.classList.toggle('introfit', s === 'intro');
+  if (S.type && /^[LH][SE]/.test(S.type)) document.documentElement.dataset.grp = S.type.slice(0, 2); else delete document.documentElement.dataset.grp;   // 11/20 #4 내 성향 색
   if (s === 'intro') return rIntro();
   if (s[0] === 'q') return rQ(+s.slice(1));
   if (s === 'calc') return rCalc();
@@ -1294,6 +1338,10 @@ const GI = { LS: '<circle cx="12" cy="12" r="8.5"/><path d="M15.5 8.5l-2 5-5 2 2
 const AV = (c, k) => window.GABOJA_CHAR ? `<div class="av gfx${k ? ' ' + k : ''}" data-c="${c}"${k === 'hero' ? ' data-fxd="650"' : ''} style="background:${GABOJA_CHAR_BG(c)}">${GABOJA_CHAR(c, { bg: false })}</div>` : '';   // 11/15 #9 짐 캐릭터
 /* 11/18 D-2·D-3: 배경 칸 없이 캐릭터만 (fx = 등장 이펙트 켬). 묶음 색 = chars.js G 값 */
 const GRPC = { LS: { bg: '#E4F3F5', a: '#6099A0' }, LE: { bg: '#FEF2F5', a: '#C78297' }, HS: { bg: '#E4EEF7', a: '#6086A9' }, HE: { bg: '#FFE7EF', a: '#C17192' } };   // 11/20 파스텔
+/* 11/20 동우님 #4: 짐 캐릭터는 키(38~73)·좌우가 제각각이라 같은 칸에 넣으면 낮게/높게 보임 → 그림 둘레에 같은 여백을 두고 정사각형으로 잘라 가운데에 (발급 완료 탑승권) */
+function fitChar(svg) { if (!svg) return; const g = svg.querySelector('.fx-b'); if (!g) return; let b; try { b = g.getBBox(); } catch (_) { return; } if (!b.width) return;
+  const pad = 4, bot = Math.max(b.y + b.height, 80), w = b.width + pad * 2, h = bot - b.y + pad * 2, sz = Math.max(w, h);
+  svg.setAttribute('viewBox', `${(b.x - pad - (sz - w) / 2).toFixed(1)} ${(b.y - pad - (sz - h) / 2).toFixed(1)} ${sz.toFixed(1)} ${sz.toFixed(1)}`); }
 const AVnb = (c, k, fx) => window.GABOJA_CHAR ? `<div class="av${fx ? ' gfx' : ''} ${k || ''}"${fx ? ` data-c="${c}" data-fxd="650"` : ''}>${GABOJA_CHAR(c, { bg: false })}</div>` : '';
 const grpIcon = c => `<svg viewBox="0 0 24 24" aria-hidden="true">${GI[c.slice(0, 2)]}</svg>`;
 const LMEAN = { L: '로컬', H: '핫플', S: '구경', E: '즐기기', F: '알차게', R: '여유롭게', J: '계획형', P: '즉흥형' };
@@ -1331,7 +1379,7 @@ function rResult(c, mine) {
   setBar(null, 0, 0, null);   // 11/18 T20: '내 결과' 버튼 없앰 (이미 그 화면)
   const day = rhythmHtml(c);   // 11/14 #12: 도시 이름 없는 하루 리듬
   const el = screen(`
-    <article class="ticket rt" aria-label="${c} ${esc(t.name)}" style="--gbg:${(window.GABOJA_CHAR_BG && GABOJA_CHAR_BG(c)) || GRPC[c.slice(0, 2)].bg};--ga:${GRPC[c.slice(0, 2)].a}">
+    <article class="ticket rt" aria-label="${c} ${esc(t.name)}" style="--gbg:${(window.GABOJA_CHAR_BG && GABOJA_CHAR_BG(c)) || GRPC[c.slice(0, 2)].bg};--ga:${GRPC[c.slice(0, 2)].a};--gi:var(--g-${c.slice(0, 2).toLowerCase()}-ink);--gon:#FFFFFF">
       <div class="rband">
         <div class="hd rhd"><b class="vz">vztr<i></i></b><span class="gchip"><i></i>${esc(t.group)}</span></div>
         <div class="rtop">${lflapsHtml(c)}${AVnb(c, 'hero', true)}</div>
@@ -1428,10 +1476,13 @@ function rInfo(s) {
     if (!S.calM) { const d = new Date(); S.calM = new Date(d.getFullYear(), d.getMonth(), 1); }
     el = screen(head('언제', '언제 가세요?', '가는 날·오는 날을 눌러 주세요. 하루만 누르면 당일치기') + `
       <div class="cal" id="cal"></div>
-      <div class="blk"><div class="sub2">날짜 미정이면</div><div class="chips" id="nights">${NIGHTS.map(x => `<button class="chip soft" data-n="${x[0]}" aria-pressed="${!tr.start && (x[0] ? !tr.day && tr.nights === x[0] : !!tr.day)}">${x[1]}</button>`).join('')}</div></div>
+      <div class="nrow" id="nights"><span class="nl">날짜 미정이면</span><div class="nstep"><button type="button" class="ns" data-d="-1" aria-label="하루 줄이기">−</button><button type="button" class="nv" id="nVal" aria-pressed="false"></button><button type="button" class="ns" data-d="1" aria-label="하루 늘리기">+</button></div></div>
       <div class="foot"><div class="sum" id="dSum"></div><button class="cta" id="dNext" ${hasN(tr) ? '' : 'disabled'}>다음</button></div>`);
     drawCal(); dateSum();
-    $('#nights').onclick = e => { const b = e.target.closest('[data-n]'); if (!b) return; tr.nights = +b.dataset.n; tr.day = tr.nights === 0; tr.start = tr.end = null; tap(); drawCal(); dateSum(); };
+    $('#nights').onclick = e => { const b = e.target.closest('button'); if (!b) return;   /* 11/20 #3: 칩 6개(두 줄) → 한 줄 − 3박 4일 + */
+      const on = !tr.start && hasN(tr), cur = on ? (tr.day ? 0 : Math.min(5, tr.nights || 3)) : 3;   // 꺼져 있을 땐 보이는 '3박 4일'을 먼저 켬
+      const n = b.dataset.d && on ? Math.max(0, Math.min(5, cur + +b.dataset.d)) : cur;
+      tr.nights = n; tr.day = n === 0; tr.start = tr.end = null; tap(); drawCal(); dateSum(); };
     $('#dNext').onclick = () => next(s);
   }
   if (s === 'who') {
@@ -1863,7 +1914,8 @@ function drawCal() {
 }
 function dateSum() {
   const tr = S.trip, el = $('#dSum'); if (!el) return;
-  document.querySelectorAll('#nights .chip').forEach(c => c.setAttribute('aria-pressed', !tr.start && (+c.dataset.n ? !tr.day && tr.nights === +c.dataset.n : !!tr.day)));
+  { const nv = $('#nVal'); if (nv) { const on = !tr.start && hasN(tr), n = on ? (tr.day ? 0 : Math.min(5, tr.nights || 3)) : 3; nv.textContent = NIGHTS[n][1]; nv.setAttribute('aria-pressed', on); $('#nights').classList.toggle('on', on);
+    document.querySelectorAll('#nights .ns').forEach(b => b.disabled = on && ((+b.dataset.d < 0 && n === 0) || (+b.dataset.d > 0 && n === 5))); } }
   if (tr.start && tr.end) el.innerHTML = `${fmt(tr.start)} → ${fmt(tr.end)} · <span>${nTx(tr)}</span>`;
   else if (tr.start) el.innerHTML = `${fmt(tr.start)} · <span>당일치기</span>`;
   else if (hasN(tr)) el.innerHTML = `날짜 미정 · <span>${nTx(tr)}</span>`;
@@ -2013,7 +2065,7 @@ function rDone() {
   screen(`
     <article class="ticket pass">
       <div class="hd"><b class="vz">vztr<i></i></b><button class="ed" id="dEdit" aria-label="수정하기"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20h4L19 9l-4-4L4 16zM13.5 6.5l4 4"/></svg>수정</button></div>
-      <div class="ptop"><div class="pl"><span class="pok">${ICON.check}발급 완료</span><h1 class="city">${esc(city)}</h1>${S.type ? flapsHtml(S.type.split(''), false) : ''}</div>${S.type ? AVnb(S.type, 'sm') : ''}</div>
+      <div class="ptop"><div class="pl"><span class="pok">${ICON.check}발급 완료</span><h1 class="city">${esc(city)}</h1>${S.type ? flapsHtml(S.type.split(''), false) : ''}</div>${S.type ? AVnb(S.type, 'sm', true) : ''}</div>
       <div class="ft">${col('FROM', tr.start)}<div class="mid"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 15.5v-2l-8-5V3.5a1.5 1.5 0 0 0-3 0v5l-8 5v2l8-2.5V18l-2 1.5V21l3.5-1 3.5 1v-1.5L13 18v-5z"/></svg>${esc(mid)}</div>${col('TO', to, 'e')}</div>
       <div class="perf"></div>
       <div class="card" style="background:none;border:0;box-shadow:none">
@@ -2036,6 +2088,7 @@ function rDone() {
       <a class="cta" href="${PLANNED ? 'index.html' : 'index.html#sample'}" style="text-decoration:none">${PLANNED ? '내 일정 보기' : '샘플 일정 보기'} ${ICON.arrow}</a>
     </div>`, 'pass-scr');
   $('#dEdit').onclick = () => { S.hist = ['intro', 'method']; go('city', { noHist: true, back: true }); };
+  fitChar(document.querySelector('.scr:not(.leaving) .pass .av svg'));   // 11/20 #4 캐릭터마다 위치·크기 통일
   document.querySelectorAll('.pass .todo [data-go]').forEach(b => b.onclick = () => { S.hist = ['intro', 'method']; S.fromDone = true; go(b.dataset.go); });   // 넣기·정하기 → 그 질문 화면(비행기·숙소는 한 화면), 뒤로 = 발급 완료
   const rs = $('#reSend'); if (rs) rs.onclick = () => { rs.disabled = true; rs.textContent = '보내는 중…'; sendNow().then(() => { dir = 1; render(); }); };
 }
