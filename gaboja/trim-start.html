@@ -637,7 +637,7 @@ html.fit, html.fit body { height: 100%; overflow: hidden; overscroll-behavior: n
 /* :root가 이미 안전 영역(노치·홈 막대)만큼 위아래 여백을 가짐 → 높이에서 빼야 아이폰에서 아래 버튼이 안 잘림 */
 html.fit .wrap { height: calc(100vh - env(safe-area-inset-top, 0px) - env(safe-area-inset-bottom, 0px)); height: calc(var(--app-h, 100dvh) - env(safe-area-inset-top, 0px) - env(safe-area-inset-bottom, 0px)); min-height: 0; overflow: hidden; padding-bottom: 0.75rem; }
 html.introfit .bar { display: none; }   /* 11/18 14: 첫 화면은 뒤로 버튼이 없으니 위 막대를 빼고 위·아래 여백을 같게(둘 다 1.25rem + 안전 영역) */
-html.introfit .wrap { padding-top: clamp(1.75rem, 7svh, 4rem); padding-bottom: clamp(1.5rem, 5svh, 3rem); }   /* 11/20 동우님: 꽉 채우지 말고 맨 위·맨 아래 여백 넉넉히 */
+html.introfit .wrap { padding-top: clamp(1.75rem, 10svh, 6rem); padding-bottom: clamp(1.5rem, 7svh, 4.5rem); }   /* 11/20 동우님: 꽉 채우지 말고 맨 위·맨 아래 여백 넉넉히 */
 html.ios26.fit .wrap { padding-bottom: 4.25rem; }
 html.fit main, html.fit .scr { min-height: 0; }
 html.fit .scr.intro { padding-top: 0; gap: 0; }
