@@ -770,6 +770,9 @@ body { background: transparent; }
 .scr:not(.intro):not(.swscr):not(:has(> .calc)) > .foot { flex: 3 1 0; justify-content: flex-end; margin-top: 0; }
 .scr:not(.intro):not(.swscr):not(:has(> .calc)):not(:has(> .foot))::after { content: ""; flex: 3 1 0; margin-top: calc(-1 * var(--scr-g, 1.5rem)); }
 .scr.qs { --scr-g: 0px; }   /* 질문 화면은 gap 0 */
+/* 11/20 동우님 질문 화면: 제목–설명 10 → 6px · 설명–보기 간격 = 보기–탑승권 코드 간격(눈으로 같게: 설명 글줄 아래 빈 줄 높이 약 4px만큼 빼 줌) */
+.qh p { margin-top: 0.375rem; }
+.scr.qs .opts { margin-top: calc(clamp(1.25rem, 4.5svh, 2.75rem) - 0.25rem); }
 </style>
 </head>
 <body>
