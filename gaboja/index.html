@@ -895,6 +895,10 @@ body { letter-spacing: 0; }
 .track > .stop.now:last-child .rail::after, .track > .stopw:last-child .stop.now .rail::after { display: none; }
 /* 11/18 G72: 위 카드 → 일정표를 잇던 파란 선 삭제 */
 #v-now .nextwrap + .track::before { display: none; }
+/* 11/21 #13a: 지나온 길 상자 ↔ 다음 카드 간격 좁게(한 줄기로 보이게) · 탭 열 때 카드가 머리 아래로 */
+#v-now > #trackPast { margin-bottom: -0.75rem; }
+#v-now .nextwrap + .track { margin-top: -0.75rem; }
+#v-now .nextwrap { scroll-margin-top: var(--now-top, 6.5rem); }
 
 /* 11/18 G56: 하루 머리 간격 — 도시–제목은 붙이고, 시간·날씨는 한 줄로 묶어 제목 아래 한 칸 띄움 */
 .dayline { gap: 0; }
@@ -1310,6 +1314,7 @@ html[data-theme="dark"][data-grp="HE"] { --me-soft: color-mix(in srgb, #C17192 2
 
   <!-- 오늘 -->
   <section class="view" id="v-now" aria-label="오늘" hidden>
+    <div class="track glass" id="trackPast" hidden></div><!-- 11/21 #13a: 지나온 길 → 다음 카드 → 남은 길 (카드가 타임라인 따라 내려감) -->
     <div class="nextwrap card glass">
     <div class="next" id="nextCard"></div>
     <div class="late"><span id="lateHint" hidden></span>
@@ -2140,7 +2145,7 @@ function navDay() { const n = nowRef(); if (st.cur) return st.cur.day; return n.
 /* 11/18 피드백6: 길안내 제목·타임라인 이름은 한 줄('…' 없음) — 넘치면 글자를 0.5px씩 줄임(최소 11px) */
 function fitNow() {
   if ($('#v-now').hidden) return;
-  document.querySelectorAll('#nextCard .nm, #track .stop b').forEach(n => { n.style.fontSize = ''; if (!n.clientWidth) return; let fs = parseFloat(getComputedStyle(n).fontSize); while (n.scrollWidth > n.clientWidth + 1 && fs > 11) { fs -= 0.5; n.style.fontSize = fs + 'px'; } });
+  document.querySelectorAll('#nextCard .nm, #track .stop b, #trackPast .stop b').forEach(n => { n.style.fontSize = ''; if (!n.clientWidth) return; let fs = parseFloat(getComputedStyle(n).fontSize); while (n.scrollWidth > n.clientWidth + 1 && fs > 11) { fs -= 0.5; n.style.fontSize = fs + 'px'; } });
 }
 addEventListener('resize', () => { try { fitNow(); } catch (_) {} });
 const roTx = w => { const c = String(w).replace(/[^가-힣]+$/, '').slice(-1).charCodeAt(0) - 0xAC00; return c >= 0 && c < 11172 ? (c % 28 && c % 28 !== 8 ? '으로' : '로') : '(으)로'; };   // 받침 없거나 ㄹ이면 '로', 있으면 '으로', 한글 아니면 '(으)로'
@@ -2169,10 +2174,10 @@ function renderNow() {
   } else if (p.at) { const c = L[p.i]; h += '<div class="nm one">마지막 · ' + esc(c.k === 'm' ? c.mv : (c.sh || c.n)) + '</div><div class="lo">끝나면 눌러서 하루 도장 완성</div><div class="acts"><button class="btn pri" id="endDayBtn">오늘 일정 끝</button></div>' + closedBtn; }
   else h += '<div class="nm">' + (n.phase === 'after' && !st.cur ? '다녀왔어요' : '오늘 일정 끝') + '</div><div class="lo">기록에 DAY ' + d.no + ' 저장</div>'
       + (di < DAYS.length - 1 ? '<div class="acts"><button class="btn sec" id="nextDayBtn">DAY ' + (d.no + 1) + ' 미리 따라가기</button></div>' : '');
+  const nwr = $('#v-now .nextwrap'), vis = !$('#v-now').hidden, y0 = vis ? nwr.getBoundingClientRect().top : 0;
   $('#nextCard').innerHTML = h;
-  fitNow();
   // 지나온 길 / 남은 길 = 일정 탭과 같은 목록(추가·옮김·보관·늦어짐·일찍 그대로)
-  $('#track').innerHTML = L.map((x, i) => {   // 11/18 D-4 ④: 이동 = 시각 없이 작은 알약 [아이콘] 17분 · 장소 = 시각 + 이름(안 잘림)
+  const rows = L.map((x, i) => {   // 11/18 D-4 ④: 이동 = 시각 없이 작은 알약 [아이콘] 17분 · 장소 = 시각 + 이름(안 잘림)
     const cls = (i < p.i || (i === p.i && !p.at)) ? 'past' : i === p.i ? 'now' : '', sh = tb ? 0 : toMin(x.s) - x.b;
     const nm = x.k === 'm' ? x.mv : x.fly ? flyTx(x, 1, 3) : (x.sh || x.n);
     const fl = cls === 'now' && (x.k === 'm' || x.fly) && i < L.length - 1 ? '<span class="fl" aria-hidden="true"><i></i><i></i><i></i></span>' : '';
@@ -2183,7 +2188,14 @@ function renderNow() {
       + (x.k === 'u' ? '<span class="s2">직접 추가</span>' : '')
       + (sh && !cls && x.k !== 'm' ? '<span class="moved">처음 예정 ' + toT(x.b) + '</span>' : '')   /* 11/15 #18: 밀림·당겨짐 문구 없이 처음 시각만 */ + '</span>'
       + (can ? '<button class="more" type="button" data-stopm="' + x.id + '" aria-label="건너뛰기·빼기">···</button></div></div>' : '</div>');
-  }).join('');
+  });
+  { // 11/21 동우님 #13a: 다음 카드(제목·도착)가 타임라인 제자리에 — 위 = 지나온 길(지금까지), 카드 = 다음 하나, 아래 = 그 뒤
+    const cut = Math.max(p.i + 1, 0), past = rows.slice(0, cut).join(''), rest = rows.slice(nx ? cut + 1 : cut).join('');
+    $('#trackPast').innerHTML = past; $('#trackPast').hidden = !past;
+    $('#track').innerHTML = rest; $('#track').hidden = !rest;
+    fitNow();
+    if (vis) { const dy = nwr.getBoundingClientRect().top - y0; if (Math.abs(dy) > 1) window.scrollBy(0, dy); }   // 도착을 눌러도 카드는 화면 같은 자리, 지난 길만 위로 쌓임
+  }
   const b = $('#banner');
   if (!net) b.hidden = true;
   else {
@@ -3169,7 +3181,7 @@ document.querySelector('.tabs').onclick = e => {
   const onPlan = b.dataset.v === 'v-plan';
   $('#modeSeg').style.visibility = onPlan ? 'visible' : 'hidden';
   $('#dayBtns').hidden = !onPlan;
-  if (b.dataset.v === 'v-now') { renderNow(); fitNow(); } else if (b.dataset.v === 'v-log') renderTrail(); else renderPlan();
+  if (b.dataset.v === 'v-now') { renderNow(); fitNow(); if (!$('#trackPast').hidden) $('#v-now .nextwrap').scrollIntoView({ block: 'start' }); } else if (b.dataset.v === 'v-log') renderTrail(); else renderPlan();
   setSub(b.dataset.v);
   setFab(b.dataset.v);
   if (b.dataset.v === 'v-log' && endGet() === 'new') { endSet('seen'); endBadge(); }
