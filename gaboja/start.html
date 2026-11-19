@@ -1673,7 +1673,7 @@ function autoRide(root) {
           if (!x) { hint.textContent = j && j.e === 'nokey' ? '' : (train ? '그날 이 열차를 못 찾았어요' : '그날 이 편을 못 찾았어요') + ' · 시각은 아래에서 골라 주세요'; return; }
           const dep = train ? x.dep : x.dep.t, arr = train ? x.arr : x.arr.t;
           setTm(root, k, 'dep', dep); setTm(root, k, 'arr', arr); T.flightTx = flightText(T); blankHint();
-          hint.textContent = train ? `${x.grade} ${x.no} · ${dep} 출발 → ${arr} 도착 · 국토교통부 열차정보` : `${x.dep.iata} ${dep} → ${x.arr.iata} ${arr}${x.arr.date && x.arr.date !== x.dep.date ? '(+1)' : ''} · 항공편 정보 AeroDataBox`;
+          hint.textContent = train ? `${x.grade} ${x.no.replace(/^0+(?=\d)/, '')}번 · ${dep} 출발 → ${arr} 도착 · 국토교통부 열차정보` : `${x.dep.iata} ${dep} → ${x.arr.iata} ${arr}${x.arr.date && x.arr.date !== x.dep.date ? '(+1)' : ''} · 항공편 정보 AeroDataBox`;
         }).catch(() => { if (my === n) hint.textContent = ''; });
       }, 650);
     });
@@ -2196,6 +2196,7 @@ else if (qsS && (/^q[0-9]$/.test(qsS) || ['intro', 'result', 'types', 'method', 
   if (!S.type && !qsS.startsWith('q') && qsS !== 'intro' && qsS !== 'types') { S.type = 'LSRP'; S.votes = { L: 4, H: 1, S: 3, E: 2, F: 2, R: 3, J: 1, P: 4 }; }
   if (qsS === 'done') { Object.assign(S.trip, { city: '오사카·교토', start: 20261204, end: 20261207, nights: 3, who: '친구', home: '올림픽로 300', method: QS.get('method') || 'auto', likes: ['자연·산책', '카페'] }); if (QS.get('method')) { buildPlan(); SEND = { st: 'off' }; } } // ?method=self|blocks 이면 일정도 만들어 저장(점검용: index.html 확인)
   if (qsS === 'result') { const want = ['LS', 'LS', 'LE', 'HS', 'LS', 'RP', 'RP', 'FP', 'RP', 'RJ']; S.ans = Q.map((q, i) => Math.max(0, q.o.findIndex(o => o[1] === want[i]))); S.votes = tally(S.ans); S.type = letters(S.votes).join(''); }   // 피드백용: 내 결과(게이지·내가 고른 답)
+  if (qsS === 'book') Object.assign(S.trip, { city: QS.get('city') || '오사카·교토', start: +QS.get('start') || 20261204, end: +QS.get('end') || 20261207, nights: 3, who: '친구', flight: 'yes' }, QS.get('mode') ? { mode: QS.get('mode'), region: QS.get('region') || '수도권', regionPicked: true } : {});   // 11/20 시험 링크: 편명·열차 번호 넣는 화면 바로 (?s=book · 국내 열차 = &city=부산&mode=train)
   if (qsS === 'build') Object.assign(S.trip, { city: '오사카·교토', nights: 3, who: '친구', home: '올림픽로 300' });
   if (qsS === 'swipe') { Object.assign(S.trip, { city: QS.get('city') || '오사카·교토', start: 20261204, end: 20261207, nights: 3, who: '친구', method: 'blocks', likes: ['카페', '쇼핑'] }); if (!S.type) { S.type = 'LERJ'; } }
   S.hist = ['intro']; S.step = qsS; render();
