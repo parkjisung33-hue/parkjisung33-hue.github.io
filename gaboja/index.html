@@ -780,7 +780,7 @@ body { letter-spacing: 0; }
 .dcard .tt .one { flex: 1; }
 .dcard .tt .muted { font-weight: 500; font-size: 0.8125rem; }
 .dchip { background: var(--ink); color: var(--on-ink); border-radius: 0.625rem; font-family: var(--mono); font-size: 0.75rem; font-weight: 500; letter-spacing: .04em; }
-.dcard .rt { height: 1.25rem; line-height: 1.25rem; font-size: 0.84375rem; }
+.dcard .rt { line-height: 1.45; font-size: 0.84375rem; white-space: normal; word-break: keep-all; }   /* 11/20 숙소 줄 뺌 → 동선은 줄바꿈 허용(잘림 X) */
 .dcard .hs { height: 1.25rem; line-height: 1.25rem; font-size: 0.78125rem; color: var(--sub); display: flex; align-items: center; gap: 0.375rem; }
 .dcard .hs svg { width: 0.875rem; height: 0.875rem; stroke: currentColor; fill: none; stroke-width: 1.9; stroke-linecap: round; stroke-linejoin: round; flex: none; }
 /* D3-3 메모 모아 보기: 할 일(노란 카드 + 날짜 카드) / 완료 접힘 */
@@ -1979,7 +1979,7 @@ function arcCount() { $('#arcN').textContent = st.archive.length ? st.archive.le
 function arcSheet() {
   const rows = st.archive.map((r, i) => '<div class="arow"><span class="tmx">DAY ' + r.d.no + '</span><span class="one"><b>' + esc(r.it.sh || r.it.n) + '</b> ' + (r.closed ? '<span class="off">닫혀서 바꿈</span>' : r.skip ? '<span class="off">건너뜀</span>' : r.d.tbd ? '' : '<span class="muted">' + toT(r.sl) + '</span>') + '</span>'
     + '<button class="btn sec" data-res="' + i + '">복원</button><button class="btn del" data-kill="' + i + '">삭제</button></div>').join('');
-  const h = '<div class="shd"><div><span class="eyebrow">보관함</span><h3 id="sheetTitle">보관한 일정 ' + st.archive.length + '개</h3><p class="sub one">밀어서 보관한 일정이에요 · 복원하면 원래 시간대로 돌아가요</p></div>' + X_BTN + '</div><div class="body">'
+  const h = '<div class="shd"><div><h3 id="sheetTitle">보관한 일정 ' + st.archive.length + '개</h3><p class="sub one">밀어서 보관한 일정이에요 · 복원하면 원래 시간대로 돌아가요</p></div>' + X_BTN + '</div><div class="body">'
     + (rows || '<p class="sub">보관한 일정이 없어요 · 일정을 옆으로 밀면 여기에 모여요</p>') + '</div>';
   if ($('#sheet').classList.contains('on') && sheetMode === 'arc') $('#sheetIn').innerHTML = h; else { sheetMode = 'arc'; openSheet(h); }
 }
@@ -2469,7 +2469,7 @@ function memoSheet() {
     '<div class="mgrp"><div class="tt"><span class="dchip">DAY ' + d.no + '</span><span class="muted one">' + esc(d.date) + '</span></div>'
     + its.map(c => '<button class="mgo" data-mopen="' + d.no + ':' + c.id + '"><b class="one">' + esc(c.sh || c.n) + '</b><span class="tm">' + tmx(d, c) + '</span><svg viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg></button>' + memoLines(c.memo, d.no + ':' + c.id, only)).join('') + '</div>').join('');
   const nTodo = tm.filter(m => !m.done).length + DAYS.reduce((a, d) => a + d.list.reduce((b, c) => b + (c.memo ? c.memo.filter(m => !m.done).length : 0), 0), 0), nDone = memoTotal() - nTodo;
-  let h = '<div class="shd"><div><span class="eyebrow">메모</span><h3 id="sheetTitle">메모 모아 보기</h3><p class="sub one">할 일 ' + nTodo + ' · 완료 ' + nDone + ' · 체크하면 완료로 옮겨져요</p></div>' + X_BTN + '</div><div class="body">'
+  let h = '<div class="shd"><div><h3 id="sheetTitle">메모 모아 보기</h3><p class="sub one">할 일 ' + nTodo + ' · 완료 ' + nDone + ' · 체크하면 완료로 옮겨져요</p></div>' + X_BTN + '</div><div class="body">'
     + '<span class="mtitle">할 일 ' + nTodo + '</span>'
     + '<div class="mpost"><span class="mh">여행 전체</span>' + memoLines(tm, 'trip', 'todo') + memoAdd('trip', '예: 환전 · 유심 · 보조배터리') + '</div>'
     + grp('todo')
@@ -2939,7 +2939,7 @@ function tripsSheet() {
   let rows = '';
   if (cur) rows += '<div class="trow now"><div class="tmain"><span class="one"><b>' + esc(planCity(cur)) + '</b></span><span class="muted one">' + esc(planDates(cur)) + '</span></div><span class="now-pill">지금</span></div>';
   a.forEach(t => { rows += '<div class="trow"><button class="tmain" data-tswap="' + esc(t.id) + '"><span class="one"><b>' + esc(planCity(t.data.plan)) + '</b></span><span class="muted one">' + esc(t.dates) + md(t.at) + '</span></button><button class="btn del xs" data-tdel="' + esc(t.id) + '">삭제</button></div>'; });
-  const h = '<div class="shd"><div><span class="eyebrow">내 여행</span><h3 id="sheetTitle">내 여행 ' + n + '</h3><p class="sub one">누르면 그 여행으로 바꿔요 · 지금 여행은 자동으로 보관돼요</p></div>' + X_BTN + '</div><div class="body"><div class="tlist">' + (rows || '<p class="sub">보관한 여행 없음</p>') + '</div></div>';
+  const h = '<div class="shd"><div><h3 id="sheetTitle">내 여행 ' + n + '</h3><p class="sub one">누르면 그 여행으로 바꿔요 · 지금 여행은 자동으로 보관돼요</p></div>' + X_BTN + '</div><div class="body"><div class="tlist">' + (rows || '<p class="sub">보관한 여행 없음</p>') + '</div></div>';
   if ($('#sheet').classList.contains('on') && sheetMode === 'trips') $('#sheetIn').innerHTML = h; else { sheetMode = 'trips'; openSheet(h); }
 }
 function swapTrip(id) {
@@ -2958,7 +2958,7 @@ function swapTrip(id) {
 function goNewTrip() { layerOn = false; try { history.replaceState(null, ''); } catch (_) {} location.href = 'start.html?from=app'; }
 function newTripSheet() {   // 바로 이동하지 않고: 지금 여행은 목록에 보관된다고 알린 뒤 [새로 만들기] [취소]
   const p = rawPlan(); if (!p) { goNewTrip(); return; }
-  openSheet('<div class="shd"><div><span class="eyebrow">새 여행</span><h3 id="sheetTitle">새 여행을 만들까요?</h3></div>' + X_BTN + '</div><div class="body"><div><p class="sub one">지금 여행은 내 여행 목록에 보관돼요</p><p class="cfm one">' + esc(planCity(p) + ' · ' + planDates(p)) + '</p></div>'
+  openSheet('<div class="shd"><div><h3 id="sheetTitle">새 여행을 만들까요?</h3></div>' + X_BTN + '</div><div class="body"><div><p class="sub one">지금 여행은 내 여행 목록에 보관돼요</p><p class="cfm one">' + esc(planCity(p) + ' · ' + planDates(p)) + '</p></div>'
     + '<div class="acts"><button class="btn ghost" data-close>취소</button><button class="btn pri" id="newGo">새로 만들기</button></div></div>');
 }
 const SHARES = [['kakao', '카카오톡으로 공유', '<path d="M12 4c4.7 0 8.5 2.9 8.5 6.5S16.7 17 12 17c-.7 0-1.4-.1-2-.2L6 19.5l1-3.6C5 14.7 3.5 12.7 3.5 10.5 3.5 6.9 7.3 4 12 4z"/>'],
@@ -2971,12 +2971,12 @@ function menuSheet(k) {
     const stop = c => ['p', 'f', 'x', 'u'].includes(c.k) && !c.fly && !/숙소|체크|집 도착|공항|휴식|짐/.test(c.sh || c.n || '');
     const nPlace = DAYS.reduce((a, d) => a + d.list.filter(stop).length, 0), mv = DAYS.reduce((a, d) => a + d.list.filter(c => c.k === 'm').reduce((b, c) => b + c.du, 0), 0);
     const nChk = DAYS.reduce((a, d) => a + d.list.filter(c => !c.fly && (c.ck === 'no' || dotOf(d, c) === 'amber')).length, 0);
-    let h = '<div class="shd"><div><span class="eyebrow">여행 요약</span><h3 id="sheetTitle" class="one">' + esc(TRIP_TITLE) + '</h3></div>' + X_BTN + '</div><div class="body">'
+    let h = '<div class="shd"><div><h3 id="sheetTitle" class="one">' + esc(TRIP_TITLE) + '</h3></div>' + X_BTN + '</div><div class="body">'
       + '<div class="sgrid"><div><small>여행</small><b>' + DAYS.length + '일</b></div><div><small>장소</small><b>' + nPlace + '곳</b></div><div><small>총 이동</small><b>' + durTx(mv) + '</b></div><div><small>확인 필요</small><b' + (nChk ? ' class="warn"' : '') + '>' + nChk + '곳</b></div></div><div class="dcards">';
     DAYS.forEach(d => {
       let nm = routeOf(d).filter(x => x !== '집' && x !== baseOf(d)); if (!nm.length) nm = routeOf(d);
       const rt = nm.length > 3 ? nm.slice(0, 3).join(' → ') + ' 외 ' + (nm.length - 3) + '곳' : nm.join(' → '), bs = baseOf(d);
-      h += '<div class="dcard"><div class="tt"><span class="dchip">DAY ' + d.no + '</span><span class="one"><span class="muted">' + esc(dShort(d)) + '</span> · ' + esc(d.title) + '</span></div><div class="rt one">' + esc(rt || '일정 없음') + '</div>'
+      h += '<div class="dcard"><div class="tt"><span class="dchip">DAY ' + d.no + '</span><span class="one"><span class="muted">' + esc(dShort(d)) + '</span> · ' + esc(d.title) + '</span></div><div class="rt">' + esc(rt || '일정 없음') + '</div>'
         + '</div>';
     });
     openSheet(h + '</div></div>');
@@ -2984,7 +2984,7 @@ function menuSheet(k) {
   else if (k === 'new') { newTripSheet(); }
   else if (k === 'trips') { tripsSheet(); }
   else if (k === 'shares') {
-    openSheet('<div class="shd"><div><span class="eyebrow">공유</span><h3 id="sheetTitle">공유하기</h3></div>' + X_BTN + '</div><div class="body"><div class="shlist">'
+    openSheet('<div class="shd"><div><h3 id="sheetTitle">공유하기</h3></div>' + X_BTN + '</div><div class="body"><div class="shlist">'
       + SHARES.map(x => '<button data-sh="' + x[0] + '"><svg viewBox="0 0 24 24">' + x[2] + '</svg>' + x[1] + '</button>').join('') + '</div></div>');
   }
   else if (k === 'install') {
@@ -3021,7 +3021,7 @@ function pdfSheet() {
   const rows = [['ios', '아이폰·아이패드', '인쇄 화면에서 공유 버튼 → ‘파일에 저장’'], ['and', '안드로이드(크롬·삼성 인터넷)', '프린터를 ‘PDF로 저장’으로 바꾼 뒤 저장 버튼을 누르세요'], ['pc', 'PC', '대상 ‘PDF로 저장’']];
   const me = ios ? 'ios' : and ? 'and' : 'pc';
   rows.sort((a, b) => (b[0] === me) - (a[0] === me));
-  openSheet('<div class="shd"><div><span class="eyebrow">PDF</span><h3 id="sheetTitle">PDF로 저장</h3></div>' + X_BTN + '</div><div class="body"><div><p class="sub">인쇄 화면이 열리면 아래처럼 저장하세요</p>'
+  openSheet('<div class="shd"><div><h3 id="sheetTitle">PDF로 저장</h3></div>' + X_BTN + '</div><div class="body"><div><p class="sub">인쇄 화면이 열리면 아래처럼 저장하세요</p>'
     + '<div class="pdfg">' + rows.map(r => '<p' + (r[0] === me ? ' class="me"' : '') + '><b>' + r[1] + '</b><span>' + r[2] + '</span></p>').join('') + '</div></div>'
     + '<div class="acts"><button class="btn ghost" data-close>취소</button><button class="btn pri" id="pdfGo">PDF 만들기</button></div></div>');
 }
