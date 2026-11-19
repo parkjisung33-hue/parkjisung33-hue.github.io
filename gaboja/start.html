@@ -2098,6 +2098,10 @@ function rDone() {
     </div>`, 'pass-scr');
   $('#dEdit').onclick = () => { S.hist = ['intro', 'method']; go('city', { noHist: true, back: true }); };
   fitChar(document.querySelector('.scr:not(.leaving) .pass .av svg'));   // 11/20 #4 캐릭터마다 위치·크기 통일
+  { // 11/21 #8 2차: 성향 이름 = 그림 실제 아래 끝(그림자 포함)에서 3px — 캐릭터마다 키가 달라도 같은 간격
+    const sv = document.querySelector('.scr:not(.leaving) .pass .av svg'), nm = document.querySelector('.scr:not(.leaving) .pass .tnm');
+    if (sv && nm) { nm.style.marginTop = '0px'; const gs = [...sv.children].filter(e => e.tagName.toLowerCase() === 'g'); if (gs.length) { const bot = Math.max(...gs.map(e => e.getBoundingClientRect().bottom)); nm.style.marginTop = Math.round(bot + 3 - nm.getBoundingClientRect().top) + 'px'; } }
+  }
   document.querySelectorAll('.pass .todo [data-go]').forEach(b => b.onclick = () => { S.hist = ['intro', 'method']; S.fromDone = true; go(b.dataset.go); });   // 넣기·정하기 → 그 질문 화면(비행기·숙소는 한 화면), 뒤로 = 발급 완료
   const rs = $('#reSend'); if (rs) rs.onclick = () => { rs.disabled = true; rs.textContent = '보내는 중…'; sendNow().then(() => { dir = 1; render(); }); };
 }
