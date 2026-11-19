@@ -1,0 +1,402 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<title>VZTR 화면 디자인 시안</title>
+<style>
+/* ④ 화면 디자인 시안 보드 (2026-11-19) — 전체 3 · 6 · 9a · 12 · 13b
+   진짜 앱(index.html·start.html)을 390×844로 띄우고, 고른 안의 CSS만 덮어씌워 보여 줌. 앱 원본·저장값은 안 건드림.
+   크기는 rem(390폭 = 16px)로 써서 BI 글꼴이 바뀌어도 숫자만 다시 맞추면 되게 함 */
+@font-face { font-family: "Pretendard Variable"; src: url("fonts/PretendardVariable.woff2") format("woff2-variations"); font-weight: 45 920; font-display: swap; }
+:root { --bg: #EFEFF1; --card: #fff; --ink: #16171A; --sub: #6B6E75; --hair: rgba(22,23,26,.1); --blue: #1F5FE0; --sh: 0 1px 2px rgba(22,23,26,.05), 0 .25rem .75rem -.375rem rgba(22,23,26,.16); }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --bg: #18191C; --card: #27282C; --ink: #F2F2F3; --sub: #A2A5AC; --hair: rgba(255,255,255,.12); --blue: #6D97EB; } }
+:root[data-theme="dark"] { --bg: #18191C; --card: #27282C; --ink: #F2F2F3; --sub: #A2A5AC; --hair: rgba(255,255,255,.12); --blue: #6D97EB; }
+* { box-sizing: border-box; }
+html, body { margin: 0; background: var(--bg); color: var(--ink); font-family: "Pretendard Variable", Pretendard, system-ui, sans-serif; -webkit-text-size-adjust: 100%; overflow-x: hidden; }
+button { font: inherit; color: inherit; border: 0; background: none; cursor: pointer; }
+.intro { max-width: 1120px; margin: 0 auto; padding: 28px 16px 4px; }
+.intro h1 { margin: 0 0 8px; font-size: 22px; letter-spacing: -.02em; }
+.intro p { margin: 0 0 6px; color: var(--sub); font-size: 14px; line-height: 1.6; word-break: keep-all; }
+.toc { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 12px; }
+.toc a { text-decoration: none; color: var(--ink); background: var(--card); box-shadow: var(--sh); border-radius: 8px; padding: 7px 11px; font-size: 13px; font-weight: 700; }
+.toc a i { font-style: normal; color: var(--blue); }
+.item { max-width: 1120px; margin: 0 auto; padding: 28px 16px 8px; display: grid; grid-template-columns: minmax(0, 390px) minmax(0, 1fr); gap: 16px 32px; align-items: start; scroll-margin-top: 8px; }
+.item + .item { border-top: 1px solid var(--hair); }
+.side { display: flex; flex-direction: column; gap: 12px; min-width: 0; }
+.side h2 { margin: 0; font-size: 19px; letter-spacing: -.02em; line-height: 1.35; }
+.side h2 b { color: var(--blue); margin-right: 6px; }
+.side .ask { margin: 0; font-size: 14px; color: var(--sub); line-height: 1.6; word-break: keep-all; }
+.tabs { display: flex; gap: 6px; flex-wrap: wrap; }
+.tabs button { height: 40px; min-width: 56px; padding: 0 14px; border-radius: 8px; background: var(--card); box-shadow: var(--sh); font-weight: 700; font-size: 14px; }
+.tabs button[aria-pressed="true"] { background: var(--ink); color: var(--bg); }
+.tabs.sm button { height: 32px; min-width: 0; padding: 0 11px; font-size: 12.5px; font-weight: 600; }
+.tabs.sm button[aria-pressed="true"] { background: var(--blue); color: #fff; }
+.tabs.sm::before { content: attr(data-l); align-self: center; font-size: 12px; color: var(--sub); margin-right: 2px; }
+.why { margin: 0; padding: 12px 14px; background: var(--card); border-radius: 10px; box-shadow: var(--sh); font-size: 13.5px; line-height: 1.65; word-break: keep-all; }
+.why b { font-weight: 800; }
+.why ul { margin: 6px 0 0; padding-left: 18px; } .why li { margin: 2px 0; }
+.why .num { display: block; margin-top: 8px; font-size: 12.5px; color: var(--sub); }
+.pick { display: flex; gap: 8px; }
+.pick button { height: 42px; padding: 0 16px; border-radius: 8px; background: var(--card); font-weight: 700; font-size: 14px; box-shadow: var(--sh); white-space: nowrap; }
+.pick button[aria-pressed="true"] { background: var(--blue); color: #fff; }
+.pick input { flex: 1; min-width: 0; height: 42px; border: 1px solid var(--hair); background: var(--card); color: var(--ink); border-radius: 8px; padding: 0 12px; font: inherit; font-size: 16px; }
+.phone { position: relative; width: 100%; max-width: 390px; border-radius: 22px; overflow: hidden; box-shadow: 0 14px 34px -16px rgba(22,23,26,.45); border: 1px solid var(--hair); background: #EFEFF1; }
+.phone iframe { position: absolute; left: 0; top: 0; width: 390px; height: 844px; border: 0; transform-origin: 0 0; }
+.phone .ld { position: absolute; inset: 0; display: grid; place-items: center; font-size: 13px; color: #6B6E75; pointer-events: none; transition: opacity .2s; }
+.phone.ok .ld { opacity: 0; }
+.dock { position: fixed; left: 0; right: 0; bottom: 0; padding: 10px 16px calc(10px + env(safe-area-inset-bottom, 0px)); background: rgba(22,23,26,.96); color: #fff; display: flex; gap: 10px; align-items: center; z-index: 5; }
+.dock .s { flex: 1; min-width: 0; font-size: 12.5px; line-height: 1.45; word-break: keep-all; }
+.dock button { background: var(--blue); color: #fff; border-radius: 8px; padding: 11px 16px; font-weight: 700; font-size: 14px; white-space: nowrap; }
+.foot { height: 110px; }
+@media (max-width: 760px) {
+  .item { grid-template-columns: minmax(0, 1fr); padding: 24px 16px 8px; }
+  .item .phone { order: 2; margin: 0 auto; }
+  .item .side { display: contents; }
+  .item .side > h2 { order: 0; } .item .side > .ask { order: 0; } .item .side > .tabs { order: 1; } .item .side > .why { order: 3; } .item .side > .pick { order: 4; }
+}
+</style>
+</head>
+<body>
+<div class="intro">
+  <h1>④ 화면 디자인 — 시안</h1>
+  <p>진짜 앱을 폰 크기(390×844)로 띄워 놓고 글자 크기·간격만 바꿔 보여 드립니다. <b>지금 · A · B</b>를 눌러 같은 화면에서 바로 비교하실 수 있고, 안에서 스크롤·탭도 됩니다.</p>
+  <p>BI(글꼴)가 정해지면 숫자만 다시 맞출 수 있게 크기·간격은 값 몇 개로 묶어 두었습니다. 항목마다 하나 고르고 메모를 남긴 뒤 맨 아래 <b>답 복사</b>로 보내 주세요.</p>
+  <div class="toc" id="toc"></div>
+</div>
+<main id="main"></main>
+<div class="foot"></div>
+<div class="dock"><div class="s" id="dockTx">아직 고른 안이 없어요</div><button id="copy">답 복사</button></div>
+<script>
+/* ---------- 항목별 시안 ---------- */
+const R = px => (px / 16) + 'rem';   // 390폭 = 16px 기준 rem
+
+// 한 줄 맞춤: 넘치면 글자를 0.5px씩 줄임 (앱의 #nextCard .nm 맞춤과 같은 방식)
+function fitOne(doc, sel, minPx) {
+  doc.querySelectorAll(sel).forEach(el => {
+    el.style.removeProperty('font-size'); el.style.setProperty('white-space', 'nowrap', 'important');
+    if (!el.clientWidth) return;
+    let f = parseFloat(doc.defaultView.getComputedStyle(el).fontSize);
+    while (el.scrollWidth > el.clientWidth + 1 && f > minPx) { f -= 0.5; el.style.setProperty('font-size', f + 'px', 'important'); }
+    if (el.scrollWidth > el.clientWidth + 1) el.style.removeProperty('white-space');   // 최소 크기에서도 넘치면 줄바꿈 허용
+  });
+}
+function unfit(doc, sel) { doc.querySelectorAll(sel).forEach(el => { el.style.removeProperty('font-size'); el.style.removeProperty('white-space'); }); }
+
+const ITEMS = [
+{
+  id: 't3', no: '전체 3', name: '제목 · 부가 글자 크기 차이',
+  ask: '제목은 더 크게, 부가 글자(시각·도시·설명)는 한 단계 작고 연하게. 제목은 늘 한 줄(넘치면 글자만 살짝 줄임).',
+  screens: [
+    { k: 'plan', n: '가이드북 일정', u: 'index.html#sample=air-jp', scroll: d => { const h = d.querySelector('#dayHead'), t = d.querySelector('.hbox'); return h ? h.getBoundingClientRect().top + d.defaultView.scrollY - (t ? t.getBoundingClientRect().height + 60 : 140) : 0; } },
+    { k: 'q', n: '질문 화면', u: 'start.html?s=q3' },
+    { k: 'det', n: '장소 상세', u: 'index.html#sample=air-jp', setup: openDetail }
+  ],
+  v: {
+    '0': { why: '<b>지금 앱 그대로.</b><ul><li>하루 제목 24 · 도시 13 · 날씨 14</li><li>일정 칸 이름 15 · 시각 12</li><li>질문 26 · 설명 14 · 장소 상세 제목 20 · 설명 13.5</li></ul><span class="num">제목 ÷ 부가 ≈ 1.25~1.9배 — 화면마다 차이가 들쭉날쭉</span>' },
+    A: { why: '<b>한 단계 더 벌리기.</b> 제목 +1~2px, 부가 글자 −0.5~1px, 부가 글자는 회색으로 통일.<ul><li>하루 제목 26 · 도시 12 · 날씨 13</li><li>일정 칸 이름 16 · 시각 11.5</li><li>질문 28 · 설명 13.5 · 장소 상세 제목 22 · 설명 13</li></ul><span class="num">제목 ÷ 부가 ≈ 1.4~2.2배</span>',
+      css: `
+        .dayline h2 { font-size: ${R(26)} !important; }
+        .dayline .city { font-size: ${R(12)} !important; color: var(--sub) !important; }
+        .dayline .wxl, .dayline .wxl b, .dayline .wxl span { font-size: ${R(13)} !important; }
+        .tile .n.one { font-size: ${R(16)} !important; }
+        .tile .t { font-size: ${R(11.5)} !important; color: var(--sub) !important; }
+        .qh h1 { font-size: ${R(28)} !important; font-weight: 800 !important; letter-spacing: -.03em !important; }
+        .qh p { font-size: ${R(13.5)} !important; color: var(--sub) !important; }
+        #sheet h3#sheetTitle { font-size: ${R(22)} !important; }
+        #sheet .shd .sub { font-size: ${R(13)} !important; color: var(--sub) !important; }
+        #sheet .shd .eyebrow { font-size: ${R(12)} !important; }`,
+      js: d => { fitOne(d, '.dayline h2', 18); fitOne(d, '.qh h1', 20); fitOne(d, '#sheet h3#sheetTitle', 16); fitOne(d, '.tile .n.one', 12.5); } },
+    B: { why: '<b>크게 벌리고 부가 글자는 연하게.</b> 제목이 확실한 주인공, 부가 글자는 11~13px 회색 한 가지로.<ul><li>하루 제목 28 · 도시 11.5 · 날씨 12.5</li><li>일정 칸 이름 16.5(800) · 시각 11 연하게</li><li>질문 30 · 설명 13 · 장소 상세 제목 24 · 설명 13</li></ul><span class="num">제목 ÷ 부가 ≈ 1.8~2.4배 · 제목이 길면 한 줄 안에서 글자만 줄어듦</span>',
+      css: `
+        .dayline h2 { font-size: ${R(28)} !important; letter-spacing: -.035em !important; }
+        .dayline .city { font-size: ${R(11.5)} !important; color: var(--sub) !important; font-weight: 600 !important; }
+        .dayline .wxl, .dayline .wxl b, .dayline .wxl span { font-size: ${R(12.5)} !important; }
+        .dayline .wxl b { font-weight: 600 !important; }
+        .tile .n.one { font-size: ${R(16.5)} !important; font-weight: 800 !important; letter-spacing: -.02em !important; }
+        .tile .t { font-size: ${R(11)} !important; color: var(--sub) !important; opacity: .8; }
+        .qh h1 { font-size: ${R(30)} !important; font-weight: 800 !important; letter-spacing: -.035em !important; line-height: 1.25 !important; }
+        .qh p { font-size: ${R(13)} !important; color: var(--sub) !important; }
+        #sheet h3#sheetTitle { font-size: ${R(24)} !important; letter-spacing: -.03em !important; }
+        #sheet .shd .sub { font-size: ${R(13)} !important; color: var(--sub) !important; }
+        #sheet .shd .eyebrow { font-size: ${R(11.5)} !important; }`,
+      js: d => { fitOne(d, '.dayline h2', 18); fitOne(d, '.qh h1', 20); fitOne(d, '#sheet h3#sheetTitle', 16); fitOne(d, '.tile .n.one', 12.5); } }
+  },
+  undo: d => unfit(d, '.dayline h2, .qh h1, #sheet h3#sheetTitle, .tile .n.one')
+},
+{
+  id: 'f6', no: '6', name: '장소 고르기 — 왼쪽 위 글자 크기',
+  ask: '배치(2줄)는 11/21에 끝. 위 줄(DAY·날짜·도착하는 날)과 동네 이름의 크기 비율만 고릅니다.',
+  screens: [{ k: 'sw', n: '장소 고르기', u: 'start.html?s=swipe&type=HSFP&city=%EB%B6%80%EC%82%B0' }],
+  v: {
+    '0': { why: '<b>지금.</b> 위 줄 12 · 동네 이름 26(700) · 하트 18 · 5곳 중 0곳 13.<span class="num">위 줄이 작고 동네가 커서 두 줄이 따로 놀아 보임</span>' },
+    A: { why: '<b>동네 이름이 주인공.</b> 동네 30(800) · 위 줄 12.5 그대로 작게 · 두 줄 사이 4px. 오른쪽 하트·숫자는 한 단계 작게(16 · 12).<span class="num">이름이 먼저 읽히고, 위 줄은 꼬리표처럼</span>',
+      css: `
+        .swhd h1 { font-size: ${R(30)} !important; font-weight: 800 !important; letter-spacing: -.035em !important; margin-top: ${R(4)} !important; line-height: 1.15 !important; }
+        .swhd .eb, .swhd .eb .dt, .swhd .eb em { font-size: ${R(12.5)} !important; }
+        .swhz svg { width: ${R(16)} !important; height: ${R(16)} !important; }
+        #swCap { font-size: ${R(12)} !important; }` },
+    B: { why: '<b>두 줄 균형.</b> 위 줄 14(날짜는 진한 글자) · 동네 24(800) · 두 줄 사이 3px. 하트 16 · 숫자 12.5.<span class="num">크기 차이 1.7배 — 한 덩어리로 읽힘</span>',
+      css: `
+        .swhd h1 { font-size: ${R(24)} !important; font-weight: 800 !important; letter-spacing: -.025em !important; margin-top: ${R(3)} !important; line-height: 1.2 !important; }
+        .swhd .eb { font-size: ${R(14)} !important; }
+        .swhd .eb .dt { font-size: ${R(14)} !important; color: var(--ink) !important; font-weight: 600 !important; }
+        .swhd .eb em { font-size: ${R(14)} !important; }
+        .swhz svg { width: ${R(16)} !important; height: ${R(16)} !important; }
+        #swCap { font-size: ${R(12.5)} !important; }` }
+  }
+},
+{
+  id: 'g9a', no: '9a', name: '가이드북 맨 위 제목 칸 — 3줄 안 되게',
+  ask: '직접 지은 제목은 16자까지. 아래 \'제목\'·\'폭\'을 바꿔 가장 나쁜 경우(16자 · 360폭 폰)도 확인해 보세요.',
+  screens: [{ k: 'top', n: '가이드북 맨 위', u: 'index.html#sample=air-jp' }],
+  opts: [
+    { k: 'title', l: '제목', o: [['long', '16자 (엄마랑 오사카·교토 먹방 4일)'], ['base', '기본 (오사카·교토에서 4일)']] },
+    { k: 'w', l: '폭', o: [['390', '390'], ['360', '360']] }
+  ],
+  v: {
+    '0': { why: '<b>지금.</b> 제목 17(700), 넘치면 줄바꿈 제한 없음. 요약/상세 토글이 오른쪽 폭을 많이 차지함.<span class="num">16자 제목 = 2줄(44px) · 폭이 더 좁거나 글꼴이 넓으면 3줄</span>' },
+    A: { why: '<b>늘 한 줄 + 자동 줄임.</b> 제목을 한 줄로 두고, 넘치면 17 → 최소 13px까지 글자만 줄임. 13px에서도 넘칠 때만 2줄.<span class="num">머리 높이가 제목 길이와 상관없이 같음 · 대신 긴 제목은 글자가 작아짐</span>',
+      css: `.pill .ttl b { line-height: 1.25 !important; }`,
+      js: d => fitOne(d, '.pill .ttl b', 13) },
+    B: { why: '<b>토글 좁히고 2줄까지.</b> 요약/상세 토글 글자 12 · 좌우 여백 10px로 줄여 제목 칸을 약 30px 넓힘. 제목 16, 줄 간격 1.2, 최대 2줄.<span class="num">글자 크기는 그대로 유지 · 긴 제목은 2줄로 정돈(3줄은 안 생김)</span>',
+      css: `
+        .pill .ttl b { font-size: ${R(16)} !important; line-height: 1.2 !important; display: -webkit-box !important; -webkit-box-orient: vertical; -webkit-line-clamp: 2 !important; overflow: hidden !important; }
+        #modeSeg button { padding: 0 ${R(10)} !important; font-size: ${R(12)} !important; height: ${R(32)} !important; }
+        #modeSeg { padding: ${R(2)} !important; }` }
+  },
+  prep: d => { if ((S.opt.g9a || {}).title === 'long') { const b = d.querySelector('.pill .ttl b'); if (b && b.textContent !== '엄마랑 오사카·교토 먹방 4일') b.textContent = '엄마랑 오사카·교토 먹방 4일'; } },
+  undo: d => unfit(d, '.pill .ttl b')
+},
+{
+  id: 'd12', no: '12', name: '장소 상세 — 간격 · 구분선 덜 복잡하게',
+  ask: '모양이 다른 줄(회색 상자 · 점 · 테두리 버튼 · 세로 구분선)이 섞여 복잡해 보이던 것을 정리합니다.',
+  screens: [{ k: 'det', n: '장소 상세 (나카자키초 골목)', u: 'index.html#sample=air-jp', setup: openDetail }],
+  undo: d => d.querySelectorAll('#sheet .ckline').forEach(p => { if (p.dataset.s4) { p.childNodes.forEach(n => { if (n.nodeType === 3 && n.textContent.trim()) n.textContent = p.dataset.s4; }); delete p.dataset.s4; } }),
+  v: {
+    '0': { why: '<b>지금.</b> 사진 아래로 현지어 줄 · 머무는 시간 회색 상자 · 영업 확인 점 줄 · 메모 라벨+입력칸 · 지도/길찾기 · 테두리 버튼 · 앞으로|뒤로|보관(세로 선 2개).<span class="num">모양 7가지 · 간격 14px 한 가지라 묶음이 안 보임</span>' },
+    A: { why: '<b>같은 모양으로 맞추고 선 빼기.</b><ul><li>현지어 · 머무는 시간 · 영업 확인 = 같은 \'라벨 | 값\' 줄 (회색 상자·점 뺌)</li><li>메모 라벨 뺌 (입력칸 안내 글로 충분)</li><li>\'닫혀 있나요?\' = 테두리 없는 글자 버튼</li><li>앞으로 · 뒤로 · 보관 = 세로 선 빼고 띄어 쓰기</li></ul><span class="num">모양 4가지 · 정보 묶음 사이 20px / 묶음 안 8px</span>',
+      css: `
+        #sheet .body { gap: ${R(20)} !important; }
+        #sheet .body > .kv, #sheet .body > .stayrow2, #sheet .body > .ckline { margin-top: ${R(-12)} !important; }
+        #sheet .body > .phbox + .kv { margin-top: 0 !important; }
+        #sheet .kv { display: grid !important; grid-template-columns: ${R(84)} 1fr !important; align-items: center !important; }
+        #sheet .kv dt, #sheet .stayrow2 .lb, #sheet .ckline::before { font-size: ${R(13)} !important; font-weight: 500 !important; color: var(--sub) !important; }
+        #sheet .kv dt { padding: 0 !important; }
+        #sheet .stayrow2 { background: none !important; border: 0 !important; box-shadow: none !important; padding: 0 !important; display: grid !important; grid-template-columns: ${R(84)} auto !important; justify-content: start !important; }
+        #sheet .stayrow2 .step button { width: ${R(30)} !important; height: ${R(30)} !important; font-size: ${R(16)} !important; }
+        #sheet .ckline { display: grid !important; grid-template-columns: ${R(84)} 1fr !important; font-size: ${R(14)} !important; }
+        #sheet .ckline::before { content: "영업시간"; }
+        #sheet .ckline .ckd { display: none !important; }
+        #sheet .memos .mh { display: none !important; }
+        #sheet .memos .madd { padding-top: 0 !important; }
+        #sheet .body > .acts:not(.two) { margin-top: ${R(-10)} !important; }
+        #sheet .body > .acts:not(.two) .btn { border: 0 !important; background: none !important; box-shadow: none !important; height: auto !important; padding: ${R(4)} 0 !important; color: var(--sub) !important; font-weight: 600 !important; text-decoration: underline; text-underline-offset: 3px; text-decoration-color: color-mix(in srgb, currentColor 35%, transparent); }
+        #sheet .ordrow { margin-top: ${R(-12)} !important; gap: ${R(20)} !important; }
+        #sheet .ordrow > i { display: none !important; }
+        #sheet .ordrow button { color: var(--sub) !important; font-weight: 600 !important; }`, js: ckFix },
+    B: { why: '<b>정보는 한 덩어리 판, 선은 0.</b><ul><li>현지어 · 머무는 시간 · 영업 확인 · 메모를 연한 판 하나에 (줄 사이 선 없음, 간격으로만 구분)</li><li>버튼은 지도/길찾기 한 줄 + 그 아래 작은 글자 버튼 한 줄 (닫혀 있나요 · 앞으로 · 뒤로 · 보관)</li><li>제목 묶음 간격 조금 넓게(제목–설명 4px, 설명–영업 칩 12px)</li></ul><span class="num">눈에 보이는 덩어리 = 제목 · 사진 · 정보 판 · 버튼 4개</span>',
+      css: `
+        #sheet .shd .sub { margin-top: ${R(4)} !important; }
+        #sheet .shd .openrow { margin-top: ${R(12)} !important; }
+        #sheet .body { gap: ${R(16)} !important; }
+        #sheet .body > .kv, #sheet .body > .stayrow2, #sheet .body > .ckline, #sheet .body > .memos { background: var(--tile, rgba(255,255,255,.7)) !important; border: 0 !important; box-shadow: none !important; border-radius: 0 !important; padding: ${R(10)} ${R(14)} !important; margin-top: ${R(-16)} !important; }
+        #sheet .body > .phbox + .kv { margin-top: 0 !important; border-radius: var(--r-lg, .65rem) var(--r-lg, .65rem) 0 0 !important; padding-top: ${R(14)} !important; }
+        #sheet .body > .memos { border-radius: 0 0 var(--r-lg, .65rem) var(--r-lg, .65rem) !important; padding-bottom: ${R(14)} !important; }
+        #sheet .kv { display: grid !important; grid-template-columns: ${R(80)} 1fr !important; align-items: center !important; }
+        #sheet .kv dt, #sheet .stayrow2 .lb, #sheet .ckline::before, #sheet .memos .mh { font-size: ${R(13)} !important; font-weight: 500 !important; color: var(--sub) !important; }
+        #sheet .kv dt { padding: 0 !important; }
+        #sheet .stayrow2 { display: grid !important; grid-template-columns: ${R(80)} auto !important; justify-content: start !important; align-items: center !important; }
+        #sheet .stayrow2 .step button { width: ${R(30)} !important; height: ${R(30)} !important; font-size: ${R(16)} !important; }
+        #sheet .ckline { display: grid !important; grid-template-columns: ${R(80)} 1fr !important; font-size: ${R(14)} !important; }
+        #sheet .ckline::before { content: "영업시간"; }
+        #sheet .ckline .ckd { display: none !important; }
+        #sheet .memos { display: grid !important; grid-template-columns: ${R(80)} minmax(0, 1fr) !important; align-items: center !important; }
+        #sheet .memos .madd { min-width: 0 !important; } #sheet .memos .madd input { min-width: 0 !important; flex: 1 1 0 !important; width: auto !important; }
+        #sheet .memos .mh { padding: 0 !important; }
+        #sheet .memos .madd { padding-top: 0 !important; }
+        #sheet .memos .madd input { background: transparent !important; border-color: var(--hair) !important; height: ${R(34)} !important; }
+        #sheet .memos .madd .btn { height: ${R(34)} !important; }
+        #sheet .body > .acts:not(.two) { margin-top: ${R(-6)} !important; justify-content: center !important; }
+        #sheet .body > .acts:not(.two) .btn { border: 0 !important; background: none !important; box-shadow: none !important; height: auto !important; padding: ${R(4)} 0 !important; color: var(--sub) !important; font-weight: 600 !important; font-size: ${R(13)} !important; width: auto !important; }
+        #sheet .ordrow { margin-top: ${R(-14)} !important; gap: ${R(18)} !important; }
+        #sheet .ordrow > i { display: none !important; }
+        #sheet .ordrow button { color: var(--sub) !important; font-weight: 600 !important; }`, js: ckFix }
+  }
+},
+{
+  id: 'n13b', no: '13b', name: '길안내 맨 위 \'지금\' 카드 줄이기',
+  ask: '지금 카드가 화면의 40% 남짓(약 340~360px). 시각·이름을 한 줄로 모으고 자주 안 쓰는 줄을 줄입니다.',
+  screens: [{ k: 'go', n: '길안내', u: 'index.html?now=2026-12-04T14:00:00#sample=air-jp', setup: openGo, scroll: d => { const w = d.querySelector('.nextwrap'); return w ? w.getBoundingClientRect().top + d.defaultView.scrollY - 150 : 0; } }],
+  opts: [{ k: 'when', l: '때', o: [['trip', '여행 중 (12/4 14:00)'], ['pre', '출발 전']] }],
+  v: {
+    '0': { why: '<b>지금.</b> 위 줄(다음 · 길찾기) / 큰 시각 40 / 이름 19 / 가는 방법 / 출발 버튼 44 / \'닫혀 있나요?\' 테두리 버튼 / 선 / 시간 조정 줄.<span class="num" data-m="go"></span>' },
+    A: { why: '<b>시각 + 이름 한 줄.</b> 시각 30 옆에 이름 18 · 출발 버튼 40 · \'닫혀 있나요?\'는 작은 글자 버튼 · 시간 조정 줄은 선 없이 얇게 · 카드 안 여백 16.<span class="num" data-m="go"></span>',
+      css: `
+        .nextwrap { padding: ${R(16)} !important; gap: ${R(8)} !important; }
+        #nextCard { display: grid !important; grid-template-columns: auto minmax(0, 1fr) !important; column-gap: ${R(10)} !important; row-gap: ${R(6)} !important; align-items: baseline !important; }
+        #nextCard > .hrow, #nextCard > .lo, #nextCard > .acts, #nextCard > .banner { grid-column: 1 / -1 !important; }
+        #nextCard .when .big { font-size: ${R(30)} !important; line-height: 1.1 !important; }
+        #nextCard .nm { font-size: ${R(18)} !important; margin: 0 !important; }
+        #nextCard .lo { margin-top: ${R(-2)} !important; }
+        #nextCard .acts.nowacts { margin-top: ${R(4)} !important; }
+        #nextCard .acts.nowacts .btn { height: ${R(40)} !important; }
+        #nextCard .acts:not(.nowacts) { margin-top: 0 !important; justify-content: center !important; }
+        #nextCard .acts:not(.nowacts) .btn { border: 0 !important; background: none !important; box-shadow: none !important; height: auto !important; padding: ${R(2)} 0 !important; color: var(--sub) !important; font-size: ${R(12.5)} !important; font-weight: 600 !important; }
+        .nextwrap .late { border-top: 0 !important; padding-top: 0 !important; gap: ${R(4)} !important; }
+        .nextwrap .late .adj { padding-block: ${R(3)} !important; }
+        .nextwrap .late .adj .adjb { width: ${R(28)} !important; height: ${R(28)} !important; }`,
+      js: d => fitOne(d, '#nextCard .nm', 13) },
+    B: { why: '<b>가장 작게 — 한 줄 + 버튼 옆으로.</b> 시각 24 · 이름 17 · 출발 버튼을 같은 줄 오른쪽에. \'닫혀 있나요?\'·시간 조정은 위 줄 <b>⋯</b> 버튼 안으로 접음(눌러 보세요).<span class="num" data-m="go"></span>',
+      css: `
+        .nextwrap { padding: ${R(14)} ${R(16)} !important; gap: ${R(8)} !important; }
+        #nextCard { display: grid !important; grid-template-columns: auto minmax(0, 1fr) auto !important; column-gap: ${R(10)} !important; row-gap: ${R(4)} !important; align-items: center !important; }
+        #nextCard > .hrow { grid-column: 1 / -1 !important; grid-row: 1 !important; }
+        #nextCard > .when { grid-column: 1 !important; grid-row: 2 !important; }
+        #nextCard > .nm { grid-column: 2 !important; grid-row: 2 !important; margin: 0 !important; font-size: ${R(17)} !important; }
+        #nextCard > .acts.nowacts { grid-column: 3 !important; grid-row: 2 !important; margin: 0 !important; }
+        #nextCard > .lo { grid-column: 1 / -1 !important; grid-row: 3 !important; margin: 0 !important; }
+        #nextCard > .acts:not(.nowacts), #nextCard > .banner { grid-column: 1 / -1 !important; }
+        #nextCard .when .big { font-size: ${R(24)} !important; line-height: 1.1 !important; }
+        #nextCard .acts.nowacts .btn { height: ${R(36)} !important; padding: 0 ${R(16)} !important; width: auto !important; min-width: 0 !important; }
+        #nextCard .acts:not(.nowacts) { display: none !important; margin: 0 !important; }
+        #nextCard .hrow .eyebrow { white-space: nowrap !important; overflow: hidden; min-width: 0; }
+        #nextCard #prevBtn { display: none !important; }
+        .nextwrap.s4more #nextCard #prevBtn { display: inline-flex !important; }
+        .nextwrap .late { display: none !important; }
+        .nextwrap.s4more #nextCard .acts:not(.nowacts) { display: flex !important; }
+        .nextwrap.s4more .late { display: flex !important; border-top: 0 !important; padding-top: 0 !important; }
+        #s4More { height: ${R(30)} !important; min-width: ${R(34)}; padding: 0 ${R(8)}; border-radius: .625rem; border: 1px solid var(--hair); font-weight: 800; letter-spacing: .05em; color: var(--sub); background: transparent; }`,
+      js: d => {
+        fitOne(d, '#nextCard .nm', 12);
+        const rt = d.querySelector('#nextCard .hrow .rt'); if (!rt || d.getElementById('s4More')) return;
+        const b = d.createElement('button'); b.id = 's4More'; b.type = 'button'; b.textContent = '⋯'; b.setAttribute('aria-label', '더 보기');
+        b.onclick = () => d.querySelector('.nextwrap').classList.toggle('s4more'); rt.appendChild(b);
+      } }
+  },
+  undo: d => { unfit(d, '#nextCard .nm'); const b = d.getElementById('s4More'); if (b) b.remove(); const w = d.querySelector('.nextwrap'); if (w) w.classList.remove('s4more'); },
+  measure: d => { const w = d.querySelector('.nextwrap'); if (!w) return ''; const h = Math.round(w.getBoundingClientRect().height); return '카드 높이 ' + h + 'px · 화면의 ' + Math.round(h / 844 * 100) + '%'; }
+}
+];
+
+/* ---------- 화면 준비 동작 ---------- */
+function ckFix(d) {   // 12: '영업시간 확인 11.11~11.13' → 라벨 '영업시간' | '11.11~11.13 확인' (라벨과 말이 겹치지 않게)
+  d.querySelectorAll('#sheet .ckline').forEach(p => p.childNodes.forEach(n => {
+    if (n.nodeType !== 3 || !/영업시간 확인/.test(n.textContent)) return;
+    p.dataset.s4 = n.textContent; n.textContent = n.textContent.replace(/영업시간 확인\s*/, '').trim() + ' 확인';
+  }));
+}
+function openDetail(d) {   // 일정 칸 '나카자키초 골목'을 눌러 장소 상세 열기
+  const t = [...d.querySelectorAll('.tile')].find(t => /나카자키/.test(t.textContent)) || d.querySelectorAll('.tile.p')[2];
+  if (t) t.click();
+}
+function openGo(d) { const b = d.querySelectorAll('.dock button')[1]; if (b) b.click(); }
+
+/* ---------- 저장 · 그리기 ---------- */
+const KEY = 'vztr-s4-v1'; let S = { pick: {}, memo: {}, cur: {}, scr: {}, opt: {} };
+try { Object.assign(S, JSON.parse(localStorage.getItem(KEY) || '{}')); } catch (e) {}
+['pick', 'memo', 'cur', 'scr', 'opt'].forEach(k => S[k] = S[k] || {});
+const save = () => { try { localStorage.setItem(KEY, JSON.stringify(S)); } catch (e) {} dock(); };
+const VN = { '0': '지금', A: 'A', B: 'B' };
+
+document.getElementById('toc').innerHTML = ITEMS.map(it => `<a href="#${it.id}"><i>${it.no}</i> ${it.name.split(' — ')[0].split(' ·')[0]}</a>`).join('');
+const main = document.getElementById('main');
+main.innerHTML = ITEMS.map(it => `
+<section class="item" id="${it.id}">
+  <div class="phone" data-ph><div class="ld">불러오는 중…</div><iframe title="${it.no} 미리보기" loading="lazy"></iframe></div>
+  <div class="side">
+    <h2><b>${it.no}</b>${it.name}</h2>
+    <p class="ask">${it.ask}</p>
+    <div class="tabs" data-v>${['0', 'A', 'B'].map(k => `<button data-k="${k}">${VN[k]}</button>`).join('')}</div>
+    ${it.screens.length > 1 ? `<div class="tabs sm" data-l="화면" data-s>${it.screens.map(s => `<button data-k="${s.k}">${s.n}</button>`).join('')}</div>` : ''}
+    ${(it.opts || []).map(o => `<div class="tabs sm" data-l="${o.l}" data-o="${o.k}">${o.o.map(([k, n]) => `<button data-k="${k}">${n}</button>`).join('')}</div>`).join('')}
+    <div class="why" data-why></div>
+    <div class="pick"><button data-pick>이걸로</button><input data-memo placeholder="${it.no} 메모"></div>
+  </div>
+</section>`).join('');
+
+ITEMS.forEach(it => {
+  const sec = document.getElementById(it.id), ph = sec.querySelector('[data-ph]'), fr = ph.querySelector('iframe');
+  if (!S.cur[it.id]) S.cur[it.id] = '0';
+  if (!S.scr[it.id]) S.scr[it.id] = it.screens[0].k;
+  S.opt[it.id] = S.opt[it.id] || {}; (it.opts || []).forEach(o => { if (!S.opt[it.id][o.k]) S.opt[it.id][o.k] = o.o[0][0]; });
+  let ready = false, mo = null, tm = null;
+
+  const scr = () => it.screens.find(s => s.k === S.scr[it.id]) || it.screens[0];
+  const width = () => +((S.opt[it.id] || {}).w || 390);
+  function scale() {
+    const W = width(), cs = getComputedStyle(sec), avail = Math.min(sec.clientWidth - parseFloat(cs.paddingLeft) - parseFloat(cs.paddingRight), 390);
+    const s = Math.min(1, avail / W); fr.style.width = W + 'px'; fr.style.transform = `scale(${s})`;
+    ph.style.maxWidth = (W * s) + 'px'; ph.style.height = (844 * s) + 'px';
+  }
+  function url() {
+    let u = scr().u;
+    if ((S.opt[it.id] || {}).when === 'pre') u = u.replace(/now=[^&#]+&?/, '').replace('?#', '#');
+    return u;
+  }
+  function load() { ready = false; ph.classList.remove('ok'); if (mo) mo.disconnect(); scale(); fr.src = url(); }
+  fr.addEventListener('load', () => {
+    const d = fr.contentDocument; if (!d) return;
+    setTimeout(() => {
+      try {
+        const s = scr();
+        if (s.setup) s.setup(d);
+        setTimeout(() => {
+          
+          ready = true; apply(); if (s.scroll) setTimeout(() => fr.contentWindow.scrollTo(0, s.scroll(d)), 150); ph.classList.add('ok');
+          mo = new MutationObserver(() => { clearTimeout(tm); tm = setTimeout(rerun, 120); });
+          mo.observe(d.body, { childList: true, subtree: true });
+        }, s.setup ? 900 : 200);
+      } catch (e) { console.warn(e); ph.classList.add('ok'); }
+    }, 1300);
+  });
+  function rerun() { const v = it.v[S.cur[it.id]], d = fr.contentDocument; if (!d) return; mo && mo.disconnect(); try { it.prep && it.prep(d); v.js && v.js(d); } catch (e) {} meas(); mo && mo.observe(d.body, { childList: true, subtree: true }); }
+  function meas() {
+    const box = sec.querySelector('[data-why] [data-m]'); if (!box || !it.measure) return;
+    try { box.textContent = it.measure(fr.contentDocument); } catch (e) {}
+  }
+  function apply() {
+    const d = fr.contentDocument, v = it.v[S.cur[it.id]];
+    sec.querySelector('[data-why]').innerHTML = v.why;
+    if (!ready || !d) return;
+    mo && mo.disconnect();
+    try { it.undo && it.undo(d); } catch (e) {}
+    let st = d.getElementById('s4css'); if (!st) { st = d.createElement('style'); st.id = 's4css'; d.head.appendChild(st); }
+    st.textContent = v.css || '';
+    try { it.prep && it.prep(d); v.js && v.js(d); } catch (e) { console.warn(e); }
+    setTimeout(meas, 60);
+    mo && mo.observe(d.body, { childList: true, subtree: true });
+  }
+  function draw() {
+    sec.querySelectorAll('[data-v] button').forEach(b => b.setAttribute('aria-pressed', b.dataset.k === S.cur[it.id]));
+    sec.querySelectorAll('[data-s] button').forEach(b => b.setAttribute('aria-pressed', b.dataset.k === S.scr[it.id]));
+    sec.querySelectorAll('[data-o]').forEach(g => g.querySelectorAll('button').forEach(b => b.setAttribute('aria-pressed', b.dataset.k === S.opt[it.id][g.dataset.o])));
+    const pk = sec.querySelector('[data-pick]'), cur = S.cur[it.id];
+    pk.setAttribute('aria-pressed', S.pick[it.id] === cur); pk.textContent = S.pick[it.id] === cur ? `✓ ${VN[cur]} 골랐어요` : `${VN[cur]}(으)로`;
+  }
+  sec.querySelectorAll('[data-v] button').forEach(b => b.onclick = () => { S.cur[it.id] = b.dataset.k; save(); draw(); apply(); });
+  sec.querySelectorAll('[data-s] button').forEach(b => b.onclick = () => { S.scr[it.id] = b.dataset.k; save(); draw(); load(); });
+  sec.querySelectorAll('[data-o]').forEach(g => g.querySelectorAll('button').forEach(b => b.onclick = () => { S.opt[it.id][g.dataset.o] = b.dataset.k; save(); draw(); load(); }));
+  const pk = sec.querySelector('[data-pick]'), mm = sec.querySelector('[data-memo]');
+  pk.onclick = () => { const c = S.cur[it.id]; S.pick[it.id] = S.pick[it.id] === c ? '' : c; save(); draw(); };
+  mm.value = S.memo[it.id] || ''; mm.oninput = () => { S.memo[it.id] = mm.value; save(); };
+  addEventListener('resize', scale);
+  draw(); sec.querySelector('[data-why]').innerHTML = it.v[S.cur[it.id]].why; load();
+});
+
+function dock() {
+  const p = ITEMS.filter(it => S.pick[it.id]).map(it => it.no + ' ' + VN[S.pick[it.id]]);
+  document.getElementById('dockTx').textContent = p.length ? `고름 ${p.length}/${ITEMS.length}: ` + p.join(' · ') : '아직 고른 안이 없어요';
+}
+dock();
+document.getElementById('copy').onclick = function () {
+  const L = ['[VZTR ④ 화면 디자인 시안]'];
+  ITEMS.forEach(it => { L.push(`${it.no} ${it.name}: ${S.pick[it.id] ? VN[S.pick[it.id]] : '안 고름'}${S.memo[it.id] ? ' — ' + S.memo[it.id] : ''}`); });
+  const t = L.join('\n'), btn = this, ok = () => { btn.textContent = '복사됨 ✓'; setTimeout(() => btn.textContent = '답 복사', 1600); };
+  const fb = () => { const a = document.createElement('textarea'); a.value = t; document.body.appendChild(a); a.select(); try { document.execCommand('copy'); ok(); } catch (e) {} a.remove(); };
+  navigator.clipboard && navigator.clipboard.writeText ? navigator.clipboard.writeText(t).then(ok, fb) : fb();
+};
+</script>
+</body>
+</html>
