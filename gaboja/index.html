@@ -1728,7 +1728,9 @@ function liveTop() {
   else if (n.phase === 'during') h = '<div class="stateline"><span class="stc">여행 중</span><span class="dd">DAY ' + (n.day + 1) + '</span><span class="tx">' + fullDate(n.t) + ' · ' + toT(n.min) + '</span></div>';
   else h = '<div class="stateline"><span class="stc end">여행 끝</span><span class="tx">' + tripDates() + ' · 기록에 저장됨</span></div>';
   // 11/14 #17: 탑승권은 그 비행기 타는 날(출발일·돌아오는 날)을 볼 때만 맨 위에. 다른 날엔 상태 줄만
-  return h + (lf && DAYS.indexOf(lf.d) === st.day ? flyCard(lf.d, lf.c, ' live', true) : '');
+  // 11/21 동우님 #11: 시각 미정인 날 = 탑승권을 늘 맨 위(가는 날·오는 날 같은 자리). 몸통 타임라인에선 뺌
+  const vd = DAYS[st.day], top = vd && vd.tbd ? vd.list.filter(c => c.fly && !(lf && lf.c === c)).map(c => flyCard(vd, c, '', true)).join('') : '';
+  return h + (lf && DAYS.indexOf(lf.d) === st.day ? flyCard(lf.d, lf.c, ' live', true) : '') + top;
 }
 function subOf(tab) {   // 11/18 피드백7: 날짜 글자 + 작은 칩(박수 · D-n · 여행 중) — HTML로 돌려줌
   const n = nowRef(), chip = t => '<small class="tchip">' + t + '</small>';
@@ -1857,7 +1859,7 @@ let fitW = innerWidth; addEventListener('resize', () => { if (innerWidth === fit
 /* ---------- 간단히: 블록 ---------- */
 function blocks(d) {
   const bands = [[], [], []];
-  d.list.filter(c => c.k !== 'm').forEach(c => bands[d.tbd ? 1 : pieceOf(c.s)].push(c));   // 시각 미정 = 한 묶음, 순서만
+  d.list.filter(c => c.k !== 'm' && !(d.tbd && c.fly)).forEach(c => bands[d.tbd ? 1 : pieceOf(c.s)].push(c));   // 시각 미정 날 탑승권은 맨 위(liveTop)   // 시각 미정 = 한 묶음, 순서만
   const nw = nowOf(d);
   let h = tbdNote(d) + '<div class="blocks">';
   let hint = true;   // 11/20 동우님 #7: 첫 묶음 머리 오른쪽에 짧은 조작 안내(자리 안 차지)
@@ -1894,6 +1896,7 @@ function list(d) {
   const nw = nowOf(d), nowCls = c => nw && c === nw.cur ? ' now-on' : pastOf(nw, c) ? ' past-on' : '';
   const flush = upto => { if (d.tbd) { wi = d.wake.length; return; } while (wi < d.wake.length && toMin(d.wake[wi].s) <= upto) { const w = d.wake[wi++]; h += '<div class="li w' + (nw && toMin(w.s) < nw.min ? ' past-on' : '') + '"><span class="tm">' + w.s + '</span><span class="c one">' + esc(w.n) + (w.say ? ' · ' + esc(w.say) : '') + '</span><span></span></div>'; } };
   d.list.forEach(c => {
+    if (d.tbd && c.fly) return;   // 11/21 #11: 시각 미정 날 탑승권은 맨 위(liveTop)
     flush(toMin(c.s));
     if (c.k === 'm') {   /* 11/18 D-4 ②: 이동 = 들여쓴 회색 한 줄 [수단 아이콘] 문구 (길찾기 글자 링크 없음 · 길찾기는 장소 상세·길안내에서) */
       h += '<div class="li m' + nowCls(c) + '" data-key="' + c.id + '" data-fixed="1"><span class="tm">' + tmx(d, c) + '</span><span class="c one">' + mvIc(c) + esc(c.mv) + '</span><span></span></div>';
