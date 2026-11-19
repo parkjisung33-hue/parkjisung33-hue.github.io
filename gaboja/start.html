@@ -862,6 +862,10 @@ html[data-theme="dark"][data-grp="HE"] { --me-soft: color-mix(in srgb, #C17192 2
 /* 11/20 W7·M36 편명 → 시각 찾은 결과 한 줄 */
 .fnh { margin: 0.25rem 0 0; font-size: 0.75rem; color: var(--sub); min-height: 0; }
 .fnh:empty { display: none; }
+
+/* 11/20 검수: 사진 출처 '…' 잘림 없앰 → 두 줄까지 줄바꿈 */
+.phcr { white-space: normal !important; text-overflow: clip !important; word-break: keep-all; overflow-wrap: anywhere; }
+.swph .phcr { max-width: 92%; }
 </style>
 </head>
 <body>
@@ -892,7 +896,7 @@ html[data-theme="dark"][data-grp="HE"] { --me-soft: color-mix(in srgb, #C17192 2
 <script src="chars.js?v=fit3"></script>
 <script src="gen-data.js?v=11"></script>
 <script src="sgg.js"></script>
-<script src="gen.js"></script>
+<script src="gen.js?v=10"></script>
 <script>
 /* ── 데이터: 확정본 v2 (문서/여행앱/2026-11-12_가보자_첫화면질문·16유형_제안_v2.md) ── */
 const AX = [ // 축: 코드 글자 · 이름
@@ -1785,7 +1789,7 @@ function swHours(p) { const o = String(p.oTx || ''); if (!o) return '영업시�
    사진은 원본 URL로 직접 표시(저장 안 함). 저작자·라이선스는 사진 아래 한 줄. 실패(onerror)하면 다음 단계. ---------- */
 const VZTR_API = 'https://vztr-api.d-chive33-a29.workers.dev';   // 11/19 E0: 구글 사진 = 우리 서버(Cloudflare Worker)가 대신 찾음 → 페이지에 사진 키 없음 (server/worker.js)
 const PH_KEY_G = () => /^(https:\/\/(www\.)?larchive\.page|http:\/\/(localhost|127\.0\.0\.1)(:\d+)?)$/.test(location.origin), PH_KEY_M = () => window.GABOJA_MAPS_KEY || '';
-const phCredit = (a, l) => '사진 © ' + String(a || '').slice(0, 60) + ' · ' + String(l || '').trim();
+const phCredit = (a, l) => '사진 © ' + String(a || '').replace(/저작권자\s*[:：]\s*/g, '').replace(/\s*공동저작자\s*[:：]\s*/g, ' · ').trim().slice(0, 60) + ' · ' + String(l || '').trim();   // 11/20 검수: 긴 저작권 문구 줄임(라벨만 뺌, 이름은 그대로)
 function phGoogle(p, cb) {   // ② 구글 장소 사진 1장 — 서버 /photo가 키로 찾아 키 없는 사진 주소만 돌려줌. 결과는 세션 동안만(sessionStorage)
   const ck = 'gaboja-gph2:' + (p.n || '');
   if (!PH_KEY_G()) { cb(null); return; }

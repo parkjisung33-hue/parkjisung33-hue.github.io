@@ -557,8 +557,8 @@
     const wd = DOM && mode === 'train' ? '열차' : '비행기';
     // 시각 미입력 = 그날 시각을 숨기고 순서만(앱이 days[].tbd로 처리). 안내 글에 가정 시각을 넣지 않음
     if (!DOM || R.pre) {
-      if (!outOk) (notes[1] = notes[1] || []).unshift({ lv: 'amber', ref: DOM ? R.fromName : DA[2], t: '가는 ' + wd + ' 시각 미입력 · 넣으면 그날 시간이 정해져요' });
-      if (!backOk) (notes[N] = notes[N] || []).unshift({ lv: 'amber', ref: DOM ? R.toName : AP.name + '공항', t: '오는 ' + wd + ' 시각 미입력 · 넣으면 그날 시간이 정해져요' });
+      if (!outOk) (notes[1] = notes[1] || []).unshift({ lv: 'amber', ref: DOM ? R.fromName : DA[2], t: '가는 ' + wd + ' 시각 미입력 · 넣으면 시간이 정해져요' });
+      if (!backOk) (notes[N] = notes[N] || []).unshift({ lv: 'amber', ref: DOM ? R.toName : AP.name + '공항', t: '오는 ' + wd + ' 시각 미입력 · 넣으면 시간이 정해져요' });
     }
     let carAttr;
     if (DOM && mode === 'car') {

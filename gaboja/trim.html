@@ -1350,6 +1350,13 @@ html #dayBody .tile .t { color: var(--sub) !important; }
 #nextCard .acts:not(.nowacts) > .btn.ghost.sm { border: 0; background: none; box-shadow: none; height: auto; padding: 0.125rem 0; color: var(--sub); font-size: 0.78125rem; font-weight: 600; }
 .nextwrap .late { border-top: 0 !important; padding-top: 0 !important; gap: 0.25rem !important; }
 .nextwrap .late .adj { padding-block: 0.25rem !important; }
+
+/* 11/20 검수: 사진 출처 '…' 잘림 없앰 → 두 줄까지 줄바꿈 */
+.phcr { white-space: normal !important; text-overflow: clip !important; word-break: keep-all; overflow-wrap: anywhere; }
+.swph .phcr { max-width: 92%; }
+
+/* 11/20 검수: 추천 카드 작은 줄 = 묶음 단위로만 줄바꿈 */
+.rec2 .nw { white-space: nowrap; }
 </style>
 
 <div class="bgfx" aria-hidden="true"></div><!-- 11/19 다크 배경(A 연하게) — 밝은 모드에선 안 보임 -->
@@ -1458,7 +1465,7 @@ html #dayBody .tile .t { color: var(--sub) !important; }
 <script src="weather.js"></script>
 <script src="types.js"></script>
 <script src="chars.js?v=fit3"></script>
-<script>/* 공유용 샘플(#sample=키): 엔진·장소 DB·샘플 입력을 바로 불러와 그 자리에서 일정을 만듦 (저장 안 함) */ if (/#sample=[\w-]+|#v=\w{12}/.test(location.hash)) document.write('<script src="gen-data.js?v=11"><\/script><script src="gen.js?v=9"><\/script><script src="samples.js?v=2"><\/script>');</script>
+<script>/* 공유용 샘플(#sample=키): 엔진·장소 DB·샘플 입력을 바로 불러와 그 자리에서 일정을 만듦 (저장 안 함) */ if (/#sample=[\w-]+|#v=\w{12}/.test(location.hash)) document.write('<script src="gen-data.js?v=11"><\/script><script src="gen.js?v=10"><\/script><script src="samples.js?v=2"><\/script>');</script>
 <script>/* 11/19 W8 보기 전용 공유 링크(#v=id): 서버에 보관된 가이드북을 샘플처럼 띄움 — 이 기기엔 저장 안 함(made 없음). 편집 반영은 VZTR_VIEW_EDITS */
 (function () { var m = location.hash.match(/^#v=([A-Za-z0-9]{12})$/); if (!m) return;
   try { var x = new XMLHttpRequest(); x.open('GET', 'https://vztr-api.d-chive33-a29.workers.dev/plan/' + m[1], false); x.send();
@@ -2511,7 +2518,7 @@ const STAYS = [30, 60, 90, 120, 180];
    사진은 원본 URL로 직접 표시(저장 안 함). 저작자·라이선스는 사진 아래 한 줄. 실패(onerror)하면 다음 단계. ---------- */
 const VZTR_API = 'https://vztr-api.d-chive33-a29.workers.dev';   // 11/19 E0: 구글 사진 = 우리 서버(Cloudflare Worker)가 대신 찾음 → 페이지에 사진 키 없음 (server/worker.js)
 const PH_KEY_G = () => /^(https:\/\/(www\.)?larchive\.page|http:\/\/(localhost|127\.0\.0\.1)(:\d+)?)$/.test(location.origin), PH_KEY_M = () => window.GABOJA_MAPS_KEY || '';
-const phCredit = (a, l) => '사진 © ' + String(a || '').slice(0, 60) + ' · ' + String(l || '').trim();
+const phCredit = (a, l) => '사진 © ' + String(a || '').replace(/저작권자\s*[:：]\s*/g, '').replace(/\s*공동저작자\s*[:：]\s*/g, ' · ').trim().slice(0, 60) + ' · ' + String(l || '').trim();   // 11/20 검수: 긴 저작권 문구 줄임(라벨만 뺌, 이름은 그대로)
 function phGoogle(p, cb) {   // ② 구글 장소 사진 1장 — 서버 /photo가 키로 찾아 키 없는 사진 주소만 돌려줌. 결과는 세션 동안만(sessionStorage)
   const ck = 'gaboja-gph2:' + (p.n || '');
   if (!PH_KEY_G()) { cb(null); return; }
@@ -2848,7 +2855,7 @@ function fixNotes(d, c) {
 // 엔진 입력 = PLAN.inp (없는 옛 일정은 유형·날짜·도시로 복원). 다른 날·메모(같은 장소)·여행 메모는 그대로
 function loadGen(cb) {
   if (window.GABOJA_GEN) { loadGD(() => cb(window.GABOJA_GEN)); return; }
-  loadGD(() => { try { fetch('gen.js?v=9').then(r => r.arrayBuffer()).then(b => { (0, eval)(new TextDecoder('utf-8').decode(b)); cb(window.GABOJA_GEN || null); }).catch(() => cb(null)); } catch (_) { cb(null); } });
+  loadGD(() => { try { fetch('gen.js?v=10').then(r => r.arrayBuffer()).then(b => { (0, eval)(new TextDecoder('utf-8').decode(b)); cb(window.GABOJA_GEN || null); }).catch(() => cb(null)); } catch (_) { cb(null); } });
 }
 let regenBusy = false;
 function regenDay(d, c, dep, arr, fno, done0) {
@@ -3097,8 +3104,8 @@ function recsHtml(d) {
   const L = recsFor(d);
   if (!L.length) return '<p class="sub" style="grid-column:1/-1">추천할 곳이 없어요 · 위에서 직접 찾아 보세요</p>';
   return L.map(r => '<button class="rec2" role="checkbox" aria-checked="false" data-rc="' + r.p.id + '"><i class="box"><svg viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></i>'
-    + '<b class="one">' + esc(r.p.n) + '</b><span class="one">' + esc(r.p.a) + ' · ' + (r.p.o ? '<span class="on">영업 중</span>' : '영업 확인 필요') + '</span>'
-    + '<span class="one">추천 <span class="tm">' + toT(r.sg.s) + '</span> · ' + durTx(r.du) + '</span></button>').join('');
+    + '<b class="one">' + esc(r.p.n) + '</b><span class="one"><span class="nw">' + esc(r.p.a) + '</span> · <span class="nw">' + (r.p.o ? '<span class="on">영업 중</span>' : '확인 필요') + '</span></span>'
+    + '<span class="one"><span class="nw">추천 <span class="tm">' + toT(r.sg.s) + '</span></span> · <span class="nw">' + durTx(r.du) + '</span></span></button>').join('');   // 11/20 검수: 줄바꿈은 · 자리에서만(30분·필요 혼자 안 넘어가게)
 }
 function updAddBar() {
   const n = document.querySelectorAll('#recList [data-rc][aria-checked="true"]').length, b = $('#addBar'); if (!b) return;
