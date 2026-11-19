@@ -258,18 +258,39 @@
     if (!v) setPick(null);
   }
   function ours(el) { return el && el.closest && el.closest('#trimUi'); }
-  function block(e) {
+  /* 폰: touchstart/touchend에 preventDefault를 걸면 click이 아예 안 생긴다(11/19 폰에서 빼기 안 됨).
+     → 앱 쪽으로는 전파만 막고(스크롤은 살림), 고르기는 손을 뗄 때(pointerup) 직접 한다. 움직였으면 스크롤로 보고 무시 */
+  function stop(e) {
     if (!mode || ours(e.target)) return;
-    e.preventDefault(); e.stopPropagation(); e.stopImmediatePropagation();
+    e.stopPropagation(); e.stopImmediatePropagation();
   }
-  ['pointerdown', 'pointerup', 'mousedown', 'mouseup', 'touchstart', 'touchend', 'dblclick', 'contextmenu', 'submit', 'change'].forEach(function (t) {
-    window.addEventListener(t, block, { capture: true, passive: false });
+  ['mousedown', 'mouseup', 'touchstart', 'touchmove', 'touchend', 'dblclick', 'contextmenu', 'change', 'input', 'keydown'].forEach(function (t) {
+    window.addEventListener(t, stop, { capture: true, passive: true });
   });
+  ['submit', 'contextmenu', 'dragstart', 'selectstart'].forEach(function (t) {
+    window.addEventListener(t, function (e) { if (mode && !ours(e.target)) e.preventDefault(); }, { capture: true, passive: false });
+  });
+  var down = null, lastPick = 0;
+  window.addEventListener('pointerdown', function (e) {
+    if (!mode || ours(e.target)) return;
+    down = { x: e.clientX, y: e.clientY };
+    e.stopPropagation(); e.stopImmediatePropagation();
+  }, true);
+  function pickAt(x, y) {
+    var el = document.elementFromPoint(x, y);
+    if (el && !ours(el) && el !== document.documentElement && el !== document.body) { setPick(el); lastPick = Date.now(); }
+  }
+  window.addEventListener('pointerup', function (e) {
+    if (!mode || ours(e.target)) return;
+    e.stopPropagation(); e.stopImmediatePropagation();
+    var d = down; down = null;
+    if (d && Math.hypot(e.clientX - d.x, e.clientY - d.y) > 10) return;   // 스크롤
+    pickAt(e.clientX, e.clientY);
+  }, true);
   window.addEventListener('click', function (e) {
     if (!mode || ours(e.target)) return;
-    e.preventDefault(); e.stopPropagation(); e.stopImmediatePropagation();
-    var el = document.elementFromPoint(e.clientX, e.clientY);
-    if (el && !ours(el) && el !== document.documentElement && el !== document.body) setPick(el);
+    e.preventDefault(); e.stopPropagation(); e.stopImmediatePropagation();   // 링크·버튼 동작 막기
+    if (Date.now() - lastPick > 400) pickAt(e.clientX, e.clientY);          // pointerup이 없던 브라우저 대비
   }, true);
 
   function setPick(el, from) {
