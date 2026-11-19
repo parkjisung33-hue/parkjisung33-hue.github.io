@@ -789,6 +789,10 @@ html { background: #EFEFF1; } body { background: transparent; }
   :root:not([data-theme="light"]) .bgfx { background: radial-gradient(ellipse at 50% 50%, #18191C, #1D1E22 55%, #232428); } }
 html:root[data-theme="dark"] { --canvas: #1D1E22; --paper: #27282C; --float: #2C2D31; --tile: rgba(42,43,47,.92); --field: #1C1D20; --glass: rgba(39,40,44,.72); background: #18191C; }
 :root[data-theme="dark"] .bgfx { background: radial-gradient(ellipse at 50% 50%, #18191C, #1D1E22 55%, #232428); }
+/* 11/20 동우님: 첫 화면 안내판 성향마다 파스텔(묶음 색) — 글자판 글자·묶음 이름은 파스텔, 글자판 바탕은 아주 연하게 물듦, 유형 이름은 흰색 그대로 */
+.dep .dr[data-r] .fl { color: var(--pc, var(--flap-tx)); background: color-mix(in srgb, var(--pc, #FFFFFF) 14%, rgba(255,255,255,.05)); transition: color .35s, background .35s; }
+.dep .dr[data-r] .fl.empty { color: var(--flap-dim); }
+.dep .dr[data-r] .dg { color: var(--pc, #8F969F); transition: color .35s; }
 </style>
 </head>
 <body>
@@ -1152,10 +1156,12 @@ function rIntro() {
 
 /* 11/14 #4 시작 A안: 출발 안내판 — 위 세 줄이 2.4초마다 다른 유형으로 넘어감 (화면을 떠나면 멈춤) */
 let DEP_T = 0;
+const DEP_PC = { LS: '#9DD2D8', LE: '#FFC6D7', HS: '#9DC3E2', HE: '#E9BCE0' };   // 11/20 안내판 = 캐릭터 파스텔(chars.js 그라디언트 색) — 어두운 판 위에서 네 묶음이 서로 구분되는 쪽
 function depRun(list) {
   clearInterval(DEP_T); let k = 0;
   const step = () => { const rows = document.querySelectorAll('.scr:not(.leaving) .dep .dr[data-r]'); if (!rows.length) { clearInterval(DEP_T); return; }
     rows.forEach((row, r) => { const c = list[(k + r * 5) % list.length], t = T(c), g = GROUPS[c.slice(0, 2)][0];
+      setTimeout(() => row.style.setProperty('--pc', DEP_PC[c.slice(0, 2)]), REDUCED ? 0 : r * 120);   // 11/20 성향 묶음 파스텔
       row.querySelectorAll('.fl').forEach((f, j) => setTimeout(() => { if (!REDUCED) { f.classList.remove('flip', 'empty'); void f.offsetWidth; f.classList.add('flip'); } else f.classList.remove('empty'); setTimeout(() => f.textContent = c[j], REDUCED ? 0 : 170); }, REDUCED ? 0 : j * 70 + r * 120));
       setTimeout(() => { row.querySelector('.dn').textContent = t.name; row.querySelector('.dg').textContent = g; }, REDUCED ? 0 : 400 + r * 120); });
     k = (k + 1) % list.length; };
