@@ -1201,6 +1201,16 @@ html[data-grp="HS"] { --stamp-a: var(--g-hs-a); --stamp-lt: var(--g-hs-lt); } ht
 @keyframes passOut { 0%, 100% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--c, var(--blue)) 0%, transparent); } 50% { box-shadow: 0 0 1rem 0.1875rem color-mix(in srgb, var(--c, var(--blue)) 30%, transparent); } }
 @media (prefers-reduced-motion: reduce) { .pass.flycard.live { animation: none !important; } }
 
+/* ---------- 11/19 다크 배경 = A 연하게 (동우님, 레퍼런스 Midnight Embrace를 연하게) ----------
+   가운데 #1A1E22 → 55% #1F2328 → 가장자리 #23272D 타원 그라디언트, 화면에 고정(.bgfx). 카드는 배경에 안 묻히게 #262A30 */
+.bgfx { display: none; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --canvas: #1F2328; --glass: #262A30; --paper: #262A30; --float: #262A30; --sheet: #262A30; --tile: rgba(42,46,53,.92); --field: #1C2025; }
+  :root:not([data-theme="light"]) { background: #1A1E22; } :root:not([data-theme="light"]) body { background: transparent; }
+  :root:not([data-theme="light"]) .bgfx { display: block; position: fixed; inset: 0; z-index: -1; pointer-events: none; background: radial-gradient(ellipse at 50% 50%, #1A1E22, #1F2328 55%, #23272D); } }
+html:root[data-theme="dark"] { --canvas: #1F2328; --glass: #262A30; --paper: #262A30; --float: #262A30; --sheet: #262A30; --tile: rgba(42,46,53,.92); --field: #1C2025; background: #1A1E22; }
+:root[data-theme="dark"] body { background: transparent; }
+:root[data-theme="dark"] .bgfx { display: block; position: fixed; inset: 0; z-index: -1; pointer-events: none; background: radial-gradient(ellipse at 50% 50%, #1A1E22, #1F2328 55%, #23272D); }
+
 /* ---------- 11/19 글꼴 A (동우님): 굵은 한글 = IBM Plex Sans KR(700) · 보통·작은·연한 한글 = Pretendard · 영문·숫자 = IBM Plex Sans ---------- */
 :root { --kr-plain: "Pretendard Variable", Pretendard, -apple-system, "Apple SD Gothic Neo", "Malgun Gothic", system-ui, sans-serif; }
 /* 작게 들어가는 굵은 글씨(12px 아래)는 Pretendard로 — 작은 크기에선 IBM 굵은 글자가 뭉개져 보임 */
@@ -1213,6 +1223,7 @@ html[data-grp="HS"] { --stamp-a: var(--g-hs-a); --stamp-lt: var(--g-hs-lt); } ht
 
 </style>
 
+<div class="bgfx" aria-hidden="true"></div><!-- 11/19 다크 배경(A 연하게) — 밝은 모드에선 안 보임 -->
 <div class="app">
   <div class="top">
     <div class="hbox glass"><!-- 11/19 A2: 맨 위 + DAY 한 상자 -->
