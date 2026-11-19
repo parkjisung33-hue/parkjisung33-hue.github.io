@@ -1176,6 +1176,11 @@ html[data-grp="HS"] { --stamp-a: var(--g-hs-a); --stamp-lt: var(--g-hs-lt); } ht
    간격: 주의 ↔ 현지 정보 = 일정 카드 사이 간격(0.4375rem) · 현지 정보 아래 = 묶음 사이(1.5rem) + 메뉴 높이 */
 :root { --shadow: 0 1px 2px rgba(24,36,60,.05), 0 0.375rem 1rem -0.5rem rgba(24,36,60,.16); --sh-float: 0 1px 2px rgba(24,36,60,.06), 0 0.625rem 1.5rem -0.75rem rgba(24,36,60,.24); }
 .hbox, .dock { box-shadow: var(--sh-float), inset 0 1px 0 var(--glass-hl); }
+/* 11/19 동우님: 아래 메뉴·맨 위 상자 덜 비치게 (밝은 모드 흰 62% → 아래 메뉴 88% · 맨 위 84%, 흐림은 그대로) */
+.dock { background: rgba(255,255,255,.88); }
+.hbox { background: rgba(255,255,255,.84); }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .dock, :root:not([data-theme="light"]) .hbox { background: var(--float, #22262C); } }
+:root[data-theme="dark"] .dock, :root[data-theme="dark"] .hbox { background: var(--float, #22262C); }
 #warn:not(:empty):not([hidden]) + #tips { margin-top: calc(0.4375rem - 1.5rem); }
 .app { padding-bottom: calc(3.375rem + 1rem + 1.5rem + env(safe-area-inset-bottom, 0px)); }
 .tiles > .tile.solo { grid-column: 1 / -1; }
