@@ -89,19 +89,14 @@ input.in:focus-visible { outline: none; }
 .flbox { display: flex; flex-direction: column; gap: 0.875rem; animation: drop .22s cubic-bezier(.2,.8,.2,1); }
 .flr { display: flex; flex-direction: column; gap: 0.4375rem; }
 .flr .fll { font-size: 0.75rem; font-weight: 700; color: var(--sub); }
-.flr .tms { display: flex; flex-direction: column; gap: 0.75rem; }
-.tmw { display: flex; flex-direction: column; gap: 0.25rem; min-width: 0; }
-.tml { font-size: 0.6875rem; color: var(--sub); }
-.quick { display: flex; gap: 0.375rem; overflow-x: auto; padding: 0.375rem 0.25rem 0.25rem 0; scrollbar-width: none; }
-.quick::-webkit-scrollbar { display: none; }
-.quick .chip { flex: none; height: 2.5rem; padding: 0 0.8125rem; font-size: 0.8125rem; }
-.quick .chip.dir { color: var(--blue); }
-.quick .chip.dir[aria-pressed="true"] { color: var(--on-ink); }
-.kp { margin-top: 0.125rem; }
-.kp[hidden] { display: none; }
-.flr .in.tm { height: 3rem; padding: 0 0.75rem; text-align: center; font-size: max(16px, 1.25rem); font-weight: 700; letter-spacing: .06em; }
-.tmh { margin: 0.375rem 0.125rem 0; font-size: 0.6875rem; color: var(--sub); }
-.tmh.bad { color: var(--red); }
+.flr .tms { display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; }   /* 11/20 동우님: 칩 줄 없앰 → 출발·도착 두 칸 한 줄 (다른 입력칸과 같은 모양) */
+.tmw { display: flex; align-items: center; justify-content: space-between; gap: 0.5rem; min-width: 0; height: 3rem; padding: 0 0.875rem; border-radius: var(--r-lg, 0.65rem); background: var(--paper, #fff); border: 1px solid var(--hair, rgba(22,23,26,.1)); cursor: text; }
+.tmw:focus-within { border-color: var(--blue); }
+.tmw[data-bad="1"] { border-color: var(--red); }
+.tml { flex: none; font-size: 0.78125rem; font-weight: 600; color: var(--sub); }
+.tmw .tm { flex: 1; min-width: 0; width: 100%; border: 0; background: none; outline: none; padding: 0; text-align: right; font-size: max(16px, 1.0625rem); font-weight: 700; letter-spacing: .02em; color: var(--ink); }
+.tmw .tm::placeholder { color: var(--sub); opacity: .55; font-weight: 500; }
+.tmw.auto .tm { color: var(--blue); }
 .flr .in.fno { text-transform: uppercase; }
 .flr .in.fno::placeholder { text-transform: none; }
 a { color: inherit; }
@@ -1099,25 +1094,20 @@ const ICON = {
   l: '<svg viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7"/></svg>', r: '<svg viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg>' };
 const wa = w => { const c = w.charCodeAt(w.length - 1) - 0xAC00; return w + (c >= 0 && c < 11172 && c % 28 ? '과' : '와'); }; // 받침 따라 과/와
 const QT_DEP = ['06:00', '09:00', '12:00', '15:00', '18:00', '21:00'], QT_ARR = ['08:00', '11:00', '14:00', '17:00', '20:00', '23:00'];
-function tmField(k, ff, v, lab) { // 시각 칸: 빠른 칩 + 직접(숫자 4자리). 저장값은 숨은 칸(data-fk·data-ff)에 'HH:MM'만
-  const qs = ff === 'arr' ? QT_ARR : QT_DEP, own = !!v && !qs.includes(v);
-  return `<div class="tmw" data-tmw><span class="tml">${lab}</span><input type="hidden" data-fk="${k}" data-ff="${ff}" value="${esc(v || '')}">
-    <div class="quick">${qs.map(t => `<button type="button" class="chip" data-t="${t}" aria-pressed="${v === t}">${t}</button>`).join('')}<button type="button" class="chip dir" data-t="" aria-pressed="${own}">직접</button></div>
-    <div class="kp" ${own ? '' : 'hidden'}><input class="in tm" inputmode="numeric" pattern="[0-9]*" maxlength="5" placeholder="--:--" autocomplete="off" aria-label="${lab} 숫자 4자리" value="${own ? esc(v) : ''}"><p class="tmh" aria-live="polite">숫자 4자리 · 예: 0930</p></div></div>`;
+function tmField(k, ff, v, lab) { // 11/20: 시각 칸 = 라벨 + 숫자 4자리(HH:MM) 한 칸. 저장값은 숨은 칸(data-fk·data-ff)에 'HH:MM'만
+  const short = /도착/.test(lab) ? '도착' : '출발';
+  return `<label class="tmw" data-tmw><span class="tml">${short}</span><input type="hidden" data-fk="${k}" data-ff="${ff}" value="${esc(v || '')}"><input class="tm" inputmode="numeric" pattern="[0-9:]*" maxlength="5" placeholder="--:--" autocomplete="off" aria-label="${lab} (숫자 4자리)" value="${esc(v || '')}"></label>`;
 }
 function wireTm(root) {
   root.querySelectorAll('[data-tmw]').forEach(w => {
-    const hid = w.querySelector('[data-fk]'), inp = w.querySelector('.in.tm'), kp = w.querySelector('.kp'), hint = w.querySelector('.tmh'), q = w.querySelector('.quick');
+    const hid = w.querySelector('[data-fk]'), inp = w.querySelector('.tm');
     const commit = v => { if (hid.value !== v) { hid.value = v; hid.dispatchEvent(new Event('input')); } };
-    q.onclick = e => { const b = e.target.closest('button'); if (!b) return; tap();
-      if (b.dataset.t) { const same = b.getAttribute('aria-pressed') === 'true'; q.querySelectorAll('button').forEach(x => x.setAttribute('aria-pressed', x === b && !same)); kp.hidden = true; inp.value = ''; commit(same ? '' : b.dataset.t); }
-      else { const open = kp.hidden; q.querySelectorAll('button').forEach(x => x.setAttribute('aria-pressed', x === b && open)); kp.hidden = !open; if (open) { commit(/^\d\d:\d\d$/.test(inp.value) ? inp.value : ''); inp.focus(); } else { inp.value = ''; commit(''); } } };
-    inp.addEventListener('input', () => {
+    inp.oninput = () => {
       const d = inp.value.replace(/\D/g, '').slice(0, 4); inp.value = d.length > 2 ? d.slice(0, 2) + ':' + d.slice(2) : d;
       const bad = (d.length >= 2 && +d.slice(0, 2) > 23) || (d.length === 4 && +d.slice(2) > 59);
-      hint.classList.toggle('bad', bad); inp.setAttribute('aria-invalid', bad);
-      hint.textContent = bad ? '00:00 – 23:59 안에서 입력해 주세요' : d.length === 4 ? '입력됨' : '숫자 4자리 · 예: 0930';
-      commit(d.length === 4 && !bad ? inp.value : ''); });
+      w.dataset.bad = bad ? '1' : ''; w.classList.remove('auto'); inp.setAttribute('aria-invalid', bad);
+      commit(d.length === 4 && !bad ? inp.value : '');
+    };
   });
 }
 const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]);
@@ -1601,7 +1591,7 @@ function rInfo(s) {
         <div class="flbox" id="fBox" ${tr.flight === 'yes' ? '' : 'hidden'}><div class="flr"><span class="fll">출발 공항</span><div class="seg" id="depSeg">${DEP_APS.map(a => `<button data-dep="${a[0]}" aria-pressed="${(tr.depAp || 'ICN') === a[0]}">${a[1]} ${a[0]}</button>`).join('')}</div></div>${(AIRPORTS[DEST[tr.city]] || []).length > 1 ? `<div class="flr"><span class="fll">도착 공항</span><div class="seg" id="apSeg">${AIRPORTS[DEST[tr.city]].map(a => `<button data-ap="${a[0]}" aria-pressed="${(tr.airport || AIRPORTS[DEST[tr.city]][0][0]) === a[0]}">${a[1]} ${a[0]}</button>`).join('')}</div></div>` : (AIRPORTS[DEST[tr.city]] || []).length ? `<div class="flr"><span class="fll">도착 공항</span><b class="apfix">${AIRPORTS[DEST[tr.city]][0][1]} ${AIRPORTS[DEST[tr.city]][0][0]}</b></div>` : ''}${['fo', 'fb'].map(k => { const f = tr[k] || {}, apn = apName(tr); return `<div class="flr"><span class="fll">${k === 'fo' ? '가는 편 · ' + depName(tr) + ' → ' + apn : '오는 편 · ' + apn + ' → ' + depName(tr)}</span>
           <input class="in fno" data-fk="${k}" data-ff="no" placeholder="편명 (예: WE513)" value="${esc(f.no || '')}" autocomplete="off" autocapitalize="characters" maxlength="8" aria-label="${k === 'fo' ? '가는 편' : '오는 편'} 편명">
           <div class="tms">${tmField(k, 'dep', f.dep, '출발 시각')}${tmField(k, 'arr', f.arr, '도착 시각')}</div></div>`; }).join('')}
-          <div class="note">${ICON.info}<span>편명·시각은 예약 확인 메일이나 e티켓에서 확인할 수 있어요</span></div></div>
+          <div class="note">${ICON.info}<span>편명을 넣으면 시각을 찾아 채워 드려요 · 편명은 예약 확인 메일이나 e티켓에 있어요</span></div></div>
         <div class="note" id="blHint" hidden>${ICON.info}<span>모르는 칸은 비워 두셔도 돼요. 나중에 앱에서 입력하면 그날 일정이 자동으로 맞춰져요.</span></div></div>
       <div class="blk" ${tr.day ? 'hidden' : ''}><div class="sub2">숙소</div><div class="seg" id="sSeg"><button data-s="no" aria-pressed="${tr.stay === 'no'}">아직</button><button data-s="area" aria-pressed="${tr.stay === 'area'}">동네만</button><button data-s="yes" aria-pressed="${tr.stay === 'yes'}">정했어요</button></div>
         <input class="in" id="sIn" value="${esc(tr.stayTx || '')}" ${tr.stay === 'no' ? 'hidden' : ''} placeholder="${tr.stay === 'area' ? '동네 이름 (예: ' + (partOf(tr) === 'side' ? '가와라마치' : '난바') + ')' : '숙소 이름'}"></div>
@@ -1658,21 +1648,17 @@ function rInfo(s) {
 }
 /* 11/20 W7·M36: 편명·열차 번호를 적으면 서버(/flight · /train)로 시각을 찾아 출발·도착 칸을 채움. 못 찾으면 한 줄 알림, 직접 고르기는 그대로 */
 const ymdDash = n => n ? String(Math.floor(n / 10000)) + '-' + String(Math.floor(n / 100) % 100).padStart(2, '0') + '-' + String(n % 100).padStart(2, '0') : '';
-function setTm(root, k, ff, v) {   // 시각 칸 하나를 v('HH:MM')로 다시 그림
+function setTm(root, k, ff, v) {   // 시각 칸 하나를 v('HH:MM')로 채움 (자동으로 채운 칸은 파란 글자)
   const hid = root.querySelector('[data-tmw] [data-fk="' + k + '"][data-ff="' + ff + '"]'); if (!hid || !/^\d\d:\d\d$/.test(v)) return;
-  const w = hid.closest('[data-tmw]'), lab = (w.querySelector('.tml') || {}).textContent || '';
-  w.outerHTML = tmField(k, ff, v, lab);
-  const nw = root.querySelector('[data-tmw] [data-fk="' + k + '"][data-ff="' + ff + '"]').closest('[data-tmw]');
-  wireTm({ querySelectorAll: () => [nw] });
-  nw.querySelector('[data-fk]').oninput = e => { tr0()[k] = tr0()[k] || {}; tr0()[k][ff] = e.target.value; tr0().flightTx = flightText(tr0()); blankHint(); };
-  const T = tr0(); T[k] = T[k] || {}; T[k][ff] = v;
+  const w = hid.closest('[data-tmw]'); w.querySelector('.tm').value = v; w.dataset.bad = ''; w.classList.add('auto');
+  hid.value = v; hid.dispatchEvent(new Event('input'));
 }
 const tr0 = () => S.trip;
 function autoRide(root) {
   if (!root || !PH_KEY_G()) return;
   root.querySelectorAll('.fno').forEach(inp => {
-    let t = 0, n = 0, hint = inp.nextElementSibling && inp.nextElementSibling.classList.contains('fnh') ? inp.nextElementSibling : null;
-    if (!hint) { hint = document.createElement('p'); hint.className = 'fnh'; hint.setAttribute('aria-live', 'polite'); inp.after(hint); }
+    let t = 0, n = 0, hint = (inp.closest('.flr') || inp.parentElement).querySelector('.fnh');
+    if (!hint) { hint = document.createElement('p'); hint.className = 'fnh'; hint.setAttribute('aria-live', 'polite'); const row = inp.closest('.flr'), tms = row && row.querySelector('.tms'); (tms || inp).after(hint); }
     inp.addEventListener('input', () => {
       clearTimeout(t); const v = inp.value.toUpperCase().replace(/\s+/g, ''), k = inp.dataset.fk, T = tr0(), my = ++n;
       const date = k === 'fb' ? (T.end || T.start) : T.start, train = inp.dataset.rt === 'train';

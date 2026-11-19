@@ -681,6 +681,20 @@ body { letter-spacing: 0; }
 .rideedit { display: flex; flex-direction: column; gap: 0.625rem; padding: 0.875rem; border-radius: var(--r-md); background: var(--field); border: 1px solid var(--hair); }
 .rideedit .mh { font-size: 0.78125rem; color: var(--sub); }
 .rideedit .sub { margin: 0; }
+/* 11/20 동우님: 입력 시트 시각 칸 = 시작 화면과 같은 모양 (편명 한 칸 + 출발·도착 두 칸 한 줄) */
+.rideedit .rfno { height: 2.75rem; border-radius: var(--r-sm); border: 1px solid var(--hair); background: var(--paper); color: var(--ink); padding: 0 0.875rem; font: inherit; font-size: max(16px, 0.9375rem); text-transform: uppercase; }
+.rideedit .rfno::placeholder { text-transform: none; color: var(--sub); }
+.rideedit .rtms { display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; }
+.rideedit .rtms.one { grid-template-columns: 1fr; }
+.rideedit .tmw { display: flex; align-items: center; justify-content: space-between; gap: 0.5rem; min-width: 0; height: 2.75rem; padding: 0 0.875rem; border-radius: var(--r-sm); background: var(--paper); border: 1px solid var(--hair); cursor: text; }
+.rideedit .tmw:focus-within { border-color: var(--blue); }
+.rideedit .tmw[data-bad="1"] { border-color: var(--red); }
+.rideedit .tml { flex: none; font-size: 0.78125rem; font-weight: 600; color: var(--sub); }
+.rideedit .tmw .tm { flex: 1; min-width: 0; width: 100%; height: auto; border: 0; background: none; outline: none; padding: 0; text-align: right; font: inherit; font-size: max(16px, 1rem); font-weight: 700; color: var(--ink); }
+.rideedit .tmw .tm::placeholder { color: var(--sub); opacity: .55; font-weight: 500; }
+.rideedit .tmw.auto .tm { color: var(--blue); }
+.rideedit .fnh { margin: -0.25rem 0 0; font-size: 0.75rem; color: var(--sub); }
+.rideedit .fnh:empty { display: none; }
 .chips.wrap { flex-wrap: wrap; overflow: visible; }
 .stayrow { display: flex; flex-direction: column; gap: 0.375rem; }
 .stayrow .mh { font-size: 0.78125rem; color: var(--sub); }
@@ -2480,10 +2494,13 @@ function rideEditHtml(d, c) {
   const CAR = isCar(c), TR = c.ride === 'train', tb = !!d.tbd, hh = x => String(x).slice(0, 5);
   const dep = tb ? '' : hh(c.s), arr = tb ? '' : hh(c.e);
   const row = (l, inner) => '<div class="row2 wl"><span>' + l + '</span>' + inner + '</div>';
-  let h = '<div class="rideedit"><span class="mh">' + (CAR ? '차 출발 시각' : TR ? '열차 시각' : '비행기 시각') + (tb ? ' · 아직 입력하지 않음' : CAR && c.car && c.car.dflt ? ' · 아직 입력하지 않음 (' + hh(c.s) + ' 가정)' : '') + '</span>';
-  if (!CAR && !TR) h += row('편명', '<input data-rf="no" value="' + esc(c.fno || '') + '" maxlength="8" placeholder="예: KE723" autocomplete="off" aria-label="편명">');
-  h += row('출발', '<input type="time" data-rf="dep" value="' + dep + '" aria-label="출발 시각">');
-  h += CAR ? row('도착', '<b id="rfArr">' + (tb ? '출발 시각을 입력하면 계산돼요' : hh(c.e) + ' · 자동 계산 (추정)') + '</b>') : row('도착', '<input type="time" data-rf="arr" value="' + arr + '" aria-label="도착 시각">');
+  const dd = new Date(TRIP0.getTime() + (d.no - 1) * 864e5), iso = dd.getFullYear() + '-' + String(dd.getMonth() + 1).padStart(2, '0') + '-' + String(dd.getDate()).padStart(2, '0');
+  const tf = (k, lab, v) => '<label class="tmw"><span class="tml">' + lab + '</span><input class="tm" data-rf="' + k + '" inputmode="numeric" pattern="[0-9:]*" maxlength="5" placeholder="--:--" autocomplete="off" value="' + v + '" aria-label="' + lab + ' 시각 (숫자 4자리)"></label>';   // 11/20: 시작 화면과 같은 시각 칸
+  let h = '<div class="rideedit" data-date="' + iso + '"><span class="mh">' + (CAR ? '차 출발 시각' : TR ? '열차 시각' : '비행기 시각') + (tb ? ' · 아직 입력하지 않음' : CAR && c.car && c.car.dflt ? ' · 아직 입력하지 않음 (' + hh(c.s) + ' 가정)' : '') + '</span>';
+  if (!CAR && !TR) h += '<input class="rfno" data-rf="no" value="' + esc(c.fno || '') + '" maxlength="8" placeholder="편명 (예: KE723) · 넣으면 시각을 찾아 채워요" autocomplete="off" autocapitalize="characters" aria-label="편명">';
+  h += CAR ? '<div class="rtms one">' + tf('dep', '출발', dep) + '</div>' + row('도착', '<b id="rfArr">' + (tb ? '출발 시각을 입력하면 계산돼요' : hh(c.e) + ' · 자동 계산 (추정)') + '</b>')
+           : '<div class="rtms">' + tf('dep', '출발', dep) + tf('arr', '도착', arr) + '</div>';
+  if (!CAR && !TR) h += '<p class="fnh" id="rfHint" aria-live="polite"></p>';
   h += '<p class="sub" id="rfNote">날짜는 그대로예요 · 바꾸려면 메뉴의 ‘여행 정보 수정’을 눌러 주세요' + (CAR ? '' : ' · 도착이 출발보다 이르면 다음 날로 계산해요') + '</p>';
   return h + '<div class="acts"><button class="btn pri" data-ride-save>저장</button></div></div>';
 }
@@ -2861,6 +2878,29 @@ function regenDay(d, c, dep, arr, fno, done0) {
     } catch (e) { done(false); }
   });
 }
+/* 11/20: 입력 시트 — 시각 칸 숫자 4자리 → HH:MM, 편명 넣으면 서버 /flight로 그날 시각 채움 (시작 화면과 같은 방식) */
+let rfT = 0, rfN = 0;
+document.addEventListener('input', e => {
+  const el = e.target.closest && e.target.closest('.rideedit [data-rf]'); if (!el) return;
+  if (el.dataset.rf === 'dep' || el.dataset.rf === 'arr') {
+    const v = el.value.replace(/\D/g, '').slice(0, 4); el.value = v.length > 2 ? v.slice(0, 2) + ':' + v.slice(2) : v;
+    const bad = (v.length >= 2 && +v.slice(0, 2) > 23) || (v.length === 4 && +v.slice(2) > 59), w = el.closest('.tmw'); if (w) { w.dataset.bad = bad ? '1' : ''; w.classList.remove('auto'); }
+    return;
+  }
+  if (el.dataset.rf !== 'no') return;
+  const box = el.closest('.rideedit'), hint = box.querySelector('#rfHint'), no = el.value.toUpperCase().replace(/\s+/g, ''), my = ++rfN; clearTimeout(rfT);
+  if (!hint) return;
+  if (!/^[A-Z0-9]{2}\d{1,4}[A-Z]?$/.test(no) || !PH_KEY_G()) { hint.textContent = ''; return; }
+  rfT = setTimeout(() => {
+    hint.textContent = '시각 찾는 중…';
+    fetch(VZTR_API + '/flight?' + new URLSearchParams({ no, date: box.dataset.date })).then(r => r.json()).then(j => {
+      if (my !== rfN) return;
+      if (!j || !j.dep || !j.dep.t) { hint.textContent = j && j.e === 'nokey' ? '' : '그날 이 편을 못 찾았어요 · 시각을 직접 넣어 주세요'; return; }
+      [['dep', j.dep.t], ['arr', j.arr.t]].forEach(([k, v]) => { const i = box.querySelector('[data-rf="' + k + '"]'); if (i && v) { i.value = v; const w = i.closest('.tmw'); if (w) { w.dataset.bad = ''; w.classList.add('auto'); } } });
+      hint.textContent = j.dep.iata + ' ' + j.dep.t + ' → ' + j.arr.iata + ' ' + j.arr.t + (j.arr.date && j.arr.date !== j.dep.date ? '(+1)' : '') + ' · 항공편 정보 AeroDataBox';
+    }).catch(() => { if (my === rfN) hint.textContent = ''; });
+  }, 650);
+});
 function rideSave() {
   const d = DAYS[st.day], c = d && sheetId && findIt(d, sheetId); if (!c || !c.fly) return;
   const q = k => { const el = document.querySelector('[data-rf="' + k + '"]'); return el ? el.value.trim() : ''; }, CAR = isCar(c);
