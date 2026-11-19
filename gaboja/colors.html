@@ -1,0 +1,154 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<title>VZTR 블루·잉크 시안</title>
+<link rel="stylesheet" href="fonts/vztr-fonts.css?v=2">
+<style>
+@font-face { font-family: "Pretendard Variable"; font-weight: 45 920; font-display: swap; src: url(fonts/PretendardVariable.woff2) format("woff2-variations"); }
+:root { --bg: #E8EBEE; --ink: #16171A; --sub: #5B6B7A; --line: #D9DDE2; --acc: #1F5FE0; }
+* { box-sizing: border-box; }
+html, body { margin: 0; background: var(--bg); color: var(--ink); font-family: "Pretendard Variable", Pretendard, system-ui, sans-serif; word-break: keep-all; }
+.top { position: sticky; top: 0; z-index: 5; background: rgba(232,235,238,.94); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); padding: calc(12px + env(safe-area-inset-top, 0px)) 16px 12px; border-bottom: 1px solid var(--line); }
+.top h1 { margin: 0 0 8px; font-size: 17px; letter-spacing: -0.01em; }
+.chips { display: flex; gap: 6px; overflow-x: auto; scrollbar-width: none; }
+.chips::-webkit-scrollbar { display: none; }
+.chips button { appearance: none; border: 0; border-radius: 999px; padding: 8px 13px; font: inherit; font-size: 14px; font-weight: 700; background: #fff; color: var(--ink); white-space: nowrap; flex: none; display: inline-flex; align-items: center; gap: 6px; }
+.chips button.on { background: var(--ink); color: #fff; }
+.chips i { width: 12px; height: 12px; border-radius: 50%; display: inline-block; }
+.chips .pk { color: var(--acc); }
+.desc { margin: 10px 0 0; font-size: 13px; line-height: 1.55; color: #3E4650; max-width: 720px; }
+.desc b { color: var(--ink); }
+.sw { display: flex; gap: 8px; margin-top: 10px; flex-wrap: wrap; }
+.sw div { display: flex; align-items: center; gap: 7px; background: #fff; border-radius: 10px; padding: 6px 10px 6px 6px; font-size: 12px; }
+.sw span.c { width: 26px; height: 26px; border-radius: 7px; flex: none; box-shadow: inset 0 0 0 1px rgba(0,0,0,.06); }
+.sw b { display: block; font-size: 12px; }
+.sw small { color: var(--sub); font-variant-numeric: tabular-nums; }
+.tools { display: flex; gap: 6px; margin-top: 10px; }
+.tools button { appearance: none; border: 0; border-radius: 9px; padding: 8px 12px; font: inherit; font-size: 13px; font-weight: 700; background: #fff; color: var(--sub); }
+.tools button.on { color: #fff; background: var(--ink); }
+.tools .pick { margin-left: auto; background: var(--acc); color: #fff; }
+main { padding: 16px 16px 24px; display: grid; grid-template-columns: repeat(auto-fill, minmax(var(--fw), 1fr)); gap: 18px 14px; justify-items: center; }
+.fr { width: var(--fw); }
+.fr .lb { font-size: 12px; font-weight: 700; color: var(--sub); margin: 0 0 6px 2px; }
+.ph { width: var(--fw); height: calc(var(--fw) * 844 / 390); border-radius: 18px; overflow: hidden; background: #fff; box-shadow: 0 6px 20px -8px rgba(10,31,51,.25); position: relative; }
+.ph iframe { width: 390px; height: 844px; border: 0; transform-origin: 0 0; transform: scale(var(--k)); position: absolute; left: 0; top: 0; }
+.fb { padding: 4px 16px calc(28px + env(safe-area-inset-bottom, 0px)); max-width: 640px; margin: 0 auto; }
+.fb h2 { font-size: 14px; margin: 8px 0; }
+.fb textarea { width: 100%; min-height: 80px; border: 1px solid #D5D9DF; border-radius: 12px; padding: 12px; font: inherit; font-size: 14px; background: #fff; }
+.fb button { appearance: none; border: 0; border-radius: 10px; padding: 12px 14px; font: inherit; font-size: 14px; font-weight: 700; background: var(--acc); color: #fff; width: 100%; margin-top: 10px; }
+.fb .now { font-size: 13px; color: var(--sub); margin: 0 0 8px; }
+</style>
+</head>
+<body>
+<div class="top">
+  <h1>블루 · 잉크(네이비 대신) — 시안 3개</h1>
+  <div class="chips" id="chips"></div>
+  <p class="desc" id="desc"></p>
+  <div class="sw" id="sw"></div>
+  <div class="tools"><button id="mLight" class="on">밝은 모드</button><button id="mDark">다크 모드</button><button class="pick" id="pickBtn">이 시안으로</button></div>
+</div>
+<main id="grid"></main>
+<div class="fb">
+  <h2>고르기 · 메모</h2>
+  <p class="now" id="nowPick">아직 안 고르셨어요</p>
+  <textarea id="memo" placeholder="예: A인데 잉크는 C의 브라운으로"></textarea>
+  <button id="copy">답 복사</button>
+</div>
+<script>
+(function () {
+  /* 블루 = 한 색조. 다크 모드는 같은 색조를 35% 밝힌 것(색이 바뀌는 게 아니라 밝기만) — 숫자는 흰 바탕 / 다크 카드(#262A30) 대비 */
+  var V = [
+    { k: '0', n: '지금', dot: '#2571DD', d: '지금 앱: 블루 #2571DD(다크는 하늘색 #49BDF6로 색조가 달라짐) · 잉크 네이비 #0A1F33.', c: null },
+    { k: 'A', n: '코발트 × 잉크 블랙', dot: '#1F5FE0',
+      d: '<b>아키 추천.</b> 블루/화이트 레트로 스티커처럼 <b>쨍한 코발트 하나를 크게</b>, 나머지는 거의 검정에 가까운 잉크로 받침. 네이비의 "차분한 회사 느낌"이 빠지고 탑승권·도장 같은 인쇄물 인상이 강해짐. 파스텔 캐릭터가 뉴트럴 위에서 더 또렷.',
+      c: { blue: '#1F5FE0', dblue: '#6D97EB', ink: '#16171A', sub: '#6B6E75' } },
+    { k: 'B', n: '울트라마린 × 그래파이트', dot: '#3D4FE0',
+      d: '<b>보랏빛이 살짝 도는 울트라마린.</b> 캐릭터의 핑크·라일락 파스텔과 같은 쪽 색온도라 가장 부드럽게 섞임. 잉크는 순검정보다 한 단계 연한 그래파이트 — 셋 중 제일 다정한 인상.',
+      c: { blue: '#3D4FE0', dblue: '#818DEB', ink: '#2A2D33', sub: '#6A6F78' } },
+    { k: 'C', n: '데님 × 에스프레소', dot: '#2F64C8',
+      d: '<b>예상 밖 조합.</b> 차분한 데님 블루에 잉크를 짙은 브라운(에스프레소)으로. 동우님 옷 취향의 뉴트럴(데님·브라운)을 화면으로 옮긴 안 — 여행 다이어리·가죽 여권 커버 같은 따뜻한 인상.',
+      c: { blue: '#2F64C8', dblue: '#789ADB', ink: '#2B221D', sub: '#75685F' } }
+  ];
+  var CR = { '#1F5FE0': '5.6', '#3D4FE0': '6.2', '#2F64C8': '5.6', '#6D97EB': '5.0', '#818DEB': '4.8', '#789ADB': '5.1', '#16171A': '15.7', '#2A2D33': '12.1', '#2B221D': '13.6', '#2571DD': '4.7', '#0A1F33': '14.6' };
+  var SCR = [
+    { n: '첫 페이지', u: 'start.html?s=intro' },
+    { n: '질문', u: 'start.html?s=q0' },
+    { n: '유형 결과', u: 'start.html?s=result' },
+    { n: '발급 완료', u: 'start.html?s=done' },
+    { n: '가이드북 — 일정', u: 'index.html?#sample=air-jp' },
+    { n: '하루 일정 요약', u: 'index.html?#sample=air-jp', a: '[data-daysum]' },
+    { n: '길 안내', u: 'index.html?#sample=air-jp', a: '[data-v="v-now"]' }
+  ];
+  function rgb(h) { return [1, 3, 5].map(function (i) { return parseInt(h.slice(i, i + 2), 16); }).join(','); }
+  function css(v) {
+    var c = v.c; if (!c) return '';
+    return 'html:not([data-theme="dark"]){--ink:' + c.ink + '!important;--sub:' + c.sub + '!important;--hair:rgba(' + rgb(c.ink) + ',.09)!important;--blue:' + c.blue + '!important;--on-blue:#FFFFFF!important;--blue-soft:rgba(' + rgb(c.blue) + ',.09)!important}\n'
+      + 'html[data-theme="dark"]{--blue:' + c.dblue + '!important;--on-blue:' + c.ink + '!important;--blue-soft:rgba(' + rgb(c.dblue) + ',.12)!important}';
+  }
+  var cur = 1, dark = false, frames = [];
+  var st = (function () { try { return JSON.parse(localStorage.getItem('vztr-colors-v1')) || {}; } catch (e) { return {}; } })();
+  function save() { try { localStorage.setItem('vztr-colors-v1', JSON.stringify(st)); } catch (e) {} }
+  function sizeFw() {
+    var w = Math.min(innerWidth, 1400) - 32, fw = innerWidth < 700 ? Math.floor((w - 14) / 2) : 250;
+    document.documentElement.style.setProperty('--fw', fw + 'px');
+    document.documentElement.style.setProperty('--k', fw / 390);
+  }
+  function inject(f) {
+    try { var d = f.contentDocument; if (!d || !d.head) return; var el = d.getElementById('cvCss');
+      if (!el) { el = d.createElement('style'); el.id = 'cvCss'; d.head.appendChild(el); }
+      el.textContent = css(V[cur]); } catch (e) {}
+  }
+  function sw(name, hex, note) { return '<div><span class="c" style="background:' + hex + '"></span><span><b>' + name + ' ' + hex + '</b><small>' + note + '</small></span></div>'; }
+  function draw() {
+    var v = V[cur];
+    document.getElementById('chips').innerHTML = V.map(function (x, i) {
+      return '<button data-i="' + i + '" class="' + (i === cur ? 'on' : '') + '"><i style="background:' + x.dot + '"></i>' + (x.k === '0' ? '' : x.k + ' ') + x.n + (st.pick === x.k ? ' <span class="pk">✓</span>' : '') + '</button>';
+    }).join('');
+    document.getElementById('desc').innerHTML = v.d;
+    var c = v.c || { blue: '#2571DD', dblue: '#49BDF6', ink: '#0A1F33', sub: '#5B6B7A' };
+    document.getElementById('sw').innerHTML = sw('블루', c.blue, '흰 바탕 대비 ' + (CR[c.blue] || '') + ':1') + sw('다크 블루', c.dblue, v.c ? '같은 색조 · 다크 카드 대비 ' + CR[c.dblue] + ':1' : '색조가 다름') + sw('잉크', c.ink, '본문·진한 버튼 · 대비 ' + CR[c.ink] + ':1') + sw('보조 글자', c.sub, '설명·작은 글자');
+    document.documentElement.style.setProperty('--acc', c.blue);
+    var pb = document.getElementById('pickBtn');
+    pb.style.display = v.c ? '' : 'none';
+    pb.textContent = st.pick === v.k ? '✓ 고른 시안' : '이 시안으로';
+    var np = V.filter(function (x) { return x.k === st.pick; })[0];
+    document.getElementById('nowPick').textContent = np ? '고른 시안: ' + np.k + ' ' + np.n : '아직 안 고르셨어요';
+  }
+  function load() {
+    var g = document.getElementById('grid'); g.innerHTML = ''; frames = [];
+    SCR.forEach(function (x, i) {
+      var w = document.createElement('div'); w.className = 'fr';
+      var u = x.u.replace('?', '?theme=' + (dark ? 'dark' : 'light') + '&');
+      w.innerHTML = '<p class="lb">' + (i + 1) + '. ' + x.n + '</p><div class="ph"><iframe loading="lazy" title="' + x.n + '" src="' + u + '"></iframe></div>';
+      g.appendChild(w);
+      var f = w.querySelector('iframe'); frames.push(f);
+      f.addEventListener('load', function () {
+        inject(f);
+        if (x.a) setTimeout(function () { try { var b = f.contentDocument.querySelector(x.a); if (b) b.click(); } catch (e) {} }, 1200);
+      });
+    });
+  }
+  document.getElementById('chips').addEventListener('click', function (e) { var b = e.target.closest('[data-i]'); if (!b) return; cur = +b.dataset.i; draw(); frames.forEach(inject); });
+  document.getElementById('mLight').addEventListener('click', function () { if (!dark) return; dark = false; this.classList.add('on'); document.getElementById('mDark').classList.remove('on'); load(); });
+  document.getElementById('mDark').addEventListener('click', function () { if (dark) return; dark = true; this.classList.add('on'); document.getElementById('mLight').classList.remove('on'); load(); });
+  document.getElementById('pickBtn').addEventListener('click', function () { st.pick = st.pick === V[cur].k ? '' : V[cur].k; save(); draw(); });
+  var memo = document.getElementById('memo'); memo.value = st.memo || '';
+  memo.addEventListener('input', function () { st.memo = memo.value; save(); });
+  document.getElementById('copy').addEventListener('click', function () {
+    var np = V.filter(function (x) { return x.k === st.pick; })[0];
+    var t = ['[VZTR 블루·잉크 시안]', '고른 시안: ' + (np ? np.k + ' ' + np.n + ' — 블루 ' + np.c.blue + ' · 다크 블루 ' + np.c.dblue + ' · 잉크 ' + np.c.ink + ' · 보조 ' + np.c.sub : '없음')];
+    if (st.memo) t.push('메모: ' + st.memo);
+    t = t.join('\n'); var b = this;
+    function ok() { b.textContent = '복사됨 ✓'; setTimeout(function () { b.textContent = '답 복사'; }, 1600); }
+    function fb() { var ta = document.createElement('textarea'); ta.value = t; document.body.appendChild(ta); ta.select(); try { document.execCommand('copy'); ok(); } catch (e) {} ta.remove(); }
+    if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(t).then(ok, fb); else fb();
+  });
+  sizeFw(); addEventListener('resize', sizeFw);
+  draw(); load();
+})();
+</script>
+</body>
+</html>
