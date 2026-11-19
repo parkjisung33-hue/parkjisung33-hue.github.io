@@ -2544,26 +2544,45 @@ function kakaoLoad() {   // 공유 창 열 때 미리 불러 둠 → 누르는 �
   document.head.appendChild(sc);
 }
 function kakaoShare() {
-  const url = shareUrl(); if (!url) return;
   if (location.hostname !== 'larchive.page') { toast('카카오톡 공유는 larchive.page에서만 돼요'); return; }
-  if (!window.Kakao || !Kakao.isInitialized || !Kakao.isInitialized()) { kakaoLoad(); toast('카카오톡 준비 중이에요 · 잠시 뒤 다시 눌러 주세요'); return; }
-  const p = /#sample=|#v=/.test(location.hash) ? PLAN : rawPlan(), lk = { mobileWebUrl: url, webUrl: url };
-  try {
-    Kakao.Share.sendDefault({ objectType: 'feed',
-      content: { title: TRIP_TITLE + ' 가이드북', description: (p ? planDates(p) + ' · ' : '') + 'VZTR로 만든 여행 일정', imageUrl: 'https://larchive.page/gaboja/icons/icon-512.png', imageWidth: 512, imageHeight: 512, link: lk },
-      buttons: [{ title: '가이드북 보기', link: lk }] });
-  } catch (_) { toast('카카오톡을 열지 못했어요 · 링크 복사를 이용해 주세요'); }
+  kakaoLoad();
+  const sdk = () => new Promise(r => { let n = 0; (function w() { if (window.Kakao && Kakao.isInitialized && Kakao.isInitialized()) r(true); else if (++n > 40) r(false); else setTimeout(w, 150); })(); });
+  Promise.all([shareWait(), sdk()]).then(([url, ok]) => {
+    if (!url) return;
+    if (!ok) { toast('카카오톡을 불러오지 못했어요 · 링크 복사를 이용해 주세요'); return; }
+    const p = /#sample=|#v=/.test(location.hash) ? PLAN : rawPlan(), lk = { mobileWebUrl: url, webUrl: url };
+    try {
+      Kakao.Share.sendDefault({ objectType: 'feed',
+        content: { title: TRIP_TITLE + ' 가이드북', description: (p ? planDates(p) + ' · ' : '') + 'VZTR로 만든 여행 일정', imageUrl: 'https://larchive.page/gaboja/icons/icon-512.png', imageWidth: 512, imageHeight: 512, link: lk },
+        buttons: [{ title: '가이드북 보기', link: lk }] });
+    } catch (_) { toast('카카오톡을 열지 못했어요 · 링크 복사를 이용해 주세요'); }
+  });
 }
 /* 11/19 W8 고침: 공유할 주소 정하기 — 샘플·공유받은 화면이면 지금 주소 그대로, 내 가이드북이면 보기 링크(없으면 바로 저장 시도 후 결과 알림) */
-function shareUrl() {
+function shareUrl() {   // 지금 바로 쓸 수 있는 주소(없으면 '')
   if (/#sample=|#v=/.test(location.hash)) return location.href;
-  const u = viewLink(); if (u) return u;
-  if (!rawPlan()) { toast('내 가이드북을 만든 뒤 공유할 수 있어요'); return ''; }
-  if (cloudBusy) { toast('서버에 저장하는 중이에요 · 잠시 뒤 다시 눌러 주세요'); return ''; }
-  toast('서버에 저장하는 중이에요');
-  clearTimeout(cloudT); window.__cloudErr = '';
-  cloudPush().then(() => toast(viewLink() ? '준비됐어요 · 한 번 더 눌러 주세요' : '서버에 저장하지 못했어요' + (window.__cloudErr ? ' (' + window.__cloudErr + ')' : '') + ' · 잠시 뒤 다시 해 주세요'));
-  return '';
+  return viewLink();
+}
+function shareWait() {   // 11/19 W8 2차: 다시 누르지 않게 — 주소가 없으면 그 자리에서 서버에 올리고 주소를 돌려줌 (실패면 알림 후 '')
+  const u = shareUrl(); if (u) return Promise.resolve(u);
+  if (!rawPlan()) { toast('내 가이드북을 만든 뒤 공유할 수 있어요'); return Promise.resolve(''); }
+  toast('공유 준비 중…'); clearTimeout(cloudT); window.__cloudErr = '';
+  const go = () => cloudBusy ? new Promise(r => setTimeout(r, 300)).then(go) : cloudPush();
+  return go().then(() => { const v = viewLink(); if (!v) toast('서버에 저장하지 못했어요' + (window.__cloudErr ? ' (' + window.__cloudErr + ')' : '') + ' · 잠시 뒤 다시 해 주세요'); return v; });
+}
+function copyLater(pr, okMsg) {   // 주소가 늦게 와도 복사되게: 사파리·크롬은 ClipboardItem에 Promise를 넘기면 누른 순간 권한으로 복사
+  const fail = () => toast('복사하지 못했어요 · 잠시 뒤 다시 눌러 주세요');
+  try {
+    if (window.ClipboardItem && navigator.clipboard && navigator.clipboard.write) {
+      const blob = pr.then(u => { if (!u) throw new Error('none'); return new Blob([u], { type: 'text/plain' }); });
+      navigator.clipboard.write([new ClipboardItem({ 'text/plain': blob })]).then(() => toast(okMsg), () => pr.then(u => { if (u) navigator.clipboard.writeText(u).then(() => toast(okMsg), fail); }));
+      return;
+    }
+  } catch (_) {}
+  pr.then(u => { if (!u) return; try { navigator.clipboard.writeText(u).then(() => toast(okMsg), fail); } catch (_) { fail(); } });
+}
+function shareReady() {   // 공유 창을 열 때 미리: 주소가 없으면 바로 올려 둠 → 누를 때는 이미 준비됨
+  if (!/#sample=|#v=/.test(location.hash) && rawPlan() && !viewLink() && PH_KEY_G()) { clearTimeout(cloudT); cloudPush(); }
 }
 function viewLink() { const p = rawPlan(), m = p && cloudGet()[p.made]; return m ? 'https://larchive.page/gaboja/#v=' + m.id : ''; }   // 11/19 W8: 남에게 보내는 보기 전용 링크
 function cloudLink() { const p = rawPlan(), m = p && cloudGet()[p.made]; return m ? 'https://larchive.page/gaboja/#g=' + m.id + '.' + m.key : ''; }
@@ -3209,7 +3228,7 @@ function menuSheet(k) {
   else if (k === 'new') { newTripSheet(); }
   else if (k === 'trips') { tripsSheet(); }
   else if (k === 'shares') {
-    kakaoLoad();   // 11/19 W8: 카카오 SDK 미리
+    kakaoLoad(); shareReady();   // 11/19 W8: 카카오 SDK·공유 주소 미리
     openSheet('<div class="shd"><div><h3 id="sheetTitle">공유하기</h3></div>' + X_BTN + '</div><div class="body"><div class="shlist">'
       + SHARES.map(x => '<button data-sh="' + x[0] + '"><svg viewBox="0 0 24 24">' + x[2] + '</svg>' + x[1] + '</button>').join('') + '</div></div>');
   }
@@ -3225,23 +3244,21 @@ function menuSheet(k) {
   else if (k === 'tips') { closeAll(); if ($('#v-plan').hidden) document.querySelector('.tabs [data-v="v-plan"]').click(); $('#tips').open = true; setTimeout(() => $('#tips').scrollIntoView({ behavior: 'smooth', block: 'start' }), 250); }
   else if (k === 'link') {   // 11/19 W8: 보기 전용 링크(받은 사람은 보기만, 내 가이드북은 안 바뀜)
     closeAll();
-    const url = shareUrl(); if (!url) return;
-    try { navigator.clipboard.writeText(url).then(() => toast('보기 전용 링크 복사됨'), () => toast('복사하지 못했어요 · 길게 눌러 복사해 주세요')); } catch (_) { toast('복사 안 됨'); }
+    copyLater(shareWait(), '보기 전용 링크 복사됨');
   }
   else if (k === 'mine') {   // 11/19 W12: 서버에 보관된 내 가이드북 링크 (가진 사람은 열고 고칠 수 있음)
     closeAll();
     const u = cloudLink();
     if (/#sample=|#v=/.test(location.hash)) { toast('내 가이드북 화면에서 눌러 주세요'); return; }
-    if (!u) { shareUrl(); return; }
+    if (!u) { shareWait().then(v => { const c = cloudLink(); if (v && c) copyLater(Promise.resolve(c), '내 링크 복사됨 · 다른 폰에서 열면 그대로 이어져요'); }); return; }
     try { navigator.clipboard.writeText(u).then(() => toast('내 링크 복사됨 · 다른 폰에서 열면 그대로 이어져요'), () => toast('복사하지 못했어요')); } catch (_) { toast('복사 안 됨'); }
   }
   else if (k === 'kakao') { closeAll(); kakaoShare(); }   // 11/19 W8
   else if (k === 'share') {
     closeAll();
-    const vu = shareUrl(); if (!vu) return;
-    const data = { title: 'VZTR · ' + TRIP_TITLE, text: TRIP_TITLE + ' 가이드북', url: vu };   // 11/19 W8: 보기 전용 링크
-    if (navigator.share) navigator.share(data).catch(e => { if (e && e.name !== 'AbortError') toast('공유 창을 열지 못했어요 · 링크 복사를 이용해 주세요'); });
-    else toast('이 브라우저는 공유를 지원하지 않아요 · 링크를 복사해 주세요');
+    if (!navigator.share) { toast('이 브라우저는 공유를 지원하지 않아요 · 링크를 복사해 주세요'); return; }
+    shareWait().then(vu => { if (!vu) return;   // 11/19 W8: 보기 전용 링크
+      navigator.share({ title: 'VZTR · ' + TRIP_TITLE, text: TRIP_TITLE + ' 가이드북', url: vu }).catch(e => { if (e && e.name === 'NotAllowedError') copyLater(Promise.resolve(vu), '공유 창 대신 링크를 복사했어요'); else if (e && e.name !== 'AbortError') toast('공유 창을 열지 못했어요 · 링크 복사를 이용해 주세요'); }); });
   }
   else if (k === 'pdf') { pdfSheet(); }
   else { closeAll(); toast('시험판에서는 아직 준비 중'); }
