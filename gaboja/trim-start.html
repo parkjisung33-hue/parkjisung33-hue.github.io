@@ -839,7 +839,7 @@ html[data-theme="dark"][data-grp="HE"] { --me-soft: color-mix(in srgb, #C17192 2
 .pair .mini .t3 { grid-area: t3; padding: 0.125rem 0.375rem 0.125rem; align-self: start; white-space: nowrap !important; overflow: hidden !important; font-size: 0.78125rem; }
 /* 11/20 동우님: 결과 탑승권 머리 — 캐릭터가 글자판과 가운데 정렬(fitChar) · 칸 140 → 112px 정사각형 · 위아래 여백 줄여 촘촘하게 */
 .rt .rtop { grid-template-columns: minmax(0,1fr) 6.5rem; padding: 0.5rem 1.125rem 0; align-items: center; }
-.ticket .av.hero { width: 6.5rem; height: 6.5rem; margin: -0.875rem 0; overflow: visible; }   /* 캐릭터는 크게 두고, 칸 높이는 글자판 블록(72px)에 맞춤 → 머리 띠 약 40px 줄어듦 */
+.ticket .av.hero { width: 6.5rem; height: 6.5rem; margin: -0.875rem 0; overflow: visible; padding: 0; gap: 0; }   /* padding 0: 첫 화면 .hero(위 0.5rem)가 이 칸에도 걸려 캐릭터가 8px 내려가 있던 것 */   /* 캐릭터는 크게 두고, 칸 높이는 글자판 블록(72px)에 맞춤 → 머리 띠 약 40px 줄어듦 */
 .ticket.rt .rband { padding-bottom: 0.625rem; }
 </style>
 </head>
