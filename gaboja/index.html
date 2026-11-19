@@ -781,8 +781,6 @@ body { letter-spacing: 0; }
 .dcard .tt .muted { font-weight: 500; font-size: 0.8125rem; }
 .dchip { background: var(--ink); color: var(--on-ink); border-radius: 0.625rem; font-family: var(--mono); font-size: 0.75rem; font-weight: 500; letter-spacing: .04em; }
 .dcard .rt { line-height: 1.45; font-size: 0.84375rem; white-space: normal; word-break: keep-all; }   /* 11/20 숙소 줄 뺌 → 동선은 줄바꿈 허용(잘림 X) */
-.dcard .hs { height: 1.25rem; line-height: 1.25rem; font-size: 0.78125rem; color: var(--sub); display: flex; align-items: center; gap: 0.375rem; }
-.dcard .hs svg { width: 0.875rem; height: 0.875rem; stroke: currentColor; fill: none; stroke-width: 1.9; stroke-linecap: round; stroke-linejoin: round; flex: none; }
 /* D3-3 메모 모아 보기: 할 일(노란 카드 + 날짜 카드) / 완료 접힘 */
 .mtitle { font-size: 0.9375rem; font-weight: 800; }
 .mpost { background: var(--note); color: var(--note-ink); border-radius: 0.2687rem 0.2687rem 0.4188rem 0.2687rem; padding: 0.625rem 0.875rem 0.75rem; box-shadow: 0 3px 8px -4px rgba(0,0,0,.3); }
@@ -928,7 +926,6 @@ body { letter-spacing: 0; }
 .dsh { display: flex; align-items: baseline; gap: 0.5rem; min-width: 0; padding-right: 0.25rem; }
 .dsh .dn { font-family: var(--mono); font-weight: 800; font-size: 0.9375rem; color: var(--blue); flex: none; }
 .dsh .dd { font-size: 0.875rem; font-weight: 600; white-space: nowrap; }
-.dsh .dr { margin-left: auto; font-family: var(--mono); font-size: 0.78125rem; color: var(--sub); white-space: nowrap; }
 .sheet h3.dstt { font-size: 1.3125rem; font-weight: 700; letter-spacing: -.035em; line-height: 1.25; margin: 0.25rem 0 0; }
 #sheet .body:has(> .rlist) { margin-top: 1.25rem; }
 .rlist { list-style: none; margin: 0; padding: 0; }
@@ -1732,7 +1729,7 @@ function dayHead(d) {
   return h;
 }
 function daySumSheet() {   /* 11/18 D-4 ①: 머리 한 줄(DAY·날짜·시각 범위) + 세로 목록(시각 · 점 · 이름, 안 잘림) */
-  const d = DAYS[st.day], nw = nowOf(d), first = d.list[0], last = d.list[d.list.length - 1];
+  const d = DAYS[st.day], nw = nowOf(d);
   let h = '<div class="shd"><div><div class="dsh"><b class="dn">DAY ' + d.no + '</b><span class="dd">' + esc(d.date) + '</span></div><h3 id="sheetTitle" class="dstt">' + esc(d.title) + '</h3>'
     + '</div>' + X_BTN + '</div><div class="body"><ul class="rlist sumscroll" aria-label="동선: ' + esc(routeOf(d).join(' → ')) + '">';
   d.list.filter(c => c.k !== 'm').forEach(c => {   // 11/15 #11: 요약엔 이동 시간 빼고 일정만
@@ -2975,7 +2972,7 @@ function menuSheet(k) {
       + '<div class="sgrid"><div><small>여행</small><b>' + DAYS.length + '일</b></div><div><small>장소</small><b>' + nPlace + '곳</b></div><div><small>총 이동</small><b>' + durTx(mv) + '</b></div><div><small>확인 필요</small><b' + (nChk ? ' class="warn"' : '') + '>' + nChk + '곳</b></div></div><div class="dcards">';
     DAYS.forEach(d => {
       let nm = routeOf(d).filter(x => x !== '집' && x !== baseOf(d)); if (!nm.length) nm = routeOf(d);
-      const rt = nm.length > 3 ? nm.slice(0, 3).join(' → ') + ' 외 ' + (nm.length - 3) + '곳' : nm.join(' → '), bs = baseOf(d);
+      const rt = nm.length > 3 ? nm.slice(0, 3).join(' → ') + ' 외 ' + (nm.length - 3) + '곳' : nm.join(' → ');
       h += '<div class="dcard"><div class="tt"><span class="dchip">DAY ' + d.no + '</span><span class="one"><span class="muted">' + esc(dShort(d)) + '</span> · ' + esc(d.title) + '</span></div><div class="rt">' + esc(rt || '일정 없음') + '</div>'
         + '</div>';
     });

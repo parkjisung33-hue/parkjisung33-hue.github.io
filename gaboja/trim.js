@@ -233,6 +233,7 @@
   }
   var STEP = { ls: 0.005, lh: 0.05, mt: 2, mb: 2, gap: 2, pl: 2, pr: 2, x: 2, y: 2 };
   function bump(k, dir) {
+    if (!pick || (k === 'gap' && baseOf(pick).gap == null && !adjItem(false))) return;   // 리뷰: 사이 간격 없는 칸에 빈 항목 쌓이지 않게
     var it = adjItem(true); if (!it) return;
     if (k === 'lh' && it.v.lh === 0) it.v.lh = 1.2;   // '보통' → 1.2부터
     if (k === 'gap' && it.v.gap == null) return;
@@ -537,7 +538,12 @@
       }
     }).observe(document.head, { childList: true });
     window.addEventListener('scroll', function () { if (pick) boxTo(pick); }, { passive: true, capture: true });
-    if (SDEF && SDEF.act) setTimeout(function () { try { SDEF.act(); } catch (e) {} }, 700);
+    if (SDEF && SDEF.act) { var tries = 0, tk = setInterval(function () {   // 리뷰: 샘플 일정이 늦게 그려지는 폰 대비 — 누를 것이 생길 때까지 최대 6초
+      tries++; var before = document.querySelector('#scrim:not([hidden]), #v-now:not([hidden]), #v-log:not([hidden])');
+      if (before) { clearInterval(tk); return; }   // 이미 열려 있으면 또 누르지 않음(메뉴 닫힘 방지)
+      try { SDEF.act(); } catch (e) {}
+      if (SDEF.s === 'pass' || SDEF.s === 'detail' || tries > 20 || document.querySelector('#scrim:not([hidden]), #v-now:not([hidden]), #v-log:not([hidden])')) clearInterval(tk);
+    }, 300); }
   }
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', start); else start();
 })();

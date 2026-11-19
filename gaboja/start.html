@@ -687,10 +687,7 @@ html.fit .foot::before { display: none; }
 .vzi { font-size: 1.05em; letter-spacing: -.05em; text-transform: none; vertical-align: baseline; }
 .eyebrow .vzi { font-size: 1.3em; margin-right: 0.125rem; }
 /* -- 11/18 BI: 화면 바탕 = 아주 연한 회색 + 흰 번짐 (거의 안 보일 만큼) -- */
-:root { --bgsoft: radial-gradient(ellipse 90% 60% at 12% 0%, #EBEDF0 0%, transparent 72%), radial-gradient(ellipse 80% 55% at 100% 100%, #EDEFF2 0%, transparent 72%), #F4F5F7; }
-@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --bgsoft: radial-gradient(ellipse 90% 40% at 50% 0%, rgba(255,255,255,.04), transparent 72%), #0E1013; } }
-:root[data-theme="dark"] { --bgsoft: radial-gradient(ellipse 90% 40% at 50% 0%, rgba(255,255,255,.04), transparent 72%), #0E1013; }
-html { background: var(--bgsoft); min-height: 100%; }
+html { min-height: 100%; }   /* 11/20 배경 = 아래 .bgfx (옛 --bgsoft 지움) */
 :root { --bgtop: #F2F3F5; } @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --bgtop: #0F1215; } } :root[data-theme="dark"] { --bgtop: #0F1215; }
 body { background: transparent; }
 
@@ -776,8 +773,8 @@ body { background: transparent; }
 /* 11/20 동우님: 선택지 파스텔은 고른 뒤에만(고르기 전엔 흰 카드 그대로) — 고르면 묶음 파스텔 바탕 + 진한 글자 */
 .opts.done .opt.chosen .k { background: color-mix(in srgb, var(--gx-ink) 14%, transparent); }
 /* 11/20 질문 간격을 다른 질문형 화면(방법·입력·수정)에도: 묶음 사이 = clamp, 제목 묶음 아래만 4px 덜(설명 글줄 아래 빈 줄) */
-.scr:not(.qs):has(> .qh) { --scr-g: clamp(1.25rem, 4.5svh, 2.75rem); gap: var(--scr-g); }
-.scr:not(.qs) > .qh + * { margin-top: -0.25rem; }
+.scr:not(.qs):not(:has(> .tqh)):has(> .qh) { --scr-g: clamp(1.25rem, 4.5svh, 2.75rem); gap: var(--scr-g); }   /* 16유형 둘러보기(.tqh)는 제외 */
+.scr:not(.qs):not(:has(> .tqh)) > .qh { margin-bottom: -0.25rem; }   /* 다음 칸의 margin-top은 건드리지 않음 */
 /* 11/20 코발트 × 잉크 블랙: 배경 = 가이드북과 같은 깊이 그라디언트(가운데 → 55% → 가장자리, 화면 고정 .bgfx)
    밝은 = 가운데 밝고 바깥 살짝 어둡게 · 다크 = 동우님 다크 A(Midnight Embrace 연하게)를 잉크 블랙 무채색으로 */
 html { background: #EFEFF1; } body { background: transparent; }
@@ -1173,7 +1170,7 @@ function depRun(list) {
 function depFit() { // 11/18 T1: 줄 높이는 고정, 남은 높이에 들어가는 줄만 보임 (늘어나지 않음). '나' 줄은 항상, 그것도 안 들어가면 안내판 숨김
   const mid = document.querySelector('.scr:not(.leaving) .intro-mid'), dep = mid && mid.querySelector('.dep'); if (!dep) return;
   const rows = [...dep.querySelectorAll('.dr[data-r]')], mine = mid.querySelector('.mine');
-  const cap = innerHeight < 740 ? 2 : 3;   // 11/20 동우님: 큰 폰도 '나' 포함 최대 4줄, 작은 폰 3줄 — 남는 높이는 위·아래 여백으로
+  const cap = Math.max(innerHeight, screen.height || 0) < 740 ? 2 : 3;   /* 리뷰: 사파리 주소창이 innerHeight를 줄여 큰 폰도 3줄이 되던 것 → 기기 화면 높이로 */   // 11/20 동우님: 큰 폰도 '나' 포함 최대 4줄, 작은 폰 3줄 — 남는 높이는 위·아래 여백으로
   rows.forEach((r, i) => r.hidden = i >= cap); dep.hidden = false;
   const cs = getComputedStyle(mid), room = mid.clientHeight - parseFloat(cs.paddingTop) - parseFloat(cs.paddingBottom) - (mine ? mine.offsetHeight + 12 : 0);
   for (let n = cap; n > 0 && dep.scrollHeight > room + 1; n--) rows[n - 1].hidden = true;
