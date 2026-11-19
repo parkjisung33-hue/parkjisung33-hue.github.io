@@ -1430,13 +1430,7 @@ function copyLink(c) {
 }
 
 /* 11/18 4: 16유형 카드 — 캐릭터를 색 상자 안 가로·세로 가운데로 (바닥선에 맞춰 그려져 아래로 붙던 것 보정, chars.js는 그대로). 그림자 타원은 빼고 몸통 기준 */
-function centerChars(root) {
-  root.querySelectorAll('.g4 .mini .av').forEach(av => { const svg = av.querySelector('svg'); if (!svg) return; svg.style.transform = '';
-    let x0 = 1e9, y0 = 1e9, x1 = -1e9, y1 = -1e9;
-    svg.querySelectorAll('path,rect,circle,polygon,line,polyline').forEach(e => { if (e.closest('defs,clipPath,mask')) return; const r = e.getBoundingClientRect(); if (!r.width && !r.height) return; x0 = Math.min(x0, r.left); y0 = Math.min(y0, r.top); x1 = Math.max(x1, r.right); y1 = Math.max(y1, r.bottom); });
-    if (x1 < x0) return; const a = av.getBoundingClientRect(), sw = svg.getBoundingClientRect(), dx = (a.left + a.width / 2) - (x0 + x1) / 2, dy = (a.top + a.height / 2) - (y0 + y1) / 2;
-    svg.style.transform = `translate(${(dx / sw.width * 100).toFixed(2)}%, ${(dy / sw.height * 100).toFixed(2)}%)`; });
-}
+function centerChars() { /* 11/20: GABOJA_FIT(그림에 맞춘 정사각형 viewBox)로 대신함 — 숨은 이펙트 조각까지 재서 엇나가던 옛 보정 끔 */ }
 function rTypes() {
   setBar(null, 0, 0, null);
   const el = screen(`
