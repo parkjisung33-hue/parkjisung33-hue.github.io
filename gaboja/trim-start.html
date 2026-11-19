@@ -735,6 +735,7 @@ body { background: transparent; }
 .pass .todo .okl svg { flex: none; width: 1.125rem; height: 1.125rem; stroke: var(--green); fill: none; stroke-width: 2.6; stroke-linecap: round; stroke-linejoin: round; }
 /* ---------- 11/19 여백 조금 더 (동우님): 좌우 1.375 → 1.625rem(.wrap) · 화면 안 묶음 사이 1.25 → 1.5rem · 맨 위 숨 ---------- */
 .scr { gap: 1.5rem; padding-top: 0.75rem; }
+.qh .soon { display: inline-block; margin-top: 0.25rem; font-size: max(0.8125rem, 11px); color: var(--blue); font-weight: 600; }   /* 11/19 #4 서비스 지역 안내 */
 /* 11/19 한 줄로 (동우님): 카드 속 짧은 설명·만드는 중 목록·결과 미니 카드는 한 줄 + 넘치면 '…' */
 /* (11/19 최종 검수: '…' 대신 들어가면 한 줄, 안 들어가면 자연스럽게 줄바꿈 — 내용이 잘리지 않게) */
 .pk span, .ticks div > span:last-child, .mini .t3, .pair .mini .t3 { white-space: normal !important; overflow: visible !important; text-overflow: clip !important; word-break: keep-all; min-width: 0; }
@@ -1379,7 +1380,7 @@ function rInfo(s) {
   const head = (e, h, p) => `<div class="qh"><span class="eyebrow">여행 정보 · ${e}</span><h1>${h}</h1>${p ? `<p>${p}</p>` : ''}</div>`;
   let el;
   if (s === 'city') {
-    el = screen(head('어디로', '어디로 가세요?', '지역만 고르면 동선은 <b class="vz vzi">vztr<i></i></b>가 짜 드려요') + `<div class="pick">${CITIES.map(c => `<button class="pk" data-v="${c[0]}" aria-pressed="${tr.city === c[0]}"><b>${c[0]}</b><span>${c[1]}</span></button>`).join('')}</div>
+    el = screen(head('어디로', '어디로 가세요?', '지역만 고르면 동선은 <b class="vz vzi">vztr<i></i></b>가 짜 드려요<br><span class="soon">가는 곳은 계속 늘려 갈게요</span>')   /* 11/19 #4 */ + `<div class="pick">${CITIES.map(c => `<button class="pk" data-v="${c[0]}" aria-pressed="${tr.city === c[0]}"><b>${c[0]}</b><span>${c[1]}</span></button>`).join('')}</div>
       <div class="blk" id="cityEtc" ${tr.city === '다른 곳' ? '' : 'hidden'}><input class="in" id="cityIn" placeholder="예: 다낭, 타이베이" value="${esc(tr.cityEtc || '')}"><button class="cta" id="cityNext">다음</button></div>
       <div class="blk" id="cityPart" ${hasPart(tr) ? '' : 'hidden'}><div class="sub2">어디까지 둘러볼까요?</div><div class="seg" id="partSeg">${PARTS.map(p => `<button data-p="${p[0]}" aria-pressed="${(partOf(tr) || 'both') === p[0]}">${p[1]}</button>`).join('')}</div><button class="cta" id="partNext">다음</button></div>`);
     el.querySelectorAll('.pk').forEach(b => b.onclick = () => { tr.city = b.dataset.v; if (!hasPart(tr)) delete tr.part; el.querySelectorAll('.pk').forEach(x => x.setAttribute('aria-pressed', x === b)); tap();
@@ -1973,7 +1974,7 @@ function rDone() {
   /* 안 끝난 것만, 최대 2줄: 비행기(가는 길) 시각 · 숙소 */
   const needFl = isDom(tr) ? (['train', 'air'].includes(tr.mode) && tr.flight !== 'yes') : tr.flight !== 'yes';
   const needSt = !tr.day && tr.stay !== 'yes';
-  const todo = [needFl ? [isDom(tr) ? '가는 길 시각 넣기' : '비행기 시각 넣기', '넣기'] : null, needSt ? ['숙소 정하기', '정하기'] : null].filter(Boolean).slice(0, 2);
+  const todo = [needFl ? [isDom(tr) ? '가는 길 시각 넣기' : '비행기 시각 넣기', '입력하기'] : null, needSt ? ['숙소 정하기', '입력하기'] : null]   /* 11/19 #8: 버튼 글자 '입력하기'로 통일 */.filter(Boolean).slice(0, 2);
   const g = S.type ? GRPC[S.type.slice(0, 2)] : null;
   screen(`
     <article class="ticket pass">
