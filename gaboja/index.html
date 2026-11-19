@@ -1272,6 +1272,70 @@ html[data-theme="dark"][data-grp="HE"] { --me-soft: color-mix(in srgb, #C17192 2
 .li .tm { font-size: 0.8125rem; }
 .li .tm small { font-size: max(0.6875rem, 11px); }
 .rlist .tm { font-size: 0.71875rem; }
+
+/* ===== 11/19 ④ 화면 디자인 (동우님 보드 s4.html 고름) — BI 글꼴이 바뀌면 아래 :root 값만 다시 맞춤 =====
+   전체 3 = A안(제목은 A보다 1px 작게) · 9a = A(제목 늘 한 줄) · 12 = A(+ ± 작게, 위 시각 줄 뺌) · 13b = A(+ ± 통일, 이름 한 줄, 카드 화면 가운데) */
+:root {
+  --t-day: 1.5625rem;      /* 하루 제목 25 (전 24) */
+  --t-sheet: 1.3125rem;    /* 창 제목 21 (전 20) */
+  --s-meta: 0.75rem;       /* 도시·작은 줄 12 */
+  --s-wx: 0.8125rem;       /* 날씨 13 */
+  --s-time: 0.71875rem;    /* 일정 칸 시각 11.5 */
+  --s-desc: 0.8125rem;     /* 창 설명 13 */
+  --step-b: 1.5rem;        /* − + 버튼 24 (전 34·30) */
+  --step-f: 0.875rem;      /* − + 글자 14 */
+  --step-v: 0.875rem;      /* 스테퍼 값 14 */
+  --kv-l: 5.25rem;         /* 장소 상세 라벨 칸 84 */
+}
+/* 전체 3: 제목은 크게, 부가 글자는 작고 회색 */
+.dayline h2 { font-size: var(--t-day) !important; }
+.dayline .city { font-size: var(--s-meta) !important; color: var(--sub) !important; }
+.dayline .wxl, .dayline .wxl b, .dayline .wxl span { font-size: var(--s-wx) !important; }
+html #dayBody .tile .t, html #dayBody .tile .t * { font-size: var(--s-time) !important; }
+html #dayBody .tile .t { color: var(--sub) !important; }
+#sheet h3#sheetTitle { font-size: var(--t-sheet) !important; }
+#sheet .shd .sub { font-size: var(--s-desc) !important; color: var(--sub) !important; }
+#sheet .shd .eyebrow { font-size: var(--s-meta) !important; }
+/* 한 줄 맞춤(fitLines): 넘치면 글자만 줄임 */
+.dayline h2.fitln, #sheet h3#sheetTitle.fitln { white-space: nowrap !important; }
+/* 9a: 맨 위 제목 = 늘 한 줄. 넘치면 --tk(0.65~1)로 글자만 줄여 요약/상세 토글과 안 겹침 */
+.pill .ttl b { white-space: nowrap !important; overflow: hidden; text-overflow: clip; display: block; min-width: 0; max-width: 100%; line-height: 1.25 !important; }
+.hbox .pill .ttl b { font-size: calc((1.0625rem - var(--p, 0) * 0.0625rem) * var(--tk, 1)) !important; }
+/* − + 버튼 통일(장소 상세 · 길안내 시간 조정 · 그 밖 스테퍼) */
+.step button, .late .adj .step button, .stayrow2 .step button { width: var(--step-b) !important; height: var(--step-b) !important; font-size: var(--step-f) !important; }
+.step b, .late .adj .step b { font-size: var(--step-v) !important; min-width: 3.75rem !important; }
+/* 12: 장소 상세 — 같은 '라벨 | 값' 줄, 선·메모 라벨 빼기, 글자 버튼 */
+#sheet .body:has(> .stayrow2) { gap: 1.25rem; }
+#sheet .body > .kv + .stayrow2, #sheet .body > .stayrow2 + .ckline, #sheet .body > .kv + .ckline { margin-top: -0.75rem; }
+#sheet .body:has(> .stayrow2) > .kv { display: grid; grid-template-columns: var(--kv-l) 1fr; align-items: center; }
+#sheet .body:has(> .stayrow2) > .kv dt { padding: 0; }
+#sheet .body > .kv dt, #sheet .stayrow2 .lb, #sheet .ckline .ckl { font-size: 0.8125rem; font-weight: 500; color: var(--sub); }
+#sheet .stayrow2 { background: none; padding: 0; border-radius: 0; display: grid; grid-template-columns: var(--kv-l) auto; justify-content: start; }
+#sheet .ckline { display: grid; grid-template-columns: var(--kv-l) auto 1fr; align-items: center; column-gap: 0.375rem; font-size: 0.875rem; }
+#sheet .ckline .ckd:not(.no) { display: none; }
+#sheet .ckline .ckd.no { order: 1; }
+#sheet .ckline .ckv { order: 2; }
+#sheet .memos .mh { display: none; }
+#sheet .memos .madd { padding-top: 0; }
+#sheet .body > .acts:not(.two):has(> .btn.sec.sm) { margin-top: -0.625rem; }
+#sheet .body > .acts:not(.two) > .btn.sec.sm { border: 0; background: none; box-shadow: none; height: auto; padding: 0.25rem 0; color: var(--sub); font-weight: 600; text-decoration: underline; text-underline-offset: 3px; text-decoration-color: color-mix(in srgb, currentColor 35%, transparent); }
+#sheet .ordrow { margin-top: -0.75rem; gap: 1.25rem; }
+#sheet .ordrow > i { display: none; }
+/* 13b: 길안내 '지금' 카드 — 시각 + 이름 한 줄, 닫혀 있나요 = 글자 버튼, 시간 조정 얇게 */
+.nextwrap { padding: 1rem !important; gap: 0.5rem !important; }
+#nextCard { display: grid !important; grid-template-columns: auto minmax(0, 1fr); column-gap: 0.625rem; row-gap: 0.375rem; align-items: baseline; }
+#nextCard > * { grid-column: 1 / -1; }
+#nextCard > .when { grid-column: 1; }
+#nextCard > .when + .nm { grid-column: 2; }
+#nextCard .when .big { font-size: 1.875rem !important; line-height: 1.1; }
+#nextCard .nm { font-size: 1.125rem; margin: 0 !important; white-space: nowrap !important; min-width: 0; }   /* 글자 크기는 !important 없이 — fitNow()가 넘치면 줄임 */
+#nextCard .lo { margin-top: -0.125rem !important; }
+#nextCard .acts.nowacts { margin-top: 0.25rem !important; }
+#nextCard .acts.nowacts .btn { height: 2.5rem; }
+#nextCard .acts:not(.nowacts) { margin-top: 0 !important; justify-content: center; }
+#nextCard .acts:not(.nowacts) > .btn.ghost.sm { border: 0; background: none; box-shadow: none; height: auto; padding: 0.125rem 0; color: var(--sub); font-size: 0.78125rem; font-weight: 600; }
+.nextwrap .late { border-top: 0 !important; padding-top: 0 !important; gap: 0.25rem !important; }
+.nextwrap .late .adj { padding-block: 0.25rem !important; }
 </style>
 
 <div class="bgfx" aria-hidden="true"></div><!-- 11/19 다크 배경(A 연하게) — 밝은 모드에선 안 보임 -->
@@ -2143,6 +2207,14 @@ document.addEventListener('contextmenu', e => { if (e.target.closest('#dayBody [
 // 보는 날 = 도착 표시 중인 날 > 오늘 > (출발 전) DAY 1 > (여행 끝) 마지막 날
 function navDay() { const n = nowRef(); if (st.cur) return st.cur.day; return n.phase === 'during' ? n.day : n.phase === 'before' ? 0 : DAYS.length - 1; }
 /* 11/18 피드백6: 길안내 제목·타임라인 이름은 한 줄('…' 없음) — 넘치면 글자를 0.5px씩 줄임(최소 11px) */
+/* 11/19 ④ #13b: 길안내 카드를 화면 가운데(맨 위 머리 아래 ~ 아래 메뉴 위)에 */
+function centerNow(smooth) {
+  const w = $('#v-now .nextwrap'); if (!w || $('#v-now').hidden) return;
+  const hb = document.querySelector('.hbox'), dk = document.querySelector('.dock'), r = w.getBoundingClientRect();
+  const top = hb ? hb.getBoundingClientRect().bottom : 0, bot = dk ? dk.getBoundingClientRect().top : innerHeight;
+  const dy = r.top + r.height / 2 - (top + bot) / 2;
+  if (Math.abs(dy) > 2) window.scrollBy({ top: dy, behavior: smooth && !calm() ? 'smooth' : 'auto' });
+}
 function fitNow() {
   if ($('#v-now').hidden) return;
   document.querySelectorAll('#nextCard .nm, #track .stop b, #trackPast .stop b').forEach(n => { n.style.fontSize = ''; if (!n.clientWidth) return; let fs = parseFloat(getComputedStyle(n).fontSize); while (n.scrollWidth > n.clientWidth + 1 && fs > 11) { fs -= 0.5; n.style.fontSize = fs + 'px'; } });
@@ -2195,6 +2267,7 @@ function renderNow() {
     $('#track').innerHTML = rest; $('#track').hidden = !rest;
     fitNow();
     if (vis) { const dy = nwr.getBoundingClientRect().top - y0; if (Math.abs(dy) > 1) window.scrollBy(0, dy); }   // 도착을 눌러도 카드는 화면 같은 자리, 지난 길만 위로 쌓임
+    if (vis && st._center) { st._center = 0; requestAnimationFrame(() => centerNow(true)); }   // 11/19 ④ #13b: 도착·출발을 누르면 카드가 화면 가운데로 스르륵
   }
   const b = $('#banner');
   if (!net) b.hidden = true;
@@ -2467,6 +2540,28 @@ function phScan() {   // 시트 안 .phbox 를 찾아 사진을 붙임 (시트�
     loadGD(D => { const p = D && D.places && D.places[el.dataset.pid]; if (!p) { el.hidden = true; return; } phMount(el, p, { link: true }); }); });
 }
 try { new MutationObserver(phScan).observe(document.getElementById('sheetIn'), { childList: true }); } catch (_) {}
+/* 11/19 ④ 화면 디자인 — 전체 3: 하루 제목·창 제목 한 줄(넘치면 0.5px씩 줄임) · 9a: 맨 위 제목 늘 한 줄(--tk로 줄여 토글과 안 겹침) */
+function fitLines() {
+  document.querySelectorAll('.dayline h2, #sheet h3#sheetTitle').forEach(el => {
+    el.classList.add('fitln'); el.style.removeProperty('font-size'); if (!el.clientWidth) return;
+    let f = parseFloat(getComputedStyle(el).fontSize); const min = el.matches('.dayline h2') ? 18 : 16;
+    while (el.scrollWidth > el.clientWidth + 1 && f > min) { f -= 0.5; el.style.setProperty('font-size', f + 'px', 'important'); }
+    if (el.scrollWidth > el.clientWidth + 1) { el.classList.remove('fitln'); el.style.removeProperty('font-size'); }   // 최소 크기에서도 넘치면 줄바꿈
+  });
+}
+function fitTitle() {
+  const b = document.querySelector('.pill .ttl b'), t = b && b.parentElement; if (!b || !t.clientWidth) return;
+  b.style.setProperty('--tk', '1');
+  const k = Math.max(0.65, Math.min(1, (t.clientWidth - 4) / b.scrollWidth)); b.style.setProperty('--tk', k.toFixed(3));
+}
+try {
+  const fl = () => requestAnimationFrame(fitLines);
+  new MutationObserver(fl).observe(document.getElementById('sheetIn'), { childList: true });
+  new MutationObserver(fl).observe(document.getElementById('dayHead'), { childList: true, subtree: true });
+  addEventListener('resize', () => { fitTitle(); fitLines(); });
+  document.fonts && document.fonts.ready.then(() => { fitTitle(); fitLines(); });
+  fitTitle(); fitLines();
+} catch (_) {}
 /* 11/18 D-4 ③: 영업시간 칩 — 영업 구간(oh)이 있으면 '그 시각에 열림/밖'(timeIssue 재사용), 없고 info에 영업 글자만 있으면 그 글자. 데이터 없으면 칩 없음 */
 function openChip(d, c) {
   if (c.fly || c.k === 'm' || c.k === 'w') return '';
@@ -2478,7 +2573,7 @@ function openChip(d, c) {
 function sheetHtml(d, c) {
   const fx = fixedOf(c), parts = c.n.split(' — '), key = d.no + ':' + c.id, L = c.memo || [], tb = d.tbd, ed = !c.fly && c.k !== 'm';
   /* 11/18 D-4 ③: 머리 = 작은 줄(DAY · 시각) / 이름 / 설명 / 영업시간 칩 (종류 글자는 뺌) */
-  let h = '<div class="shd"><div><span class="eyebrow one">DAY ' + d.no + ' · ' + (tb ? '시각 미정' : c.s + (c.est ? '' : ' – ' + c.e)) + (c.chg ? '<span class="chgtag">변경됨</span>' : '') + '</span>'
+  let h = '<div class="shd"><div>' + (c.chg ? '<span class="eyebrow one"><span class="chgtag">변경됨</span></span>' : '')   /* 11/19 ④ #12 동우님: 위 'DAY · 시각' 줄 뺌 (변경됨 표시만) */
     + '<h3 class="one" id="sheetTitle">' + esc(parts[1] || parts[0]) + '</h3>' + (c.say ? '<p class="sub one">' + esc(c.say) + '</p>' : '') + openChip(d, c) + '</div>' + X_BTN + '</div><div class="body">'
     + (c.pid && !c.fly ? '<div class="phbox" data-pid="' + esc(c.pid) + '"></div>' : '');
   if (c.fly) h += rideEditHtml(d, c);
@@ -2490,7 +2585,8 @@ function sheetHtml(d, c) {
   (c.info || []).forEach(x => { if (x[0] === '영업' && !c.fly && c.k !== 'm') return; kv.push([x[0], esc(x[1])]); });   // 영업시간은 위 칩으로
   if (kv.length) h += '<dl class="kv">' + kv.map(x => '<dt>' + x[0] + '</dt><dd>' + x[1] + '</dd>').join('') + '</dl>';
   if (ed) h += '<div class="stayrow2"><span class="lb">머무는 시간' + (c.du !== c.du0 ? '<small>원래 ' + durTx(c.du0) + '</small>' : '') + '</span><span class="step"><button type="button" data-stay-d="-15" aria-label="15분 줄이기"' + (c.du - 15 < 30 ? ' disabled' : '') + '>−</button><b>' + durTx(c.du) + '</b><button type="button" data-stay-d="15" aria-label="15분 늘리기"' + (c.du + 15 > 360 ? ' disabled' : '') + '>+</button></span></div>';   // 11/18 D-4 ③: 칩 2줄 → 한 줄 스테퍼(15분 단위 · 30분~6시간)
-  if (c.ck) h += '<p class="ckline"><i class="ckd' + (c.ck === 'ok' ? '' : ' no') + '"></i>' + esc(CHECKS[c.ck].t) + '</p>';
+  if (c.ck) { const t = String(CHECKS[c.ck].t), m = t.match(/^영업시간 확인\s*([\d.~\s]+)$/), v = m ? m[1] + ' 확인' : t.replace(/^영업시간이?\s*/, '');   // 11/19 ④ #12: '라벨 | 값' 줄
+    h += '<p class="ckline"><span class="ckl">영업시간</span><i class="ckd' + (c.ck === 'ok' ? '' : ' no') + '"></i><span class="ckv">' + esc(v) + '</span></p>'; }
   { const ti = timeIssue(c); if (ti.hard || ti.soft) h += '<p class="sub off">' + esc(ti.hard || ti.soft) + ' · 가능한 시간 ' + esc(ti.fix) + '</p>'; }
   h += '<div class="memos"><span class="mh">메모' + (L.length ? ' ' + L.length : '') + '</span>' + memoLines(L, key) + memoAdd(key, '예: 여기선 셔츠 보기') + '</div>';
   const nu = navUrl(d, c), mu = c.k === 'm' ? '' : mapUrl(d, c);
@@ -3158,7 +3254,7 @@ document.addEventListener('click', e => {
   const bk = e.target.closest('[data-blank]'); if (bk) { addSheet(); setTimeout(() => { const el = bk.dataset.blank === 'find' ? $('#addName') : $('#addRecs'); if (!el) return; if (bk.dataset.blank === 'find') el.focus(); else el.scrollIntoView({ block: 'center', behavior: calm() ? 'auto' : 'smooth' }); }, 80); return; }
   const gt = e.target.closest('[data-goto]');
   if (gt) { const el = document.querySelector('#dayBody [data-key="' + gt.dataset.goto + '"]'); if (el) { el.scrollIntoView({ behavior: calm() ? 'auto' : 'smooth', block: 'center' }); el.classList.remove('just'); void el.offsetWidth; el.classList.add('just'); } return; }
-  if (e.target.id === 'arriveBtn') { const di = navDay(), L = DAYS[di].list, p = posOf(di), nx = L[p.i + 1]; if (nx) { const prev = st.cur ? { ...st.cur } : null; st.cur = { day: di, id: nx.id }; refreshAll(); toast((nx.k === 'm' || isCar(nx) ? '출발 처리 · ' : '도착 처리 · ') + (nx.k === 'm' ? nx.n : (nx.sh || nx.n)), () => { st.cur = prev; refreshAll(); }, 5000); } return; }
+  if (e.target.id === 'arriveBtn') { const di = navDay(), L = DAYS[di].list, p = posOf(di), nx = L[p.i + 1]; if (nx) { const prev = st.cur ? { ...st.cur } : null; st.cur = { day: di, id: nx.id }; st._center = 1; refreshAll(); toast((nx.k === 'm' || isCar(nx) ? '출발 처리 · ' : '도착 처리 · ') + (nx.k === 'm' ? nx.n : (nx.sh || nx.n)), () => { st.cur = prev; refreshAll(); }, 5000); } return; }
   if (e.target.closest('#prevBtn')) { prevGo(); return; }
   const skp = e.target.closest('[data-skip]'); if (skp) { const di = navDay(); if (sheetMode === 'stop') closeAll(); removeItem(skp.dataset.skip, di, true); return; }
   const rmv = e.target.closest('[data-rmv]'); if (rmv) { const di = navDay(); if (sheetMode === 'stop') closeAll(); removeItem(rmv.dataset.rmv, di, false); return; }
@@ -3181,7 +3277,7 @@ document.querySelector('.tabs').onclick = e => {
   const onPlan = b.dataset.v === 'v-plan';
   $('#modeSeg').style.visibility = onPlan ? 'visible' : 'hidden';
   $('#dayBtns').hidden = !onPlan;
-  if (b.dataset.v === 'v-now') { renderNow(); fitNow(); if (!$('#trackPast').hidden) $('#v-now .nextwrap').scrollIntoView({ block: 'start' }); } else if (b.dataset.v === 'v-log') renderTrail(); else renderPlan();
+  if (b.dataset.v === 'v-now') { renderNow(); fitNow(); requestAnimationFrame(() => requestAnimationFrame(() => centerNow(false))); /* 11/19 ④ #13b: 탭 열면 카드가 화면 가운데 */ } else if (b.dataset.v === 'v-log') renderTrail(); else renderPlan();
   setSub(b.dataset.v);
   setFab(b.dataset.v);
   if (b.dataset.v === 'v-log' && endGet() === 'new') { endSet('seen'); endBadge(); }

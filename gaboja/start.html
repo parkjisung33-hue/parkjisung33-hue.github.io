@@ -850,6 +850,11 @@ html[data-theme="dark"][data-grp="HE"] { --me-soft: color-mix(in srgb, #C17192 2
 .ticket .av.hero { width: 8.25rem; height: 8.25rem; margin: -1.25rem 0; overflow: visible; padding: 0; gap: 0; }   /* padding 0: 첫 화면 .hero(위 0.5rem)가 이 칸에도 걸려 캐릭터가 8px 내려가 있던 것 */   /* 캐릭터는 크게 두고, 칸 높이는 글자판 블록(72px)에 맞춤 → 머리 띠 약 40px 줄어듦 */
 .ticket.rt .rband { padding-bottom: 0.625rem; }
 .av svg { overflow: visible; }   /* 11/20 바닥 그림자·이펙트가 잘린 viewBox 밖으로 조금 나가도 보이게 */
+
+/* ===== 11/19 ④ 화면 디자인 — 전체 3 A안(제목은 A보다 1px 작게). BI 글꼴이 바뀌면 :root 값만 다시 맞춤 ===== */
+:root { --t-q: 1.6875rem; --s-qdesc: 0.84375rem; }   /* 질문·화면 제목 27 (전 26) · 설명 13.5 (전 14) */
+.qh h1 { font-size: var(--t-q); font-weight: 800; }
+.qh p { font-size: var(--s-qdesc); color: var(--sub); }
 </style>
 </head>
 <body>
