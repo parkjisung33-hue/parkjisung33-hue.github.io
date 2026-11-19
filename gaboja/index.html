@@ -1196,6 +1196,7 @@ html[data-grp="HS"] { --stamp-a: var(--g-hs-a); --stamp-lt: var(--g-hs-lt); } ht
 .flycard .fields .fld:nth-child(2) { text-align: center; }   /* 공항 도착 = 가운데 */
 /* 살아 있는 탑승권 빛: 바깥 테두리에만 은은하게. 카드 자체의 그림자를 숨 쉬게 함(::after는 '처음 한 번 빛줄기'가 쓰고 있어 겹치면 PC에서 왼쪽에 빈 상자가 보였음 → 11/19 수정)
    1분마다 화면을 다시 그려도 빛이 처음부터 다시 시작하지 않게 시각에 맞춘 지연(--pd, fitTiles) */
+.pass.flycard.live::before { animation: none !important; box-shadow: inset 0 0 0 1.5px var(--c, var(--blue)), inset 0 1px 0 var(--glass-hl) !important; }   /* 안쪽 빛(passglow2) 끔 — 테두리 선만 */
 .pass.flycard.live { animation: passOut 2.8s ease-in-out var(--pd, 0s) infinite !important; }
 @keyframes passOut { 0%, 100% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--c, var(--blue)) 0%, transparent); } 50% { box-shadow: 0 0 1rem 0.1875rem color-mix(in srgb, var(--c, var(--blue)) 30%, transparent); } }
 @media (prefers-reduced-motion: reduce) { .pass.flycard.live { animation: none !important; } }
