@@ -17,6 +17,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400..800&family=Zen+Kaku+Gothic+New:wght@400;700&display=swap">
+<link rel="stylesheet" href="fonts/vztr-fonts.css?v=2"><!-- 11/19 글꼴: 굵은 한글 IBM Plex Sans KR · 보통 한글 Pretendard · 영문·숫자 IBM Plex Sans -->
 <style>
 /* Pretendard 1.3.9 (SIL OFL 1.1) — 공식 배포본(orioncactus/pretendard)을 fonts/에 함께 올림 */
 @font-face { font-family: "Pretendard Variable"; font-weight: 45 920; font-style: normal; font-display: swap;
@@ -34,8 +35,8 @@
   --toast-bg: rgba(10,31,51,.94); --toast-fg: #FFFFFF; --toast-act: #A9B9FF; --scrim: rgba(20,24,30,.28);
   --shadow: 0 1.375rem 2.75rem -1.375rem rgba(24,36,60,.32), 0 2px 0.375rem -2px rgba(24,36,60,.10);
   --sh-xs: 0 1px 2px rgba(24,36,60,.05), 0 0.25rem 0.75rem -0.375rem rgba(24,36,60,.14);
-  --kr: "Pretendard Variable", Pretendard, -apple-system, "Apple SD Gothic Neo", "Malgun Gothic", system-ui, sans-serif;
-  --mono: "Inter Tight", "Pretendard Variable", Pretendard, -apple-system, "Malgun Gothic", system-ui, sans-serif; /* 11/18 BI: 시각·숫자·영문 코드 = Inter Tight(고정폭 숫자), 한글은 Pretendard로 넘어감 */
+  --kr: "VZTR KR", "Pretendard Variable", Pretendard, -apple-system, "Apple SD Gothic Neo", "Malgun Gothic", system-ui, sans-serif;
+  --mono: "VZTR EN", "VZTR KR", "Pretendard Variable", Pretendard, -apple-system, "Malgun Gothic", system-ui, sans-serif; /* 11/18 BI: 시각·숫자·영문 코드 = Inter Tight(고정폭 숫자), 한글은 Pretendard로 넘어감 */
   --jp: "Zen Kaku Gothic New", "Yu Gothic", sans-serif;
   --r-lg: 1.625rem; --r-md: 1.25rem; --r-sm: 0.875rem;
 }
@@ -1072,6 +1073,16 @@ html[data-grp="HS"] { --stamp-a: var(--g-hs-a); --stamp-lt: var(--g-hs-lt); } ht
 /* 머리 날짜+칩: 좁으면 칩이 아랫줄로(잘리지 않게) */
 .pill { height: auto; min-height: 3.5rem; padding-block: 0.25rem; }
 .pill .ttl > span#topSub { flex-wrap: wrap; row-gap: 0.1875rem; overflow: visible; }
+/* ---------- 11/19 글꼴 A (동우님): 굵은 한글 = IBM Plex Sans KR(700) · 보통·작은·연한 한글 = Pretendard · 영문·숫자 = IBM Plex Sans ---------- */
+:root { --kr-plain: "Pretendard Variable", Pretendard, -apple-system, "Apple SD Gothic Neo", "Malgun Gothic", system-ui, sans-serif; }
+/* 작게 들어가는 굵은 글씨(12px 아래)는 Pretendard로 — 작은 크기에선 IBM 굵은 글자가 뭉개져 보임 */
+.stateline .stc, .dayline .sumlink, .nrow .v, .crow .tel, .tabs button { font-family: var(--kr-plain); }
+/* IBM Plex Sans는 Inter Tight보다 글자 폭이 넓음 → 영문 대문자 자간을 좁혀 원래 길이에 맞춤 */
+.eyebrow { letter-spacing: .06em; }
+.code { font-weight: 600; letter-spacing: 0; }
+/* IBM 굵은 한글은 Pretendard보다 자간이 살짝 넓음 → 큰 제목만 조금 당김 */
+.pill .ttl b, .dayline h2 { letter-spacing: -.02em; }
+
 </style>
 
 <div class="app">
