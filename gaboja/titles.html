@@ -1,0 +1,176 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<title>VZTR 제목 섹션 시안</title>
+<link rel="stylesheet" href="fonts/vztr-fonts.css?v=2">
+<style>
+@font-face { font-family: "Pretendard Variable"; font-weight: 45 920; font-display: swap; src: url(fonts/PretendardVariable.woff2) format("woff2-variations"); }
+:root { --bg: #E8EBEE; --card: #fff; --ink: #0A1F33; --sub: #5B6B7A; --line: #D9DDE2; --blue: #2F5BFF; }
+* { box-sizing: border-box; }
+html, body { margin: 0; background: var(--bg); color: var(--ink); font-family: "Pretendard Variable", Pretendard, system-ui, sans-serif; word-break: keep-all; }
+.top { position: sticky; top: 0; z-index: 5; background: rgba(232,235,238,.92); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); padding: calc(12px + env(safe-area-inset-top, 0px)) 16px 10px; border-bottom: 1px solid var(--line); }
+.top h1 { margin: 0 0 8px; font-size: 17px; letter-spacing: -0.01em; }
+.chips { display: flex; gap: 6px; overflow-x: auto; scrollbar-width: none; }
+.chips::-webkit-scrollbar { display: none; }
+.chips button { appearance: none; border: 0; border-radius: 999px; padding: 8px 13px; font: inherit; font-size: 14px; font-weight: 700; background: #fff; color: var(--ink); white-space: nowrap; flex: none; }
+.chips button.on { background: var(--ink); color: #fff; }
+.chips button .pk { color: var(--blue); }
+.chips button.on .pk { color: #9DB2FF; }
+.desc { margin: 8px 0 0; font-size: 13px; line-height: 1.5; color: var(--sub); }
+.desc b { color: var(--ink); }
+.spec { margin: 4px 0 0; font-size: 12px; color: var(--sub); font-variant-numeric: tabular-nums; line-height: 1.5; }
+.tools { display: flex; gap: 6px; margin-top: 8px; }
+.tools button { appearance: none; border: 0; border-radius: 9px; padding: 7px 10px; font: inherit; font-size: 12px; font-weight: 700; background: #fff; color: var(--sub); }
+.tools button.on { color: var(--blue); }
+.tools .pick { margin-left: auto; background: var(--blue); color: #fff; }
+.tools .pick.got { background: #0A1F33; }
+main { padding: 16px 16px 24px; display: grid; grid-template-columns: repeat(auto-fill, minmax(var(--fw), 1fr)); gap: 18px 14px; justify-items: center; }
+.fr { width: var(--fw); }
+.fr .lb { font-size: 12px; font-weight: 700; color: var(--sub); margin: 0 0 6px 2px; }
+.ph { width: var(--fw); height: calc(var(--fw) * 844 / 390); border-radius: 18px; overflow: hidden; background: #fff; box-shadow: 0 6px 20px -8px rgba(10,31,51,.25); position: relative; }
+.ph iframe { width: 390px; height: 844px; border: 0; transform-origin: 0 0; transform: scale(var(--k)); position: absolute; left: 0; top: 0; }
+.fb { padding: 4px 16px calc(28px + env(safe-area-inset-bottom, 0px)); max-width: 640px; margin: 0 auto; }
+.fb h2 { font-size: 14px; margin: 8px 0; }
+.fb textarea { width: 100%; min-height: 80px; border: 1px solid #D5D9DF; border-radius: 12px; padding: 12px; font: inherit; font-size: 14px; background: #fff; }
+.fb .btns { display: flex; gap: 8px; margin-top: 10px; }
+.fb button { appearance: none; border: 0; border-radius: 10px; padding: 12px 14px; font: inherit; font-size: 14px; font-weight: 700; background: var(--blue); color: #fff; flex: 1; }
+.fb .now { font-size: 13px; color: var(--sub); margin: 0 0 8px; }
+</style>
+</head>
+<body>
+<div class="top">
+  <h1>제목 섹션 — 시안 5개</h1>
+  <div class="chips" id="chips"></div>
+  <p class="desc" id="desc"></p>
+  <p class="spec" id="spec"></p>
+  <div class="tools"><button id="szBtn">크게 보기</button><button class="pick" id="pickBtn">이 시안으로</button></div>
+</div>
+<main id="grid"></main>
+<div class="fb">
+  <h2>고르기 · 메모</h2>
+  <p class="now" id="nowPick">아직 안 고르셨어요</p>
+  <textarea id="memo" placeholder="예: B인데 화면 제목만 한 단계 작게 / 설명은 E처럼 위로"></textarea>
+  <div class="btns"><button id="copy">답 복사</button></div>
+</div>
+<script>
+(function () {
+  /* 제목 역할 4가지 — 시안마다 이 4가지 + 간격만 바뀜. 화면 크기에 맞춰 rem(16px 기준)로 적용 */
+  var ROLE = {
+    D: '.hero h1, .ticket .nm',                                           // 큰 제목: 첫 페이지 · 유형 결과
+    P: '.qh h1, .swhd h1, .calc h2, .dayline h2, .dhd h2',                // 화면 제목: 질문 · 입력 · 장소 고르기 · 가이드북 하루 · 기록
+    S: '.sheet h3, .sheet h3.dstt',                                       // 창 제목: 하루 요약 · 여행 요약 · 일정 추가
+    T: '.qh p, .hero .hl, .sheet .sub'                                    // 설명 문장
+  };
+  var V = [
+    { k: '0', n: '지금', d: '지금 앱 그대로 (비교 기준). 화면마다 크기·굵기가 조금씩 따로 놉니다.', s: null },
+    { k: 'A', n: '차분하게', d: '<b>작고 단정하게.</b> 제목을 한 단계씩 줄이고 설명 줄을 넉넉히 — 정보가 먼저 보이는 쪽.',
+      s: { D: [28, 700, -0.03, 1.25], P: [22, 700, -0.025, 1.35], S: [18, 700, -0.02, 1.3], T: [14, 400, 0, 1.55], gap: 8, top: 0 } },
+    { k: 'B', n: '크고 굵게', d: '<b>제목이 주인공.</b> 크기·굵기를 올리고 자간을 좁혀 잡지 표지처럼 — 설명은 그대로 작게.',
+      s: { D: [38, 800, -0.05, 1.1], P: [28, 800, -0.04, 1.2], S: [22, 800, -0.03, 1.25], T: [14, 400, 0, 1.45], gap: 12, top: 4 } },
+    { k: 'C', n: '제목만', d: '<b>설명 문장을 빼고 제목 한 줄만.</b> 대신 제목 위 여백을 넓혀 숨을 줌 — 가장 덜어낸 안.',
+      s: { D: [34, 800, -0.045, 1.15], P: [26, 700, -0.03, 1.3], S: [20, 800, -0.02, 1.3], T: null, gap: 0, top: 16 } },
+    { k: 'D', n: '가볍고 넓게', d: '<b>굵기를 낮추고 줄 간격을 넓게.</b> 부드럽고 여유 있는 인상 — 설명도 한 단계 크게.',
+      s: { D: [30, 600, -0.02, 1.3], P: [24, 600, -0.015, 1.42], S: [19, 600, -0.01, 1.35], T: [15, 400, 0, 1.65], gap: 14, top: 8 } },
+    { k: 'E', n: '설명 먼저', d: '<b>문장 순서를 바꿔 짧은 설명이 제목 위로</b>(파랑 작은 글씨) — 제목은 굵고 조금 작게, 둘이 한 덩어리.',
+      s: { D: [34, 800, -0.045, 1.15], P: [25, 800, -0.035, 1.25], S: [20, 800, -0.025, 1.25], T: [13, 600, 0, 1.45], gap: 6, top: 4, lead: true } }
+  ];
+  var SCR = [
+    { n: '첫 페이지', u: 'start.html?s=intro' },
+    { n: '질문', u: 'start.html?s=q3' },
+    { n: '유형 결과', u: 'start.html?s=result' },
+    { n: '일정 만드는 방법', u: 'start.html?s=method' },
+    { n: '입력 — 어디로', u: 'start.html?s=city' },
+    { n: '장소 고르기', u: 'start.html?s=swipe' },
+    { n: '가이드북 — 일정', u: 'index.html#sample=air-jp' },
+    { n: '하루 일정 요약', u: 'index.html#sample=air-jp', a: '[data-daysum]' },
+    { n: '여행 요약', u: 'index.html#sample=air-jp', a: '[data-m="sum"]' },
+    { n: '일정 추가', u: 'index.html#sample=air-jp', a: '#addBtn' },
+    { n: '기록', u: 'index.html#sample=air-jp', a: '#tabLog' }
+  ];
+  function rem(px) { return (px / 16) + 'rem'; }
+  function role(sel, r) {
+    return sel + '{font-size:' + rem(r[0]) + '!important;font-weight:' + r[1] + '!important;letter-spacing:' + r[2] + 'em!important;line-height:' + r[3] + '!important}';
+  }
+  function css(v) {
+    var s = v.s; if (!s) return '';
+    var o = [role(ROLE.D, s.D), role(ROLE.P, s.P), role(ROLE.S, s.S)];
+    if (s.T) o.push(ROLE.T + '{font-size:' + rem(s.T[0]) + '!important;font-weight:' + s.T[1] + '!important;line-height:' + s.T[3] + '!important}');
+    else o.push(ROLE.T + '{display:none!important}');
+    o.push('.qh p{margin-top:' + rem(s.gap) + '!important}', '.hero{gap:' + rem(Math.max(s.gap, 8)) + '!important}', '.sheet .sub{margin-top:' + rem(Math.max(2, s.gap / 2)) + '!important}');
+    o.push('.qh:not(.tqh){padding-top:' + rem(s.top) + '!important}', '.hero{padding-top:' + rem(8 + s.top) + '!important}', '.dayline h2{margin-top:' + rem(s.top / 2) + '!important}');
+    if (s.lead) o.push(
+      '.qh p,.hero .hl{order:-1;margin:0 0 ' + rem(s.gap) + '!important;color:var(--blue)!important}',
+      '.hero .eyebrow{order:-2}',
+      '.sheet .shd>div{display:flex;flex-direction:column}',
+      '.sheet .shd .sub{order:-1;margin:0 0 ' + rem(s.gap / 2 + 1) + '!important;color:var(--blue)!important;font-size:' + rem(s.T[0]) + '!important;font-weight:600!important}');
+    return o.join('\n');
+  }
+  var cur = 0, big = false, frames = [];
+  function KEY() { return 'vztr-titles-v1'; }
+  var st = (function () { try { return JSON.parse(localStorage.getItem(KEY())) || {}; } catch (e) { return {}; } })();
+  function save() { try { localStorage.setItem(KEY(), JSON.stringify(st)); } catch (e) {} }
+  function sizeFw() {
+    var w = Math.min(innerWidth, 1400) - 32;
+    var fw = big ? Math.min(390, w) : innerWidth < 700 ? Math.floor((w - 14) / 2) : 250;
+    document.documentElement.style.setProperty('--fw', fw + 'px');
+    document.documentElement.style.setProperty('--k', fw / 390);
+  }
+  function inject(f) {
+    try {
+      var d = f.contentDocument; if (!d || !d.head) return;
+      var el = d.getElementById('tvCss');
+      if (!el) { el = d.createElement('style'); el.id = 'tvCss'; d.head.appendChild(el); }
+      el.textContent = css(V[cur]);
+    } catch (e) {}
+  }
+  function drawChips() {
+    document.getElementById('chips').innerHTML = V.map(function (v, i) {
+      return '<button data-i="' + i + '" class="' + (i === cur ? 'on' : '') + '">' + (v.k === '0' ? '' : v.k + ' ') + v.n + (st.pick === v.k ? ' <span class="pk">✓</span>' : '') + '</button>';
+    }).join('');
+    var v = V[cur];
+    document.getElementById('desc').innerHTML = v.d;
+    document.getElementById('spec').textContent = v.s ? '큰 제목 ' + v.s.D[0] + 'px·' + v.s.D[1] + ' · 화면 제목 ' + v.s.P[0] + 'px·' + v.s.P[1] + ' · 창 제목 ' + v.s.S[0] + 'px · 설명 ' + (v.s.T ? v.s.T[0] + 'px·행간 ' + v.s.T[3] : '없음') + ' · 제목–설명 ' + v.s.gap + 'px' : '큰 제목 34px · 화면 제목 22~26px(화면마다 다름) · 창 제목 20~21px · 설명 13.5~14px';
+    var pb = document.getElementById('pickBtn');
+    pb.style.display = v.k === '0' ? 'none' : '';
+    pb.textContent = st.pick === v.k ? '✓ 고른 시안' : '이 시안으로';
+    pb.classList.toggle('got', st.pick === v.k);
+    var np = V.filter(function (x) { return x.k === st.pick; })[0];
+    document.getElementById('nowPick').textContent = np ? '고른 시안: ' + np.k + ' ' + np.n : '아직 안 고르셨어요';
+  }
+  function setV(i) { cur = i; drawChips(); frames.forEach(inject); }
+  document.getElementById('chips').addEventListener('click', function (e) { var b = e.target.closest('[data-i]'); if (b) setV(+b.dataset.i); });
+  document.getElementById('szBtn').addEventListener('click', function () { big = !big; this.classList.toggle('on', big); this.textContent = big ? '작게 보기' : '크게 보기'; sizeFw(); });
+  document.getElementById('pickBtn').addEventListener('click', function () { st.pick = st.pick === V[cur].k ? '' : V[cur].k; save(); drawChips(); });
+  var memo = document.getElementById('memo'); memo.value = st.memo || '';
+  memo.addEventListener('input', function () { st.memo = memo.value; save(); });
+  document.getElementById('copy').addEventListener('click', function () {
+    var np = V.filter(function (x) { return x.k === st.pick; })[0];
+    var t = ['[VZTR 제목 섹션 시안]', '고른 시안: ' + (np ? np.k + ' ' + np.n : '없음')].concat(np && np.s ? ['  (크기px/굵기/자간em/행간) 큰 제목 ' + np.s.D.join('/') + ' · 화면 제목 ' + np.s.P.join('/') + ' · 창 제목 ' + np.s.S.join('/') + ' · 설명 ' + (np.s.T ? np.s.T.join('/') : '없음') + ' · 간격 ' + np.s.gap + ' · 위 ' + np.s.top + (np.s.lead ? ' · 설명 먼저' : '')] : []);
+    if (st.memo) t.push('메모: ' + st.memo);
+    t = t.join('\n'); var b = this;
+    function ok() { b.textContent = '복사됨 ✓'; setTimeout(function () { b.textContent = '답 복사'; }, 1600); }
+    function fb() { var ta = document.createElement('textarea'); ta.value = t; document.body.appendChild(ta); ta.select(); try { document.execCommand('copy'); ok(); } catch (e) {} ta.remove(); }
+    if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(t).then(ok, fb); else fb();
+  });
+  sizeFw(); addEventListener('resize', sizeFw);
+  var grid = document.getElementById('grid');
+  SCR.forEach(function (x, i) {
+    var w = document.createElement('div'); w.className = 'fr';
+    w.innerHTML = '<p class="lb">' + (i + 1) + '. ' + x.n + '</p><div class="ph"><iframe loading="lazy" title="' + x.n + '" src="' + x.u + '"></iframe></div>';
+    grid.appendChild(w);
+    var f = w.querySelector('iframe'); frames.push(f);
+    f.addEventListener('load', function () {
+      inject(f);
+      if (x.a) setTimeout(function () { try { var b = f.contentDocument.querySelector(x.a); if (b) b.click(); } catch (e) {} }, 1200);
+      // 화면이 다시 그려져도(시트 열기 등) 스타일 유지
+      try { new f.contentWindow.MutationObserver(function () { if (!f.contentDocument.getElementById('tvCss')) inject(f); }).observe(f.contentDocument.head, { childList: true }); } catch (e) {}
+    });
+  });
+  drawChips();
+})();
+</script>
+</body>
+</html>
