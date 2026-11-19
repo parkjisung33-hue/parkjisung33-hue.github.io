@@ -25,3 +25,19 @@
 /* 하루 머리 아래 → 일정 사이 숨 (안내 한 줄 빠진 자리) */
 #dayHead { margin-bottom: 0.375rem; }
 #dayBody + #warn, #v-plan > #warn { margin-top: 0.5rem; }
+
+/* ── 2차 (11/19 동우님): 시각 미정인 날 상세 타임라인의 '–' 빼기 → 시각 칸 없애고 공간 다시 나눔 ── */
+.list.notm { padding: 0.375rem 1.125rem; }
+.list.notm .li { grid-template-columns: minmax(0,1fr) auto !important; gap: 0 0.5rem !important; }
+.list.notm .li .tm { display: none !important; }
+/* 장소 줄: 칸이 넓어진 만큼 이름을 키우고 한 줄에 더 들어가게 */
+.list.notm .li:not(.m):not(.w) { padding-block: 0.8125rem !important; align-items: center !important; }
+.list.notm .li:not(.m):not(.w) .nm { font-size: 1.0625rem !important; font-weight: 800; line-height: 1.35; }
+.list.notm .li .nm .one { -webkit-line-clamp: 2; }
+.list.notm .li .s { font-size: 0.8125rem !important; margin-top: 0.125rem; }
+/* 이동 줄: 장소 이름 글자 시작에 맞춰 살짝 들여서 '사이에 낀 안내'로 */
+.list.notm .li.m { padding: 0 0 0.5rem 0.125rem !important; margin-top: -0.25rem; }
+.list.notm .li.m .c { font-size: 0.8125rem !important; line-height: 1.4; display: flex !important; align-items: center; gap: 0.3125rem; }
+.list.notm .li.m .c::before { content: "" !important; width: 1px; height: 0.875rem; background: var(--hair); margin-right: 0.3125rem; flex: none; }
+.list.notm .li.m .mic svg { width: 1rem; height: 1rem; }
+.list.notm .nm { align-items: center !important; } .list.notm .nm .kd { align-self: center !important; margin-top: 0 !important; }
