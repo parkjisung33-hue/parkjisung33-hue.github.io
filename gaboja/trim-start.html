@@ -129,9 +129,9 @@ a { color: inherit; }
 
 /* 화면 */
 main { flex: 1; display: flex; flex-direction: column; position: relative; overflow-x: clip; }
-.scr { flex: 1; display: flex; flex-direction: column; gap: 1.25rem; padding-top: 0.5rem; animation: inR .32s cubic-bezier(.2,.8,.2,1) both; }
+.scr { flex: 1; display: flex; flex-direction: column; gap: 1.25rem; padding-top: 0.5rem; animation: inR .4s cubic-bezier(.2,.8,.2,1) .04s both; }
 .scr.back { animation-name: inL; }
-.scr.leaving { position: absolute; left: 0; right: 0; pointer-events: none; animation: outL .18s ease-in forwards; z-index: 0; }
+.scr.leaving { position: absolute; left: 0; right: 0; pointer-events: none; animation: outL .26s cubic-bezier(.4,0,.6,1) forwards; z-index: 0; }   /* 11/20 #1: .18 → .26s 부드럽게 교차 */
 .scr.leaving.toR { animation-name: outR; }
 @keyframes outL { to { opacity: 0; transform: translateX(-1rem); } }
 @keyframes outR { to { opacity: 0; transform: translateX(1rem); } }
@@ -1097,7 +1097,7 @@ function screen(html, cls = '') {
   const m = $('#stage'), old = m.querySelector('.scr:not(.leaving)');
   m.querySelectorAll('.leaving').forEach(e => e.remove());
   if (old) old.querySelectorAll('[id]').forEach(e => e.removeAttribute('id')); // 새 화면의 같은 id와 안 겹치게
-  if (old && !REDUCED) { old.classList.add('leaving', dir < 0 ? 'toR' : 'toL'); old.style.top = (old.offsetTop - window.scrollY) + 'px'; old.setAttribute('aria-hidden', 'true'); old.inert = true; setTimeout(() => old.remove(), 200); }
+  if (old && !REDUCED) { const oh = old.offsetHeight, ot = old.offsetTop - window.scrollY; old.style.height = oh + 'px'; old.style.top = ot + 'px'; old.classList.add('leaving', dir < 0 ? 'toR' : 'toL');   /* 11/20 동우님 #1: 나갈 때 높이를 잡아 둠 — 가운데 정렬 여백이 접히며 위로 뚝 튀던 것 */ old.setAttribute('aria-hidden', 'true'); old.inert = true; setTimeout(() => old.remove(), 280); }
   else if (old) old.remove();
   const sec = document.createElement('section'); sec.className = `scr ${dir < 0 ? 'back' : ''} ${cls}`; sec.innerHTML = html; m.appendChild(sec); return sec;
 }
