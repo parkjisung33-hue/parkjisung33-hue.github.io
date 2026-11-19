@@ -108,7 +108,7 @@ a { color: inherit; }
 .glass { background: var(--glass); -webkit-backdrop-filter: blur(1.25rem) saturate(1.5); backdrop-filter: blur(1.25rem) saturate(1.5);
   border: 1px solid var(--glass-edge); box-shadow: var(--shadow), inset 0 1px 0 var(--glass-hl); }
 .wrap { max-width: 27.5rem; margin: 0 auto; min-height: 100vh; min-height: 100svh; display: flex; flex-direction: column;
-  padding-left: max(1.375rem, env(safe-area-inset-left, 0px)); padding-right: max(1.375rem, env(safe-area-inset-right, 0px)); padding-block: 0 2rem; }   /* 11/18 15: 좌우 여백 1rem → 1.375rem (모든 화면 공통) */
+  padding-left: max(1.625rem, env(safe-area-inset-left, 0px)); padding-right: max(1.625rem, env(safe-area-inset-right, 0px)); padding-block: 0 2rem; }   /* 11/18 15: 좌우 여백 1rem → 1.375rem (모든 화면 공통) */
 .eyebrow { font-size: 0.75rem; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--sub); }
 .muted { color: var(--sub); }
 
@@ -200,7 +200,7 @@ main { flex: 1; display: flex; flex-direction: column; position: relative; overf
 .ghost:hover { color: var(--ink); }
 .foot { display: flex; flex-direction: column; gap: 0.25rem; margin-top: auto; padding-top: 1rem; position: sticky; bottom: max(0.75rem, env(safe-area-inset-bottom, 0px)); }
 html.ios26 .foot, html.ios26 .board { bottom: calc(max(0.75rem, env(safe-area-inset-bottom, 0px)) + 3.5rem); }
-.foot::before { content: ""; position: absolute; inset: -1.5rem calc(-1 * max(1.375rem, env(safe-area-inset-right, 0px))) calc(-1 * max(0.75rem, env(safe-area-inset-bottom, 0px))); z-index: -1; background: linear-gradient(transparent, var(--canvas) 40%); pointer-events: none; }
+.foot::before { content: ""; position: absolute; inset: -1.5rem calc(-1 * max(1.625rem, env(safe-area-inset-right, 0px))) calc(-1 * max(0.75rem, env(safe-area-inset-bottom, 0px))); z-index: -1; background: linear-gradient(transparent, var(--canvas) 40%); pointer-events: none; }
 
 /* 시작 화면: 펼쳐지는 탑승권 세 장 */
 .hero { display: flex; flex-direction: column; gap: 0.75rem; padding-top: 0.5rem; }
@@ -732,6 +732,9 @@ body { background: transparent; }
 .pass .todo .t button { font-size: 0.78125rem; font-weight: 700; color: var(--blue); padding: 0.5rem 0 0.5rem 0.75rem; }
 .pass .todo .okl { display: flex; gap: 0.5rem; align-items: center; font-size: 0.875rem; font-weight: 600; min-height: 2.25rem; }
 .pass .todo .okl svg { flex: none; width: 1.125rem; height: 1.125rem; stroke: var(--green); fill: none; stroke-width: 2.6; stroke-linecap: round; stroke-linejoin: round; }
+/* ---------- 11/19 여백 조금 더 (동우님): 좌우 1.375 → 1.625rem(.wrap) · 화면 안 묶음 사이 1.25 → 1.5rem · 맨 위 숨 ---------- */
+.scr { gap: 1.5rem; padding-top: 0.75rem; }
+
 /* (11/19 곡률 고정: 가이드북과 같게 = 상자 원래 값의 30% · 알약 모양 0.5rem, 동우님) */
 /* ---------- 11/19 글꼴 A (동우님): 굵은 한글 = IBM Plex Sans KR(700) · 보통·작은·연한 한글 = Pretendard · 영문·숫자 = IBM Plex Sans ---------- */
 :root { --kr-plain: "Pretendard Variable", Pretendard, -apple-system, "Apple SD Gothic Neo", "Malgun Gothic", system-ui, sans-serif; }
