@@ -793,6 +793,14 @@ html:root[data-theme="dark"] { --canvas: #1D1E22; --paper: #27282C; --float: #2C
 .dep .dr[data-r] .fl { color: var(--pc, var(--flap-tx)); background: color-mix(in srgb, var(--pc, #FFFFFF) 14%, rgba(255,255,255,.05)); transition: color .35s, background .35s; }
 .dep .dr[data-r] .fl.empty { color: var(--flap-dim); }
 .dep .dr[data-r] .dg { color: var(--pc, #8F969F); transition: color .35s; }
+/* 11/20 동우님: 노란색 빼기 — '나' 줄 = 네 칸이 네 묶음 파스텔 테두리(넷 중 어디일지 모르는 '?'), 이름 '나'는 흰색, '확인 전'은 회색 · 머리 '여행 성향들' = 흰색 */
+.dep .dh em { color: var(--flap-tx); }
+.dep .dr.me .fl { background: rgba(255,255,255,.04); }
+.dep .dr.me .fl:nth-child(1) { --pc: #9DD2D8; } .dep .dr.me .fl:nth-child(2) { --pc: #FFC6D7; }
+.dep .dr.me .fl:nth-child(3) { --pc: #9DC3E2; } .dep .dr.me .fl:nth-child(4) { --pc: #E9BCE0; }
+.dep .dr.me .fl { box-shadow: inset 0 0 0 1.5px var(--pc); color: var(--pc); }
+.dep .dr.me .dn { color: var(--flap-tx); }
+.dep .dr.me .dg { color: #8F969F; }
 </style>
 </head>
 <body>
