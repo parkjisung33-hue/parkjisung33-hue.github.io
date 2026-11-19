@@ -878,7 +878,7 @@ html[data-theme="dark"][data-grp="HE"] { --me-soft: color-mix(in srgb, #C17192 2
 <script>/* 11/15 #23: 아이폰 사파리 26(떠 있는 아래 주소창) = 아래 고정 버튼을 그만큼 올림 */ (function () { try { const ua = navigator.userAgent, ios = /iP(hone|od|ad)/.test(ua) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1), solo = navigator.standalone === true || matchMedia('(display-mode: standalone)').matches, v = +((ua.match(/Version\/(\d+)/) || [])[1] || 0); if (ios && !solo && v >= 26) document.documentElement.classList.add('ios26'); } catch (_) {} })();</script>
 <script src="types.js"></script>
 <script src="chars.js?v=fit3"></script>
-<script src="gen-data.js?v=9"></script>
+<script src="gen-data.js?v=10"></script>
 <script src="sgg.js"></script>
 <script src="gen.js"></script>
 <script>
@@ -1720,8 +1720,13 @@ function swReason(sw, d, id) {
   return `${d.area} 근처에서 많이 가는 곳이에요`;
 }
 /* 11/21 #7-① ★ 줄 = 추천 이유 + 유명도(장소 DB fame, 앱에 이미 쓰던 말만: 2 '유명한 곳이에요' · 1 '많이 가는 곳이에요' · 0 없음) */
+/* 11/19 #7-② 유명한 것(kf, 출처 확인된 것만)이 있으면 유명도 대신 'OO(으)로 유명해요' */
+const roJosa = w => { const c = String(w).trim().slice(-1).charCodeAt(0) - 0xAC00; if (c < 0 || c > 11171) return null; const j = c % 28; return j === 0 || j === 8 ? '로' : '으로'; };
 function swWhy(sw, d, id) {
-  const r = swReason(sw, d, id), f = (window.GABOJA_DATA.places[id] || {}).fame, tx = f >= 2 ? '유명한 곳이에요' : f === 1 ? '많이 가는 곳이에요' : '';
+  const p = window.GABOJA_DATA.places[id] || {}, f = p.fame, ro = p.kf && roJosa(p.kf);
+  let r = swReason(sw, d, id);
+  if (p.kf) { r = r.replace(' · 유명한 곳이에요', ' 골랐어요'); return r + ' · ' + (ro ? `${p.kf}${ro} 유명해요` : `대표 ${p.kf}`); }
+  const tx = f >= 2 ? '유명한 곳이에요' : f === 1 ? '많이 가는 곳이에요' : '';
   return tx && !r.includes(tx) ? r + ' · ' + tx : r;
 }
 function swHours(p) { const o = String(p.oTx || ''); if (!o) return '영업시간 확인 필요'; if (/^거리/.test(o)) return '거리·야외 · 언제든'; const f = o.split(' · ')[0]; return f === '00:00–24:00' ? '24시간' : f; }
@@ -1782,7 +1787,7 @@ function phMount(host, p, o) {
 }
 function swCardHtml(sw, d, id, k) {   // 11/18 D-1: 사진이 위쪽을 꽉 채움 + 종류 칩 · 아래 이름 / 설명 | 영업시간 / ☆ 추천 이유 (동네 줄 없음)
   const D = window.GABOJA_DATA, p = D.places[id];
-  const say = p.say2 || p.say || [KIND_LB[p.kind]].concat((p.tg || []).filter(t => t !== KIND_LB[p.kind]).slice(0, 2)).filter(Boolean).join(' · ');
+  const say = p.best || p.say2 || p.say || [KIND_LB[p.kind]].concat((p.tg || []).filter(t => t !== KIND_LB[p.kind]).slice(0, 2)).filter(Boolean).join(' · ');
   const ic = KIND_IC[p.kind] || KIND_IC.sight;
   return `<div class="swc ticket sin" data-id="${esc(id)}" role="group" aria-label="${esc(p.n)}">
       <div class="swph"><span class="noph" aria-hidden="true"><svg viewBox="0 0 24 24">${ic}</svg></span><div class="phbox" hidden></div><span class="swkd"><svg viewBox="0 0 24 24" aria-hidden="true">${ic}</svg>${esc(KIND_LB[p.kind] || '')}</span></div>
