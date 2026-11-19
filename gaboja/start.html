@@ -838,8 +838,8 @@ html[data-theme="dark"][data-grp="HE"] { --me-soft: color-mix(in srgb, #C17192 2
 .pair .mini .pf { display: none; }
 .pair .mini .t3 { grid-area: t3; padding: 0.125rem 0.375rem 0.125rem; align-self: start; white-space: nowrap !important; overflow: hidden !important; font-size: 0.78125rem; }
 /* 11/20 동우님: 결과 탑승권 머리 — 캐릭터가 글자판과 가운데 정렬(fitChar) · 칸 140 → 112px 정사각형 · 위아래 여백 줄여 촘촘하게 */
-.rt .rtop { grid-template-columns: minmax(0,1fr) 7rem; padding: 0.25rem 1.125rem 0; align-items: center; }
-.ticket .av.hero { width: 7rem; height: 7rem; }
+.rt .rtop { grid-template-columns: minmax(0,1fr) 6.5rem; padding: 0.5rem 1.125rem 0; align-items: center; }
+.ticket .av.hero { width: 6.5rem; height: 6.5rem; margin: -0.875rem 0; overflow: visible; }   /* 캐릭터는 크게 두고, 칸 높이는 글자판 블록(72px)에 맞춤 → 머리 띠 약 40px 줄어듦 */
 .ticket.rt .rband { padding-bottom: 0.625rem; }
 </style>
 </head>
@@ -868,7 +868,7 @@ html[data-theme="dark"][data-grp="HE"] { --me-soft: color-mix(in srgb, #C17192 2
 
 <script>/* 11/15 #23: 아이폰 사파리 26(떠 있는 아래 주소창) = 아래 고정 버튼을 그만큼 올림 */ (function () { try { const ua = navigator.userAgent, ios = /iP(hone|od|ad)/.test(ua) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1), solo = navigator.standalone === true || matchMedia('(display-mode: standalone)').matches, v = +((ua.match(/Version\/(\d+)/) || [])[1] || 0); if (ios && !solo && v >= 26) document.documentElement.classList.add('ios26'); } catch (_) {} })();</script>
 <script src="types.js"></script>
-<script src="chars.js?v=fit1"></script>
+<script src="chars.js?v=fit2"></script>
 <script src="gen-data.js"></script>
 <script src="sgg.js"></script>
 <script src="gen.js"></script>
