@@ -883,7 +883,7 @@ html[data-theme="dark"][data-grp="HE"] { --me-soft: color-mix(in srgb, #C17192 2
 <script>/* 11/15 #23: 아이폰 사파리 26(떠 있는 아래 주소창) = 아래 고정 버튼을 그만큼 올림 */ (function () { try { const ua = navigator.userAgent, ios = /iP(hone|od|ad)/.test(ua) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1), solo = navigator.standalone === true || matchMedia('(display-mode: standalone)').matches, v = +((ua.match(/Version\/(\d+)/) || [])[1] || 0); if (ios && !solo && v >= 26) document.documentElement.classList.add('ios26'); } catch (_) {} })();</script>
 <script src="types.js"></script>
 <script src="chars.js?v=fit3"></script>
-<script src="gen-data.js?v=10"></script>
+<script src="gen-data.js?v=11"></script>
 <script src="sgg.js"></script>
 <script src="gen.js"></script>
 <script>
@@ -1737,21 +1737,19 @@ function swWhy(sw, d, id) {
 function swHours(p) { const o = String(p.oTx || ''); if (!o) return '영업시간 확인 필요'; if (/^거리/.test(o)) return '거리·야외 · 언제든'; const f = o.split(' · ')[0]; return f === '00:00–24:00' ? '24시간' : f; }
 /* ---------- 장소 사진 (11/14) — ① 위키·Openverse 사진(ph) → ② 구글 장소 사진(키 있을 때) → ③ 스트리트뷰 → ④ 선 아이콘.
    사진은 원본 URL로 직접 표시(저장 안 함). 저작자·라이선스는 사진 아래 한 줄. 실패(onerror)하면 다음 단계. ---------- */
-const PH_KEY_G = () => window.GABOJA_PHOTO_KEY || '', PH_KEY_M = () => window.GABOJA_MAPS_KEY || '';
+const VZTR_API = 'https://vztr-api.d-chive33-a29.workers.dev';   // 11/19 E0: 구글 사진 = 우리 서버(Cloudflare Worker)가 대신 찾음 → 페이지에 사진 키 없음 (server/worker.js)
+const PH_KEY_G = () => /^(https:\/\/(www\.)?larchive\.page|http:\/\/(localhost|127\.0\.0\.1)(:\d+)?)$/.test(location.origin), PH_KEY_M = () => window.GABOJA_MAPS_KEY || '';
 const phCredit = (a, l) => '사진 © ' + String(a || '').slice(0, 60) + ' · ' + String(l || '').trim();
-function phGoogle(p, cb) {   // ② Places API (New) 텍스트 검색 → 사진 1장. 결과는 세션 동안만(sessionStorage)
-  const k = PH_KEY_G(), ck = 'gaboja-gph:' + (p.n || '');
-  if (!k) { cb(null); return; }
+function phGoogle(p, cb) {   // ② 구글 장소 사진 1장 — 서버 /photo가 키로 찾아 키 없는 사진 주소만 돌려줌. 결과는 세션 동안만(sessionStorage)
+  const ck = 'gaboja-gph2:' + (p.n || '');
+  if (!PH_KEY_G()) { cb(null); return; }
   try { const s = sessionStorage.getItem(ck); if (s) { cb(s === '-' ? null : JSON.parse(s)); return; } } catch (_) {}
-  const body = { textQuery: p.q || p.n, languageCode: 'ko', maxResultCount: 1 };
-  if (p.ll) body.locationBias = { circle: { center: { latitude: p.ll[0], longitude: p.ll[1] }, radius: 500 } };
-  fetch('https://places.googleapis.com/v1/places:searchText', { method: 'POST', headers: { 'Content-Type': 'application/json', 'X-Goog-Api-Key': k, 'X-Goog-FieldMask': 'places.photos' }, body: JSON.stringify(body) })
-    .then(r => r.ok ? r.json() : null).then(j => {
-      const ph = j && j.places && j.places[0] && j.places[0].photos && j.places[0].photos[0];
-      const r = ph ? { u: 'https://places.googleapis.com/v1/' + ph.name + '/media?maxWidthPx=640&key=' + k, a: (ph.authorAttributions && ph.authorAttributions[0] && ph.authorAttributions[0].displayName) || 'Google' } : null;
-      try { sessionStorage.setItem(ck, r ? JSON.stringify(r) : '-'); } catch (_) {}
-      cb(r);
-    }).catch(() => cb(null));
+  const q = new URLSearchParams({ q: p.q || p.n || '' }); if (p.ll) { q.set('lat', p.ll[0]); q.set('lng', p.ll[1]); }
+  fetch(VZTR_API + '/photo?' + q).then(r => r.ok ? r.json() : null).then(j => {
+    const r = j && j.u ? { u: j.u, a: j.a || 'Google' } : null;
+    if (!(j && j.e)) try { sessionStorage.setItem(ck, r ? JSON.stringify(r) : '-'); } catch (_) {}
+    cb(r);
+  }).catch(() => cb(null));
 }
 /* host = 빈 .phbox 요소. 사진·거리 풍경이 하나라도 뜨면 host.dataset.on = '1', 전부 실패하면 host.hidden + onNone(). 스트리트뷰는 withSv 일 때만. */
 function phMount(host, p, o) {

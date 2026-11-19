@@ -1444,7 +1444,7 @@ html #dayBody .tile .t { color: var(--sub) !important; }
 <script src="weather.js"></script>
 <script src="types.js"></script>
 <script src="chars.js?v=fit3"></script>
-<script>/* 공유용 샘플(#sample=키): 엔진·장소 DB·샘플 입력을 바로 불러와 그 자리에서 일정을 만듦 (저장 안 함) */ if (/#sample=[\w-]+/.test(location.hash)) document.write('<script src="gen-data.js?v=10"><\/script><script src="gen.js?v=9"><\/script><script src="samples.js?v=2"><\/script>');</script>
+<script>/* 공유용 샘플(#sample=키): 엔진·장소 DB·샘플 입력을 바로 불러와 그 자리에서 일정을 만듦 (저장 안 함) */ if (/#sample=[\w-]+/.test(location.hash)) document.write('<script src="gen-data.js?v=11"><\/script><script src="gen.js?v=9"><\/script><script src="samples.js?v=2"><\/script>');</script>
 <script>
 // k: m 이동 · p 장소 · f 식사 · x 꼭 지킬 것 · w 기상·취침(자세히에서만) · u 직접 추가
 // fly: 비행기(고정) · est: 끝 시각이 일정에 없음(머무름 숨김) · info: 장소 DB 확인값 · 문장은 명사형 시험
@@ -2485,21 +2485,19 @@ const canClose = c => !!c && !c.fly && ['p', 'f', 'x', 'u'].includes(c.k) && (!!
 const STAYS = [30, 60, 90, 120, 180];
 /* ---------- 장소 사진 (11/14) — ① 위키·Openverse 사진(ph) → ② 구글 장소 사진(키 있을 때) → ③ 스트리트뷰 → ④ 선 아이콘.
    사진은 원본 URL로 직접 표시(저장 안 함). 저작자·라이선스는 사진 아래 한 줄. 실패(onerror)하면 다음 단계. ---------- */
-const PH_KEY_G = () => window.GABOJA_PHOTO_KEY || '', PH_KEY_M = () => window.GABOJA_MAPS_KEY || '';
+const VZTR_API = 'https://vztr-api.d-chive33-a29.workers.dev';   // 11/19 E0: 구글 사진 = 우리 서버(Cloudflare Worker)가 대신 찾음 → 페이지에 사진 키 없음 (server/worker.js)
+const PH_KEY_G = () => /^(https:\/\/(www\.)?larchive\.page|http:\/\/(localhost|127\.0\.0\.1)(:\d+)?)$/.test(location.origin), PH_KEY_M = () => window.GABOJA_MAPS_KEY || '';
 const phCredit = (a, l) => '사진 © ' + String(a || '').slice(0, 60) + ' · ' + String(l || '').trim();
-function phGoogle(p, cb) {   // ② Places API (New) 텍스트 검색 → 사진 1장. 결과는 세션 동안만(sessionStorage)
-  const k = PH_KEY_G(), ck = 'gaboja-gph:' + (p.n || '');
-  if (!k) { cb(null); return; }
+function phGoogle(p, cb) {   // ② 구글 장소 사진 1장 — 서버 /photo가 키로 찾아 키 없는 사진 주소만 돌려줌. 결과는 세션 동안만(sessionStorage)
+  const ck = 'gaboja-gph2:' + (p.n || '');
+  if (!PH_KEY_G()) { cb(null); return; }
   try { const s = sessionStorage.getItem(ck); if (s) { cb(s === '-' ? null : JSON.parse(s)); return; } } catch (_) {}
-  const body = { textQuery: p.q || p.n, languageCode: 'ko', maxResultCount: 1 };
-  if (p.ll) body.locationBias = { circle: { center: { latitude: p.ll[0], longitude: p.ll[1] }, radius: 500 } };
-  fetch('https://places.googleapis.com/v1/places:searchText', { method: 'POST', headers: { 'Content-Type': 'application/json', 'X-Goog-Api-Key': k, 'X-Goog-FieldMask': 'places.photos' }, body: JSON.stringify(body) })
-    .then(r => r.ok ? r.json() : null).then(j => {
-      const ph = j && j.places && j.places[0] && j.places[0].photos && j.places[0].photos[0];
-      const r = ph ? { u: 'https://places.googleapis.com/v1/' + ph.name + '/media?maxWidthPx=640&key=' + k, a: (ph.authorAttributions && ph.authorAttributions[0] && ph.authorAttributions[0].displayName) || 'Google' } : null;
-      try { sessionStorage.setItem(ck, r ? JSON.stringify(r) : '-'); } catch (_) {}
-      cb(r);
-    }).catch(() => cb(null));
+  const q = new URLSearchParams({ q: p.q || p.n || '' }); if (p.ll) { q.set('lat', p.ll[0]); q.set('lng', p.ll[1]); }
+  fetch(VZTR_API + '/photo?' + q).then(r => r.ok ? r.json() : null).then(j => {
+    const r = j && j.u ? { u: j.u, a: j.a || 'Google' } : null;
+    if (!(j && j.e)) try { sessionStorage.setItem(ck, r ? JSON.stringify(r) : '-'); } catch (_) {}
+    cb(r);
+  }).catch(() => cb(null));
 }
 /* host = 빈 .phbox 요소. 사진·거리 풍경이 하나라도 뜨면 host.dataset.on = '1', 전부 실패하면 host.hidden + onNone(). 스트리트뷰는 withSv 일 때만. */
 function phMount(host, p, o) {
@@ -2800,7 +2798,7 @@ function setStay(id, du) {
    장소 DB = gen-data.js (처음 누를 때 불러옴). 좌표는 DB에 없어 '같은 동네 묶음 → 동네 사이 이동 분' 순 */
 function loadGD(cb) {
   if (window.GABOJA_DATA) { cb(window.GABOJA_DATA); return; }
-  try { fetch('gen-data.js?v=10').then(r => r.arrayBuffer()).then(b => { (0, eval)(new TextDecoder('utf-8').decode(b)); cb(window.GABOJA_DATA || null); }).catch(() => cb(null)); } catch (_) { cb(null); }
+  try { fetch('gen-data.js?v=11').then(r => r.arrayBuffer()).then(b => { (0, eval)(new TextDecoder('utf-8').decode(b)); cb(window.GABOJA_DATA || null); }).catch(() => cb(null)); } catch (_) { cb(null); }
 }
 const WDN = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'];
 // gen.js openAt와 같은 기준 (기간·장 서는 날·휴무 요일·n번째 요일·휴무일·영업 구간). 기다림 없이 그 시각에 열려 있는지만
@@ -2887,7 +2885,7 @@ let addPick = null;   // { p: 장소 DB 항목 또는 null, name, du, sug, when 
     PLACES = Object.entries(D.places).map(([id, p]) => { const h = p.h, o = h && h.o && h.o[0] && !/^거리/.test(p.oTx || '') ? h.o[0] : null;
       return { id, n: p.n, l: p.l || '', c: p.city, a: (D.clName && D.clName[p.cl]) || '', t: p.tg || [], o, x: (h && h.x) || [], st: p.st || 60, say: p.say || '', q: p.q || p.n, k: p.kind }; });
   };
-  if (window.GABOJA_DATA) apply(); else { try { fetch('gen-data.js?v=10').then(r => r.arrayBuffer()).then(b => { (0, eval)(new TextDecoder('utf-8').decode(b)); apply(); }).catch(() => {}); } catch (_) {} }   /* 페이지 글자 설정과 상관없이 UTF-8로 읽음 */
+  if (window.GABOJA_DATA) apply(); else { try { fetch('gen-data.js?v=11').then(r => r.arrayBuffer()).then(b => { (0, eval)(new TextDecoder('utf-8').decode(b)); apply(); }).catch(() => {}); } catch (_) {} }   /* 페이지 글자 설정과 상관없이 UTF-8로 읽음 */
 })();
 // 장소 DB 항목 → 시간대 제약 (gen.js twOf와 같은 기준: 술집·이름 글자·17시 이후에만 영업 = night / 14시 안에 영업 끝 = morning, 식당은 제약 없음)
 function twOfPlace(p) {
