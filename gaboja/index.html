@@ -1464,7 +1464,7 @@ function setTheme(t, save) {
   if (save) { try { localStorage.setItem('gaboja-theme', t); } catch (_) {} }
   syncBar();
 }
-try { const t = localStorage.getItem('gaboja-theme'); setTheme(t || 'light'); } catch (_) { setTheme('light'); }   // 11/15 #2: 처음엔 밝게
+try { const q = new URLSearchParams(location.search).get('theme'), t = q === 'dark' || q === 'light' ? q : localStorage.getItem('gaboja-theme'); setTheme(t || 'light'); } catch (_) { setTheme('light'); }   // 11/15 #2: 처음엔 밝게 · 11/19 ?theme=dark|light = 미리보기용(저장 안 함)
 // 11/15 #2: 탑승권 빛줄기가 지나간 뒤, 기기가 다크 모드이고 아직 안 물어봤으면 한 번만 물어봄
 setTimeout(() => {
   try { if (localStorage.getItem('gaboja-theme') || localStorage.getItem('gaboja-theme-ask') || !matchMedia('(prefers-color-scheme: dark)').matches) return; localStorage.setItem('gaboja-theme-ask', '1'); } catch (_) { return; }

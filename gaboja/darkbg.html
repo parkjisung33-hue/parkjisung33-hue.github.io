@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<title>VZTR 다크 배경 3안</title>
+<style>
+/* 다크 모드 배경 시안 3 (2026-11-19) — 동우님 레퍼런스 'Midnight Embrace'
+   radial-gradient(ellipse at 50% 50%, #1A1E22, #2B2D34, #3F4751) 를 연한 → 진한 3단계로.
+   실제 가이드북(index.html#sample=air-jp)을 다크로 띄우고 배경만 바꿔 보여 줌 (이 보드 안에서만, 앱·저장값은 안 건드림) */
+:root { --bg: #E4E7EB; --ink: #0A1F33; --sub: #5B6B7A; --blue: #2F5BFF; --sh: 0 1px 2px rgba(24,36,60,.05), 0 .25rem .75rem -.375rem rgba(24,36,60,.14); }
+* { box-sizing: border-box; }
+html, body { margin: 0; background: var(--bg); color: var(--ink); font-family: "Pretendard Variable", Pretendard, system-ui, sans-serif; -webkit-text-size-adjust: 100%; overflow-x: hidden; }
+button { font: inherit; color: inherit; border: 0; background: none; cursor: pointer; }
+.intro { max-width: 1240px; margin: 0 auto; padding: 28px 16px 8px; }
+.intro h1 { margin: 0 0 6px; font-size: 22px; letter-spacing: -.02em; }
+.intro p { margin: 0; color: var(--sub); font-size: 14px; line-height: 1.65; word-break: keep-all; }
+.intro code { font-size: 12px; background: #fff; padding: 2px 6px; border-radius: 6px; }
+.grid { max-width: 1240px; margin: 0 auto; padding: 16px 16px 140px; display: grid; grid-template-columns: repeat(auto-fill, minmax(360px, 1fr)); gap: 28px 20px; }
+.opt { display: flex; flex-direction: column; gap: 10px; align-items: center; }
+.opt .hd { width: 100%; max-width: 375px; display: flex; align-items: baseline; gap: 8px; }
+.opt .hd b { color: var(--blue); font-weight: 800; }
+.opt .hd h2 { margin: 0; font-size: 16px; }
+.opt .why { width: 100%; max-width: 375px; margin: 0; font-size: 13px; color: var(--sub); line-height: 1.55; word-break: keep-all; }
+.opt .sw { width: 100%; max-width: 375px; height: 26px; border-radius: 8px; }
+.phone { width: 375px; max-width: 100%; height: 760px; border-radius: 26px; overflow: hidden; box-shadow: 0 14px 34px -16px rgba(10,31,51,.45); border: 1px solid rgba(10,31,51,.08); background: #1A1E22; }
+.phone iframe { width: 375px; height: 100%; border: 0; display: block; }
+.pick { width: 100%; max-width: 375px; display: flex; gap: 8px; }
+.pick button { height: 42px; padding: 0 18px; border-radius: 8px; background: #fff; font-weight: 700; font-size: 14px; box-shadow: var(--sh); }
+.pick button[aria-pressed="true"] { background: var(--blue); color: #fff; }
+.pick input { flex: 1; min-width: 0; height: 42px; border: 1px solid rgba(10,31,51,.12); border-radius: 8px; padding: 0 12px; font: inherit; font-size: 14px; }
+.dock { position: fixed; left: 0; right: 0; bottom: 0; padding: 12px 16px calc(12px + env(safe-area-inset-bottom, 0px)); background: rgba(10,31,51,.96); color: #fff; display: flex; gap: 10px; align-items: center; z-index: 5; }
+.dock .s { flex: 1; font-size: 13px; }
+.dock button { background: var(--blue); color: #fff; border-radius: 8px; padding: 11px 16px; font-weight: 700; font-size: 14px; }
+@media (max-width: 420px) { .grid { grid-template-columns: 1fr; padding: 12px 12px 140px; } .phone { height: 700px; } }
+</style>
+</head>
+<body>
+<div class="intro">
+  <h1>다크 모드 배경 — 3안</h1>
+  <p>레퍼런스 <code>radial-gradient(ellipse at 50% 50%, #1A1E22, #2B2D34, #3F4751)</code> 를 바탕으로, 가운데가 가장 어둡고 바깥으로 갈수록 밝아지는 배경을 <b>연함 → 진함</b> 3단계로 만들었습니다. 실제 가이드북(편명 KE723 샘플)을 다크 모드로 띄운 화면이라 안에서 스크롤·탭이 됩니다. 배경은 스크롤해도 화면에 고정. 카드 색은 배경에 묻히지 않게 안마다 한 단계 밝게 맞췄습니다.</p>
+</div>
+<div class="grid" id="grid"></div>
+<div class="dock"><div class="s" id="dockTx">아직 고른 안이 없어요</div><button id="copy">답 복사</button></div>
+<script>
+const OPTS = [
+  { k: 'A', name: '연하게', why: '거의 단색에 가까운 은은한 빛. 가운데 #1A1E22 → 가장자리 #23272D. 지금 다크(#0E1013)보다 살짝 밝고 부드러움.',
+    bg: 'radial-gradient(ellipse at 50% 50%, #1A1E22, #1F2328 55%, #23272D)', top: '#1F2328', card: '#262A30', tile: 'rgba(42,46,53,.92)' },
+  { k: 'B', name: '중간', why: '바깥으로 갈수록 은은하게 밝아짐. 가운데 #1A1E22 → #262930 → 가장자리 #313740.',
+    bg: 'radial-gradient(ellipse at 50% 50%, #1A1E22, #262930 55%, #313740)', top: '#262930', card: '#2B2F36', tile: 'rgba(47,52,60,.92)' },
+  { k: 'C', name: '진하게 (레퍼런스 그대로)', why: '보내 주신 CSS 그대로. 가운데 #1A1E22 → #2B2D34 → 가장자리 #3F4751. 빛이 가장 또렷하고 드라마틱.',
+    bg: 'radial-gradient(ellipse at 50% 50%, #1A1E22, #2B2D34, #3F4751)', top: '#2B2D34', card: '#30343C', tile: 'rgba(52,57,66,.92)' },
+];
+const KEY = 'vztr-darkbg-v1'; let S = { pick: {}, memo: {} }; try { Object.assign(S, JSON.parse(localStorage.getItem(KEY) || '{}')); } catch (e) {}
+const save = () => { try { localStorage.setItem(KEY, JSON.stringify(S)); } catch (e) {} dock(); };
+const grid = document.getElementById('grid');
+grid.innerHTML = OPTS.map(o => `<section class="opt" data-k="${o.k}"><div class="hd"><b>${o.k}</b><h2>${o.name}</h2></div><p class="why">${o.why}</p><div class="sw" style="background:${o.bg}"></div>
+  <div class="phone"><iframe title="${o.k}안 미리보기" src="index.html?theme=dark&darkbg=${o.k}#sample=air-jp" loading="lazy"></iframe></div>
+  <div class="pick"><button data-pick>이걸로</button><input placeholder="${o.k} 메모"></div></section>`).join('');
+grid.querySelectorAll('iframe').forEach((f, i) => f.addEventListener('load', () => paint(f, OPTS[i])));
+function paint(f, o) {
+  try {
+    const d = f.contentDocument, root = d.documentElement;
+    root.setAttribute('data-theme', 'dark');
+    let st = d.getElementById('darkbgSt'); if (!st) { st = d.createElement('style'); st.id = 'darkbgSt'; d.head.appendChild(st); }
+    st.textContent = `
+      html:root[data-theme="dark"] { --canvas: ${o.top}; --glass: ${o.card}; --paper: ${o.card}; --float: ${o.card}; --sheet: ${o.card}; --tile: ${o.tile}; }
+      html { background: #1A1E22 !important; }
+      body { background: transparent !important; }
+      #darkbgFx { position: fixed; inset: 0; z-index: -1; pointer-events: none; background: ${o.bg}; }
+      .top::before { background: linear-gradient(${o.top} 60%, transparent) !important; }
+      body::before { background: ${o.top} !important; }`;
+    if (!d.getElementById('darkbgFx')) { const x = d.createElement('div'); x.id = 'darkbgFx'; d.body.prepend(x); }
+  } catch (e) { console.warn(e); }
+}
+grid.querySelectorAll('.opt').forEach(sec => { const k = sec.dataset.k, b = sec.querySelector('[data-pick]'), m = sec.querySelector('input');
+  const draw = () => { b.setAttribute('aria-pressed', !!S.pick[k]); b.textContent = S.pick[k] ? '✓ 골랐어요' : '이걸로'; }; draw(); m.value = S.memo[k] || '';
+  b.onclick = () => { S.pick[k] = !S.pick[k]; save(); draw(); }; m.oninput = () => { S.memo[k] = m.value; save(); }; });
+function dock() { const p = OPTS.filter(o => S.pick[o.k]).map(o => o.k + ' ' + o.name); document.getElementById('dockTx').textContent = p.length ? '고른 안: ' + p.join(' · ') : '아직 고른 안이 없어요'; }
+dock();
+document.getElementById('copy').onclick = function () {
+  const L = ['[VZTR 다크 배경] 고른 안: ' + (OPTS.filter(o => S.pick[o.k]).map(o => o.k + ' ' + o.name).join(' / ') || '없음')];
+  OPTS.forEach(o => { if (S.memo[o.k]) L.push(o.k + ' 메모: ' + S.memo[o.k]); });
+  const t = L.join('\n'), btn = this, ok = () => { btn.textContent = '복사됨 ✓'; setTimeout(() => btn.textContent = '답 복사', 1600); };
+  const fb = () => { const a = document.createElement('textarea'); a.value = t; document.body.appendChild(a); a.select(); try { document.execCommand('copy'); ok(); } catch (e) {} a.remove(); };
+  navigator.clipboard && navigator.clipboard.writeText ? navigator.clipboard.writeText(t).then(ok, fb) : fb();
+};
+</script>
+</body>
+</html>
