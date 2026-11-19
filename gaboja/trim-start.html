@@ -90,13 +90,13 @@ input.in:focus-visible { outline: none; }
 .flr { display: flex; flex-direction: column; gap: 0.4375rem; }
 .flr .fll { font-size: 0.75rem; font-weight: 700; color: var(--sub); }
 .flr .tms { display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; }   /* 11/20 동우님: 칩 줄 없앰 → 출발·도착 두 칸 한 줄 (다른 입력칸과 같은 모양) */
-.tmw { display: flex; align-items: center; justify-content: space-between; gap: 0.5rem; min-width: 0; height: 3rem; padding: 0 0.875rem; border-radius: var(--r-lg, 0.65rem); background: var(--paper, #fff); border: 1px solid var(--hair, rgba(22,23,26,.1)); cursor: text; }
+.tmw { box-sizing: border-box; display: flex; align-items: center; justify-content: space-between; gap: 0.5rem; min-width: 0; height: 3rem; overflow: hidden; padding: 0 0.875rem; border-radius: var(--r-lg, 0.65rem); background: var(--paper, #fff); border: 1px solid var(--hair, rgba(22,23,26,.1)); cursor: text; }
 .tmw:focus-within { border-color: var(--blue); }
 .tmw[data-bad="1"] { border-color: var(--red); }
 .tml { flex: none; font-size: 0.78125rem; font-weight: 600; color: var(--sub); }
-.tmw .tm { flex: 1; min-width: 0; width: 100%; border: 0; background: none; outline: none; padding: 0; text-align: right; font-size: max(16px, 1.0625rem); font-weight: 700; letter-spacing: .02em; color: var(--ink); }
+.tmw .tm { flex: 1; min-width: 0; width: 100%; height: 1.5rem; line-height: 1.5rem; margin: 0; border: 0; border-radius: 0; background: none; outline: none; padding: 0; -webkit-appearance: none; appearance: none; text-align: right; font-size: 16px; font-weight: 700; letter-spacing: .02em; color: var(--ink); }   /* 11/20 동우님: 숫자 16px 고정(아이폰 확대 방지 최소) · 칸 높이 안 변하게
 .tmw .tm::placeholder { color: var(--sub); opacity: .55; font-weight: 500; }
-.tmw.auto .tm { color: var(--blue); }
+.tmw.auto .tm { color: var(--ink); }   /* 11/20 동우님: 자동으로 채워도 검정 굵게 */
 .flr .in.fno { text-transform: uppercase; }
 .flr .in.fno::placeholder { text-transform: none; }
 a { color: inherit; }
@@ -1569,7 +1569,7 @@ function rInfo(s) {
           <div class="flbox" id="fBox" ${tr.flight === 'yes' ? '' : 'hidden'}>${['fo', 'fb'].map(k => { const f = tr[k] || {}; return `<div class="flr"><span class="fll">${car ? (k === 'fo' ? '가는 날 · 집 → ' + (tr.day ? '도착지' : '숙소') : '오는 날 · ' + (tr.day ? '도착지' : '숙소') + ' → 집') : k === 'fo' ? '가는 ' + w + ' · ' + nm(ln.from) + ' → ' + nm(ln.to) : '오는 ' + w + ' · ' + nm(ln.to) + ' → ' + nm(ln.from)}</span>
             ${car ? '' : `<input class="in fno" data-fk="${k}" data-ff="no" data-rt="${tr.mode === 'air' ? 'air' : 'train'}" data-a="${esc(k === 'fo' ? ln.from || '' : ln.to || '')}" data-b="${esc(k === 'fo' ? ln.to || '' : ln.from || '')}" placeholder="${tr.mode === 'air' ? '편명 (예: KE1101)' : '열차 번호 (예: 101)'}" value="${esc(f.no || '')}" autocomplete="off" autocapitalize="characters" maxlength="8">`}
             <div class="tms">${tmField(k, 'dep', f.dep, '출발 시각')}${tmField(k, 'arr', f.arr, '도착 시각')}</div></div>`; }).join('')}
-            </div><div class="note" id="blHint" hidden>${ICON.info}<span>모르는 칸은 비워 두셔도 돼요. 나중에 앱에서 입력하면 그날 일정이 자동으로 맞춰져요.</span></div></div>` : ''}`;
+            </div><div class="note">${ICON.info}<span>${tr.mode === 'air' ? '편명을' : '열차 번호를'} 넣으면 시각이 채워져요</span></div><div class="note" id="blHint" hidden>${ICON.info}<span>모르면 비워 두세요 · 나중에 앱에서 넣어도 돼요</span></div></div>` : ''}`;
       $('#rgBack').onclick = () => { if (S.editing) go('home'); else back(); };
       $('#mdSeg').onclick = e => { const b = e.target.closest('[data-md]'); if (!b) return; tr.mode = b.dataset.md; tr.line = 0; tap(); draw(); };
       const lns = $('#lnSeg'); if (lns) lns.onclick = e => { const b = e.target.closest('[data-ln]'); if (!b) return; tr.line = +b.dataset.ln; draw(); };
@@ -1591,8 +1591,8 @@ function rInfo(s) {
         <div class="flbox" id="fBox" ${tr.flight === 'yes' ? '' : 'hidden'}><div class="flr"><span class="fll">출발 공항</span><div class="seg" id="depSeg">${DEP_APS.map(a => `<button data-dep="${a[0]}" aria-pressed="${(tr.depAp || 'ICN') === a[0]}">${a[1]} ${a[0]}</button>`).join('')}</div></div>${(AIRPORTS[DEST[tr.city]] || []).length > 1 ? `<div class="flr"><span class="fll">도착 공항</span><div class="seg" id="apSeg">${AIRPORTS[DEST[tr.city]].map(a => `<button data-ap="${a[0]}" aria-pressed="${(tr.airport || AIRPORTS[DEST[tr.city]][0][0]) === a[0]}">${a[1]} ${a[0]}</button>`).join('')}</div></div>` : (AIRPORTS[DEST[tr.city]] || []).length ? `<div class="flr"><span class="fll">도착 공항</span><b class="apfix">${AIRPORTS[DEST[tr.city]][0][1]} ${AIRPORTS[DEST[tr.city]][0][0]}</b></div>` : ''}${['fo', 'fb'].map(k => { const f = tr[k] || {}, apn = apName(tr); return `<div class="flr"><span class="fll">${k === 'fo' ? '가는 편 · ' + depName(tr) + ' → ' + apn : '오는 편 · ' + apn + ' → ' + depName(tr)}</span>
           <input class="in fno" data-fk="${k}" data-ff="no" placeholder="편명 (예: WE513)" value="${esc(f.no || '')}" autocomplete="off" autocapitalize="characters" maxlength="8" aria-label="${k === 'fo' ? '가는 편' : '오는 편'} 편명">
           <div class="tms">${tmField(k, 'dep', f.dep, '출발 시각')}${tmField(k, 'arr', f.arr, '도착 시각')}</div></div>`; }).join('')}
-          <div class="note">${ICON.info}<span>편명을 넣으면 시각을 찾아 채워 드려요 · 편명은 예약 확인 메일이나 e티켓에 있어요</span></div></div>
-        <div class="note" id="blHint" hidden>${ICON.info}<span>모르는 칸은 비워 두셔도 돼요. 나중에 앱에서 입력하면 그날 일정이 자동으로 맞춰져요.</span></div></div>
+          <div class="note">${ICON.info}<span>편명을 넣으면 시각이 채워져요</span></div></div>
+        <div class="note" id="blHint" hidden>${ICON.info}<span>모르면 비워 두세요 · 나중에 앱에서 넣어도 돼요</span></div></div>
       <div class="blk" ${tr.day ? 'hidden' : ''}><div class="sub2">숙소</div><div class="seg" id="sSeg"><button data-s="no" aria-pressed="${tr.stay === 'no'}">아직</button><button data-s="area" aria-pressed="${tr.stay === 'area'}">동네만</button><button data-s="yes" aria-pressed="${tr.stay === 'yes'}">정했어요</button></div>
         <input class="in" id="sIn" value="${esc(tr.stayTx || '')}" ${tr.stay === 'no' ? 'hidden' : ''} placeholder="${tr.stay === 'area' ? '동네 이름 (예: ' + (partOf(tr) === 'side' ? '가와라마치' : '난바') + ')' : '숙소 이름'}"></div>
       <div class="note">${ICON.info}<span>체크인 시각은 입력하지 않아도 돼요. 숙소 이름으로 찾아서 넣어 드려요.</span></div>

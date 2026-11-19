@@ -686,13 +686,13 @@ body { letter-spacing: 0; }
 .rideedit .rfno::placeholder { text-transform: none; color: var(--sub); }
 .rideedit .rtms { display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; }
 .rideedit .rtms.one { grid-template-columns: 1fr; }
-.rideedit .tmw { display: flex; align-items: center; justify-content: space-between; gap: 0.5rem; min-width: 0; height: 2.75rem; padding: 0 0.875rem; border-radius: var(--r-sm); background: var(--paper); border: 1px solid var(--hair); cursor: text; }
+.rideedit .tmw { box-sizing: border-box; overflow: hidden; display: flex; align-items: center; justify-content: space-between; gap: 0.5rem; min-width: 0; height: 2.75rem; padding: 0 0.875rem; border-radius: var(--r-sm); background: var(--paper); border: 1px solid var(--hair); cursor: text; }
 .rideedit .tmw:focus-within { border-color: var(--blue); }
 .rideedit .tmw[data-bad="1"] { border-color: var(--red); }
 .rideedit .tml { flex: none; font-size: 0.78125rem; font-weight: 600; color: var(--sub); }
-.rideedit .tmw .tm { flex: 1; min-width: 0; width: 100%; height: auto; border: 0; background: none; outline: none; padding: 0; text-align: right; font: inherit; font-size: max(16px, 1rem); font-weight: 700; color: var(--ink); }
+.rideedit .tmw .tm { flex: 1; min-width: 0; width: 100%; height: 1.5rem; line-height: 1.5rem; margin: 0; border: 0; border-radius: 0; background: none; outline: none; padding: 0; -webkit-appearance: none; appearance: none; text-align: right; font: inherit; font-size: 16px; font-weight: 700; color: var(--ink); }
 .rideedit .tmw .tm::placeholder { color: var(--sub); opacity: .55; font-weight: 500; }
-.rideedit .tmw.auto .tm { color: var(--blue); }
+.rideedit .tmw.auto .tm { color: var(--ink); }
 .rideedit .fnh { margin: -0.25rem 0 0; font-size: 0.75rem; color: var(--sub); }
 .rideedit .fnh:empty { display: none; }
 .chips.wrap { flex-wrap: wrap; overflow: visible; }
