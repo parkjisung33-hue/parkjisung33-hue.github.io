@@ -18,6 +18,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400..800&family=Zen+Kaku+Gothic+New:wght@400;700&display=swap">
 <script src="inapp.js?v=1"></script>
+<script src="i18n.js?v=1"></script><!-- 11/20 W5 언어 틀 (영어판 = /en/, 사전 i18n-en.js는 배포 때 en/에만 붙음) -->
 <link rel="stylesheet" href="fonts/vztr-fonts.css?v=2"><!-- 11/19 글꼴: 굵은 한글 IBM Plex Sans KR · 보통 한글 Pretendard · 영문·숫자 IBM Plex Sans -->
 <style>
 /* Pretendard 1.3.9 (SIL OFL 1.1) — 공식 배포본(orioncactus/pretendard)을 fonts/에 함께 올림 */
@@ -981,6 +982,14 @@ body { letter-spacing: 0; }
 .step button:disabled { opacity: .35; box-shadow: none; cursor: default; }
 .step b { min-width: 4.5rem; text-align: center; font-size: 0.9375rem; font-weight: 700; white-space: nowrap; }
 .acts.two { gap: 0.625rem; }
+/* 11/20 W5 영어판: 한글 원문 작게 · 지도 3개(네이버 앱 → 카카오 웹 → 구글) · 한글로 보여 주기(전체 화면) */
+.acts.three { gap: 0.5rem; } .acts.three .btn { padding: 0 0.5rem; text-decoration: none; font-size: 0.8125rem; } .acts.three .btn.sec { background: var(--hair); border-color: transparent; }
+.vzko { margin-top: 0.125rem; } .kobtn { margin-top: 0.5rem; }
+.kofs { position: fixed; inset: 0; z-index: 2147482000; background: var(--canvas, #EFEFF1); color: var(--ink, #16171A); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1rem; padding: 1.5rem 1rem calc(1.5rem + env(safe-area-inset-bottom, 0px)); text-align: center; }
+.kofs .kn { font-size: clamp(2.5rem, 13vw, 4.5rem); font-weight: 800; line-height: 1.15; word-break: keep-all; letter-spacing: 0; }
+.kofs .kq { font-size: 1.25rem; font-weight: 600; color: var(--sub, #6B6E76); word-break: keep-all; }
+.kofs .ke { font-size: 0.9375rem; color: var(--sub, #6B6E76); }
+.kofs .btn { position: absolute; left: 1rem; right: 1rem; bottom: calc(1rem + env(safe-area-inset-bottom, 0px)); }
 .acts.two .btn { gap: 0.4375rem; text-decoration: none; }
 .acts.two .btn svg { width: 1.0625rem; height: 1.0625rem; stroke: currentColor; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; flex: none; }
 .acts.two .btn.sec { background: var(--hair); border-color: transparent; }
@@ -1465,7 +1474,7 @@ html #dayBody .tile .t { color: var(--sub) !important; }
 <script src="weather.js"></script>
 <script src="types.js"></script>
 <script src="chars.js?v=fit3"></script>
-<script>/* 공유용 샘플(#sample=키): 엔진·장소 DB·샘플 입력을 바로 불러와 그 자리에서 일정을 만듦 (저장 안 함) */ if (/#sample=[\w-]+|#v=\w{12}/.test(location.hash)) document.write('<script src="gen-data.js?v=11"><\/script><script src="gen.js?v=10"><\/script><script src="samples.js?v=2"><\/script>');</script>
+<script>/* 공유용 샘플(#sample=키): 엔진·장소 DB·샘플 입력을 바로 불러와 그 자리에서 일정을 만듦 (저장 안 함) */ if (window.VZTR_LANG === 'en' || /#sample=[\w-]+|#v=\w{12}/.test(location.hash)) document.write('<script src="gen-data.js?v=11"><\/script><script src="gen.js?v=10"><\/script><script src="samples.js?v=3"><\/script>');</script>
 <script>/* 11/19 W8 보기 전용 공유 링크(#v=id): 서버에 보관된 가이드북을 샘플처럼 띄움 — 이 기기엔 저장 안 함(made 없음). 편집 반영은 VZTR_VIEW_EDITS */
 (function () { var m = location.hash.match(/^#v=([A-Za-z0-9]{12})$/); if (!m) return;
   try { var x = new XMLHttpRequest(); x.open('GET', 'https://vztr-api.d-chive33-a29.workers.dev/plan/' + m[1], false); x.send();
@@ -1588,6 +1597,28 @@ const gmap = q => 'https://www.google.com/maps/search/?api=1&query=' + encodeURI
 const gdir = (q, mode) => 'https://www.google.com/maps/dir/?api=1&destination=' + encodeURIComponent(q) + '&travelmode=' + (mode === 'walk' ? 'walking' : mode === 'car' ? 'driving' : 'transit');
 // 차 구간 길찾기: 한국 = 카카오맵 자동차 길찾기, 일본 = 구글 지도 (점 = [이름, 위도, 경도])
 const drvLink = v => v.kr ? 'https://map.kakao.com/link/by/car/' + [v.a, v.b].map(p => encodeURIComponent(p[0]) + ',' + p[1] + ',' + p[2]).join('/') : 'https://www.google.com/maps/dir/?api=1&origin=' + v.a[1] + ',' + v.a[2] + '&destination=' + v.b[1] + ',' + v.b[2] + '&travelmode=driving';
+/* 11/20 W5 영어판(F2·F3): 장소 한글 원문 · 지도 버튼 순서 = 네이버지도 앱(nmap://, appname 필수 — 네이버 클라우드 URL Scheme 문서) → 카카오맵 웹(/link/to/이름,위도,경도) → 구글 */
+const W5 = window.VZTR_LANG === 'en';
+function koOf(d, c) {   // 이 일정의 한글 이름·좌표 (이동 = 다음 장소)
+  const L = d.list || [], t = c.k === 'm' ? L.slice(L.indexOf(c) + 1).find(x => x.k !== 'm') || null : c; if (!t) return null;
+  const P = window.GABOJA_DATA && GABOJA_DATA.places, p = t.pid && P && P[t.pid];
+  const n = p ? p.n : String(t.q || t.to || t.sh || '').trim(); if (!n || HOME_RE.test(n) || !/[가-힣]/.test(n)) return null;
+  return { n, ll: p && p.ll, en: p && window.VZTR_I18N && VZTR_I18N.placeEn ? VZTR_I18N.placeEn(p) : '' };
+}
+function w5Maps(d, c) {
+  const k = koOf(d, c); if (!k) return '';
+  const nm = encodeURIComponent(k.n), ll = k.ll, md = c.k === 'm' ? (c.mode === 'walk' ? 'walk' : c.mode === 'car' ? 'car' : 'public') : 'public', APN = '&appname=larchive.page';
+  const nv = ll ? 'nmap://route/' + md + '?dlat=' + ll[0] + '&dlng=' + ll[1] + '&dname=' + nm + APN : 'nmap://search?query=' + nm + APN;
+  const kk = ll ? 'https://map.kakao.com/link/to/' + nm + ',' + ll[0] + ',' + ll[1] : 'https://map.kakao.com/link/search/' + nm;
+  const gg = ll ? 'https://www.google.com/maps/dir/?api=1&destination=' + ll[0] + ',' + ll[1] + '&travelmode=' + (md === 'walk' ? 'walking' : md === 'car' ? 'driving' : 'transit') : gdir(k.n, c.mode);
+  return '<div class="acts three"><a class="btn pri" href="' + nv + '">네이버 지도</a><a class="btn sec" href="' + kk + '" target="_blank" rel="noopener">카카오맵</a><a class="btn sec" href="' + gg + '" target="_blank" rel="noopener">구글 지도</a></div>'
+    + '<p class="sub">네이버 지도는 앱이 있어야 열려요 · 없으면 카카오맵(웹)</p>';
+}
+function koShow(d, c) {   // 한글로 보여 주기 — 택시 기사·현지인에게 화면째 보여 줌
+  const k = koOf(d, c); if (!k) return; const o = document.createElement('div'); o.className = 'kofs'; o.setAttribute('role', 'dialog'); o.setAttribute('aria-modal', 'true');
+  o.innerHTML = '<div class="kn" lang="ko">' + esc(k.n) + '</div>' + (d.city ? '<div class="kq" lang="ko">' + esc(d.city) + '</div>' : '') + '<p class="kq" lang="ko">여기로 가 주세요</p>' + (k.en ? '<div class="ke" data-noi18n>' + esc(k.en) + '</div>' : '') + '<button class="btn sec" type="button">닫기</button>';
+  o.querySelector('button').onclick = () => o.remove(); document.body.appendChild(o); o.querySelector('button').focus();
+}
 const goHref = (c, q) => c.drv ? drvLink(c.drv) : gdir(q, c.mode);
 // 길찾기 링크 — 어느 일정이든 뜨게 (11/13): 좌표(drv) > 일정의 q·to > 비행·열차 = 타는 곳 > 이동 = 다음 장소 > 이름 + 도시 검색. 집(집 도착·집으로)만 목적지가 없어 '' (버튼 없음)
 const HOME_RE = /(^|→\s*)집(\s|으로|$)|집\s*도착|집으로/;
@@ -2701,7 +2732,7 @@ function sheetHtml(d, c) {
   const fx = fixedOf(c), parts = c.n.split(' — '), key = d.no + ':' + c.id, L = c.memo || [], tb = d.tbd, ed = !c.fly && c.k !== 'm';
   /* 11/18 D-4 ③: 머리 = 작은 줄(DAY · 시각) / 이름 / 설명 / 영업시간 칩 (종류 글자는 뺌) */
   let h = '<div class="shd"><div>' + (c.chg ? '<span class="eyebrow one"><span class="chgtag">변경됨</span></span>' : '')   /* 11/19 ④ #12 동우님: 위 'DAY · 시각' 줄 뺌 (변경됨 표시만) */
-    + '<h3 class="one" id="sheetTitle">' + esc(parts[1] || parts[0]) + '</h3>' + (c.say ? '<p class="sub one">' + esc(c.say) + '</p>' : '') + openChip(d, c) + '</div>' + X_BTN + '</div><div class="body">'
+    + '<h3 class="one" id="sheetTitle">' + esc(parts[1] || parts[0]) + '</h3>' + (W5 && koOf(d, c) && c.k !== 'm' ? '<span class="vzko one" lang="ko">' + esc(koOf(d, c).n) + '</span>' : '') + (c.say ? '<p class="sub one">' + esc(c.say) + '</p>' : '') + openChip(d, c) + '</div>' + X_BTN + '</div><div class="body">'
     + (c.pid && !c.fly ? '<div class="phbox" data-pid="' + esc(c.pid) + '"></div>' : '');
   if (c.fly) h += rideEditHtml(d, c);
   const kv = [];
@@ -2716,8 +2747,9 @@ function sheetHtml(d, c) {
     h += '<p class="ckline"><span class="ckl">영업시간</span><i class="ckd' + (c.ck === 'ok' ? '' : ' no') + '"></i><span class="ckv">' + esc(v) + '</span></p>'; }
   { const ti = timeIssue(c); if (ti.hard || ti.soft) h += '<p class="sub off">' + esc(ti.hard || ti.soft) + ' · 가능한 시간 ' + esc(ti.fix) + '</p>'; }
   h += '<div class="memos"><span class="mh">메모' + (L.length ? ' ' + L.length : '') + '</span>' + memoLines(L, key) + memoAdd(key, '예: 여기선 셔츠 보기') + '</div>';
-  const nu = navUrl(d, c), mu = c.k === 'm' ? '' : mapUrl(d, c);
-  if (nu || mu) h += '<div class="acts two">' + (mu ? '<a class="btn sec" href="' + mu + '" target="_blank" rel="noopener">' + PIN_SVG + '지도</a>' : '')
+  const nu = navUrl(d, c), mu = c.k === 'm' ? '' : mapUrl(d, c), w5m = W5 ? w5Maps(d, c) : '';
+  if (w5m) h += w5m + '<div class="acts kobtn"><button class="btn sec" type="button" data-kosh="' + c.id + '">한글로 보여 주기</button></div>';
+  else if (nu || mu) h += '<div class="acts two">' + (mu ? '<a class="btn sec" href="' + mu + '" target="_blank" rel="noopener">' + PIN_SVG + '지도</a>' : '')
     + (nu ? '<a class="btn pri" href="' + nu + '" target="_blank" rel="noopener"><svg viewBox="0 0 24 24"><path d="M12 3l7 17-7-4-7 4z"/></svg>길찾기</a>' : '') + '</div>';   // 11/18 D-4 ③: 지도(회색) · 길찾기(잉크) 2칸
   if (canClose(c)) h += '<div class="acts"><button class="btn sec sm" data-closed="' + c.id + '">닫혀 있나요? 근처 다른 곳 보기</button></div>';
   h += fx ? '<p class="sub">고정된 일정이에요 · 옮기거나 삭제할 수 없어요</p>'
@@ -2768,6 +2800,7 @@ $('#sheet').addEventListener('click', e => {
     return; }
   if (ma) { addMemo(ma.dataset.madd); return; }
   if (mo) { const [dn, id] = mo.dataset.mopen.split(':'); st.day = +dn - 1; renderDays(); renderPlan(); sheetId = id; sheetMode = 'item'; $('#sheetIn').innerHTML = sheetHtml(DAYS[st.day], findIt(DAYS[st.day], id)); $('#sheet').scrollTop = 0; return; }
+  const ks = e.target.closest('[data-kosh]'); if (ks) { const d = DAYS[st.day], c = findIt(d, ks.dataset.kosh); if (c) koShow(d, c); return; }
   const pk = e.target.closest('[data-pk]'); if (pk) { pickPlace(pk.dataset.pk); return; }
   const sh = e.target.closest('[data-sh]'); if (sh) { menuSheet(sh.dataset.sh); return; }
   const rc = e.target.closest('[data-rc]'); if (rc) { rc.setAttribute('aria-checked', rc.getAttribute('aria-checked') !== 'true'); updAddBar(); return; }

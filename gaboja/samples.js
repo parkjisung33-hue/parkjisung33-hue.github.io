@@ -7,6 +7,8 @@ window.GABOJA_SAMPLE_INPUTS = {
   'air-kr':   { label: '국내 · 비행기 (김포 → 부산 2박)', inp: { type: 'HEFP', start: '2026-12-11', nights: 2, dest: 'bsn', region: '수도권', mode: 'air', fo: { no: 'KE1101', dep: '09:00', arr: '10:05' }, fb: { no: 'KE1112', dep: '17:00', arr: '18:05' } } },
   'train-kr': { label: '국내 · 기차 (서울역 → 부산 2박)', inp: { type: 'LSFJ', start: '2026-12-11', nights: 2, dest: 'bsn', region: '수도권', mode: 'train', line: 0, fo: { no: '011', dep: '08:00', arr: '10:40' }, fb: { no: '054', dep: '18:00', arr: '20:40' } } },
   'car-kr':   { label: '국내 · 차 (강원 → 서울 2박)', inp: { type: 'HERP', start: '2026-12-18', nights: 2, dest: 'sel', region: '강원', mode: 'car', fo: { dep: '09:00' }, fb: { dep: '15:00' } } },
+  'in-sel':   { label: '외국인 · 인천 도착 (서울 3박)', inp: { type: 'HSFJ', start: '2026-12-04', nights: 3, dest: 'sel', inbound: 'ICN', fo: { no: 'KE902', arr: '14:30' }, fb: { no: 'KE901', dep: '19:40' }, stayTx: '홍대', likes: ['맛집', '쇼핑'] } },   // 11/20 W5 F1
+  'in-bsn':   { label: '외국인 · 김해 도착 (부산 2박)', inp: { type: 'LEFP', start: '2026-12-11', nights: 2, dest: 'bsn', inbound: 'PUS', fo: { no: '', arr: '' }, fb: { no: '', dep: '' } } },
   'day-kr':   { label: '국내 · 기차 당일치기 (서울역 → 부산)', inp: { type: 'LEFJ', start: '2026-12-12', daytrip: true, nights: 0, dest: 'bsn', region: '수도권', mode: 'train', line: 0, fo: { no: '001', dep: '06:00', arr: '08:35' }, fb: { no: '070', dep: '20:00', arr: '22:40' } } }
 };
 (() => {

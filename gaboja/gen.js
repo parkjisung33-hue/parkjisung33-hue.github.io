@@ -26,6 +26,17 @@
   const mnTx = m => { m = Math.round(m); return m >= 60 ? Math.floor(m / 60) + '시간' + (m % 60 ? ' ' + m % 60 + '분' : '') : m + '분'; };
   // 차(운전) 이동 시간 정책 (2026-11-13) — 값은 전부 여기 한 곳. 시간 = 기준분(경로 엔진 표 car_times.json) × 혼잡 배수 + 버퍼
   // 근거 구분: [근거] = 확인한 자료가 있는 부분, [추정] = 아키 추정(출처 없음, 바꿔도 됨)
+  /* 11/20 W5 F1 한국 공항 도착(외국인) — 시간 출처: AREX 직통 43분·일반 59분(인천 T1 → 서울역, 한국관광공사 english.visitkorea.or.kr 140654) ·
+     홍대 = 공항철도 일반 약 1시간(Visit Seoul english.visitseoul.net/airport-to-seoul) · 서울역 → 동네 = 기존 국내 표(modes.train.toBase 서울역) + 갈아타기 5분 [추정 합산] ·
+     김포·김해 → 동네 = 기존 국내선 표(modes.air.toBase 김포·김해) · 입국 심사·짐 = 60분 [추정, 공식 평균 없음] · 인천 T2는 공항철도 +7분(미반영) */
+  const INBOUND = {
+    ICN: { dest: 'sel', ap: { name: '인천', l: '인천국제공항', q: '인천국제공항', say: '입국 심사 → 짐 찾기 → 공항철도(AREX) 표지판', out: ['11:00', '11:00'], back: ['18:00', '18:00'] },
+      toBase: tr => { const S = (tr.toBase || {})['서울역'] || {}, o = {}; Object.keys(S).forEach(k => { o[k] = S[k][0] ? [59 + 5 + S[k][0], '공항철도 + ' + S[k][1]] : [59, '공항철도']; }); o['sel-hongdae'] = [60, '공항철도']; return o; } },
+    GMP: { dest: 'sel', ap: { name: '김포', l: '김포국제공항', q: '김포국제공항', say: '입국 심사 → 짐 찾기 → 지하철 표지판', out: ['11:00', '11:00'], back: ['18:00', '18:00'] },
+      toBase: (tr, air) => ({ ...((air.toBase || {})['김포'] || {}) }) },
+    PUS: { dest: 'bsn', ap: { name: '김해', l: '김해국제공항', q: '김해국제공항', say: '입국 심사 → 짐 찾기 → 경전철 표지판', out: ['11:00', '11:00'], back: ['18:00', '18:00'] },
+      toBase: (tr, air) => ({ ...((air.toBase || {})['김해'] || {}) }) },
+  };
   const CAR_POLICY = {
     // 혼잡 배수 [추정] — 참고 수치: 서울 2025 평균 속도 퇴근 18~20시 19.8 · 휴일 평균 23.9km/h (서울시 자료 인용 보도, heraldk 2026-03-13). 자유 흐름 대비 배수는 한국·일본 모두 근거 못 구함
     metro: { peak: 1.3, day: 1.15, night: 1.0, weekend: 1.2 },   // 대도시 안: 평일 07–10·17–20시 peak / 평일 10–17시 day / 그 밖 night / 주말 10–19시 weekend
@@ -138,7 +149,11 @@
     // 11/19 I48: 오사카·교토 묶음 안에서 고르기 input.part = 'main'(오사카만) · 'side'(교토만) · 없음(둘 다 = 기존과 같음)
     //   main = 옆 도시 가는 날 없음 / side = 숙소·공항 이동 기준을 옆 도시(SIDE_ONLY)로 바꾸고 모든 날을 옆 도시에서
     const PART = C0.side && (input.part === 'main' || (input.part === 'side' && SIDE_ONLY[input.dest || 'kix'])) ? input.part : '';
-    const C = PART === 'main' ? { ...C0, side: null, label: C0.main } : PART === 'side' ? { ...C0, ...SIDE_ONLY[input.dest || 'kix'], airports: Object.fromEntries(Object.entries(C0.airports || {}).map(([k, a]) => [k, { ...a, say: (SIDE_ONLY[input.dest || 'kix'].say || {})[k] || a.say }])), main: C0.side, side: null, label: C0.side } : C0;
+    const C1 = PART === 'main' ? { ...C0, side: null, label: C0.main } : PART === 'side' ? { ...C0, ...SIDE_ONLY[input.dest || 'kix'], airports: Object.fromEntries(Object.entries(C0.airports || {}).map(([k, a]) => [k, { ...a, say: (SIDE_ONLY[input.dest || 'kix'].say || {})[k] || a.say }])), main: C0.side, side: null, label: C0.side } : C0;
+    /* 11/20 W5 외국인판(F1) input.inbound = 'ICN'|'GMP'|'PUS' (서울·부산만): 집 대신 한국 공항 도착에서 시작 → 마지막 날 공항 출국까지.
+       국내 도시 설정을 해외 흐름(공항 → 숙소)으로 돌림. 공항 → 숙소 시간 = INBOUND (출처는 그 위 주석) */
+    const INB = input.inbound && C1.domestic && INBOUND[input.inbound] && INBOUND[input.inbound].dest === (input.dest || '') ? INBOUND[input.inbound] : null;
+    const C = INB ? { ...C1, domestic: false, airports: { [input.inbound]: INB.ap }, toBase: { [input.inbound]: INB.toBase((C1.modes || {}).train || {}, (C1.modes || {}).air || {}) } } : C1;
     const DOM = !!C.domestic;   // 국내(서울·부산): 비행기 대신 기차·국내선·차·집에서 바로
     // 시·군·구 출발 (input.sgg = '서울 마포구' 같은 키, 표 = gen-data sgg): 집→공항·국내 차 구간을 그 시·군·구 중심점 기준으로 계산. 표에 없으면 null = 기존 가정값
     const SG = input.sgg && D.sgg && D.sgg[input.sgg] ? { name: input.sgg, ...D.sgg[input.sgg] } : null; let sgUsed = false;
@@ -187,11 +202,13 @@
     let apK = null, AP = null, TB = null, R = null, mode = 'intl', out, back, outOk, backOk, homeMin = 75; // 집 → 인천공항 (주소별 계산은 앱 단계, 지금은 가정)
     if (!DOM) {
       apK = C.airports[input.airport] ? input.airport : Object.keys(C.airports)[0]; AP = C.airports[apK];
-      out = hm(fo.dep) && hm(fo.arr) ? [hm(fo.dep), hm(fo.arr)] : !input.fo && tm && tm.length >= 2 ? [tm[0].padStart(5, '0'), tm[1].padStart(5, '0')] : AP.out;
-      back = hm(fb.dep) && hm(fb.arr) ? [hm(fb.dep), hm(fb.arr)] : AP.back;
+      if (INB) { const a = hm(fo.arr) || AP.out[1], b = hm(fb.dep) || AP.back[0]; out = [a, a]; back = [b, b]; outOk = !!hm(fo.arr); backOk = !!hm(fb.dep);
+        if (!outOk) assumed.push('도착 비행기 시각 미입력 → 시각 미정'); if (!backOk) assumed.push('출국 비행기 시각 미입력 → 시각 미정'); }
+      else out = hm(fo.dep) && hm(fo.arr) ? [hm(fo.dep), hm(fo.arr)] : !input.fo && tm && tm.length >= 2 ? [tm[0].padStart(5, '0'), tm[1].padStart(5, '0')] : AP.out;
+      if (!INB) { back = hm(fb.dep) && hm(fb.arr) ? [hm(fb.dep), hm(fb.arr)] : AP.back;
       outOk = !!(hm(fo.dep) && hm(fo.arr)) || (!input.fo && !!(tm && tm.length >= 2)); backOk = !!(hm(fb.dep) && hm(fb.arr));
       if (!outOk) assumed.push('가는 비행기 시각 미입력 → 시각 미정');
-      if (!backOk) assumed.push('오는 비행기 시각 미입력 → 시각 미정');
+      if (!backOk) assumed.push('오는 비행기 시각 미입력 → 시각 미정'); }
       TB = (C.toBase[apK] || {})[base] || [60, '전철'];
     } else {
       // 출발 지역 × 교통수단 → 타는 곳·내리는 곳·소요 시간 (cfg.modes = domestic_moves_add.json 조사값)
@@ -456,6 +473,15 @@
         title = (mode === 'home' ? '집에서 바로 ' : '도착하자마자 ') + (blocks[0] || '동네 산책');
         if (DT) { const ro = route; backDom(true); title = '당일치기 — ' + (blocks[0] || '동네 산책'); route = ro.concat(route.slice(1)); }
       } else if (i === N && DOM) backDom(false);
+      else if (i === 1 && INB) {   // W5 F1: 한국 공항 도착에서 시작 (집·출국 없음)
+        const arr = toMin(out[1]), ex = 60, tr = TB[0];
+        it.push({ k: 'p', s: arr, e: arr + ex, sh: AP.name + '공항', n: AP.name + '공항 도착', l: AP.l, say: AP.say, q: AP.q });
+        it.push({ k: 'm', s: arr + ex, e: arr + ex + tr, mode: 'train', n: TB[1], mv: TB[1] + ' · 약 ' + mnTx(tr), to: BQ });
+        nt.push({ lv: 'gray', t: '입국 심사·짐 찾기 약 1시간으로 잡았어요 · 붐비면 더 걸려요' });
+        t = r5(arr + ex + tr); if (!DT) { arriveTail('체크인 전 짐만 보관'); if (mustQ.length && t < toMin('21:30')) flushMust(toMin('22:30')); }
+        title = '도착하자마자 ' + (blocks[0] || '동네 산책'); route = [AP.name + '공항', baseName];
+        if (DT) { const ro = route; backIntl(true); title = '당일치기 — ' + (blocks[0] || '동네 산책'); route = ro.concat(route.slice(1)); }
+      }
       else if (i === 1) {
         const dep = toMin(out[0]), arr = spanEnd(out[0], out[1]), airport = dep - 120, HL = homeLeg(DA[0], airport, date, false, false), hmo = HL.m, leave = airport - hmo;
         if (HL.early) nt.push({ lv: 'amber', t: '새벽 출발 · 대중교통은 첫차 전일 수 있어요 · 차·택시 기준' });
@@ -533,6 +559,12 @@
         if (t > leave) leave2 = t;
         it.push({ k: 'm', s: leave2, e: Math.max(airport, leave2 + TB[0]), mode: 'train', n: TB[1], mv: '공항으로 · ' + TB[1] + ' 약 ' + mnTx(TB[0]) + '', to: AP.q });
         it.push({ k: 'x', s: airport, e: dep, sh: AP.name + '공항', n: AP.name + '공항 · 체크인', l: AP.l, say: '면세품 있으면 세관 먼저', q: AP.q });
+        if (INB) {   // W5 F1: 출국 비행기가 마지막 (그 뒤 도착·집 없음)
+          it.push({ k: 'x', s: dep, e: dep + 5, n: '출국 비행기' + (fnoBack ? ' ' + fnoBack : ''), sh: '출국', q: AP.q });
+          if (backOk) nt.push({ lv: 'red', ref: AP.name + '공항', t: AP.name + '공항 ' + toT(airport) + '까지 도착 · 출발 2시간 전' });
+          nt.push({ lv: 'gray', t: '세금 환급(택스 리펀드)은 출국 심사 전에' });
+          title = '돌아가는 날' + (blocks[0] ? ' — ' + blocks[0] : ''); route = [baseName, AP.name + '공항']; return;
+        }
         it.push({ k: 'x', s: dep, e: arr, fly: [apK, AP.name, DA[0], DA[1]], fno: fnoBack || undefined, n: '비행기 · ' + AP.name + ' → ' + DA[1] + (fnoBack ? ' ' + fnoBack : ''), mv: '비행기' });
         it.push({ k: 'p', s: arr, e: arr + 50, sh: DA[2], n: DA[2] + ' 도착', q: DA[3] });
         const HB = homeLeg(DA[0], arr + 50, date, true, false), hmb = HB.m; if (HB.alt) nt.push({ lv: 'gray', t: HB.alt });
@@ -596,7 +628,7 @@
     if (stayUnknown) notes[1].push({ lv: 'gray', t: stayUnknown });
     const end = new Date(start); end.setDate(start.getDate() + nights);
     const f2 = d => (d.getMonth() + 1) + '. ' + d.getDate();
-    return { v: 1, type, title: (PART ? C.label : input.cityLabel || C.label) + (DT ? ' 당일치기' : ' ' + nights + '박 ' + N + '일'), sub: (DT ? f2(start) : f2(start) + ' – ' + f2(end)) + ' · 집에서 집까지', start: start.getFullYear() + '-' + String(start.getMonth() + 1).padStart(2, '0') + '-' + String(start.getDate()).padStart(2, '0'), days, notes, assumed, local: C.local || null, sgg: SG && sgUsed ? SG.name : null, dest: input.dest || 'kix', ...(PART ? { part: PART } : {}), go: DOM ? { mode, line: R.lineTx || null, region: R.region } : { mode: 'intl', airport: apK }, carAttr, ...(BLANK ? { blank: true } : {}), inp: JSON.parse(JSON.stringify(input)), made: new Date().toISOString() };   // inp = 11/14 #28: 앱에서 비행기 시각을 바꾸면 그날을 다시 짤 때 씀
+    return { v: 1, type, title: (PART ? C.label : input.cityLabel || C.label) + (DT ? ' 당일치기' : ' ' + nights + '박 ' + N + '일'), sub: (DT ? f2(start) : f2(start) + ' – ' + f2(end)) + (INB ? ' · 공항에서 공항까지' : ' · 집에서 집까지'), start: start.getFullYear() + '-' + String(start.getMonth() + 1).padStart(2, '0') + '-' + String(start.getDate()).padStart(2, '0'), days, notes, assumed, local: C.local || null, sgg: SG && sgUsed ? SG.name : null, dest: input.dest || 'kix', ...(PART ? { part: PART } : {}), go: DOM ? { mode, line: R.lineTx || null, region: R.region } : { mode: INB ? 'inbound' : 'intl', airport: apK }, carAttr, ...(BLANK ? { blank: true } : {}), inp: JSON.parse(JSON.stringify(input)), made: new Date().toISOString() };   // inp = 11/14 #28: 앱에서 비행기 시각을 바꾸면 그날을 다시 짤 때 씀
   }
   // 차 예상 도착 (질문지 start.html도 이 함수를 씀): key 'pt>base' 또는 'sgg:서울 마포구>base' · dep 'HH:MM' · date Date · dest 도시코드 → { dep, arr 'HH:MM', next(다음 날), dur(분), rest(휴게소 쉼 포함) } 또는 null(표에 없음)
   function carEta(key, dep, date, dest) {
