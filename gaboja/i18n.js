@@ -18,7 +18,7 @@
   }
   try {
     var saved = localStorage.getItem(KEY);
-    if (!EN && !saved && !bot && /^https?:/.test(location.protocol) && /\/(index\.html|start\.html)?$/.test(location.pathname) && !/^ko\b/i.test(navigator.language || 'ko')) { location.replace(other()); return; }
+    if (!EN && !saved && !bot && /^https?:/.test(location.protocol) && /\/(index\.html|start\.html)?$/.test(location.pathname) && !/^ko\b/i.test(navigator.language || 'ko')) { location.replace(other()); try { window.stop(); } catch (_) {} return; }   // 리뷰 #8: 뒤 스크립트(샘플·저장) 안 돌게
     if (!saved || saved !== L) { /* 주소로 들어온 언어는 고른 것으로 치지 않음 — 버튼으로만 기억 */ }
   } catch (_) {}
   function go() { try { localStorage.setItem(KEY, EN ? 'ko' : 'en'); } catch (_) {} location.href = other(); }
@@ -33,7 +33,7 @@
     + 'html.introfit header.bar.vzl{display:grid;position:absolute;top:env(safe-area-inset-top,0px);left:0;right:0;background:none;padding:.5rem 1rem 0;pointer-events:none}html.introfit header.bar.vzl>*{visibility:hidden}html.introfit header.bar.vzl .vzlang{visibility:visible;pointer-events:auto}'   // 첫 화면은 위 막대가 없음 → 언어만 오른쪽 위에
     + '.vzko{display:block;font-size:.8125rem;font-weight:500;color:var(--sub,#6B6E76);letter-spacing:0}';
   function mount() {
-    if (document.querySelector('.vzlang')) return;
+    if (document.querySelector('.vzlang') || !/\/(index\.html|start\.html)?$/.test(location.pathname)) return;   // 리뷰 #9: 덜어내기 보드 등엔 영어판이 없음
     var b = document.createElement('a'); b.className = 'vzlang'; b.href = other(); b.setAttribute('data-noi18n', '');
     b.textContent = EN ? '한국어' : 'English'; b.lang = EN ? 'ko' : 'en'; b.setAttribute('hreflang', b.lang);
     b.onclick = function (e) { e.preventDefault(); go(); };
@@ -48,32 +48,49 @@
   if (!EN) return;
 
   /* ===== 영어판: 사전 ===== */
-  var HAN = /[가-힣]/, D = Object.create(null), PAT = [];
+  var HAN = /[가-힣]/, D = Object.create(null), PAT = [], PATS = [], PATS2 = [], MAN = window.VZTR_EN || {};
   function load() {
-    var src = window.VZTR_EN || {};
+    var src = Object.assign({}, window.VZTR_EN_AUTO || {}, window.VZTR_EN || {});   // 자동 번역(i18n-en-auto.js) 위에 손 사전(i18n-en.js)이 이김
     Object.keys(src).forEach(function (k) {
-      if (/\{\w+\}/.test(k)) {   // 틀: '{n}박 {m}일' → /^(\d+)박 (\d+)일$/
+      if (/\{\w+\}/.test(k) && typeof src[k] === 'function') {   // 틀: '{n}박 {m}일' → /^(\d+)박 (\d+)일$/
         var names = [], re = new RegExp('^' + k.replace(/[.*+?^$()|[\]\\]/g, '\\$&').replace(/\\?\{(\w+)\\?\}/g, function (_, n) { names.push(n); return /^[nmd]$/.test(n) ?'(\\d+)' : '(.+?)'; }) + '$');
         PAT.push([re, names, src[k]]);
-      } else D[k] = src[k];
+      } else if (/\{\w+\}/.test(k)) PATS.push(k); else D[k] = src[k];
     });
   }
   load();
+  PATS.forEach(function (k) { var names = [], src = Object.assign({}, window.VZTR_EN_AUTO || {}, MAN), re = new RegExp('^' + k.replace(/[.*+?^$()|[\]\\]/g, '\\$&').replace(/\\?\{(\w+)\\?\}/g, function (_, n) { names.push(n); return /^[nmd]$/.test(n) ? '(\\d+)' : '(.+?)'; }) + '$'); PATS2.push([re, names, src[k]]); });   // 문자열 틀 = 마지막에
   /* 장소 이름 → 영어 (gen-data가 있는 화면에서 처음 쓸 때 한 번) */
   var placesDone = false;
   function places() {
     if (placesDone || !window.GABOJA_DATA) return; placesDone = true;
     var P = window.GABOJA_DATA.places || {};
-    Object.keys(P).forEach(function (id) { var p = P[id]; if (!p || !HAN.test(p.n)) return; var e = API.placeEn(p); if (e) { if (!(p.n in D)) D[p.n] = e; if (p.sh && !(p.sh in D)) D[p.sh] = e; } });
+    var names = [];
+    var EPL = window.VZTR_EN_PLACES || {};
+    Object.keys(P).forEach(function (id) { var p = P[id]; if (!p || !HAN.test(p.n)) return; var x = EPL[id], e = x && x.en || API.placeEn(p), sh = x && x.short && x.short.length <= 20 ? x.short : e; if (e) { if (!(p.n in MAN)) D[p.n] = e.length > 20 ? sh : e; if (p.sh && p.sh !== p.n && !(p.sh in MAN)) D[p.sh] = sh; /* 화면 = 20자 넘으면 짧은 이름(V-28 한 줄) */ names.push(p.n); if (p.sh && p.sh !== p.n) names.push(p.sh); } });
+    names = names.filter(function (n) { return n.length >= 3; })   /* 리뷰 #7: 2글자('서면')는 다른 낱말 안에서도 걸려서 '@'로 안 바꿈 */.sort(function (a, b) { return b.length - a.length; });
+    if (names.length) PN = new RegExp(names.map(function (n) { return n.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); }).join('|'), 'g');
   }
-  API.placeEn = function (p) { return p && (p.en || (HAN.test(p.n) ? roman(p.n) : '')); };
+  var PN = null;
+  API.placeEn = function (p) { places(); return p && (p.en || (placesDone && D[p.n] && !HAN.test(D[p.n]) ? D[p.n] : HAN.test(p.n) ? roman(p.n) : '')); };   // 영어 이름 = 장소 사전(i18n-en-auto.js VZTR_EN_PLACES) > 로마자 자동
   function tr(s) {
     var t = s.trim(); if (!t || !HAN.test(t)) return null;
     places();
-    var r = D[t];
-    if (r == null) for (var i = 0; i < PAT.length; i++) { var m = t.match(PAT[i][0]); if (m) { r = PAT[i][2]; var g = m.slice(1).map(function (v) { return HAN.test(v) ? (tr(v) || v).trim() : v; }); if (typeof r === 'function') r = r.apply(null, g); else PAT[i][1].forEach(function (n, j) { r = r.replace('{' + n + '}', g[j]); }); break; } }   // 값이 함수면 끼운 말들을 받아 문장을 만듦
-    if (r == null) { API.miss.set(t, (API.miss.get(t) || 0) + 1); return null; }
-    return s.replace(t, r);
+    var r = null;
+    for (var i = 0; i < PAT.length; i++) { var m = t.match(PAT[i][0]); if (m) { try { r = PAT[i][2].apply(null, m.slice(1)); } catch (_) { r = null; } if (r != null) break; } }   // 함수 틀 먼저(모르는 말이면 null → 다음)
+    if (r == null) r = D[t];
+    if (r == null && /\d/.test(t)) {   // 숫자만 다른 문장 = 키에서 숫자를 '#'로 (예 '강수확률 #%' → 'Rain #%'), 값의 '#'에 같은 순서로 다시 넣음
+      var nums = t.match(/\d+/g), v0 = D[t.replace(/\d+/g, '#')];
+      if (v0 != null) { var q = 0; r = String(v0).replace(/#/g, function () { return nums[q++] || ''; }); }
+    }
+    if (r == null && PN) {   // 장소 이름이 들어간 문장 = 이름을 '@'로 (예 '‘@’ 근처 인기 장소'), 값의 '@'에 영어 이름
+      var got = []; var t2 = t.replace(PN, function (w) { got.push(D[w] || w); return '@'; }).replace(/\d+/g, '#');
+      var nums2 = t.replace(PN, '@').match(/\d+/g) || [], v1 = got.length ? D[t2] : null;
+      if (v1 != null) { var a = 0, b = 0; r = String(v1).replace(/@/g, function () { return got[a++] || ''; }).replace(/#/g, function () { return nums2[b++] || ''; }); }
+    }
+    if (r == null) for (var i2 = 0; i2 < PATS2.length; i2++) { var m2 = t.match(PATS2[i2][0]); if (!m2) continue; var g = m2.slice(1).map(function (v) { return HAN.test(v) ? (tr(v) || v).trim() : v; }); if (g.some(function (v) { return HAN.test(v); })) continue; r = PATS2[i2][2]; PATS2[i2][1].forEach(function (n, j) { r = r.replace('{' + n + '}', function () { return g[j]; }); }); break; }   // 리뷰 #2
+    if (r == null) { var mk = /\d/.test(t) ? t.replace(/\d+/g, '#') : t; if (PN && t.replace(PN, '@') !== t) mk = t.replace(PN, '@').replace(/\d+/g, '#'); API.miss.set(mk, (API.miss.get(mk) || 0) + 1); return null; }   // 빠진 목록 = 사전 키 모양 그대로(숫자 #, 장소 @)
+    return s.replace(t, function () { return r; });   // r 안의 '$' 글자가 치환 기호로 읽히지 않게
   }
   API.t = window.T = function (s) { var r = tr(String(s)); return r == null ? s : r; };
   var ATTR = ['placeholder', 'aria-label', 'title', 'alt'], mine = new WeakMap(), mineA = new WeakMap();
@@ -85,7 +102,7 @@
     if (n.tagName === 'INPUT' && (n.type === 'button' || n.type === 'submit') && HAN.test(n.value)) { var r3 = tr(n.value); if (r3 != null) n.value = r3; }
     for (var c = n.firstChild; c; c = c.nextSibling) node(c);
   }
-  function title() { var r = tr(document.title); if (r != null) document.title = r; }
+  var lastT = ''; function title() { if (document.title === lastT) return; var r = tr(document.title); if (r != null) { lastT = r; document.title = r; } }
   function start() {
     node(document.body); title();
     new MutationObserver(function (ms) {

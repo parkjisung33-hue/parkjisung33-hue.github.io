@@ -30,11 +30,11 @@
      홍대 = 공항철도 일반 약 1시간(Visit Seoul english.visitseoul.net/airport-to-seoul) · 서울역 → 동네 = 기존 국내 표(modes.train.toBase 서울역) + 갈아타기 5분 [추정 합산] ·
      김포·김해 → 동네 = 기존 국내선 표(modes.air.toBase 김포·김해) · 입국 심사·짐 = 60분 [추정, 공식 평균 없음] · 인천 T2는 공항철도 +7분(미반영) */
   const INBOUND = {
-    ICN: { dest: 'sel', ap: { name: '인천', l: '인천국제공항', q: '인천국제공항', say: '입국 심사 → 짐 찾기 → 공항철도(AREX) 표지판', out: ['11:00', '11:00'], back: ['18:00', '18:00'] },
+    ICN: { dest: 'sel', ap: { name: '인천', q: '인천국제공항', say: '입국 심사 → 짐 찾기 → 공항철도(AREX) 표지판', out: ['11:00', '11:00'], back: ['18:00', '18:00'] },
       toBase: tr => { const S = (tr.toBase || {})['서울역'] || {}, o = {}; Object.keys(S).forEach(k => { o[k] = S[k][0] ? [59 + 5 + S[k][0], '공항철도 + ' + S[k][1]] : [59, '공항철도']; }); o['sel-hongdae'] = [60, '공항철도']; return o; } },
-    GMP: { dest: 'sel', ap: { name: '김포', l: '김포국제공항', q: '김포국제공항', say: '입국 심사 → 짐 찾기 → 지하철 표지판', out: ['11:00', '11:00'], back: ['18:00', '18:00'] },
+    GMP: { dest: 'sel', ap: { name: '김포', q: '김포국제공항', say: '입국 심사 → 짐 찾기 → 지하철 표지판', out: ['11:00', '11:00'], back: ['18:00', '18:00'] },
       toBase: (tr, air) => ({ ...((air.toBase || {})['김포'] || {}) }) },
-    PUS: { dest: 'bsn', ap: { name: '김해', l: '김해국제공항', q: '김해국제공항', say: '입국 심사 → 짐 찾기 → 경전철 표지판', out: ['11:00', '11:00'], back: ['18:00', '18:00'] },
+    PUS: { dest: 'bsn', ap: { name: '김해', q: '김해국제공항', say: '입국 심사 → 짐 찾기 → 경전철 표지판', out: ['11:00', '11:00'], back: ['18:00', '18:00'] },
       toBase: (tr, air) => ({ ...((air.toBase || {})['김해'] || {}) }) },
   };
   const CAR_POLICY = {
