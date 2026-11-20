@@ -2071,7 +2071,7 @@ function sendNow() {
 
 /* 11/20 E6·M38 가이드북 메일 — 만든 일정을 서버에 보관(W12와 같은 /plan)하고, 서버가 정해진 틀로 '내 링크'를 메일로 보냄(Resend, server/worker.js /send).
    자동 일정이 없는 도시(PLANNED 없음)는 지금처럼 신청만 → 아키가 만들어 보냄 */
-const MAIL_ON = false;   // 11/20: Resend 도메인·키 연결되면 true (README E6 절)
+const MAIL_ON = true;   // 11/21 Resend 연결(mail.larchive.page) · 답장 = vztr@larchive.page → Cloudflare 전달 (README E6 절)
 let MAIL = null; // { st: 'wait'|'ok'|'bad'|'off', err }
 function mailNow() {
   const tr = S.trip, p = PLANNED, to = (tr.to || '').trim();
