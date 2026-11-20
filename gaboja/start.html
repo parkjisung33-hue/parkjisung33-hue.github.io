@@ -1391,7 +1391,7 @@ const GRPC = { LS: { bg: '#E4F3F5', a: '#6099A0' }, LE: { bg: '#FEF2F5', a: '#C7
 function fitChar(svg, k) { if (window.GABOJA_FIT) GABOJA_FIT(svg, k == null ? 1.45 : k); }
 const AVnb = (c, k, fx) => window.GABOJA_CHAR ? `<div class="av${fx ? ' gfx' : ''} ${k || ''}"${fx ? ` data-c="${c}" data-fxd="650"` : ''}>${GABOJA_CHAR(c, { bg: false })}</div>` : '';
 const grpIcon = c => `<svg viewBox="0 0 24 24" aria-hidden="true">${GI[c.slice(0, 2)]}</svg>`;
-const LMEAN = W5 ? { L: 'Local', H: 'Hotspot', S: 'Sights', E: 'Fun', F: 'Packed', R: 'Easy', J: 'Plan', P: 'Free' } : { L: '로컬', H: '핫플', S: '구경', E: '즐기기', F: '알차게', R: '여유롭게', J: '계획형', P: '즉흥형' };   // W5: 글자 칸 아래라 짧게
+const LMEAN = W5 ? { L: 'Local', H: 'Hotspot', S: 'Sights', E: 'Fun', F: 'Packed', R: 'Easy', J: 'Plan', P: 'Free' } : { L: '로컬', H: '핫플', S: '구경', E: '즐기기', F: '알차게', R: '여유', J: '계획', P: '즉흥' };   // W5: 글자 칸 아래라 짧게 · 11/21 한국어도 3·4번째 칸은 두 글자(칸 36px라 '여유롭게즉흥형'이 붙어 보였음, 전체 이름은 아래 '내 유형 글자 뜻')
 function lflapsHtml(c) { return `<div class="flaps big lfl">${c.split('').map(l => `<span class="lcol"><span class="fl">${l}</span><span class="lb">${LMEAN[l]}</span></span>`).join('')}</div>`; }
 // 11/15 #4 → 11/18 D-2: '내가 고른 답 10개' = 처음부터 펼친 목록 (접기 없음) · 두 묶음 소제목 · 오른쪽 축 글자 칩(내 유형 글자와 같으면 진하게) — 남의 유형 보기에선 안 보임
 const LTX = { L: '현지인 동네·골목 위주', H: '유명한 곳·요즘 뜨는 곳 위주', S: '보고 걷는 게 좋은 편', E: '먹고 사고 체험하는 게 좋은 편', F: '하루를 꽉 채우는 편', R: '쉬는 시간을 넉넉히', J: '동선·시간을 미리 정해 두는 편', P: '그때그때 끌리는 대로' };
@@ -2085,7 +2085,7 @@ function mailNow() {
     .then(r => r.json()).then(j => {
       if (!j.id) throw new Error(j.e || 'save');
       try { const c = JSON.parse(localStorage.getItem('vztr-cloud')) || {}; c[p.made] = { id: j.id, key: j.key, at: Date.now() }; localStorage.setItem('vztr-cloud', JSON.stringify(c)); } catch (_) {}   // 가이드북(index)이 같은 id로 이어서 고침
-      return fetch(VZTR_API + '/send', { method: 'POST', headers: J, body: JSON.stringify({ id: j.id, key: j.key, to, nick: (tr.nick || '').trim() }), signal: ctl.signal });
+      return fetch(VZTR_API + '/send', { method: 'POST', headers: J, body: JSON.stringify({ id: j.id, key: j.key, to, nick: (tr.nick || '').trim(), lang: W5 ? 'en' : 'ko' }), signal: ctl.signal });   // 11/21 영어판 = 영어 메일·/en/ 링크
     })
     .then(r => r.json()).then(j => { MAIL = j.ok ? { st: 'ok' } : { st: 'bad', err: j.e || 'mail' }; })
     .catch(e => { MAIL = { st: 'bad', err: e.name === 'AbortError' ? 'slow' : String(e.message || e).slice(0, 40) }; })

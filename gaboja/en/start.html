@@ -11,7 +11,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400..800&display=swap">
 <script src="inapp.js?v=1"></script>
-<script src="i18n-en.js?v=7a312b31"></script><script src="i18n.js?v=7a312b31"></script><!-- 11/20 W5 언어 틀 (영어판 = /en/, 사전 i18n-en.js는 배포 때 en/에만 붙음) -->
+<script src="i18n-en-auto.js?v=43d32b6d"></script><script src="i18n-en.js?v=43d32b6d"></script><script src="i18n.js?v=43d32b6d"></script><!-- 11/20 W5 언어 틀 (영어판 = /en/, 사전 i18n-en.js는 배포 때 en/에만 붙음) -->
 <link rel="stylesheet" href="fonts/vztr-fonts.css?v=2"><!-- 11/19 글꼴: 굵은 한글 IBM Plex Sans KR · 보통 한글 Pretendard · 영문·숫자 IBM Plex Sans -->
 <link rel="icon" href="icons/favicon-32.png">
 <link rel="apple-touch-icon" href="icons/icon-180.png">
@@ -269,6 +269,7 @@ html.ios26 .foot, html.ios26 .board { bottom: calc(max(0.75rem, env(safe-area-in
 .ans h4::after { content: ""; flex: 1; height: 1px; background: var(--hair); }
 .ans .qa { display: grid; grid-template-columns: 1.375rem minmax(0,1fr) auto; gap: 0.125rem 0.625rem; padding: 0.5625rem 0; border-bottom: 1px solid var(--hair); align-items: start; }
 .ans .ag > .qa:last-child { border-bottom: 0; }
+.ans .qa.lm { grid-template-columns: auto minmax(0,1fr); align-items: center; } .ans .qa.lm .q b { font-weight: 700; }
 .ans .qa .n { font: 700 0.75rem/1.25rem var(--lat); color: var(--sub); }
 .ans .qa .q { font-size: 0.78125rem; color: var(--sub); line-height: 1.4; }
 .ans .qa .a { grid-column: 2; font-size: 0.9375rem; font-weight: 600; line-height: 1.4; word-break: keep-all; }
@@ -601,8 +602,10 @@ html.ios26 .foot, html.ios26 .board { bottom: calc(max(0.75rem, env(safe-area-in
 .swb.no { color: var(--red); }
 .swb.yes { background: var(--blue); color: var(--on-blue); border-color: var(--blue); }
 .swb.yes svg { fill: currentColor; stroke-width: 1.4; }
-.swauto { align-self: center; font-size: 0.8125rem; font-weight: 600; color: var(--sub); padding: 0.5rem 0.75rem; text-align: center; text-decoration: underline; text-underline-offset: 3px; text-decoration-color: var(--hair); }
-.swauto:hover { color: var(--ink); }
+/* V-18: 추천·큐레이션 버튼 공통 모양(.recbtn) = 연한 파랑 알약 + 반짝 아이콘 — 앱 안 '추천에 맡기기' 류는 이 모양으로 */
+.recbtn, .swauto { align-self: center; display: inline-flex; align-items: center; gap: 0.375rem; font-size: 0.8125rem; font-weight: 700; color: var(--blue); background: var(--blue-soft); border: 1px solid color-mix(in srgb, var(--blue) 22%, transparent); padding: 0.5rem 0.875rem; border-radius: 999px; text-align: center; text-decoration: none; }
+.recbtn svg, .swauto svg { width: 0.9375rem; height: 0.9375rem; stroke: currentColor; fill: none; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; flex: none; }
+.recbtn:active, .swauto:active { transform: scale(.97); }
 /* 하루 완성 도장 (11/18 D-1): 마지막 카드가 날아간 뒤 오버레이 페이드 → 도장 '쾅'(blue) → 화면 흔들림 + 진동 + 잉크 링 → 문구 → 버튼으로만 다음 */
 .dstamp-ov { position: fixed; inset: 0; z-index: 30; display: flex; align-items: center; justify-content: center; background: color-mix(in srgb, var(--canvas) 90%, transparent); -webkit-backdrop-filter: blur(14px); backdrop-filter: blur(14px); opacity: 0; transition: opacity .25s; }
 .dstamp-ov.on { opacity: 1; }
@@ -784,8 +787,11 @@ body { background: transparent; }
 .scr:not(.qs):not(:has(> .tqh)) > .qh { margin-bottom: -0.25rem; }   /* 다음 칸의 margin-top은 건드리지 않음 */
 /* 11/20 코발트 × 잉크 블랙: 배경 = 가이드북과 같은 깊이 그라디언트(가운데 → 55% → 가장자리, 화면 고정 .bgfx)
    밝은 = 가운데 밝고 바깥 살짝 어둡게 · 다크 = 동우님 다크 A(Midnight Embrace 연하게)를 잉크 블랙 무채색으로 */
-html { background: #EFEFF1; } body { background: transparent; }
-.bgfx { display: block; position: fixed; inset: 0; z-index: -1; pointer-events: none; background: radial-gradient(ellipse at 50% 50%, #F4F4F5, #EFEFF1 55%, #E9EAEC); }
+html { background: #FBFBFD; } body { background: transparent; }
+.bgfx { display: block; position: fixed; inset: 0; z-index: -1; pointer-events: none; background: radial-gradient(ellipse at 50% 40%, #FFFFFF, #FBFBFD 60%, #F7F7F9); }
+/* V-23 (11/20 실사용 리뷰): 앞단(시작·질문·결과…) 밝은 배경 = 아주 미세한 오프화이트(아이보리 X, 애플 상세 페이지 정도) · 박스 = 반대로 아주 연한 회색 그라디언트 */
+:root { --canvas: #FBFBFD; --tile: linear-gradient(180deg, #F6F6F8, #F1F1F4); --tile-c: #F3F3F6; --tile-edge: rgba(0,0,0,.035); --glass: rgba(243,243,246,.88); }
+.mine { box-shadow: 0 6px 18px -8px rgba(22,23,26,.22), 0 1px 2px rgba(22,23,26,.06); }   /* V-22: 지난번 내 성향 = 그림자로 띄움 */
 @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --canvas: #1D1E22; --paper: #27282C; --float: #2C2D31; --tile: rgba(42,43,47,.92); --field: #1C1D20; --glass: rgba(39,40,44,.72); background: #18191C; }
   :root:not([data-theme="light"]) .bgfx { background: radial-gradient(ellipse at 50% 50%, #18191C, #1D1E22 55%, #232428); } }
 html:root[data-theme="dark"] { --canvas: #1D1E22; --paper: #27282C; --float: #2C2D31; --tile: rgba(42,43,47,.92); --field: #1C1D20; --glass: rgba(39,40,44,.72); background: #18191C; }
@@ -801,7 +807,8 @@ html:root[data-theme="dark"] { --canvas: #1D1E22; --paper: #27282C; --float: #2C
 .dep .dr.me .dn { color: var(--flap-tx); }
 .dep .dr.me .dg { color: #8F969F; }
 /* 11/20 동우님 #3 '언제 가세요?' = 스크롤 없이 한 화면: 날짜 미정 = 한 줄(− 3박 4일 +), 달력 칸 높이 조금 줄임 → 남는 높이는 위아래 여백 */
-.nrow { display: flex; align-items: center; justify-content: space-between; gap: 0.75rem; }
+.nrow { display: flex; align-items: center; justify-content: center; gap: 0.75rem; }   /* V-25: 가운데 */
+.nstep .ns, .nstep .nv { display: inline-flex; align-items: center; justify-content: center; line-height: 1; }
 .nrow .nl { font-size: 0.875rem; font-weight: 600; color: var(--sub); }
 .nstep { display: flex; align-items: center; height: 2.625rem; border-radius: 0.625rem; background: var(--tile); border: 1px solid var(--tile-edge); box-shadow: var(--sh-xs); overflow: hidden; }
 .nstep .ns { width: 2.625rem; height: 100%; font-size: 1.125rem; font-weight: 600; color: var(--ink); }
@@ -870,6 +877,14 @@ html[data-theme="dark"][data-grp="HE"] { --me-soft: color-mix(in srgb, #C17192 2
 /* 11/20 검수: 사진 출처 '…' 잘림 없앰 → 두 줄까지 줄바꿈 */
 .phcr { white-space: normal !important; text-overflow: clip !important; word-break: keep-all; overflow-wrap: anywhere; }
 .swph .phcr { max-width: 92%; }
+/* V-19: 장소 사진 = 가이드북 카드 라운드 값 프레임 안에서만(이미지는 그대로) · V-20: 사진 캡션 = 늘 오른쪽 아래(사진 위) */
+.phbox { position: relative; }
+.phfr { border-radius: var(--r-lg); }
+.sheet .phbox { margin: 0; } .sheet .phbox .phfr { border-radius: var(--r-lg); }
+.phbox > .phcr { position: absolute; right: 0.5rem; bottom: 0.375rem; left: auto; padding: 0; max-width: 88%; text-align: right; color: rgba(255,255,255,.88); text-shadow: 0 1px 2px rgba(0,0,0,.55); z-index: 2; }
+.phbox > .phcr a { color: inherit; }
+.swph .phfr { border-radius: 0; }   /* 장소 고르기 카드 사진은 카드 모서리를 따름 */
+
 </style>
 </head>
 <body>
@@ -963,7 +978,8 @@ const HALF = 5; // 앞 묶음(여행 취향) 문항 수 = 뒤 묶음(여행 스�
 /* E1 코드 칸 (10문항): 앞 묶음 5문항 동안 1·2칸(1번 → 1칸, 2번 → 2칸, 3~4번 다듬는 중, 5번 → 앞 두 칸 확정) · 뒤 묶음 5문항 동안 3·4칸(6번 → 3칸, 7번 → 4칸, 8~9번 다듬는 중, 10번 → 완성) */
 const SHOWN = [1, 2, 2, 2, 2, 3, 4, 4, 4, 4], LOCKED = [0, 0, 0, 0, 2, 2, 2, 2, 2, 4];
 const STEP_TX = ['첫 글자가 나왔어요', '두 번째 글자가 나왔어요', '앞 두 글자는 아직 바뀔 수 있어요', '앞 두 글자는 아직 바뀔 수 있어요', '앞 두 글자가 정해졌어요', '세 번째 글자가 나왔어요', '네 번째 글자가 나왔어요', '뒤 두 글자는 아직 바뀔 수 있어요', '뒤 두 글자는 아직 바뀔 수 있어요', '코드가 완성됐어요'];   // 11/18 T9·T12
-const W5 = window.VZTR_LANG === 'en';   /* 11/20 W5 영어판(/en/) = 방한 외국인: 서울·부산만 · 집(출발지) 대신 한국 공항 도착 · 엔진 input.inbound */
+const W5 = window.VZTR_LANG === 'en';
+const TRIP_KEY = W5 ? 'gaboja-trip-en' : 'gaboja-trip';   /* 리뷰 #6: 영어판 신청 중 여행은 따로 저장(한국어판 오사카 여행 등과 안 섞임) */   /* 11/20 W5 영어판(/en/) = 방한 외국인: 서울·부산만 · 집(출발지) 대신 한국 공항 도착 · 엔진 input.inbound */
 // 자동 일정이 되는 곳 → 엔진 도시 키 (gen.js cfg)
 const DEST = { '오사카·교토': 'kix', '도쿄': 'tyo', '후쿠오카': 'fuk', '삿포로': 'spk', '서울': 'sel', '부산': 'bsn' };
 // 11/15 #5: 출발 공항 (편명만으로는 공항을 알 수 없어 직접 고름 · 기본 인천)
@@ -1024,7 +1040,7 @@ function refPoint(tr) { // 출발 지역의 대표 지점 (자동차 경로 기�
 }
 const CITIES = W5 ? [['서울', '한국'], ['부산', '한국']] : [['오사카·교토', '고베·나라까지 · 일본'], ['도쿄', '신주쿠·시부야·아사쿠사 · 일본'], ['후쿠오카', '일본 규슈'], ['삿포로', '오타루까지 · 일본'], ['서울', '국내'], ['부산', '국내'], ['제주', '국내'], ['다른 곳', '직접 입력']];
 const WHO = [['혼자', '내 속도대로'], ['연인', '둘이서'], ['친구', '여럿이'], ['가족 (아이 포함)', '쉬는 시간 넉넉히'], ['가족 (어른만)', '이동은 편하게']];
-const NIGHTS = [[0, '당일치기'], [1, '1박 2일'], [2, '2박 3일'], [3, '3박 4일'], [4, '4박 5일'], [5, '5박 이상']];
+const NIGHTS = [[0, '당일치기'], [1, '1박 2일'], [2, '2박 3일'], [3, '3박 4일'], [4, '4박 5일'], [5, '5박 6일'], [6, '6박 7일']];   // V-09: 당일치기 ~ 일주일
 // 취향 칩 -> 장소 DB 태그 (gen.js는 장소 tags와 글자 그대로 맞춤). 칩 하나 = 태그 여러 개. 태그가 없는 칩은 빈 배열(일정에는 영향 없음, 신청서에만 기록)
 // 11/14 #15 A안(NOL식 문장형 2열, 동우님 선택 · 최대 5개): 문장 하나 = 장소 DB 태그 여러 개. '@'로 시작하는 건 엔진 규칙(gen.js score):
 //   @local = 덜 알려진 곳 우선 · @famous = 유명한 곳 우선 · @night = 밤 조각 우선
@@ -1260,7 +1276,7 @@ if (window.visualViewport) visualViewport.addEventListener('resize', () => { set
 
 function rQ(i) {
   const q = Q[i], ord = S.shuffle[i], prev = S.ans[i];
-  setBar('test', i, Q.length, { t: `${i + 1} / ${Q.length}` });
+  setBar('test', i, Q.length, prev != null ? { t: '다음 →', fn: () => { if (busy) return; go(i + 1 < Q.length ? 'q' + (i + 1) : 'calc'); } } : null);   /* V-07·Q-03: 위 칸 진행 막대만(‘n/10’ 뺌) · 이미 답한 질문은 오른쪽 ‘다음 →’로 바로 넘어감(뒤 답 유지) */
   const ls = boardLetters(i - 1), known = i > 0;
   const el = screen(`
     <div class="qh"><h1>${esc(q.h)}</h1><p>${esc(QSUB[q.h] || '제일 끌리는 쪽 하나만 골라 주세요')}</p></div>
@@ -1273,7 +1289,7 @@ function rQ(i) {
 }
 function boardSub(ls) { return AX.map((x, k) => ls[k] ? (ls[k] === x.a[0] ? x.a[1] : x.b[1]) : null).filter(Boolean).join(', ') + ' 쪽'; }
 // 11/18 T16: 보기 줄바꿈 — 쉼표·마침표 뒤에서 끊음(앞 덩어리가 4자 이상일 때만). 나머지는 keep-all + balance
-const brk = t => t.includes('|') ? t.split('|').map(esc).join('<br>') : esc(t).replace(/^(.{4,}?[,.]) /, '$1<br>');   // '|' = 정해 둔 줄바꿈 자리
+const brk = t => W5 ? esc(String(VZTR_I18N.t(t)).replace(/\s*\|\s*/g, ' ')) : t.includes('|') ? t.split('|').map(esc).join('<br>') : esc(t).replace(/^(.{4,}?[,.]) /, '$1<br>');   // '|' = 정해 둔 줄바꿈 자리
 const plain = t => String(t).replace(/\|/g, ' ').replace(/ {2,}/g, ' ');
 const gStyle = l => /^[LH][SE]$/.test(l) ? ` style="--gx-soft:var(--g-${l.toLowerCase()}-soft);--gx-fill:var(--g-${l.toLowerCase()}-fill);--gx-ink:var(--g-${l.toLowerCase()}-ink);--gx-edge:var(--g-${l.toLowerCase()}-edge)"` : '';   // 11/18 16·17: 묶음 색 변수 연결
 function choose(i, oi, btn) {
@@ -1301,7 +1317,7 @@ function openRx(i, oi) {
   later(() => ls.forEach((l, k) => { if (l && l !== prevLs[k]) { setFlap(fls[k], l); fls[k].classList.add('new'); } if (k < LOCKED[i]) fls[k].classList.add('lock'); }), 420);
   let done = false;
   const goOn = () => { if (done) return; done = true; closeRx(); setTimeout(() => { busy = false; go(last ? 'calc' : 'q' + (i + 1)); }, 240); };
-  $('#rxGo').onclick = goOn; sc.onclick = null;   // 11/14 #6: 자동 넘김 없음, 바깥 눌러도 안 넘어감
+  $('#rxGo').onclick = goOn; sc.onclick = () => { if (done) return; done = true; NAV++; closeRx(); busy = false; dir = -1; render(); };   // V-06: 바깥 누르면 시트만 닫고 그 질문에 머묾(고른 답 표시, 다른 걸로 바꿀 수 있음)
   rx.tabIndex = -1; setTimeout(() => rx.focus({ preventScroll: true }), 60); // 시트 자체에 포커스(버튼 테두리 안 보이게), Enter = 다음
 }
 // 11/14 #13a: '같이 가면' 카드 → 아래에서 올라오는 시트(그 유형 한 줄·장면·왜 맞는지/부딪히는지) + '이 유형 자세히'
@@ -1375,14 +1391,14 @@ const GRPC = { LS: { bg: '#E4F3F5', a: '#6099A0' }, LE: { bg: '#FEF2F5', a: '#C7
 function fitChar(svg, k) { if (window.GABOJA_FIT) GABOJA_FIT(svg, k == null ? 1.45 : k); }
 const AVnb = (c, k, fx) => window.GABOJA_CHAR ? `<div class="av${fx ? ' gfx' : ''} ${k || ''}"${fx ? ` data-c="${c}" data-fxd="650"` : ''}>${GABOJA_CHAR(c, { bg: false })}</div>` : '';
 const grpIcon = c => `<svg viewBox="0 0 24 24" aria-hidden="true">${GI[c.slice(0, 2)]}</svg>`;
-const LMEAN = { L: '로컬', H: '핫플', S: '구경', E: '즐기기', F: '알차게', R: '여유롭게', J: '계획형', P: '즉흥형' };
+const LMEAN = W5 ? { L: 'Local', H: 'Hotspot', S: 'Sights', E: 'Fun', F: 'Packed', R: 'Easy', J: 'Plan', P: 'Free' } : { L: '로컬', H: '핫플', S: '구경', E: '즐기기', F: '알차게', R: '여유', J: '계획', P: '즉흥' };   // W5: 글자 칸 아래라 짧게 · 11/21 한국어도 3·4번째 칸은 두 글자(칸 36px라 '여유롭게즉흥형'이 붙어 보였음, 전체 이름은 아래 '내 유형 글자 뜻')
 function lflapsHtml(c) { return `<div class="flaps big lfl">${c.split('').map(l => `<span class="lcol"><span class="fl">${l}</span><span class="lb">${LMEAN[l]}</span></span>`).join('')}</div>`; }
 // 11/15 #4 → 11/18 D-2: '내가 고른 답 10개' = 처음부터 펼친 목록 (접기 없음) · 두 묶음 소제목 · 오른쪽 축 글자 칩(내 유형 글자와 같으면 진하게) — 남의 유형 보기에선 안 보임
-function ansHtml(c) {
-  if (!S.ans || S.ans.length < Q.length || S.ans.some(x => x == null)) return '';
-  const row = (q, i) => { const o = q.o[S.ans[i]]; return o ? `<div class="qa"><span class="n">${String(i + 1).padStart(2, '0')}</span><span class="q">${esc(q.h)}</span><span class="ls">${o[1].split('').map(l => `<span class="lt${c.includes(l) ? ' m' : ''}">${l}</span>`).join('')}</span><span class="a">${esc(plain(o[0]))}</span></div>` : ''; };
-  const grp = (h, a, b) => `<h4>${h}</h4><div class="ag">${Q.slice(a, b).map((q, k) => row(q, a + k)).join('')}</div>`;
-  return `<div class="ans"><div class="ah">내가 고른 답 ${Q.length}개</div>${grp('어디로 · 무엇을', 0, HALF)}${grp('얼마나 · 어떻게', HALF, Q.length)}</div>`;
+const LTX = { L: '현지인 동네·골목 위주', H: '유명한 곳·요즘 뜨는 곳 위주', S: '보고 걷는 게 좋은 편', E: '먹고 사고 체험하는 게 좋은 편', F: '하루를 꽉 채우는 편', R: '쉬는 시간을 넉넉히', J: '동선·시간을 미리 정해 두는 편', P: '그때그때 끌리는 대로' };
+function ansHtml(c) {   // V-08: '내가 고른 답 10개' → 내 유형 글자 뜻 4줄 (H·L이 뭐냐는 질문이 많았음)
+  if (!c || c.length < 4) return '';
+  const row = (x, k) => { const l = c[k], nm = l === x.a[0] ? x.a[1] : x.b[1]; return `<div class="qa lm"><span class="ls"><span class="lt m">${l}</span></span><span class="q"><b>${esc(nm)}</b> · ${esc(LTX[l] || '')}</span></div>`; };
+  return `<div class="ans"><div class="ah">내 유형 글자 뜻</div><div class="ag">${AX.map(row).join('')}</div></div>`;
 }
 function gaugeHtml(c, v) { // 11/14 v2: 얇은 선 + 위치 점(양 끝이 있는 척도, 가운데 눈금 = 반반 — 16Personalities 방식). 점 위에 %
   return AX.map((x, k) => { const aw = c[k] === x.a[0];
@@ -1499,15 +1515,14 @@ function rInfo(s) {
   }
   if (s === 'date') {
     if (!S.calM) { const d = new Date(); S.calM = new Date(d.getFullYear(), d.getMonth(), 1); }
-    el = screen(head('언제', '언제 가세요?', '가는 날·오는 날을 눌러 주세요. 하루만 누르면 당일치기.') + `
+    el = screen(head('언제', '언제 가세요?', '') + `
       <div class="cal" id="cal"></div>
-      <div class="nrow" id="nights"><span class="nl">날짜 미정이면</span><div class="nstep"><button type="button" class="ns" data-d="-1" aria-label="하루 줄이기">−</button><button type="button" class="nv" id="nVal" aria-pressed="false"></button><button type="button" class="ns" data-d="1" aria-label="하루 늘리기">+</button></div></div>
-      <div class="foot"><div class="sum" id="dSum"></div><button class="cta" id="dNext" ${hasN(tr) ? '' : 'disabled'}>다음</button></div>`);
+      <div class="nrow" id="nights"><div class="nstep"><button type="button" class="ns" data-d="-1" aria-label="하루 줄이기">−</button><button type="button" class="nv" id="nVal" aria-pressed="false"></button><button type="button" class="ns" data-d="1" aria-label="하루 늘리기">+</button></div></div>
+      <div class="foot"><div class="sum" id="dSum"></div><button class="cta" id="dNext" ${tr.start && (tr.end || tr.day) ? '' : 'disabled'}>다음</button></div>`);
     drawCal(); dateSum();
-    $('#nights').onclick = e => { const b = e.target.closest('button'); if (!b) return;   /* 11/20 #3: 칩 6개(두 줄) → 한 줄 − 3박 4일 + */
-      const on = !tr.start && hasN(tr), cur = on ? (tr.day ? 0 : Math.min(5, tr.nights || 3)) : 3;   // 꺼져 있을 땐 보이는 '3박 4일'을 먼저 켬
-      const n = b.dataset.d && on ? Math.max(0, Math.min(5, cur + +b.dataset.d)) : cur;
-      tr.nights = n; tr.day = n === 0; tr.start = tr.end = null; tap(); drawCal(); dateSum(); };
+    $('#nights').onclick = e => { const b = e.target.closest('.ns'); if (!b || b.disabled || !tr.start) return;   /* V-09: 날짜 미정 없앰 · − 몇 박 + 가 달력 구간을 늘리고 줄임 */
+      const cur = tr.end ? tr.nights || 0 : 0, n = Math.max(0, Math.min(6, cur + +b.dataset.d)); if (n === cur) return;
+      tr.nights = n; tr.day = n === 0; tr.end = n ? ymdAdd(tr.start, n) : null; tap(); drawCal(); dateSum(); };
     $('#dNext').onclick = () => next(s);
   }
   if (s === 'who') {
@@ -1558,7 +1573,7 @@ function rInfo(s) {
     el = screen(head('공항', '어느 공항에 도착하세요?', '도착 공항에서 일정을 시작해요. 시각은 몰라도 돼요.') + `
       <div class="blk"><div class="sub2">도착 공항</div><div class="seg" id="apSeg">${L.map(a => `<button data-ap="${a[0]}" aria-pressed="${tr.airport === a[0]}">${a[1]} ${a[0]}</button>`).join('')}</div></div>
       <div class="blk"><div class="flbox" id="fBox">${fRow('fo', '도착 비행기', 'arr', '도착 시각')}${fRow('fb', '출국 비행기', 'dep', '출발 시각')}</div>
-        <div class="note" id="blHint" hidden>${ICON.info}<span>모르면 비워 두세요 · 나중에 앱에서 넣어도 돼요</span></div></div>
+        <div class="note" id="blHint" hidden>${ICON.info}<span>모르면 비워 두세요 · 나중에 ‘여행 정보 수정’에서 넣어도 돼요</span></div></div>
       <div class="blk" ${tr.day ? 'hidden' : ''}><div class="sub2">숙소</div><div class="seg" id="sSeg"><button data-s="no" aria-pressed="${tr.stay === 'no'}">아직</button><button data-s="area" aria-pressed="${tr.stay === 'area'}">동네만</button><button data-s="yes" aria-pressed="${tr.stay === 'yes'}">정했어요</button></div>
         <input class="in" id="sIn" value="${esc(tr.stayTx || '')}" ${tr.stay === 'no' ? 'hidden' : ''} placeholder="${tr.stay === 'area' ? '동네 이름 (예: ' + ex + ')' : '숙소 이름'}"></div>
       <div class="foot"><button class="cta" id="bNext">다음</button></div>`);
@@ -1591,7 +1606,7 @@ function rInfo(s) {
         ${car ? `<div class="blk"><div class="sub2">출발 시각<span>비워 두면 가는 날 09:00 출발로 계산해요</span></div>
           <div class="flbox">${['fo', 'fb'].map(k => { const f = tr[k] || {}; return `<div class="flr"><span class="fll">${k === 'fo' ? '가는 날 · 집 → ' + (tr.day ? '도착지' : '숙소') : '오는 날 · ' + (tr.day ? '도착지' : '숙소') + ' → 집'}</span>
             <div class="tms one">${tmField(k, 'dep', f.dep, '출발 시각')}</div><div class="eta" data-eta="${k}"></div></div>`; }).join('')}
-            <div class="note">${ICON.info}<span>도착 시각은 입력하지 않아도 돼요. 거리·시간대별 교통량·휴게소 휴식을 반영해 계산해 드려요.</span></div></div></div>` : ride ? `<div class="blk"><div class="sub2">${tr.mode === 'air' ? '비행기' : '열차'} 시각</div><div class="seg" id="fSeg"><button data-f="no" aria-pressed="${tr.flight === 'no'}">아직 안 정했어요</button><button data-f="yes" aria-pressed="${tr.flight === 'yes'}">정했어요</button></div>
+            </div></div>` : ride ? `<div class="blk"><div class="sub2">${tr.mode === 'air' ? '비행기' : '열차'} 시각</div><div class="seg" id="fSeg"><button data-f="no" aria-pressed="${tr.flight === 'no'}">아직 안 정했어요</button><button data-f="yes" aria-pressed="${tr.flight === 'yes'}">정했어요</button></div>
           <div class="flbox" id="fBox" ${tr.flight === 'yes' ? '' : 'hidden'}>${['fo', 'fb'].map(k => { const f = tr[k] || {}; return `<div class="flr"><span class="fll">${car ? (k === 'fo' ? '가는 날 · 집 → ' + (tr.day ? '도착지' : '숙소') : '오는 날 · ' + (tr.day ? '도착지' : '숙소') + ' → 집') : k === 'fo' ? '가는 ' + w + ' · ' + nm(ln.from) + ' → ' + nm(ln.to) : '오는 ' + w + ' · ' + nm(ln.to) + ' → ' + nm(ln.from)}</span>
             ${car ? '' : `<input class="in fno" data-fk="${k}" data-ff="no" data-rt="${tr.mode === 'air' ? 'air' : 'train'}" data-a="${esc(k === 'fo' ? ln.from || '' : ln.to || '')}" data-b="${esc(k === 'fo' ? ln.to || '' : ln.from || '')}" placeholder="${tr.mode === 'air' ? '편명 (예: KE1101)' : '열차 번호 (예: 101)'}" value="${esc(f.no || '')}" autocomplete="off" autocapitalize="characters" maxlength="8">`}
             <div class="tms">${tmField(k, 'dep', f.dep, '출발 시각')}${tmField(k, 'arr', f.arr, '도착 시각')}</div></div>`; }).join('')}
@@ -1621,11 +1636,10 @@ function rInfo(s) {
         <div class="note" id="blHint" hidden>${ICON.info}<span>모르면 비워 두세요 · 나중에 앱에서 넣어도 돼요</span></div></div>
       <div class="blk" ${tr.day ? 'hidden' : ''}><div class="sub2">숙소</div><div class="seg" id="sSeg"><button data-s="no" aria-pressed="${tr.stay === 'no'}">아직</button><button data-s="area" aria-pressed="${tr.stay === 'area'}">동네만</button><button data-s="yes" aria-pressed="${tr.stay === 'yes'}">정했어요</button></div>
         <input class="in" id="sIn" value="${esc(tr.stayTx || '')}" ${tr.stay === 'no' ? 'hidden' : ''} placeholder="${tr.stay === 'area' ? '동네 이름 (예: ' + (partOf(tr) === 'side' ? '가와라마치' : '난바') + ')' : '숙소 이름'}"></div>
-      <div class="note">${ICON.info}<span>체크인 시각은 입력하지 않아도 돼요. 숙소 이름으로 찾아서 넣어 드려요.</span></div>
       <div class="foot"><button class="cta" id="bNext">다음</button></div>`);
     $('#fSeg').onclick = e => { const b = e.target.closest('[data-f]'); if (!b) return; tr.flight = b.dataset.f; $('#fSeg').querySelectorAll('button').forEach(x => x.setAttribute('aria-pressed', x === b)); $('#fBox').hidden = tr.flight !== 'yes'; if (tr.flight === 'yes') $('#fBox input').focus(); blankHint(); };
     $('#sSeg').onclick = e => { const b = e.target.closest('[data-s]'); if (!b) return; tr.stay = b.dataset.s; $('#sSeg').querySelectorAll('button').forEach(x => x.setAttribute('aria-pressed', x === b)); const i = $('#sIn'); i.hidden = tr.stay === 'no'; i.placeholder = tr.stay === 'area' ? '동네 이름 (예: ' + (partOf(tr) === 'side' ? '가와라마치' : '난바') + ')' : '숙소 이름'; if (!i.hidden) i.focus(); };
-    const dps = $('#depSeg'); if (dps) dps.onclick = e => { const b = e.target.closest('[data-dep]'); if (!b) return; tr.depAp = b.dataset.dep; dps.querySelectorAll('button').forEach(x => x.setAttribute('aria-pressed', x === b)); el.querySelectorAll('.flr .fll').forEach(l => { if (/가는 편/.test(l.textContent)) l.textContent = '가는 편 · ' + depName(tr) + ' → ' + apName(tr); else if (/오는 편/.test(l.textContent)) l.textContent = '오는 편 · ' + apName(tr) + ' → ' + depName(tr); }); tr.flightTx = flightText(tr); };
+    const dps = $('#depSeg'); if (dps) dps.onclick = e => { const b = e.target.closest('[data-dep]'); if (!b) return; { const nd = b.dataset.dep, bad = ['fo', 'fb'].filter(k => tr[k] && tr[k].no && (tr[k].ap ? tr[k].ap !== nd : nd !== (tr.depAp || 'ICN'))); if (bad.length) { bad.forEach(k => { el.querySelectorAll('[data-fk="' + k + '"]').forEach(x => { x.value = ''; }); const row = el.querySelector('.fno[data-fk="' + k + '"]'); const fr = row && row.closest('.flr'); if (fr) { fr.querySelectorAll('.tm').forEach(x => { x.value = ''; }); fr.querySelectorAll('.fnh').forEach(x => { x.textContent = ''; }); } if (row) row.dispatchEvent(new Event('input')); tr[k] = {}; }); toast('출발 공항을 바꿔서 편명·시각을 지웠어요'); } }   /* 리뷰 #4: 찾은 공항과 다른 편만 지움 */   /* 늦게 온 편명 조회 결과도 버림(input 이벤트 = 조회 번호 올림) */   /* V-05: 편명과 출발 공항이 어긋난 채 남지 않게 */ tr.depAp = b.dataset.dep; dps.querySelectorAll('button').forEach(x => x.setAttribute('aria-pressed', x === b)); el.querySelectorAll('.flr .fll').forEach(l => { if (/가는 편/.test(l.textContent)) l.textContent = '가는 편 · ' + depName(tr) + ' → ' + apName(tr); else if (/오는 편/.test(l.textContent)) l.textContent = '오는 편 · ' + apName(tr) + ' → ' + depName(tr); }); tr.flightTx = flightText(tr); };
     const aps = $('#apSeg'); if (aps) aps.onclick = e => { const b = e.target.closest('[data-ap]'); if (!b) return; tr.airport = b.dataset.ap; aps.querySelectorAll('button').forEach(x => x.setAttribute('aria-pressed', x === b)); el.querySelectorAll('.flr .fll').forEach((l, i) => { if (/가는 편/.test(l.textContent)) l.textContent = '가는 편 · ' + depName(tr) + ' → ' + apName(tr); else if (/오는 편/.test(l.textContent)) l.textContent = '오는 편 · ' + apName(tr) + ' → ' + depName(tr); }); tr.flightTx = flightText(tr); };
     el.querySelectorAll('[data-fk]').forEach(i => i.oninput = () => { const k = i.dataset.fk; tr[k] = tr[k] || {}; tr[k][i.dataset.ff] = i.dataset.ff === 'no' ? i.value.toUpperCase().replace(/\s+/g, '') : i.value; tr.flightTx = flightText(tr); blankHint(); });
     wireTm(el); autoRide(el);
@@ -1685,6 +1699,7 @@ function autoRide(root) {
     if (!hint) { hint = document.createElement('p'); hint.className = 'fnh'; hint.setAttribute('aria-live', 'polite'); const row = inp.closest('.flr'), tms = row && row.querySelector('.tms'); (tms || inp).after(hint); }
     inp.addEventListener('input', () => {
       clearTimeout(t); const v = inp.value.toUpperCase().replace(/\s+/g, ''), k = inp.dataset.fk, T = tr0(), my = ++n;
+      if (T[k]) delete T[k].ap;   // 리뷰 V-05: 번호를 바꾸면 예전 조회 공항은 버림
       const date = k === 'fb' ? (T.end || T.start) : T.start, train = inp.dataset.rt === 'train';
       if (!date || (train ? !/^\d{2,5}$/.test(v) : !/^[A-Z0-9]{2}\d{1,4}[A-Z]?$/.test(v))) { hint.textContent = ''; return; }
       t = setTimeout(() => {
@@ -1696,6 +1711,7 @@ function autoRide(root) {
           const x = train ? (j.list || [])[0] : (j && j.dep && j.dep.t ? j : null);
           if (!x) { hint.textContent = j && j.e === 'nokey' ? '' : (train ? '그날 이 열차를 못 찾았어요' : '그날 이 편을 못 찾았어요') + ' · 시각은 아래에서 골라 주세요'; return; }
           const dep = train ? x.dep : x.dep.t, arr = train ? x.arr : x.arr.t;
+          if (!train && !W5) { const ap = k === 'fo' ? x.dep.iata : x.arr.iata, seg = root.querySelector('#depSeg'); T[k] = T[k] || {}; T[k].ap = ap; if (k === 'fo' && seg && ['ICN', 'GMP', 'PUS'].includes(ap) && ap !== (T.depAp || 'ICN')) { T.depAp = ap; seg.querySelectorAll('[data-dep]').forEach(b => b.setAttribute('aria-pressed', b.dataset.dep === ap)); root.querySelectorAll('.flr .fll').forEach(l => { if (/가는 편/.test(l.textContent)) l.textContent = '가는 편 · ' + depName(T) + ' → ' + apName(T); else if (/오는 편/.test(l.textContent)) l.textContent = '오는 편 · ' + apName(T) + ' → ' + depName(T); }); } }   // V-05: 편명의 실제 출발 공항으로 토글 맞춤
           setTm(root, k, 'dep', dep); setTm(root, k, 'arr', arr); T.flightTx = flightText(T); blankHint();
           hint.textContent = train ? `${x.grade} ${x.no.replace(/^0+(?=\d)/, '')}번 · ${dep} 출발 → ${arr} 도착 · 국토교통부 열차정보` : `${x.dep.iata} ${dep} → ${x.arr.iata} ${arr}${x.arr.date && x.arr.date !== x.dep.date ? '(+1)' : ''} · 항공편 정보 AeroDataBox`;
         }).catch(() => { if (my === n) hint.textContent = ''; });
@@ -1714,7 +1730,7 @@ function flightText(tr) {
     if (!rideOn(tr)) return head; const t = ['fo', 'fb'].map(k => { const f = tr[k] || {}; if (tr.mode === 'car') return f.dep ? (k === 'fo' ? '가는 날 ' : '오는 날 ') + f.dep + ' 출발' : ''; if (!f.no && !f.dep && !f.arr) return ''; return (k === 'fo' ? '가는 편 ' : '오는 편 ') + [f.no, (f.dep || '?') + '→' + (f.arr || '?')].filter(Boolean).join(' '); }).filter(Boolean).join(' / '); return head + (t ? ' · ' + t : ''); }
   return (DEST[tr.city] === 'tyo' ? apName(tr) + ' · ' : '') + ['fo', 'fb'].map(k => { const f = tr[k] || {}; if (!f.no && !f.dep && !f.arr) return ''; return (k === 'fo' ? '가는 편 ' : '오는 편 ') + [f.no, (f.dep || '?') + '→' + (f.arr || '?')].filter(Boolean).join(' '); }).filter(Boolean).join(' / '); }
 function next(s) {
-  if (S.fromDone) { S.fromDone = false; store.set('gaboja-trip', S.trip); buildPlan(); S.hist = ['intro', 'method']; go('done', { noHist: true, back: true }); return; }   // 11/18 c: 발급 완료에서 '넣기·정하기'로 온 경우 = 저장하고 바로 발급 완료로 (다시 신청 안 감 · 일정은 다시 만듦)
+  if (S.fromDone) { S.fromDone = false; store.set(TRIP_KEY, S.trip); buildPlan(); S.hist = ['intro', 'method']; go('done', { noHist: true, back: true }); return; }   // 11/18 c: 발급 완료에서 '넣기·정하기'로 온 경우 = 저장하고 바로 발급 완료로 (다시 신청 안 감 · 일정은 다시 만듦)
   if (S.editing) { // 수정 중: 저장은 '일정 다시 만들기' 때만. 도시가 바뀌면 출발 지역·가는 길을 다시 묻고 요약으로
     const tr = S.trip;
     if (s === 'city' && S.cityWas !== null && S.cityWas === tr.city && (S.partWas || '') !== partOf(tr)) {   // 11/19 I48: 같은 묶음에서 오사카만↔교토만 바꾸면 숙소 동네가 달라짐 → 숙소만 다시 묻기
@@ -1727,7 +1743,7 @@ function next(s) {
     const nx = S.chain.shift(); if (nx) { go(nx); return; }
     S.hist = []; go('edit', { noHist: true }); return;
   }
-  const i = INFO.indexOf(s); store.set('gaboja-trip', S.trip);
+  const i = INFO.indexOf(s); store.set(TRIP_KEY, S.trip);
   if (i + 1 >= INFO.length && S.trip.method === 'blocks' && canSwipe()) { S.sw = null; go('swipe'); return; } // E1: 추천 받아서 고를래요 → 스와이프 → 가이드북 만들기
   go(i + 1 < INFO.length ? INFO[i + 1] : 'build');
 }
@@ -1897,7 +1913,7 @@ function swDay() {
     <div class="sw-stack" id="swStack"><div class="sw-react" id="swRx" role="status" aria-live="polite"></div></div>
     <div class="foot swfoot">
       <div class="swbtns"><button class="swb no" id="swNo" aria-label="패스"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg></button><button class="swb yes" id="swYes" aria-label="좋아요">${HEART}</button></div>
-      <button class="swauto" id="swAuto">이 날은 추천에 맡길게요</button>
+      <button class="swauto recbtn" id="swAuto"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l1.8 4.7L18.5 9.5l-4.7 1.8L12 16l-1.8-4.7L5.5 9.5l4.7-1.8z"/><path d="M19 15l.8 2 2 .8-2 .8-.8 2-.8-2-2-.8 2-.8z"/></svg>이 날은 추천에 맡길게요</button>
     </div>`, 'swscr');
   $('#swNo').onclick = () => swDecide(-1); $('#swYes').onclick = () => swDecide(1); $('#swAuto').onclick = () => { if (sw.busy) return; tap(); swEndDay('auto'); };
   sw.cur = swPick(sw, d, sw.cands); swShow(true); swToast(hint);
@@ -1919,7 +1935,12 @@ function swShow(first) {
   const sw = S.sw, d = sw.days[sw.di], box = $('#swStack'); box.querySelectorAll('.swc').forEach(e => e.remove());
   box.insertAdjacentHTML('beforeend', swCardHtml(sw, d, sw.cur, sw.k)); const c = box.querySelector('.swc'); if (document.fonts && document.fonts.status !== 'loaded') document.fonts.ready.then(() => swFit(c)); else swFit(c); sw.busy = false; swBind(c); swMeta();
   { const pp = window.GABOJA_DATA.places[sw.cur], hb = c.querySelector('.phbox'); phMount(hb, pp, {}); }   // 사진 없으면 phbox가 숨고 뒤의 큰 종류 아이콘이 보임
+  swPre(sw, d);   // V-16: 다음에 나올 만한 후보 사진을 미리 받아 둠(넘길 때 빈 사진 줄임)
   if (new URLSearchParams(location.search).get('drag') === '1' && first) { c.classList.remove('sin'); c.style.transform = 'translateX(4.5rem) rotate(5deg)'; c.querySelector('.sw-st.l').style.opacity = .85; } // 점검용: 밀리는 중인 모습
+}
+const SW_PRE = new Set();
+function swPre(sw, d) {   // V-16: ♥/✕ 결과와 상관없이 점수 상위 후보 4곳의 사진(직접 주소가 있는 것)을 미리 내려받음
+  try { const PL = window.GABOJA_DATA.places; swCands(sw, d).filter(id => id !== sw.cur).map(id => [swScore(sw, d, id), id]).sort((a, b) => b[0] - a[0]).slice(0, 4).forEach(([, id]) => { const u = PL[id] && PL[id].ph && PL[id].ph.u; if (u && !SW_PRE.has(u)) { SW_PRE.add(u); const im = new Image(); im.decoding = 'async'; im.src = u; } }); } catch (_) {}
 }
 function swBind(c) {
   const sw = S.sw; let x0 = null, dx = 0; const L = c.querySelector('.sw-st.l'), R = c.querySelector('.sw-st.r');
@@ -1990,7 +2011,7 @@ function swEndDay(how) {
 function swNextDay() {
   const sw = S.sw; sw.busy = false;
   if (sw.di + 1 < sw.days.length) { sw.di++; dir = 1; swDay(); return; }
-  S.trip.sw = { n: nOf(S.trip), city: S.trip.city, part: partOf(S.trip), must: sw.must, ban: sw.ban, tagW: swTagW(sw) }; store.set('gaboja-trip', S.trip);
+  S.trip.sw = { n: nOf(S.trip), city: S.trip.city, part: partOf(S.trip), must: sw.must, ban: sw.ban, tagW: swTagW(sw) }; store.set(TRIP_KEY, S.trip);
   go('build');
 }
 function swTagW(sw) { const o = {}; Object.keys(sw.w).forEach(k => { if (!k.startsWith('k:') && sw.w[k]) o[k] = sw.w[k]; }); return o; }
@@ -1999,6 +2020,7 @@ function swTagW(sw) { const o = {}; Object.keys(sw.w).forEach(k => { if (!k.star
 const WD = ['일', '월', '화', '수', '목', '금', '토'];
 const ymd = d => d.getFullYear() * 10000 + (d.getMonth() + 1) * 100 + d.getDate();
 const fmt = n => { const d = new Date(Math.floor(n / 10000), Math.floor(n / 100) % 100 - 1, n % 100); return `${d.getMonth() + 1}. ${d.getDate()} ${WD[d.getDay()]}`; };
+const ymdAdd = (n, k) => { const d = new Date(Math.floor(n / 10000), Math.floor(n / 100) % 100 - 1, n % 100 + k); return d.getFullYear() * 10000 + (d.getMonth() + 1) * 100 + d.getDate(); };
 function drawCal() {
   const m = S.calM, tr = S.trip, today = ymd(new Date()), y = m.getFullYear(), mo = m.getMonth();
   const first = new Date(y, mo, 1).getDay(), dim = new Date(y, mo + 1, 0).getDate(), now = new Date(), isNow = y === now.getFullYear() && mo === now.getMonth();
@@ -2012,18 +2034,18 @@ function drawCal() {
   $('#cNext').onclick = () => { S.calM = new Date(y, mo + 1, 1); drawCal(); $('#cal .gd').classList.add('swap'); };
   $('#cal .gd').onclick = e => { const b = e.target.closest('[data-d]'); if (!b || b.disabled) return; const n = +b.dataset.d; tap();
     if (!tr.start || tr.end || n < tr.start) { tr.start = n; tr.end = null; tr.nights = 0; tr.day = true; } else if (n === tr.start) { tr.start = null; tr.day = false; }
+    else if (n > ymdAdd(tr.start, 6)) { toast('최대 6박 7일까지 고를 수 있어요'); return; }   // 리뷰 #3: − 몇 박 + 와 같은 범위
     else { tr.end = n; tr.day = false; const a = new Date(Math.floor(tr.start / 10000), Math.floor(tr.start / 100) % 100 - 1, tr.start % 100), b2 = new Date(Math.floor(n / 10000), Math.floor(n / 100) % 100 - 1, n % 100); tr.nights = Math.round((b2 - a) / 864e5); }
     drawCal(); dateSum(); const f = document.querySelector(`#cal [data-d="${n}"]`); if (f) f.focus({ preventScroll: true }); };
 }
 function dateSum() {
   const tr = S.trip, el = $('#dSum'); if (!el) return;
-  { const nv = $('#nVal'); if (nv) { const on = !tr.start && hasN(tr), n = on ? (tr.day ? 0 : Math.min(5, tr.nights || 3)) : 3; nv.textContent = NIGHTS[n][1]; nv.setAttribute('aria-pressed', on); $('#nights').classList.toggle('on', on);
-    document.querySelectorAll('#nights .ns').forEach(b => b.disabled = on && ((+b.dataset.d < 0 && n === 0) || (+b.dataset.d > 0 && n === 5))); } }
+  { const nv = $('#nVal'); if (nv) { const on = !!tr.start, n = on ? (tr.end ? Math.min(6, tr.nights || 0) : 0) : Math.min(6, tr.nights || 3); nv.textContent = NIGHTS[n][1]; nv.setAttribute('aria-pressed', on); $('#nights').classList.toggle('on', on);   // V-09: 달력에서 고른 구간 = 몇 박 (양쪽이 같이 움직임)
+    document.querySelectorAll('#nights .ns').forEach(b => b.disabled = !on || (+b.dataset.d < 0 && n === 0) || (+b.dataset.d > 0 && n === 6)); } }
   if (tr.start && tr.end) el.innerHTML = `${fmt(tr.start)} → ${fmt(tr.end)} · <span>${nTx(tr)}</span>`;
   else if (tr.start) el.innerHTML = `${fmt(tr.start)} · <span>당일치기</span>`;
-  else if (hasN(tr)) el.innerHTML = `날짜 미정 · <span>${nTx(tr)}</span>`;
   else el.innerHTML = '<span class="muted">가는 날을 눌러 주세요</span>';
-  $('#dNext').disabled = !(hasN(tr) && (!tr.start || tr.end || tr.day));
+  $('#dNext').disabled = !(tr.start && (tr.end || tr.day));   // V-09: 날짜를 골라야 다음
 }
 
 let SEND = null; // { st: 'wait'|'ok'|'bad', row, err }
@@ -2049,7 +2071,7 @@ function sendNow() {
 
 /* 11/20 E6·M38 가이드북 메일 — 만든 일정을 서버에 보관(W12와 같은 /plan)하고, 서버가 정해진 틀로 '내 링크'를 메일로 보냄(Resend, server/worker.js /send).
    자동 일정이 없는 도시(PLANNED 없음)는 지금처럼 신청만 → 아키가 만들어 보냄 */
-const MAIL_ON = false;   // 11/20: Resend 도메인·키 연결되면 true (README E6 절)
+const MAIL_ON = true;   // 11/21 Resend 연결(mail.larchive.page) · 답장 = vztr@larchive.page → Cloudflare 전달 (README E6 절)
 let MAIL = null; // { st: 'wait'|'ok'|'bad'|'off', err }
 function mailNow() {
   const tr = S.trip, p = PLANNED, to = (tr.to || '').trim();
@@ -2063,7 +2085,7 @@ function mailNow() {
     .then(r => r.json()).then(j => {
       if (!j.id) throw new Error(j.e || 'save');
       try { const c = JSON.parse(localStorage.getItem('vztr-cloud')) || {}; c[p.made] = { id: j.id, key: j.key, at: Date.now() }; localStorage.setItem('vztr-cloud', JSON.stringify(c)); } catch (_) {}   // 가이드북(index)이 같은 id로 이어서 고침
-      return fetch(VZTR_API + '/send', { method: 'POST', headers: J, body: JSON.stringify({ id: j.id, key: j.key, to, nick: (tr.nick || '').trim() }), signal: ctl.signal });
+      return fetch(VZTR_API + '/send', { method: 'POST', headers: J, body: JSON.stringify({ id: j.id, key: j.key, to, nick: (tr.nick || '').trim(), lang: W5 ? 'en' : 'ko' }), signal: ctl.signal });   // 11/21 영어판 = 영어 메일·/en/ 링크
     })
     .then(r => r.json()).then(j => { MAIL = j.ok ? { st: 'ok' } : { st: 'bad', err: j.e || 'mail' }; })
     .catch(e => { MAIL = { st: 'bad', err: e.name === 'AbortError' ? 'slow' : String(e.message || e).slice(0, 40) }; })
@@ -2084,7 +2106,7 @@ function doorNow(p) {
   if (!legs.length) { DOOR = { st: 'off' }; return Promise.resolve(null); }
   DOOR = { st: 'wait' }; const ctl = new AbortController(), tm = setTimeout(() => ctl.abort(), 8000), v = {};
   return Promise.all(legs.map(L => fetch(VZTR_API + '/door?' + L.q, { signal: ctl.signal }).then(r => r.json()).then(j => { if (j && (j.c || j.p)) v[L.k] = j; }).catch(() => {})))
-    .then(() => { clearTimeout(tm); if (!Object.keys(v).length) { DOOR = { st: 'off' }; return null; } tr.door = { ll: String(ll), v }; store.set('gaboja-trip', tr); DOOR = { st: 'ok' }; return v; });
+    .then(() => { clearTimeout(tm); if (!Object.keys(v).length) { DOOR = { st: 'off' }; return null; } tr.door = { ll: String(ll), v }; store.set(TRIP_KEY, tr); DOOR = { st: 'ok' }; return v; });
 }
 
 const carDep = (tr, f) => f && isDom(tr) && tr.mode === 'car' ? { dep: f.dep } : f; // 차는 출발 시각만 (도착은 엔진이 계산)
@@ -2130,7 +2152,7 @@ function rBuild() {
 
 /* 여행 정보 수정 (?edit=1): 저장된 gaboja-trip을 한 페이지로 보여 주고 항목별로 바꿔 일정을 다시 만든다. 신청 전송(INTAKE)은 하지 않음 */
 function startEdit() {
-  const t = store.get('gaboja-trip'); if (t && typeof t === 'object') Object.assign(S.trip, t);
+  const t = store.get(TRIP_KEY); if (t && typeof t === 'object') Object.assign(S.trip, t);
   S.trip.likes = normLikes(S.trip.likes); S.trip.avoid = normAvoid(S.trip.avoid); S.trip.homeMode = 'addr';
   S.editing = true; S.chain = []; S.hist = []; S.step = 'edit'; render();
 }
@@ -2138,12 +2160,12 @@ const stayLine = tr => tr.stay === 'no' ? '아직 안 정했어요' : (tr.stayTx
 function rEdit() {
   setBar(null, 0, 0, { t: '정보 수정' });
   const tr = S.trip, city = cityTx(tr, ''), dom = isDom(tr); tr.sgg = effSgg(tr);
-  const when = tr.start && (tr.end || tr.day) ? (tr.day ? fmt(tr.start) : `${fmt(tr.start)} → ${fmt(tr.end)}`) + `<small>${nTx(tr)}</small>` : hasN(tr) ? `${nTx(tr)}<small>날짜 미정</small>` : '';
+  const when = tr.start && (tr.end || tr.day) ? (tr.day ? fmt(tr.start) : `${fmt(tr.start)} → ${fmt(tr.end)}`) + `<small>${nTx(tr)}</small>` : '';   // V-09: 날짜 미정 없음
   const ref = dom ? refPoint(tr) : null;
   const way = dom ? (flightText(tr) || '아직 안 정했어요') : tr.flight === 'yes' ? (flightText(tr) || '비행기 정했어요') : '비행기 아직 안 정했어요';
   const hasT = !!store.get('gaboja-type') || !!S.type;
   const R = (k, v, step) => `<div class="erow"><span class="k">${k}</span><b>${v}</b><button data-e="${step}" aria-label="${k} 바꾸기">바꾸기</button></div>`;
-  const ok = !!(tr.city && hasN(tr));
+  const ok = !!(tr.city && tr.start && (tr.end || tr.day));   // V-09: 날짜가 있어야
   screen(`<div class="qh"><h1>바꿀 항목을 눌러 주세요</h1><p>${hasT ? '유형은 그대로 두고 ' : ''}여행 정보만 바꿔서 일정을 다시 짜요</p></div>
     <div class="card">
       ${R('어디로', city ? esc(city) : '<small>도시를 골라 주세요</small>', 'city')}
@@ -2171,7 +2193,7 @@ function titleRx() {
   $('#rxGo').onclick = () => {
     tr.ttl = inp.value.trim().slice(0, TITLE_MAX);
     const P = store.get('gaboja-plan'); if (P && P.days) { if (tr.ttl) P.myTitle = tr.ttl; else delete P.myTitle; store.set('gaboja-plan', P); }
-    const T0 = store.get('gaboja-trip'); if (T0) { T0.ttl = tr.ttl; store.set('gaboja-trip', T0); }   // 다른 고친 항목은 '일정 다시 만들기' 때만 저장
+    const T0 = store.get(TRIP_KEY); if (T0) { T0.ttl = tr.ttl; store.set(TRIP_KEY, T0); }   // 다른 고친 항목은 '일정 다시 만들기' 때만 저장
     closeRx(); toast(tr.ttl ? '제목을 바꿨어요' : '자동 제목으로 돌려놨어요'); rEdit();
   };
   setTimeout(() => inp.focus({ preventScroll: true }), 60);
@@ -2186,7 +2208,7 @@ function confirmRebuild() {
   rx.tabIndex = -1; setTimeout(() => rx.focus({ preventScroll: true }), 60);
 }
 function rebuildNow() {
-  store.set('gaboja-trip', S.trip);
+  store.set(TRIP_KEY, S.trip);
   if (!buildPlan()) { toast('이 도시는 아직 자동 일정이 없어요 · 기존 일정은 그대로예요'); return; }
   toast('일정을 다시 만들었어요'); setTimeout(() => { location.href = 'index.html'; }, 500);
 }
