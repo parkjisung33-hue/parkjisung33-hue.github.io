@@ -579,8 +579,9 @@ html.ios26 .foot, html.ios26 .board { bottom: calc(max(0.75rem, env(safe-area-in
 .swkd svg { width: 0.875rem; height: 0.875rem; flex: none; stroke: currentColor; fill: none; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
 .swinf { flex: none; padding: 0.75rem 1rem 0.875rem; display: flex; flex-direction: column; gap: 0.3125rem; }
 .swinf .nm { margin: 0; font-size: 1.4375rem; font-weight: 700; letter-spacing: -.03em; line-height: 1.25; }
-.swinf .ln { margin: 0; font-size: 0.84375rem; line-height: 1.45; color: var(--sub); text-wrap: pretty; }
-.swinf .ln .hr { display: inline-block; margin-left: 0.375rem; padding-left: 0.4375rem; border-left: 1px solid var(--hair); font: 500 0.78125rem var(--lat); color: var(--sub); }
+.swinf .ln { margin: 0; font-size: 0.84375rem; line-height: 1.45; color: var(--sub); }
+.swinf .ln.cut { white-space: nowrap; overflow: hidden; }   /* 마지막 후보도 넘칠 때만(없어야 정상 — 측정으로 확인) */
+.swkd .h { margin-left: 0.125rem; padding-left: 0.375rem; border-left: 1px solid rgba(255,255,255,.35); font: 600 0.71875rem var(--lat); }
 .swinf .why { margin: 0; display: flex; gap: 0.375rem; align-items: center; font-size: 0.8125rem; font-weight: 500; line-height: 1.35; color: var(--sub); }   /* 11/20 동우님: 별만 블루 · 글자는 회색, 핵심어만 잉크 굵게 */
 .swinf .why .wy { min-width: 0; }
 .swinf .why b { color: var(--ink); font-weight: 700; }
@@ -1769,28 +1770,32 @@ const swPick = (sw, d, list) => { let best = null, bs = -1e9; list.forEach(id =>
 function swReason(sw, d, id) {
   const p = window.GABOJA_DATA.places[id], t = T(S.type), tg = p.tg || [];
   /* 11/20 동우님: ★ 줄 = 한 줄 · 핵심어(‘취향’·«유형 이름»)만 굵게 → swWhyHtml */
-  const lk = tg.find(x => sw.likes.includes(x)); if (lk) return `‘${lk}’ 취향이라 골랐어요`;
-  const hv = tg.map(x => [x, sw.w[x] || 0]).filter(x => x[1] > 0).sort((a, b) => b[1] - a[1])[0] || (sw.w['k:' + p.kind] > 0 ? [KIND_LB[p.kind], 1] : null); if (hv) return `♥한 ‘${hv[0]}’ 쪽이라 골랐어요`;
+  const lk = tg.find(x => sw.likes.includes(x)); if (lk) return [`‘${lk}’ 취향이라 골랐어요`, `‘${lk}’ 취향`];
+  const hv = tg.map(x => [x, sw.w[x] || 0]).filter(x => x[1] > 0).sort((a, b) => b[1] - a[1])[0] || (sw.w['k:' + p.kind] > 0 ? [KIND_LB[p.kind], 1] : null); if (hv) return [`♥한 ‘${hv[0]}’ 쪽이라 골랐어요`, `♥한 ‘${hv[0]}’ 쪽`];
   const G = S.type.slice(0, 2), tn = `«${t.name}»${ira(t.name).slice(t.name.length)} 골랐어요`;
-  if ((G[1] === 'S' && SEE_K[p.kind]) || (G[1] === 'E' && ENJ_K[p.kind]) || (G[0] === 'H' && p.fame >= 2)) return tn;
-  return p.fame >= 2 ? '근처에서 유명한 곳이에요' : '근처에서 많이 가는 곳이에요';   // 동네 이름은 머리 줄에 있음 · 유명도와 같은 말 겹치지 않게
+  if ((G[1] === 'S' && SEE_K[p.kind]) || (G[1] === 'E' && ENJ_K[p.kind]) || (G[0] === 'H' && p.fame >= 2)) return [tn, `«${t.name}» 취향`];
+  return p.fame >= 2 ? ['근처에서 유명한 곳이에요', '근처 유명한 곳'] : ['근처에서 많이 가는 곳이에요', '근처 인기 장소'];   // 동네 이름은 머리 줄에 있음 · 유명도와 같은 말 겹치지 않게
 }
 /* 11/21 #7-① ★ 줄 = 추천 이유 + 유명도(장소 DB fame, 앱에 이미 쓰던 말만: 2 '유명한 곳이에요' · 1 '많이 가는 곳이에요' · 0 없음) */
 /* 11/19 #7-② 유명한 것(kf, 출처 확인된 것만)이 있으면 유명도 대신 'OO(으)로 유명해요' */
 const roJosa = w => { const c = String(w).trim().slice(-1).charCodeAt(0) - 0xAC00; if (c < 0 || c > 11171) return null; const j = c % 28; return j === 0 || j === 8 ? '로' : '으로'; };
-function swWhy(sw, d, id) {   // { r: 추천 이유(늘 보임), x: 덧붙임(한 줄에 들어갈 때만 — swFit) }
-  const p = window.GABOJA_DATA.places[id] || {}, f = p.fame, ro = p.kf && roJosa(p.kf), r = swReason(sw, d, id);
-  if (p.kf) return { r, x: ro ? `${p.kf}${ro} 유명해요` : `대표 ${p.kf}` };
+function swWhy(sw, d, id) {   // { r: 추천 이유(늘 보임), s: 짧은 이유(r도 넘칠 때), x: 덧붙임(한 줄에 들어갈 때만) — swFit
+  const p = window.GABOJA_DATA.places[id] || {}, f = p.fame, ro = p.kf && roJosa(p.kf), [r, sh] = swReason(sw, d, id);
+  if (p.kf) return { r, s: sh, x: ro ? `${p.kf}${ro} 유명해요` : `대표 ${p.kf}` };
   const tx = f >= 2 ? '유명한 곳이에요' : f === 1 ? '많이 가는 곳이에요' : '';
-  return { r, x: tx && !r.includes(tx) ? tx : '' };
+  return { r, s: sh, x: tx && !r.includes(tx) ? tx : '' };
 }
 const whyB = t => esc(t).replace(/‘[^’]+’/g, m => `<b>${m}</b>`).replace(/«([^»]+)»/g, '<b>$1</b>');
-function swWhyHtml(sw, d, id) { const w = swWhy(sw, d, id); return `<span class="wk">${whyB(w.r)}</span>${w.x ? `<span class="wz"> · ${esc(w.x)}</span>` : ''}`; }
-function swFit(c) {   // 한 줄을 넘으면 덧붙임을 뺌 (추천 이유만 남김)
-  const el = c && c.querySelector('.swinf .why'), x = el && el.querySelector('.wz'); if (!x) return;
-  const lh = parseFloat(getComputedStyle(el).lineHeight) || 18; if (el.getBoundingClientRect().height > lh * 1.5) x.remove();
+function swWhyHtml(sw, d, id) { const w = swWhy(sw, d, id); return `<span class="wk" data-s="${esc(whyB(w.s))}">${whyB(w.r)}</span>${w.x ? `<span class="wz"> · ${esc(w.x)}</span>` : ''}`; }
+function swFit(c) {   // 11/20 동우님: 이름 아래는 늘 2줄 — 설명은 한 줄에 드는 후보로, ★ 줄은 넘으면 덧붙임을 뺌
+  const one = e => e.getBoundingClientRect().height <= (parseFloat(getComputedStyle(e).lineHeight) || 18) * 1.5;
+  const ln = c && c.querySelector('.swinf .ln');
+  if (ln) { let L = []; try { L = JSON.parse(ln.dataset.alt || '[]'); } catch (_) {} for (const t of L) { ln.textContent = t; if (one(ln)) break; } if (!one(ln)) ln.classList.add('cut'); }
+  const el = c && c.querySelector('.swinf .why'), x = el && el.querySelector('.wz'), k = el && el.querySelector('.wk'); if (!el) return;
+  if (x && !one(el)) x.remove();
+  if (k && !one(el) && k.dataset.s) k.innerHTML = k.dataset.s;   // 글자가 크게 그려지는 폰: 짧은 이유로
 }
-function swHours(p) { const o = String(p.oTx || ''); if (!o) return '영업시간 확인 필요'; if (/^거리/.test(o)) return '거리·야외 · 언제든'; const f = o.split(' · ')[0]; return f === '00:00–24:00' ? '24시간' : f; }
+function swHours(p) { const o = String(p.oTx || ''); if (!o || /^거리/.test(o)) return ''; const f = o.split(' · ')[0]; return f === '00:00–24:00' ? '24시간' : f; }   // 11/20 동우님: 거리·야외('언제든')·모름은 안 보임 → 사진 위 종류 칩 옆에만
 /* ---------- 장소 사진 (11/14) — ① 위키·Openverse 사진(ph) → ② 구글 장소 사진(키 있을 때) → ③ 스트리트뷰 → ④ 선 아이콘.
    사진은 원본 URL로 직접 표시(저장 안 함). 저작자·라이선스는 사진 아래 한 줄. 실패(onerror)하면 다음 단계. ---------- */
 const VZTR_API = 'https://vztr-api.d-chive33-a29.workers.dev';   // 11/19 E0: 구글 사진 = 우리 서버(Cloudflare Worker)가 대신 찾음 → 페이지에 사진 키 없음 (server/worker.js)
@@ -1846,11 +1851,12 @@ function phMount(host, p, o) {
 }
 function swCardHtml(sw, d, id, k) {   // 11/18 D-1: 사진이 위쪽을 꽉 채움 + 종류 칩 · 아래 이름 / 설명 | 영업시간 / ☆ 추천 이유 (동네 줄 없음)
   const D = window.GABOJA_DATA, p = D.places[id];
-  const say = p.best || p.say2 || p.say || [KIND_LB[p.kind]].concat((p.tg || []).filter(t => t !== KIND_LB[p.kind]).slice(0, 2)).filter(Boolean).join(' · ');
+  /* 11/20 동우님: 이름 아래 = 설명 1줄 + ★ 1줄. 설명은 한 줄에 드는 것 중 앞의 것(장점 → 한 문장 → 짧은 설명 → 종류) — swFit */
+  const alts = [...new Set([p.best, p.say2, p.say, [KIND_LB[p.kind]].concat((p.tg || []).filter(t => t !== KIND_LB[p.kind]).slice(0, 2)).filter(Boolean).join(' · ')].filter(Boolean))], hr = swHours(p);
   const ic = KIND_IC[p.kind] || KIND_IC.sight;
   return `<div class="swc ticket sin" data-id="${esc(id)}" role="group" aria-label="${esc(p.n)}">
-      <div class="swph"><span class="noph" aria-hidden="true"><svg viewBox="0 0 24 24">${ic}</svg></span><div class="phbox" hidden></div><span class="swkd"><svg viewBox="0 0 24 24" aria-hidden="true">${ic}</svg>${esc(KIND_LB[p.kind] || '')}</span></div>
-      <div class="swinf"><h2 class="nm">${esc(p.n)}</h2><p class="ln">${esc(say)}<span class="hr">${esc(swHours(p))}</span></p>
+      <div class="swph"><span class="noph" aria-hidden="true"><svg viewBox="0 0 24 24">${ic}</svg></span><div class="phbox" hidden></div><span class="swkd"><svg viewBox="0 0 24 24" aria-hidden="true">${ic}</svg>${esc(KIND_LB[p.kind] || '')}${hr ? `<span class="h">${esc(hr)}</span>` : ''}</span></div>
+      <div class="swinf"><h2 class="nm">${esc(p.n)}</h2><p class="ln" data-alt="${esc(JSON.stringify(alts))}">${esc(alts[0] || '')}</p>
       <p class="why"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l2.6 5.6 6 .7-4.5 4.1 1.2 6L12 16.4 6.7 19.4l1.2-6L3.4 9.3l6-.7z"/></svg><span class="wy">${swWhyHtml(sw, d, id)}</span></p></div>
       <span class="sw-st l" aria-hidden="true">좋아요</span><span class="sw-st r" aria-hidden="true">패스</span></div>`;
 }
@@ -1892,7 +1898,7 @@ function swMeta() {   // 11/18 D-1: 하트 아이콘 cap개(채운 것 = blue) +
 }
 function swShow(first) {
   const sw = S.sw, d = sw.days[sw.di], box = $('#swStack'); box.querySelectorAll('.swc').forEach(e => e.remove());
-  box.insertAdjacentHTML('beforeend', swCardHtml(sw, d, sw.cur, sw.k)); const c = box.querySelector('.swc'); swFit(c); sw.busy = false; swBind(c); swMeta();
+  box.insertAdjacentHTML('beforeend', swCardHtml(sw, d, sw.cur, sw.k)); const c = box.querySelector('.swc'); if (document.fonts && document.fonts.status !== 'loaded') document.fonts.ready.then(() => swFit(c)); else swFit(c); sw.busy = false; swBind(c); swMeta();
   { const pp = window.GABOJA_DATA.places[sw.cur], hb = c.querySelector('.phbox'); phMount(hb, pp, {}); }   // 사진 없으면 phbox가 숨고 뒤의 큰 종류 아이콘이 보임
   if (new URLSearchParams(location.search).get('drag') === '1' && first) { c.classList.remove('sin'); c.style.transform = 'translateX(4.5rem) rotate(5deg)'; c.querySelector('.sw-st.l').style.opacity = .85; } // 점검용: 밀리는 중인 모습
 }
