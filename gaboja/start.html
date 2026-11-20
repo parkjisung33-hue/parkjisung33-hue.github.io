@@ -2038,7 +2038,7 @@ function mailNow() {
   if (MAIL && (MAIL.st === 'ok' || MAIL.st === 'wait')) return Promise.resolve();   // 한 번 신청에 한 통
   if (!p || !p.made || !RE_MAIL.test(to) || !/^(https:\/\/(www\.)?larchive\.page|http:\/\/(localhost|127\.0\.0\.1)(:\d+)?)$/.test(location.origin)) { MAIL = { st: 'off' }; return Promise.resolve(); }
   MAIL = { st: 'wait' };
-  let t = { ...tr }; ['home', 'homeName', 'homeLL', 'to', 'hp'].forEach(k => delete t[k]);   // M34: 집 주소·연락처는 서버에 안 올림
+  let t = { ...tr }; ['home', 'homeName', 'homeLL', 'to', 'hp', 'door'].forEach(k => delete t[k]);   // M34: 집 주소·연락처는 서버에 안 올림
   const ctl = new AbortController(), tm = setTimeout(() => ctl.abort(), 15000), J = { 'Content-Type': 'application/json' };
   return fetch(VZTR_API + '/plan', { method: 'POST', headers: J, body: JSON.stringify({ data: { plan: p, edits: null, trip: t } }), signal: ctl.signal })
     .then(r => r.json()).then(j => {
@@ -2051,12 +2051,29 @@ function mailNow() {
     .finally(() => clearTimeout(tm));
 }
 
+/* 11/20 문 앞 이동 시간 — 출발지를 검색 목록에서 골라 좌표(tr.homeLL)가 있을 때만: 만든 일정의 집 출발·도착(허브·시각)으로
+   서버 /door(카카오 길찾기, 저장·캐시 안 함)에 물어 → tr.door에 두고 일정을 다시 만듦. 실패하면 지금 일정 그대로(시·군·구 기준) */
+let DOOR = null; // { st: 'wait'|'ok'|'off' }
+function doorNow(p) {
+  const tr = S.trip, ll = tr.homeLL;
+  if (!p || !p.start || !Array.isArray(ll) || !PH_KEY_G()) { DOOR = { st: 'off' }; return Promise.resolve(null); }
+  const st = new Date(p.start + 'T00:00:00'), z = n => String(n).padStart(2, '0'), legs = [];
+  (p.days || []).forEach(d => (d.items || []).forEach(x => { if (x.mode !== 'home' || !x.hub) return;
+    const hm = String(x.s).match(/^(\d{1,2}):(\d{2})(\(다음 날\))?/); if (!hm) return;   // 엔진 시각 = 'HH:MM' (자정 전은 0으로 눌림 → 그때는 시·군·구 기준 유지)
+    const t = new Date(st.getTime() + ((d.no || 1) - 1 + (hm[3] ? 1 : 0)) * 864e5 + (+hm[1] * 60 + +hm[2]) * 6e4), dir = x.n === '집으로' ? 'b' : 'o';
+    legs.push({ k: x.hub + '>' + dir, q: new URLSearchParams({ o: ll[0].toFixed(5) + ',' + ll[1].toFixed(5), hub: x.hub, dir, t: '' + t.getFullYear() + z(t.getMonth() + 1) + z(t.getDate()) + z(t.getHours()) + z(t.getMinutes()) }) }); }));
+  if (!legs.length) { DOOR = { st: 'off' }; return Promise.resolve(null); }
+  DOOR = { st: 'wait' }; const ctl = new AbortController(), tm = setTimeout(() => ctl.abort(), 8000), v = {};
+  return Promise.all(legs.map(L => fetch(VZTR_API + '/door?' + L.q, { signal: ctl.signal }).then(r => r.json()).then(j => { if (j && (j.c || j.p)) v[L.k] = j; }).catch(() => {})))
+    .then(() => { clearTimeout(tm); if (!Object.keys(v).length) { DOOR = { st: 'off' }; return null; } tr.door = { ll: String(ll), v }; store.set('gaboja-trip', tr); DOOR = { st: 'ok' }; return v; });
+}
+
 const carDep = (tr, f) => f && isDom(tr) && tr.mode === 'car' ? { dep: f.dep } : f; // 차는 출발 시각만 (도착은 엔진이 계산)
 let PLANNED = null; // 방금 만든 일정 (DEST에 있는 도시만 — 오사카·교토·도쿄, 나머지는 아키가 만들어 보냄)
 function planInput() { // 일정 엔진 입력 (스와이프 미리 만들기·최종 만들기 공통)
   const tr = S.trip, dest = DEST[tr.city];
   const d = n => n ? `${Math.floor(n / 10000)}-${String(Math.floor(n / 100) % 100).padStart(2, '0')}-${String(n % 100).padStart(2, '0')}` : null;
-  return { type: S.type, start: d(tr.start), nights: nOf(tr), daytrip: !!tr.day || undefined, likes: likeTags(tr.likes), avoid: normAvoid(tr.avoid), flightTx: tr.flight === 'yes' ? tr.flightTx : '', depAp: tr.flight === 'yes' && tr.depAp && tr.depAp !== 'ICN' ? tr.depAp : undefined, fo: tr.flight === 'yes' ? carDep(tr, tr.fo) : null, fb: tr.flight === 'yes' ? carDep(tr, tr.fb) : null, stayTx: tr.stay !== 'no' ? tr.stayTx : '', cityLabel: tr.city, part: partOf(tr) || undefined, dest, airport: tr.airport || ((AIRPORTS[dest] || [[]])[0] || [])[0], region: tr.region, sgg: tr.sgg = effSgg(tr), mode: tr.mode, line: tr.line || 0 };
+  return { type: S.type, start: d(tr.start), nights: nOf(tr), daytrip: !!tr.day || undefined, likes: likeTags(tr.likes), avoid: normAvoid(tr.avoid), flightTx: tr.flight === 'yes' ? tr.flightTx : '', depAp: tr.flight === 'yes' && tr.depAp && tr.depAp !== 'ICN' ? tr.depAp : undefined, fo: tr.flight === 'yes' ? carDep(tr, tr.fo) : null, fb: tr.flight === 'yes' ? carDep(tr, tr.fb) : null, stayTx: tr.stay !== 'no' ? tr.stayTx : '', cityLabel: tr.city, part: partOf(tr) || undefined, dest, airport: tr.airport || ((AIRPORTS[dest] || [[]])[0] || [])[0], region: tr.region, sgg: tr.sgg = effSgg(tr), mode: tr.mode, line: tr.line || 0, door: tr.door && tr.door.ll === String(tr.homeLL) ? tr.door.v : undefined };   // 11/20 문 앞 시간(doorNow)
 }
 function buildPlan() {
   const tr = S.trip; PLANNED = null;
@@ -2071,7 +2088,7 @@ function buildPlan() {
 }
 function rBuild() {
   /* 시안: 전송 안 함 */ if (!E1_NOSEND && (!SEND || SEND.st !== 'ok')) sendNow(); else if (E1_NOSEND) SEND = { st: 'off' };
-  buildPlan(); mailNow();
+  buildPlan(); doorNow(PLANNED).then(v => { if (v) buildPlan(); mailNow(); });   // 11/20: 문 앞 시간 받으면 다시 만들고 → 메일
   setBar('info', INFO.length + 1, INFO.length + 1, { t: '만드는 중' });
   const tr = S.trip, t = S.type ? T(S.type) : null, city = placeTx(tr, '여행지');
   const lines = [tr.home ? (isDom(tr) ? '집 문 앞에서 ' + (tr.mode === 'air' ? '공항' : tr.mode === 'train' ? '역' : '숙소') + '까지 시간 계산' : '집 문 앞에서 공항까지 시간 계산') : '출발 시각 정하기', `${city}에서 ${t ? t.name + ' 취향' : '취향'}에 맞는 곳 고르기`, '영업시간·휴무일 맞춰 보기', tr.nights ? `${tr.nights + 1}일 동선 짜기` : '하루 동선 짜기', '가이드북 한 권으로 정리'];
@@ -2089,7 +2106,7 @@ function rBuild() {
   later(() => { const h = $('#cT'); h.textContent = '다 만들었어요!'; h.classList.add('found'); }, end);
   // 연출이 끝나도 전송이 안 끝났으면 조금 더 기다림 (최대 9초)
   const finish = () => { S.hist = S.hist.filter(h => h !== 'build'); go('done', { noHist: true }); };
-  later(() => { const t0 = Date.now(); const wait = () => { if (!SEND || SEND.st === 'wait' || (MAIL && MAIL.st === 'wait')) { if (Date.now() - t0 > 9000) return finish(); $('#cT').textContent = '거의 다 됐어요'; return later(wait, 300); } finish(); }; wait(); }, end + 800);
+  later(() => { const t0 = Date.now(); const wait = () => { if (!SEND || SEND.st === 'wait' || (MAIL && MAIL.st === 'wait') || (DOOR && DOOR.st === 'wait')) { if (Date.now() - t0 > 9000) return finish(); $('#cT').textContent = '거의 다 됐어요'; return later(wait, 300); } finish(); }; wait(); }, end + 800);
 }
 
 /* 여행 정보 수정 (?edit=1): 저장된 gaboja-trip을 한 페이지로 보여 주고 항목별로 바꿔 일정을 다시 만든다. 신청 전송(INTAKE)은 하지 않음 */
