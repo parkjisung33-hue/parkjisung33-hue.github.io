@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow">
+<title>캐릭터 진단</title>
+<style>
+body{margin:0;padding:14px;background:#fff;color:#111;font:14px/1.5 -apple-system,"Noto Sans KR",sans-serif}
+#info{font:11px/1.4 monospace;background:#f2f2f2;padding:8px;border-radius:6px;word-break:break-all}
+.ask{margin:10px 0 14px;font-weight:700;font-size:15px}
+.row{display:flex;align-items:center;gap:8px;margin:0 0 10px}
+.lab{flex:0 0 44px;font:900 40px/1 sans-serif;color:#d33}
+.cells{flex:1;min-width:0;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:4px}
+.cells>*{width:100%;aspect-ratio:1;display:block;background:#EEF3F6;border-radius:8px}
+.cells svg,.cells img{width:100%;height:auto;aspect-ratio:1}
+.name{font-size:11px;color:#666;margin:0 0 2px 52px}
+</style></head><body>
+<div id="info">...</div>
+<div class="ask">B/C 중 폰에서 PC 사진처럼 보이는 줄을 알려 주세요 (A = 지금 방식)</div>
+<div id="out"></div>
+<script src="chars.js"></script>
+<script>
+const CODES=['LEFP','LSFJ','HSRJ','HERP'];
+const info=()=>{try{document.getElementById('info').textContent=navigator.userAgent+' | dpr='+devicePixelRatio+' | vvScale='+(window.visualViewport?visualViewport.scale:'n/a')}catch(e){}};
+info(); try{visualViewport.addEventListener('resize',info)}catch(e){}
+/* B: 필터 제거 + 흰색→투명 그라디언트 겹치기 */
+const HI=0.6; // 하이라이트 강도(왼쪽 위)
+function svgB(code,idx){
+  const tmp=document.createElement('div'); tmp.innerHTML=GABOJA_CHAR(code,{bg:false});
+  const svg=tmp.firstChild, ns='http://www.w3.org/2000/svg', suf='tb'+idx;
+  svg.querySelectorAll('[id]').forEach(e=>{ /* 안쪽 id 충돌 방지 */ });
+  let defs=svg.querySelector('defs'); if(!defs){defs=document.createElementNS(ns,'defs');svg.insertBefore(defs,svg.firstChild)}
+  /* url(#vza..) 그라디언트는 페이지 전역(#gbjFx)에 있음 → 이 svg 안에 복제해 둠 */
+  const used=new Set(); svg.querySelectorAll('[fill^="url("]').forEach(e=>{const m=e.getAttribute('fill').match(/#([^)]+)/); if(m&&m[1]!=='gbjGnd')used.add(m[1])});
+  used.forEach(id=>{const src=document.getElementById(id); if(src&&!svg.querySelector('[id="'+id+'"]')){const c=src.cloneNode(true);c.id=id+'_'+suf;defs.appendChild(c);svg.querySelectorAll('[fill="url(#'+id+')"]').forEach(e=>e.setAttribute('fill','url(#'+id+'_'+suf+')'))}});
+  const gid='hl_'+suf;
+  defs.insertAdjacentHTML('beforeend',`<linearGradient id="${gid}" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fff" stop-opacity="${HI}"/><stop offset=".55" stop-color="#fff" stop-opacity="0"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></linearGradient>`);
+  svg.querySelectorAll('[filter]').forEach(el=>{
+    el.removeAttribute('filter');
+    const c=el.cloneNode(false); c.removeAttribute('class'); c.setAttribute('fill','url(#'+gid+')'); c.setAttribute('stroke','none'); c.setAttribute('pointer-events','none');
+    el.parentNode.insertBefore(c,el.nextSibling);
+  });
+  /* 바닥 그림자 그라디언트도 이 svg 안으로 */
+  const gnd=document.getElementById('gbjGnd'); if(gnd&&svg.querySelector('[fill="url(#gbjGnd)"]')){const c=gnd.cloneNode(true);c.id='gnd_'+suf;defs.appendChild(c);svg.querySelectorAll('[fill="url(#gbjGnd)"]').forEach(e=>e.setAttribute('fill','url(#gnd_'+suf+')'))}
+  return svg.outerHTML;
+}
+const out=document.getElementById('out');
+const rows=[['A',c=>GABOJA_CHAR(c,{bg:false})],['B',(c,i)=>svgB(c,i)],['C',c=>'<img src="chars-png/'+c+'.png" alt="">']];
+rows.forEach(([L,f])=>{
+  out.insertAdjacentHTML('beforeend','<div class="row"><div class="lab">'+L+'</div><div class="cells">'+CODES.map((c,i)=>'<div>'+f(c,i)+'</div>').join('')+'</div></div>');
+});
+</script></body></html>
