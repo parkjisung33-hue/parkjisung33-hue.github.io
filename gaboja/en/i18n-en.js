@@ -75,6 +75,11 @@ window.VZTR_EN = {
   '{n}곳': '{n} places', '{n}곳 예정': '{n} planned', '장소 {n}곳': '{n} places', '{n}곳 중 {m}곳': '{m} of {n}', '{n}번째': '#{n}', '선택 {n} / {m}': '{n} of {m} picked',
   '강수확률 {n}%': 'Rain {n}%', '날씨 {n}도 {m}도': 'Weather {n}° / {m}°', '{x}에서 {n}일': '{n} days in {x}', '{x} 지도': '{x} map',
   '걸어서 · 약 {n}분': 'Walk · about {n} min',
+  // 11/22 동네 이름이 끼는 문장 = 틀 하나로 (도시별로 한 줄씩 넣던 방식은 새 동네에서 한글이 남음 — '오다이바 근처')
+  '{x} 근처': 'Near {x}', '{x} 역 근처': 'Near {x} Station', '{x} 근처에서 갈 곳을 넣어 보세요': 'Add a place to go near {x}',
+  '점심 — {x} 근처': 'Lunch — near {x}', '저녁 — {x} 근처': 'Dinner — near {x}', '브런치 — {x} 근처': 'Brunch — near {x}', '아침 — {x} 근처': 'Breakfast — near {x}',
+  '점심 — {x} 역 근처': 'Lunch — near {x} Station', '브런치 — {x} 역 근처': 'Brunch — near {x} Station',
+  '자유 시간 — {x}': 'Free time — {x}', '오호리 공원': 'Ohori Park', '종로·광화문': 'Jongno/Gwanghwamun',
   '옥내외 전시실에 #만여 점을 전시해요': 'Tens of thousands of pieces on show, indoors and out',
   '#만 보 채우고 웃으며 귀가': 'Hit 10,000 steps and head home smiling', '#층 초장집': 'Chojang raw-fish spot (floor #)',
   '(가정)': '(assumed)', '(기본값)': '(default)', '(다음 날)': '(next day)', '(차 기준, 추정)': '(by car, est.)', '(추정)': '(est.)', '(금) 출발로 가정': '(Fri) departure assumed',
@@ -132,3 +137,101 @@ window.VZTR_EN = {
   '{n}박 {m}일': '{n} nights · {m} days', '약 {n}분': 'about {n} min', '{n}분': '{n} min', '약 {n}시간 {m}분': 'about {n} h {m} min', '{n}시간 {m}분': '{n} h {m} min', '{n}시간': '{n} h',
   'DAY {n}': 'DAY {n}',
 };
+
+/* ===== 2026-11-22 영어판 한글 0자 — 이름·숫자·화살표 경로가 끼는 문장 = 틀 (장소·공항이 새로 생겨도 한글이 안 남게) =====
+   FULL(x) = 다 영어로 옮겨질 때만 · EN1(x) = 영어 > 못 옮기면 로마자(사람·가게 이름 전용) · PATHEN = 'A → B → C' 조각마다 */
+(function () {
+  const HAN = /[가-힣]/, I = () => window.VZTR_I18N || {};
+  const TQ = s => (I().tq ? I().tq(String(s)) : String(s));
+  const ROM = s => (I().roman ? I().roman(String(s)) : String(s));
+  const EN1 = s => { s = String(s).trim(); const e = TQ(s); return HAN.test(e) ? ROM(e) : e; };
+  const FULL = s => { const e = TQ(String(s).trim()); return HAN.test(e) ? null : e; };
+  const PATHEN = x => String(x).split(' → ').map(EN1).join(' → ');
+  const HAS = s => !!(I().has && I().has(s));
+  const WK = VZTR_EN_FN.WK, MON = VZTR_EN_FN.MON;
+  const num = v => /^-?\d+$/.test(String(v));
+  const wrapAfter = (suffix, en) => x => { if (HAS(x + suffix)) return null; const e = FULL(x); return e ? en(e) : null; };
+  Object.assign(window.VZTR_EN, {
+    // 대안 카드·구글 지도·동선
+    '‘{x}’ 대신, 지금 문 연 비슷한 곳': x => 'Instead of ‘' + EN1(x) + '’, a similar place open now',
+    '‘{x}’ 대신': x => 'Instead of ‘' + EN1(x) + '’',
+    '‘{x}’': x => { const e = FULL(x); return e ? '‘' + e + '’' : null; },
+    '{x} 근처 구글 지도에서 열기': x => 'Open Google Maps near ' + EN1(x),
+    '{x} 구글 지도에서 열기': x => 'Open ' + EN1(x) + ' in Google Maps',
+    '동선: {x}': x => 'Route: ' + PATHEN(x),
+    '{x} 외 {n}곳': (x, n) => PATHEN(x) + ' +' + n + ' more',
+    '{x} 지도': wrapAfter(' 지도', e => 'Map: ' + e),
+    '출국 비행기 {x}': x => 'Departing flight ' + x, '도착 비행기 {x}': x => 'Arriving flight ' + x,
+    '{x} (가정)': wrapAfter(' (가정)', e => e + ' (assumed)'),
+    '{x} (추정)': wrapAfter(' (추정)', e => e + ' (est.)'),
+    '{x} (대략)': wrapAfter(' (대략)', e => e + ' (approx.)'),
+    // 길·이동
+    '✈ {x}': x => { const e = FULL(x); return e ? '✈ ' + e : null; },
+    '{x}으로': x => { if (HAS(x + '으로')) return null; const M = { '공항': 'the airport', '숙소': 'your stay', '집': 'home' }, e = M[x] || FULL(x); return e ? 'To ' + e : null; },
+    '{x}로': x => { if (HAS(x + '로')) return null; const M = { '공항': 'the airport', '숙소': 'your stay', '집': 'home' }, e = M[x] || FULL(x); return e ? 'To ' + e : null; },
+    '{x}까지 이동': x => { const e = FULL(x); return e ? 'Head to ' + e : null; },
+    '늦어지면 {x} 먼저 빼기': x => { const e = FULL(x); return e ? 'Running late? Skip ' + e + ' first' : null; },
+    '다음 {x}': x => { const m = /^(\d{1,2}:\d{2}) (.+)$/.exec(x); if (!m) return null; const e = FULL(m[2]); return e ? 'Next ' + m[1] + ' ' + e : null; },
+    '{n}시간 {m}분 남음': '{n} h {m} min left', '{n}시간 남음': '{n} h left', '{n}분 남음': '{n} min left',
+    // 날짜·날씨·시각
+    '날씨 {x}도 {y}도': (a, b) => num(a) && num(b) ? 'Weather ' + a + '° / ' + b + '°' : null,
+    '출발 {n}. {m}': 'Departs {n}/{m}',
+    '{n}월 {m}일 {x}': (m, d, w) => WK[w] ? WK[w] + ', ' + MON[m - 1] + ' ' + d : null,
+    '{n}일 · {m}월 {d}일 {x} – {y}일 {z}': (n, m, d, w, y, z) => WK[w] && WK[z] && num(y) ? n + ' days · ' + m + '/' + d + ' ' + WK[w] + ' – ' + y + ' ' + WK[z] : null,
+    // 사진 출처: 사진 © 이름 · 라이선스  /  사진 · Google · 이름   (이름 = 영어 > 로마자, 라이선스는 영어로)
+    '사진 © {x} · {y}': (x, y) => { const e = HAN.test(y) ? FULL(y) : y; return e ? 'Photo © ' + EN1(x) + ' · ' + e : null; },
+    '사진 © {x}': x => 'Photo © ' + EN1(x),
+    '사진 · Google · {x}': x => 'Photo · Google · ' + EN1(x),
+  });
+})();
+
+/* ===== 2026-11-22 (2) 영어판 한글 0자 — 틀 추가: 공항 도착·유형 코드·편명·'또는'·단문 =====
+   한 글자 키('팁'·'차')는 build_i18n(자동)이 안 받아서 여기에 */
+(function () {
+  const HAN = /[가-힣]/, I = () => window.VZTR_I18N || {};
+  const TQ = s => (I().tq ? I().tq(String(s)) : String(s));
+  const ROM = s => (I().roman ? I().roman(String(s)) : String(s));
+  const EN1 = s => { s = String(s).trim(); const e = TQ(s); return HAN.test(e) ? ROM(e) : e; };
+  const FULL = s => { const e = TQ(String(s).trim()); return HAN.test(e) ? null : e; };
+  const HAS = s => !!(I().has && I().has(s));
+  const wrapAfter = (suffix, en) => x => { if (HAS(x + suffix)) return null; const e = FULL(x); return e ? en(e) : null; };
+  const wrapBefore = (prefix, en) => x => { if (HAS(prefix + x)) return null; const e = FULL(x); return e ? en(e) : null; };
+  const CODE = /^(?:[A-Z0-9]{2}\d{2,4}|[A-Z]{3}|\d{3,4})$/;   // 편명(KE723·7C1401)·기차 번호(011)·공항 코드(KIX)
+  Object.assign(window.VZTR_EN, {
+    '팁': 'Tipping', '차': 'Car',
+    // 공항·역 도착 / 체크인 줄
+    '{x} 도착': wrapAfter(' 도착', e => 'Arrive at ' + e),
+    '{x} 역': wrapAfter(' 역', e => e + ' Station'),
+    '{x}까지 도착 · 출발 {n}시간 전': (x, n) => { const m = /^(.+) (\d{1,2}:\d{2})$/.exec(x), e = m && FULL(m[1]); return e ? e + ' by ' + m[2] + ' · ' + n + ' h early' : null; },
+    '{x}까지 도착 · 출발 {n}분 전': (x, n) => { const m = /^(.+) (\d{1,2}:\d{2})$/.exec(x), e = m && FULL(m[1]); return e ? e + ' by ' + m[2] + ' · ' + n + ' min early' : null; },
+    '{x} 약 {n}분': '{x} · about {n} min', '{x} 약 {n}시간 {m}분': '{x} · about {n} h {m} min', '{x} 약 {n}시간': '{x} · about {n} h',
+    '{x} 당일치기': '{x} day trip', '{x}에서 자유 시간': wrapAfter('에서 자유 시간', e => 'Free time in ' + e),
+    // 코드가 붙은 이름: '골목 산책가' 앞 'LSRJ' · '인천 → 간사이 KE723' · '간사이 KIX' · '부산역 011'
+    '{x} {y}': (a, b) => { if (/^[LH][SE][FR][JP]$/.test(a)) { const e = FULL(b); return e ? a + ' ' + e : null; } if (CODE.test(b)) { const e = FULL(a); return e ? e + ' ' + b : null; } return null; },
+    'KTX {x}': x => { const e = FULL(x); return e ? 'KTX ' + e : null; },
+    '차 {x}': x => { const e = FULL(x); return e ? 'Car ' + e : null; },
+    '출국 비행기 {x}': x => { if (HAS('출국 비행기 ' + x)) return null; const e = HAN.test(x) ? FULL(x) : x; return e ? 'Departing flight ' + e : null; },
+    '도착 비행기 {x}': x => { if (HAS('도착 비행기 ' + x)) return null; const e = HAN.test(x) ? FULL(x) : x; return e ? 'Arriving flight ' + e : null; },
+    // 하루 일정 '또는' 후보 · 닫혀 있나요?
+    '또는 {x}': x => { const e = FULL(x); return e ? 'Or ' + e : null; },
+    '‘{x}’ 닫혀 있나요? 다른 곳 보기': x => 'Is ‘' + EN1(x) + '’ closed? See other places',
+    // 질문 마지막 화면
+    '{x} 유형에 맞춰 골라 뒀어요': x => { const e = FULL(x); return e ? 'Picked to match ' + e : null; },
+    '먼저 넣는 곳: {x}': x => { const e = FULL(x); return e ? 'Added first: ' + e : null; },
+    '{x}에 맞는 곳부터 골라요': x => { const e = FULL(x); return e ? 'Starting with places for ' + e : null; },
+    '최대 {n}개': 'Up to {n}',
+    '{x}에서 {y} 취향에 맞는 곳 고르기': (c, t) => { const a = FULL(c), b = FULL(t); return a && b ? 'Pick places in ' + a + ' for ' + b : null; },
+    '{x} 맞춤': wrapAfter(' 맞춤', e => 'Tailored for ' + e),
+    '{x} 쪽으로 {n}%': (x, n) => { const e = FULL(x); return e ? 'Leans ' + e + ' ' + n + '%' : null; },
+  });
+})();
+
+/* ===== 2026-11-22 (3) 검수(qa_sweep 일본 화면)에서 영어가 길어 두 줄·잘림 나던 곳 = 짧게 ===== */
+Object.assign(window.VZTR_EN, {
+  '공항 도착': 'At airport', '역 도착': 'At station',
+  '출발 {n}. {m}': 'Dep. {n}/{m}',
+  '여권·지갑·충전기 확인': 'Passport · wallet · charger', '신분증·지갑·충전기 확인': 'ID · wallet · charger', '승차권·지갑·충전기 확인': 'Ticket · wallet · charger',
+  '와나카 영업시간이 자료마다 달라요 · 전날 전화로 확인': 'Wanaka hours vary · call ahead', '영업시간이 자료마다 달라요 · 전날 전화로 확인': 'Hours vary by source · call ahead',
+  '비행기 시각을 넣으면 그날 시간이 정해져요': 'Add flight time to set the day', '비행기 시각을 넣으면 시간표가 완성돼요': 'Add flight time to finish the plan',
+  '비행기 시각을 넣으면 일정을 추가할 수 있어요': 'Add flight time to add stops', '이동 시각을 넣으면 일정을 추가할 수 있어요': 'Add travel time to add stops',
+});

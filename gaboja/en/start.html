@@ -11,7 +11,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400..800&display=swap">
 <script src="inapp.js?v=1"></script>
-<script src="i18n-en-auto.js?v=43d32b6d"></script><script src="i18n-en.js?v=43d32b6d"></script><script src="i18n.js?v=43d32b6d"></script><!-- 11/20 W5 언어 틀 (영어판 = /en/, 사전 i18n-en.js는 배포 때 en/에만 붙음) -->
+<script src="i18n-en-auto.js?v=02528f24"></script><script src="i18n-en.js?v=02528f24"></script><script src="i18n.js?v=02528f24"></script><!-- 11/20 W5 언어 틀 (영어판 = /en/, 사전 i18n-en.js는 배포 때 en/에만 붙음) -->
 <link rel="stylesheet" href="fonts/vztr-fonts.css?v=2"><!-- 11/19 글꼴: 굵은 한글 IBM Plex Sans KR · 보통 한글 Pretendard · 영문·숫자 IBM Plex Sans -->
 <link rel="icon" href="icons/favicon-32.png">
 <link rel="apple-touch-icon" href="icons/icon-180.png">
@@ -1418,7 +1418,7 @@ function howHtml(c) { // 엔진이 실제로 하는 것만 (gen.js: 알차게 �
   return it.map(([i, b, s]) => `<div class="hw"><span class="ic"><svg viewBox="0 0 24 24" aria-hidden="true">${HOW_IC[i]}</svg></span><div><b>${esc(b)}</b><span>${esc(s)}</span></div></div>`).join('');
 }
 function rhythmHtml(c) { const r = (window.GABOJA_RHYTHM || {})[c]; if (!r) return '';
-  return r.map(([t, x]) => `<div class="rr"><span class="tm ${/\d/.test(t) ? '' : 'zone'}">${esc(t)}</span><span>${esc(x).replace(/\*\*(.+?)\*\*/g, '<b>$1</b>')}</span></div>`).join(''); }
+  return r.map(([t, x]) => `<div class="rr"><span class="tm ${/\d/.test(t) ? '' : 'zone'}">${esc(t)}</span><span>${esc(window.VZTR_I18N && VZTR_I18N.t ? VZTR_I18N.t(x) : x).replace(/\*\*(.+?)\*\*/g, '<b>$1</b>')}</span></div>`).join(''); }   // 11/22 영어판: ** 로 쪼개지기 전의 통째 문장을 옮김('에서 점심' 조각이 한글로 남던 것)
 function strength(c, v) { if (!v) return ''; const soft = AX.filter((x, k) => v[c[k]] === 2).map(x => x.ax); return soft.length ? `반반에 가까운 축 · ${soft.join(' · ')}` : '네 축 모두 한쪽으로 확실'; }
 
 function rResult(c, mine) {

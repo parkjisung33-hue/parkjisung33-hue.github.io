@@ -27,21 +27,28 @@
   window.T = function (s) { return s; };   // 코드에서 쓰는 번역(한국어판 = 그대로)
 
   /* 머리 언어 전환 — start.html: header.bar 오른쪽 / index.html: 맨 위 상자(.pill) 메뉴 옆 */
-  var CSS = '.vzlang{all:unset;box-sizing:border-box;cursor:pointer;flex:none;display:inline-flex;align-items:center;justify-content:center;min-height:2rem;padding:0 .625rem;border-radius:999px;font:600 .8125rem/1 inherit;letter-spacing:0;color:var(--sub,#6B6E76);white-space:nowrap;-webkit-tap-highlight-color:transparent}'
-    + '.vzlang:hover{color:var(--ink,#16171A)}.vzlang:focus-visible{outline:2px solid var(--blue,#2F55D4);outline-offset:2px}'
+  var CSS = '.vzlang{all:unset;box-sizing:border-box;cursor:pointer;flex:none;display:inline-flex;align-items:center;justify-content:center;min-width:44px;min-height:44px;-webkit-tap-highlight-color:transparent}'   /* 누르는 칸 44px, 보이는 알약은 .vzp 34px (2026-11-22 ① 지구본+EN/KO) */
+    + '.vzp{display:inline-flex;align-items:center;gap:5px;height:34px;padding:0 11px 0 9px;border-radius:999px;background:var(--paper,#fff);box-shadow:0 0 0 1px var(--hair,rgba(22,23,26,.09));font-family:inherit;font-size:12.5px;font-weight:700;line-height:1;letter-spacing:.03em;color:var(--ink,#16171A);white-space:nowrap}'
+    + '.pill .ttl b.vzwrap,.hbox .pill .ttl b.vzwrap{white-space:normal!important;overflow:visible!important;overflow-wrap:normal!important;word-break:keep-all!important;font-size:.875rem!important;line-height:1.2!important}'
+    + '.vzlang.vzic .vzt{display:none}.vzlang.vzic .vzp{padding:0 9px;gap:0}'
+    + '.vzp svg{width:15px;height:15px;flex:none;stroke:currentColor;fill:none;stroke-width:1.8}'
+    + '.vzlang:hover .vzp{box-shadow:0 0 0 1px var(--sub,#6B6E76)}.vzlang:focus-visible{outline:2px solid var(--blue,#2F55D4);outline-offset:-2px;border-radius:999px}'
     + 'header.bar.vzl{grid-template-columns:2.75rem minmax(0,1fr) auto auto}'
     + 'html.introfit header.bar.vzl{display:grid;position:absolute;top:env(safe-area-inset-top,0px);left:0;right:0;background:none;padding:.5rem 1rem 0;pointer-events:none}html.introfit header.bar.vzl>*{visibility:hidden}html.introfit header.bar.vzl .vzlang{visibility:visible;pointer-events:auto}'   // 첫 화면은 위 막대가 없음 → 언어만 오른쪽 위에
     + '.vzko{display:block;font-size:.8125rem;font-weight:500;color:var(--sub,#6B6E76);letter-spacing:0}';
+  var rf = 0, rfT = null; function refit() { if (rf || typeof window.fitTitle !== 'function') return; rf = requestAnimationFrame(function () { rf = 0; try { window.fitTitle(); var b = document.querySelector('.pill .ttl b'), l = document.querySelector('.pill .vzlang'); if (b) { var bad = function () { return b.scrollWidth > b.clientWidth + 1; }; b.classList.remove('vzwrap'); if (l) l.classList.remove('vzic'); if (b.dataset.vzs && b.textContent === b.dataset.vzs) { b.textContent = b.dataset.vzf; window.fitTitle(); } if (bad() && l) { l.classList.add('vzic'); window.fitTitle(); } if (bad()) { var f = b.textContent, m = f.match(/^(?:\d+ days? in |Day trip (?:to |· )?)(.+)$/) || f.match(/^(.+?),? (?:day trip|\d+ nights?.*)$/i) || f.match(/^(.+?) (?:\d+박 \d+일|당일치기)$/); if (m) { b.dataset.vzf = f; b.dataset.vzs = m[1]; b.title = f; b.textContent = m[1]; window.fitTitle(); } } if (bad()) { var k0 = parseFloat(b.style.getPropertyValue('--tk')) || 1; b.style.setProperty('--tk', Math.max(0.5, k0 * (b.clientWidth - 2) / b.scrollWidth).toFixed(3)); }   /* 11/22: 두 줄 금지 — 아주 좁은 폰(320)은 글자를 조금 더 줄이고(최소 0.5배), 그래도 넘치면 말줄임(…) */
+    b.style.textOverflow = 'ellipsis'; b.style.overflow = 'hidden'; b.style.whiteSpace = 'nowrap'; rfT = b.textContent; } } catch (_) {} }); }   // 머리 제목 맞춤 = 버튼이 붙거나 제목이 번역된 뒤 다시
   function mount() {
     if (document.querySelector('.vzlang') || !/\/(index\.html|start\.html)?$/.test(location.pathname)) return;   // 리뷰 #9: 덜어내기 보드 등엔 영어판이 없음
     var b = document.createElement('a'); b.className = 'vzlang'; b.href = other(); b.setAttribute('data-noi18n', '');
-    b.textContent = EN ? '한국어' : 'English'; b.lang = EN ? 'ko' : 'en'; b.setAttribute('hreflang', b.lang);
+    b.innerHTML = '<span class="vzp"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c3 3.2 3 14.8 0 18M12 3c-3 3.2-3 14.8 0 18"/></svg><span class="vzt">' + (EN ? 'KO' : 'EN') + '</span></span>'; b.setAttribute('aria-label', EN ? 'View in Korean' : '영어로 보기'); b.lang = EN ? 'ko' : 'en'; b.setAttribute('hreflang', b.lang);
     b.onclick = function (e) { e.preventDefault(); go(); };
     var bar = document.querySelector('header.bar'), pill = document.querySelector('.top .pill');
     if (bar) { bar.classList.add('vzl'); bar.appendChild(b); }
     else if (pill) { var m = pill.querySelector('#modeSeg'); pill.insertBefore(b, m || null); }
     else return;
     addEventListener('hashchange', function () { b.href = other(); });
+    refit(); addEventListener('resize', refit);   // 11/22 폭이 바뀌면(회전 등) 제목 다시 맞춤
   }
   var st = document.createElement('style'); st.textContent = CSS; (document.head || document.documentElement).appendChild(st);
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', mount); else mount();
@@ -73,7 +80,7 @@
   }
   var PN = null;
   API.placeEn = function (p) { places(); return p && (p.en || (placesDone && D[p.n] && !HAN.test(D[p.n]) ? D[p.n] : HAN.test(p.n) ? roman(p.n) : '')); };   // 영어 이름 = 장소 사전(i18n-en-auto.js VZTR_EN_PLACES) > 로마자 자동
-  function tr(s) {
+  function tr(s, quiet) {
     var t = s.trim(); if (!t || !HAN.test(t)) return null;
     places();
     var r = null;
@@ -88,11 +95,22 @@
       var nums2 = t.replace(PN, '@').match(/\d+/g) || [], v1 = got.length ? D[t2] : null;
       if (v1 != null) { var a = 0, b = 0; r = String(v1).replace(/@/g, function () { return got[a++] || ''; }).replace(/#/g, function () { return nums2[b++] || ''; }); }
     }
-    if (r == null) for (var i2 = 0; i2 < PATS2.length; i2++) { var m2 = t.match(PATS2[i2][0]); if (!m2) continue; var g = m2.slice(1).map(function (v) { return HAN.test(v) ? (tr(v) || v).trim() : v; }); if (g.some(function (v) { return HAN.test(v); })) continue; r = PATS2[i2][2]; PATS2[i2][1].forEach(function (n, j) { r = r.replace('{' + n + '}', function () { return g[j]; }); }); break; }   // 리뷰 #2
+    if (r == null) for (var i2 = 0; i2 < PATS2.length; i2++) { var m2 = t.match(PATS2[i2][0]); if (!m2) continue; var g = m2.slice(1).map(function (v) { return HAN.test(v) ? (tr(v, true) || v).trim() : v; }); if (g.some(function (v) { return HAN.test(v); })) continue; r = PATS2[i2][2]; PATS2[i2][1].forEach(function (n, j) { r = r.replace('{' + n + '}', function () { return g[j]; }); }); break; }   // 리뷰 #2
+    if (r == null) {   // 11/22 ' · '·' — '·' → ' 로 이어 붙인 문장 = 조각마다 번역해서 다시 이음. 바깥 구분자부터 한 겹씩(조각 이름에 ' → '가 들어 있어도 됨) · 조각이 하나라도 못 옮기면 통째로 빠진 것
+      for (var si = 0, SEP = [' · ', ' — ', ' → ']; si < SEP.length; si++) {
+        if (t.indexOf(SEP[si]) < 0) continue;
+        var ok = true, out = t.split(SEP[si]).map(function (pc) { if (!HAN.test(pc)) return pc; var q = tr(pc, true); if (q == null) { ok = false; return pc; } return q.trim(); });
+        if (ok) r = out.join(SEP[si]);
+        break;
+      }
+    }
+    if (r == null && quiet) return null;
     if (r == null) { var mk = /\d/.test(t) ? t.replace(/\d+/g, '#') : t; if (PN && t.replace(PN, '@') !== t) mk = t.replace(PN, '@').replace(/\d+/g, '#'); API.miss.set(mk, (API.miss.get(mk) || 0) + 1); return null; }   // 빠진 목록 = 사전 키 모양 그대로(숫자 #, 장소 @)
     return s.replace(t, function () { return r; });   // r 안의 '$' 글자가 치환 기호로 읽히지 않게
   }
   API.t = window.T = function (s) { var r = tr(String(s)); return r == null ? s : r; };
+  API.has = function (s) { return D[String(s).trim()] != null; };   // 사전에 통째 문장이 있는지(틀이 통째 문장을 가로채지 않게)
+  API.tq = function (s) { var r = tr(String(s), true); return r == null ? s : r; };   // 조용한 번역(못 옮겨도 빠진 목록에 안 쌓음) — 틀 안에서 조각을 옮길 때
   var ATTR = ['placeholder', 'aria-label', 'title', 'alt'], mine = new WeakMap(), mineA = new WeakMap();
   function skip(el) { return !el || el.closest && el.closest('script,style,textarea,[data-noi18n],[contenteditable],.vzko,[lang="ko"]'); }
   function node(n) {
@@ -106,6 +124,7 @@
   function start() {
     node(document.body); title();
     new MutationObserver(function (ms) {
+      if (ms.some(function (m) { var e = m.target.nodeType === 1 ? m.target : m.target.parentNode, tb = e && e.closest && e.closest('.pill .ttl b'); return !tb || tb.textContent !== rfT; })) refit();   // 리뷰: refit이 제목을 줄이며 만든 변화로 다시 refit → 매 프레임 반복되던 것 막음
       for (var i = 0; i < ms.length; i++) { var m = ms[i];
         if (m.type === 'characterData') node(m.target);
         else if (m.type === 'attributes') node(m.target);

@@ -51,7 +51,9 @@ const body = (code, g) => { const n = NORM[code], b = C[IDX[code]][3](g); return
 const TONE = { LS: { lt: '#C4E5E9', dk: '#2F6B73' }, LE: { lt: '#FCE6EC', dk: '#9A4A62' }, HS: { lt: '#C6DBEE', dk: '#2F557A' }, HE: { lt: '#FFD2E0', dk: '#8E3A63' } };   // 11/19 파스텔: lt = 넓은 흰 면, dk = 선·눈
 const FXDEFS = '<defs><filter id="gbjSoft" x="-20%" y="-20%" width="140%" height="150%" color-interpolation-filters="sRGB"><feGaussianBlur in="SourceAlpha" stdDeviation="1.6" result="b"/><feSpecularLighting in="b" surfaceScale="1.6" specularConstant=".42" specularExponent="22" lighting-color="#fff" result="s"><fePointLight x="20" y="-40" z="80"/></feSpecularLighting><feComposite in="s" in2="SourceAlpha" operator="in" result="s2"/><feMerge><feMergeNode in="SourceGraphic"/><feMergeNode in="s2"/></feMerge></filter><radialGradient id="gbjGnd" cx="50%" cy="50%" r="50%"><stop offset="0" stop-color="#1b1f3a" stop-opacity=".22"/><stop offset="1" stop-color="#1b1f3a" stop-opacity="0"/></radialGradient></defs>';
 const ALLDEFS = () => G.map(DEFS).join('').replace(/<\/?defs>/g, '');   // 11/19 리뷰: 묶음 그라디언트 8개는 전역 #gbjFx 한 곳에만(숨은 화면의 캐릭터가 먼저 나와도 색이 빠지지 않게)
-const ensureFx = () => { if (document.getElementById('gbjFxCss') || !document.body) return; const d = document.createElement('div'); d.innerHTML = '<svg id="gbjFx" width="0" height="0" style="position:absolute;width:0;height:0" aria-hidden="true">' + FXDEFS.replace('</defs>', ALLDEFS() + '</defs>') + '</svg>'; document.body.appendChild(d.firstChild); };
+/* 11/22 V-17 진짜 원인: 예전엔 여기서 'gbjFxCss'(이펙트 CSS, boot()가 만듦)를 확인해서, boot()가 먼저 돈 페이지(폰에서 스크립트가 늦게 읽힐 때 등)에선 #gbjFx가 아예 안 생김 → 그라디언트·입체 필터 참조가 비어 평면. 반대로 boot() 전엔 캐릭터마다 #gbjFx가 또 생겨 같은 id 중복.
+   → #gbjFx 자체를 확인 · 한 번만 · body 맨 앞(숨은 화면보다 먼저) */
+const ensureFx = () => { if (document.getElementById('gbjFx') || !document.body) return; const d = document.createElement('div'); d.innerHTML = '<svg id="gbjFx" width="0" height="0" style="position:absolute;width:0;height:0;overflow:hidden" aria-hidden="true" focusable="false">' + FXDEFS.replace('</defs>', ALLDEFS() + '</defs>') + '</svg>'; document.body.insertBefore(d.firstChild, document.body.firstChild); };
 const CACHE = {};
 /* 11/20 동우님 폰: 사파리(아이폰은 모든 브라우저가 WebKit)는 SVG 필터를 낮은 해상도로 그려 몸 테두리가 거칠어짐 → 거기선 입체 필터를 빼고 그라디언트 면만(가장자리 선명) */
 const WK_LOWRES = (() => { try { const u = navigator.userAgent; return /iP(hone|ad|od)/.test(u) || (/Macintosh/.test(u) && navigator.maxTouchPoints > 1) || (/Safari\//.test(u) && !/Chrome|Chromium|Edg|OPR|Android/.test(u)); } catch (_) { return false; } })();
@@ -85,7 +87,7 @@ window.GABOJA_FIT = (svg, k = 1.5) => { if (!svg || svg.dataset.fit) return; con
   /* 11/20 동우님: 크기 = 그림 넓이(√가로×세로) 기준으로 통일 — 옆으로 긴 버스·신발이 폭 때문에 작아지던 것. k = 칸 한 변 / √넓이(작을수록 큼), 단 긴 변은 칸 안(여백 3) */
   const S = Math.sqrt(b.width * b.height), sz = Math.max(Math.max(b.width, b.height) + 6, S * k), cx = b.x + b.width / 2, cy = b.y + b.height / 2;
   svg.setAttribute('viewBox', `${(cx - sz / 2).toFixed(1)} ${(cy - sz / 2).toFixed(1)} ${sz.toFixed(1)} ${sz.toFixed(1)}`); svg.dataset.fit = '1'; };
-window.GABOJA_CHAR = (code, o = {}) => { if (!(code in IDX)) return ''; return soft(code, o.bg !== false).replace('<svg ', '<svg aria-hidden="true" focusable="false" '); };
+window.GABOJA_CHAR = (code, o = {}) => { if (!(code in IDX)) return ''; ensureFx(); /* 캐시된 캐릭터도: 화면을 통째로 다시 그려 #gbjFx가 지워졌으면 다시 깔기 */ return soft(code, o.bg !== false).replace('<svg ', '<svg aria-hidden="true" focusable="false" '); };
 window.GABOJA_CHAR_BG = code => code in IDX ? grp(code).bg : '';
 window.GABOJA_CHAR_ITEM = code => code in IDX ? C[IDX[code]][2] : '';
 /* ===== 등장 이펙트 (2026-11-18 확정, 정본 시안 = preview/2026-11-18_7_캐릭터이펙트_시안_v1.html 3차) =====
@@ -94,7 +96,7 @@ window.GABOJA_CHAR_ITEM = code => code in IDX ? C[IDX[code]][2] : '';
 const FXCSS = `/* ===== 이펙트 (재생 = .gfx.play) — 등장할 때 한 번, 1~1.6초, 그 짐만의 동작 ===== */
 .gfx svg [class*="fx-"], .gfx svg .fx-puff > g { transform-box: fill-box; }   /* 이펙트 조각에만 (transform 속성이 있는 몸통·회전 묶음은 건드리지 않음) */
 .gfx.play .fx-ndl { transform-origin: center; animation: ndl 1.5s cubic-bezier(.2,.75,.25,1) both; }
-@keyframes ndl { 0% { transform: rotate(0); } 62% { transform: rotate(570deg); } 78% { transform: rotate(528deg); } 90% { transform: rotate(546deg); } 100% { transform: rotate(540deg); } }
+@keyframes ndl { 0% { transform: rotate(0); } 62% { transform: rotate(390deg); } 78% { transform: rotate(348deg); } 90% { transform: rotate(366deg); } 100% { transform: rotate(360deg); } }   /* 11/22 반복 재생: 한 바퀴 돌아 처음 자리(북쪽)에서 멈춤 — 다음 반복이 튀지 않게 */
 /* 운동화: 좌우로 뒤뚱 + 두 발 번갈아 들기 (걸음) */
 .gfx.play[data-c="LSFP"] .fx-b { transform-origin: 50% 100%; animation: waddle 1.3s ease-in-out both; }
 @keyframes waddle { 0%, 100% { transform: none; } 15% { transform: translateX(-2px) rotate(-4deg); } 40% { transform: translateX(2px) rotate(4deg); } 65% { transform: translateX(-1px) rotate(-2.5deg); } 85% { transform: translateX(.5px) rotate(1deg); } }
@@ -163,15 +165,51 @@ const FXCSS = `/* ===== 이펙트 (재생 = .gfx.play) — 등장할 때 한 번
 /* 커피잔: 김이 하나씩 피어오름 */
 .gfx.play .fx-sm { animation: rise 1.1s ease-out calc(var(--i) * .18s + .1s) both; }
 @keyframes rise { 0% { opacity: 0; transform: translateY(6px); } 70% { opacity: 1; transform: translateY(-1.5px); } 100% { opacity: 1; transform: none; } }
-@media (prefers-reduced-motion: reduce) { .gfx.play * { animation: none !important; } }
+/* ===== 11/22 동우님: 등장 뒤 약 3초마다 그 짐만의 동작을 반복(.gfx.loop) — 다른 화면으로 갈 때까지.
+   '뿅 하고 나타나는' 등장(지도 펼침·핀 떨어짐·도장 쾅·채소 쏙·화면 속 핀·불꽃·zZ·김 피어오름)은 반복에서 빼고, 이미 있는 채로 살짝 움직이기만 ===== */
+.gfx.loop .fx-ndl { transform-origin: center; animation: ndl 1.5s cubic-bezier(.2,.75,.25,1) both; }
+.gfx.loop[data-c="LSFP"] .fx-b { transform-origin: 50% 100%; animation: waddle 1.3s ease-in-out both; }
+.gfx.loop .fx-l1 { animation: step 1.3s ease-in-out both; } .gfx.loop .fx-l2 { animation: step 1.3s ease-in-out .25s both; }
+.gfx.loop .fx-s1 { transform-origin: 0% 50%; animation: ask 1.6s ease-in-out both; } .gfx.loop .fx-s2 { transform-origin: 100% 50%; animation: ask 1.6s ease-in-out .4s both; }
+.gfx.loop[data-c="LSRP"] .fx-b { animation: rumble 1.3s linear both; }
+.gfx.loop .fx-puff { animation: show 1.6s ease-out both; } .gfx.loop .fx-puff > g { transform-origin: center; animation: puff 1.6s cubic-bezier(.2,.7,.3,1) both; }
+.gfx.loop .fx-puff .p2 { animation-delay: .12s; } .gfx.loop .fx-puff .p3 { animation-delay: .24s; }
+.gfx.loop .fx-pin { transform-origin: 50% 100%; animation: bob .9s ease-in-out both; }
+.gfx.loop .fx-tag { transform-origin: 23% 50%; animation: swing 1.6s cubic-bezier(.3,.6,.4,1) both; }
+.gfx.loop .fx-st { transform-origin: center; animation: tap .4s ease-out calc(var(--i) * .14s) both; }
+.gfx.loop .fx-veg { animation: bob 1s ease-in-out both; }
+.gfx.loop .fx-flag { transform-origin: 0% 50%; animation: flagtilt 1.6s ease-in-out both; }
+.gfx.loop[data-c="HSFP"] .fx-b { transform-origin: 50% 100%; animation: tilt 1s ease-out both; } .gfx.loop .fx-pin2 { transform-origin: 50% 100%; animation: bob .9s ease-in-out .15s both; }
+.gfx.loop .fx-lens { transform-origin: center; animation: snap .55s cubic-bezier(.3,.6,.3,1.4) .1s both; } .gfx.loop .fx-flash { animation: flash .7s ease-out .2s both; }
+.gfx.loop[data-c="HSRP"] .fx-b { transform-origin: 50% 100%; animation: lift 1.4s ease-in-out both; }
+.gfx.loop .fx-gl { animation: sweep .9s ease-out .6s both; } .gfx.loop .fx-gl.g2 { animation-delay: .7s; }
+.gfx.loop .fx-chop { animation: dip 1.2s ease-in-out both; } .gfx.loop .fx-steam2 { animation: steam 1.6s ease-out .3s both; }
+.gfx.loop[data-c="HEFP"] .fx-b { transform-origin: 50% 100%; animation: squash .9s cubic-bezier(.3,.6,.3,1.3) both; } .gfx.loop .fx-pop { animation: peek 1.3s cubic-bezier(.3,.6,.3,1.3) .2s both; }
+.gfx.loop .fx-z1 { animation: bob 1.2s ease-in-out both; } .gfx.loop .fx-z2 { animation: bob 1.2s ease-in-out .3s both; }
+.gfx.loop .fx-sm { animation: sway 1.2s ease-in-out calc(var(--i) * .15s) both; }
+@keyframes bob { 0%, 100% { transform: none; } 40% { transform: translateY(-3px); } 70% { transform: translateY(.6px); } }
+@keyframes tap { 0%, 100% { transform: none; } 45% { transform: scale(1.18); } }
+@keyframes sweep { 0% { transform: translate(-6px, 6px); } 50% { transform: translate(3px, -3px); } 100% { transform: none; } }
+@keyframes sway { 0%, 100% { transform: none; } 50% { transform: translate(.8px, -2px); } }
+@media (prefers-reduced-motion: reduce) { .gfx.play *, .gfx.loop * { animation: none !important; } }
 `;
 const reduced = () => { try { return matchMedia('(prefers-reduced-motion: reduce)').matches; } catch (_) { return false; } };
 const play = el => { el.classList.remove('play'); void el.offsetWidth; el.classList.add('play'); if (!reduced()) el.querySelectorAll('animate').forEach(m => { try { m.beginElement(); } catch (_) {} }); };
-window.GABOJA_CHAR_PLAY = play;
+/* 11/22 반복: 처음 재생 뒤 3초마다 .loop(등장 빼고 동작만). 화면에 보일 때만 · 탭이 숨으면 쉼 · 화면에서 빠진 캐릭터는 목록에서 지움 */
+const EVERY = 3000, LOOPS = new Map();   // el → { vis, next }
+const loop = el => { el.classList.remove('play', 'loop'); void el.offsetWidth; el.classList.add('loop'); el.querySelectorAll('animate').forEach(m => { try { m.beginElement(); } catch (_) {} }); };
+const arm = el => { if (reduced()) return; const s = LOOPS.get(el) || { vis: true }; s.next = Date.now() + EVERY + 200; LOOPS.set(el, s); };
+let ticking = 0;
+const tick = () => { if (document.hidden) return; const now = Date.now();
+  LOOPS.forEach((s, el) => { if (!el.isConnected) { LOOPS.delete(el); return; } if (!s.vis || now < s.next) return; s.next = now + EVERY; loop(el); });
+  if (!LOOPS.size) { clearInterval(ticking); ticking = 0; } };
+window.GABOJA_CHAR_PLAY = el => { play(el); arm(el); if (!ticking) ticking = setInterval(tick, 250); };
 const boot = () => {
   if (!document.getElementById('gbjFxCss')) { const st = document.createElement('style'); st.id = 'gbjFxCss'; st.textContent = FXCSS; document.head.appendChild(st); }
   if (!('IntersectionObserver' in window)) return;
-  const io = new IntersectionObserver(es => es.forEach(e => { if (!e.isIntersecting) return; const el = e.target; io.unobserve(el); setTimeout(() => play(el), +el.dataset.fxd || 0); }), { threshold: .6 });
+  const io = new IntersectionObserver(es => es.forEach(e => { const el = e.target, s = LOOPS.get(el);
+    if (s) { s.vis = e.isIntersecting; if (!el.isConnected) { LOOPS.delete(el); io.unobserve(el); } return; }   // 이미 재생한 캐릭터 = 보임 여부만 갱신(안 보이면 반복 쉼)
+    if (!e.isIntersecting) return; setTimeout(() => { window.GABOJA_CHAR_PLAY(el); }, +el.dataset.fxd || 0); }), { threshold: .6 });
   const scan = () => document.querySelectorAll('.gfx:not([data-fxw])').forEach(el => { if (!el.querySelector('svg')) return; el.dataset.fxw = '1'; io.observe(el); });
   scan(); new MutationObserver(scan).observe(document.documentElement, { childList: true, subtree: true, attributes: true, attributeFilter: ['class'] });
 };

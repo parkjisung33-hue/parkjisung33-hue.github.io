@@ -1418,7 +1418,7 @@ function howHtml(c) { // 엔진이 실제로 하는 것만 (gen.js: 알차게 �
   return it.map(([i, b, s]) => `<div class="hw"><span class="ic"><svg viewBox="0 0 24 24" aria-hidden="true">${HOW_IC[i]}</svg></span><div><b>${esc(b)}</b><span>${esc(s)}</span></div></div>`).join('');
 }
 function rhythmHtml(c) { const r = (window.GABOJA_RHYTHM || {})[c]; if (!r) return '';
-  return r.map(([t, x]) => `<div class="rr"><span class="tm ${/\d/.test(t) ? '' : 'zone'}">${esc(t)}</span><span>${esc(x).replace(/\*\*(.+?)\*\*/g, '<b>$1</b>')}</span></div>`).join(''); }
+  return r.map(([t, x]) => `<div class="rr"><span class="tm ${/\d/.test(t) ? '' : 'zone'}">${esc(t)}</span><span>${esc(window.VZTR_I18N && VZTR_I18N.t ? VZTR_I18N.t(x) : x).replace(/\*\*(.+?)\*\*/g, '<b>$1</b>')}</span></div>`).join(''); }   // 11/22 영어판: ** 로 쪼개지기 전의 통째 문장을 옮김('에서 점심' 조각이 한글로 남던 것)
 function strength(c, v) { if (!v) return ''; const soft = AX.filter((x, k) => v[c[k]] === 2).map(x => x.ax); return soft.length ? `반반에 가까운 축 · ${soft.join(' · ')}` : '네 축 모두 한쪽으로 확실'; }
 
 function rResult(c, mine) {
