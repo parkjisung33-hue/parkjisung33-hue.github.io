@@ -51,7 +51,9 @@ const body = (code, g) => { const n = NORM[code], b = C[IDX[code]][3](g); return
 const TONE = { LS: { lt: '#C4E5E9', dk: '#2F6B73' }, LE: { lt: '#FCE6EC', dk: '#9A4A62' }, HS: { lt: '#C6DBEE', dk: '#2F557A' }, HE: { lt: '#FFD2E0', dk: '#8E3A63' } };   // 11/19 파스텔: lt = 넓은 흰 면, dk = 선·눈
 const FXDEFS = '<defs><filter id="gbjSoft" x="-20%" y="-20%" width="140%" height="150%" color-interpolation-filters="sRGB"><feGaussianBlur in="SourceAlpha" stdDeviation="1.6" result="b"/><feSpecularLighting in="b" surfaceScale="1.6" specularConstant=".42" specularExponent="22" lighting-color="#fff" result="s"><fePointLight x="20" y="-40" z="80"/></feSpecularLighting><feComposite in="s" in2="SourceAlpha" operator="in" result="s2"/><feMerge><feMergeNode in="SourceGraphic"/><feMergeNode in="s2"/></feMerge></filter><radialGradient id="gbjGnd" cx="50%" cy="50%" r="50%"><stop offset="0" stop-color="#1b1f3a" stop-opacity=".22"/><stop offset="1" stop-color="#1b1f3a" stop-opacity="0"/></radialGradient></defs>';
 const ALLDEFS = () => G.map(DEFS).join('').replace(/<\/?defs>/g, '');   // 11/19 리뷰: 묶음 그라디언트 8개는 전역 #gbjFx 한 곳에만(숨은 화면의 캐릭터가 먼저 나와도 색이 빠지지 않게)
-const ensureFx = () => { if (document.getElementById('gbjFxCss') || !document.body) return; const d = document.createElement('div'); d.innerHTML = '<svg id="gbjFx" width="0" height="0" style="position:absolute;width:0;height:0" aria-hidden="true">' + FXDEFS.replace('</defs>', ALLDEFS() + '</defs>') + '</svg>'; document.body.appendChild(d.firstChild); };
+/* 11/22 V-17 진짜 원인: 예전엔 여기서 'gbjFxCss'(이펙트 CSS, boot()가 만듦)를 확인해서, boot()가 먼저 돈 페이지(폰에서 스크립트가 늦게 읽힐 때 등)에선 #gbjFx가 아예 안 생김 → 그라디언트·입체 필터 참조가 비어 평면. 반대로 boot() 전엔 캐릭터마다 #gbjFx가 또 생겨 같은 id 중복.
+   → #gbjFx 자체를 확인 · 한 번만 · body 맨 앞(숨은 화면보다 먼저) */
+const ensureFx = () => { if (document.getElementById('gbjFx') || !document.body) return; const d = document.createElement('div'); d.innerHTML = '<svg id="gbjFx" width="0" height="0" style="position:absolute;width:0;height:0;overflow:hidden" aria-hidden="true" focusable="false">' + FXDEFS.replace('</defs>', ALLDEFS() + '</defs>') + '</svg>'; document.body.insertBefore(d.firstChild, document.body.firstChild); };
 const CACHE = {};
 /* 11/20 동우님 폰: 사파리(아이폰은 모든 브라우저가 WebKit)는 SVG 필터를 낮은 해상도로 그려 몸 테두리가 거칠어짐 → 거기선 입체 필터를 빼고 그라디언트 면만(가장자리 선명) */
 const WK_LOWRES = (() => { try { const u = navigator.userAgent; return /iP(hone|ad|od)/.test(u) || (/Macintosh/.test(u) && navigator.maxTouchPoints > 1) || (/Safari\//.test(u) && !/Chrome|Chromium|Edg|OPR|Android/.test(u)); } catch (_) { return false; } })();
@@ -85,7 +87,7 @@ window.GABOJA_FIT = (svg, k = 1.5) => { if (!svg || svg.dataset.fit) return; con
   /* 11/20 동우님: 크기 = 그림 넓이(√가로×세로) 기준으로 통일 — 옆으로 긴 버스·신발이 폭 때문에 작아지던 것. k = 칸 한 변 / √넓이(작을수록 큼), 단 긴 변은 칸 안(여백 3) */
   const S = Math.sqrt(b.width * b.height), sz = Math.max(Math.max(b.width, b.height) + 6, S * k), cx = b.x + b.width / 2, cy = b.y + b.height / 2;
   svg.setAttribute('viewBox', `${(cx - sz / 2).toFixed(1)} ${(cy - sz / 2).toFixed(1)} ${sz.toFixed(1)} ${sz.toFixed(1)}`); svg.dataset.fit = '1'; };
-window.GABOJA_CHAR = (code, o = {}) => { if (!(code in IDX)) return ''; return soft(code, o.bg !== false).replace('<svg ', '<svg aria-hidden="true" focusable="false" '); };
+window.GABOJA_CHAR = (code, o = {}) => { if (!(code in IDX)) return ''; ensureFx(); /* 캐시된 캐릭터도: 화면을 통째로 다시 그려 #gbjFx가 지워졌으면 다시 깔기 */ return soft(code, o.bg !== false).replace('<svg ', '<svg aria-hidden="true" focusable="false" '); };
 window.GABOJA_CHAR_BG = code => code in IDX ? grp(code).bg : '';
 window.GABOJA_CHAR_ITEM = code => code in IDX ? C[IDX[code]][2] : '';
 /* ===== 등장 이펙트 (2026-11-18 확정, 정본 시안 = preview/2026-11-18_7_캐릭터이펙트_시안_v1.html 3차) =====
