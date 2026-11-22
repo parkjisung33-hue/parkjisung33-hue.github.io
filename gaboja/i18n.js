@@ -121,6 +121,7 @@
     if (n.tagName === 'INPUT' && (n.type === 'button' || n.type === 'submit') && HAN.test(n.value)) { var r3 = tr(n.value); if (r3 != null) n.value = r3; }
     for (var c = n.firstChild; c; c = c.nextSibling) node(c);
   }
+  API.node = function (el) { if (L === 'en' && el) node(el); };   // 11/22 그 자리에서 바로 번역(한 줄 맞추기 swFit이 영어 폭으로 재게)
   var lastT = ''; function title() { if (document.title === lastT) return; var r = tr(document.title); if (r != null) { lastT = r; document.title = r; } }
   function start() {
     node(document.body); title();

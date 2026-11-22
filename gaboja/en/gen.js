@@ -131,6 +131,11 @@
     if (!start || isNaN(start)) { start = new Date(); start.setDate(start.getDate() + 21); while (start.getDay() !== 5) start.setDate(start.getDate() + 1); assumed.push('날짜 미정 → ' + (start.getMonth() + 1) + '/' + start.getDate() + '(금) 출발로 가정'); }
     const rand = rng(type + (input.start || '') + nights);
     const likes = new Set(input.likes || []), avoid = new Set(input.avoid || []);
+    /* 11/22 3축 엔진: 테마 input.themes = ['kpop','kfood','kbeauty','anime'] → 그 꼬리표(조각 th · 장소 th) 먼저 · 레벨 input.level 1~5(방문 횟수) → 유명도 가중 LVK
+       (Lv1 명소 쪽 +0.7 · Lv2 0 · Lv3 숨은 곳 쪽 −0.9 · Lv4+ −1.6, 로드맵 5절 비율은 가정값) · Lv2+ input.seen(지난 여행에서 간 장소 id) 은 뺌 */
+    const THM = new Set(Array.isArray(input.themes) ? input.themes : []), thHit = th => !!th && th.some(x => THM.has(x));
+    const LV = input.level ? Math.max(1, Math.min(5, parseInt(input.level, 10) || 1)) : 0, LVK = [0, 0.7, 0, -0.9, -1.6, -1.6][LV];
+    const SEEN = new Set(LV >= 2 && Array.isArray(input.seen) ? input.seen : []);
     // 11/14 #15 A안 '빼 주세요' (옛 이름도 받음) · '@' 좋아함 규칙: @local 덜 알려진 곳 · @famous 유명한 곳 · @night 밤 조각
     const AV = { walk: avoid.has('많이 걷기') || avoid.has('많이 걷는 코스'), crowd: avoid.has('붐비는 관광지'), queue: avoid.has('줄 서는 맛집') || avoid.has('긴 줄'),
       raw: avoid.has('날것·회') || avoid.has('날것 (회·스시)'), early: avoid.has('이른 아침 일정') };
@@ -298,9 +303,11 @@
       if (likes.has('@night') && pc.slots.includes('night')) s += 2;
       if (!F && pc.walk === 'low') s += 1;
       if (G[0] === 'H') s += pc.fame * 0.6; else s -= pc.fame * 0.4;
+      if (thHit(pc.th)) s += 9;   // 11/22 테마 조각 먼저
+      s += pc.fame * LVK;          // 11/22 레벨
       return s + rand() * 2.2;
     }
-    function candidates(city, slot) { return PC.filter(pc => pc.city === city && pc.slots.includes(slot) && !used.has(pc.id) && !pc.steps.some(st => usedPlaces.has(st.place))).map(pc => [score(pc), pc]).sort((a, b) => b[0] - a[0]).map(x => x[1]); }
+    function candidates(city, slot) { return PC.filter(pc => pc.city === city && pc.slots.includes(slot) && !used.has(pc.id) && !pc.steps.some(st => usedPlaces.has(st.place) || SEEN.has(st.place))).map(pc => [score(pc), pc]).sort((a, b) => b[0] - a[0]).map(x => x[1]); }
     // 조각을 지금 시각·위치에서 실제로 넣어 봄
     function tryPiece(pc, date, t, at) {
       const items = [], warn = []; let cur = t, loc = at;
@@ -362,10 +369,11 @@
       if (AV.raw && isRaw(p.tg)) s -= 8;
       if (likes.has('@local')) s -= (p.fame || 0) * 0.8;
       if (likes.has('@famous')) s += (p.fame || 0) * 0.8;
+      if (thHit(p.th)) s += 5; s += (p.fame || 0) * LVK;   // 11/22 테마·레벨
       return s - (p.cl === at ? 0 : mins(at, p.cl) / 12) + rand();
     }
     function fill(city, slot, date, t, at, until) {
-      const pool = Object.entries(PL).filter(([id, p]) => p.city === city && !usedPlaces.has(id)).map(([id, p]) => [pscore(id, p, slot, at), id, p]).filter(x => x[0] > -50).sort((a, b) => b[0] - a[0]);
+      const pool = Object.entries(PL).filter(([id, p]) => p.city === city && !usedPlaces.has(id) && !SEEN.has(id)).map(([id, p]) => [pscore(id, p, slot, at), id, p]).filter(x => x[0] > -50).sort((a, b) => b[0] - a[0]);
       for (const [, a, A] of pool.slice(0, 12)) {
         const pair = pool.filter(([, b, Bp]) => b !== a && Bp.cl === A.cl).slice(0, 4).map(x => x[1]);
         for (const b of pair.concat([null])) {
@@ -383,9 +391,10 @@
       if (kind === '점심' || kind === '브런치') ate.l = true; else if (kind === '저녁') ate.d = true;
       const lim = kind === '저녁' ? 1260 : 870;   // 점심 ~14:30 · 저녁 ~21:00 안에 시작
       let pool = Object.entries(PL).filter(([id, p]) => p.city === city && p.kind === 'restaurant' && !usedPlaces.has(id) && !(AV.raw && isRaw(p.tg)));
+      if (SEEN.size) { const fresh = pool.filter(([id]) => !SEEN.has(id)); if (fresh.length) pool = fresh; }   // 11/22 Lv2+: 지난번 간 식당 빼기
       if (AV.queue) { const calm = pool.filter(([id]) => !busyFood(id)); if (calm.length) pool = calm; }   // 줄 서는 맛집 빼기 = 유명한 식당(fame 2 이상) 먼저 거름
       const near = pool.filter(([id]) => cl(id) === at).concat(pool.filter(([id]) => cl(id) !== at && mins(at, cl(id)) <= 20));
-      for (const [id, p] of near.sort(() => rand() - 0.5).sort((a, b) => (cl(a[0]) !== at) - (cl(b[0]) !== at))) {
+      for (const [id, p] of near.sort(() => rand() - 0.5).sort((a, b) => thHit(b[1].th) - thHit(a[1].th)).sort((a, b) => (cl(a[0]) !== at) - (cl(b[0]) !== at))) {
         const go = cl(id) === at ? 0 : mins(at, cl(id));
         const o = openAt(p, date, t + go, p.st || 60); if (!o.ok || o.start > lim) continue;
         const dur = o.end ? Math.min(p.st || 60, o.end - o.start) : (p.st || 60); if (dur < 30) continue;   // 닫는 시각을 넘기지 않게 식사 시간을 줄임 (11/13)

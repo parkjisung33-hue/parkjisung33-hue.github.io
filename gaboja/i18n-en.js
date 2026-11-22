@@ -236,3 +236,18 @@ Object.assign(window.VZTR_EN, {
   '비행기 시각을 넣으면 그날 시간이 정해져요': 'Add flight time to set the day', '비행기 시각을 넣으면 시간표가 완성돼요': 'Add flight time to finish the plan',
   '비행기 시각을 넣으면 일정을 추가할 수 있어요': 'Add flight time to add stops', '이동 시각을 넣으면 일정을 추가할 수 있어요': 'Add travel time to add stops',
 });
+
+/* ===== 2026-11-22 (4) 3축 엔진: 이번 여행 주제(테마) · 몇 번째(레벨) 단계 ===== */
+(function () {
+  const I = () => window.VZTR_I18N || {}, HAN = /[가-힣]/;
+  const FULL = s => { const e = I().tq ? I().tq(String(s).trim()) : String(s); return HAN.test(e) ? null : e; };
+  Object.assign(window.VZTR_EN, {
+    '주제': 'Theme', '이번 여행 주제가 있나요?': 'Any theme for this trip?', '몇 번째 여행이에요?': 'How many times have you been?',
+    '고른 주제의 장소를 먼저 넣어요': 'Places for your theme go in first', '다녀온 만큼 유명한 곳은 줄이고 숨은 곳을 늘려요': 'More visits, fewer famous spots, more hidden ones',
+    '숨은 곳 비율이 달라져요': 'Sets the hidden-spot mix', '처음이에요': 'First time', '두 번째': '2nd time', '3~4번째': '3rd–4th', '5번 이상': '5+ times', '없음': 'None',
+    '숙소에 짐 맡기기': 'Drop bags', "강남 · 숙소에 짐 맡기기": "Gangnam · Drop bags", "난바 · 숙소에 짐 맡기기": "Namba · Drop bags", "명동·을지로 · 숙소에 짐 맡기기": "Myeongdong·Euljiro · Drop bags", "해운대 · 숙소에 짐 맡기기": "Haeundae · Drop bags", "홍대 · 숙소에 짐 맡기기": "Hongdae · Drop bags",   // 검수: 하루 요약 버튼 한 줄(동네 이름 + 이 말)
+    'K-팝': 'K-pop', 'K-푸드': 'K-food', 'K-뷰티': 'K-beauty', '애니·만화': 'Anime & manga', '주제라 골랐어요': 'Picked for your theme',
+    '{x}, 몇 번째예요?': x => { const e = FULL(x); return e ? 'Times in ' + e + '?' : null; },
+    '{x} 여행': x => { const e = FULL(x); return e ? e + ' trip' : null; },
+  });
+})();

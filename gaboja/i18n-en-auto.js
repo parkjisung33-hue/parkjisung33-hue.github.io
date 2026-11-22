@@ -126,6 +126,7 @@ window.VZTR_EN_AUTO = {
 "#층에서 시티 뷰와 리버 뷰를 볼 수 있어요": "See city and river views from floor #",
 "#칸이 다 차면 내 여행 유형": "Fill all # slots for your travel type",
 "& 로컬즈 오호리 공원": "& Locals Ohori Park",
+"'와' 테마 만화·애니 굿즈 서점": "Japanese-style manga & anime bookstore",
 "**골목 상점가** 한 바퀴": "Stroll the **alley shopping street**",
 "**길거리 간식**으로 시작": "Start with **street snacks**",
 "**노을 시간**에 맞춰 전망대로": "Head to the viewpoint for **sunset**",
@@ -185,15 +186,20 @@ window.VZTR_EN_AUTO = {
 "1907년 돌 건물 유리 공예점, 잠자리구슬 체험": "Stone-building glass shop since 1907, dragonfly bead workshop",
 "1907년 창업 미야가와초 동네 양식당": "Yoshoku diner in Miyagawacho since 1907",
 "1909년 지은 술 창고를 쓴 월계관 사료관": "Gekkeikan museum in a sake storehouse built in 1909",
+"1924년 시작 남도 한식": "Southern Korean cooking since 1924",
 "1931년 군 사령부 건물을 개조한 상업시설": "Shopping complex in a converted 1931 army HQ",
 "1931년 육군 사령부 건물 개조": "Converted 1931 army headquarters",
+"1932년부터 추어탕": "Loach soup since 1932",
 "1934년 창업 후쿠오카 대표 킷사텐": "Fukuoka's iconic kissaten since 1934",
 "1938년 창업, 옛 건물을 살린 야나카 킷사텐": "Yanaka kissaten in a 1938 building",
+"1939년부터 이어온 곰탕 노포": "Gomtang since 1939",
 "1941년 일본인 집을 고친 레트로 공간이에요": "Retro space in a Japanese house from 1941",
 "1942년 창업 빵집 '파노 페리칸' 직영": "Run by Pelican bakery, since 1942",
 "1948년에 시작한 완당 전문점": "Wandang (wonton) specialist since 1948",
+"1949년부터 설렁탕": "Seolleongtang since 1949",
 "1950년 문 연 한우 전문점. 서면역 근처.": "Korean beef specialist since 1950, near Seomyeon Stn",
 "1951년 문을 연 헌책방을 살린 공간이에요": "Space reviving a bookstore from 1951",
+"1952년부터 메밀국수": "Buckwheat noodles since 1952",
 "1953년 개장한 시장에 유리 지붕이 있어요": "1953 market under a glass roof",
 "1960년경 창업 가마메시·야키토리 노포": "Kamameshi and yakitori spot since about 1960",
 "1963년 개관한 서일본·교토 중심 근현대 미술관": "Modern and contemporary art museum in Kyoto, opened 1963",
@@ -205,6 +211,7 @@ window.VZTR_EN_AUTO = {
 "1970년 건물을 옛 모습 살려 고친 카페예요": "Café in a restored 1970 building",
 "1970년대 정미소 붉은 벽돌 건물을 고쳤어요": "Restored 1970s red-brick rice mill",
 "1972년 창업 빌딩 지하 커피 가게": "Basement coffee shop since 1972",
+"1973년 3대째 삼계탕": "3rd-gen samgyetang since 1973",
 "1975년 전통시장": "Traditional market since 1975",
 "1976년부터 40년 넘게 이어 온 집이에요": "Running for over 40 years since 1976",
 "1977년부터 2대째 같은 자리를 지켜 온 돈까스집이에요": "Tonkatsu spot in the same place since 1977, 2nd generation",
@@ -213,6 +220,7 @@ window.VZTR_EN_AUTO = {
 "1980년 창업 네루드립 킷사텐": "Nel-drip kissaten since 1980",
 "1985년에 문을 연 옛 다방이에요": "Old dabang (tea room) opened in 1985",
 "1988년부터 연남동을 지켜 온 감자탕집이에요": "Gamjatang (pork bone stew) in Yeonnam-dong since 1988",
+"1:1 퍼스널컬러 진단": "1:1 personal color analysis",
 "1~4층에 장난감 약 20만 점이 있어요": "About 200,000 toys on floors 1 to 4",
 "1층 야외 테이블이 바다 바로 앞이에요": "1F outdoor tables right by the sea",
 "1층에서 산 회를 2층에서 바로 먹어요": "Buy raw fish on 1F, eat it on 2F",
@@ -220,13 +228,19 @@ window.VZTR_EN_AUTO = {
 "2001년 창업 수프카레 노포": "Soup curry institution since 2001",
 "2003년 매실 한우로 시작한 생갈비집": "Raw galbi, started in 2003 with plum-fed Korean beef",
 "2010년 삿포로 경관자산 인정 석조 창고": "Stone warehouse recognized as Sapporo landscape heritage in 2010",
+"2026-11-18 연 치이카와 카스텔라": "Chiikawa castella, opened 2026-11-18",
+"2026-11-20 문 연 건담 베이스": "Gundam Base, opened 2026-11-20",
+"2026년 8월 확장 리뉴얼한 매장": "Expanded and renewed Aug 2026",
 "20종 부위를 굽는 산겐자야 야키토리집": "Yakitori spot in Sangenjaya grilling 20 cuts",
 "24시간 끓인 맑고 뽀얀 국물에 조미료를 안 써요": "Clear milky broth simmered 24 h, no MSG",
 "24시간 돈코츠 라멘": "24-hour tonkotsu ramen",
 "24시간 돈코츠 라멘 체인점": "24-hour tonkotsu ramen chain",
 "24시간 설렁탕집": "24-hour seolleongtang spot",
+"24시간 즉석사진 부스": "24-hour instant photo booth",
 "2층 초장집": "2nd-floor chojang (raw fish with sauce) spot",
 "2층 회랑에서 장인의 작업을 무료로 구경해요": "Watch the artisans free from the 2F gallery",
+"30만 점 피규어·굿즈 대형 숍": "Huge shop, 300K figures & goods",
+"3CE 있는 핑크 호텔 건물": "Pink hotel building with 3CE",
 "3층 빈백 좌석": "3rd-floor bean bag seats",
 "40년 넘은 팥빙수": "Patbingsu (red bean shaved ice), 40+ years",
 "4층 루프탑 카페": "4th-floor rooftop café",
@@ -305,7 +319,14 @@ window.VZTR_EN_AUTO = {
 "@로": "To @",
 "@역": "@ Station",
 "@와 영도 오션뷰 카페 먼저 빼기": "Skip @ and Yeongdo ocean-view cafe first",
+"AI 퍼스널컬러 체험관": "AI personal color experience",
 "BIFF 광장": "BIFF Square",
+"BTS 4명이 다녀간 중식당": "Chinese spot 4 BTS members visited",
+"BTS RM 가족이 하는 파란 카페": "Blue cafe run by RM's family",
+"BTS 밥집·K스타로드": "BTS diner & K-Star Road",
+"BTS 뷔 다녀간 일식집": "Japanese spot BTS’s V visited",
+"BTS 뷔가 다녀간 이탈리안": "Italian place V visited",
+"BTS 연습생 때 매일 간 밥집": "BTS's trainee-days diner",
 "DAY # · 현재 시각 #:#": "DAY # · now #:#",
 "DAY # 완료": "DAY # done",
 "DDP와 닭한마리": "DDP and dakhanmari",
@@ -313,6 +334,7 @@ window.VZTR_EN_AUTO = {
 "DENO 라유와 산초": "DENO chili oil and Sichuan pepper",
 "F# · @ 먼저 빼기": "Skip F# · @ first",
 "F# 먼저 빼기": "Skip F# first",
+"ITZY 유나가 추천한 타코": "Tacos ITZY’s Yuna recommends",
 "JNTO · #시간 · 한국어": "JNTO · # h · Korean",
 "JR 삿포로역 직결, 화장품 매장이 도내 최대급이에요": "Directly linked to JR Sapporo Station, with one of Hokkaido's largest cosmetics floors",
 "JR 우지역 앞 1854년 창업 말차 카페 본점": "Matcha cafe flagship by JR Uji Station, since 1854",
@@ -325,16 +347,27 @@ window.VZTR_EN_AUTO = {
 "JR 하루카 + 환승": "JR Haruka + transfer",
 "JR타워 T# 야경과 담담면": "JR Tower T# night view and tantanmen",
 "JR타워 전망실 T38": "JR Tower Observatory T38",
+"K-스타로드와 설화수 도산": "K-Star Road & Sulwhasoo",
+"K-팝 곰 인형 조형물 길": "Street of K-pop bear statues",
+"K-팝 뮤비 찍는 체험관": "Shoot your own K-pop video",
+"K-팝 미디어월 광장": "Plaza with a K-pop media wall",
+"K-팝 앨범·굿즈 대형 매장": "Big K-pop album and merch store",
+"K-팝 전문 굿즈 매장": "K-pop merch store",
 "KITTE 하카타": "KITTE Hakata",
 "KTX(강릉선, 종류 표기는 koreacharts 기준)": "KTX (Gangneung Line; train type per koreacharts)",
+"K향수·핸드케어 브랜드 쇼룸": "K-perfume and hand care showroom",
 "LP 틀어주는 바": "A bar that plays LP records",
 "LP 틀어주는 저녁 영업 바&카페. 전화 문의 후 방문.": "Evening bar and café playing LPs, call before visiting",
 "LSFP · 프로 뚜벅이": "LSFP · 10K Stepper",
 "LSRP 동네 방랑자": "LSRP Side Quester",
+"NCT·스키즈 방찬이 간 한우집": "Hanwoo spot visited by NCT and Bang Chan",
+"NU 차야마치 3층 애니메이트": "animate on NU Chayamachi 3F",
 "N서울타워": "N Seoul Tower",
 "PDF 만들기": "Make PDF",
 "PDF로 저장": "Save as PDF",
+"RM 사진 걸린 순대볶음": "Sundae stir-fry with RM’s photo",
 "SL 증기기관차가 있는 철도 박물관": "Railway museum with steam locomotives",
+"SM 공식 굿즈 매장": "SM official merch store",
 "SNS 뜨는 곳으로 바로 이동": "Go straight to what's trending on social media",
 "SiZUK 사케노시즈쿠": "SiZUK",
 "SiZUK 사케노시즈쿠 (사케 가쿠우치)": "SiZUK Sake no Shizuku",
@@ -345,6 +378,7 @@ window.VZTR_EN_AUTO = {
 "VZTR 여행 유형": "VZTR travel type",
 "VZTR로 만든 여행 일정": "Trip plan made with VZTR",
 "VZTR로 만든 일정 · 만든 날": "Made with VZTR · Created",
+"YG 공식 굿즈 공간": "YG official merch space",
 "] 같은 곳은 줄여서 보여 드려요": "Places like ] are shortened",
 "] 대신 [": "[ instead of ]",
 "] 쪽으로 보여 드려요": "Shown toward ]",
@@ -434,6 +468,7 @@ window.VZTR_EN_AUTO = {
 "가와라마치": "Kawaramachi",
 "가와라마치 교토 찻집": "Kawaramachi Kyoto tea house",
 "가와라마치 교토 카페": "Kawaramachi Kyoto cafe",
+"가와라마치 애니 쇼핑": "Kawaramachi anime shopping",
 "가와라마치 찻집 + 구제 거리": "Kawaramachi tea house + vintage street",
 "가와라마치|기온|시조|산조|河原町|祇園|四条": "Kawaramachi|Gion|Shijo|Sanjo|河原町|祇園|四条",
 "가와바타 아시아 미술관": "Kawabata Asian art museum",
@@ -472,6 +507,8 @@ window.VZTR_EN_AUTO = {
 "간식": "Snacks",
 "간을 살짝 더해 평양냉면 초심자도 먹기 편해요": "Lightly seasoned, easy even for pyeongyang-naengmyeon beginners",
 "간장 육수 모츠나베": "Soy broth motsunabe",
+"간장게장 성수 직영점": "Ganjang gejang, Seongsu flagship",
+"간장게장 전문 식당": "Soy-marinated crab specialist",
 "갈 곳 #곳 + 시각 고정": "# places to visit + fixed times",
 "감양이·대롱이 굿즈": "Gamyangi·Daerongi goods",
 "감양이·대롱이 캐릭터로 부산 굿즈를 만들어요": "Make Busan goods with the Gamyangi·Daerongi characters",
@@ -485,6 +522,7 @@ window.VZTR_EN_AUTO = {
 "감천문화마을 캐릭터 굿즈. 그립톡·키링·인형.": "Gamcheon Culture Village character goods: grips, keyrings, dolls",
 "감천문화마을과 돼지국밥": "Gamcheon Culture Village and pork soup",
 "갓 만든 맥주 시음": "Fresh beer tasting",
+"갓 만든 스킨케어 매장": "Fresh-made skincare shop",
 "갓 튀긴 카츠산도": "Freshly fried katsu sandwich",
 "강 위 평상 식당가": "Riverside platform dining",
 "강가에서 현지인처럼 아침 산책을 할 수 있어요": "Take a morning stroll along the river like a local",
@@ -569,6 +607,8 @@ window.VZTR_EN_AUTO = {
 "강남 → 홍대·연남 → 잠실 → 명동·을지로 → 여의도 → 강남": "Gangnam → Hongdae·Yeonnam → Jamsil → Myeongdong·Euljiro → Yeouido → Gangnam",
 "강남 → 홍대·연남 → 종로·@ → 남산·서울역 → 강남": "Gangnam → Hongdae·Yeonnam → Jongno·@ → Namsan·Seoul Station → Gangnam",
 "강남 역 근처": "Near Gangnam Station",
+"강남역 3층 규모 올영": "3-floor Olive Young at Gangnam Stn",
+"강남역 미디어월·올영": "Gangnam media wall & Olive Young",
 "강릉역": "Gangneung Station",
 "강변 계단 쪽에서 야경": "Night view from the riverside steps",
 "강변 산책 공원": "Riverside walk park",
@@ -614,6 +654,7 @@ window.VZTR_EN_AUTO = {
 "건너뜀 · 보관함에 있어요": "Skipped · In Archive",
 "건물 외벽을 덮은 수직 정원이 작품이에요": "The vertical garden covering the facade is the artwork",
 "건진 물건이 곧 추억인 분이시군요?": "Your finds are your memories?",
+"건프라 전문 공식 베이스": "Official Gunpla base",
 "걷기 약": "Walk ~",
 "걷다 끌리는 곳": "Wherever catches your eye",
 "걷다 만난 골목이 오늘 코스": "Today's route: whichever alley you stumble into",
@@ -664,6 +705,7 @@ window.VZTR_EN_AUTO = {
 "경전철·지하철 타는 곳으로": "To the light rail · subway platform",
 "경치 보며 커피 한 잔 더": "One more coffee with a view",
 "계절 튀김·굴 소바": "Seasonal tempura · oyster soba",
+"계절온반 한 상 식당": "Seasonal onban set meals",
 "계획은 없어도 체력은 있음. 걷다 보면 그게 코스": "No plan, lots of stamina. The route is wherever your feet go",
 "계획은 이따가": "Plan later",
 "계획한 곳 하나 더": "One more planned place",
@@ -704,6 +746,7 @@ window.VZTR_EN_AUTO = {
 "고정 →": "Pinned →",
 "고정된 일정이에요 · 옮기거나 삭제할 수 없어요": "Pinned plan · Can’t be moved or deleted",
 "고조 뒷골목 동네 센토": "Backstreet sento in Gojo",
+"고지라·애니 굿즈 복합점": "Godzilla & anime goods store",
 "고코유": "Gokoyu",
 "고코유 (센토)": "Gokoyu",
 "고타니 주호": "Kotani Shuho",
@@ -816,6 +859,7 @@ window.VZTR_EN_AUTO = {
 "광화문": "Gwanghwamun Gate",
 "광화문 대형 서점": "Big bookstore in Gwanghwamun",
 "광화문 맛집 거리": "Gwanghwamun dining street",
+"광화문 면·국물": "Gwanghwamun noodles & soup",
 "광화문국밥": "Gwanghwamun Gukbap",
 "교고쿠 카네요": "Kyogoku Kaneyo",
 "교고쿠 카네요 (킨시동)": "Kyogoku Kaneyo",
@@ -853,6 +897,7 @@ window.VZTR_EN_AUTO = {
 "교토역": "Kyoto Station",
 "교토역 근처 #석 야키토리 카운터": "Yakitori counter with # seats near Kyoto Station",
 "교토역 근처 검은 국물 라멘 노포 본점": "Old-school dark-broth ramen flagship near Kyoto Station",
+"교토역 남쪽 아반티 6층": "Avanti 6F, south of Kyoto Stn",
 "교토역 앞 높이 100m 전망대": "100 m observation deck by Kyoto Station",
 "교토역 앞 랜드마크 전망대": "Landmark observation deck by Kyoto Station",
 "교토역 인근 대형 목조 사찰": "Large wooden temple near Kyoto Station",
@@ -909,14 +954,17 @@ window.VZTR_EN_AUTO = {
 "국보 금인": "National treasure gold seal",
 "국보 금인 '漢委奴国王'을 소개해요": "Features the national treasure gold seal of the King of Na",
 "국산 흑모와규 생곱창만 쓰고 맛이 #년 넘게 같아요": "Only fresh domestic black wagyu offal, with a taste unchanged for over # years",
+"국산콩 직접 만든 두부집": "House-made tofu from Korean beans",
 "국시, 마지막 주문 20시 30분": "Guksi (noodle soup), last order 20:30",
 "국제 눈 조각 대회": "International snow sculpture contest",
 "국제시장": "Gukje Market",
 "국제시장 안 수제 젓가락 가게": "Handmade chopsticks shop in Gukje Market",
 "국제시장·깡통시장·자갈치가 걸어서 이어져요": "Gukje, Jagalchi and Kkangtong markets are all walkable",
 "규슈 국립박물관": "Kyushu National Museum",
+"규슈 첫 고지라·애니 굿즈점": "Kyushu’s first Godzilla & anime shop",
 "규슈 첫 마루이": "Kyushu's first Marui",
 "규슈 최대 상업지구 텐진을 대표하는 백화점이에요": "The flagship department store of Tenjin, Kyushu's largest commercial district",
+"규슈 최대 애니메이트 (2026-10 개점)": "Kyushu's biggest animate (opened Oct 2026)",
 "규슈국립박물관과 덴만구": "Kyushu National Museum and Tenmangu",
 "규카츠": "Gyukatsu",
 "규카츠 모토무라 난바 미도스지점": "Gyukatsu Motomura Namba Midosuji",
@@ -1044,6 +1092,7 @@ window.VZTR_EN_AUTO = {
 "길이 #m 지하상가": "#-meter underground mall",
 "길이 192m 정조대왕 능행 도자벽화가 있어요": "192 m ceramic mural of King Jeongjo's royal procession",
 "길찾기 버튼으로 실제 시간 확인": "Tap Navigate for actual times",
+"김치 박물관과 담그기 체험": "Kimchi museum and making class",
 "김치 요리 전문점": "Kimchi-dish spot",
 "김치 요리 전문점. 용호동 W스퀘어.": "Kimchi dishes, at W Square in Yongho-dong",
 "김치찌개·양념게장": "Kimchi-jjigae·yangnyeom-gejang (marinated crab)",
@@ -1136,6 +1185,7 @@ window.VZTR_EN_AUTO = {
 "나폴리 화덕 피자 이탈리안": "Neapolitan wood-fired pizza Italian",
 "낙동강이 남해와 만나는 곳을 볼 수 있어요": "See where the Nakdong River meets the South Sea",
 "낙산 얼큰이 냉면집": "Naksan spicy naengmyeon spot",
+"낙산 해질녘과 중식": "Naksan sunset & Chinese food",
 "낙산공원": "Naksan Park",
 "낙산공원과 얼큰이냉면": "Naksan Park and spicy naengmyeon",
 "낙산냉면": "Naksan Naengmyeon",
@@ -1172,7 +1222,10 @@ window.VZTR_EN_AUTO = {
 "날짜는 그대로예요 · 바꾸려면 메뉴의 ‘여행 정보 수정’을 눌러 주세요": "Dates unchanged · To change, tap ‘Edit trip info’ in the menu",
 "날짜별 빈 칸에 내가 장소 넣기": "Fill empty days with your own places",
 "남구": "Nam-gu",
+"남대문 곰탕과 라네즈": "Namdaemun gomtang & LANEIGE",
+"남대문 냉면과 시장": "Namdaemun naengmyeon & market",
 "남대문시장": "Namdaemun Market",
+"남대문시장 곰탕 맛집": "Gomtang in Namdaemun Market",
 "남들과 다른 기념품이 여행의 증거예요": "A souvenir nobody else has proves you went",
 "남들이 모르는 곳을 찾아내는 분이시군요?": "You find places others don’t know?",
 "남북 일직선으로 당탑이 늘어선 가람을 걸어볼 수 있어요": "Walk a straight north–south line of temple halls and pagoda",
@@ -1182,6 +1235,7 @@ window.VZTR_EN_AUTO = {
 "남산 아랫길의 왕돈까스집": "Giant tonkatsu place below Namsan",
 "남산 왕돈까스집": "Namsan king tonkatsu spot",
 "남산 하늘숲길": "Namsan Skyforest Trail",
+"남산골 옆 평양냉면 노포": "Old Pyongyang naengmyeon spot",
 "남산공원": "Namsan Park",
 "남산공원 산책로": "Namsan Park Trail",
 "남산타워 야경": "N Seoul Tower night view",
@@ -1256,6 +1310,7 @@ window.VZTR_EN_AUTO = {
 "눈여겨 둔 곳 가 보기": "Visit the places you had your eye on",
 "눌러서 바꾸기 · 시각은 그대로 · 원래 장소는 보관함에 ‘문 닫음’으로": "Tap to swap · Time stays · Original place goes to Archive as ‘Closed’",
 "뉴우먼 다카나와": "NEWoMan Takanawa",
+"뉴진스 다녀간 홍대 카페": "Hongdae café NewJeans visited",
 "느긋하게 **산책**으로 시작": "Ease in with a leisurely **walk**",
 "느긋한 시동": "Slow start",
 "느긋한 아침": "Slow morning",
@@ -1352,6 +1407,7 @@ window.VZTR_EN_AUTO = {
 "니시진오리 회관": "Nishijin Textile Center",
 "니시키 시장": "Nishiki Market",
 "니시키 시장 + 데라마치 골동 거리": "Nishiki Market + Teramachi antique street",
+"니시키·교토 IP 서점": "Nishiki & Kyoto IP bookstore",
 "니시테쓰 공항 익스프레스 (텐진 고속버스터미널, 최속 #분)": "Nishitetsu Airport Express (Tenjin Bus Terminal, fastest # min)",
 "니시테쓰 공항버스 (하카타역 지쿠시구치, 최속 #분)": "Nishitetsu Airport Bus (Hakata Station Chikushi Exit, fastest # min)",
 "니시테쓰 다자이후역에서 걸어서 #분이에요": "# min walk from Nishitetsu Dazaifu Station",
@@ -1375,6 +1431,8 @@ window.VZTR_EN_AUTO = {
 "니혼바시에서 긴자까지": "From Nihonbashi to Ginza",
 "닉네임·받을 곳·여행 정보는 가이드북에만 써요": "Nickname, address and trip info are used only for your guidebook",
 "닛폰바시": "Nipponbashi",
+"닛폰바시 만다라케 별관": "Mandarake annex in Nippombashi",
+"닛폰바시 오타쿠 거리": "Nippombashi otaku street",
 "다 만들었어요!": "All done!",
 "다국적 음식부터 화장품까지 한 길에 있어요": "Everything from international food to cosmetics on one street",
 "다녀온 비율": "% visited",
@@ -1408,6 +1466,7 @@ window.VZTR_EN_AUTO = {
 "다시 짜기": "Redo plan",
 "다시 찾기": "Search again",
 "다시마로 감싼 명란 한 덩이를 밥에 올려요": "A kelp-wrapped piece of mentaiko served on rice",
+"다시크 성수 플래그십": "Dasique Seongsu flagship",
 "다쓰미": "Tatsumi",
 "다쓰미 (대중 이자카야)": "Tatsumi",
 "다음 #:# @": "Next #:# @",
@@ -1425,6 +1484,7 @@ window.VZTR_EN_AUTO = {
 "다이묘 주류점 안 낮술 다치노미": "Daytime tachinomi in a Daimyo liquor store",
 "다이묘 하카타 라멘집": "Daimyo Hakata ramen shop",
 "다이묘·야쿠인 가쿠우치 순례": "Daimyo and Yakuin kakuuchi crawl",
+"다이브인 세럼 토리든 체험 공간": "Try Torriden's Dive-In serum",
 "다이슈 식당 아라타마": "Aratama",
 "다이칸야마 서점": "Daikanyama bookstore",
 "다이칸야마 츠타야 서점": "Daikanyama T-Site Bookstore",
@@ -1440,6 +1500,7 @@ window.VZTR_EN_AUTO = {
 "다카나와 게이트웨이 시티": "Takanawa Gateway City",
 "다카나와 게이트웨이와 MoN": "Takanawa Gateway and MoN",
 "다카나와 쇼핑·식당가": "Takanawa shopping and dining",
+"다카시마야 4층 만화 중고점": "Used manga shop, Takashimaya 4F",
 "다케시타도리": "Takeshita Street",
 "다크 모드": "Dark mode",
 "단골 자리에서 아침": "Breakfast at your regular spot",
@@ -1488,6 +1549,7 @@ window.VZTR_EN_AUTO = {
 "대표": "Signature",
 "대표 메뉴 리스트 전부 체크": "Check off every signature dish",
 "대표 타코야키": "Signature takoyaki",
+"대학로 삼겹살 직영 본점": "Daehangno samgyeopsal flagship",
 "대학로에서 올라가 서울 전망을 볼 수 있어요": "Hike up from Daehangno for a view of Seoul",
 "대화 금지 독서 카페": "Silent reading cafe",
 "더 글래스 스튜디오 인 오타루": "Glass Studio Otaru",
@@ -1510,7 +1572,10 @@ window.VZTR_EN_AUTO = {
 "데마치 후타바": "Demachi Futaba",
 "데마치 후타바 (콩떡)": "Demachi Futaba",
 "데마치야나기": "Demachiyanagi",
+"데이지크 2층 디저트 카페": "Dasique 2F dessert café",
+"데즈카·후지코 살던 만화 성지": "Manga mecca of Tezuka & Fujiko",
 "덴구야마 기슭 불기 유리 공방 체험": "Glassblowing studio experience at the foot of Mt. Tenguyama",
+"덴덴타운 입구의 애니메이트": "animate at the Den Den Town gate",
 "덴덴타운(닛폰바시)": "Den Den Town (Nipponbashi)",
 "덴류지": "Tenryu-ji",
 "덴류지 쪽문으로 들어가면 대나무 길이 더 좋아요": "Enter by the Tenryu-ji side gate for a better bamboo path",
@@ -1531,6 +1596,7 @@ window.VZTR_EN_AUTO = {
 "도리카고": "Torikago",
 "도매 시장, 평일 낮과 밤에 나눠 열어요": "Wholesale market, opens in separate day and night shifts on weekdays",
 "도매 의류 시장": "Wholesale clothing market",
+"도산 게장과 뷰티": "Dosan gejang & beauty",
 "도시마야 주점(도시마야 사케텐)": "Toshimaya Sakaten",
 "도시형 한옥마을": "Urban hanok village",
 "도심 광장 사진 명소": "Downtown plaza photo spot",
@@ -1579,12 +1645,15 @@ window.VZTR_EN_AUTO = {
 "도쿄국립박물관": "Tokyo National Museum",
 "도쿄도청 전망실": "Tokyo Metropolitan Gov. Observatory",
 "도쿄역 우설 전문점": "Tokyo Station beef tongue restaurant",
+"도쿄역 지하 캐릭터 가게 거리": "Character shops under Tokyo Stn",
+"도쿄역 캐릭터 거리": "Tokyo Stn Character Street",
 "도쿄의 샹젤리제": "Tokyo's Champs-Elysees",
 "도톤보리": "Dotonbori",
 "도톤보리 · 에비스바시": "Dotonbori · Ebisubashi",
 "도톤보리 강 위 미니 크루즈": "Mini cruise on the Dotonbori canal",
 "도톤보리 거대 게 간판 게요리점": "Giant-crab-sign crab restaurant in Dotonbori",
 "도톤보리 리버크루즈": "Tombori River Cruise",
+"도톤보리 만화·VTuber 한정 굿즈": "Dotonbori manga & VTuber exclusives",
 "도톤보리 밤 산책 + 타코야키": "Dotonbori night walk + takoyaki",
 "도톤보리 야경 + 우라난바": "Dotonbori at night + Uranamba",
 "도톤보리 야경 거리": "Dotonbori night view street",
@@ -1643,6 +1712,7 @@ window.VZTR_EN_AUTO = {
 "동선까지 확인": "Check the route too",
 "동선이 정리돼 있어야 마음 놓고 즐길 수 있어요": "You relax once the route is sorted",
 "동치미 냉면": "Dongchimi naengmyeon (radish-water cold noodles)",
+"동통 상점가 속 만화 중고점": "Used manga shop in Dotom Street",
 "돼지 뼈를 #시간 넘게 끓인 맑은 국물이에요": "A clear broth from pork bones simmered over # hours",
 "돼지갈비 전문점": "Pork rib spot",
 "돼지국밥": "Dwaeji-gukbap (pork soup)",
@@ -1666,6 +1736,7 @@ window.VZTR_EN_AUTO = {
 "득템 정리하며 식사": "Meal while sorting your haul",
 "득템 정리하며 저녁": "Dinner while sorting your haul",
 "디저트 가게나 스파": "A dessert shop or spa",
+"디퓨저·향수 4층 플래그십": "4F diffuser & perfume flagship",
 "딕 인": "DIG INN",
 "딕 인 (베이글 샌드위치)": "DIG INN",
 "딤섬·쌀국수": "Dim sum·pho",
@@ -1674,6 +1745,8 @@ window.VZTR_EN_AUTO = {
 "딱 하나만 고른다면요?": "If you could pick only one?",
 "떠나는 날": "Departure day",
 "떠올려 보면 제일 많을 것 같은 사진은요?": "Which photos fill most of your camera roll?",
+"떡 만들기 체험이 있는 박물관": "Rice cake museum with classes",
+"떡볶이 가게가 모인 원조 골목": "The original tteokbokki alley",
 "떡볶이·유부전골": "Tteokbokki·yubu jeongol (tofu pouch hot pot)",
 "또는": "or",
 "또는 @ 구경": "Or see @",
@@ -2154,6 +2227,7 @@ window.VZTR_EN_AUTO = {
 "뜨거운 철판에 나오는 스테이크 정식": "Steak set on a sizzling iron plate",
 "뜨는 곳부터 찍기": "Hit the trending spot first",
 "라돈탕이 있는 동네 대중목욕탕": "Neighborhood bathhouse with a radon bath",
+"라라포트 점프·건담": "LaLaport Jump & Gundam",
 "라멘": "Ramen",
 "라멘 가게 #곳 안팎이 모인 거리예요": "A street with around # ramen shops",
 "라멘 가게 골목": "Ramen shop alley",
@@ -2163,6 +2237,7 @@ window.VZTR_EN_AUTO = {
 "라멘·오뎅 야타이": "Ramen and oden food stall",
 "라멘집 모인 거리": "Ramen shop street",
 "라스트 오더는 밤 #시 #분이에요": "Last order at #:# p.m.",
+"라이즈 은석이 말한 소바": "Soba RIIZE’s Eunseok mentioned",
 "라일락과 느릅나무": "Lilacs and elms",
 "랍스터롤": "Lobster roll",
 "랜드마크·야경": "Landmarks·night views",
@@ -2177,6 +2252,7 @@ window.VZTR_EN_AUTO = {
 "렌가관 맥주 펍": "Brick Hall beer pub",
 "렌가테이": "Rengatei",
 "로그인 필요 없어요": "No login needed",
+"로데오 사진과 고기": "Rodeo photos & grilled meat",
 "로열 가든 카페 오호리 공원점": "Royal Garden Cafe Ohori Park",
 "로컬": "Local",
 "로컬 맛집·시장·소품샵": "Local eateries · markets · gift shops",
@@ -2205,6 +2281,7 @@ window.VZTR_EN_AUTO = {
 "루프탑에서 노을을 보며 마실 수 있어요": "Sip a drink on the rooftop at sunset",
 "루프탑에서 부산항대교가 보이는 카페": "Café with Busan Harbor Bridge views from the rooftop",
 "루프탑에서 영도 바다가 보이는 대형 카페": "Big café with Yeongdo sea views from the rooftop",
+"르세라핌 출연한 감자파 빵집": "Bakery featured with LE SSERAFIM",
 "르타오 본점": "LeTAO Main Store",
 "르타오 본점 (오타루)": "LeTAO Main Store (Otaru)",
 "리스트 체크 표시 줄줄이": "Ticking off the list, one after another",
@@ -2212,6 +2289,7 @@ window.VZTR_EN_AUTO = {
 "리움미술관": "Leeum Museum of Art",
 "리움미술관과 이태원 커피": "Leeum Museum and Itaewon coffee",
 "리쿠로 오지상 난바 본점": "Rikuro Ojisan Namba Main Store",
+"립 300색 벽, 롬앤 첫 매장": "rom&nd's first store, 300-lip wall",
 "마감 시간 역산 일정": "Plan built backward from closing time",
 "마그네츠 아메리카무라점": "Magnets Amerikamura",
 "마루노우치": "Marunouchi",
@@ -2228,6 +2306,7 @@ window.VZTR_EN_AUTO = {
 "마루야마 해산물 덮밥집": "Maruyama seafood bowl shop",
 "마루야마 해산물 시장": "Maruyama seafood market",
 "마루후쿠 커피점 센니치마에 본점": "Marufuku Coffee Sennichimae Main Store",
+"마스크핏 쿠션 그 브랜드 첫 플래그십": "First store of the Mask Fit cushion",
 "마쓰요시(가마메시·야키토리)": "Matsuyoshi",
 "마음에 든 가게는 두 번 감. 사장님이 얼굴 기억함": "Go back to shops you love — the owner will remember you",
 "마이센 아오야마 본점": "Maisen Aoyama Main Store",
@@ -2249,6 +2328,7 @@ window.VZTR_EN_AUTO = {
 "만루가 시즈무라(소바)": "Marugaya Shizumura",
 "만화 박물관": "Manga Museum",
 "만화 박물관 · 데라마치 · 프랑수아": "Manga Museum · Teramachi · Francois",
+"만화·VTuber 한정 굿즈 서점": "Manga & VTuber exclusives bookstore",
 "만화·애니 굿즈": "Manga and anime goods",
 "만화·피규어·게임 가게가 아케이드에 이어져요": "Manga, figure and game shops line the arcade",
 "많이 가는 곳이에요": "Popular spot",
@@ -2281,6 +2361,8 @@ window.VZTR_EN_AUTO = {
 "망원시장": "Mangwon Market",
 "망원시장과 생선구이": "Mangwon Market and grilled fish",
 "망원한강공원": "Mangwon Hangang Park",
+"맞춤 제조 라네즈 플래그십": "LANEIGE custom-blend flagship",
+"맞춤 파운데이션 해주는 본사 매장": "Custom foundation at Amore HQ",
 "매달 #일 고보 장터": "Kobo market on day # of each month",
 "매달 #일 아침 #시부터 오후 #시까지 열려요": "Open on day # of each month, from #:00 a.m. to #:00 p.m.",
 "매실 연근 튀김 소바": "Plum and lotus root tempura soba",
@@ -2332,7 +2414,10 @@ window.VZTR_EN_AUTO = {
 "면세품이 있으면 세관 확인 먼저": "Duty-free items? Check customs first",
 "멸치회 무침": "Anchovy hoe-muchim (raw anchovy salad)",
 "멸치회는 채소 무침으로 나와 쌈 싸 먹어요": "Raw anchovy comes mixed with veggies — wrap it in leaves",
+"명동 K뷰티 플래그십": "Myeongdong K-beauty flagships",
+"명동 곰탕·올영": "Myeongdong gomtang & Olive Young",
 "명동 칼국수 전문점": "Myeongdong kalguksu spot",
+"명동 컬러 진단·쇼핑": "Myeongdong color check & shopping",
 "명동·을지로 · 숙소에 짐 맡기기": "Myeongdong·Euljiro · Drop bags at the hotel",
 "명동·을지로 → 김포공항": "Myeongdong·Euljiro → Gimpo Airport",
 "명동·을지로 → 동대문·혜화 → 명동·을지로 → 성수 → 명동·을지로": "Myeongdong·Euljiro → Dongdaemun·Hyehwa → Myeongdong·Euljiro → Seongsu → Myeongdong·Euljiro",
@@ -2489,6 +2574,7 @@ window.VZTR_EN_AUTO = {
 "명소까지|걸어서 가는 위치": "Within walking|distance of landmarks",
 "명소와 가까운 숙소를 고르는 분이시군요?": "Prefer a hotel near the sights?",
 "명장면은 꼭 남기는 분이시군요?": "Always capture the best moments?",
+"모던 캐주얼 한식당": "Modern casual Korean",
 "모두 끝났어요": "All done",
 "모든 메뉴가 #,#원 이하라 부담 없어요": "Every dish under ₩#,#, easy on the wallet",
 "모든 메뉴가 9,000원 이하라 부담 없어요": "Every dish 9,000 won or less",
@@ -2521,13 +2607,16 @@ window.VZTR_EN_AUTO = {
 "못 넣은 곳:": "Not added:",
 "못 없이 지은 본당 무대": "Main hall stage built without nails",
 "몽실종가돼지국밥 감천문화마을 본점": "Mongsil Jongga Dwaeji-gukbap Gamcheon",
+"무드 색조 힌스 성수 매장": "hince mood makeup store",
 "무료 '하카타 마치 워크' 안내 투어가 매일 있어요": "Free \"Hakata Machi Walk\" guided tours run daily",
 "무료 구역에서 소프트아이스를 맛봐요": "Try soft serve in the free zone",
+"무료로 보는 일본 애니 역사": "Free museum of anime history",
 "무료로 산복도로 주민 이야기를 볼 수 있어요": "Free to see Sanbokdoro residents’ stories",
 "무사시노의 정취": "Musashino atmosphere",
 "무소 소세키의 정원": "Muso Soseki's garden",
 "무쇠 가마솥 전복죽·해산물집": "Abalone porridge and seafood in a cast-iron pot",
 "무쇠 전복 가마솥밥": "Abalone rice in a cast-iron pot",
+"무신사 뷰티 첫 상설 매장": "Musinsa Beauty's first store",
 "무엇을": "What",
 "묵은지수육한판": "Aged kimchi & boiled pork platter",
 "문 여는 시간에 맞춰 **쇼핑** 시작": "Start **shopping** the moment doors open",
@@ -2615,6 +2704,7 @@ window.VZTR_EN_AUTO = {
 "발길 닿는 **시장이나 골목**으로": "Wander into a **market or alley**",
 "발길 닿는 쪽으로": "Wherever your feet lead",
 "발이 닿는 대로 걷다 보면 그날의 가게를 만나요": "Follow your feet and find that day's shop",
+"발효 칵테일 제철 바": "Fermented cocktails, seasonal bar",
 "밤 #시까지 열어 저녁에도 들를 수 있어요": "Open until #:00 — drop by in the evening",
 "밤 10시까지 열어 저녁에도 들를 수 있어요": "Open until 22:00, good for an evening stop",
 "밤 일정(#:# 이후)": "Night plans (after #:#)",
@@ -2780,8 +2870,11 @@ window.VZTR_EN_AUTO = {
 "북쪽에 저녁에 여는 옛 대중목욕탕이 있어요": "An old public bath that opens in the evening sits to the north",
 "북촌 #경": "# views of Bukchon",
 "북촌 8경": "Bukchon's 8 scenic views",
+"북촌 설화수 산책": "Bukchon & Sulwhasoo walk",
+"북촌 한방차·향·설화수": "Bukchon tea, scent & Sulwhasoo",
 "북촌 한옥길과 삼청동": "Bukchon Hanok lanes and Samcheong-dong",
 "북촌 한옥길과 삼청동 먼저 빼기": "Skip Bukchon Hanok Alley and Samcheong-dong first",
+"북촌에서 내 향수 만들기": "Make your own perfume in Bukchon",
 "북촌의 기와 녹차 와플": "Bukchon tile-roof green tea waffle",
 "북촌한옥마을": "Bukchon Hanok Village",
 "분당선M": "Bundangseon M",
@@ -2815,6 +2908,9 @@ window.VZTR_EN_AUTO = {
 "브런치 단축 · 공항 #:# 도착 고정": "Shorter brunch · Airport arrival fixed at #:#",
 "브루어리 1876": "Brewery 1876",
 "브루어리 1876 (팩토리 렌가관 펍)": "Brewery 1876 (Factory Pub)",
+"블랙핑크 뮤비 한복 만든 곳": "Made hanbok for a BLACKPINK MV",
+"블랙핑크 제니 추천 감자빵": "Potato bread Jennie recommended",
+"블랙핑크 지수·로제 도자기": "Pottery with BLACKPINK’s Jisoo & Rosé",
 "비 오는 날은 쉬는 날인 분이시군요?": "Rainy days are rest days?",
 "비가 와도 일단 나가는 분이시군요?": "Go out even in the rain?",
 "비건 베이커리 카페": "Vegan bakery cafe",
@@ -2859,8 +2955,11 @@ window.VZTR_EN_AUTO = {
 "빨간 벽돌 건물에 야외 테라스가 있어요": "Red brick building with an outdoor terrace",
 "빵과 에스프레소와 아라시야마 정원": "Pan to Espresso Arashiyama Garden",
 "빵집에서 아침 해결": "Breakfast at a bakery",
+"뽀얀 도가니탕 노포": "Old-school ox knee soup",
+"삐아 첫 오프라인 매장": "BBIA’s first offline store",
 "사가노 산책의 출발점": "Starting point for a Sagano stroll",
 "사골 돼지국밥": "Sagol dwaeji-gukbap (pork bone soup)",
+"사극 세트와 특촬·애니 전시": "Period sets, tokusatsu and anime",
 "사라사 니시진": "Sarasa Nishijin",
 "사라사 니시진 (옛 센토 카페)": "Sarasa Nishijin",
 "사람 많은 **번화가** 구경": "Watch the crowds in the **busy district**",
@@ -2876,6 +2975,8 @@ window.VZTR_EN_AUTO = {
 "사이폰 커피 쇼와풍 킷사텐 본점": "Original Showa-style siphon coffee kissaten",
 "사장님과 눈인사": "A nod to the owner",
 "사장님이 직접 면을 뽑아 바로 조리해요": "The owner pulls the noodles by hand and cooks to order",
+"사전 예약 필수 지브리 미술관": "Ghibli museum · booking required",
+"사직 칵테일 밤": "Sajik cocktail night",
 "사진 ©": "Photo ©",
 "사진 © Christopher from Shanghai, China · CC BY #.#": "Photo © Christopher from Shanghai, China · CC BY #.#",
 "사진 © 한국관광공사 · 공공누리 #유형": "Photo © Korea Tourism Organization · KOGL Type #",
@@ -2922,11 +3023,13 @@ window.VZTR_EN_AUTO = {
 "살롱 드 아만토": "Salon de AManTO",
 "살아있는 식물도감": "A living plant encyclopedia",
 "삼각공원 중심으로 주말마다 젊은이가 모여요": "Young crowds gather around Triangle Park on weekends",
+"삼각지 BTS 순대볶음 밤": "Samgakji BTS sundae night",
 "삼각형 땅과 지붕": "Triangular lot and roof",
 "삼계탕 전문, 주문 마감 21시": "Samgyetang (ginseng chicken soup) specialist, last order 21:00",
 "삼나무 숲과 계수나무": "Cedar forest and katsura trees",
 "삼백 년 전통 에도마에 장어를 내요": "Serves Edomae eel with a 300-year tradition",
 "삼성 설렁탕 전문점": "Samseong seolleongtang spot",
+"삼청 블핑 한복·북촌": "Samcheong BLACKPINK hanbok",
 "삼청동 수제비 전문점": "Samcheong-dong sujebi restaurant",
 "삼청동수제비": "Samcheong-dong Sujebi",
 "삿포로": "Sapporo",
@@ -2943,6 +3046,7 @@ window.VZTR_EN_AUTO = {
 "삿포로 산책 공원": "Sapporo walking park",
 "삿포로 스텔라플레이스": "Sapporo Stellar Place",
 "삿포로 시계탑": "Sapporo Clock Tower",
+"삿포로 애니 가게 두 곳": "Two Sapporo anime shops",
 "삿포로 작가 전시 카페": "Cafe with Sapporo artist shows",
 "삿포로 작가 전시를 보면서 차를 마셔요": "Sip tea while viewing Sapporo artists' shows",
 "삿포로 장외시장": "Sapporo Outer Market",
@@ -2955,6 +3059,7 @@ window.VZTR_EN_AUTO = {
 "삿포로역 삿포로 전망실": "Sapporo Station Sapporo observatory",
 "삿포로역 삿포로 찻집": "Sapporo Station Sapporo tea house",
 "삿포로역 수프카레집": "Sapporo Station soup curry shop",
+"삿포로역 직결 다이마루 8층": "Daimaru 8F, linked to Sapporo Stn",
 "삿포로역 탄탄멘 라멘집": "Sapporo Station tantanmen ramen shop",
 "삿포로의 오쿠자시키": "Sapporo's back parlor",
 "상강꽃갈비·육회": "Sanggang flower galbi and yukhoe (beef tartare)",
@@ -2978,6 +3083,7 @@ window.VZTR_EN_AUTO = {
 "샐러드 가게 산초 후시미점": "Sancho Fushimi",
 "샐러드 가게 산초 후시미점 (양식)": "Salad no Mise Sancho Fushimi",
 "생각보다 먼저 떠오르는 걸로": "Go with your first instinct",
+"생들기름면 면 요리집": "Raw perilla oil noodles",
 "생선 가게 직영이라 신선도가 자랑이에요": "Run by a fishmonger, so freshness is the pride",
 "생태숲 사슴우리": "Ecological forest deer pen",
 "생활 정보": "Local info",
@@ -2994,6 +3100,7 @@ window.VZTR_EN_AUTO = {
 "서면 한우 저녁과 시민공원": "Seomyeon hanwoo dinner and Citizens Park",
 "서면 한우 전문점": "Seomyeon Korean beef specialist",
 "서버에 저장하지 못했어요": "Couldn't save to server",
+"서브컬처 가게가 층마다 있어요": "Subculture shops on every floor",
 "서브컬처 매장 #곳": "# subculture shops",
 "서서 마시는 술집 골목": "Standing-bar alley",
 "서울 #대 족발로 불릴 만큼 이름난 집이에요": "Known as one of Seoul's top # jokbal spots",
@@ -3053,9 +3160,12 @@ window.VZTR_EN_AUTO = {
 "서점은 아침 #시부터 밤 #시까지 열어요": "The bookstore is open from #:00 a.m. to #:00 p.m.",
 "서촌": "Seochon",
 "서촌 골목": "Seochon Alleys",
+"서촌 골목 산책과 오마카세": "Seochon strolls & omakase",
 "서촌 골목 서점, 연중무휴": "Seochon alley bookstore, open daily",
+"서촌 국수·시장": "Seochon noodles & market",
 "서촌 먹거리 시장": "Seochon food market",
 "서촌 삼계탕 전문점": "Seochon samgyetang (ginseng chicken soup) restaurant",
+"서촌 한식 오마카세": "Seochon Korean omakase",
 "석구로 직접 빻은 메밀로 수타해서 내줘요": "Handmade soba from buckwheat ground on a stone mill",
 "석유 램프 카페": "Oil lamp cafe",
 "석조 창고 안에서 여유롭게 쉬어요": "Unwind inside a stone warehouse",
@@ -3070,14 +3180,23 @@ window.VZTR_EN_AUTO = {
 "설농탕 전문, 아침 8시부터": "Seolleongtang specialist, open from 8:00",
 "설렁탕 전문, 일요일 휴무": "Seolleongtang (beef bone soup) specialist, closed Sun",
 "설렁탕, 24시간 영업": "Seolleongtang (beef bone soup), open 24 h",
+"설화수 부티크와 스파가 있는 매장": "Sulwhasoo boutique and spa",
 "성게 해산물덮밥": "Sea urchin seafood bowl",
 "성게에 힘주고 덮밥 재료가 크고 싱싱해요": "Generous sea urchin and big, fresh toppings",
 "성곽길 산책 공원": "Fortress wall walking park",
 "성수 #층 카페바": "Seongsu #-floor cafe bar",
 "성수 2층 카페바": "Seongsu 2nd-floor café bar",
+"성수 SM 굿즈·숲": "SM merch & Seoul Forest",
+"성수 다시크·삐아 코스": "Seongsu Dasique & BBIA route",
+"성수 댄스·RM 카페": "Seongsu dance & RM's cafe",
 "성수 도심 숲 산책": "Seongsu urban forest walk",
 "성수 모듬 초밥집": "Seongsu assorted sushi restaurant",
 "성수 베이커리 카페": "Seongsu bakery cafe",
+"성수 뷰티 세 곳": "Three Seongsu beauty stops",
+"성수 색조 브랜드 순례": "Seongsu makeup brand tour",
+"성수 스킨케어·편집숍": "Seongsu skincare stores",
+"성수 연무장길 뷰티 A": "Seongsu Yeonmujang beauty A",
+"성수 올영·이니스프리": "Seongsu beauty stores",
 "성수 족발 전문점": "Seongsu jokbal restaurant",
 "성수 족발과 카페바": "Seongsu jokbal and cafe bar",
 "성수 족발과 카페바 먼저 빼기": "Skip Seongsu jokbal and the cafe bar first",
@@ -3085,10 +3204,12 @@ window.VZTR_EN_AUTO = {
 "성수 칼국수와 서울숲": "Seongsu kalguksu and Seoul Forest",
 "성수 핫 카페 두 곳": "Two hot Seongsu cafes",
 "성수 핫 카페 두 곳 먼저 빼기": "Skip two hot cafes in Seongsu first",
+"성수 향 쇼핑·향수 만들기": "Seongsu scents & perfume class",
 "성수동 거리": "Seongsu-dong Street",
 "성수동 대림창고": "Daelim Changgo Seongsu",
 "성수동 랜드마크": "Seongsu-dong landmark",
 "성수역": "Seongsu Station",
+"성수의 올영 체험형 대형 매장": "Hands-on Olive Young flagship",
 "성수족발": "Seongsu Jokbal",
 "성터 돌담과 나무가 빛과 소리에 반응해요": "Castle walls and trees react to light and sound",
 "성터 야외 빛 전시": "Outdoor light show at the castle ruins",
@@ -3099,14 +3220,18 @@ window.VZTR_EN_AUTO = {
 "세계 각국 팀이 만든 눈 조각을 볼 수 있어요": "See snow sculptures made by teams from around the world",
 "세계음식거리": "World Food Street",
 "세계의 아트북 6만 권을 갖춘 서점이에요": "A bookstore with 60,000 art books from around the world",
+"세븐틴 단골 곱창 고깃집": "Gopchang grill SEVENTEEN frequents",
+"세븐틴이 좋아하는 국밥집": "SEVENTEEN's favorite gukbap",
 "세이코샤 서점": "Seikosha Bookshop",
 "세종": "Sejong",
 "세종 때 훈민정음을 만들어 반포한 법궁이에요": "Main palace where King Sejong created and proclaimed Hunminjeongeum",
 "센소지": "Senso-ji",
 "센소지 서쪽, 야외석 야키토리집이 있는 거리예요": "West of Senso-ji, a street of outdoor-seating yakitori shops",
 "센소지와 스미다 강변": "Senso-ji and Sumida riverside",
+"센텔라 앰플 그 브랜드 본점": "Home of the Centella ampoule",
 "센토 한 번, 대중주점 한 잔": "One sento, one tavern drink",
 "소개": "About",
+"소고기 국수·만둣국 서촌": "Beef noodles and dumplings",
 "소금기 있는 완두콩과 부드러운 팥소가 어우러져요": "Salty peas meet soft sweet red bean paste",
 "소금빵": "Salt bread",
 "소머리국밥, 9시부터 21시": "Someori-gukbap (ox head soup), 9:00-21:00",
@@ -3212,6 +3337,7 @@ window.VZTR_EN_AUTO = {
 "숙소에서 쉬다가": "Rest at the hotel, then",
 "숙소에서 쉬다가|저녁 예약 시간에 출발": "Rest at the hotel,|then head out for your dinner reservation",
 "순喫茶 올림피아": "Junkissa Olympia",
+"순면 평양냉면 전문점": "Pure-buckwheat pyeongyang naengmyeon",
 "순서는 가서": "Pick the order there",
 "술집": "Pub",
 "술집·맛집 거리": "Pub and food street",
@@ -3245,6 +3371,7 @@ window.VZTR_EN_AUTO = {
 "스스키노 해산물 식당": "Susukino seafood restaurant",
 "스스키노 헌책방과 갤러리 카페": "Susukino used books and gallery cafe",
 "스스키노·오도리": "Susukino · Odori",
+"스스키노역 가까운 만화 중고점": "Used manga shop near Susukino",
 "스시": "Sushi",
 "스시 덴치진": "Sushi Tenchijin",
 "스시 덴치진과 닛카 바": "Sushi Tenchijin and Nikka Bar",
@@ -3258,6 +3385,7 @@ window.VZTR_EN_AUTO = {
 "스크램블 교차로 사진": "Scramble crossing photo",
 "스타벅스 다자이후 덴만구 오모테산도점": "Starbucks Dazaifu Tenmangu Omotesando",
 "스텔라플레이스 이스트 #층 입구에서 올라가는 전망실": "Observation room reached from the floor-# entrance of Stellar Place East",
+"스트레이 키즈 연습생 단골 백반집": "Stray Kids' trainee-days diner",
 "스트리트 갤러리": "Street gallery",
 "스파월드 세계의 대온천": "Spa World",
 "스파이스 앤 카레 오곤노카제": "Ogon no Kaze",
@@ -3318,21 +3446,25 @@ window.VZTR_EN_AUTO = {
 "시모키타자와 서점": "Shimokitazawa bookstore",
 "시민의 종·꽃시계": "Citizens' Bell and Flower Clock",
 "시부야": "Shibuya",
+"시부야 건담·원피스": "Shibuya Gundam & One Piece",
 "시부야 스시 전문점": "Shibuya sushi restaurant",
 "시부야 스카이": "SHIBUYA SKY",
 "시부야 스크램블 교차로": "Shibuya Scramble Crossing",
 "시부야 스크램블과 시부야 스카이": "Shibuya Scramble and SHIBUYA SKY",
 "시부야 전망 명소": "Shibuya view spot",
+"시부야 포켓몬센터": "Shibuya Pokemon Center",
 "시사이드 모모치": "Seaside Momochi",
 "시장": "Market",
 "시장 군것질 순례": "Market snack crawl",
 "시장·소품샵에서 건진 것들": "Finds from markets·shops",
 "시장과 단골 식당": "Markets and regular restaurants",
 "시장에서 군것질": "Street snacks at the market",
+"시조 스이나 무로마치 2층": "SUINA Muromachi 2F, Shijo",
 "시조가라스마 마치야 개조 일본주 이자카야": "Machiya izakaya on Shijo-Karasuma, sake focus",
 "시조오미야": "Shijo-Omiya",
 "시조오미야 야키토리집": "Shijo-Omiya yakitori shop",
 "시청 돼지국밥집": "City Hall dwaeji-gukbap restaurant",
+"시청 전통주 밤": "City Hall traditional liquor night",
 "시치조 일본주 전문점 겸 가쿠우치": "Shichijo sake specialist and kakuuchi (liquor-store standing bar)",
 "시치후쿠진 덴마 에키마에점": "Shichifukujin Tenma Ekimae",
 "시텐노지": "Shitennoji Temple",
@@ -3348,6 +3480,11 @@ window.VZTR_EN_AUTO = {
 "식사 뒤 근처 부둣가를 산책하기 좋아요": "A nice harbor walk by the pier after your meal",
 "식사 때 줄이 있어도 내부가 넓어 오래 안 기다려요": "Even with a line at mealtime, the large interior keeps waits short",
 "식사도 문 여는 시간에 맞춰 넣어요": "Meals are timed to opening hours too",
+"신당 떡볶이·삼겹살": "Sindang tteokbokki & pork belly",
+"신당 방탄 삼겹살": "Sindang BTS pork belly",
+"신당 비건·떡볶이": "Sindang vegan & tteokbokki",
+"신당 시장 안 비건 국수집": "Vegan noodles in Sindang market",
+"신당동 떡볶이·DDP": "Tteokbokki Town & DDP",
 "신발": "Shoes",
 "신발 밑창이 먼저 닳는 여행": "A trip where your soles wear out first",
 "신발을 벗고 무릎 깊이 물속을 걸어요": "Take off your shoes and wade knee-deep",
@@ -3356,6 +3493,7 @@ window.VZTR_EN_AUTO = {
 "신분증·지갑·충전기 확인": "Check ID · wallet · charger",
 "신사 곱창과 다이닝 라운지": "Sinsa gopchang and dining lounge",
 "신사 한우곱창구이집": "Sinsa grilled Korean beef gopchang (intestines) restaurant",
+"신사동 삼겹살 본점": "Sinsa-dong samgyeopsal flagship",
 "신사역": "Sinsa Station",
 "신사이바시": "Shinsaibashi",
 "신사이바시 구제 옷가게": "Shinsaibashi vintage clothing shop",
@@ -3372,6 +3510,7 @@ window.VZTR_EN_AUTO = {
 "신신도 교다이 기타몬마에": "Shinshindo Kyodai",
 "신신도 교다이 기타몬마에 (킷사텐)": "Shinshindo Kyodai Kitamon-mae",
 "신오쿠보 코리아타운": "Shin-Okubo Koreatown",
+"신용산 떡볶이 본점": "Sinyongsan tteokbokki flagship",
 "신주쿠": "Shinjuku",
 "신주쿠 골든가이": "Shinjuku Golden Gai",
 "신주쿠 라멘 전문점": "Shinjuku ramen restaurant",
@@ -3390,17 +3529,20 @@ window.VZTR_EN_AUTO = {
 "신치토세공항": "New Chitose Airport",
 "신쿄고쿠": "Shinkyogoku",
 "신쿄고쿠 · 나카교 야키토리": "Shinkyogoku · Nakagyo yakitori",
+"신쿄고쿠 근처 애니메이트": "animate near Shinkyogoku",
 "신쿄고쿠 근처 장어 전문점": "Eel specialist near Shinkyogoku",
 "신후쿠사이칸 본점": "Shinpuku Saikan",
 "신후쿠사이칸 본점 (교토역 라멘)": "Shinpuku Saikan Main Store",
 "실내 정원 사운즈 포레스트": "Sounds Forest indoor garden",
 "실내 코스로 그대로": "Keep it as an indoor route",
 "실내 코스로 바꿔도 하루가 그대로 굴러가요": "Switch to indoor and your day still runs smoothly",
+"실물 크기 건담 서 있는 쇼핑몰": "Mall with a life-size Gundam",
 "쌍대포 맷돌순두부": "Ssangdaepo Maetdol Sundubu",
 "쌍화차 내는 다방, 아침 6시부터": "Dabang serving ssanghwa-cha (herbal tea), from 6:00",
 "쓰키지 스시 전문점": "Tsukiji sushi restaurant",
 "쓰키지 장외시장": "Tsukiji Outer Market",
 "쓰키지 장외시장 아침": "Tsukiji Outer Market morning",
+"아닐로 향수 플래그십": "ANILLO perfume flagship",
 "아라시야마": "Arashiyama",
 "아라시야마 다리 명소": "Arashiyama bridge spot",
 "아라시야마 대나무숲": "Arashiyama Bamboo Grove",
@@ -3437,6 +3579,7 @@ window.VZTR_EN_AUTO = {
 "아오이 마쓰리 행렬 (시모가모 신사)": "Aoi Festival Procession (Shimogamo Shrine)",
 "아오츠카 식당": "Aotsuka Shokudo",
 "아오츠카 식당 (슈쿠즈)": "Aotsuka Shokudo",
+"아이돌처럼 녹음해 보는 스튜디오": "Record like an idol",
 "아이폰·아이패드": "iPhone · iPad",
 "아이하시": "Aihashi Chopsticks",
 "아이하시 (수제젓가락공예)": "Aihashi Chopsticks Craft",
@@ -3466,6 +3609,7 @@ window.VZTR_EN_AUTO = {
 "아키하바라": "Akihabara",
 "아키하바라 구경": "Akihabara browsing",
 "아키하바라 쇼핑 거리": "Akihabara shopping street",
+"아키하바라 애니 쇼핑": "Akihabara anime shopping",
 "아키하바라 전기가": "Akihabara Electric Town",
 "아트북 6만 권": "60,000 art books",
 "아파트·건물 이름이나 도로명 주소로 찾아요": "Search by apartment/building name or street address",
@@ -3476,21 +3620,26 @@ window.VZTR_EN_AUTO = {
 "안데르센 전시·정원": "Andersen exhibit and garden",
 "안도 다다오 설계": "Designed by Tadao Ando",
 "안드로이드(크롬·삼성 인터넷)": "Android (Chrome · Samsung Internet)",
+"안무가 수업 듣는 대형 댄스 스튜디오": "Big studio with star choreographers",
 "안우석": "Ahn Woo-seok",
 "알아서 다 짜 줘요": "We'll plan it all for you",
 "알차게": "Packed",
 "알차게 · 계획형": "Packed · Planner",
 "알차게 · 즉흥형": "Packed · Spontaneous",
 "알차게와 여유롭게, 어느 쪽에 가까운지": "Are you more Packed or Relaxed?",
+"압구정 로데오 고깃집": "Apgujeong Rodeo grill house",
+"압구정 만두 전문점": "Apgujeong dumpling specialist",
 "압구정곱창": "Apgujeong Gopchang",
 "앙떼띠 카페": "Ant Eti Cafe",
 "앞 두 글자가 정해졌어요": "First two letters set",
 "앞 두 글자는 아직 바뀔 수 있어요": "The first two letters can still change",
 "앞 일정 빼기": "Remove previous plan",
 "앞 일정과 이어져 있어요": "Linked to previous plan",
+"애니 굿즈의 세계 최대급 본점": "One of the biggest anime stores",
 "앤티크 가구와 피아노 음악 속에서 마셔요": "Drink among antique furniture and piano music",
 "앤티크 인테리어로 꾸민 레트로한 분위기예요": "Retro mood with antique interiors",
 "앤티크 잡화와 고양이 있는 미부 킷사텐": "Kissaten with antiques and a cat in Mibu",
+"앨범·공식 굿즈 매장": "Albums and official merch",
 "야경": "Night view",
 "야경 보며 마무리": "Finish with the night view",
 "야경 속 인증샷": "Night-view photo",
@@ -3529,6 +3678,7 @@ window.VZTR_EN_AUTO = {
 "약 20분 도톤보리 미니 크루즈": "20-min Dotonbori mini cruise",
 "약 6.5ha 잔디 정원, 벚나무 약 300그루": "6.5 ha lawn garden with about 300 cherry trees",
 "약 7,000㎡ 잔디광장": "Lawn plaza of about 7,000 ㎡",
+"약국까지 있는 뷰티 편집숍": "Beauty select shop with a pharmacy",
 "얀슈 해산물 요리": "Yanshu seafood dishes",
 "양갈비 전문, 일요일 휴무": "Lamb chops specialist, closed Sun",
 "양고기 징기스칸": "Lamb Genghis Khan",
@@ -3579,6 +3729,8 @@ window.VZTR_EN_AUTO = {
 "에서 쉬기": "Rest at",
 "에서의": "At",
 "에스컬레이터로 편하게 오를 수 있고 무료예요": "Easy escalator climb, and it's free",
+"에스파 윈터가 올린 멜론빵 카페": "Melon bread cafe Winter posted",
+"에스파 카리나 착용 안경 체험": "Try the glasses Karina wore",
 "에이투비 Cafe&Bar": "A2B Cafe & Bar",
 "에이투비 카페앤바 성수": "Atob Cafe & Bar Seongsu",
 "에테르": "Aether",
@@ -3589,6 +3741,7 @@ window.VZTR_EN_AUTO = {
 "여권·지갑·충전기 확인": "Check passport · wallet · charger",
 "여기서 공항까지 걸리는 시간을 계산해요": "Calculating travel time from here to the airport",
 "여름 다누키 축제": "Summer Tanuki Festival",
+"여성향 애니 가게가 모인 거리": "Street of anime shops for women",
 "여유 일정 같고 단골·명소 보완": "Same relaxed plan, with regulars and sights added",
 "여유 일정 같고 숙소·단골 보완": "Same relaxed plan, with hotel and regulars added",
 "여유롭게": "Relaxed",
@@ -3629,14 +3782,18 @@ window.VZTR_EN_AUTO = {
 "역사적 외관에 현대적 디자인을 더한 건물이에요": "A historic facade with a modern design inside",
 "연결 실패": "Connection failed",
 "연남 감자탕 전문점": "Yeonnam gamjatang spot",
+"연남 난면·숲길": "Yeonnam noodles & forest trail",
+"연남 퓌 아지트·향수 공방": "Yeonnam fwee & perfume class",
 "연남·망원 돈까스와 커피": "Yeonnam · Mangwon tonkatsu and coffee",
 "연남·망원 돈까스와 커피 먼저 빼기": "Skip Yeonnam–Mangwon tonkatsu and coffee first",
 "연남동": "Yeonnam-dong",
 "연남동 골목": "Yeonnam-dong Alleys",
 "연남동 숲길 산책": "Yeonnam-dong forest path walk",
+"연남동 퓌 아지트, 성수보다 한산": "fwee in Yeonnam, calmer than Seongsu",
 "연못 위 금박 누각이 물에 비쳐요": "A gold-leaf pavilion reflected in the pond",
 "연못과 잡목림에 무사시노의 정취가 남아 있어요": "Ponds and woodland keep the feel of old Musashino",
 "연무장길 카페": "Yeonmujang-gil cafe",
+"연탄불 삼겹살 줄서는 집": "Charcoal pork belly with a queue",
 "연필·색연필 #,#종": "#,# kinds of pencils and colored pencils",
 "연화리 자연산 물회 전문점": "Wild-caught mulhoe (cold raw fish soup) in Yeonhwa-ri",
 "열차": "Train",
@@ -3657,8 +3814,10 @@ window.VZTR_EN_AUTO = {
 "영도해녀촌": "Yeongdo Haenyeo-chon",
 "영문·숫자·._- #~#자로 적어 주세요": "Use letters, numbers, ._- (#~# characters)",
 "영사안전콜센터": "Consular Call Center",
+"영상 따라 내 향수 만들기": "Make your own perfume by video",
 "영수증이 접히지 않음": "Receipts don't fold",
 "영어 가능한 직원이 있어 외국인도 이용하기 쉬워요": "English-speaking staff make it easy for visitors",
+"영어로 받는 퍼스널컬러 진단": "Personal color test in English",
 "영업": "Open",
 "영업 시작(": "Opens (",
 "영업 중": "Open",
@@ -3691,6 +3850,7 @@ window.VZTR_EN_AUTO = {
 "예: 환전 · 유심 · 보조배터리": "e.g. Currency exchange · SIM · power bank",
 "예상": "Estimated",
 "예약": "Reservation",
+"예약 필수 치이카와 빵집": "Chiikawa bakery, reservation a must",
 "예약까지 완료": "Even booking is done",
 "예약은 안 받고 매장 앞에서 줄을 서요": "No reservations; line up at the shop",
 "예약제 카운터 #석에서 천천히 먹을 수 있어요": "Eat at your own pace at # reservation-only counter seats",
@@ -3733,6 +3893,7 @@ window.VZTR_EN_AUTO = {
 "오늘은 쉬는 날. 계획은 이따가": "Rest day today. Plans later",
 "오늘은 안 가요 · 보관함에 ‘건너뜀’으로 남아요": "Skipping today · Kept in Archive as ‘Skipped’",
 "오다이바": "Odaiba",
+"오다이바 건담 베이스": "Odaiba Gundam Base",
 "오다이바 해변 공원": "Odaiba Seaside Park",
 "오다이바 해변공원": "Odaiba Seaside Park",
 "오뎅백반, 20시 40분까지": "Odeng baekban (fish cake set meal), until 20:40",
@@ -3740,6 +3901,7 @@ window.VZTR_EN_AUTO = {
 "오도리 겨울 조명 행사": "Odori winter lights event",
 "오도리 공원": "Odori Park",
 "오도리 공원 전망": "Odori Park view",
+"오도리 근처 애니메이트": "animate near Odori",
 "오도리 삿포로 카페": "Odori Sapporo cafe",
 "오도리 쇼핑 상점가": "Odori shopping arcade",
 "오도리 크리스마스 시장": "Odori Christmas market",
@@ -3813,6 +3975,7 @@ window.VZTR_EN_AUTO = {
 "오스테리아 루마카": "Lumaca",
 "오스테리아 루마카 (스스키노 0번지)": "Osteria Lumaca",
 "오시리아역": "Osiria Station",
+"오장동 함흥냉면 노포": "Ojangdong hamheung naengmyeon classic",
 "오전·오후·저녁을 빈틈없이 이어요": "Morning, afternoon and evening linked without gaps",
 "오전은 숙소,": "Morning at the hotel,",
 "오전은 숙소, 오후 일정만 살리기": "Hotel in the morning, keep only afternoon plans",
@@ -3863,6 +4026,7 @@ window.VZTR_EN_AUTO = {
 "오타루 유리 이로도리야 (잠자리구슬 체험)": "Otaru Glass Irodoriya",
 "오타루 작은 유리 공방": "Otaru small glass studios",
 "오타루 전망 로프웨이": "Otaru view ropeway",
+"오타루 치이카와·사카이마치": "Otaru Chiikawa & Sakaimachi",
 "오타루 카페·쇼핑": "Otaru cafe and shopping",
 "오타루 해산물 시장": "Otaru seafood market",
 "오타루까지 · 일본": "To Otaru · Japan",
@@ -3892,6 +4056,7 @@ window.VZTR_EN_AUTO = {
 "옥상 노천탕이 있는 나카메구로 센토": "Nakameguro sento with a rooftop open-air bath",
 "옥상 스카이 워크": "Rooftop sky walk",
 "올림픽로 #": "Olympic-ro #",
+"올영 체험 특화 성수 4층": "Olive Young 4F experience, Seongsu",
 "옮긴 순서·바꾼 시각은 처음 상태로 돌아가요 · 메모도 초기화돼요": "Order and times reset to original · Notes reset too",
 "옷·빈티지": "Clothes · vintage",
 "옷·신발·카페 거리": "Clothes, shoes and cafe street",
@@ -3913,6 +4078,8 @@ window.VZTR_EN_AUTO = {
 "왕돈까스 전문, 화요일 휴무": "Giant tonkatsu specialist, closed Tue",
 "왕돈까스·매운왕돈까스": "Giant tonkatsu · spicy giant tonkatsu",
 "외고집설렁탕": "Oegojip Seolleongtang",
+"외국인 많이 찾는 올영 대형 매장": "Big Olive Young popular with visitors",
+"외국인 붐비는 대형 다이소": "Big Daiso packed with tourists",
 "외국인이 운영하는 세계 음식점이 한곳에 모여 있어요": "World restaurants run by foreigners, all in one place",
 "요소자케": "Yosozake",
 "요시다야마 세세리": "Yoshidayama Seseri",
@@ -3928,6 +4095,8 @@ window.VZTR_EN_AUTO = {
 "용두산공원": "Yongdusan Park",
 "용두산공원과 부산타워": "Yongdusan Park and Busan Tower",
 "용산 국립 박물관": "Yongsan national museum",
+"용산 맞춤 뷰티·퍼스널컬러": "Yongsan custom beauty & color",
+"용산 박물관과 BTS 일식": "Yongsan museum & BTS Japanese",
 "용산역": "Yongsan Station",
 "용호동할매팥빙수단팥죽 본점": "Yongho-dong Halmae Patbingsu",
 "우동": "Udon",
@@ -3939,11 +4108,14 @@ window.VZTR_EN_AUTO = {
 "우래옥": "Woo Lae Oak",
 "우메가에모치": "Umegae mochi",
 "우메다": "Umeda",
+"우메다 루쿠아 13층 포켓몬센터": "Pokemon Center on LUCUA 13F",
 "우메다 빨간 관람차": "Red Ferris wheel in Umeda",
 "우메다 쇼핑·야경": "Umeda shopping and night views",
 "우메다 스카이빌딩 공중정원": "Umeda Sky Building Floating Garden",
 "우메다 스카이빌딩 전망": "Umeda Sky Building views",
+"우메다 애니 쇼핑": "Umeda anime shopping",
 "우메다 야경 전망대": "Umeda night view observatory",
+"우메다 치이카와 코스": "Umeda Chiikawa route",
 "우메다 한큐 백화점": "Hankyu Department Store Umeda",
 "우메다의 랜드마크 관람차": "Umeda's landmark Ferris wheel",
 "우산 쓰고 일단 출발": "Take an umbrella and head out",
@@ -3957,6 +4129,7 @@ window.VZTR_EN_AUTO = {
 "우에노역과 오카치마치역 사이 약 #m에 가게 약 #곳이 이어져요": "About # shops line a stretch of about # m between Ueno and Okachimachi stations",
 "우오베이 시부야 도겐자카점": "Uobei Shibuya Dogenzaka",
 "우주 콘셉트 인테리어의 지하 킷사텐": "Underground kissaten with a space theme",
+"우즈마사 영화마을": "Uzumasa Studio Park",
 "우지": "Uji",
 "우지 뵤도인": "Uji Byodoin",
 "우지 뵤도인 · 겐지 박물관": "Uji: Byodoin · Genji Museum",
@@ -3973,6 +4146,7 @@ window.VZTR_EN_AUTO = {
 "원조 새우 스프": "Original shrimp soup",
 "원조 새우 스프와 햄버그가 잘 어울려요": "The original shrimp soup pairs well with hamburger steak",
 "원조남산왕돈까스": "Wonjo Namsan Wang Donkatsu",
+"원피스 공식 굿즈 본점": "Official One Piece goods flagship",
 "원형 투명 바닥": "Circular clear floor",
 "월계관": "Gekkeikan",
 "월계관 오쿠라 기념관": "Gekkeikan Okura Sake Museum",
@@ -4020,6 +4194,7 @@ window.VZTR_EN_AUTO = {
 "을숙도 부산현대미술관": "Eulsukdo Busan Museum of Contemporary Art",
 "을지다방": "Eulji Dabang",
 "을지로 골목": "Euljiro Alleys",
+"을지로 골목과 냉면 노포": "Euljiro alleys & naengmyeon classic",
 "을지로 냉면·갈비탕집": "Euljiro naengmyeon and galbitang restaurant",
 "을지로 냉면과 커피": "Euljiro naengmyeon and coffee",
 "을지로 냉면과 커피 먼저 빼기": "Skip Euljiro naengmyeon and coffee first",
@@ -4031,6 +4206,7 @@ window.VZTR_EN_AUTO = {
 "을지로 쌍화차 다방": "Euljiro ssanghwa tea dabang (old-style tea room)",
 "을지로 커피와 노가리·종로 포차": "Euljiro coffee and nogari · Jongno pocha",
 "을지로 커피와 노가리·종로 포차 먼저 빼기": "Skip Euljiro coffee and nogari / Jongno pocha first",
+"을지로 평양냉면 노포": "Euljiro pyeongyang naengmyeon classic",
 "을지로 필터커피 카페": "Euljiro filter coffee cafe",
 "을지로#가역": "Euljiro #-ga Station",
 "을지로입구역": "Euljiroipgu Station",
@@ -4054,6 +4230,7 @@ window.VZTR_EN_AUTO = {
 "이곳 한정 메뉴": "Menu only available here",
 "이기대": "Igidae",
 "이기대 해안산책로": "Igidae Coastal Trail",
+"이나리 풍 치이카와 먹거리 숍": "Inari-style Chiikawa food shop",
 "이노다 커피 본점": "Inoda Coffee Main Store",
 "이노카시라 공원과 기치조지": "Inokashira Park and Kichijoji",
 "이노카시라 온시 공원": "Inokashira Park",
@@ -4067,6 +4244,7 @@ window.VZTR_EN_AUTO = {
 "이런 여행을 해요": "How you travel",
 "이런 여행자들이 있어요. 궁금한 성향을 눌러 자세히 보세요.": "Meet the travelers. Tap a type for details.",
 "이런 장면, 익숙하죠?": "Sound familiar?",
+"이른 아침부터 설렁탕": "Seolleongtang from early morning",
 "이름 모를 골목에서 멈춤": "Stop in an unnamed alley",
 "이마이 도톤보리 본점": "Imai Dotonbori Main Store",
 "이마이즈미 고민가 카페와 빈티지": "Imaizumi old-house cafe and vintage",
@@ -4081,9 +4259,11 @@ window.VZTR_EN_AUTO = {
 "이바구공작소": "Ebagu Crafts Workshop",
 "이바구길 카페. 바닐라우유와 생강우유.": "Ibagu-gil café with vanilla milk and ginger milk",
 "이번 여행, 이것만은 꼭!": "The one thing I must do this trip",
+"이북 순대 맡김차림": "North Korean–style sundae omakase",
 "이세야 공원점": "Iseya Koen Branch",
 "이시다 커피 스토어": "Ishida Coffee Store",
 "이엘 16.52": "EL 16.52",
+"이음·인사동 만두": "EUM & Insadong dumplings",
 "이전 일정으로": "Back to previous plan",
 "이즈에이 본점": "Izuei Main Store",
 "이즈에이 본점 (장어)": "Izuei Main Store (Eel)",
@@ -4105,7 +4285,10 @@ window.VZTR_EN_AUTO = {
 "이치조지역에서 걸어서 #분": "# min walk from Ichijoji Station",
 "이케부쿠로": "Ikebukuro",
 "이케부쿠로 대형 쇼핑몰": "Ikebukuro large shopping mall",
+"이케부쿠로 애니 한 바퀴": "Ikebukuro anime loop",
 "이케부쿠로 이치란 라멘집": "Ikebukuro Ichiran ramen shop",
+"이케부쿠로 포켓몬·오토메": "Ikebukuro Pokémon & Otome Road",
+"이탈리안 셰프의 난면": "Hand-cut noodles by an Italian chef",
 "이태원": "Itaewon",
 "이태원 거리": "Itaewon Street",
 "이태원 밤거리": "Itaewon Night Street",
@@ -4120,11 +4303,13 @@ window.VZTR_EN_AUTO = {
 "익선동": "Ikseon-dong",
 "익선동 한옥 골목": "Ikseon-dong Hanok Street",
 "인간국보 구로다 다쓰아키의 긴 테이블에서 쉴 수 있어요": "Relax at the long table by a Living National Treasure, Kuroda Tatsuaki",
+"인사동 김치·떡 체험": "Kimchi & rice cake classes",
 "인생샷 장인": "Main Character",
 "인쇄 화면에서 공유 버튼 → ‘파일에 저장’": "On the print screen, tap Share → ‘Save to Files’",
 "인쇄 화면을 열지 못했어요": "Couldn't open the print screen",
 "인쇄 화면이 열리면 아래처럼 저장하세요": "When the print screen opens, save as shown below",
 "인어상과 누리마루 APEC하우스를 함께 볼 수 있어요": "See the Mermaid Statue and Nurimaru APEC House together",
+"인왕산 보이는 만둣국집": "Dumpling soup by Inwangsan",
 "인왕산이 보이는 루프탑이 있어요": "Rooftop with a view of Inwangsan Mountain",
 "인천공항 #:#까지 도착": "Arrive at Incheon Airport by #:#",
 "인천공항 #:#까지 도착 · 출발 #시간 전": "Arrive at Incheon Airport by #:# · # h before departure",
@@ -4158,6 +4343,7 @@ window.VZTR_EN_AUTO = {
 "일본 불법 최초의 관사(官寺), 593년 창건": "Japan's first state temple, founded 593",
 "일본 첫 철도가 달린 터": "Site of Japan's first railway",
 "일본 최대 매장 면적 백화점": "Japan's largest department store by floor area",
+"일본 최대 포켓몬센터": "Japan’s biggest Pokémon Center",
 "일본 최대급 매장 면적 백화점": "One of Japan's largest department stores",
 "일본 최대급 목조 석가 좌상 대불이 있어요": "Home to one of Japan's largest wooden seated Buddha statues",
 "일본 최대급 오르골": "One of Japan's largest music box selections",
@@ -4282,6 +4468,8 @@ window.VZTR_EN_AUTO = {
 "전 층 통창으로 바다가 보이는 카페": "Café with sea views through full-height windows",
 "전국 덴만구의 총본궁으로 학문의 신을 모셔요": "Head shrine of all Tenmangu shrines, enshrining the god of learning",
 "전국 사케와 오반자이(교토 제철 요리)": "Sake from across Japan and obanzai (Kyoto home cooking)",
+"전국 전통주 막걸리 집": "Korean liquor & makgeolli house",
+"전국 첫 치이카와 파크 공식점": "Nation’s first Chiikawa Park store",
 "전날 전화": "Call the day before",
 "전날 전화로 확인": "Call the day before to confirm",
 "전날 확인": "Check the day before",
@@ -4321,6 +4509,8 @@ window.VZTR_EN_AUTO = {
 "전철·걷기 · 약 #시간 #분 (추정)": "Train · walking · about # h # min (est.)",
 "전체": "All",
 "전통 건축과 서양식 건물이 어우러져 있어요": "Traditional architecture blends with Western-style buildings",
+"전통 한옥에서 먹는 한정식": "Korean course meal in a hanok",
+"전통주 시음·한식 전시 공간": "Korean liquor tasting and food exhibits",
 "전포 밤 산책과 LP바": "Jeonpo night walk and LP bar",
 "전포 밤 산책과 LP바 먼저 빼기": "Skip a Jeonpo night walk and LP bar first",
 "전포 카페 거리 카페": "Cafe on Jeonpo Cafe Street",
@@ -4357,7 +4547,12 @@ window.VZTR_EN_AUTO = {
 "정통 아랍 음식을 먹고 시샤도 체험할 수 있어요": "Authentic Arab food and a shisha experience",
 "정함": "Set",
 "정해 둔 **골목 하나**만 천천히": "Take it slow in just one **alley** you picked",
+"정호영 셰프 우동 본점": "Chef Jung Ho-young’s udon flagship",
 "정확한 주소는 이 폰에만 저장해요": "Exact address stays on this phone",
+"제기동 큰 재래시장": "Big traditional market, Jegi-dong",
+"제니 모델 그 향수, 성수점": "Jennie's perfume brand, Seongsu",
+"제니 모델 그 향수·핸드크림": "Jennie's perfume and hand cream brand",
+"제니 모델 향수, 삼청동 쇼룸": "Jennie's perfume brand, Samcheong",
 "제대로 쉬고 오는 분이시군요?": "So you come back fully rested?",
 "제목 ‘": "Title ‘",
 "제목을 바꿨어요": "Title changed",
@@ -4365,7 +4560,9 @@ window.VZTR_EN_AUTO = {
 "제일 먼저 자랑하고 싶은 한마디는요?": "What's the first thing you'd brag about?",
 "제일평화시장": "Jeil Pyeonghwa Market",
 "제주": "Jeju",
+"제주 섬을 닮은 이니스프리 매장": "Jeju-inspired Innisfree store",
 "제주복국": "Jeju Bokguk",
+"제철 모던 한식 코스": "Seasonal modern Korean course",
 "제철 재료로 만든 계절 소바가 있어요": "Seasonal soba made with in-season ingredients",
 "제철 해산물 요리": "Seasonal seafood dishes",
 "제철 해산물 초밥": "Seasonal seafood sushi",
@@ -4378,6 +4575,7 @@ window.VZTR_EN_AUTO = {
 "조잔케이": "Jozankei",
 "조잔케이 온천": "Jozankei Onsen",
 "조잔케이 온천 반나절": "Half day at Jozankei Onsen",
+"조향사와 내 향수 만들기": "Make perfume with a perfumer",
 "족발 전문, 22시까지": "Jokbal specialist, until 22:00",
 "종각역": "Jonggak Station",
 "종로 설농탕 전문점": "Jongno seolleongtang restaurant",
@@ -4396,6 +4594,8 @@ window.VZTR_EN_AUTO = {
 "좋은 방, 좋은 디저트, 늘어진 시간이 제일 소중해요": "A good room, good desserts and slow time matter most",
 "좌석 간격이 넓고 창가에서 청사포 바다가 보여요": "Wide seat spacing and sea views of Cheongsapo from the window",
 "주 3일만 여는 단카·시집 중심 작은 서점": "Small bookshop for tanka and poetry, open 3 days a week",
+"주간 점프 공식 굿즈 숍": "Official Weekly Jump goods shop",
+"주간 점프 굿즈, 2026-02 리뉴얼": "Weekly Jump goods, renewed 2026-02",
 "주류점 뒤편 20석 다치노미": "20-seat tachinomi behind a liquor store",
 "주말·공휴일엔 큰길이 보행자 거리가 돼요": "The main avenue becomes pedestrian-only on weekends and holidays",
 "주문 마감": "Last order",
@@ -4428,6 +4628,7 @@ window.VZTR_EN_AUTO = {
 "줄은 미련 없이 넘기고 계획대로 이어 가요": "Skip the line without regret and stick to the plan",
 "줄이 길면 옆 가게로": "If the line is long, go next door",
 "줄이려면": "To shorten",
+"중고 만화·피규어의 성지": "Mecca of used manga and figures",
 "중고 옷가게 말고도 음반·책방이 많아요": "Besides used clothes, plenty of record and book shops",
 "중고 옷가게·아웃도어": "Used clothing · outdoor gear",
 "중구": "Jung-gu",
@@ -4462,12 +4663,14 @@ window.VZTR_EN_AUTO = {
 "지도만 있으면 어디든 한 곳 더 갈 수 있어요": "With a map, you can always fit in one more stop",
 "지도에 없는 골목 산책": "Stroll alleys not on the map",
 "지도에 없는 동네도 동선은 미리. 하루 #만 보는 기본": "Plan routes even for areas not on the map. Baseline: # steps a day",
+"지드래곤 굿데이 그 갈비집": "Galbi spot from G-Dragon’s Good Day",
 "지붕 LED 조명이 부산의 랜드마크로 꼽혀요": "The rooftop LED lighting is a Busan landmark",
 "지붕 덮인 쇼핑 거리": "Covered shopping street",
 "지붕 덮인 쇼핑 거리 두 줄이 나란히 있어요": "Two covered shopping streets run side by side",
 "지붕 덮인 쇼핑 거리 두 줄이 나란히 있어요. 구제 가게 ‘아미아미’(#~#시)가 남쪽 입구 근처.": "Two covered shopping streets run side by side. Vintage shop ‘Ami Ami’ (#:00–#:00) is near the south entrance.",
 "지붕 덮인 아케이드에 옷가게와 식당이 이어져요": "A covered arcade of clothing shops and restaurants",
 "지붕이 있어 비나 눈에도 걸을 수 있어요": "Covered, so you can walk in rain or snow",
+"지브리 미술관과 기치조지": "Ghibli Museum & Kichijoji",
 "지상 #m 전망": "View from # m up",
 "지상 #m에서 #도로 내려다봐요": "Look out over # degrees from # m up",
 "지역만 고르면 동선은": "Just pick an area and the route is",
@@ -4500,6 +4703,7 @@ window.VZTR_EN_AUTO = {
 "진보초 킷사와 소바, 가쿠우치": "Jimbocho kissa, soba and kakuuchi",
 "진옥화할매원조닭한마리": "Jinokhwa Halmae Wonjo Dakhanmari",
 "진우네 담벼락": "Jinu's Wall",
+"진주 비빔밥·헛제사밥": "Jinju bibimbap & heotjesabap",
 "진짜 가 봤어”": "I actually went”",
 "진짜 꽃 1만 3천 송이": "13,000 real flowers",
 "진품물회": "Jinpum Mulhoe",
@@ -4543,6 +4747,7 @@ window.VZTR_EN_AUTO = {
 "징기스칸 미야시타 상점": "Miyashita Shoten",
 "징기스칸 요요테이 삿포로 본점": "Genghis Khan Yoyotei Sapporo Main Store",
 "징기스칸 전문점": "Genghis Khan (grilled lamb) restaurant",
+"짚불구이 우대갈비집": "Straw-fired prime galbi",
 "짧은 공유 링크는 아직 지원하지 않아요 · 장소 이름으로 입력해 주세요": "Short share links aren't supported yet · Enter the place name instead",
 "쫄깃한 곱창 모츠나베": "Chewy offal motsunabe",
 "차 · 집 →": "Car · Home →",
@@ -4600,13 +4805,17 @@ window.VZTR_EN_AUTO = {
 "첫날은 서두르지 않고 기분 좋게 시작하는 게 중요해요": "Start day one unhurried and in a good mood",
 "청계광장": "Cheonggye Plaza",
 "청계천": "Cheonggyecheon Stream",
+"청계천 K-팝 체험": "K-pop at Cheonggyecheon",
 "청계천 하천 산책길": "Stream-side walking path",
 "청년감자탕 송파 본점": "Cheongnyeon Gamjatang Songpa Main",
+"청담 스키즈 점심": "Cheongdam Stray Kids lunch",
+"청담 아이돌 저녁": "Cheongdam idol dinner",
 "청량리역": "Cheongnyangni Station",
 "청사포 다릿돌전망대": "Cheongsapo Daritdol Observatory",
 "청사포 횟집촌의 장어·조개구이집": "Grilled eel and shellfish in Cheongsapo raw-fish village",
 "청수우동메밀냉면": "Cheongsu Udong & Memil Naengmyeon",
 "청아라 생선구이": "Cheongara Grilled Fish",
+"청주와 한식 안주 술집": "Sake & Korean bar bites",
 "청진옥": "Cheongjinok",
 "체크 안 된 메모 없음": "No unchecked notes",
 "체크아웃 전까지": "Until check-out",
@@ -4744,8 +4953,10 @@ window.VZTR_EN_AUTO = {
 "캐나다산 대형 참치": "Large Canadian tuna",
 "캐널 야간 조명 행사": "Canal night lights event",
 "캐널 일루미네이션 2026": "Canal Illumination 2026",
+"캐널시티 건담 베이스": "Canal City Gundam Base",
 "캐널시티 하카타": "Canal City Hakata",
 "캐널시티와 일루미네이션": "Canal City and illumination",
+"캐널시티의 건프라 공식 매장": "Official Gunpla store in Canal City",
 "캐리어 빈 공간 계산 시작": "Start counting your suitcase's spare room",
 "캣 스트리트": "Cat Street",
 "커피 소주": "Coffee shochu",
@@ -4762,6 +4973,7 @@ window.VZTR_EN_AUTO = {
 "코모에스 이마이즈미": "Comoes Imaizumi",
 "코모에스 이마이즈미 (고민가 카페·바)": "Comoes Imaizumi",
 "코사카 닭 오마카세": "Kosaka chicken omakase",
+"코엑스 K-팝 굿즈": "COEX K-pop merch",
 "쿠시카츠": "Kushikatsu",
 "쿠시카츠 다루마 신세카이 총본점": "Kushikatsu Daruma Shinsekai Main Store",
 "쿠쿠루": "Kukuru",
@@ -4773,6 +4985,8 @@ window.VZTR_EN_AUTO = {
 "큰 수조의 활게를 그 자리에서 조리해 줘요": "Live crabs from a big tank, cooked on the spot",
 "큰 연못을 도는 산책길이 고즈넉해요": "A quiet path loops around the big pond",
 "클라우드 아케이드": "Cloud Arcade",
+"클렌저 직접 만드는 곳": "Make your own cleanser",
+"클린잇제로 클렌징밤 본가": "Home of Clean It Zero balm",
 "키친 펀치": "Kitchen Punch",
 "키타카로 삿포로 본관": "Kitakaro Sapporo Main Hall",
 "킨류 라멘 난바 센니치마에점": "Kinryu Ramen Namba Sennichimae",
@@ -4798,6 +5012,7 @@ window.VZTR_EN_AUTO = {
 "탑승권": "Boarding pass",
 "탑승권 코드 # / #": "Boarding pass code # / #",
 "탑처럼 쌓은 감자탕": "Gamjatang stacked like a tower",
+"태안식 간장게장집": "Taean-style ganjang gejang",
 "태종대": "Taejongdae",
 "태종대와 영도 오션뷰 카페": "Taejongdae and Yeongdo ocean-view cafe",
 "탱고가 흐르는 진보초 노포 킷사텐": "Old-school Jimbocho kissaten with tango",
@@ -4852,6 +5067,7 @@ window.VZTR_EN_AUTO = {
 "팀랩 후쿠오카성 터 빛의 축제": "teamLab Fukuoka Castle Festival of Light",
 "팁 문화 없음": "No tipping culture",
 "파도 모양 아치 건물": "Wave-shaped arch building",
+"파르코 6층 포켓몬센터": "Pokemon Center on PARCO 6F",
 "파스텔 지붕 사이 골목에서 스탬프 투어를 할 수 있어요": "Stamp tour in the alleys between pastel rooftops",
 "파주 장단콩으로 순두부를 직접 갈아 만들어요": "Sundubu ground by hand from Paju Jangdan beans",
 "파크 안 카레 식당": "Curry restaurant inside the park",
@@ -4859,6 +5075,7 @@ window.VZTR_EN_AUTO = {
 "팥빙수·단팥죽집": "Patbingsu and danpatjuk (sweet red bean porridge) shop",
 "팥빙수와 단팥죽 가게": "Patbingsu and danpatjuk (sweet red bean porridge)",
 "패트릭 블랑 수직 정원": "Patrick Blanc vertical garden",
+"퍼스널컬러·체형 분석 스튜디오": "Personal color & body analysis studio",
 "펑크·라이브하우스": "Punk · live houses",
 "페리칸 카페": "Pelican Cafe",
 "펭귄당": "Penguin-do",
@@ -4887,6 +5104,7 @@ window.VZTR_EN_AUTO = {
 "폰토초 골목 저녁": "Pontocho alley evening",
 "폰토초 밤 산책": "Pontocho night walk",
 "표지·속지를 골라 만드는 오더 노트 문구점": "Stationery shop for custom-made notebooks",
+"푸딩팟 키링 만드는 퓌 매장": "Make a fwee pudding pot keyring",
 "푸른 조명이 낮에도 밤 같은 분위기를 만들어요": "Blue lighting makes it feel like night even by day",
 "푸짐한 앙카케 야키소바가 간판이에요": "Hearty ankake yakisoba is the signature",
 "푹 쉬는 여행": "A truly restful trip",
@@ -4903,7 +5121,9 @@ window.VZTR_EN_AUTO = {
 "피 얇은 만두": "Thin-skinned dumplings",
 "피란 시절 헌책방": "Wartime used bookstore",
 "피자 펍, 월요일 휴무": "Pizza pub, closed Mon",
+"필동 한정식·명동": "Korea House & Myeongdong",
 "필터커피, 1층 기준 22시까지": "Filter coffee, until 22:00 on the 1st floor",
+"핑크 요정 콘셉트 뷰티 기기 체험": "Try beauty devices, pink fairy theme",
 "하나미코지": "Hanamikoji",
 "하나미코지 골목까지": "To Hanamikoji Alley",
 "하네 분코": "Hane Bunko",
@@ -4916,6 +5136,7 @@ window.VZTR_EN_AUTO = {
 "하라주쿠에서 시부야로 이어지는 어른스러운 길이에요": "A grown-up lane from Harajuku to Shibuya",
 "하루 #묶음 + 숙소에서 쉬는 시간": "# blocks a day + rest time at the hotel",
 "하루 #묶음, 꽉 채워서": "# blocks a day, fully packed",
+"하루 100그릇 소고기곰탕": "Beef gomtang, 100 bowls a day",
 "하루 다섯 끼 계획 vs 마트 산책": "Five meals a day vs. a supermarket stroll",
 "하루 동선 짜기": "Plan the day's route",
 "하루 두세 곳만,": "Just two or three places a day,",
@@ -4944,6 +5165,7 @@ window.VZTR_EN_AUTO = {
 "하카타역 모츠나베집": "Hakata Station motsunabe shop",
 "하카타역 바로 옆, #~#층 마루이·B#·#~#층 식당": "Right next to Hakata Station; Marui on floors #–#, B#, restaurants on floors #–#",
 "하카타역 쇼핑·식당": "Hakata Station shopping and dining",
+"하카타역 앞 마루이 2층": "Marui 2F by Hakata Stn",
 "하카타역에서 걸어갈 만큼 가까워요": "Close enough to walk from Hakata Station",
 "하코다테 가이요테이 스스키노 총본점": "Hakodate Kaiyotei Susukino Flagship",
 "하코다테 해산물과 스스키노 한 잔": "Hakodate seafood and a Susukino drink",
@@ -4962,14 +5184,18 @@ window.VZTR_EN_AUTO = {
 "한국관광공사": "Korea Tourism Organization",
 "한국저작권위원회": "Korea Copyright Commission",
 "한남 서울 미술관": "Hannam art museum",
+"한남 향·핸드케어 쇼룸": "Hannam scent showrooms",
 "한눈에 보기": "At a glance",
 "한눈에 보는 여행 성향 #": "Travel types at a glance #",
+"한방 생강 차 마시는 티하우스": "Herbal ginger tea house",
 "한식": "Korean food",
 "한신마에~난바 조명길": "Lit boulevard from Hanshin-mae to Namba",
+"한옥 느낌의 설화수 플래그십": "Hanok-style Sulwhasoo flagship",
 "한옥 마을 사진 명소": "Hanok village photo spot",
 "한옥 마을이라 방문 가능 시간이 정해져 있어요": "Hanok village with set visiting hours",
 "한옥 지붕과 남산, 고층 빌딩이 함께 보여요": "Hanok roofs, Namsan and skyscrapers in one view",
 "한옥 카페 골목": "Hanok cafe alley",
+"한옥에서 개성식 만두": "Gaeseong dumplings in a hanok",
 "한우 갈빗살": "Hanwoo galbi-salt (rib-finger beef)",
 "한우곱창구이, 22시 50분까지": "Grilled Korean beef gopchang (intestines), until 22:50",
 "한큐 백화점 우메다 본점": "Hankyu Department Store Umeda",
@@ -4979,6 +5205,7 @@ window.VZTR_EN_AUTO = {
 "할 일 # · 완료 # · 체크하면 완료로 옮겨져요": "To-do # · Done # · check to move to Done",
 "할 일로 돌려놨어요": "Moved back to To do",
 "할매빵·연탄빵": "Halmae-ppang · yeontan-ppang (briquette-shaped bread)",
+"합정 국밥·곰탕": "Hapjeong gomtang",
 "핫플": "Hotspot",
 "핫플 러너": "Trend Chaser",
 "핫플, 구경 쪽": "Leaning Hotspot, Sights",
@@ -5005,6 +5232,7 @@ window.VZTR_EN_AUTO = {
 "해발 #m 전망대": "Observatory # m above sea level",
 "해발 #m에서 보는 절경 레스토랑이에요": "A restaurant with stunning views from # m above sea level",
 "해방촌": "Haebangchon",
+"해방촌 ITZY 타코 저녁": "Haebangchon ITZY taco dinner",
 "해방촌 신흥시장": "Haebangchon Sinheung Market",
 "해방촌 언덕": "Haebangchon Hill",
 "해방촌 피자 펍": "Haebangchon pizza pub",
@@ -5213,12 +5441,14 @@ window.VZTR_EN_AUTO = {
 "홈무스가 대표 메뉴, 월요일 휴무": "Hummus is the signature, closed Mon",
 "홋카이도 신궁": "Hokkaido Jingu",
 "홋카이도 신궁과 마루야마 공원": "Hokkaido Jingu and Maruyama Park",
+"홋카이도 첫 치이카와 먹거리 숍": "Hokkaido’s first Chiikawa food shop",
 "홋카이도 팥소를 넉넉히 넣은 바삭한 만주예요": "Crisp manju stuffed with Hokkaido red bean paste",
 "홋카이도대 근처 원두 판매 겸 카페": "Beans and cafe near Hokkaido University",
 "홋카이도신궁 신궁 산책": "Hokkaido Jingu shrine walk",
 "홋카이도의 역사와 문화를 전시로 배워요": "Learn Hokkaido's history and culture through exhibits",
 "홋카이도청 구본청사": "Red Brick Office",
 "홋카이도청 구본청사 (붉은 벽돌 청사)": "Former Hokkaido Government Office (Red Brick)",
+"홍대 K-팝 굿즈 쇼핑": "Hongdae K-pop shopping",
 "홍대 · 숙소에 짐 맡기기": "Hongdae · drop bags at the hotel",
 "홍대 → 김포공항": "Hongdae → Gimpo Airport",
 "홍대 → 동대문·혜화 → 성수 → 명동·을지로 → 홍대": "Hongdae → Dongdaemun·Hyehwa → Seongsu → Myeongdong·Euljiro → Hongdae",
@@ -5281,6 +5511,8 @@ window.VZTR_EN_AUTO = {
 "홍대 → 종로·@ → 홍대·연남 → 종로·@ → 명동·을지로 → 홍대": "Hongdae → Jongno·@ → Hongdae·Yeonnam → Jongno·@ → Myeongdong·Euljiro → Hongdae",
 "홍대 걷고싶은거리": "Hongdae Walking Street",
 "홍대 밤거리": "Hongdae Night Street",
+"홍대 뷰티 쇼핑": "Hongdae beauty shopping",
+"홍대 블랙핑크 도자기 코스": "Hongdae BLACKPINK pottery route",
 "홍대 쇼핑·술집 거리": "Hongdae shopping · bar street",
 "홍대 술집 밤거리": "Hongdae bar and nightlife street",
 "홍대 역 근처": "Near Hongdae Station",
@@ -5301,6 +5533,7 @@ window.VZTR_EN_AUTO = {
 "활어회": "Fresh raw fish (hoe)",
 "활오징어 회": "Live squid sashimi",
 "황치즈 빵": "Yellow cheese bread",
+"회를 골라 먹는 수산시장": "Pick your fish, eat it fresh",
 "후나오카 온천": "Funaoka Onsen",
 "후나오카 온천 대중탕": "Funaoka Onsen public bath",
 "후나오카 온천(대중탕)": "Funaoka Onsen (Public Bath)",
@@ -5310,6 +5543,7 @@ window.VZTR_EN_AUTO = {
 "후시미 사케 양조장 풍경": "Fushimi sake brewery scenery",
 "후시미 양조장 거리": "Fushimi sake district",
 "후시미 양조장 거리 · 월계관": "Fushimi sake street · Gekkeikan",
+"후시미 치이카와+이나리": "Fushimi Chiikawa + Inari",
 "후시미이나리 대사": "Fushimi Inari Taisha",
 "후시미이나리 앞 장어 덮밥집": "Eel rice bowl shop near Fushimi Inari",
 "후시미이나리 천 개의 도리이": "Fushimi Inari's thousand torii gates",
@@ -5327,6 +5561,7 @@ window.VZTR_EN_AUTO = {
 "후쿠오카 사찰 산책": "Fukuoka temple walk",
 "후쿠오카 신사 명소": "Fukuoka shrine highlight",
 "후쿠오카 아시아 미술관": "Fukuoka Asian Art Museum",
+"후쿠오카 유일 점프 굿즈숍": "Fukuoka’s only Jump goods shop",
 "후쿠오카 전망 타워": "Fukuoka view tower",
 "후쿠오카 타워": "Fukuoka Tower",
 "후쿠오카 타워가 있는 모모치하마 일대": "Momochihama area with Fukuoka Tower",
@@ -5347,6 +5582,9 @@ window.VZTR_EN_AUTO = {
 "휴무일": "Closed day",
 "휴식": "Rest",
 "흑돼지 돈카츠": "Black pork tonkatsu",
+"흑백요리사2 돼지곰탕": "Pork gomtang from Culinary Class Wars 2",
+"흑백요리사2 셰프 중식당": "Chinese by a Culinary Class Wars 2 chef",
+"흑백요리사2 정호영 우동": "Jung Ho-young udon, Culinary Class Wars 2",
 "흘러가는 대로 vs 오픈 시간 계산": "Go with the flow vs. calculate opening times",
 "흘러가는 대로 즐기는 분이시군요?": "Go with the flow?",
 "흰여울마을과 루프탑 카페": "Huinnyeoul Village and rooftop cafe",
@@ -5768,6 +6006,11 @@ window.VZTR_EN_PLACES = {
 "short": "Halmae Patbingsu",
 "conf": "romanized"
 },
+"fuk-animate-lachic": {
+"en": "animate LACHIC Fukuoka Tenjin",
+"conf": "of",
+"short": "animate LACHIC"
+},
 "fuk-apa-motsunabe": {
 "en": "Motsunabe Rakutenchi Hakata Station East",
 "short": "Motsunabe Rakutenchi",
@@ -5858,6 +6101,15 @@ window.VZTR_EN_PLACES = {
 "short": "gram Imaizumi",
 "conf": "manual"
 },
+"fuk-gundam-base-fukuoka": {
+"en": "THE GUNDAM BASE FUKUOKA",
+"conf": "of",
+"short": "Gundam Base Fukuoka"
+},
+"fuk-gundam-side-f": {
+"en": "GUNDAM SIDE-F",
+"conf": "of"
+},
 "fuk-hisharee": {
 "en": "Hisharee (Hakata Station East Stall)",
 "short": "Hisharee",
@@ -5887,6 +6139,11 @@ window.VZTR_EN_PLACES = {
 "en": "Hakata Ippudo Daimyo Main Store",
 "short": "Ippudo Daimyo",
 "conf": "manual"
+},
+"fuk-jump-shop-lalaport": {
+"en": "JUMP SHOP LaLaport Fukuoka",
+"conf": "of",
+"short": "JUMP SHOP LaLaport"
 },
 "fuk-kadoya-tachinomi": {
 "en": "Kadoya",
@@ -6008,6 +6265,11 @@ window.VZTR_EN_PLACES = {
 "short": "Fukuoka Parco",
 "conf": "manual"
 },
+"fuk-pokecen-fukuoka": {
+"en": "Pokemon Center Fukuoka",
+"conf": "of",
+"short": "Pokemon Ctr Fukuoka"
+},
 "fuk-rakutenti-daimyo": {
 "en": "Motsunabe Rakutenchi Tenjin Daimyo",
 "short": "Rakutenchi Daimyo",
@@ -6083,6 +6345,11 @@ window.VZTR_EN_PLACES = {
 "short": "Tochoji",
 "conf": "manual"
 },
+"fuk-toho-store-hakata": {
+"en": "TOHO entertainment STORE Fukuoka",
+"conf": "of",
+"short": "TOHO STORE Fukuoka"
+},
 "fuk-tower": {
 "en": "Fukuoka Tower",
 "short": "Fukuoka Tower",
@@ -6102,6 +6369,14 @@ window.VZTR_EN_PLACES = {
 "en": "Venice",
 "short": "Venice",
 "conf": "manual"
+},
+"kyo-animate-avanti": {
+"en": "animate Avanti Kyoto",
+"conf": "of"
+},
+"kyo-animate-kyoto": {
+"en": "animate Kyoto",
+"conf": "of"
 },
 "kyo-aoi-matsuri": {
 "en": "Aoi Festival Procession (Shimogamo Shrine)",
@@ -6127,6 +6402,16 @@ window.VZTR_EN_PLACES = {
 "en": "Byodoin",
 "short": "Byodoin",
 "conf": "manual"
+},
+"kyo-chiikawa-fushimi": {
+"en": "Chiikawa Mogumogu Honpo Kyoto Fushimi",
+"conf": "of",
+"short": "Chiikawa Fushimi"
+},
+"kyo-chiikawa-nishiki": {
+"en": "Chiikawa Baby Castella Kyoto Nishiki",
+"conf": "of",
+"short": "Chiikawa Nishiki"
 },
 "kyo-daiichi-asahi": {
 "en": "Honke Daiichi Asahi Takabashi",
@@ -6223,6 +6508,10 @@ window.VZTR_EN_PLACES = {
 "short": "Inoda Coffee",
 "conf": "manual"
 },
+"kyo-ip-shoten": {
+"en": "Kyoto IP Bookstore",
+"conf": "of"
+},
 "kyo-junsei": {
 "en": "Nanzenji Junsei",
 "short": "Nanzenji Junsei",
@@ -6318,6 +6607,10 @@ window.VZTR_EN_PLACES = {
 "short": "Kyoto Tower",
 "conf": "manual"
 },
+"kyo-mandarake-kyoto": {
+"en": "Mandarake Kyoto",
+"conf": "of"
+},
 "kyo-mikou": {
 "en": "Mikou",
 "short": "Mikou",
@@ -6392,6 +6685,10 @@ window.VZTR_EN_PLACES = {
 "en": "Pan to Espresso Arashiyama Garden",
 "short": "Pan to Espresso",
 "conf": "manual"
+},
+"kyo-pokecen-kyoto": {
+"en": "Pokemon Center Kyoto",
+"conf": "of"
 },
 "kyo-pontocho": {
 "en": "Pontocho",
@@ -6498,6 +6795,11 @@ window.VZTR_EN_PLACES = {
 "short": "Philosopher's Path",
 "conf": "manual"
 },
+"kyo-toei-eigamura": {
+"en": "Toei Kyoto Studio Park",
+"conf": "of",
+"short": "Toei Studio Park"
+},
 "kyo-tofukuji": {
 "en": "Tofuku-ji",
 "short": "Tofuku-ji",
@@ -6578,6 +6880,15 @@ window.VZTR_EN_PLACES = {
 "short": "Amerikamura",
 "conf": "manual"
 },
+"osk-animate-nippombashi": {
+"en": "animate Osaka Nippombashi",
+"conf": "of",
+"short": "animate Nippombashi"
+},
+"osk-animate-umeda": {
+"en": "animate Umeda",
+"conf": "of"
+},
 "osk-art-museum": {
 "en": "Osaka City Museum of Fine Arts",
 "short": "Osaka City Museum",
@@ -6597,6 +6908,15 @@ window.VZTR_EN_PLACES = {
 "en": "Osaka City Central Public Hall",
 "short": "Central Public Hall",
 "conf": "manual"
+},
+"osk-chiikawa-bakery": {
+"en": "Chiikawa Bakery OSAKA",
+"conf": "of",
+"short": "Chiikawa Bakery"
+},
+"osk-chiikawa-park-store": {
+"en": "Chiikawa Park Store",
+"conf": "of"
 },
 "osk-daruma-shinsekai": {
 "en": "Kushikatsu Daruma Shinsekai Main Store",
@@ -6678,6 +6998,10 @@ window.VZTR_EN_PLACES = {
 "short": "Imai Dotonbori",
 "conf": "manual"
 },
+"osk-ip-shoten-ebisubashi": {
+"en": "Osaka IP Bookstore",
+"conf": "of"
+},
 "osk-jiyuken": {
 "en": "Jiyuken Namba Main Store",
 "short": "Jiyuken Namba",
@@ -6687,6 +7011,11 @@ window.VZTR_EN_PLACES = {
 "en": "JO-TERRACE OSAKA",
 "short": "JO-TERRACE OSAKA",
 "conf": "manual"
+},
+"osk-jump-shop-umeda": {
+"en": "JUMP SHOP Osaka Umeda",
+"conf": "of",
+"short": "JUMP SHOP Umeda"
 },
 "osk-kaiyukan": {
 "en": "Kaiyukan Aquarium",
@@ -6747,6 +7076,15 @@ window.VZTR_EN_PLACES = {
 "en": "Magnets Amerikamura",
 "short": "Magnets Amerikamura",
 "conf": "manual"
+},
+"osk-mandarake-grandchaos": {
+"en": "Mandarake Grand Chaos",
+"conf": "of",
+"short": "Mandarake Grand Chao"
+},
+"osk-mandarake-umeda": {
+"en": "Mandarake Umeda",
+"conf": "of"
 },
 "osk-marufuku-sennichimae": {
 "en": "Marufuku Coffee Sennichimae Main Store",
@@ -6827,6 +7165,10 @@ window.VZTR_EN_PLACES = {
 "en": "Namba Parks Garden",
 "short": "Namba Parks Garden",
 "conf": "manual"
+},
+"osk-pokecen-osaka": {
+"en": "Pokemon Center Osaka",
+"conf": "of"
 },
 "osk-rikuro-namba": {
 "en": "Rikuro Ojisan Namba Main Store",
@@ -6923,6 +7265,11 @@ window.VZTR_EN_PLACES = {
 "short": "Tenshiba",
 "conf": "manual"
 },
+"osk-toho-store-nu": {
+"en": "TOHO entertainment STORE Osaka",
+"conf": "of",
+"short": "TOHO STORE Osaka"
+},
 "osk-umeda-sky": {
 "en": "Umeda Sky Building Floating Garden",
 "short": "Umeda Sky Building",
@@ -6948,10 +7295,23 @@ window.VZTR_EN_PLACES = {
 "short": "Yu Kobo Horie",
 "conf": "manual"
 },
+"sel-1million-dance": {
+"en": "1MILLION Dance Studio",
+"conf": "of",
+"short": "1MILLION Dance"
+},
+"sel-3rd-samgyetang": {
+"en": "3dae Samgye Jangin",
+"conf": "of"
+},
 "sel-a2b": {
 "en": "A2B Cafe & Bar",
 "short": "A2B Cafe & Bar",
 "conf": "romanized"
+},
+"sel-andeok": {
+"en": "Andeok",
+"conf": "of"
 },
 "sel-anteti": {
 "en": "Ant Eti Cafe",
@@ -6962,6 +7322,10 @@ window.VZTR_EN_PLACES = {
 "en": "Apgujeong Gopchang",
 "short": "Apgujeong Gopchang",
 "conf": "romanized"
+},
+"sel-asoto": {
+"en": "Asoto",
+"conf": "of"
 },
 "sel-bagane": {
 "en": "Bagane Bindaetteok",
@@ -6977,6 +7341,22 @@ window.VZTR_EN_PLACES = {
 "en": "Bukchon Hanok Village",
 "short": "Bukchon Hanok",
 "conf": "official"
+},
+"sel-cafe-dasique": {
+"en": "Cafe Dasique",
+"conf": "of"
+},
+"sel-cafe-farben": {
+"en": "Cafe Farben Seongsu",
+"conf": "of"
+},
+"sel-cafe-offer-hongdae": {
+"en": "Cafe Offer",
+"conf": "of"
+},
+"sel-ceramic-cafe-jool": {
+"en": "Ceramic Cafe JOOL",
+"conf": "of"
 },
 "sel-champ-coffee": {
 "en": "Champ Coffee Itaewon",
@@ -7028,6 +7408,11 @@ window.VZTR_EN_PLACES = {
 "short": "Coffee Hanyakbang",
 "conf": "romanized"
 },
+"sel-daebongjip-sinsa": {
+"en": "Daebongjip Sinsa Main",
+"conf": "romanized",
+"short": "Daebongjip Sinsa"
+},
 "sel-daeo-books": {
 "en": "Daeo Bookstore",
 "short": "Daeo Bookstore",
@@ -7037,6 +7422,14 @@ window.VZTR_EN_PLACES = {
 "en": "Daelim Changgo Seongsu",
 "short": "Daelim Changgo",
 "conf": "romanized"
+},
+"sel-daesungjip": {
+"en": "Daesungjip",
+"conf": "of"
+},
+"sel-danha-hanbok": {
+"en": "Danha",
+"conf": "of"
 },
 "sel-ddp": {
 "en": "Dongdaemun Design Plaza (DDP)",
@@ -7053,6 +7446,19 @@ window.VZTR_EN_PLACES = {
 "short": "Deoksugung Palace",
 "conf": "official"
 },
+"sel-dokdo16do": {
+"en": "Dokdo 16do",
+"conf": "romanized"
+},
+"sel-dongmyo-galbi": {
+"en": "Dongmyo Galbi",
+"conf": "of"
+},
+"sel-dosan-ttukbaegi": {
+"en": "Dosan Ttukbaeki Cheongdam",
+"conf": "of",
+"short": "Dosan Ttukbaeki"
+},
 "sel-dubai": {
 "en": "Dubai Restaurant",
 "short": "Dubai Restaurant",
@@ -7067,6 +7473,51 @@ window.VZTR_EN_PLACES = {
 "en": "Euljiro Alleys",
 "short": "Euljiro Alleys",
 "conf": "official"
+},
+"sel-eunho-sikdang": {
+"en": "Eunho Sikdang",
+"conf": "of"
+},
+"sel-gaeseong-mandu-koong": {
+"en": "Gaeseong Mandu Koong",
+"conf": "of"
+},
+"sel-gangnam-square": {
+"en": "Gangnam Square",
+"conf": "of"
+},
+"sel-gebang-sikdang-gangnam": {
+"en": "Gebang Sikdang Nonhyeon",
+"conf": "romanized",
+"short": "Gebang Sikdang"
+},
+"sel-gebang-sikdang-seongsu": {
+"en": "Gebang Sikdang Seongsu",
+"conf": "romanized",
+"short": "Gebang Sikdang"
+},
+"sel-gentle-monster-haus-dosan": {
+"en": "Gentle Monster Haus Dosan",
+"conf": "of",
+"short": "Gentle Monster Haus"
+},
+"sel-geumdwaeji": {
+"en": "Geumdwaeji Sikdang",
+"conf": "of"
+},
+"sel-gobchang-paneun-gogitjip": {
+"en": "Gopchang Paneun Gogitjip Gongdeok",
+"conf": "romanized",
+"short": "Gopchang Gogitjip"
+},
+"sel-golmok-sikdang": {
+"en": "Golmok Sikdang (Alley Restaurant)",
+"conf": "of",
+"short": "Golmok Sikdang"
+},
+"sel-gosari-express": {
+"en": "Gosari Express",
+"conf": "of"
 },
 "sel-gwanghwamun": {
 "en": "Gwanghwamun Gate",
@@ -7083,10 +7534,22 @@ window.VZTR_EN_PLACES = {
 "short": "Gwangjang Market",
 "conf": "official"
 },
+"sel-gyehyanggak": {
+"en": "Gyehyanggak",
+"conf": "romanized"
+},
 "sel-gyeongbokgung": {
 "en": "Gyeongbokgung Palace",
 "short": "Gyeongbokgung Palace",
 "conf": "official"
+},
+"sel-gyeongdong-market": {
+"en": "Gyeongdong Market",
+"conf": "of"
+},
+"sel-hadongkwan": {
+"en": "Hadongkwan",
+"conf": "of"
 },
 "sel-haebangchon": {
 "en": "Haebangchon Hill",
@@ -7097,6 +7560,24 @@ window.VZTR_EN_PLACES = {
 "en": "Haebangchon Sinheung Market",
 "short": "Sinheung Market",
 "conf": "romanized"
+},
+"sel-hansik-eum": {
+"en": "Hansik Cultural Space EUM",
+"conf": "of",
+"short": "Hansik Space EUM"
+},
+"sel-hapjeongok": {
+"en": "Hapjeongok",
+"conf": "of"
+},
+"sel-harufilm-apgujeong": {
+"en": "Haru Film Apgujeong Rodeo",
+"conf": "romanized",
+"short": "Haru Film Apgujeong"
+},
+"sel-hikr-ground": {
+"en": "HiKR Ground",
+"conf": "of"
 },
 "sel-hongdae": {
 "en": "Hongdae Walking Street",
@@ -7113,15 +7594,125 @@ window.VZTR_EN_PLACES = {
 "short": "Horangi Sushi",
 "conf": "romanized"
 },
+"sel-hot-abura-hanare": {
+"en": "Abura Soba Hanare",
+"conf": "romanized"
+},
+"sel-hot-baekgom-makgeolli": {
+"en": "Baekgom Makgeolli",
+"conf": "romanized"
+},
+"sel-hot-beautyplay-hongdae": {
+"en": "Beauty Play Hongdae",
+"conf": "of"
+},
+"sel-hot-chamjecheol": {
+"en": "Cham Jecheol",
+"conf": "of"
+},
+"sel-hot-color-signal-gangnam": {
+"en": "Color Signal",
+"conf": "of"
+},
+"sel-hot-colorholic-gangnam": {
+"en": "Colorholic Gangnam",
+"conf": "of"
+},
+"sel-hot-daiso-myeongdong-stn": {
+"en": "Daiso Myeongdong Station",
+"conf": "of",
+"short": "Daiso Myeongdong"
+},
+"sel-hot-haenam-cheonilgwan": {
+"en": "Haenam Cheonilgwan",
+"conf": "of"
+},
+"sel-hot-hamo": {
+"en": "Hamo",
+"conf": "of"
+},
+"sel-hot-hetras-seongsu": {
+"en": "Hetras Seongsu",
+"conf": "of"
+},
+"sel-hot-hobin": {
+"en": "Hobin",
+"conf": "of"
+},
+"sel-hot-montan": {
+"en": "Montan",
+"conf": "of"
+},
+"sel-hot-musinsa-beauty-hongdae": {
+"en": "Musinsa Beauty Hongdae",
+"conf": "of",
+"short": "Musinsa Beauty"
+},
+"sel-hot-myeonseoul": {
+"en": "Myeon Seoul",
+"conf": "of"
+},
+"sel-hot-oy-beauty-mansion": {
+"en": "Olive Young Beauty Mansion Seongsu",
+"conf": "of",
+"short": "Beauty Mansion"
+},
+"sel-hot-pumseoul": {
+"en": "Pum Seoul",
+"conf": "of"
+},
+"sel-hot-ribukbang": {
+"en": "Reebukbang",
+"conf": "of"
+},
+"sel-hot-sancho": {
+"en": "Sancho",
+"conf": "of"
+},
+"sel-hot-seoryeong": {
+"en": "Seoryeong",
+"conf": "of"
+},
+"sel-hot-sillim-sundae": {
+"en": "Samgakji Sillim Sundae-bokkeum",
+"conf": "romanized",
+"short": "Sillim Sundae"
+},
+"sel-hot-soban": {
+"en": "Hansik Gonggan Soban",
+"conf": "romanized"
+},
+"sel-hot-superpan": {
+"en": "Superpan",
+"conf": "of"
+},
+"sel-hot-yurok": {
+"en": "Yurok",
+"conf": "of"
+},
 "sel-huam": {
 "en": "Huam-dong",
 "short": "Huam-dong",
 "conf": "romanized"
 },
+"sel-hwanggeum-kongbat": {
+"en": "Hwanggeum Kongbat",
+"conf": "of"
+},
+"sel-hwayeon-sanjang-apgujeong": {
+"en": "Hwayeon Sanjang Apgujeong Rodeo",
+"conf": "romanized",
+"short": "Hwayeon Sanjang"
+},
 "sel-hyehwa-kalguksu": {
 "en": "Hyehwa Kalguksu",
 "short": "Hyehwa Kalguksu",
 "conf": "romanized"
+},
+"sel-hyehwa-samgyeop-daetongryeong": {
+"en": "Hyehwa Samgyeopsal Daetongnyeong",
+"conf": "romanized",
+"short": "Hyehwa Samgyeopsal"
 },
 "sel-idorim": {
 "en": "Idorim Blot Coffee",
@@ -7138,6 +7729,11 @@ window.VZTR_EN_PLACES = {
 "short": "Imun Seolnongtang",
 "conf": "romanized"
 },
+"sel-innisfree-isle": {
+"en": "Innisfree The Isle Seongsu",
+"conf": "of",
+"short": "Innisfree The Isle"
+},
 "sel-irang": {
 "en": "Irang Kalguksu",
 "short": "Irang Kalguksu",
@@ -7152,6 +7748,10 @@ window.VZTR_EN_PLACES = {
 "en": "Itaewon Night Street",
 "short": "Itaewon at Night",
 "conf": "official"
+},
+"sel-jaha-son-mandu": {
+"en": "Jaha Son Mandu",
+"conf": "of"
 },
 "sel-jangsu-seolleongtang": {
 "en": "Jangsu Seolleongtang Haejangguk",
@@ -7198,6 +7798,152 @@ window.VZTR_EN_PLACES = {
 "short": "Jongno 3-ga at Night",
 "conf": "romanized"
 },
+"sel-kb-amore-yongsan": {
+"en": "Amore Yongsan",
+"conf": "of"
+},
+"sel-kb-anillo-seongsu": {
+"en": "ANILLO Seongsu",
+"conf": "of"
+},
+"sel-kb-banila-seongsu": {
+"en": "BANILA CO Seongsu Flagship Store",
+"conf": "of",
+"short": "BANILA CO Seongsu"
+},
+"sel-kb-bbia-seongsu": {
+"en": "BBIA IN SEONGSU",
+"conf": "of"
+},
+"sel-kb-dasique-seongsu": {
+"en": "Dasique Seongsu Flagship",
+"conf": "of",
+"short": "Dasique Flagship"
+},
+"sel-kb-fwee-seongsu": {
+"en": "fwee AGIT Seongsu",
+"conf": "of"
+},
+"sel-kb-fwee-yeonnam": {
+"en": "fwee AGIT Yeonnam",
+"conf": "of"
+},
+"sel-kb-greedy-bukchon": {
+"en": "Greedy Scent Bukchon",
+"conf": "of"
+},
+"sel-kb-greedy-yeonnam": {
+"en": "Greedy Scent Yeonnam",
+"conf": "of"
+},
+"sel-kb-hince-seongsu": {
+"en": "hince Seongsu",
+"conf": "of"
+},
+"sel-kb-kuoca-seongsu": {
+"en": "KUOCA Seongsu",
+"conf": "of"
+},
+"sel-kb-laneige-seoul": {
+"en": "LANEIGE Seoul",
+"conf": "of"
+},
+"sel-kb-medicube-seongsu": {
+"en": "Medicube Flagship Store Seongsu",
+"conf": "of",
+"short": "Medicube Seongsu"
+},
+"sel-kb-musinsa-seongsu": {
+"en": "Musinsa Mega Store Seongsu",
+"conf": "of",
+"short": "Musinsa Mega Store"
+},
+"sel-kb-nonfiction-hannam": {
+"en": "NONFICTION Hannam",
+"conf": "of"
+},
+"sel-kb-note-seongsu": {
+"en": ".NOTE Perfume Studio Seongsu",
+"conf": "of",
+"short": ".NOTE Perfume Studio"
+},
+"sel-kb-pyunkang-yul": {
+"en": "Pyunkang Yul Flagship & Tea House",
+"conf": "of",
+"short": "Pyunkang Yul Tea"
+},
+"sel-kb-romand-seongsu": {
+"en": "rom&nd PINK OFFICE",
+"conf": "of"
+},
+"sel-kb-seasonofyou-yongsan": {
+"en": "Season of You Personal Color",
+"conf": "of",
+"short": "Season of You"
+},
+"sel-kb-skin1004-myeongdong": {
+"en": "SKIN1004 Flagship Store",
+"conf": "of",
+"short": "SKIN1004 Myeongdong"
+},
+"sel-kb-stylenanda-myeongdong": {
+"en": "Stylenanda Pink Hotel (3CE) Myeongdong",
+"conf": "of",
+"short": "3CE Pink Hotel"
+},
+"sel-kb-tamburins-hannam": {
+"en": "TAMBURINS Hannam Flagship Store",
+"conf": "of",
+"short": "TAMBURINS Hannam"
+},
+"sel-kb-tamburins-samcheong": {
+"en": "TAMBURINS Samcheong Flagship Store",
+"conf": "of",
+"short": "TAMBURINS Samcheong"
+},
+"sel-kb-tamburins-seongsu": {
+"en": "TAMBURINS Seongsu Flagship Store",
+"conf": "of",
+"short": "TAMBURINS Seongsu"
+},
+"sel-kb-tirtir-seongsu": {
+"en": "TIRTIR SHADE VALLEY",
+"conf": "of"
+},
+"sel-kb-torriden-connect": {
+"en": "Torriden Connect Seongsu",
+"conf": "of",
+"short": "Torriden Connect"
+},
+"sel-kb-whipped-house": {
+"en": "WHIPPED House",
+"conf": "of"
+},
+"sel-king-studio": {
+"en": "King Studio Seolleung",
+"conf": "of",
+"short": "King Studio"
+},
+"sel-korea-house": {
+"en": "Korea House",
+"conf": "of"
+},
+"sel-kpop-square-hongdae": {
+"en": "K-Pop Square Hongdae",
+"conf": "of"
+},
+"sel-kstar-road": {
+"en": "K-Star Road",
+"conf": "of"
+},
+"sel-ktown4u-coex": {
+"en": "Ktown4u COEX",
+"conf": "of"
+},
+"sel-kwangya": {
+"en": "KWANGYA SEOUL",
+"conf": "of"
+},
 "sel-kyobo-gwanghwamun": {
 "en": "Kyobo Book Centre Gwanghwamun",
 "short": "Kyobo Book Centre",
@@ -7218,15 +7964,31 @@ window.VZTR_EN_PLACES = {
 "short": "Mangwon Market",
 "conf": "official"
 },
+"sel-mapo-ok": {
+"en": "Mapo Ok",
+"conf": "of"
+},
+"sel-mijin": {
+"en": "Mijin",
+"conf": "of"
+},
 "sel-mmca-seoul": {
 "en": "MMCA Seoul",
 "short": "MMCA Seoul",
 "conf": "official"
 },
+"sel-munhwaok": {
+"en": "Munhwaok",
+"conf": "romanized"
+},
 "sel-munts": {
 "en": "Munts BBQ",
 "short": "Munts BBQ",
 "conf": "romanized"
+},
+"sel-museum-kimchikan": {
+"en": "Museum Kimchikan",
+"conf": "of"
 },
 "sel-myeongdong-gyoja": {
 "en": "Myeongdong Gyoja",
@@ -7278,6 +8040,10 @@ window.VZTR_EN_PLACES = {
 "short": "Negi Dining Lounge",
 "conf": "romanized"
 },
+"sel-new-mandujip": {
+"en": "New Mandujip",
+"conf": "romanized"
+},
 "sel-nmk": {
 "en": "National Museum of Korea",
 "short": "National Museum",
@@ -7287,6 +8053,11 @@ window.VZTR_EN_PLACES = {
 "en": "Euljiro Nogari Alley",
 "short": "Euljiro Nogari Alley",
 "conf": "official"
+},
+"sel-noryangjin-market": {
+"en": "Noryangjin Fisheries Wholesale Market",
+"conf": "of",
+"short": "Noryangjin Market"
 },
 "sel-nyokki-bar": {
 "en": "Nyokki Bar",
@@ -7298,6 +8069,15 @@ window.VZTR_EN_PLACES = {
 "short": "Oegojip",
 "conf": "romanized"
 },
+"sel-ojangdong-hamheung": {
+"en": "Ojangdong Hamheung Naengmyeon",
+"conf": "romanized",
+"short": "Ojangdong Hamheung"
+},
+"sel-okdongsik": {
+"en": "Okdongsik",
+"conf": "of"
+},
 "sel-onion-seongsu": {
 "en": "Onion Seongsu",
 "short": "Onion Seongsu",
@@ -7308,10 +8088,45 @@ window.VZTR_EN_PLACES = {
 "short": "Osulloc Bukchon",
 "conf": "official"
 },
+"sel-oy-gangnam-main": {
+"en": "Olive Young Gangnam Main",
+"conf": "of",
+"short": "Olive Young Gangnam"
+},
+"sel-oy-myeongdong-town": {
+"en": "Olive Young Myeongdong Global",
+"conf": "of",
+"short": "Olive Young Town"
+},
+"sel-oy-n-seongsu": {
+"en": "Olive Young N Seongsu",
+"conf": "of",
+"short": "Olive Young N"
+},
+"sel-pachamama-bakery": {
+"en": "Pachamama Bakery",
+"conf": "of"
+},
+"sel-peterpan-1978": {
+"en": "PETERPAN 1978",
+"conf": "of"
+},
+"sel-pildong-myeonok": {
+"en": "Pildong Myeonok",
+"conf": "of"
+},
+"sel-pyeongnaeok": {
+"en": "Pyeongnaeok",
+"conf": "romanized"
+},
 "sel-samcheong-sujebi": {
 "en": "Samcheong-dong Sujebi",
 "short": "Samcheong Sujebi",
 "conf": "romanized"
+},
+"sel-scopa-the-chef": {
+"en": "Scopa the Chef",
+"conf": "of"
 },
 "sel-seochon": {
 "en": "Seochon Alleys",
@@ -7322,6 +8137,10 @@ window.VZTR_EN_PLACES = {
 "en": "Seokchon Lake",
 "short": "Seokchon Lake",
 "conf": "official"
+},
+"sel-seokyo-nanmyeon": {
+"en": "Seokyonanmyunbang",
+"conf": "of"
 },
 "sel-seongsu": {
 "en": "Seongsu-dong Street",
@@ -7348,6 +8167,11 @@ window.VZTR_EN_PLACES = {
 "short": "Seoullo 7017",
 "conf": "official"
 },
+"sel-shindang-tteokbokki": {
+"en": "Sindang-dong Tteokbokki Town",
+"conf": "of",
+"short": "Tteokbokki Town"
+},
 "sel-signiel-lounge": {
 "en": "Signiel Seoul The Lounge",
 "short": "Signiel The Lounge",
@@ -7363,10 +8187,33 @@ window.VZTR_EN_PLACES = {
 "short": "Ssangdaepo Sundubu",
 "conf": "romanized"
 },
+"sel-sulwhasoo-bukchon": {
+"en": "The House of Sulwhasoo Bukchon",
+"conf": "of",
+"short": "Sulwhasoo Bukchon"
+},
+"sel-sulwhasoo-dosan": {
+"en": "Sulwhasoo Dosan Flagship Store",
+"conf": "of",
+"short": "Sulwhasoo Dosan"
+},
+"sel-superstar-tteokbokki": {
+"en": "Superstar Tteokbokki Sinyongsan",
+"conf": "romanized",
+"short": "Superstar Tteokbokki"
+},
 "sel-the-hyundai": {
 "en": "The Hyundai Seoul",
 "short": "The Hyundai Seoul",
 "conf": "official"
+},
+"sel-the-same-hapjeong": {
+"en": "the SamE",
+"conf": "of"
+},
+"sel-tipsy-taco": {
+"en": "Tipsy Taco",
+"conf": "of"
 },
 "sel-tongin-market": {
 "en": "Tongin Market",
@@ -7378,6 +8225,19 @@ window.VZTR_EN_PLACES = {
 "short": "Tosokchon",
 "conf": "official"
 },
+"sel-tteok-museum": {
+"en": "Tteok & Kitchen Utensil Museum",
+"conf": "of",
+"short": "Tteok Museum"
+},
+"sel-udon-kaden-hapjeong": {
+"en": "Udon Kaden Hapjeong",
+"conf": "romanized"
+},
+"sel-udon-kaden-yeonhui": {
+"en": "Udon Kaden Yeonhui",
+"conf": "romanized"
+},
 "sel-uraeok": {
 "en": "Woo Lae Oak",
 "short": "Woo Lae Oak",
@@ -7387,6 +8247,15 @@ window.VZTR_EN_PLACES = {
 "en": "War Memorial of Korea",
 "short": "War Memorial",
 "conf": "official"
+},
+"sel-wasedaya-ichon": {
+"en": "Wasedaya",
+"conf": "of"
+},
+"sel-withmuu-hongdae": {
+"en": "WITHMUU AK PLAZA Hongdae",
+"conf": "of",
+"short": "WITHMUU Hongdae"
 },
 "sel-yeonnam": {
 "en": "Yeonnam-dong Alleys",
@@ -7413,6 +8282,18 @@ window.VZTR_EN_PLACES = {
 "short": "Yetnal Someori",
 "conf": "romanized"
 },
+"sel-yonggeumok": {
+"en": "Yonggeumok",
+"conf": "of"
+},
+"sel-yoojung-sikdang": {
+"en": "Yoojung Sikdang",
+"conf": "of"
+},
+"sel-youngcheon-younghwa": {
+"en": "Youngcheon Younghwa",
+"conf": "of"
+},
 "spk-akarenga-honcho": {
 "en": "Former Hokkaido Government Office (Red Brick)",
 "short": "Red Brick Office",
@@ -7422,6 +8303,10 @@ window.VZTR_EN_PLACES = {
 "en": "Akarenga Terrace",
 "short": "Akarenga Terrace",
 "conf": "manual"
+},
+"spk-animate-sapporo": {
+"en": "animate Sapporo",
+"conf": "of"
 },
 "spk-aotsuka-shokudo": {
 "en": "Aotsuka Shokudo",
@@ -7452,6 +8337,11 @@ window.VZTR_EN_PLACES = {
 "en": "Brewery 1876 (Factory Pub)",
 "short": "Brewery 1876",
 "conf": "manual"
+},
+"spk-chiikawa-otaru": {
+"en": "Chiikawa Mogumogu Honpo Otaru",
+"conf": "of",
+"short": "Chiikawa Otaru"
 },
 "spk-clock-tower": {
 "en": "Sapporo Clock Tower",
@@ -7593,6 +8483,10 @@ window.VZTR_EN_PLACES = {
 "short": "LeTAO Main Store",
 "conf": "manual"
 },
+"spk-mandarake-sapporo": {
+"en": "Mandarake Sapporo",
+"conf": "of"
+},
 "spk-maruyama-park": {
 "en": "Maruyama Park",
 "short": "Maruyama Park",
@@ -7723,6 +8617,11 @@ window.VZTR_EN_PLACES = {
 "short": "Penguin-do",
 "conf": "manual"
 },
+"spk-pokecen-sapporo": {
+"en": "Pokemon Center Sapporo",
+"conf": "of",
+"short": "Pokemon Ctr Sapporo"
+},
 "spk-ramen-yokocho": {
 "en": "Ganso Sapporo Ramen Yokocho",
 "short": "Ganso Sapporo Ramen Yokocho",
@@ -7778,6 +8677,11 @@ window.VZTR_EN_PLACES = {
 "short": "Studio J-45",
 "conf": "manual"
 },
+"spk-surugaya-shin-sapporo": {
+"en": "Surugaya Shin-Sapporo DUO",
+"conf": "of",
+"short": "Surugaya Sapporo DUO"
+},
 "spk-tanukikoji": {
 "en": "Tanukikoji Shopping Arcade",
 "short": "Tanukikoji",
@@ -7830,7 +8734,7 @@ window.VZTR_EN_PLACES = {
 },
 "tyo-akihabara": {
 "en": "Akihabara Electric Town",
-"short": "Akihabara Electric Town",
+"short": "Akihabara",
 "conf": "manual"
 },
 "tyo-ameshin": {
@@ -7843,6 +8747,15 @@ window.VZTR_EN_PLACES = {
 "short": "Ameyoko",
 "conf": "manual"
 },
+"tyo-animate-akihabara": {
+"en": "animate Akihabara",
+"conf": "of"
+},
+"tyo-animate-ikebukuro": {
+"en": "animate Ikebukuro Flagship",
+"conf": "of",
+"short": "animate Ikebukuro"
+},
 "tyo-bnb-shimokita": {
 "en": "Book & Bed B&B",
 "short": "Book & Bed B&B",
@@ -7852,6 +8765,11 @@ window.VZTR_EN_PLACES = {
 "en": "Bondy Jimbocho Main Store (Curry)",
 "short": "Bondy Jimbocho",
 "conf": "manual"
+},
+"tyo-character-street": {
+"en": "Tokyo Character Street",
+"conf": "of",
+"short": "Character Street"
 },
 "tyo-chikuyotei": {
 "en": "Chikuyotei Main Store",
@@ -7888,6 +8806,11 @@ window.VZTR_EN_PLACES = {
 "short": "Fuunji",
 "conf": "manual"
 },
+"tyo-ghibli-museum": {
+"en": "Ghibli Museum, Mitaka",
+"conf": "of",
+"short": "Ghibli Museum"
+},
 "tyo-ginza": {
 "en": "Ginza Street",
 "short": "Ginza Street",
@@ -7902,6 +8825,16 @@ window.VZTR_EN_PLACES = {
 "en": "Shinjuku Golden Gai",
 "short": "Shinjuku Golden Gai",
 "conf": "manual"
+},
+"tyo-gundam-base-shibuya": {
+"en": "THE GUNDAM BASE SHIBUYA",
+"conf": "of",
+"short": "GUNDAM BASE SHIBUYA"
+},
+"tyo-gundam-base-tokyo": {
+"en": "THE GUNDAM BASE TOKYO",
+"conf": "of",
+"short": "Gundam Base Tokyo"
 },
 "tyo-hakuhinkan": {
 "en": "Hakuhinkan Toy Park Ginza",
@@ -7943,6 +8876,11 @@ window.VZTR_EN_PLACES = {
 "short": "Inokashira Park",
 "conf": "manual"
 },
+"tyo-ip-shoten-shibuya": {
+"en": "IP Bookstore (SHIBUYA TSUTAYA)",
+"conf": "of",
+"short": "Shibuya IP Books"
+},
 "tyo-iseya-koen": {
 "en": "Iseya Koen Branch",
 "short": "Iseya Koen Branch",
@@ -7962,6 +8900,11 @@ window.VZTR_EN_PLACES = {
 "en": "Jimbocho Used Bookstore Street",
 "short": "Jimbocho Book Street",
 "conf": "manual"
+},
+"tyo-jump-shop-dome": {
+"en": "JUMP SHOP (Tokyo Dome City)",
+"conf": "of",
+"short": "JUMP SHOP Dome City"
 },
 "tyo-kakimori": {
 "en": "Kakimori Kuramae",
@@ -8023,6 +8966,10 @@ window.VZTR_EN_PLACES = {
 "short": "Maisen Aoyama",
 "conf": "manual"
 },
+"tyo-mandarake-complex": {
+"en": "Mandarake Complex",
+"conf": "of"
+},
 "tyo-marunouchi": {
 "en": "Marunouchi",
 "short": "Marunouchi",
@@ -8047,6 +8994,11 @@ window.VZTR_EN_PLACES = {
 "en": "MoN Takanawa",
 "short": "MoN Takanawa",
 "conf": "manual"
+},
+"tyo-mugiwara-store-shibuya": {
+"en": "Mugiwara Store Shibuya",
+"conf": "of",
+"short": "Mugiwara Shibuya"
 },
 "tyo-nakameguro-river": {
 "en": "Nakameguro Meguro River",
@@ -8108,15 +9060,34 @@ window.VZTR_EN_PLACES = {
 "short": "Omotesando Hills",
 "conf": "manual"
 },
+"tyo-otome-road": {
+"en": "Otome Road",
+"conf": "of"
+},
 "tyo-pelican-cafe": {
 "en": "Pelican Cafe",
 "short": "Pelican Cafe",
 "conf": "manual"
 },
+"tyo-pokecen-mega-tokyo": {
+"en": "Pokemon Center MEGA TOKYO",
+"conf": "of",
+"short": "Pokemon MEGA TOKYO"
+},
+"tyo-pokecen-shibuya": {
+"en": "Pokemon Center Shibuya",
+"conf": "of",
+"short": "Pokemon Ctr Shibuya"
+},
 "tyo-r-za": {
 "en": "Arza Dokushokan",
 "short": "Arza Reading Room",
 "conf": "manual"
+},
+"tyo-radio-kaikan": {
+"en": "Akihabara Radio Kaikan",
+"conf": "of",
+"short": "Radio Kaikan"
 },
 "tyo-ramen-street": {
 "en": "Tokyo Ramen Street",
@@ -8193,6 +9164,11 @@ window.VZTR_EN_PLACES = {
 "short": "Sometaro",
 "conf": "manual"
 },
+"tyo-suginami-anime-museum": {
+"en": "Suginami Animation Museum",
+"conf": "of",
+"short": "Suginami Anime"
+},
 "tyo-sumida-park": {
 "en": "Sumida Park",
 "short": "Sumida Park",
@@ -8232,6 +9208,11 @@ window.VZTR_EN_PLACES = {
 "en": "Tokyo Metropolitan Gov. Observatory",
 "short": "Tokyo Gov. Observatory",
 "conf": "manual"
+},
+"tyo-tokiwaso-museum": {
+"en": "Tokiwaso Manga Museum",
+"conf": "of",
+"short": "Tokiwaso Museum"
 },
 "tyo-tokoshima": {
 "en": "Tokoshima",
