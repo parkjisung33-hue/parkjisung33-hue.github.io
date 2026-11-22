@@ -4637,7 +4637,7 @@ window.VZTR_EN_AUTO = {
 "최고 106m에서 아카시 해협까지 보여요": "From up to 106 m, see all the way to the Akashi Strait",
 "최대": "Max",
 "최신 한국 현대미술": "New Korean contemporary art",
-"추정": "Est.",
+"추정": "Estimated",
 "추천 받아서 내가 고를래요": "I'll pick from recommendations",
 "추천 블록 보기": "View suggested blocks",
 "추천 블록에서 고르거나 장소 이름으로 찾을 수 있어요 · 시각과 동선은 앱이 계산해요": "Pick a suggested block or search a place · The app handles times and routes",

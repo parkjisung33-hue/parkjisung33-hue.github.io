@@ -27,7 +27,7 @@ window.VZTR_EN = {
   '어디로': 'Where', '어디로 가세요?': 'Where are you going?', '가는 곳은 계속 늘려 갈게요': 'More cities soon',
   '언제': 'When', '언제 가세요?': 'When are you going?', '누구와': 'Who', '누구와 가세요?': 'Who’s coming?',
   '공항': 'Airport', '어느 공항에 도착하세요?': 'Where do you land?', '도착 공항에서 일정을 시작해요. 시각은 몰라도 돼요.': 'Your plan starts when you land. Times are optional.',
-  '도착 공항': 'Arrival airport', '도착 비행기': 'Arriving flight', '출국 비행기': 'Departing flight', '도착': 'Arr.', '출발': 'Dep.',
+  '도착 공항': 'Arrival airport', '도착 비행기': 'Arriving flight', '출국 비행기': 'Departing flight', '도착': 'Arrive', '출발': 'Depart', '출처 외교부·JNTO': 'Source: MOFA · JNTO', '사진 Commons 외': 'Photos: Commons etc.', '날씨 Open-Meteo': 'Weather: Open-Meteo', '경로 © OpenStreetMap': 'Routes © OpenStreetMap', '내 나라 대사관 찾기': 'Find your embassy', '일본 외무성 공식 목록': 'Official list · MOFA Japan', '한국 외교부 공식 목록': 'Official list · MOFA Korea', '목록 열기': 'Open list', 'JNTO · 24시간 · 영어·중국어·한국어': 'JNTO · 24 h · EN, ZH, KO', '확인 완료': 'Mark as checked', '확인함': 'Checked', '확인 완료로 표시했어요': 'Marked as checked', '확인 표시를 지웠어요': 'Check mark removed', '내 링크 복사': 'Copy my link', '다른 폰에서도 열기': 'Open on another phone', '사진 Commons·Openverse·공공누리': 'Photos Commons·Openverse·KOGL', '날씨 Open-Meteo (CC BY 4.0)': 'Weather Open-Meteo (CC BY 4.0)',
   '편명 (예: KE902)': 'Flight no. (e.g. KE902)', '편명 (예: OZ221)': 'Flight no. (e.g. OZ221)',
   '숙소': 'Stay', '숙소 이름': 'Hotel name', '동네 이름 (예: 홍대)': 'Area (e.g. Hongdae)', '동네 이름 (예: 해운대)': 'Area (e.g. Haeundae)',
   '모르면 비워 두세요 · 나중에 앱에서 넣어도 돼요': 'Not sure? Leave it blank.',
@@ -71,7 +71,7 @@ window.VZTR_EN = {
   '{n}년 {m}월 {d}일': (y, m, d) => VZTR_EN_FN.MON[m - 1] + ' ' + d + ', ' + y,
   '오늘 {n}월 {m}일 {x}': (m, d, w) => VZTR_EN_FN.WK[w] ? 'Today · ' + VZTR_EN_FN.WK[w] + ', ' + VZTR_EN_FN.MON[m - 1] + ' ' + d : null,
   '{n}.{m} {x}': (m, d, w) => VZTR_EN_FN.WK[w] ? VZTR_EN_FN.WK[w] + ' ' + m + '/' + d : null, '{n}. {m} {x}': (m, d, w) => VZTR_EN_FN.WK[w] ? VZTR_EN_FN.WK[w] + ' ' + m + '/' + d : null, '· {n}. {m} {x}': (m, d, w) => VZTR_EN_FN.WK[w] ? '· ' + VZTR_EN_FN.WK[w] + ' ' + m + '/' + d : null,
-  'DAY {n} 일정 보기': 'View DAY {n}', 'DAY {n} {m} / {d} 진행': 'DAY {n} · {m} of {d} done', '긴급 연락처 {n}': 'Emergency numbers {n}',
+  'DAY {n} 일정 보기': 'View DAY {n}', 'DAY {n} {m} / {d} 진행': 'DAY {n} · {m} of {d} done', '긴급 연락처 {n}': 'Emergency {n}',
   '{n}곳': '{n} places', '{n}곳 예정': '{n} planned', '장소 {n}곳': '{n} places', '{n}곳 중 {m}곳': '{m} of {n}', '{n}번째': '#{n}', '선택 {n} / {m}': '{n} of {m} picked',
   '강수확률 {n}%': 'Rain {n}%', '날씨 {n}도 {m}도': 'Weather {n}° / {m}°', '{x}에서 {n}일': '{n} days in {x}', '{x} 지도': '{x} map',
   '걸어서 · 약 {n}분': 'Walk · about {n} min',
@@ -176,6 +176,7 @@ window.VZTR_EN = {
     // 날짜·날씨·시각
     '날씨 {x}도 {y}도': (a, b) => num(a) && num(b) ? 'Weather ' + a + '° / ' + b + '°' : null,
     '출발 {n}. {m}': 'Departs {n}/{m}',
+    '+{n}곳': '+{n} more',   // F-14 여행 요약 남은 장소 수
     '{n}월 {m}일 {x}': (m, d, w) => WK[w] ? WK[w] + ', ' + MON[m - 1] + ' ' + d : null,
     '{n}일 · {m}월 {d}일 {x} – {y}일 {z}': (n, m, d, w, y, z) => WK[w] && WK[z] && num(y) ? n + ' days · ' + m + '/' + d + ' ' + WK[w] + ' – ' + y + ' ' + WK[z] : null,
     // 사진 출처: 사진 © 이름 · 라이선스  /  사진 · Google · 이름   (이름 = 영어 > 로마자, 라이선스는 영어로)
@@ -229,7 +230,7 @@ window.VZTR_EN = {
 /* ===== 2026-11-22 (3) 검수(qa_sweep 일본 화면)에서 영어가 길어 두 줄·잘림 나던 곳 = 짧게 ===== */
 Object.assign(window.VZTR_EN, {
   '공항 도착': 'At airport', '역 도착': 'At station',
-  '출발 {n}. {m}': 'Dep. {n}/{m}',
+  '출발 {n}. {m}': 'Departs {n}/{m}',
   '여권·지갑·충전기 확인': 'Passport · wallet · charger', '신분증·지갑·충전기 확인': 'ID · wallet · charger', '승차권·지갑·충전기 확인': 'Ticket · wallet · charger',
   '와나카 영업시간이 자료마다 달라요 · 전날 전화로 확인': 'Wanaka hours vary · call ahead', '영업시간이 자료마다 달라요 · 전날 전화로 확인': 'Hours vary by source · call ahead',
   '비행기 시각을 넣으면 그날 시간이 정해져요': 'Add flight time to set the day', '비행기 시각을 넣으면 시간표가 완성돼요': 'Add flight time to finish the plan',

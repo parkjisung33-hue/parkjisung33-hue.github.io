@@ -1385,6 +1385,89 @@ html #dayBody .tile .t { color: var(--sub) !important; }
 
 /* 11/20 검수: 추천 카드 작은 줄 = 묶음 단위로만 줄바꿈 */
 .rec2 .nw { white-space: nowrap; }
+/* F-11 (11/21): 현지 정보 맨 아래 출처 = 한 줄 · 아주 작게 · 흐리게 */
+#tips .cattr.srcall { font-size: 0.5625rem !important; line-height: 1.3; opacity: .62; white-space: nowrap !important; overflow: hidden !important; text-overflow: ellipsis !important; padding-top: 0.5rem; }
+/* F-05 (11/21): 길안내 시간 조정 − + 작게, 위아래 여백 */
+.nextwrap .late .adj { padding-block: 0.4375rem !important; }
+.nextwrap .late .adj .step button { width: 1.25rem !important; height: 1.25rem !important; font-size: 0.8125rem !important; }
+/* F-02 (11/21): 기록 탭 전환 — + 버튼이 왼쪽으로 밀리며 사라지고 알약이 같이 줄어듦 / 돌아오면 알약이 좌우로 늘며 + 다시 */
+.dock .fab { width: 2.75rem !important; aspect-ratio: auto !important; overflow: hidden;
+  transition: width .38s cubic-bezier(.25,.8,.25,1), margin .38s cubic-bezier(.25,.8,.25,1), opacity .26s ease, transform .38s cubic-bezier(.25,.8,.25,1), visibility 0s !important; }
+.dock.mini .fab { width: 2.25rem !important; }
+.dock.nofab { width: min(19rem, calc(100% - 2 * max(1.25rem, env(safe-area-inset-left, 0px)) - 3rem)) !important; }
+.dock.mini.nofab { width: min(16.5rem, calc(86% - 2 * max(1.25rem, env(safe-area-inset-left, 0px)) - 2.5rem)) !important; }
+.dock.nofab .fab { width: 0 !important; margin-left: -0.25rem; opacity: 0; transform: translateX(-0.75rem) scale(.7); pointer-events: none; visibility: hidden;
+  transition: width .38s cubic-bezier(.25,.8,.25,1), margin .38s cubic-bezier(.25,.8,.25,1), opacity .2s ease, transform .38s cubic-bezier(.25,.8,.25,1), visibility 0s .38s !important; }
+.dock.nofab .tabs { transform: none !important; }
+@media (prefers-reduced-motion: reduce) { .dock, .dock .fab { transition: none !important; } }
+/* F-03 (11/21): 길안내·기록 탭 = 요약/상세 토글을 접어 제목이 오른쪽까지 */
+.pill.noseg #modeSeg { display: none !important; }
+/* F-17 (11/21): 일정 상세 줄 = 시간·이름·지금·메모·점·지도 핀 모두 세로 가운데 */
+#v-plan .li:not(.m) { align-items: center !important; }
+#v-plan .li:not(.m) > .c, #v-plan .li:not(.m) .nm { align-items: center !important; }
+#v-plan .li:not(.m) .nm .one { line-height: 1.5 !important; }
+#v-plan .li:not(.m) .nm em, #v-plan .li:not(.m) .nm .mcnt, #v-plan .li:not(.m) .nm i { align-self: center; }
+/* F-18 (11/21): 날짜 칩 — 숫자 글자가 0.5px 위로 떠 보임 → 숫자 기준 가운데 */
+#dayBtns button { padding-top: 1px !important; }
+/* F-12 (11/21): 메뉴의 내 유형 카드 = 다크모드에서도 파스텔 그대로(글자는 어둡게) */
+html[data-grp="LS"] { --me-pastel: #E4F3F5; --me-pastel-ink: #2F6B73; }
+html[data-grp="LE"] { --me-pastel: #FEF2F5; --me-pastel-ink: #9A4A62; }
+html[data-grp="HS"] { --me-pastel: #E4EEF7; --me-pastel-ink: #2F557A; }
+html[data-grp="HE"] { --me-pastel: #FFE7EF; --me-pastel-ink: #8E3A63; }
+html[data-grp] .drawer .tcard[data-m] { background: var(--me-pastel) !important; color: #16171A !important; }
+html[data-grp] .drawer .tcard[data-m]:hover { background: color-mix(in srgb, var(--me-pastel-ink) 12%, var(--me-pastel)) !important; }
+html[data-grp] .drawer .tcard[data-m] b { background: var(--me-pastel-ink) !important; color: #FFFFFF !important; }
+html[data-grp] .drawer .tcard[data-m] > svg { stroke: #16171A; opacity: .55; }
+/* F-08 (11/21): 유형 이름 한 줄 — 캐릭터 조금 작게, 이름은 줄바꿈 없이(넘치면 글자만 줄임: fitLines) */
+.drawer .tcard[data-m] { flex-wrap: nowrap; }
+.drawer .tcard .tav { width: 3.5rem !important; height: 3.5rem !important; margin: -0.625rem -0.25rem -0.625rem -0.375rem !important; }
+.drawer .tcard #typeNm { white-space: nowrap !important; overflow: hidden; text-overflow: clip; font-size: 0.9375rem; line-height: 1.3; min-width: 0; }
+/* F-19 (11/21): 'Local Info' 제목 두 줄 꺾임 → 한 줄, 개수 글자가 줄어듦 */
+details.sec > summary { white-space: nowrap; }
+details.sec > summary .cnt { min-width: 0; overflow: hidden; text-overflow: ellipsis; }
+/* F-09 (11/21): 공유 시트 = 가이드북 카드 결(요약 시트 카드와 같은 테두리·곡률), 아이콘은 옅은 원 안 */
+.shlist { gap: 0.5rem; }
+.shlist button { height: auto; min-height: 3.5rem; padding: 0.625rem 0.875rem; gap: 0.75rem; border: 1px solid var(--hair) !important; border-radius: 0.4562rem; background: var(--field); }   /* 요약 시트 .dcard와 같은 결 */
+.shlist button:active { transform: scale(.985); }
+.shlist .shic { flex: none; width: 2.25rem; height: 2.25rem; border-radius: 50%; display: grid; place-items: center; background: color-mix(in srgb, var(--blue) 10%, transparent); }
+.shlist .shic svg { width: 1.125rem; height: 1.125rem; color: var(--blue); }
+.shlist .sht { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 0.125rem; }
+.shlist .sht b { font-size: 0.9375rem; font-weight: 700; line-height: 1.3; }
+.shlist .sht small { font-size: 0.78125rem; color: var(--sub); font-weight: 500; line-height: 1.3; }
+.shlist svg.chev { width: 1rem; height: 1rem; color: var(--sub); opacity: .6; }
+/* F-14 (11/21): 여행 요약 동선 줄 */
+.dcard .rt { display: flex; flex-wrap: wrap; align-items: center; gap: 0.25rem 0.375rem; margin-top: 0.25rem; }
+.dcard .rt .rs { font-size: 0.84375rem; font-weight: 500; color: var(--ink); line-height: 1.4; }
+.dcard .rt .ra { width: 0.375rem; height: 0.375rem; border-top: 1.5px solid var(--sub); border-right: 1.5px solid var(--sub); transform: rotate(45deg); opacity: .55; flex: none; margin: 0 0.0625rem; }
+.dcard .rt .rmore { font-size: 0.75rem; font-weight: 600; color: var(--sub); background: color-mix(in srgb, var(--sub) 12%, transparent); border-radius: 999px; padding: 0.0625rem 0.4375rem; line-height: 1.4; }
+/* F-16 (11/21): 확인 완료 버튼 — 주의 목록·장소 상세 */
+.ackb { flex: none; font-size: 0.75rem; font-weight: 700; padding: 0.25rem 0.625rem; border-radius: 999px; background: color-mix(in srgb, var(--amber) 16%, transparent); color: var(--ink); border: 1px solid color-mix(in srgb, var(--amber) 45%, transparent); line-height: 1.3; white-space: nowrap; }
+.ackb.ghost { background: none; border-color: var(--hair); color: var(--sub); }
+.ackrow { display: flex; align-items: center; gap: 0.5rem; margin: -0.25rem 0 0; }
+.ackrow .ackd { font-size: 0.8125rem; font-weight: 600; color: var(--green); }
+.ackrow .ackd::before { content: '✓ '; }
+#warn .nrow:has(.ackb) { align-items: center; }
+/* F-15 (11/21): '확인 필요 N곳' 숫자 = 앱의 노랑(주의 점과 같은 색) */
+.sgrid b.warn { color: var(--amber) !important; }
+/* F-13 (11/21): 길안내 '지금' 박스 — 박스 안 왼쪽 점선 삭제, 박스는 테두리 pulse만(탑승권과 같은 passglow),
+   이동 중이면 위 '지나온 길'의 이동 선 → 박스 → 아래 '남은 길' 첫 점까지 타임라인 선 위로만 점이 흐름 */
+#v-now .nextwrap.moving::after { display: none !important; }
+#v-now .nextwrap.moving, #v-now .nextwrap.here { outline: 0 !important; --c: var(--blue); animation: passglow 2.2s ease-in-out infinite; }
+#v-now:has(.nextwrap.moving) #trackPast { overflow: visible; }
+#v-now:has(.nextwrap.moving) #trackPast > :last-child .stop.m .rail::before,
+#v-now:has(.nextwrap.moving) #trackPast > .stop.m:last-child .rail::before { border-left: 0; width: 0.1875rem; bottom: -0.6875rem; height: auto; background: repeating-linear-gradient(to bottom, var(--blue) 0 0.3125rem, transparent 0.3125rem 0.75rem); background-size: 100% 0.75rem; animation: vzflow2 .9s linear infinite; }
+#v-now:has(.nextwrap.moving) #trackPast::after,
+#v-now:has(.nextwrap.moving) .nextwrap + .track::before { content: ""; display: block; position: absolute; left: var(--rail-x, calc(1.125rem + 0.6875rem)); transform: translateX(-50%); width: 0.1875rem; border: 0;
+  background: repeating-linear-gradient(to bottom, var(--blue) 0 0.3125rem, transparent 0.3125rem 0.75rem); background-size: 100% 0.75rem; animation: vzflow2 .9s linear infinite; pointer-events: none; z-index: 1; }
+#v-now:has(.nextwrap.moving) #trackPast::after { top: 100%; height: var(--gap-a, 0.75rem); }
+#v-now:has(.nextwrap.moving) .nextwrap + .track::before { top: calc(-1 * var(--gap-b, 0.75rem)); height: calc(var(--gap-b, 0.75rem) + var(--rail-in, 1.25rem)); opacity: .7; }
+@keyframes vzflow2 { to { background-position: 0 0.75rem; } }
+@media (prefers-reduced-motion: reduce) { #v-now .nextwrap.moving, #v-now .nextwrap.here, #v-now:has(.nextwrap.moving) #trackPast::after, #v-now:has(.nextwrap.moving) .nextwrap + .track::before, #v-now:has(.nextwrap.moving) #trackPast .rail::before { animation: none !important; } }
+#v-now { --rail-x: 1.875rem; --gap-a: 0.75rem; --gap-b: 0.75rem; --rail-in: 1.8125rem; }
+#warn[hidden] { display: none !important; }   /* F-16: 확인할 것이 없으면 주의 상자 자체를 숨김 */
+#tips .srcall [hidden] { display: none; }
+/* 11/22 검수: 영어판 'Departs 12/18'이 3~4px 잘림 → 탑승권 출발 표시만 자간 줄임 */
+.pass .live-tag { letter-spacing: .02em !important; }
 </style>
 
 <div class="bgfx" aria-hidden="true"></div><!-- 11/19 다크 배경(A 연하게) — 밝은 모드에선 안 보임 -->
@@ -1421,7 +1504,6 @@ html #dayBody .tile .t { color: var(--sub) !important; }
       <div class="grp2">생활 정보</div>
       <div class="nrow"><span class="ic"><svg viewBox="0 0 24 24"><rect x="5" y="4" width="14" height="16" rx="2"/><path d="M9 9h6M9 13h6M9 17h3"/></svg></span><span class="one"><b>면세품</b> <span class="src">짐을 부치기 전에 세관 확인 먼저</span></span><span></span></div>
       <div class="nrow"><span class="ic"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><path d="M9 9l3 4 3-4M9 13h6M12 13v4"/></svg></span><span class="one"><b>팁</b> <span class="src">팁 문화 없음</span></span><span></span></div>
-      <div class="nrow"><span></span><span class="src one">출처 외교부·JNTO (11/12 확인)</span><span></span></div>
     </details>
   </section>
 
@@ -1441,7 +1523,7 @@ html #dayBody .tile .t { color: var(--sub) !important; }
 
   <!-- 기록 -->
   <section class="view" id="v-log" aria-label="기록" hidden>
-    <div class="dhd glass"><div class="dmeta"><span class="dchip">기록</span><span>4일 · 12. 4 – 12. 7</span></div><h2 class="one">여행 기록</h2><span class="muted one" style="font-size:0.8125rem">하루가 끝나면 자동으로 저장돼요</span></div>
+    <div class="dhd glass"><div class="dmeta"><span class="dchip">기록</span></div><h2 class="one">여행 기록</h2><span class="muted one" style="font-size:0.8125rem">하루가 끝나면 자동으로 저장돼요</span></div>
     <div id="trips" class="view"></div>
   </section>
 </div>
@@ -1588,7 +1670,6 @@ const $ = s => document.querySelector(s);
 const esc = s => String(s ?? '').replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 // 현지 정보 = 도시마다 (내 일정의 PLAN.local, gen.js가 도시 설정 cfg.local에서 넣음). 샘플은 위 HTML(오사카) 그대로
 const TIP_IC = { police: '<path d="M7 17v-5a5 5 0 0 1 10 0v5"/><path d="M5 17h14v3H5z"/><path d="M12 3v1.5M5.2 5.7l1 1M18.8 5.7l-1 1M3 11.5h1.5M19.5 11.5H21"/>', plus: '<path d="M12 5v14M5 12h14"/>', phone: '<path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a1 1 0 0 1-1 1A16 16 0 0 1 4 5a1 1 0 0 1 1-1"/>', bldg: '<path d="M4 20h16M6 20V10M10 20V10M14 20V10M18 20V10M3 10l9-6 9 6"/>', globe: '<circle cx="12" cy="12" r="8.5"/><path d="M3.5 12h17M12 3.5c2.5 3 2.5 14 0 17M12 3.5c-2.5 3-2.5 14 0 17"/>', doc: '<rect x="5" y="4" width="14" height="16" rx="2"/><path d="M9 9h6M9 13h6M9 17h3"/>', coin: '<circle cx="12" cy="12" r="8.5"/><path d="M9 9l3 4 3-4M9 13h6M12 13v4"/>' };
-const wxSrcHtml = () => '<div class="cattr" data-wxsrc>날씨 · Open-Meteo (CC BY 4.0) · 평년 = 2016–2025 평균</div>';
 function renderTips(L) {
   const el = document.getElementById('tips'); if (!el || !L || !Array.isArray(L.rows)) return;
   const ic = k => '<span class="ic"><svg viewBox="0 0 24 24">' + (TIP_IC[k] || TIP_IC.phone) + '</svg></span>';
@@ -1598,14 +1679,27 @@ function renderTips(L) {
   h += '<div class="grp2">긴급 연락처 · 번호를 누르면 전화가 걸려요</div>';
   L.rows.forEach(r => { h += '<div class="crow">' + ic(r.ic) + '<span class="nm2"><b class="one">' + esc(r.n) + '</b><span class="src one">' + esc(r.sub || '') + '</span></span><a class="tel" href="' + esc(r.href || 'tel:' + r.tel) + '">' + esc(r.tel) + '</a></div>'; });
   if ((L.life || []).length) { h += '<div class="grp2">생활 정보</div>'; L.life.forEach(([b, t], i) => { h += '<div class="nrow">' + ic(i % 2 ? 'coin' : 'doc') + '<span class="one"><b>' + esc(b) + '</b> <span class="src">' + esc(t) + '</span></span><span></span></div>'; }); }
-  if (L.src) h += '<div class="nrow"><span></span><span class="src one">' + esc(L.src) + '</span><span></span></div>';
-  h += '<div class="cattr">사진: Wikimedia Commons · Openverse(Flickr 등) · 한국관광공사(공공누리 제1유형) · 각 사진의 저작자·라이선스는 사진 아래에 표기</div>';
-  if (PLAN && PLAN.carAttr) h += '<div class="cattr">' + esc(PLAN.carAttr) + '</div>';
-  h += wxSrcHtml();
-  el.innerHTML = h;
+  // F-11: 출처는 맨 아래 한 줄·아주 작게(조각마다 ' · '로 이어 영어판도 조각별 번역)
+  h += '<div class="cattr srcall">' + [L.src ? String(L.src).replace(/\s*\([^)]*\)/g, '').replace(/\s*·\s*\d+\/\d+\s*확인.*$/, '') : '', '사진 Commons 외', PLAN && PLAN.carAttr ? '경로 © OpenStreetMap' : '', '날씨 Open-Meteo'].filter(Boolean).map(t => '<span' + (t === '사진 Commons 외' ? ' data-opt' : '') + '>' + esc(t) + '</span>').join(' · ') + '</div>';   // 조각마다 span = 영어판이 조각 통째로 번역
+  el.innerHTML = h; try { fixEmb(); } catch (_) {}
+}
+// F-10 (11/21): 영어판(외국인) = 한국 영사관 줄 빼고 '내 나라 대사관 찾기'(여행 나라 외교부 공식 목록, 11/21 Chrome으로 열어 확인)
+//   일본 = 외무성 Foreign Missions in Japan · 한국 = 외교부 Foreign Missions in ROK. 나중에 랜딩에서 국적을 고르면 그 나라 공관 하나로
+const EMB = { jp: ['일본 외무성 공식 목록', 'https://www.mofa.go.jp/about/emb_cons/protocol/index.html'], kr: ['한국 외교부 공식 목록', 'https://www.mofa.go.kr/eng/pgm/m_5789/uss/cnsrshp/inKoEmblgbdAdres.do'] };
+function fixEmb() {
+  if (window.VZTR_LANG !== 'en') return; const el = document.getElementById('tips'); if (!el || el.querySelector('[data-emb]')) return;
+  const rows = [...el.querySelectorAll('.crow')], jp = rows.some(r => /일본/.test(r.textContent)) || /오사카|교토|도쿄|후쿠오카|삿포로/.test(TRIP_TITLE || '');
+  rows.filter(r => /영사|대사관|영사안전콜센터/.test((r.querySelector('b') || r).textContent)).forEach(r => r.remove());
+  const e = EMB[jp ? 'jp' : 'kr'], last = [...el.querySelectorAll('.crow')].pop();
+  const h = '<div class="crow" data-emb><span class="ic"><svg viewBox="0 0 24 24">' + (TIP_IC.bldg || TIP_IC.phone) + '</svg></span><span class="nm2"><b class="one">내 나라 대사관 찾기</b><span class="src one">' + e[0] + '</span></span><a class="tel" href="' + e[1] + '" target="_blank" rel="noopener">목록 열기</a></div>';
+  if (last) last.insertAdjacentHTML('afterend', h);
+  el.querySelectorAll('.crow .src').forEach(x => { if (x.textContent === 'JNTO · 24시간 · 한국어') x.textContent = 'JNTO · 24시간 · 영어·중국어·한국어'; });   // JNTO 공식: 영어·중국어·한국어
+  const cnt = el.querySelector('summary .cnt'); if (cnt) cnt.textContent = cnt.textContent.replace(/긴급 연락처 \d+/, '긴급 연락처 ' + el.querySelectorAll('.crow').length);
 }
 if (PLAN && PLAN.local) { try { renderTips(PLAN.local); } catch (_) {} }
-if (!PLAN) { const tp0 = document.getElementById('tips'); if (tp0) tp0.insertAdjacentHTML('beforeend', wxSrcHtml()); }   // 샘플
+try { fixEmb(); } catch (_) {}
+{ const tp = document.getElementById('tips'); if (tp) tp.addEventListener('toggle', () => requestAnimationFrame(() => { try { fitSrc(); } catch (_) {} })); }   // 현지 정보를 펼칠 때 출처 한 줄 맞춤
+if (!PLAN) { const tp0 = document.getElementById('tips'); if (tp0) tp0.insertAdjacentHTML('beforeend', '<div class="cattr srcall"><span>출처 외교부·JNTO</span> · <span>사진 Commons 외</span> · <span>날씨 Open-Meteo</span></div>'); }   // 샘플
 // 내 일정인데 현지 정보가 없으면(옛 저장 일정) 샘플의 오사카 긴급 연락처를 그대로 보여 주지 않음 (11/13)
 else if (PLAN && (PLAN.dest || 'kix') !== 'kix') { const tp = document.getElementById('tips'); if (tp) tp.style.display = 'none'; }
 // 24:00 넘는 시각 = '01:40(다음 날)' 로 표시, 읽을 때 다시 +1440 (옛 저장 일정의 '25:40'도 그대로 읽힘)
@@ -1768,8 +1862,9 @@ function recompute(d) {
 }
 function dotOf(d, c) {
   if (c.fly) return 'red';
-  const n = (NOTES[d.no] || []).find(x => x.ref && (c.sh || c.n).includes(x.ref) && x.lv !== 'gray');
+  const n = (NOTES[d.no] || []).find(x => x.ref && (c.sh || c.n).includes(x.ref) && x.lv !== 'gray' && !(x.lv === 'amber' && x.ack));
   if (n) return n.lv;
+  if (c.ackd) return '';   // F-16: 사용자가 '확인 완료'를 누른 곳
   const ti = timeIssue(c); return ti.hard || ti.soft ? 'amber' : '';
 }
 const dotHtml = (d, c) => { const lv = dotOf(d, c); return lv ? '<i class="kd ' + lv + '"></i>' : ''; };
@@ -1900,7 +1995,7 @@ function dayHead(d) {
     const c = nw.cur, nm = c ? (c.k === 'm' ? '이동 중 · ' + (c.n || '') : (c.sh || c.n)) : (nw.nx ? '다음 일정까지 여유' : '오늘 일정 끝');
     const goId = c && c.k !== 'm' ? c.id : nw.nx ? nw.nx.id : '';
     h += '<button class="nowbar glass"' + (goId ? ' data-goto="' + goId + '"' : '') + '><i class="pulse"></i><b>현재 ' + toT(nw.min) + '</b><span class="cur">' + esc(nm) + '</span>'
-      + (nw.nx ? '<span class="nx">다음 ' + (d.tbd ? '' : nw.nx.s + ' ') + esc(nw.nx.sh || nw.nx.n) + '</span>' : '') + '</button>';
+      + (nw.nx ? '<span class="nx">' + (nw.nx.fly ? '<span>다음</span> ' : '다음 ') + (d.tbd ? '' : nw.nx.s + ' ') + (nw.nx.fly ? flyHtml(nw.nx, 1, 3) + (nw.nx.fno ? ' ' + esc(nw.nx.fno) : '') : esc(nw.nx.sh || nw.nx.n)) + '</span>' : '') + '</button>';   
   }
   return h;
 }
@@ -1911,7 +2006,7 @@ function daySumSheet() {   /* 11/18 D-4 ①: 머리 한 줄(DAY·날짜·시각 
   d.list.filter(c => c.k !== 'm').forEach(c => {   // 11/15 #11: 요약엔 이동 시간 빼고 일정만
     const isNow = nw && c === nw.cur, cls = (c.fly ? 'fly ' : '') + (isNow ? 'now-row' : pastOf(nw, c) ? 'past-on' : '');
     const nm0 = c.fly ? flyTx(c, 1, 3) : (c.n.split(' — ')[1] || c.n), mu = canClose(c) ? mapUrl(d, c) : '';
-    h += '<li class="' + cls + '"><span class="tm">' + tmx(d, c) + '</span><i aria-hidden="true"></i><button type="button" class="nm" data-open="' + c.id + '">' + esc(nm0) + (isNow ? '<em>지금</em>' : '') + '</button>'
+    h += '<li class="' + cls + '"><span class="tm">' + tmx(d, c) + '</span><i aria-hidden="true"></i><button type="button" class="nm" data-open="' + c.id + '">' + (c.fly ? flyHtml(c, 1, 3) : esc(nm0)) + (isNow ? '<em>지금</em>' : '') + '</button>'
       + (mu ? '<a class="pin" href="' + mu + '" target="_blank" rel="noopener" aria-label="' + esc(nm0) + ' 구글 지도에서 열기">' + PIN_SVG + '</a>' : '<span></span>') + '</li>';
   });
   sheetMode = 'daysum'; openSheet(h + '</ul></div>');
@@ -1922,7 +2017,7 @@ const TRAIN_SVG = '<svg viewBox="0 0 24 24"><path d="M8 3h8a3 3 0 0 1 3 3v9a3 3 
 // 차 = 열차표와 같은 선 아이콘 (옆모습 자동차)
 const CAR_SVG = '<svg viewBox="0 0 24 24"><path d="M3.5 16.5v-3.2c0-.7.3-1.3.9-1.6L7 10.2l1.6-3.4c.2-.5.7-.8 1.2-.8h4.4c.5 0 1 .3 1.2.8l1.6 3.4 2.6 1.5c.6.3.9.9.9 1.6v3.2z"/><path d="M3.5 16.5V19h3v-2.5M17.5 16.5V19h3v-2.5M8 10.2h8"/><circle cx="7.6" cy="13.6" r=".9" fill="currentColor" stroke="none"/><circle cx="16.4" cy="13.6" r=".9" fill="currentColor" stroke="none"/></svg>';
 // 비행기·열차·차 한 줄 표기 (국내 기차 = 'KTX 서울역 → 부산역', 차 = '차 집 → 해운대')
-// 11/18 G57: 화면용 = 출발지 [수단 아이콘] 도착지 (글자 '✈ →' 대신)
+// 11/18 G57: 화면용 = 출발지 [수단 아이콘] 도착지 (글자 '✈ →' 대신) — 11/21 동우님: 목록·길안내·지금·기록 4곳도 flyHtml로 (flyTx 글자는 aria에만)
 const RIDE_IC = { air: '<svg class="ric" viewBox="0 0 24 24" aria-hidden="true"><path class="f" d="M10.5 3.5a1.5 1.5 0 0 1 3 0V9l7 4.5v2l-7-2V18l2.5 2v1.5l-4-1-4 1V20l2.5-2v-4.5l-7 2v-2l7-4.5z" transform="rotate(90 12 12)"/></svg>',
   train: '<svg class="ric" viewBox="0 0 24 24" aria-hidden="true"><rect x="5.5" y="3.5" width="13" height="14" rx="3"/><path d="M5.5 11h13M9 14.5h.01M15 14.5h.01M8.5 21l1.5-3.5M15.5 21L14 17.5"/></svg>',
   car: '<svg class="ric" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 16.5V12l2-5h12l2 5v4.5zM4 12h16M7 16.5V19M17 16.5V19"/><circle cx="8" cy="14" r=".75"/><circle cx="16" cy="14" r=".75"/></svg>' };
@@ -2092,11 +2187,15 @@ function renderPlan(flashId) {
   if (!$('#v-plan').hidden) setSub('v-plan');
   $('#dayHead').innerHTML = dayHead(d);
   const W = { red:'시간 고정', amber:'확인 필요', gray:'알아 두기' };
-  $('#warn').innerHTML = '<h4 class="warnh">' + NICON.amber + '주의</h4>' + (NOTES[d.no] || []).map(n0 => {
+  const WL = (NOTES[d.no] || []).map((n0, i) => {
+    if (n0.lv === 'amber' && n0.ack && n0.ref) return '';   // F-16: 확인 완료한 항목은 숨김
     const n = PLAN && /^늦어지면 .+ 먼저 빼기$/.test(n0.t) ? { ...n0, t: dropOf(d) ? '늦어지면 ' + dropOf(d) : '' } : n0; if (!n.t) return '';
-    const it = n.ref && d.list.find(c => (c.sh || c.n).includes(n.ref));
-    return '<' + (it ? 'button data-open="' + it.id + '"' : 'div') + ' class="nrow"><i class="kd ' + n.lv + '"></i><span class="nt">' + esc(n.t) + '</span><span class="v ' + n.lv + '">' + W[n.lv] + '</span></' + (it ? 'button' : 'div') + '>';
+    const it = n.ref && d.list.find(c => (c.sh || c.n).includes(n.ref)), ack = n.lv === 'amber' && !!it && !it.fly && it.k !== 'm' && !/비행기|시각 미입력/.test(n.t) && !/공항/.test(it.sh || it.n || '');   // 11/22 검수: '가는 비행기 시각 미입력'은 공항 칸에 걸림 → 입력해야 풀리니 버튼 없음   // 장소에 걸린 '확인 필요'만 확인 완료 버튼(비행기 시각 미입력 등은 입력해야 풀림)
+    const tag = it ? (ack ? 'div role="button" tabindex="0"' : 'button') + ' data-open="' + it.id + '"' : 'div', end = it && !ack ? 'button' : 'div';
+    return '<' + tag + ' class="nrow"><i class="kd ' + n.lv + '"></i><span class="nt">' + esc(n.t) + '</span>' + (ack ? '<button type="button" class="ackb" data-acknote="' + i + '">확인 완료</button>' : '<span class="v ' + n.lv + '">' + W[n.lv] + '</span>') + '</' + end + '>';
   }).join('');
+  $('#warn').innerHTML = WL ? '<h4 class="warnh">' + NICON.amber + '주의</h4>' + WL : '';
+  $('#warn').hidden = !WL;
   $('#dayBody').innerHTML = st.mode === 'simple' ? blocks(d) : list(d);
   if (st.mode === 'simple') fitTiles();
   flip($('#dayBody'), before);
@@ -2315,7 +2414,7 @@ function renderNow() {
     const dn = dst ? (dst.sh || dst.n).split(' — ').pop() : '';
     const mvp = String(nx.mv || '').split(' · '), ttl = nx.k === 'm' ? (dn ? dn + roTx(dn) : mvp[0]) : nx.fly ? flyTx(nx, 1, 3) : (nx.sh || parts[1] || parts[0]);   // 11/18 피드백6: 짧은 이름(sh) 우선 · 덧말은 작은 줄로
     h += '<div class="when">' + (tb ? '<span class="big" style="font-size:1.5rem">다음 순서</span>' : '<span class="big">' + nx.s + '</span>') + (sh > 0 ? '<span class="chk">예정 ' + toT(nx.b) + '</span>' : sh < 0 ? '<span class="chk no">예정 ' + toT(nx.b) + ' · ' + durTx(-sh) + ' 일찍</span>' : '') + '</div>'
-      + '<div class="nm">' + esc(ttl) + '</div>'
+      + '<div class="nm">' + (nx.k !== 'm' && nx.fly ? flyHtml(nx, 1, 3) : esc(ttl)) + '</div>'
       + (nx.k === 'm' ? '<div class="lo">' + esc(dn ? nx.mv : mvp.slice(1).join(' · ')) + '</div>' : nx.fly && nx.fno ? '<div class="lo">' + esc(nx.fno) + '</div>' : '')
       + (nx.l ? '<div class="lo one"><span class="jp">' + esc(nx.l) + '</span>' + (nx.r ? ' · ' + esc(nx.r) : '') + '</div>' : '')
       + (nx.say ? '<div class="lo one">' + esc(nx.say) + '</div>' : '')
@@ -2335,7 +2434,7 @@ function renderNow() {
     const can = i > p.i && canSkip(x);
     return (can ? '<div class="stopw" data-sw="' + x.id + '"><div class="swb"><button class="sk" data-skip="' + x.id + '">건너뛰기</button><button class="rm" data-rmv="' + x.id + '">빼기</button></div>' : '')
       + '<div class="stop ' + cls + (x.k === 'm' ? ' m' : '') + (can ? ' can' : '') + '"><span class="rail"><span class="pt"></span>' + fl + '</span><span class="t">' + (x.k === 'm' ? '' : String(tmx(d, x)).replace('(다음 날)', '')) + '</span><span class="nmc">'
-      + (x.k === 'm' ? '<span class="mvp" aria-label="' + esc(x.mv) + '">' + mvIc(x) + (x.du ? durTx(x.du) : esc(nm)) + '</span>' : '<b>' + esc(nm) + '</b>')
+      + (x.k === 'm' ? '<span class="mvp" aria-label="' + esc(x.mv) + '">' + mvIc(x) + (x.du ? durTx(x.du) : esc(nm)) + '</span>' : '<b>' + (x.fly ? flyHtml(x, 1, 3) : esc(nm)) + '</b>')
       + (sh && !cls && x.k !== 'm' ? '<span class="moved">처음 예정 ' + toT(x.b) + '</span>' : '')   /* 11/15 #18: 밀림·당겨짐 문구 없이 처음 시각만 */ + '</span>'
       + (can ? '<button class="more" type="button" data-stopm="' + x.id + '" aria-label="건너뛰기·빼기">···</button></div></div>' : '</div>');
   });
@@ -2493,7 +2592,7 @@ function logDaySheet(i) {   /* 11/18 D-4 ⑤: 머리 DAY · 날짜 + 제목 / �
   const rest = V.filter(v => !v.done && !v.skip).length, e = dayEndT(d);
   let h = '<div class="shd"><div><span class="eyebrow">DAY ' + d.no + ' · ' + esc(d.date) + '</span><h3 id="sheetTitle" class="dstt">' + esc(d.title) + '</h3></div>' + X_BTN + '</div><div class="body"><ol class="ldlist">';
   V.forEach(v => { const c = v.c, nm = c.fly ? flyTx(c, 1, 3) : (c.n.split(' — ')[1] || c.sh || c.n), m = (c.memo || []).length;
-    h += '<li class="' + (v.skip ? 'sk' : v.done ? 'dn' : v.now ? 'nw' : 'td') + '"><span class="tm">' + (v.tm || tmx(d, c)) + '</span><i aria-hidden="true"></i><span class="nm">' + esc(nm) + (v.skip ? '<em>건너뜀</em>' : m ? '<em>메모 ' + m + '</em>' : '') + '</span></li>'; });
+    h += '<li class="' + (v.skip ? 'sk' : v.done ? 'dn' : v.now ? 'nw' : 'td') + '"><span class="tm">' + (v.tm || tmx(d, c)) + '</span><i aria-hidden="true"></i><span class="nm">' + (c.fly ? flyHtml(c, 1, 3) : esc(nm)) + (v.skip ? '<em>건너뜀</em>' : m ? '<em>메모 ' + m + '</em>' : '') + '</span></li>'; });
   h += '</ol><div class="ldft"><span><b>' + done + '곳</b> 다녀옴' + (rest ? ' · ' + rest + '곳 남음' : '') + (sk.length ? ' · ' + sk.length + '곳 건너뜀' : '') + '</span>' + (e ? '<span>' + e + ' 마무리</span>' : '') + '</div></div>';
   sheetMode = 'logday'; openSheet(h);
 }
@@ -2723,12 +2822,19 @@ function phScan() {   // 시트 안 .phbox 를 찾아 사진을 붙임 (시트�
 }
 try { new MutationObserver(phScan).observe(document.getElementById('sheetIn'), { childList: true }); } catch (_) {}
 /* 11/19 ④ 화면 디자인 — 전체 3: 하루 제목·창 제목 한 줄(넘치면 0.5px씩 줄임) · 9a: 맨 위 제목 늘 한 줄(--tk로 줄여 토글과 안 겹침) */
-function fitLines() {
-  document.querySelectorAll('.dayline h2, #sheet h3#sheetTitle, #v-log .ttl2.one').forEach(el => {   // 11/21: 기록 탭 하루 제목도 한 줄(넘치면 글자만 줄임, 최소 12px)
+// F-06 (11/21): 넘침 = 실제 글자 폭 > 안쪽 칸(좌우 여백 뺀 폭). scrollWidth는 오른쪽 여백(스탬프 자리) 안으로 넘친 글자를 못 잡음
+function lnOver(el) { const cs = getComputedStyle(el), inner = el.clientWidth - (parseFloat(cs.paddingLeft) || 0) - (parseFloat(cs.paddingRight) || 0); const r = document.createRange(); r.selectNodeContents(el); return r.getBoundingClientRect().width > inner + 1; }
+function fitSrc() {   // F-11: 출처 한 줄이 넘치면 '사진 Commons 외' 조각부터 뺌(사진 출처는 사진마다 아래에 따로 있음)
+  const e = document.querySelector('#tips .srcall'); if (!e || !e.clientWidth) return;
+  const o = e.querySelector('[data-opt]'); if (o) { o.hidden = false; if (o.nextSibling && o.nextSibling.nodeType === 3) o.nextSibling.textContent = ' · '; }
+  if (o && lnOver(e)) { o.hidden = true; if (o.nextSibling && o.nextSibling.nodeType === 3) o.nextSibling.textContent = ''; }
+}
+function fitLines() { try { fitSrc(); } catch (_) {}
+  document.querySelectorAll('.dayline h2, #sheet h3#sheetTitle, #v-log .ttl2.one, .drawer #typeNm').forEach(el => {   // 11/21: 기록 탭 하루 제목도 한 줄(넘치면 글자만 줄임, 최소 12px)
     el.classList.add('fitln'); el.style.removeProperty('font-size'); if (!el.clientWidth) return;
-    let f = parseFloat(getComputedStyle(el).fontSize); const min = el.matches('.dayline h2') ? 18 : el.matches('.ttl2') ? 12 : 16;
-    while (el.scrollWidth > el.clientWidth + 1 && f > min) { f -= 0.5; el.style.setProperty('font-size', f + 'px', 'important'); }
-    if (el.scrollWidth > el.clientWidth + 1) { el.classList.remove('fitln'); el.style.removeProperty('font-size'); }   // 최소 크기에서도 넘치면 줄바꿈
+    let f = parseFloat(getComputedStyle(el).fontSize); const min = el.matches('.dayline h2') ? 18 : el.matches('.ttl2, #typeNm') ? 12 : 16;
+    while (lnOver(el) && f > min) { f -= 0.5; el.style.setProperty('font-size', f + 'px', 'important'); }
+    if (lnOver(el)) { el.classList.remove('fitln'); el.style.removeProperty('font-size'); }   // 최소 크기에서도 넘치면 줄바꿈
   });
 }
 function fitTitle() {
@@ -2771,7 +2877,8 @@ function sheetHtml(d, c) {
   if (ed) h += '<div class="stayrow2"><span class="lb">머무는 시간' + (c.du !== c.du0 ? '<small>원래 ' + durTx(c.du0) + '</small>' : '') + '</span><span class="step"><button type="button" data-stay-d="-15" aria-label="15분 줄이기"' + (pv - 15 < 30 ? ' disabled' : '') + '>−</button><b>' + durTx(pv) + '</b><button type="button" data-stay-d="15" aria-label="15분 늘리기"' + (pv + 15 > 360 ? ' disabled' : '') + '>+</button></span><button type="button" class="btn pri xs stayok" data-stay-ok' + (pv === c.du ? ' disabled' : '') + '>확인</button></div>';   // 11/18 D-4 ③: 칩 2줄 → 한 줄 스테퍼(15분 단위 · 30분~6시간)
   if (c.ck) { const t = String(CHECKS[c.ck].t), m = t.match(/^영업시간 확인\s*([\d.~\s]+)$/), v = m ? m[1] + ' 확인' : t.replace(/^영업시간이?\s*/, '');   // 11/19 ④ #12: '라벨 | 값' 줄
     h += '<p class="ckline"><span class="ckl">영업시간</span><i class="ckd' + (c.ck === 'ok' ? '' : ' no') + '"></i><span class="ckv">' + esc(v) + '</span></p>'; }
-  { const ti = timeIssue(c); if (ti.hard || ti.soft) h += '<p class="sub off">' + esc(ti.hard || ti.soft) + ' · 가능한 시간 ' + esc(ti.fix) + '</p>'; }
+  { const ti = timeIssue(c); if (ti.hard || ti.soft) h += '<p class="sub off">' + esc(ti.hard || ti.soft) + ' · 가능한 시간 ' + esc(ti.fix) + '</p>';
+    if (!c.fly && c.k !== 'm' && (c.ackd || (c.ck && c.ck !== 'ok') || ti.hard || ti.soft)) h += '<p class="ackrow">' + (c.ackd ? '<span class="ackd">확인함</span><button type="button" class="ackb ghost" data-ack="' + c.id + '">되돌리기</button>' : '<button type="button" class="ackb" data-ack="' + c.id + '">확인 완료</button>') + '</p>'; }   // F-16
   h += '<div class="memos"><span class="mh">메모' + (L.length ? ' ' + L.length : '') + '</span>' + memoLines(L, key) + memoAdd(key, '예: 여기선 셔츠 보기') + '</div>';
   const nu = navUrl(d, c), mu = c.k === 'm' ? '' : mapUrl(d, c), w5m = W5 ? w5Maps(d, c) : '';
   const arcB = fx ? '' : '<button class="btn sec" type="button" data-del>보관</button>';
@@ -3342,13 +3449,14 @@ function menuSheet(k) {
     // 11/14 D3: 맨 위 2×2 숫자 칸(여행·장소·총 이동·확인 필요, 실제 DAYS에서 계산) + 날짜별 카드(DAY 칩·날짜·제목 / 동선 한 줄 / 숙소)
     const stop = c => ['p', 'f', 'x', 'u'].includes(c.k) && !c.fly && !/숙소|체크|집 도착|공항|휴식|짐/.test(c.sh || c.n || '');
     const nPlace = DAYS.reduce((a, d) => a + d.list.filter(stop).length, 0), mv = DAYS.reduce((a, d) => a + d.list.filter(c => c.k === 'm').reduce((b, c) => b + c.du, 0), 0);
-    const nChk = DAYS.reduce((a, d) => a + d.list.filter(c => !c.fly && (c.ck === 'no' || dotOf(d, c) === 'amber')).length, 0);
+    const nChk = DAYS.reduce((a, d) => a + d.list.filter(c => !c.fly && ((c.ck === 'no' && !c.ackd) || dotOf(d, c) === 'amber')).length, 0);
     let h = '<div class="shd"><div><h3 id="sheetTitle" class="one">' + esc(TRIP_TITLE) + '</h3></div>' + X_BTN + '</div><div class="body">'
-      + '<div class="sgrid"><div><small>여행</small><b>' + DAYS.length + '일</b></div><div><small>장소</small><b>' + nPlace + '곳</b></div><div><small>총 이동</small><b>' + durTx(mv) + '</b></div><div><small>확인 필요</small><b' + (nChk ? ' class="warn"' : '') + '>' + nChk + '곳</b></div></div><div class="dcards">';
+      + '<div class="sgrid"><div><small>여행</small><b>' + (window.VZTR_LANG === 'en' ? DAYS.length + (DAYS.length > 1 ? ' days' : ' day') : DAYS.length + '일') + '</b></div><div><small>장소</small><b>' + nPlace + '곳</b></div><div><small>총 이동</small><b>' + durTx(mv) + '</b></div><div><small>확인 필요</small><b' + (nChk ? ' class="warn"' : '') + '>' + nChk + '곳</b></div></div><div class="dcards">';
     DAYS.forEach(d => {
       let nm = routeOf(d).filter(x => x !== '집' && x !== baseOf(d)); if (!nm.length) nm = routeOf(d);
-      const rt = nm.length > 3 ? nm.slice(0, 3).join(' → ') + ' 외 ' + (nm.length - 3) + '곳' : nm.join(' → ');
-      h += '<div class="dcard"><div class="tt"><span class="dchip">DAY ' + d.no + '</span><span class="one"><span class="muted">' + esc(dShort(d)) + '</span> · ' + esc(d.title) + '</span></div><div class="rt">' + esc(rt || '일정 없음') + '</div>'
+      // F-14 (11/21): 동선 = 장소마다 끊어 읽히게(작은 › 로 잇기) + 남은 수는 '+N곳' 알약
+      const rt = nm.length ? nm.slice(0, 3).map(x => '<span class="rs">' + esc(x) + '</span>').join('<i class="ra" aria-hidden="true"></i>') + (nm.length > 3 ? '<span class="rmore">+' + (nm.length - 3) + '곳</span>' : '') : '<span class="rs">일정 없음</span>';
+      h += '<div class="dcard"><div class="tt"><span class="dchip">DAY ' + d.no + '</span><span class="one"><span class="muted">' + esc(dShort(d)) + '</span> · ' + esc(d.title) + '</span></div><div class="rt" aria-label="' + esc(nm.join(' → ')) + '">' + rt + '</div>'
         + '</div>';
     });
     openSheet(h + '</div></div>');
@@ -3358,7 +3466,7 @@ function menuSheet(k) {
   else if (k === 'shares') {
     kakaoLoad(); shareReady();   // 11/19 W8: 카카오 SDK·공유 주소 미리
     openSheet('<div class="shd"><div><h3 id="sheetTitle">공유하기</h3></div>' + X_BTN + '</div><div class="body"><div class="shlist">'
-      + SHARES.map(x => '<button data-sh="' + x[0] + '"><svg viewBox="0 0 24 24">' + x[2] + '</svg>' + x[1] + '</button>').join('') + '</div></div>');
+      + SHARES.map(x => { const [t, sub] = x[1].split(' · '); return '<button data-sh="' + x[0] + '"><span class="shic"><svg viewBox="0 0 24 24">' + x[2] + '</svg></span><span class="sht"><b>' + t + '</b>' + (sub ? '<small>' + sub + '</small>' : '') + '</span><svg class="chev" viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg></button>'; }).join('') + '</div></div>');   // F-09: 카드형(요약 시트와 같은 결)
   }
   else if (k === 'install') {
     closeAll();
@@ -3492,6 +3600,8 @@ document.addEventListener('click', e => {
   const it = e.target.closest('#dayBody [data-key]');
   if (it && !justG && !e.target.closest('a')) { itemSheet(it.dataset.key); return; }
   if (e.target.closest('[data-close]')) { closeAll(); return; }
+  const akn = e.target.closest('[data-acknote]'); if (akn) { const n = (NOTES[DAYS[st.day].no] || [])[+akn.dataset.acknote]; if (n) { n.ack = true; const d0 = DAYS[st.day], it = n.ref && d0.list.find(c => (c.sh || c.n).includes(n.ref)); if (it) it.ackd = true; renderPlan(); saveEdits(true); toast('확인 완료로 표시했어요'); } return; }   // F-16: 그 항목이 가리키는 장소도 확인함
+  const ak = e.target.closest('[data-ack]'); if (ak) { let c = null; DAYS.some(dd => (c = findIt(dd, ak.dataset.ack))); if (c) { c.ackd = !c.ackd; DAYS.forEach(dd => { if (dd.list.includes(c)) (NOTES[dd.no] || []).forEach(n => { if (n.lv === 'amber' && n.ref && (c.sh || c.n).includes(n.ref)) n.ack = c.ackd; }); });   /* 리뷰 11/22: 되돌리면 주의 줄도 다시 */ saveEdits(true); renderPlan(); itemSheet(c.id); toast(c.ackd ? '확인 완료로 표시했어요' : '확인 표시를 지웠어요'); } return; }
   const op = e.target.closest('[data-open]'); if (op) { itemSheet(op.dataset.open, true); return; }
   if (e.target.closest('[data-daysum]')) { daySumSheet(); return; }
   const bk = e.target.closest('[data-blank]'); if (bk) { addSheet(); setTimeout(() => { const el = bk.dataset.blank === 'find' ? $('#addName') : $('#addRecs'); if (!el) return; if (bk.dataset.blank === 'find') el.focus(); else el.scrollIntoView({ block: 'center', behavior: calm() ? 'auto' : 'smooth' }); }, 80); return; }
@@ -3518,7 +3628,8 @@ document.querySelector('.tabs').onclick = e => {
   document.querySelectorAll('.tabs button').forEach(x => x.setAttribute('aria-selected', x === b));
   document.querySelectorAll('.view[id^="v-"]').forEach(v => v.hidden = v.id !== b.dataset.v);
   const onPlan = b.dataset.v === 'v-plan';
-  $('#modeSeg').style.visibility = onPlan ? 'visible' : 'hidden';
+  $('#modeSeg').style.visibility = onPlan ? 'visible' : 'hidden'; $('.top .pill').classList.toggle('noseg', !onPlan);   // F-03: 길안내·기록은 토글 자리까지 제목
+  requestAnimationFrame(() => { try { fitTitle(); window.VZTR_REFIT && window.VZTR_REFIT(); } catch (_) {} });
   $('#dayBtns').hidden = !onPlan;
   if (b.dataset.v === 'v-now') { renderNow(); fitNow(); requestAnimationFrame(() => requestAnimationFrame(() => centerNow(false))); /* 11/19 ④ #13b: 탭 열면 카드가 화면 가운데 */ } else if (b.dataset.v === 'v-log') renderTrail(); else renderPlan();
   setSub(b.dataset.v);
@@ -3541,6 +3652,7 @@ $('#addBtn').onclick = () => {
   addSheet();
 };
 $('#menuBtn').onclick = () => { lastFocus = $('#menuBtn'); pushLayer(); const tok = ++openTok; $('#scrim').hidden = false; nextFrame(() => { if (tok !== openTok) return; $('#scrim').classList.add('on'); $('#drawer').classList.add('on'); }); setTimeout(() => $('#drawer [data-m]').focus({ preventScroll: true }), 60); };
+$('#menuBtn').addEventListener('click', () => setTimeout(() => { try { fitLines(); } catch (_) {} }, 80));   // F-08: 메뉴를 열 때 유형 이름 한 줄 맞춤
 $('#drawer').onclick = e => { const b = e.target.closest('[data-m]'); if (!b) return;
   if (b.tagName === 'A') { e.preventDefault(); const href = b.getAttribute('href'); layerOn = false; try { history.replaceState(null, ''); } catch (_) {} location.href = href; return; } $('#drawer').classList.remove('on'); menuSheet(b.dataset.m); };
 $('#scrim').onclick = closeAll;
@@ -3549,6 +3661,7 @@ document.addEventListener('keydown', e => {
   if (e.key === 'Enter' && e.target.id === 'addName') doAdd();
   if (e.key === 'Enter' && e.target.dataset && e.target.dataset.min) addMemo(e.target.dataset.min);
   if ((e.key === 'Enter' || e.key === ' ') && e.target.matches && e.target.matches('#dayBody .li[data-key]')) { e.preventDefault(); itemSheet(e.target.dataset.key); }
+  if ((e.key === 'Enter' || e.key === ' ') && e.target.matches && e.target.matches('#warn [role="button"][data-open]')) { e.preventDefault(); itemSheet(e.target.dataset.open, true); }   // F-16: 주의 줄(안에 확인 버튼이 있어 div)
 });
 document.querySelector('.late').onclick = e => {
   const be = e.target.closest('[data-early]'); if (be) { if (!be.disabled) earlyGo(+be.dataset.early); return; }
@@ -3586,7 +3699,6 @@ document.addEventListener('input', e => {
 loadEdits();
 DAYS.forEach(d => { if (!d.slots) d.slots = d.list.map(c => toMin(c.s)); });
 { const n = nowRef(); if (n.phase === 'during') st.day = n.day; }
-{ const lg = document.querySelector('#v-log .dmeta span:nth-child(2)'); if (lg) lg.textContent = DAYS.length + '일 · ' + tripDates(); }
 renderDays(); renderPlan(); renderNow(); renderTrail(); arcCount(); memoCount(); syncBar(); tripsCount(); endBadge();
 window.addEventListener('beforeprint', () => { try { buildPrintDoc(); } catch (_) {} });   // 브라우저 메뉴·Ctrl+P로 인쇄해도 빈 쪽 안 나오게
 try { if (new URLSearchParams(location.search).get('print') === '1') { buildPrintDoc(); } } catch (_) {}   // 점검용: 인쇄 문서만 만듦 (인쇄 창 안 띄움)
