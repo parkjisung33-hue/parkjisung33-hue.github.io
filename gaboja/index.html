@@ -3796,9 +3796,9 @@ try { const fm = sessionStorage.getItem('gaboja-flash'); if (fm) { sessionStorag
 <script>/* 11/22 동우님 #16: 상세 줄 장소 이름이 두 줄로 꺾이면 짧은 이름(괄호 뺀 것)으로 — 그려질 때마다 */
 (function () {
   const lines = e => { const r = document.createRange(); r.selectNodeContents(e); const t = [...new Set([...r.getClientRects()].filter(q => q.width > 2).map(q => Math.round(q.top)))].sort((a, b) => a - b); let n = t.length ? 1 : 0; for (let i = 1; i < t.length; i++) if (t[i] - t[i - 1] > 6) n++; return n; };
-  const fit = () => document.querySelectorAll('.li .nm .one[data-sh]').forEach(e => { if (e.dataset.fit === e.textContent || !e.offsetParent) return; if (lines(e) > 1) e.textContent = e.dataset.sh; e.dataset.fit = e.textContent; });
+  const fit = force => document.querySelectorAll('.li .nm .one[data-sh]').forEach(e => { if (!e.offsetParent || (!force && e.dataset.fit === e.textContent)) return; if (!e.dataset.full) e.dataset.full = e.textContent; e.textContent = e.dataset.full; if (lines(e) > 1) e.textContent = e.dataset.sh; e.dataset.fit = e.textContent; });   // 리뷰: 넓어지면 원래 이름으로
   let k = 0; new MutationObserver(() => { cancelAnimationFrame(k); k = requestAnimationFrame(fit); }).observe(document.body, { childList: true, subtree: true });
-  window.addEventListener('resize', () => { cancelAnimationFrame(k); k = requestAnimationFrame(fit); });
+  window.addEventListener('resize', () => { cancelAnimationFrame(k); k = requestAnimationFrame(() => fit(true)); });
   if (document.fonts && document.fonts.ready) document.fonts.ready.then(fit);
 })();
 </script>

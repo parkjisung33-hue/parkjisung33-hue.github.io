@@ -11,7 +11,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400..800&display=swap">
 <script src="inapp.js?v=1"></script>
-<script src="i18n-en-auto.js?v=bf791966"></script><script src="i18n-en.js?v=bf791966"></script><script src="i18n.js?v=bf791966"></script><!-- 11/20 W5 언어 틀 (영어판 = /en/, 사전 i18n-en.js는 배포 때 en/에만 붙음) -->
+<script src="i18n-en-auto.js?v=3cf489b6"></script><script src="i18n-en.js?v=3cf489b6"></script><script src="i18n.js?v=3cf489b6"></script><!-- 11/20 W5 언어 틀 (영어판 = /en/, 사전 i18n-en.js는 배포 때 en/에만 붙음) -->
 <link rel="stylesheet" href="fonts/vztr-fonts.css?v=2"><!-- 11/19 글꼴: 굵은 한글 IBM Plex Sans KR · 보통 한글 Pretendard · 영문·숫자 IBM Plex Sans -->
 <link rel="icon" href="icons/favicon-32.png">
 <link rel="apple-touch-icon" href="icons/icon-180.png">
@@ -1049,7 +1049,7 @@ const hh = m => { m = ((Math.round(m) % 1440) + 1440) % 1440; return String(Math
 function stayHint() {
   const h = $('#sHint'), tr = S.trip; if (!h) return;
   const raw = tr.stay !== 'no' ? String(tr.stayTx || '').trim() : '', G = window.GABOJA_GEN, a = raw && G && G.stayArea ? G.stayArea(DEST[tr.city], raw) : '';
-  h.hidden = !raw; if (!raw) return;
+  h.hidden = !raw || !DEST[tr.city]; if (h.hidden) return;   // 리뷰: 자동 일정 없는 도시('준비 중'·다른 곳)는 안내 없음
   h.className = 'sthint' + (a ? ' ok' : '');
   h.innerHTML = a ? `${ICON.check}<span>매일 ${esc(a)}에서 출발·복귀하는 동선으로 짜요</span>` : `<span>목록에 없는 동네예요 · 가까운 큰 동네 기준으로 짜요</span>`;
 }
@@ -1115,7 +1115,7 @@ const PARTS = [['both', '둘 다'], ['main', '오사카만'], ['side', '교토�
 /* 11/22 동우님 #3: 어디로 = 나라별 묶음(일본 · 한국) 안에 도시를 하나씩. 같은 지역(간사이 = 오사카·교토·나라·고베 / 홋카이도 = 삿포로·오타루)은 여러 곳 함께 고름.
    [이름, 엔진 키(없으면 자동 일정 준비 중 → 아키가 가이드북), 지역] — 엔진 연결: 오사카만 = kix part main · 교토만 = side · 둘 다 = both */
 const CGRP = W5 ? [['한국', [['서울', 'sel', 'sel'], ['부산', 'bsn', 'bsn']]]] : [
-  ['일본', [['오사카', 'kix', 'kx'], ['교토', 'kix', 'kx'], ['나라', '', 'kx'], ['고베', '', 'kx'], ['도쿄', 'tyo', 'tyo'], ['후쿠오카', 'fuk', 'fuk'], ['삿포로', 'spk', 'hk'], ['오타루', 'spk', 'hk']]],
+  ['일본', [['오사카', 'kix', 'kx'], ['교토', 'kix', 'kx'], ['나라', '', 'kx'], ['고베', '', 'kx'], ['도쿄', 'tyo', 'tyo'], ['후쿠오카', 'fuk', 'fuk'], ['삿포로', 'spk', 'hk'], ['오타루', '', 'hk']]],
   ['한국', [['서울', 'sel', 'sel'], ['부산', 'bsn', 'bsn'], ['제주', '', 'jj'], ['경주', '', 'gj'], ['강릉', '', 'gn'], ['속초', '', 'sc'], ['전주', '', 'jn'], ['여수', '', 'ys'], ['통영', '', 'ty'], ['대구', '', 'dg'], ['인천', '', 'ic'], ['수원', '', 'sw']]]];
 const CPK = Object.fromEntries(CGRP.flatMap(g => g[1].map(c => [c[0], c])));
 function picksOf(tr) {   // 예전 저장값(city·part)에서 고른 도시 되살리기
@@ -1780,7 +1780,7 @@ function rInfo(s) {
     $('#lNext').onclick = () => next(s);
   }
   if (s === 'theme') {
-    const opts = THEMES[DEST[tr.city]] || [], cn = String(tr.city || '').split('·')[0] || '이 도시';
+    const opts = THEMES[DEST[tr.city]] || [], cn = placeTx(tr, '') || '이 도시';   // 리뷰: 교토만 → '교토'
     tr.themes = (tr.themes || []).filter(v => opts.some(o => o[0] === v));   // 리뷰 #1: 레벨은 누르거나 '다음'일 때만 정함(건너뛰기 = 안 정함 = 엔진 가중 없음)
     el = screen(head('주제', opts.length ? '이번 여행 주제가 있나요?' : '몇 번째 여행이에요?', opts.length ? '고른 주제의 장소를 먼저 넣어요 · 여러 개 가능' : '다녀온 만큼 유명한 곳은 줄이고 숨은 곳을 늘려요') + `
       ${opts.length ? `<div class="two" id="thC">${opts.map(o => `<button data-v="${o[0]}" aria-pressed="${tr.themes.includes(o[0])}"><em aria-hidden="true">${o[1]}</em>${o[2]}</button>`).join('')}</div>` : ''}
@@ -2010,6 +2010,7 @@ function swPoints(sw, d, id, l1) {
     : [p.kf && esc(ro ? `${p.kf}${ro} 유명해요` : `대표 ${p.kf}`), p.say2 && esc(p.say2), p.best && esc(p.best)];
   const out = [...new Set(L.filter(x => x && !l1.some(t => esc(t) === x)))];
   if (th) out.push(`<b>‘${esc(th[2])}’</b> 주제로 골랐어요`);
+  if (!out.length) { const kd = [KIND_LB[p.kind]].concat((p.tg || []).filter(t => t !== KIND_LB[p.kind]).slice(0, 2)).filter(Boolean).join(' · '); if (kd && !l1.includes(kd)) out.push(esc(kd)); else if (p.oTx && !/^거리/.test(p.oTx)) out.push(B('영업', p.oTx.split(' · ')[0])); }   // 리뷰: 이름 아래 늘 2줄
   return out;
 }
 function swCardHtml(sw, d, id, k) {   // 11/18 D-1: 사진이 위쪽을 꽉 채움 + 종류 칩 · 아래 이름 / 설명 | 영업시간 / ☆ 추천 이유 (동네 줄 없음)
@@ -2245,7 +2246,7 @@ let PLANNED = null; // 방금 만든 일정 (DEST에 있는 도시만 — 오사
 function planInput() { // 일정 엔진 입력 (스와이프 미리 만들기·최종 만들기 공통)
   const tr = S.trip, dest = DEST[tr.city];
   const d = n => n ? `${Math.floor(n / 10000)}-${String(Math.floor(n / 100) % 100).padStart(2, '0')}-${String(n % 100).padStart(2, '0')}` : null;
-  return { type: S.type, start: d(tr.start), nights: nOf(tr), daytrip: !!tr.day || undefined, likes: likeTags(tr.likes), avoid: normAvoid(tr.avoid), flightTx: tr.flight === 'yes' ? tr.flightTx : '', depAp: tr.flight === 'yes' && tr.depAp && tr.depAp !== 'ICN' ? tr.depAp : undefined, fo: tr.flight === 'yes' ? carDep(tr, tr.fo) : null, fb: tr.flight === 'yes' ? carDep(tr, tr.fb) : null, stayTx: tr.stay !== 'no' ? tr.stayTx : '', cityLabel: tr.city, part: partOf(tr) || undefined, dest, airport: tr.airport || ((AIRPORTS[dest] || [[]])[0] || [])[0], region: tr.region, sgg: tr.sgg = effSgg(tr), mode: tr.mode, line: tr.line || 0, door: tr.door && tr.door.ll === String(tr.homeLL) ? tr.door.v : undefined, inbound: W5 ? tr.airport || ((AIRPORTS[dest] || [[]])[0] || [])[0] : undefined, themes: themeOf(tr).map(o => o[0]), level: tr.visit || undefined, seen: (tr.visit || 1) >= 2 ? seenOf(tr, dest) : undefined };   // 11/20 W5 F1 한국 도착 공항   // 11/20 문 앞 시간(doorNow)
+  return { type: S.type, start: d(tr.start), nights: nOf(tr), daytrip: !!tr.day || undefined, likes: likeTags(tr.likes), avoid: normAvoid(tr.avoid), flightTx: tr.flight === 'yes' ? tr.flightTx : '', depAp: tr.flight === 'yes' && tr.depAp && tr.depAp !== 'ICN' ? tr.depAp : undefined, fo: tr.flight === 'yes' ? carDep(tr, tr.fo) : null, fb: tr.flight === 'yes' ? carDep(tr, tr.fb) : null, stayTx: tr.stay !== 'no' ? tr.stayTx : '', stayKind: tr.stay, cityLabel: tr.city, part: partOf(tr) || undefined, dest, airport: tr.airport || ((AIRPORTS[dest] || [[]])[0] || [])[0], region: tr.region, sgg: tr.sgg = effSgg(tr), mode: tr.mode, line: tr.line || 0, door: tr.door && tr.door.ll === String(tr.homeLL) ? tr.door.v : undefined, inbound: W5 ? tr.airport || ((AIRPORTS[dest] || [[]])[0] || [])[0] : undefined, themes: themeOf(tr).map(o => o[0]), level: tr.visit || undefined, seen: (tr.visit || 1) >= 2 ? seenOf(tr, dest) : undefined };   // 11/20 W5 F1 한국 도착 공항   // 11/20 문 앞 시간(doorNow)
 }
 function buildPlan() {
   const tr = S.trip; PLANNED = null;
@@ -2307,7 +2308,7 @@ function rEdit() {
       ${R(dom ? '가는 길' : '비행기', esc(way), 'book')}
       ${R('숙소', esc(stayLine(tr)), 'book')}
       ${R('취향', (tr.likes.length ? esc(tr.likes.join(' · ')) : '고르지 않음') + (tr.avoid.length ? `<small>피함 · ${esc(tr.avoid.join(' · '))}</small>` : ''), 'likes')}
-      ${R('주제', (themeOf(tr).length ? esc(themeOf(tr).map(o => o[2]).join(' · ')) : '없음') + `<small>${esc((VISITS.find(v => v[0] === (tr.visit || 1)) || VISITS[0])[1])}</small>`, 'theme')}
+      ${R('주제', (themeOf(tr).length ? esc(themeOf(tr).map(o => o[2]).join(' · ')) : '없음') + `<small>${esc(tr.visit ? (VISITS.find(v => v[0] === tr.visit) || VISITS[0])[1] : '횟수 안 고름')}</small>`, 'theme')}
     </div>
     <div class="foot"><button class="cta" id="eGo" ${ok ? '' : 'disabled'}>일정 다시 만들기 ${ICON.arrow}</button><a class="ghost" id="eKeep" href="index.html" style="text-decoration:none">그대로 두고 돌아가기</a></div>`);
   document.querySelectorAll('[data-e]').forEach(b => b.onclick = () => { const st = b.dataset.e; if (st === 'ttl') { titleRx(); return; } S.cityWas = st === 'city' ? (tr.city || '') : null; S.partWas = partOf(tr); go(st); });

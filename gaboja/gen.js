@@ -217,7 +217,8 @@
     const B = matchB || (HOME ? C.bases.slice().sort((a, b) => mins(a.key, HOME) - mins(b.key, HOME))[0] : null) || C.bases[0];
     let base = B.key; const calcName = HOME ? D.clName[HOME] || B.name : B.name;
     // 화면에 쓰는 숙소 이름: 목록에 있으면 동네 이름, 없으면 사용자가 적은 말 그대로(계산만 첫 동네 기준). 지도 검색어도 같은 말 (11/13)
-    const baseName = HOME || !stayRaw ? calcName : stayRaw.slice(0, 14), BQ = HOME || !stayRaw ? (D.clQ[HOME || base] || calcName) : stayRaw;
+    const exact = input.stayKind === 'yes' && stayRaw;   // 리뷰: '정했어요'(숙소 이름)는 화면 이름·지도 검색어를 적은 그대로 — 계산만 동네(HOME)로
+    const baseName = exact ? stayRaw.slice(0, 14) : HOME || !stayRaw ? calcName : stayRaw.slice(0, 14), BQ = exact ? stayRaw : HOME || !stayRaw ? (D.clQ[HOME || base] || calcName) : stayRaw;
     // 숙소 동네가 목록에 없으면 첫 동네로 계산 → 1일차 회색 주의에 알림 (아래 notes[1])
     const stayUnknown = stayRaw && !HOME ? '숙소 ‘' + stayRaw.slice(0, 20) + '’ → 목록에 없는 동네라 이동 시간은 ' + calcName + ' 기준으로 계산' : '';
     if (stayUnknown) assumed.push(stayUnknown);
@@ -270,7 +271,8 @@
       } else { R = { min: (M.home && M.home.min) || 60 }; outOk = backOk = true; assumed.push('집 → 숙소 지하철 약 ' + mnTx(R.min) + ' 가정'); }
       R.region = region;
     }
-    if (HOME && HOME !== base) { if (TB) TB = [TB[0] + mins(base, HOME), TB[1] + ' + 전철']; base = HOME; }   // 11/22 #4: 표 계산이 끝난 뒤 숙소 동네로
+    let carAdd = 0;   // 리뷰: 차 표는 기준 동네까지 → 숙소 동네까지 시내 이동을 더함(앱에서 출발 시각 바꿀 때 쓰는 표 car.d 에도)
+    if (HOME && HOME !== base) { if (TB) TB = [TB[0] + mins(base, HOME), TB[1] + ' + 전철']; if (DOM && mode === 'car') carAdd = mins(base, HOME); base = HOME; }   // 11/22 #4: 표 계산이 끝난 뒤 숙소 동네로
     if (DT && !backOk && out && back) {   // 당일치기: 오는 편 시각 미입력이면 가는 편 도착 6시간 뒤로 가정(순서만 쓰임)
       const oa = spanEnd(out[0], out[1]), bd0 = toMin(back[0]), bdu = spanEnd(back[0], back[1]) - bd0;
       const gap = DOM ? 360 : 480;   // 해외는 공항 수속(2시간 전)·공항 이동이 길어 8시간
@@ -493,7 +495,7 @@
           it.push({ k: 'm', s: arr + R.ex, e: arr + R.ex + TB[0], mode: 'train', n: TB[1], mv: TB[1] + ' · 약 ' + mnTx(TB[0]) + '', to: BQ });
           t = r5(arr + R.ex + TB[0]); route = ['집', R.fromName, R.toName, baseName];
         } else if (mode === 'car') {
-          const leave = toMin(R.carOutDep), L = R.tabOut ? carLeg(R.kOut, leave, date) : null, dur = L ? L.dur : CAR_ASSUME, arrv = leave + dur, tb = R.tabOut ? carTable(R.kOut, date) : null;
+          const leave = toMin(R.carOutDep), L = R.tabOut ? carLeg(R.kOut, leave, date) : null, dur = (L ? L.dur : CAR_ASSUME) + carAdd, arrv = leave + dur, tb0 = R.tabOut ? carTable(R.kOut, date) : null, tb = tb0 && carAdd ? { ...tb0, d: tb0.d.map(x => x + carAdd) } : tb0;
           it.push({ k: 'w', s: leave - 45, n: '기상', say: '짐 싣기 · 주차 확인' });
           it.push({ k: 'x', s: leave, e: arrv, mode: 'car', ride: 'car', fly: ['집', '집', baseName, baseName], car: { d: tb && tb.d, rs: tb && tb.rs, est: !!L, rest: !!(L && L.rest), park: L ? CAR_POLICY.parkMin : 0, dflt: R.dOut || undefined }, n: '차 · 집 → ' + baseName, to: BQ, drv: L ? L.drv : undefined });
           t = r5(arrv + (L ? CAR_POLICY.parkMin : 0)); route = ['집', baseName];
@@ -574,8 +576,8 @@
           route = [baseName, R.toName, R.fromName, '집'];
         } else {
           const LB = mode === 'car' && R.tabBack ? carLeg(R.kBack, leave2, date) : null;
-          const drive = LB ? LB.dur : mode === 'car' ? CAR_ASSUME : R.min;
-          if (mode === 'car') { const tb = R.tabBack ? carTable(R.kBack, date) : null; it.push({ k: 'x', s: leave2, e: leave2 + drive, mode: 'car', ride: 'car', fly: [baseName, baseName, '집', '집'], car: { d: tb && tb.d, rs: tb && tb.rs, est: !!LB, rest: !!(LB && LB.rest), park: 0, dflt: R.dBack || undefined }, n: '차 · ' + baseName + ' → 집', to: '집', drv: LB ? LB.drv : undefined }); }
+          const drive = (LB ? LB.dur : mode === 'car' ? CAR_ASSUME : R.min) + (mode === 'car' ? carAdd : 0);
+          if (mode === 'car') { const tb0 = R.tabBack ? carTable(R.kBack, date) : null, tb = tb0 && carAdd ? { ...tb0, d: tb0.d.map(x => x + carAdd) } : tb0; it.push({ k: 'x', s: leave2, e: leave2 + drive, mode: 'car', ride: 'car', fly: [baseName, baseName, '집', '집'], car: { d: tb && tb.d, rs: tb && tb.rs, est: !!LB, rest: !!(LB && LB.rest), park: 0, dflt: R.dBack || undefined }, n: '차 · ' + baseName + ' → 집', to: '집', drv: LB ? LB.drv : undefined }); }
           else it.push({ k: 'm', s: leave2, e: leave2 + drive, mode: 'home', n: '집으로', mv: baseName + ' → 집 · 지하철 약 ' + mnTx(R.min) + ' (가정)' });
           it.push({ k: 'p', s: leave2 + drive, sh: '집 도착', n: '집 도착 — 여행 끝', est: 1 });
           if (mode === 'car') nt.push({ lv: 'gray', t: '일·연휴 오후 고속도로 막힘 · 출발 확인' });

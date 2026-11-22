@@ -18,7 +18,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400..800&family=Zen+Kaku+Gothic+New:wght@400;700&display=swap">
 <script src="inapp.js?v=1"></script>
-<script src="i18n-en-auto.js?v=bf791966"></script><script src="i18n-en.js?v=bf791966"></script><script src="i18n.js?v=bf791966"></script><!-- 11/20 W5 언어 틀 (영어판 = /en/, 사전 i18n-en.js는 배포 때 en/에만 붙음) -->
+<script src="i18n-en-auto.js?v=3cf489b6"></script><script src="i18n-en.js?v=3cf489b6"></script><script src="i18n.js?v=3cf489b6"></script><!-- 11/20 W5 언어 틀 (영어판 = /en/, 사전 i18n-en.js는 배포 때 en/에만 붙음) -->
 <link rel="stylesheet" href="fonts/vztr-fonts.css?v=2"><!-- 11/19 글꼴: 굵은 한글 IBM Plex Sans KR · 보통 한글 Pretendard · 영문·숫자 IBM Plex Sans -->
 <style>
 /* Pretendard 1.3.9 (SIL OFL 1.1) — 공식 배포본(orioncactus/pretendard)을 fonts/에 함께 올림 */
@@ -3796,9 +3796,9 @@ try { const fm = sessionStorage.getItem('gaboja-flash'); if (fm) { sessionStorag
 <script>/* 11/22 동우님 #16: 상세 줄 장소 이름이 두 줄로 꺾이면 짧은 이름(괄호 뺀 것)으로 — 그려질 때마다 */
 (function () {
   const lines = e => { const r = document.createRange(); r.selectNodeContents(e); const t = [...new Set([...r.getClientRects()].filter(q => q.width > 2).map(q => Math.round(q.top)))].sort((a, b) => a - b); let n = t.length ? 1 : 0; for (let i = 1; i < t.length; i++) if (t[i] - t[i - 1] > 6) n++; return n; };
-  const fit = () => document.querySelectorAll('.li .nm .one[data-sh]').forEach(e => { if (e.dataset.fit === e.textContent || !e.offsetParent) return; if (lines(e) > 1) e.textContent = e.dataset.sh; e.dataset.fit = e.textContent; });
+  const fit = force => document.querySelectorAll('.li .nm .one[data-sh]').forEach(e => { if (!e.offsetParent || (!force && e.dataset.fit === e.textContent)) return; if (!e.dataset.full) e.dataset.full = e.textContent; e.textContent = e.dataset.full; if (lines(e) > 1) e.textContent = e.dataset.sh; e.dataset.fit = e.textContent; });   // 리뷰: 넓어지면 원래 이름으로
   let k = 0; new MutationObserver(() => { cancelAnimationFrame(k); k = requestAnimationFrame(fit); }).observe(document.body, { childList: true, subtree: true });
-  window.addEventListener('resize', () => { cancelAnimationFrame(k); k = requestAnimationFrame(fit); });
+  window.addEventListener('resize', () => { cancelAnimationFrame(k); k = requestAnimationFrame(() => fit(true)); });
   if (document.fonts && document.fonts.ready) document.fonts.ready.then(fit);
 })();
 </script>
