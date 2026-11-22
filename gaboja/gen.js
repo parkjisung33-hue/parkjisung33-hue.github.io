@@ -122,6 +122,23 @@
     kix: { bases: [{ key: 'kyo-station', name: '교토역', re: '' }, { key: 'kyo-center', name: '가와라마치', re: '가와라마치|기온|시조|산조|河原町|祇園|四条' }],
       toBase: { KIX: { 'kyo-station': [80, 'JR 특급 하루카'], 'kyo-center': [100, 'JR 하루카 + 지하철·버스'] } }, say: { KIX: '입국 심사 → JR 표지판 · 하루카 타는 곳' } }
   };
+  /* 11/22 동우님 #4: 숙소 글자 → 숙소 동네(클러스터) 키. 동네 이름·줄임말·일본어 > DB 장소 이름 > 기준 동네(bases) 정규식. 못 찾으면 '' */
+  function stayHome(C, stayRaw, matchB) {
+    if (!stayRaw) return '';
+    const CLS = [...new Set(Object.values(PL).filter(p => p.city === C.main || p.city === C.side).map(p => p.cl).filter(Boolean))];
+    const AKA = { 'osk-minami': '도톤보리|신사이바시|닛폰바시|難波|心斎橋|Namba', 'osk-kita': '오사카역|梅田|Umeda', 'osk-tennoji': '아베노|신세카이|天王寺', 'osk-bay': '유니버설|USJ|베이 에리어', 'kyo-center': '시조|기온|가라스마|河原町|祇園|四条', 'kyo-station': '京都駅', 'kyo-arashiyama': '嵐山', 'kyo-fushimi': '伏見',
+      'tyo-akiba': '아키바|秋葉原|Akihabara', 'tyo-shimokita': '시모키타|下北沢', 'tyo-asakusa': '浅草|Asakusa', 'tyo-ueno': '上野|Ueno', 'tyo-ginza': '니혼바시|유라쿠초|마루노우치|銀座|東京駅|Ginza', 'tyo-shinjuku': '新宿|Shinjuku', 'tyo-shibuya': '에비스|渋谷|Shibuya', 'tyo-harajuku': '오모테산도|原宿', 'tyo-ikebukuro': '池袋', 'tyo-shinagawa': '品川', 'tyo-bay': 'お台場|도요스',
+      'fuk-hakata': '하카타|博多', 'fuk-tenjin': '다이묘|天神', 'fuk-nakasu': '캐널시티|中洲', 'spk-station': '札幌駅', 'spk-susukino': 'すすきの|스스키노', 'spk-odori': '大通',
+      'sel-hongdae': '연남|합정|신촌|망원', 'sel-euljiro': '명동|을지로|충무로', 'sel-jongno': '인사동|북촌|광화문|익선동|삼청', 'sel-namsan': '서울역|용산|후암', 'sel-itaewon': '한남|해방촌', 'sel-gangnam': '신사|압구정|역삼|삼성|청담|논현', 'sel-dongdaemun': '혜화|대학로|동대문', 'sel-jamsil': '롯데월드|석촌', 'bsn-haeundae': '해운대|송정|마린시티', 'bsn-gwangalli': '광안|민락|수영', 'bsn-seomyeon': '전포|부전', 'bsn-nampo': '광복|자갈치|중앙동', 'bsn-station': '초량' };   // 11/22 #4: 흔히 쓰는 줄임말·일본어
+    const clHit = k => (D.clName[k] || '').split('·').some(w => (w = w.trim()).length >= 2 && stayRaw.includes(w)) || (AKA[k] && new RegExp(AKA[k], 'i').test(stayRaw));
+    const plHit = stayRaw.length >= 2 ? Object.values(PL).find(p => (p.city === C.main || p.city === C.side) && p.cl && p.kind !== 'hub' && ((p.n && p.n.length >= 3 && (stayRaw.includes(p.n) || p.n.includes(stayRaw) && stayRaw.length >= 3)) || (p.l && p.l.length >= 3 && stayRaw.includes(p.l)))) : null;
+    return CLS.find(clHit) || (plHit && plHit.cl) || (matchB && matchB.key) || '';
+  }
+  function stayArea(dest, raw) {   // 시작 화면 숙소 칸 아래 '○○에서 출발해요' (엔진과 같은 규칙)
+    const C = D.cfg && D.cfg[dest]; raw = String(raw || '').trim(); if (!C || !raw) return '';
+    const mb = C.bases.find(b => b.re && new RegExp(b.re).test(raw)) || C.bases.find(b => raw.includes(b.name.split('·')[0].trim()));
+    const k = stayHome(C, raw, mb); return k ? D.clName[k] || '' : '';
+  }
   function make(input) {
     const type = /^[LH][SE][FR][JP]$/.test(input.type || '') ? input.type : 'LSRP';
     const G = type.slice(0, 2), F = type[2] === 'F', J = type[3] === 'J';
@@ -196,14 +213,7 @@
     const stayRaw = String(input.stayTx || '').trim(), matchB = C.bases.find(b => b.re && new RegExp(b.re).test(stayRaw)) || (stayRaw && C.bases.find(b => stayRaw.includes(b.name.split('·')[0].trim())));
     /* 11/22 동우님 #4: 숙소에 적은 동네·장소(예: 아키하바라·호텔 이름 속 동네·DB 장소 이름) = 그 동네(클러스터)에서 매일 출발·복귀.
        공항·역·차 표는 기준 동네(bases)에만 있으니 표는 가장 가까운 기준 동네 + 동네 사이 시간으로 계산 */
-    const CLS = [...new Set(Object.values(PL).filter(p => p.city === C.main || p.city === C.side).map(p => p.cl).filter(Boolean))];
-    const AKA = { 'osk-minami': '도톤보리|신사이바시|닛폰바시|難波|心斎橋|Namba', 'osk-kita': '오사카역|梅田|Umeda', 'osk-tennoji': '아베노|신세카이|天王寺', 'osk-bay': '유니버설|USJ|베이 에리어', 'kyo-center': '시조|기온|가라스마|河原町|祇園|四条', 'kyo-station': '京都駅', 'kyo-arashiyama': '嵐山', 'kyo-fushimi': '伏見',
-      'tyo-akiba': '아키바|秋葉原|Akihabara', 'tyo-shimokita': '시모키타|下北沢', 'tyo-asakusa': '浅草|Asakusa', 'tyo-ueno': '上野|Ueno', 'tyo-ginza': '니혼바시|유라쿠초|마루노우치|銀座|東京駅|Ginza', 'tyo-shinjuku': '新宿|Shinjuku', 'tyo-shibuya': '에비스|渋谷|Shibuya', 'tyo-harajuku': '오모테산도|原宿', 'tyo-ikebukuro': '池袋', 'tyo-shinagawa': '品川', 'tyo-bay': 'お台場|도요스',
-      'fuk-hakata': '하카타|博多', 'fuk-tenjin': '다이묘|天神', 'fuk-nakasu': '캐널시티|中洲', 'spk-station': '札幌駅', 'spk-susukino': 'すすきの|스스키노', 'spk-odori': '大通',
-      'sel-hongdae': '연남|합정|신촌|망원', 'sel-euljiro': '명동|을지로|충무로', 'sel-jongno': '인사동|북촌|광화문|익선동|삼청', 'sel-namsan': '서울역|용산|후암', 'sel-itaewon': '한남|해방촌', 'sel-gangnam': '신사|압구정|역삼|삼성|청담|논현', 'sel-dongdaemun': '혜화|대학로|동대문', 'sel-jamsil': '롯데월드|석촌', 'bsn-haeundae': '해운대|송정|마린시티', 'bsn-gwangalli': '광안|민락|수영', 'bsn-seomyeon': '전포|부전', 'bsn-nampo': '광복|자갈치|중앙동', 'bsn-station': '초량' };   // 11/22 #4: 흔히 쓰는 줄임말·일본어
-    const clHit = k => (D.clName[k] || '').split('·').some(w => (w = w.trim()).length >= 2 && stayRaw.includes(w)) || (AKA[k] && new RegExp(AKA[k], 'i').test(stayRaw));
-    const plHit = stayRaw.length >= 2 ? Object.values(PL).find(p => (p.city === C.main || p.city === C.side) && p.cl && p.kind !== 'hub' && ((p.n && p.n.length >= 3 && (stayRaw.includes(p.n) || p.n.includes(stayRaw) && stayRaw.length >= 3)) || (p.l && p.l.length >= 3 && stayRaw.includes(p.l)))) : null;
-    const HOME = !stayRaw ? '' : CLS.find(clHit) || (plHit && plHit.cl) || (matchB && matchB.key) || '';
+    const HOME = stayHome(C, stayRaw, matchB);
     const B = matchB || (HOME ? C.bases.slice().sort((a, b) => mins(a.key, HOME) - mins(b.key, HOME))[0] : null) || C.bases[0];
     let base = B.key; const calcName = HOME ? D.clName[HOME] || B.name : B.name;
     // 화면에 쓰는 숙소 이름: 목록에 있으면 동네 이름, 없으면 사용자가 적은 말 그대로(계산만 첫 동네 기준). 지도 검색어도 같은 말 (11/13)
@@ -339,7 +349,7 @@
         if (tw === 'morning' && s >= 720) return { fail: p.n + ' 아침 전용(정오 전)' };
         items.push({ k: st.meal && st.meal !== '간식' ? 'f' : (o.opensAt ? 'x' : 'p'), s, e, n: (st.meal && st.meal !== '간식' ? st.meal + ' — ' : '') + p.n, sh: p.sh || p.n, l: p.l, say: p.say || '', q: p.q, ck: o.unknown ? 'no' : 'ok', info: p.oTx ? [['영업', p.oTx]] : null, pid: st.place, meal: st.meal, tw: tw || undefined, oh: o.ran });
         if (o.opensAt) warn.push({ lv: 'red', ref: p.sh || p.n, t: (p.sh || p.n) + ' ' + o.opensAt + ' 문 열 때 맞춰 도착' });
-        if (o.unknown) warn.push({ lv: 'amber', ref: p.sh || p.n, t: (p.sh || p.n) + ' 영업시간 확인 필요 · 전날 확인' });
+        if (o.unknown) warn.push({ lv: 'amber', ref: p.sh || p.n, t: (p.sh || p.n) + ' 영업시간 전날 확인' });
         cur = e; loc = cl(st.place);
       }
       return { items, warn, end: cur, loc };
@@ -416,7 +426,7 @@
         usedPlaces.add(id);
         const items = []; if (go) items.push({ k: 'm', s: t, e: t + go, mode: 'train', n: '이동', mv: '약 ' + mnTx(go) + '' + estTx(at, cl(id)), to: p.q, tc: cl(id) });
         items.push({ k: 'f', s: o.start, e: o.start + dur, n: kind + ' — ' + p.n, sh: p.sh || p.n, l: p.l, say: p.say || '', q: p.q, ck: o.unknown ? 'no' : 'ok', info: p.oTx ? [['영업', p.oTx]] : null, pid: id, oh: o.ran });
-        return { items, end: o.start + dur, loc: cl(id), warn: o.unknown ? [{ lv: 'amber', ref: p.sh || p.n, t: (p.sh || p.n) + ' 영업시간 확인 필요' }] : [] };
+        return { items, end: o.start + dur, loc: cl(id), warn: o.unknown ? [{ lv: 'amber', ref: p.sh || p.n, t: (p.sh || p.n) + ' 영업시간 전날 확인' }] : [] };
       }
       const area = D.clName[at] || '근처';
       return { items: [{ k: 'f', s: t, e: t + 60, n: kind + ' — ' + area + ' 근처', sh: kind, say: '가서 고르기 · 줄이 길면 옆 가게로', q: D.clQ[at] || area }], end: t + 60, loc: at, warn: [] };
@@ -660,5 +670,5 @@
     const leave = toMin(dep), raw = T.min * carMult(T.km || 999, leave, date, dest), rest = Math.floor(raw / CAR_POLICY.restEvery) * CAR_POLICY.restMin, arr = Math.max(r5(leave + raw + rest), leave + 30);
     return { dep: toT(leave), arr: toT(arr).replace(/\(.*/, ''), next: arr >= 1440, dur: arr - leave, rest: rest > 0 };
   }
-  window.GABOJA_GEN = { make, carEta, CAR_POLICY, version: 8, dests: Object.keys(D.cfg || {}) };
+  window.GABOJA_GEN = { make, stayArea, carEta, CAR_POLICY, version: 8, dests: Object.keys(D.cfg || {}) };
 })();

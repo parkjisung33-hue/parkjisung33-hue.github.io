@@ -18,7 +18,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400..800&family=Zen+Kaku+Gothic+New:wght@400;700&display=swap">
 <script src="inapp.js?v=1"></script>
-<script src="i18n-en-auto.js?v=60660773"></script><script src="i18n-en.js?v=60660773"></script><script src="i18n.js?v=60660773"></script><!-- 11/20 W5 언어 틀 (영어판 = /en/, 사전 i18n-en.js는 배포 때 en/에만 붙음) -->
+<script src="i18n-en-auto.js?v=bf791966"></script><script src="i18n-en.js?v=bf791966"></script><script src="i18n.js?v=bf791966"></script><!-- 11/20 W5 언어 틀 (영어판 = /en/, 사전 i18n-en.js는 배포 때 en/에만 붙음) -->
 <link rel="stylesheet" href="fonts/vztr-fonts.css?v=2"><!-- 11/19 글꼴: 굵은 한글 IBM Plex Sans KR · 보통 한글 Pretendard · 영문·숫자 IBM Plex Sans -->
 <style>
 /* Pretendard 1.3.9 (SIL OFL 1.1) — 공식 배포본(orioncactus/pretendard)을 fonts/에 함께 올림 */
@@ -1168,7 +1168,7 @@ html[data-grp="HS"] { --stamp-a: var(--g-hs-a); --stamp-lt: var(--g-hs-lt); } ht
 .hbox .pill .ttl b { font-size: calc(1.0625rem - var(--p, 0) * 0.0625rem) !important; }
 .hbox .days { background: none !important; border: 0 !important; box-shadow: none !important; -webkit-backdrop-filter: none !important; backdrop-filter: none !important;
   border-radius: 0 !important; padding: 0 !important; border-top: 1px solid var(--hair) !important;
-  margin-top: calc(0.25rem - var(--p, 0) * 0.125rem); padding-top: calc(0.375rem - var(--p, 0) * 0.1875rem) !important; gap: 0.25rem !important; }
+  margin-top: calc(0.25rem - var(--p, 0) * 0.125rem); padding-top: calc(0.375rem - var(--p, 0) * 0.1875rem + var(--p, 0) * 0.11rem) !important; gap: 0.25rem !important; }   /* 11/22 #12: 줄어든 상태에서 날짜 칸 위·아래 여백 같게 */
 .hbox .days button { height: calc(3rem - var(--p, 0) * 1.0625rem) !important; gap: calc(0.125rem * (1 - var(--p, 0))) !important; overflow: hidden; }
 .hbox .days button b { max-height: calc((1 - var(--p, 0)) * 0.875rem); opacity: max(0, calc(0.6 - var(--p, 0) * 1.0)) !important; overflow: hidden; line-height: 0.875rem !important; }
 @media (prefers-reduced-motion: no-preference) { .hbox .days button { transition: background .15s, color .15s; } }
@@ -1306,6 +1306,8 @@ html[data-theme="dark"][data-grp="HE"] { --me-soft: color-mix(in srgb, #C17192 2
 #dayBody .tile .n { font-size: 0.9375rem; }
 .li .tm { font-size: 0.8125rem; }
 .li .tm small { font-size: max(0.6875rem, 11px); }
+/* 11/22 동우님 #14: 동우님 화면 캡처 픽셀로 잰 값 — 시간 글자 가운데가 제목보다 0.5px 아래, 지도 핀이 1px 아래 → 같은 가로선에 맞춤 */
+.li > .tm { position: relative; top: -0.5px; } .li .pin svg { position: relative; top: -1px; }
 .rlist .tm { font-size: 0.71875rem; }
 
 /* ===== 11/19 ④ 화면 디자인 (동우님 보드 s4.html 고름) — BI 글꼴이 바뀌면 아래 :root 값만 다시 맞춤 =====
@@ -1468,6 +1470,12 @@ details.sec > summary .cnt { min-width: 0; overflow: hidden; text-overflow: elli
 #tips .srcall [hidden] { display: none; }
 /* 11/22 검수: 영어판 'Departs 12/18'이 3~4px 잘림 → 탑승권 출발 표시만 자간 줄임 */
 .pass .live-tag { letter-spacing: .02em !important; }
+
+/* 11/22 동우님 #15: 길안내 다음 카드 — 시각 미정 날 제목 = 장소 이름(크게, 왼쪽), 그 아래 이동 수단 줄 · 아래 목록은 시각 칸 없이 */
+.next .nm.tbt { font-size: 1.75rem; font-weight: 800; letter-spacing: -.03em; margin-top: 0.125rem; }
+.next .lo.mvl { display: flex; align-items: center; gap: 0.375rem; color: var(--sub); font-size: 0.8125rem; font-weight: 600; }
+.next .lo.mvl svg { width: 1rem; height: 1rem; flex: none; stroke: currentColor; fill: none; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+.notm .stop { grid-template-columns: 1.375rem minmax(0,1fr) !important; } .notm .stop .t { display: none !important; }
 </style>
 
 <div class="bgfx" aria-hidden="true"></div><!-- 11/19 다크 배경(A 연하게) — 밝은 모드에선 안 보임 -->
@@ -2150,7 +2158,7 @@ function list(d) {
     const fx = fixedOf(c), mu = mapUrl(d, c), P = window.GABOJA_DATA && GABOJA_DATA.places, ev = !!(c.pid && P && P[c.pid] && P[c.pid].kind === 'event');
     h += '<div class="li ' + c.k + (ev ? ' ev' : '') + nowCls(c) + '" data-key="' + c.id + '"' + (fx ? ' data-fixed="1"' : '') + ' role="button" tabindex="0">'
       + '<span class="tm">' + tmx(d, c) + '</span>'
-      + '<span class="c"><span class="nm">' + (ev ? EV_STAR : dotHtml(d, c)) + '<span class="one">' + esc(main) + '</span>' + (nw && c === nw.cur ? '<span class="now-pill">지금</span>' : '') + memoBadge(c) + (c.ck ? '<i class="ckd' + (c.ck === 'ok' ? '' : ' no') + '" role="img" aria-label="' + (c.ck === 'ok' ? '영업시간 확인' : '확인 필요') + '"></i>' : '') + '</span>'
+      + '<span class="c"><span class="nm">' + (ev ? EV_STAR : dotHtml(d, c)) + '<span class="one"' + (c.sh && c.sh !== main && !/^(점심|저녁|브런치|간식)$/.test(c.sh) ? ' data-sh="' + esc(c.sh) + '"' : '') + '>' + esc(main) + '</span>' + (nw && c === nw.cur ? '<span class="now-pill">지금</span>' : '') + memoBadge(c) + (c.ck ? '<i class="ckd' + (c.ck === 'ok' ? '' : ' no') + '" role="img" aria-label="' + (c.ck === 'ok' ? '영업시간 확인' : '확인 필요') + '"></i>' : '') + '</span>'
       + (ti.hard || ti.soft ? '<span class="s one"><span class="off">' + (ti.hard ? '시간대 안 맞음' : '영업시간 밖') + '</span></span>' : '') + '</span>'
       + (mu ? '<a class="pin" href="' + mu + '" target="_blank" rel="noopener" aria-label="' + esc(main) + ' 지도">' + PIN_SVG + '</a>' : '<span></span>') + '</div>';
   });
@@ -2413,8 +2421,10 @@ function renderNow() {
     const parts = nx.n.split(' — '), sh = tb ? 0 : toMin(nx.s) - nx.b, dst = nx.k === 'm' ? L.slice(p.i + 2).find(x => x.k !== 'm') : null;
     const dn = dst ? (dst.sh || dst.n).split(' — ').pop() : '';
     const mvp = String(nx.mv || '').split(' · '), ttl = nx.k === 'm' ? (dn ? dn + roTx(dn) : mvp[0]) : nx.fly ? flyTx(nx, 1, 3) : (nx.sh || parts[1] || parts[0]);   // 11/18 피드백6: 짧은 이름(sh) 우선 · 덧말은 작은 줄로
-    h += '<div class="when">' + (tb ? '<span class="big" style="font-size:1.5rem">다음 순서</span>' : '<span class="big">' + nx.s + '</span>') + (sh > 0 ? '<span class="chk">예정 ' + toT(nx.b) + '</span>' : sh < 0 ? '<span class="chk no">예정 ' + toT(nx.b) + ' · ' + durTx(-sh) + ' 일찍</span>' : '') + '</div>'
-      + '<div class="nm">' + (nx.k !== 'm' && nx.fly ? flyHtml(nx, 1, 3) : esc(ttl)) + '</div>'
+    const pm = nx.k !== 'm' && p.i >= 0 && L[p.i] && L[p.i].k === 'm' ? L[p.i] : null;   // 11/22 #15: 장소 차례면 그 앞 이동(지하철 등)을 이름 아래에
+    h += (tb ? '' : '<div class="when">' + '<span class="big">' + nx.s + '</span>')   /* 11/22 동우님 #15: 시각 미정 날 '다음 순서' 큰 글자 없앰 → 장소 이름이 제목(왼쪽 정렬) */ + (sh > 0 ? '<span class="chk">예정 ' + toT(nx.b) + '</span>' : sh < 0 ? '<span class="chk no">예정 ' + toT(nx.b) + ' · ' + durTx(-sh) + ' 일찍</span>' : '') + (tb ? '' : '</div>')
+      + '<div class="nm' + (tb ? ' tbt' : '') + '">' + (nx.k !== 'm' && nx.fly ? flyHtml(nx, 1, 3) : esc(ttl)) + '</div>'
+      + (pm ? '<div class="lo mvl">' + mvIc(pm) + '<span>' + esc(pm.mv) + '</span></div>' : '')
       + (nx.k === 'm' ? '<div class="lo">' + esc(dn ? nx.mv : mvp.slice(1).join(' · ')) + '</div>' : nx.fly && nx.fno ? '<div class="lo">' + esc(nx.fno) + '</div>' : '')
       + (nx.l ? '<div class="lo one"><span class="jp">' + esc(nx.l) + '</span>' + (nx.r ? ' · ' + esc(nx.r) : '') + '</div>' : '')
       + (nx.say ? '<div class="lo one">' + esc(nx.say) + '</div>' : '')
@@ -2425,7 +2435,7 @@ function renderNow() {
       + (di < DAYS.length - 1 ? '<div class="acts"><button class="btn sec" id="nextDayBtn">DAY ' + (d.no + 1) + ' 미리 따라가기</button></div>' : '');
   const nwr = $('#v-now .nextwrap'), vis = !$('#v-now').hidden, y0 = vis ? nwr.getBoundingClientRect().top : 0;
   $('#nextCard').innerHTML = h;
-  { const cur = p.i >= 0 ? L[p.i] : null, mv = !!(cur && !tb && (cur.k === 'm' || cur.fly) && nx); nwr.classList.toggle('moving', mv); nwr.classList.toggle('here', !mv && !!(cur && p.at)); }   // V-15: 이동 중 = 파란 테두리 + 안쪽 흐름 / 도착 = 테두리만
+  { const cur = p.i >= 0 ? L[p.i] : null, mv = !!(cur && (cur.k === 'm' || cur.fly) && nx);   /* 11/22 동우님 #17: 시각 미정 날에도 이동 중이면 흐름 보임(전엔 !tb로 꺼져 '사라짐') */ nwr.classList.toggle('moving', mv); nwr.classList.toggle('here', !mv && !!(cur && p.at)); }   // V-15: 이동 중 = 파란 테두리 + 안쪽 흐름 / 도착 = 테두리만
   // 지나온 길 / 남은 길 = 일정 탭과 같은 목록(추가·옮김·보관·늦어짐·일찍 그대로)
   const rows = L.map((x, i) => {   // 11/18 D-4 ④: 이동 = 시각 없이 작은 알약 [아이콘] 17분 · 장소 = 시각 + 이름(안 잘림)
     const cls = (i < p.i || (i === p.i && !p.at)) ? 'past' : i === p.i ? 'now' : '', sh = tb ? 0 : toMin(x.s) - x.b;
@@ -2444,7 +2454,7 @@ function renderNow() {
     const orow = o0 ? '<div class="stop' + (p.i >= 0 ? ' past' : '') + ' origin"><span class="rail"><span class="pt"></span></span><span class="t">' + (tb ? '–' : esc(L[0].s)) + '</span><span class="nmc"><b>' + esc(o0) + '</b><span class="s2">출발</span></span></div>' : '';
     const cut = Math.max(p.i + 1, 0), past = orow + rows.slice(0, cut).join(''), rest = rows.slice(nx ? cut + 1 : cut).join('');
     $('#trackPast').innerHTML = past; $('#trackPast').hidden = !past;
-    $('#track').innerHTML = rest; $('#track').hidden = !rest;
+    $('#track').innerHTML = rest; $('#track').hidden = !rest; $('#track').classList.toggle('notm', tb); { const tp = $('#trackPast'); if (tp) tp.classList.toggle('notm', tb); }   // 11/22 #15: 시각 미정 날은 '–' 시각 칸을 없앰(왼쪽 빈 공간)
     fitNow();
     if (vis) { const dy = nwr.getBoundingClientRect().top - y0; if (Math.abs(dy) > 1) window.scrollBy(0, dy); }   // 도착을 눌러도 카드는 화면 같은 자리, 지난 길만 위로 쌓임
     if (vis && st._center) { st._center = 0; requestAnimationFrame(() => centerNow(true)); }   // 11/19 ④ #13b: 도착·출발을 누르면 카드가 화면 가운데로 스르륵
@@ -3201,7 +3211,7 @@ function altPick(id) {
   Object.assign(c, { n: (meal ? meal + ' — ' : '') + p.n, sh: p.sh || p.n, l: p.l, say: p.say || '', q: p.q, ck: r.o.unknown ? 'no' : 'ok', pid: r.id, tw: r.tw, oh: r.o.ran, k: p.kind === 'restaurant' ? 'f' : 'p', du: r.du, du0: r.du, pl: 0 });
   if (p.oTx) c.info = [['영업', p.oTx]];
   NOTES[d.no] = (NOTES[d.no] || []).filter(n => !(n.ref && n.lv !== 'gray' && oldName.includes(n.ref)));
-  if (r.o.unknown) NOTES[d.no].push({ lv: 'amber', ref: c.sh, t: c.sh + ' 영업시간 확인 필요 · 전날 확인' });
+  if (r.o.unknown) NOTES[d.no].push({ lv: 'amber', ref: c.sh, t: c.sh + ' 영업시간 전날 확인' });
   d.clash = recompute(d);
   altCtx = null; closeAll(); renderPlan(c.id); renderNow(); renderTrail(); arcCount();
   toast('‘' + oldName + '’ → ‘' + c.sh + '’ 바꿈', () => {
@@ -3781,6 +3791,15 @@ try { const fm = sessionStorage.getItem('gaboja-flash'); if (fm) { sessionStorag
   function sync() { raf = 0; document.querySelectorAll('.pass.flycard.live').forEach(function (e) { e.style.setProperty('--pd', -(Date.now() % 2800) / 1000 + 's'); }); }
   new MutationObserver(function () { if (!raf) raf = requestAnimationFrame(sync); }).observe(document.body, { childList: true, subtree: true });
   sync();
+})();
+</script>
+<script>/* 11/22 동우님 #16: 상세 줄 장소 이름이 두 줄로 꺾이면 짧은 이름(괄호 뺀 것)으로 — 그려질 때마다 */
+(function () {
+  const lines = e => { const r = document.createRange(); r.selectNodeContents(e); const t = [...new Set([...r.getClientRects()].filter(q => q.width > 2).map(q => Math.round(q.top)))].sort((a, b) => a - b); let n = t.length ? 1 : 0; for (let i = 1; i < t.length; i++) if (t[i] - t[i - 1] > 6) n++; return n; };
+  const fit = () => document.querySelectorAll('.li .nm .one[data-sh]').forEach(e => { if (e.dataset.fit === e.textContent || !e.offsetParent) return; if (lines(e) > 1) e.textContent = e.dataset.sh; e.dataset.fit = e.textContent; });
+  let k = 0; new MutationObserver(() => { cancelAnimationFrame(k); k = requestAnimationFrame(fit); }).observe(document.body, { childList: true, subtree: true });
+  window.addEventListener('resize', () => { cancelAnimationFrame(k); k = requestAnimationFrame(fit); });
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(fit);
 })();
 </script>
 

@@ -11,7 +11,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400..800&display=swap">
 <script src="inapp.js?v=1"></script>
-<script src="i18n-en-auto.js?v=60660773"></script><script src="i18n-en.js?v=60660773"></script><script src="i18n.js?v=60660773"></script><!-- 11/20 W5 언어 틀 (영어판 = /en/, 사전 i18n-en.js는 배포 때 en/에만 붙음) -->
+<script src="i18n-en-auto.js?v=bf791966"></script><script src="i18n-en.js?v=bf791966"></script><script src="i18n.js?v=bf791966"></script><!-- 11/20 W5 언어 틀 (영어판 = /en/, 사전 i18n-en.js는 배포 때 en/에만 붙음) -->
 <link rel="stylesheet" href="fonts/vztr-fonts.css?v=2"><!-- 11/19 글꼴: 굵은 한글 IBM Plex Sans KR · 보통 한글 Pretendard · 영문·숫자 IBM Plex Sans -->
 <link rel="icon" href="icons/favicon-32.png">
 <link rel="apple-touch-icon" href="icons/icon-180.png">
@@ -269,7 +269,11 @@ html.ios26 .foot, html.ios26 .board { bottom: calc(max(0.75rem, env(safe-area-in
 .ans h4::after { content: ""; flex: 1; height: 1px; background: var(--hair); }
 .ans .qa { display: grid; grid-template-columns: 1.375rem minmax(0,1fr) auto; gap: 0.125rem 0.625rem; padding: 0.5625rem 0; border-bottom: 1px solid var(--hair); align-items: start; }
 .ans .ag > .qa:last-child { border-bottom: 0; }
-.ans .qa.lm { grid-template-columns: auto minmax(0,1fr); align-items: center; } .ans .qa.lm .q b { font-weight: 700; }
+.ans .qa.lm { grid-template-columns: minmax(0,1fr) auto; align-items: center; } .ans .qa.lm .q b { font-weight: 700; color: var(--ink); font-size: 0.875rem; }
+.ans .qa.lm .q { display: flex; flex-direction: column; gap: 0.125rem; }
+.ans .lmh { display: flex; align-items: baseline; gap: 0.4375rem; } .ans .lmh em { font: 600 0.75rem var(--lat); font-style: normal; color: var(--gi, var(--sub)); letter-spacing: 0; }
+.ans .lmd { font-size: 0.8125rem; color: var(--sub); }
+.lt.m.g { background: var(--gi, var(--ink)); color: var(--gon, var(--paper)); min-width: 1.5rem; height: 1.5rem; font-size: 0.8125rem; }
 .ans .qa .n { font: 700 0.75rem/1.25rem var(--lat); color: var(--sub); }
 .ans .qa .q { font-size: 0.78125rem; color: var(--sub); line-height: 1.4; }
 .ans .qa .a { grid-column: 2; font-size: 0.9375rem; font-weight: 600; line-height: 1.4; word-break: keep-all; }
@@ -277,6 +281,19 @@ html.ios26 .foot, html.ios26 .board { bottom: calc(max(0.75rem, env(safe-area-in
 .lt { display: inline-grid; place-items: center; min-width: 1.25rem; height: 1.25rem; padding: 0 0.25rem; border-radius: 0.2687rem; font: 700 0.71875rem var(--lat); background: var(--hair); color: var(--sub); }
 .lt.m { background: var(--ink); color: var(--paper); }
 
+.sthint { display: flex; align-items: center; gap: 0.375rem; margin: 0.5rem 0.125rem 0; font-size: 0.8125rem; color: var(--sub); line-height: 1.4; }
+.sthint.ok { color: var(--blue); } .sthint b { font-weight: 700; } .sthint svg { width: 0.9375rem; height: 0.9375rem; flex: none; stroke: currentColor; fill: none; stroke-width: 2.2; }
+.cgrp { display: flex; flex-direction: column; gap: 0.5rem; margin-top: 0.25rem; }
+.cgh { font-size: 0.8125rem; font-weight: 700; color: var(--sub); letter-spacing: -.01em; padding-left: 0.125rem; }
+.cgl { display: grid; grid-template-columns: repeat(4, minmax(0,1fr)); gap: 0.4375rem; }
+.ck2 { min-height: 3.25rem; border-radius: var(--r-md); padding: 0.5rem 0.25rem; background: var(--tile); border: 1px solid var(--tile-edge); box-shadow: var(--sh-xs); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 0.0625rem; transition: transform .12s, background .18s, color .18s; min-width: 0; }
+.ck2 b { font-size: 0.9375rem; font-weight: 700; white-space: nowrap; letter-spacing: -.02em; }
+.ck2 small { font-size: max(0.6875rem, 11px); color: var(--sub); font-weight: 500; white-space: nowrap; }
+.ck2[aria-pressed="true"] { background: var(--ink); color: var(--on-ink); border-color: var(--ink); } .ck2[aria-pressed="true"] small { color: inherit; opacity: .7; }
+.ck2:active { transform: scale(.97); }
+.ck2.etc { flex-direction: row; gap: 0.5rem; min-height: 3rem; margin-top: 0.25rem; }
+.cgtip { font-size: 0.8125rem; color: var(--sub); margin: 0.125rem 0.125rem 0; }
+.cgtip:empty { display: none; }
 .sec { display: flex; flex-direction: column; gap: 0.625rem; }
 .sec h3 { margin: 0; font-size: 1rem; font-weight: 800; letter-spacing: -.02em; }
 .card { border-radius: var(--r-lg); background: var(--glass); border: 1px solid var(--glass-edge); box-shadow: var(--sh-xs); padding: 0.375rem 1.125rem; }
@@ -588,6 +605,7 @@ html.ios26 .foot, html.ios26 .board { bottom: calc(max(0.75rem, env(safe-area-in
 .swkd .h { margin-left: 0.125rem; padding-left: 0.375rem; border-left: 1px solid rgba(255,255,255,.35); font: 600 0.71875rem var(--lat); }
 .swinf .why { margin: 0; display: flex; gap: 0.375rem; align-items: center; font-size: 0.8125rem; font-weight: 500; line-height: 1.35; color: var(--sub); }   /* 11/20 동우님: 별만 블루 · 글자는 회색, 핵심어만 잉크 굵게 */
 .swinf .why .wy { min-width: 0; }
+.swinf .why.cut .wy { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .swinf .why b { color: var(--ink); font-weight: 700; }
 .swinf .why svg { flex: none; width: 0.9375rem; height: 0.9375rem; fill: var(--blue-soft); stroke: var(--blue); stroke-width: 1.6; stroke-linejoin: round; }
 .sw-st { position: absolute; top: 3rem; z-index: 3; padding: 0.1875rem 0.75rem; border: 2.5px solid currentColor; border-radius: 0.3438rem; font-size: 1.25rem; font-weight: 900; letter-spacing: -.02em; opacity: 0; pointer-events: none; background: color-mix(in srgb, var(--paper) 70%, transparent); }
@@ -597,7 +615,7 @@ html.ios26 .foot, html.ios26 .board { bottom: calc(max(0.75rem, env(safe-area-in
 @keyframes stampPop { from { opacity: 0; scale: 1.6; } to { opacity: 1; scale: 1; } }
 /* 아래: 패스(✕) · 좋아요(♥) 같은 크기 64px 원, 라벨 없음 */
 .swfoot { gap: 0.125rem; padding-top: 0.125rem; }
-.swbtns { display: flex; justify-content: center; align-items: center; gap: 1.375rem; }
+.swbtns { display: flex; justify-content: center; align-items: center; gap: 1.375rem; margin-bottom: 0.875rem; }   /* 11/22 #6: 버튼과 '추천에 맡길게요' 사이 여백 */
 .swb { width: 4rem; height: 4rem; border-radius: 50%; display: grid; place-items: center; background: var(--tile); border: 1px solid var(--tile-edge); box-shadow: var(--shadow); transition: transform .12s, opacity .2s; }
 .swb:active { transform: scale(.92); }
 .swb svg { width: 1.6875rem; height: 1.6875rem; stroke: currentColor; fill: none; stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; }
@@ -702,8 +720,8 @@ body { background: transparent; }
 /* 11/18 리뷰: 다크 띠 = 연한 바탕색을 섞으면 회색으로 죽음 → 묶음 진한 색(--ga) 24% + paper (다른 다크 묶음 토큰과 같은 방식) */
 @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .ticket.rt .rband { background: color-mix(in srgb, var(--ga) 24%, var(--paper)); } }
 :root[data-theme="dark"] .ticket.rt .rband { background: color-mix(in srgb, var(--ga) 24%, var(--paper)); }
-.gchip { display: inline-flex; align-items: center; gap: 0.375rem; font-size: 0.75rem; font-weight: 700; letter-spacing: 0; color: var(--ink); }
-.gchip i { width: 0.5rem; height: 0.5rem; border-radius: 50%; background: var(--ga); flex: none; }
+.rchar { display: flex; flex-direction: column; align-items: center; gap: 0.25rem; }   /* 11/22 #1: 묶음 이름 = 캐릭터 바로 아래 알약 (점 없음) */
+.gchip { display: inline-flex; align-items: center; font-size: 0.75rem; font-weight: 700; letter-spacing: -.01em; color: var(--gi, var(--ink)); background: color-mix(in srgb, var(--ga) 20%, transparent); padding: 0.25rem 0.625rem; border-radius: 999px; white-space: nowrap; margin-top: -0.375rem; position: relative; }
 .rt .rtop { padding: 0.5rem 1.125rem 0; display: grid; grid-template-columns: minmax(0,1fr) 8.75rem; gap: 0.75rem; align-items: center; }
 .rt .rtop .flaps.big { gap: 0.25rem; }
 .rt .rtop .flaps.big .fl { width: 2.25rem; height: 3rem; font-size: 1.5rem; border-radius: 0.2875rem; }
@@ -721,7 +739,7 @@ body { background: transparent; }
 .pass .flaps { gap: 0.1875rem; }
 .pass .flaps .fl { width: 1.375rem; height: 1.8125rem; font-size: 0.9375rem; border-radius: 0.25rem; }
 .pass .av.sm { width: 8.5rem; height: 8.5rem; flex: none; margin: -0.5rem 0; }   /* 11/20 #4: 6.25 → 7.25rem, 그림은 fitChar로 칸에 꽉 */
-.pass .ft { display: grid; grid-template-columns: 1fr auto 1fr; gap: 0.625rem; align-items: end; padding: 0.625rem 1.125rem 1rem; }
+.pass .ft { display: grid; grid-template-columns: 1fr auto 1fr; gap: 0.625rem; align-items: end; padding: 1.125rem 1.125rem 1rem; }   /* 11/22 #9: 성향과 날짜 사이 조금 더 */
 .pass .ft small { display: block; font: 700 0.65625rem var(--lat); letter-spacing: .1em; color: var(--sub); }
 .pass .ft b { display: block; font: 800 1.625rem/1.1 var(--lat); letter-spacing: -.02em; }
 .pass .ft span { display: block; font-size: 0.8125rem; font-weight: 600; color: var(--sub); min-height: 1.2em; }
@@ -731,7 +749,8 @@ body { background: transparent; }
 .pass .todo { padding: 0.25rem 1.125rem 1.125rem; display: flex; flex-direction: column; gap: 0.375rem; }
 .pass .todo h4 { margin: 0 0 0.125rem; font: 700 0.65625rem var(--lat); letter-spacing: .1em; color: var(--sub); }
 .pass .todo .t { display: grid; grid-template-columns: 1.375rem minmax(0,1fr) auto; gap: 0.625rem; align-items: center; font-size: 0.875rem; min-height: 2.25rem; }
-.pass .todo .bx { width: 1.375rem; height: 1.375rem; border-radius: 0.2875rem; border: 1.8px solid color-mix(in srgb, var(--sub) 45%, transparent); }
+.pass .todo .bx { width: 1.375rem; height: 1.375rem; display: grid; place-items: center; color: var(--blue); }   /* 11/22 #10: 빈 네모 → 할 일 종류 아이콘 */
+.pass .todo .bx svg { width: 1.25rem; height: 1.25rem; stroke: currentColor; fill: none; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
 .pass .todo .t b { font-weight: 600; }
 .pass .todo .t button { font-size: 0.78125rem; font-weight: 700; color: color-mix(in srgb, var(--amber) 55%, var(--ink)); padding: 0.5rem 0 0.5rem 0.75rem; }   /* 11/21 #8: 가이드북 주의 글자 색과 같게 */
 /* 11/21 #8 동우님 2차: 성향 이름 = 캐릭터 바로 아래 가운데(꽤 붙여서) · 캐릭터 조금 작게 · H·E·F·P = 캐릭터 높이에 맞춰 크게 */
@@ -770,7 +789,7 @@ body { background: transparent; }
 :root { --kr-plain: "Pretendard Variable", Pretendard, -apple-system, "Apple SD Gothic Neo", "Malgun Gothic", system-ui, sans-serif; }
 /* 작게 들어가는 굵은 한글(13px 아래)은 Pretendard로 */
 .dep .dh span, .dep .dh em, .dep .dg, .board .lb b, .rx .rh .step, .rx .near span,
-.rhd .gchip, .flaps.big .lb, .g .top .l, .g .top .r, .ans h4, .pair .lab, .mini .t1 em, .scr > .acts button { font-family: var(--kr-plain); }
+.rchar .gchip, .flaps.big .lb, .g .top .l, .g .top .r, .ans h4, .pair .lab, .mini .t1 em, .scr > .acts button { font-family: var(--kr-plain); }
 .eyebrow { letter-spacing: .06em; }
 
 /* 11/20 동우님: 스크롤 없는 화면은 위로 쏠리지 않게 — 내용 묶음을 화면 가운데보다 살짝 위(위 2 : 아래 3)에.
@@ -839,8 +858,8 @@ html[data-theme="dark"][data-grp="HE"] { --me-soft: color-mix(in srgb, #C17192 2
 .g4 .mini .me-b { background: var(--me-ink, var(--blue)); color: var(--me-on, var(--on-ink)); }
 .pass .flaps .fl { background: var(--me-ink, var(--flap)); color: var(--me-on, var(--flap-tx)); }
 .rt .rtop .flaps.big .fl { background: var(--gi, var(--flap)); color: var(--gon, var(--flap-tx)); }
-@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .rt .rtop .flaps.big .fl { color: #16171A; } }
-:root[data-theme="dark"] .rt .rtop .flaps.big .fl { color: #16171A; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .rt .rtop .flaps.big .fl, :root:not([data-theme="light"]) .rt .lt.m.g { color: #16171A; } }
+:root[data-theme="dark"] .rt .rtop .flaps.big .fl, :root[data-theme="dark"] .rt .lt.m.g { color: #16171A; }
 /* 11/20 동우님 #5: NEXT 위가 점선에 붙어 있던 것 → 위 점선 아래 정보 줄처럼 숨 (점선 ↔ 글자 약 14px) */
 .pass .todo { padding-top: 0.875rem; }
 .pass .todo h4 { margin-bottom: 0.25rem; }
@@ -862,6 +881,14 @@ html[data-theme="dark"][data-grp="HE"] { --me-soft: color-mix(in srgb, #C17192 2
 /* ===== 11/19 ④ 화면 디자인 — 전체 3 A안(제목은 A보다 1px 작게). BI 글꼴이 바뀌면 :root 값만 다시 맞춤 ===== */
 :root { --t-q: 1.6875rem; --s-qdesc: 0.84375rem; }   /* 질문·화면 제목 27 (전 26) · 설명 13.5 (전 14) */
 .qh h1 { font-size: var(--t-q); font-weight: 800; }
+/* 11/22 질문 = 캐릭터 말풍선 (레퍼런스 Duolingo A안) */
+.qask { display: flex; align-items: flex-end; gap: 0.625rem; }
+.qask .qav { flex: none; width: 3.75rem; height: 3.75rem; background: none; }
+.qask .qav svg { width: 100%; height: 100%; overflow: visible; }
+.qbub { position: relative; flex: 1; min-width: 0; background: var(--tile); border: 1px solid var(--tile-edge); border-radius: 1rem; padding: 0.75rem 0.875rem; box-shadow: var(--sh-xs); }
+.qbub::before { content: ""; position: absolute; left: -0.4375rem; bottom: 1rem; width: 0.75rem; height: 0.75rem; background: var(--tile); border-left: 1px solid var(--tile-edge); border-bottom: 1px solid var(--tile-edge); transform: rotate(45deg); }
+.qbub h1 { font-size: 1.3125rem; line-height: 1.3; text-wrap: balance; }
+.qask + p { margin-top: 0.625rem; }
 .qh p { font-size: var(--s-qdesc); color: var(--sub); }
 
 /* 11/19 W7·M33 출발지 검색 결과 */
@@ -1018,6 +1045,14 @@ function domOpts(tr) {   // 그 지역에서 되는 교통수단·노선
 }
 const rideOn = tr => isDom(tr) && ['train', 'air', 'car'].includes(tr.mode) && tr.flight === 'yes';
 const hh = m => { m = ((Math.round(m) % 1440) + 1440) % 1440; return String(Math.floor(m / 60)).padStart(2, '0') + ':' + String(m % 60).padStart(2, '0'); };
+/* 11/22 동우님 #4: 숙소 칸에 적은 동네·숙소 이름 → 일정 출발지(엔진 stayArea와 같은 규칙)를 바로 보여 줌 */
+function stayHint() {
+  const h = $('#sHint'), tr = S.trip; if (!h) return;
+  const raw = tr.stay !== 'no' ? String(tr.stayTx || '').trim() : '', G = window.GABOJA_GEN, a = raw && G && G.stayArea ? G.stayArea(DEST[tr.city], raw) : '';
+  h.hidden = !raw; if (!raw) return;
+  h.className = 'sthint' + (a ? ' ok' : '');
+  h.innerHTML = a ? `${ICON.check}<span>매일 ${esc(a)}에서 출발·복귀하는 동선으로 짜요</span>` : `<span>목록에 없는 동네예요 · 가까운 큰 동네 기준으로 짜요</span>`;
+}
 function carBaseKey(tr) { // gen.js의 숙소 동네 고르기와 같음 (목록에 없으면 첫 동네)
   const C = cfgOf(tr), raw = String(tr.stay !== 'no' ? tr.stayTx || '' : '').trim();
   const m = C.bases.find(b => b.re && new RegExp(b.re).test(raw)) || (raw && C.bases.find(b => raw.includes(b.name.split('·')[0].trim())));
@@ -1077,11 +1112,29 @@ const normAvoid = a => [...new Set((a || []).map(x => AVOID_OLD[x] || x).filter(
 const METHOD = [['auto', '알아서 다 짜 줘요', '완성된 일정 바로 받기'], ['blocks', '추천 받아서 내가 고를래요', '장소 추천 카드를 넘기며 고르기'], ['self', '장소는 내가 정할게요', '날짜별 빈 칸에 내가 장소 넣기']];
 // 11/19 I48: 오사카·교토 묶음 안에서 고르기 (엔진 input.part) · G52: 여행 제목 직접 짓기 (한 줄, TITLE_MAX자)
 const PARTS = [['both', '둘 다'], ['main', '오사카만'], ['side', '교토만']], TITLE_MAX = 16;
+/* 11/22 동우님 #3: 어디로 = 나라별 묶음(일본 · 한국) 안에 도시를 하나씩. 같은 지역(간사이 = 오사카·교토·나라·고베 / 홋카이도 = 삿포로·오타루)은 여러 곳 함께 고름.
+   [이름, 엔진 키(없으면 자동 일정 준비 중 → 아키가 가이드북), 지역] — 엔진 연결: 오사카만 = kix part main · 교토만 = side · 둘 다 = both */
+const CGRP = W5 ? [['한국', [['서울', 'sel', 'sel'], ['부산', 'bsn', 'bsn']]]] : [
+  ['일본', [['오사카', 'kix', 'kx'], ['교토', 'kix', 'kx'], ['나라', '', 'kx'], ['고베', '', 'kx'], ['도쿄', 'tyo', 'tyo'], ['후쿠오카', 'fuk', 'fuk'], ['삿포로', 'spk', 'hk'], ['오타루', 'spk', 'hk']]],
+  ['한국', [['서울', 'sel', 'sel'], ['부산', 'bsn', 'bsn'], ['제주', '', 'jj'], ['경주', '', 'gj'], ['강릉', '', 'gn'], ['속초', '', 'sc'], ['전주', '', 'jn'], ['여수', '', 'ys'], ['통영', '', 'ty'], ['대구', '', 'dg'], ['인천', '', 'ic'], ['수원', '', 'sw']]]];
+const CPK = Object.fromEntries(CGRP.flatMap(g => g[1].map(c => [c[0], c])));
+function picksOf(tr) {   // 예전 저장값(city·part)에서 고른 도시 되살리기
+  if (Array.isArray(tr.picks)) return tr.picks.filter(x => CPK[x]);
+  if (tr.city === '오사카·교토') return partOf(tr) === 'main' ? ['오사카'] : partOf(tr) === 'side' ? ['교토'] : ['오사카', '교토'];
+  return CPK[tr.city] ? [tr.city] : [];
+}
+function applyPicks(tr, P) {   // 고른 도시 → 엔진이 아는 city·part
+  tr.picks = P.slice(); if (!P.length) { tr.city = null; delete tr.part; return; }
+  const o = P.includes('오사카'), k = P.includes('교토');
+  if (CPK[P[0]][2] === 'kx' && (o || k)) { tr.city = '오사카·교토'; tr.part = o && k ? 'both' : o ? 'main' : 'side'; }
+  else if (CPK[P[0]][2] === 'hk' && P.includes('삿포로')) { tr.city = '삿포로'; delete tr.part; }
+  else { tr.city = P.join('·'); delete tr.part; }
+}
 const hasPart = tr => DEST[tr.city] === 'kix';
 const partOf = tr => hasPart(tr) && (tr.part === 'main' || tr.part === 'side') ? tr.part : '';
 const partTx = tr => ({ main: '오사카만', side: '교토만' })[partOf(tr)] || '';
-const cityTx = (tr, dflt) => tr.city === '다른 곳' ? (tr.cityEtc || dflt) : tr.city ? tr.city + (partTx(tr) ? ' · ' + partTx(tr) : '') : dflt;   // 정보 수정·신청 시트용
-const placeTx = (tr, dflt) => partTx(tr) ? partTx(tr).replace(/만$/, '') : cityTx(tr, dflt);   // 문장 속 여행지 (교토만 → '교토')
+const cityTx = (tr, dflt) => tr.city === '다른 곳' ? (tr.cityEtc || dflt) : tr.picks && tr.picks.length ? tr.picks.join('·') : tr.city ? tr.city + (partTx(tr) ? ' · ' + partTx(tr) : '') : dflt;   // 11/22 #3: 고른 도시 그대로   // 정보 수정·신청 시트용
+const placeTx = (tr, dflt) => tr.city !== '다른 곳' && tr.picks && tr.picks.length ? tr.picks.join('·') : partTx(tr) ? partTx(tr).replace(/만$/, '') : cityTx(tr, dflt);   // 문장 속 여행지 (교토만 → '교토')
 const myTitle = tr => String(tr.ttl || '').trim().slice(0, TITLE_MAX);
 const INFO = W5 ? ['city', 'date', 'who', 'book', 'likes', 'theme', 'send'] : ['city', 'date', 'who', 'home', 'book', 'likes', 'theme', 'send'];
 /* 11/22 3축 엔진: 'theme' 단계 = 이번 여행 주제(도시마다, 여러 개) + 이 도시 몇 번째(레벨). 엔진 input.themes · level · seen */
@@ -1204,9 +1257,27 @@ function screen(html, cls = '') {
   if (old && !REDUCED) { const oh = old.offsetHeight, ot = old.offsetTop - window.scrollY; old.style.height = oh + 'px'; old.style.top = ot + 'px'; old.classList.add('leaving', dir < 0 ? 'toR' : 'toL');   /* 11/20 동우님 #1: 나갈 때 높이를 잡아 둠 — 가운데 정렬 여백이 접히며 위로 뚝 튀던 것 */ old.setAttribute('aria-hidden', 'true'); old.inert = true; setTimeout(() => old.remove(), 280); }
   else if (old) old.remove();
   const sec = document.createElement('section'); sec.className = `scr ${dir < 0 ? 'back' : ''} ${cls}`; sec.innerHTML = html; m.appendChild(sec);
+  qAsk(sec);
   sec.querySelectorAll('.av svg').forEach(v => fitChar(v, v.closest('.pass, .rtop') ? 1.42 : 1.55));   // 11/20 캐릭터 = 칸 가운데(옆 글자와 정렬)
+  qFit(sec);
   return sec;
 }
+/* 11/22 레퍼런스(Duolingo) A안 — 질문 제목 = 왼쪽 캐릭터 + 오른쪽 말풍선. 캐릭터 = 내 유형(없으면 LSRP), 등장 이펙트(gfx)는 chars.js가 보일 때 재생
+   말풍선 글자는 늘 2줄 안: 넘치면 0.5px씩 줄임(최소 16px) — qFit. 정보 수정(edit) 화면은 빼고 */
+function qAsk(sec) {
+  const qh = sec.querySelector('.qh'), h = qh && qh.querySelector(':scope > h1');
+  if (!h || !window.GABOJA_CHAR || S.step === 'edit') return;
+  const c = /^[LH][SE][FR][JP]$/.test(S.type || '') ? S.type : 'LSRP', box = document.createElement('div');
+  box.className = 'qask'; box.innerHTML = `<div class="av gfx qav" data-c="${c}" data-fxd="200">${GABOJA_CHAR(c, { bg: false })}</div><div class="qbub"></div>`;
+  qh.insertBefore(box, h); box.lastChild.appendChild(h);
+}
+function qFit(sec) {
+  const h = sec.querySelector('.qbub h1'); if (!h) return;
+  const run = () => { h.style.removeProperty('font-size'); if (!h.clientWidth) return; const lh = () => parseFloat(getComputedStyle(h).lineHeight) || 26;
+    let f = parseFloat(getComputedStyle(h).fontSize); while (h.getBoundingClientRect().height > lh() * 2.4 && f > 16) { f -= 0.5; h.style.fontSize = f + 'px'; } };
+  run(); if (document.fonts && document.fonts.status !== 'loaded') document.fonts.ready.then(run);
+}
+addEventListener('resize', () => { const s = document.querySelector('#stage .scr:not(.leaving)'); if (s) qFit(s); });
 const REDUCED = matchMedia('(prefers-reduced-motion: reduce)').matches;
 function flapsHtml(ls, big, qi = -1) { const lk = qi >= 0 ? LOCKED[qi] : 0; return `<div class="flaps${big ? ' big' : ''}">${ls.map((l, i) => `<span class="fl ${l ? '' : 'empty'} ${i < lk ? 'lock' : ''}" data-i="${i}">${l || '·'}</span>`).join('')}</div>`; }
 /* 문항 qi까지 답했을 때 안내판에 보이는 글자 (아직 안 열린 칸은 null) */
@@ -1409,10 +1480,12 @@ const grpIcon = c => `<svg viewBox="0 0 24 24" aria-hidden="true">${GI[c.slice(0
 const LMEAN = W5 ? { L: 'Local', H: 'Hotspot', S: 'Sights', E: 'Fun', F: 'Packed', R: 'Easy', J: 'Plan', P: 'Free' } : { L: '로컬', H: '핫플', S: '구경', E: '즐기기', F: '알차게', R: '여유', J: '계획', P: '즉흥' };   // W5: 글자 칸 아래라 짧게 · 11/21 한국어도 3·4번째 칸은 두 글자(칸 36px라 '여유롭게즉흥형'이 붙어 보였음, 전체 이름은 아래 '내 유형 글자 뜻')
 function lflapsHtml(c) { return `<div class="flaps big lfl">${c.split('').map(l => `<span class="lcol"><span class="fl">${l}</span><span class="lb">${LMEAN[l]}</span></span>`).join('')}</div>`; }
 // 11/15 #4 → 11/18 D-2: '내가 고른 답 10개' = 처음부터 펼친 목록 (접기 없음) · 두 묶음 소제목 · 오른쪽 축 글자 칩(내 유형 글자와 같으면 진하게) — 남의 유형 보기에선 안 보임
+const LEN = { L: 'Local', H: 'Hot place', S: 'Sightseeing', E: 'Enjoy', F: 'Full', R: 'Relax', J: 'MBTI의 J', P: 'MBTI의 P' };   // 11/22 #2 글자 뜻(영어 앞 글자)
 const LTX = { L: '현지인 동네·골목 위주', H: '유명한 곳·요즘 뜨는 곳 위주', S: '보고 걷는 게 좋은 편', E: '먹고 사고 체험하는 게 좋은 편', F: '하루를 꽉 채우는 편', R: '쉬는 시간을 넉넉히', J: '동선·시간을 미리 정해 두는 편', P: '그때그때 끌리는 대로' };
 function ansHtml(c) {   // V-08: '내가 고른 답 10개' → 내 유형 글자 뜻 4줄 (H·L이 뭐냐는 질문이 많았음)
   if (!c || c.length < 4) return '';
-  const row = (x, k) => { const l = c[k], nm = l === x.a[0] ? x.a[1] : x.b[1]; return `<div class="qa lm"><span class="ls"><span class="lt m">${l}</span></span><span class="q"><b>${esc(nm)}</b> · ${esc(LTX[l] || '')}</span></div>`; };
+  /* 11/22 동우님 #2: 글자가 무슨 말의 앞 글자인지 같이 · 글자 칩 = 위 글자판과 같은 묶음 파스텔 색 */
+  const row = (x, k) => { const l = c[k], nm = l === x.a[0] ? x.a[1] : x.b[1]; return `<div class="qa lm"><span class="q"><span class="lmh"><b>${esc(nm)}</b>${W5 ? '' : `<em>${l} = ${LEN[l]}</em>`}</span><span class="lmd">${esc(LTX[l] || '')}</span></span><span class="lt m g">${l}</span></div>`; };
   return `<div class="ans"><div class="ah">내 유형 글자 뜻</div><div class="ag">${AX.map(row).join('')}</div></div>`;
 }
 function gaugeHtml(c, v) { // 11/14 v2: 얇은 선 + 위치 점(양 끝이 있는 척도, 가운데 눈금 = 반반 — 16Personalities 방식). 점 위에 %
@@ -1443,8 +1516,8 @@ function rResult(c, mine) {
   const el = screen(`
     <article class="ticket rt" aria-label="${c} ${esc(t.name)}" style="--gbg:${(window.GABOJA_CHAR_BG && GABOJA_CHAR_BG(c)) || GRPC[c.slice(0, 2)].bg};--ga:${GRPC[c.slice(0, 2)].a};--gi:var(--g-${c.slice(0, 2).toLowerCase()}-ink);--gon:#FFFFFF">
       <div class="rband">
-        <div class="hd rhd"><b class="vz">vztr<i></i></b><span class="gchip"><i></i>${esc(t.group)}</span></div>
-        <div class="rtop">${lflapsHtml(c)}${AVnb(c, 'hero', true)}</div>
+        <div class="hd rhd"><b class="vz">vztr<i></i></b></div>
+        <div class="rtop">${lflapsHtml(c)}<div class="rchar">${AVnb(c, 'hero', true)}<span class="gchip">${esc(t.group)}</span></div></div>
       </div>
       <div class="bd">
         <h1 class="nm">${esc(t.name)}</h1>
@@ -1517,16 +1590,24 @@ function rInfo(s) {
   setBar('info', n, INFO.length + 1, optional ? { t: '건너뛰기', fn: () => next(s) } : { t: S.editing ? '수정' : `${n} / ${INFO.length}` });
   const head = (e, h, p) => `<div class="qh"><h1>${h}</h1>${p ? `<p>${p}</p>` : ''}</div>`;
   let el;
-  if (s === 'city') {
-    el = screen(head('어디로', '어디로 가세요?', '지역만 고르면 동선은 <b class="vz vzi">vztr<i></i></b>가 짜 드려요<br><span class="soon">가는 곳은 계속 늘려 갈게요</span>')   /* 11/19 #4 */ + `<div class="pick">${CITIES.map(c => `<button class="pk" data-v="${c[0]}" aria-pressed="${tr.city === c[0]}"><b>${c[0]}</b><span>${c[1]}</span></button>`).join('')}</div>
-      <div class="blk" id="cityEtc" ${tr.city === '다른 곳' ? '' : 'hidden'}><input class="in" id="cityIn" placeholder="예: 다낭, 타이베이" value="${esc(tr.cityEtc || '')}"><button class="cta" id="cityNext">다음</button></div>
-      <div class="blk" id="cityPart" ${hasPart(tr) ? '' : 'hidden'}><div class="sub2">어디까지 둘러볼까요?</div><div class="seg" id="partSeg">${PARTS.map(p => `<button data-p="${p[0]}" aria-pressed="${(partOf(tr) || 'both') === p[0]}">${p[1]}</button>`).join('')}</div><button class="cta" id="partNext">다음</button></div>`);
-    el.querySelectorAll('.pk').forEach(b => b.onclick = () => { tr.city = b.dataset.v; if (!hasPart(tr)) delete tr.part; el.querySelectorAll('.pk').forEach(x => x.setAttribute('aria-pressed', x === b)); tap();
-      $('#cityEtc').hidden = tr.city !== '다른 곳'; $('#cityPart').hidden = !hasPart(tr);
-      if (tr.city === '다른 곳') $('#cityIn').focus(); else if (!hasPart(tr)) later(() => next(s), 280); });
-    $('#cityNext').onclick = () => { tr.cityEtc = $('#cityIn').value.trim(); if (tr.cityEtc) next(s); else $('#cityIn').focus(); };
-    $('#partSeg').onclick = e => { const b = e.target.closest('[data-p]'); if (!b) return; tr.part = b.dataset.p; $('#partSeg').querySelectorAll('button').forEach(x => x.setAttribute('aria-pressed', x === b)); tap(); };
-    $('#partNext').onclick = () => next(s);
+  if (s === 'city') {   /* 11/22 동우님 #3: 나라별 묶음 + 도시 하나씩 (같은 지역은 여러 곳) */
+    let P = tr.city === '다른 곳' ? [] : picksOf(tr);
+    const chip = c => `<button class="ck2" data-v="${c[0]}" aria-pressed="${P.includes(c[0])}"><b>${c[0]}</b>${c[1] ? '' : '<small>준비 중</small>'}</button>`;
+    el = screen(head('어디로', '어디로 가세요?', '도시만 고르면 동선은 <b class="vz vzi">vztr<i></i></b>가 짜 드려요') + `
+      ${CGRP.map(g => `<div class="cgrp"><div class="cgh">${g[0]}</div><div class="cgl">${g[1].map(chip).join('')}</div></div>`).join('')}
+      <p class="cgtip">${W5 ? '' : '가까운 도시는 함께 고를 수 있어요 · 예: 오사카 + 교토 + 나라'}</p>
+      <button class="ck2 etc" id="cityOther" aria-pressed="${tr.city === '다른 곳'}"><b>다른 곳</b><small>직접 입력</small></button>
+      <div class="blk" id="cityEtc" ${tr.city === '다른 곳' ? '' : 'hidden'}><input class="in" id="cityIn" placeholder="예: 다낭, 타이베이" value="${esc(tr.cityEtc || '')}"></div>
+      <div class="foot"><div class="sum" id="cSum"></div><button class="cta" id="cityNext" ${P.length || tr.city === '다른 곳' ? '' : 'disabled'}>다음</button></div>`);
+    const sync = () => { el.querySelectorAll('.cgrp .ck2').forEach(x => x.setAttribute('aria-pressed', P.includes(x.dataset.v)));
+      const oth = tr.city === '다른 곳'; $('#cityOther').setAttribute('aria-pressed', oth); $('#cityEtc').hidden = !oth;
+      $('#cSum').textContent = P.length > 1 ? P.join(' + ') : ''; $('#cityNext').disabled = !P.length && !oth; };
+    el.querySelectorAll('.cgrp .ck2').forEach(b => b.onclick = () => { const v = b.dataset.v, R = CPK[v][2];
+      P = P.includes(v) ? P.filter(x => x !== v) : P.filter(x => CPK[x][2] === R).concat(v);   // 다른 지역을 누르면 새로 고름
+      applyPicks(tr, P); tap(); sync(); });
+    $('#cityOther').onclick = () => { P = []; applyPicks(tr, P); tr.city = '다른 곳'; tap(); sync(); $('#cityIn').focus(); };
+    $('#cityNext').onclick = () => { if (tr.city === '다른 곳') { tr.cityEtc = $('#cityIn').value.trim(); if (!tr.cityEtc) { $('#cityIn').focus(); return; } } next(s); };
+    sync();
   }
   if (s === 'date') {
     if (!S.calM) { const d = new Date(); S.calM = new Date(d.getFullYear(), d.getMonth(), 1); }
@@ -1590,20 +1671,20 @@ function rInfo(s) {
       <div class="blk"><div class="flbox" id="fBox">${fRow('fo', '도착 비행기', 'arr', '도착 시각')}${fRow('fb', '출국 비행기', 'dep', '출발 시각')}</div>
         <div class="note" id="blHint" hidden>${ICON.info}<span>모르면 비워 두세요 · 나중에 ‘여행 정보 수정’에서 넣어도 돼요</span></div></div>
       <div class="blk" ${tr.day ? 'hidden' : ''}><div class="sub2">숙소</div><div class="seg" id="sSeg"><button data-s="no" aria-pressed="${tr.stay === 'no'}">아직</button><button data-s="area" aria-pressed="${tr.stay === 'area'}">동네만</button><button data-s="yes" aria-pressed="${tr.stay === 'yes'}">정했어요</button></div>
-        <input class="in" id="sIn" value="${esc(tr.stayTx || '')}" ${tr.stay === 'no' ? 'hidden' : ''} placeholder="${tr.stay === 'area' ? '동네 이름 (예: ' + ex + ')' : '숙소 이름'}"></div>
+        <input class="in" id="sIn" value="${esc(tr.stayTx || '')}" ${tr.stay === 'no' ? 'hidden' : ''} placeholder="${tr.stay === 'area' ? '동네 이름 (예: ' + ex + ')' : '숙소 이름'}"><p class="sthint" id="sHint" hidden></p></div>
       <div class="foot"><button class="cta" id="bNext">다음</button></div>`);
     $('#apSeg').onclick = e => { const b = e.target.closest('[data-ap]'); if (!b) return; tr.airport = b.dataset.ap; $('#apSeg').querySelectorAll('button').forEach(x => x.setAttribute('aria-pressed', x === b)); tap(); };
-    $('#sSeg').onclick = e => { const b = e.target.closest('[data-s]'); if (!b) return; tr.stay = b.dataset.s; $('#sSeg').querySelectorAll('button').forEach(x => x.setAttribute('aria-pressed', x === b)); const i = $('#sIn'); i.hidden = tr.stay === 'no'; i.placeholder = tr.stay === 'area' ? '동네 이름 (예: ' + ex + ')' : '숙소 이름'; if (!i.hidden) i.focus(); };
+    $('#sSeg').onclick = e => { const b = e.target.closest('[data-s]'); if (!b) return; tr.stay = b.dataset.s; $('#sSeg').querySelectorAll('button').forEach(x => x.setAttribute('aria-pressed', x === b)); const i = $('#sIn'); i.hidden = tr.stay === 'no'; i.placeholder = tr.stay === 'area' ? '동네 이름 (예: ' + ex + ')' : '숙소 이름'; if (!i.hidden) i.focus(); stayHint(); };
     el.querySelectorAll('[data-fk]').forEach(i => i.oninput = () => { const k = i.dataset.fk; tr[k] = tr[k] || {}; tr[k][i.dataset.ff] = i.dataset.ff === 'no' ? i.value.toUpperCase().replace(/\s+/g, '') : i.value; tr.flightTx = flightText(tr); blankHint(); });
     wireTm(el); autoRide(el); blankHint();
-    $('#sIn').oninput = e => tr.stayTx = e.target.value;
+    $('#sIn').oninput = e => { tr.stayTx = e.target.value; stayHint(); }; stayHint();
     $('#bNext').onclick = () => next(s);
   } else if (s === 'book' && isDom(tr)) {
     const C = cfgOf(tr), ex = (C.bases[1] || C.bases[0]).name;
     el = screen(head('가는 길', '어떻게 가세요?', '출발 지역과 교통만 고르면 첫날·마지막 날을 짜 드려요') + `
       <div id="dBox"></div>
       <div class="blk" ${tr.day ? 'hidden' : ''}><div class="sub2">숙소</div><div class="seg" id="sSeg"><button data-s="no" aria-pressed="${tr.stay === 'no'}">아직</button><button data-s="area" aria-pressed="${tr.stay === 'area'}">동네만</button><button data-s="yes" aria-pressed="${tr.stay === 'yes'}">정했어요</button></div>
-        <input class="in" id="sIn" value="${esc(tr.stayTx || '')}" ${tr.stay === 'no' ? 'hidden' : ''} placeholder="${tr.stay === 'area' ? '동네 이름 (예: ' + ex + ')' : '숙소 이름'}"></div>
+        <input class="in" id="sIn" value="${esc(tr.stayTx || '')}" ${tr.stay === 'no' ? 'hidden' : ''} placeholder="${tr.stay === 'area' ? '동네 이름 (예: ' + ex + ')' : '숙소 이름'}"><p class="sthint" id="sHint" hidden></p></div>
       <div class="foot"><button class="cta" id="bNext">다음</button></div>`);
     const draw = () => {
       if (!tr.regionPicked) { const g = regionOf(tr.home); if (g && domOpts(tr).regs.includes(g)) tr.region = g; }
@@ -1638,8 +1719,8 @@ function rInfo(s) {
       tr.flightTx = flightText(tr); if (car) eta(); blankHint();
     };
     draw();
-    $('#sSeg').onclick = e => { const b = e.target.closest('[data-s]'); if (!b) return; tr.stay = b.dataset.s; $('#sSeg').querySelectorAll('button').forEach(x => x.setAttribute('aria-pressed', x === b)); const i = $('#sIn'); i.hidden = tr.stay === 'no'; i.placeholder = tr.stay === 'area' ? '동네 이름 (예: ' + ex + ')' : '숙소 이름'; if (!i.hidden) i.focus(); };
-    $('#sIn').oninput = e => tr.stayTx = e.target.value;
+    $('#sSeg').onclick = e => { const b = e.target.closest('[data-s]'); if (!b) return; tr.stay = b.dataset.s; $('#sSeg').querySelectorAll('button').forEach(x => x.setAttribute('aria-pressed', x === b)); const i = $('#sIn'); i.hidden = tr.stay === 'no'; i.placeholder = tr.stay === 'area' ? '동네 이름 (예: ' + ex + ')' : '숙소 이름'; if (!i.hidden) i.focus(); stayHint(); };
+    $('#sIn').oninput = e => { tr.stayTx = e.target.value; stayHint(); }; stayHint();
     $('#bNext').onclick = () => next(s);
   } else if (s === 'book') {
     el = screen(head('예약', '예약한 게 있나요?', '이미 예약한 것만 알려 주세요. 없으면 넘어가도 돼요.') + `
@@ -1650,16 +1731,16 @@ function rInfo(s) {
           <div class="note">${ICON.info}<span>편명을 넣으면 시각이 채워져요</span></div></div>
         <div class="note" id="blHint" hidden>${ICON.info}<span>모르면 비워 두세요 · 나중에 앱에서 넣어도 돼요</span></div></div>
       <div class="blk" ${tr.day ? 'hidden' : ''}><div class="sub2">숙소</div><div class="seg" id="sSeg"><button data-s="no" aria-pressed="${tr.stay === 'no'}">아직</button><button data-s="area" aria-pressed="${tr.stay === 'area'}">동네만</button><button data-s="yes" aria-pressed="${tr.stay === 'yes'}">정했어요</button></div>
-        <input class="in" id="sIn" value="${esc(tr.stayTx || '')}" ${tr.stay === 'no' ? 'hidden' : ''} placeholder="${tr.stay === 'area' ? '동네 이름 (예: ' + (partOf(tr) === 'side' ? '가와라마치' : '난바') + ')' : '숙소 이름'}"></div>
+        <input class="in" id="sIn" value="${esc(tr.stayTx || '')}" ${tr.stay === 'no' ? 'hidden' : ''} placeholder="${tr.stay === 'area' ? '동네 이름 (예: ' + (partOf(tr) === 'side' ? '가와라마치' : '난바') + ')' : '숙소 이름'}"><p class="sthint" id="sHint" hidden></p></div>
       <div class="foot"><button class="cta" id="bNext">다음</button></div>`);
     $('#fSeg').onclick = e => { const b = e.target.closest('[data-f]'); if (!b) return; tr.flight = b.dataset.f; $('#fSeg').querySelectorAll('button').forEach(x => x.setAttribute('aria-pressed', x === b)); $('#fBox').hidden = tr.flight !== 'yes'; if (tr.flight === 'yes') $('#fBox input').focus(); blankHint(); };
-    $('#sSeg').onclick = e => { const b = e.target.closest('[data-s]'); if (!b) return; tr.stay = b.dataset.s; $('#sSeg').querySelectorAll('button').forEach(x => x.setAttribute('aria-pressed', x === b)); const i = $('#sIn'); i.hidden = tr.stay === 'no'; i.placeholder = tr.stay === 'area' ? '동네 이름 (예: ' + (partOf(tr) === 'side' ? '가와라마치' : '난바') + ')' : '숙소 이름'; if (!i.hidden) i.focus(); };
+    $('#sSeg').onclick = e => { const b = e.target.closest('[data-s]'); if (!b) return; tr.stay = b.dataset.s; $('#sSeg').querySelectorAll('button').forEach(x => x.setAttribute('aria-pressed', x === b)); const i = $('#sIn'); i.hidden = tr.stay === 'no'; i.placeholder = tr.stay === 'area' ? '동네 이름 (예: ' + (partOf(tr) === 'side' ? '가와라마치' : '난바') + ')' : '숙소 이름'; if (!i.hidden) i.focus(); stayHint(); };
     const dps = $('#depSeg'); if (dps) dps.onclick = e => { const b = e.target.closest('[data-dep]'); if (!b) return; { const nd = b.dataset.dep, bad = ['fo', 'fb'].filter(k => tr[k] && tr[k].no && (tr[k].ap ? tr[k].ap !== nd : nd !== (tr.depAp || 'ICN'))); if (bad.length) { bad.forEach(k => { el.querySelectorAll('[data-fk="' + k + '"]').forEach(x => { x.value = ''; }); const row = el.querySelector('.fno[data-fk="' + k + '"]'); const fr = row && row.closest('.flr'); if (fr) { fr.querySelectorAll('.tm').forEach(x => { x.value = ''; }); fr.querySelectorAll('.fnh').forEach(x => { x.textContent = ''; }); } if (row) row.dispatchEvent(new Event('input')); tr[k] = {}; }); toast('출발 공항을 바꿔서 편명·시각을 지웠어요'); } }   /* 리뷰 #4: 찾은 공항과 다른 편만 지움 */   /* 늦게 온 편명 조회 결과도 버림(input 이벤트 = 조회 번호 올림) */   /* V-05: 편명과 출발 공항이 어긋난 채 남지 않게 */ tr.depAp = b.dataset.dep; dps.querySelectorAll('button').forEach(x => x.setAttribute('aria-pressed', x === b)); el.querySelectorAll('.flr .fll').forEach(l => { if (/가는 편/.test(l.textContent)) l.textContent = '가는 편 · ' + depName(tr) + ' → ' + apName(tr); else if (/오는 편/.test(l.textContent)) l.textContent = '오는 편 · ' + apName(tr) + ' → ' + depName(tr); }); tr.flightTx = flightText(tr); };
     const aps = $('#apSeg'); if (aps) aps.onclick = e => { const b = e.target.closest('[data-ap]'); if (!b) return; tr.airport = b.dataset.ap; aps.querySelectorAll('button').forEach(x => x.setAttribute('aria-pressed', x === b)); el.querySelectorAll('.flr .fll').forEach((l, i) => { if (/가는 편/.test(l.textContent)) l.textContent = '가는 편 · ' + depName(tr) + ' → ' + apName(tr); else if (/오는 편/.test(l.textContent)) l.textContent = '오는 편 · ' + apName(tr) + ' → ' + depName(tr); }); tr.flightTx = flightText(tr); };
     el.querySelectorAll('[data-fk]').forEach(i => i.oninput = () => { const k = i.dataset.fk; tr[k] = tr[k] || {}; tr[k][i.dataset.ff] = i.dataset.ff === 'no' ? i.value.toUpperCase().replace(/\s+/g, '') : i.value; tr.flightTx = flightText(tr); blankHint(); });
     wireTm(el); autoRide(el);
     blankHint();
-    $('#sIn').oninput = e => tr.stayTx = e.target.value;
+    $('#sIn').oninput = e => { tr.stayTx = e.target.value; stayHint(); }; stayHint();
     $('#bNext').onclick = () => next(s);
   }
   if (s === 'send') {
@@ -1858,6 +1939,8 @@ function swFit(c) {   // 11/20 동우님: 이름 아래는 늘 2줄 — 설명�
   if (nm) { TR(nm); if (!one(nm) && p0 && p0.sh && p0.sh !== p0.n) { nm.textContent = p0.sh; TR(nm); } }   // 11/22 이름도 한 줄: 넘치면 짧은 이름(괄호 뺀 것 · 영어는 short)
   const ln = c && c.querySelector('.swinf .ln');
   if (ln) { let L = []; try { L = JSON.parse(ln.dataset.alt || '[]'); } catch (_) {} for (const t of L) { ln.textContent = t; TR(ln); if (one(ln)) break; } if (!one(ln)) ln.classList.add('cut'); }
+  const wy = c && c.querySelector('.swinf .why.pt .wy');
+  if (wy) { const W = wy.closest('.why'); let L = []; try { L = JSON.parse(wy.dataset.alt || '[]'); } catch (_) {} for (const t of L) { wy.innerHTML = t; TR(W); if (one(W)) break; } if (!one(W)) W.classList.add('cut'); return; }   // 11/22 요점 줄
   const el = c && c.querySelector('.swinf .why'), x = el && el.querySelector('.wz'), k = el && el.querySelector('.wk'); if (!el) return;
   TR(el);
   if (x && !one(el)) x.remove();
@@ -1917,15 +2000,30 @@ function phMount(host, p, o) {
   };
   next();
 }
+/* 11/22 동우님 #5·#7: 카드 ★ 줄 = 이 장소의 요점(맛집은 인기 메뉴, 나머지는 유명한 것·장점). '‘맛집’ 취향이라 골랐어요'·'많이 가는 곳' 같은 당연한 말은 뺌.
+   후보를 앞에서부터 한 줄에 드는 것으로(swFit). 맛집 위치 설명(역 출구·층)은 요점이 아니라서 뺌 */
+const SW_FOOD = { restaurant: 1, cafe: 1, bar: 1, market: 1 }, SW_LOC = /출구|[0-9]층|역에서|걸어서|분 거리|바로 이어|건물|위치/;
+function swPoints(sw, d, id, l1) {
+  const p = window.GABOJA_DATA.places[id] || {}, food = SW_FOOD[p.kind], ro = p.kf && roJosa(p.kf), th = swTh(p), B = (k, v) => `<b>${esc(k)}</b> · ${esc(v)}`;
+  const pop = p.sig || p.kf, L = food
+    ? [pop && B(p.kind === 'cafe' ? '인기' : p.kind === 'bar' ? '대표' : '인기 메뉴', pop), p.say2 && !SW_LOC.test(p.say2) && esc(p.say2), p.best && !SW_LOC.test(p.best) && esc(p.best)]
+    : [p.kf && esc(ro ? `${p.kf}${ro} 유명해요` : `대표 ${p.kf}`), p.say2 && esc(p.say2), p.best && esc(p.best)];
+  const out = [...new Set(L.filter(x => x && !l1.some(t => esc(t) === x)))];
+  if (th) out.push(`<b>‘${esc(th[2])}’</b> 주제로 골랐어요`);
+  return out;
+}
 function swCardHtml(sw, d, id, k) {   // 11/18 D-1: 사진이 위쪽을 꽉 채움 + 종류 칩 · 아래 이름 / 설명 | 영업시간 / ☆ 추천 이유 (동네 줄 없음)
   const D = window.GABOJA_DATA, p = D.places[id];
   /* 11/20 동우님: 이름 아래 = 설명 1줄 + ★ 1줄. 설명은 한 줄에 드는 것 중 앞의 것(장점 → 한 문장 → 짧은 설명 → 종류) — swFit */
-  const alts = [...new Set([p.best, p.say2, p.say, [KIND_LB[p.kind]].concat((p.tg || []).filter(t => t !== KIND_LB[p.kind]).slice(0, 2)).filter(Boolean).join(' · ')].filter(Boolean))], hr = swHours(p);
+  const kd = [KIND_LB[p.kind]].concat((p.tg || []).filter(t => t !== KIND_LB[p.kind]).slice(0, 2)).filter(Boolean).join(' · ');
+  const food = !W5 && SW_FOOD[p.kind], alts = [...new Set((food ? [p.mu, p.say, kd] : [p.best, p.say2, p.say, kd]).filter(Boolean))], hr = swHours(p);   // 11/22 #5·#7: 맛집 = 무슨 메뉴 집인지 먼저
+  const pts = W5 ? null : swPoints(sw, d, id, alts);
   const ic = KIND_IC[p.kind] || KIND_IC.sight;
   return `<div class="swc ticket sin" data-id="${esc(id)}" role="group" aria-label="${esc(p.n)}">
       <div class="swph"><span class="noph" aria-hidden="true"><svg viewBox="0 0 24 24">${ic}</svg></span><div class="phbox" hidden></div><span class="swkd"><svg viewBox="0 0 24 24" aria-hidden="true">${ic}</svg>${esc(KIND_LB[p.kind] || '')}${hr ? `<span class="h">${esc(hr)}</span>` : ''}</span></div>
       <div class="swinf"><h2 class="nm">${esc(p.n)}</h2><p class="ln" data-alt="${esc(JSON.stringify(alts))}">${esc(alts[0] || '')}</p>
-      <p class="why"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l2.6 5.6 6 .7-4.5 4.1 1.2 6L12 16.4 6.7 19.4l1.2-6L3.4 9.3l6-.7z"/></svg><span class="wy">${swWhyHtml(sw, d, id)}</span></p></div>
+      ${pts ? (pts.length ? `<p class="why pt"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l2.6 5.6 6 .7-4.5 4.1 1.2 6L12 16.4 6.7 19.4l1.2-6L3.4 9.3l6-.7z"/></svg><span class="wy" data-alt="${esc(JSON.stringify(pts))}">${pts[0]}</span></p>` : '')
+        : `<p class="why"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l2.6 5.6 6 .7-4.5 4.1 1.2 6L12 16.4 6.7 19.4l1.2-6L3.4 9.3l6-.7z"/></svg><span class="wy">${swWhyHtml(sw, d, id)}</span></p>`}</div>
       <span class="sw-st l" aria-hidden="true">좋아요</span><span class="sw-st r" aria-hidden="true">패스</span></div>`;
 }
 const HEART = '<svg viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.5A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg>';
@@ -1946,7 +2044,7 @@ function swDay() {
     <div class="sw-stack" id="swStack"><div class="sw-react" id="swRx" role="status" aria-live="polite"></div></div>
     <div class="foot swfoot">
       <div class="swbtns"><button class="swb no" id="swNo" aria-label="패스"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg></button><button class="swb yes" id="swYes" aria-label="좋아요">${HEART}</button></div>
-      <button class="swauto recbtn" id="swAuto"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l1.8 4.7L18.5 9.5l-4.7 1.8L12 16l-1.8-4.7L5.5 9.5l4.7-1.8z"/><path d="M19 15l.8 2 2 .8-2 .8-.8 2-.8-2-2-.8 2-.8z"/></svg>이 날은 추천에 맡길게요</button>
+      <button class="swauto recbtn" id="swAuto">이 날은 추천에 맡길게요<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 6l6 6-6 6M13 6l6 6-6 6"/></svg></button>
     </div>`, 'swscr');
   $('#swNo').onclick = () => swDecide(-1); $('#swYes').onclick = () => swDecide(1); $('#swAuto').onclick = () => { if (sw.busy) return; tap(); swEndDay('auto'); };
   sw.cur = swPick(sw, d, sw.cands); swShow(true); swToast(hint);
@@ -2030,7 +2128,7 @@ function swEndDay(how) {
   if (how === 'auto' && !n) { swNextDay(); return; }
   const nx = last ? null : sw.days[sw.di + 1];
   ov.innerHTML = `<div class="dstamp-in"><div class="dstamp-st">${dstampSvg(d.no, d.md, Math.min(n, d.cap), d.cap)}</div>
-    <div class="dmsg"><b>${n ? `DAY ${d.no} 완성` : '이 날은 추천으로'}</b><p>${n ? `♥ ${n}곳을 먼저 넣고, 나머지 시간은 동선에 맞게 채워요` : '취향에 맞는 곳으로 알아서 채워 둘게요'}</p>
+    <div class="dmsg"><b>${n ? `DAY ${d.no} 완성` : '이 날은 추천으로'}</b><p>${n ? `고른 ${n}곳을 중심으로, 남은 시간은 가까운 곳으로 채울게요` : '취향에 맞는 곳으로 알아서 채워 둘게요'}</p>
     <button class="dnx" id="swNx">${last ? '가이드북 만들기 →' : `DAY ${nx.no} · ${esc(nx.area)} 고르기 →`}</button></div></div>
     <label class="hap"><input type="checkbox" switch tabindex="-1" aria-hidden="true"></label>`;
   ov.classList.remove('on', 'hit'); ov.hidden = false; void ov.offsetWidth; ov.classList.add('on');
@@ -2259,7 +2357,8 @@ function rDone() {
   /* 안 끝난 것만, 최대 2줄: 비행기(가는 길) 시각 · 숙소 */
   const needFl = isDom(tr) ? (['train', 'air'].includes(tr.mode) && tr.flight !== 'yes') : tr.flight !== 'yes';
   const needSt = !tr.day && tr.stay !== 'yes';
-  const todo = [needFl ? [isDom(tr) ? '가는 길 시각 넣기' : '비행기 시각 넣기', '입력하기'] : null, needSt ? ['숙소 정하기', '입력하기'] : null]   /* 11/19 #8: 버튼 글자 '입력하기'로 통일 */.filter(Boolean).slice(0, 2);
+  const TIC = { fl: '<path d="M21 15.5v-2l-8-5V3.5a1.5 1.5 0 0 0-3 0v5l-8 5v2l8-2.5V18l-2 1.5V21l3.5-1 3.5 1v-1.5L13 18v-5z"/>', tn: '<rect x="6" y="3" width="12" height="14" rx="3"/><path d="M6 11h12M9 21l1.5-4M15 21l-1.5-4"/><circle cx="9.5" cy="14" r=".6"/><circle cx="14.5" cy="14" r=".6"/>', bed: '<path d="M3 18V7M3 14h18v4M21 14v-2a3 3 0 0 0-3-3h-7v5"/><circle cx="7" cy="11" r="1.6"/>' };
+  const todo = [needFl ? [isDom(tr) ? '가는 길 시각 넣기' : '비행기 시각 넣기', '입력하기', isDom(tr) && tr.mode === 'train' ? 'tn' : 'fl'] : null, needSt ? ['숙소 정하기', '입력하기', 'bed'] : null]   /* 11/19 #8: 버튼 글자 '입력하기'로 통일 */.filter(Boolean).slice(0, 2);
   const g = S.type ? GRPC[S.type.slice(0, 2)] : null;
   screen(`
     <article class="ticket pass">
@@ -2276,7 +2375,7 @@ function rDone() {
       </div>
       <div class="perf"></div>
       <div class="todo"><h4>NEXT · 다음 할 일</h4>
-        ${todo.length ? todo.map(([x, b]) => `<div class="t"><span class="bx"></span><b>${x}</b><button data-go="book">${b}</button></div>`).join('') : `<div class="okl">${ICON.check}<span>준비 끝! 가이드북을 기다려 주세요</span></div>`}
+        ${todo.length ? todo.map(([x, b, ic]) => `<div class="t"><span class="bx" aria-hidden="true"><svg viewBox="0 0 24 24">${TIC[ic]}</svg></span><b>${x}</b><button data-go="book">${b}</button></div>`).join('') : `<div class="okl">${ICON.check}<span>준비 끝! 가이드북을 기다려 주세요</span></div>`}
       </div>
     </article>
     ${SEND && SEND.st === 'off' ? `<div class="sent ok" style="background:var(--hair);color:var(--sub)">${ICON.lock}<span>시험판이라 신청은 보내지 않았어요</span></div>`
