@@ -743,6 +743,10 @@ body { letter-spacing: 0; }
 .flycard .lbl .eyebrow { display: flex; align-items: center; gap: 0.375rem; min-width: 0; white-space: nowrap; }
 .flycard .lbl .lt { font-weight: 700; flex: none; }
 .flycard .lbl .eyebrow:last-child { overflow: hidden; text-overflow: ellipsis; display: block; }
+/* 11/23 동우님 폰(아이폰 SF Pro): 오른쪽 날짜가 'DEPARTS 12/…'로 잘림 → 날짜는 절대 안 자르고(flex none), 왼쪽 이름이 먼저 줄어듦 · 영어 'Departs' → 'Dep' */
+.flycard .lbl .eyebrow:last-child { flex: none; overflow: visible; text-overflow: clip; }
+.flycard .lbl .lt { flex: 0 1 auto; min-width: 0; overflow: hidden; text-overflow: ellipsis; }
+.flycard .lbl { gap: 0.5rem; }
 .flycard .lt .ico { display: flex; }
 .flycard .lt .ico svg { width: 1rem; height: 1rem; fill: currentColor; }
 .flycard .lt .ico.tr svg { fill: none; stroke: currentColor; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }

@@ -178,7 +178,7 @@ window.VZTR_EN = {
     '{n}시간 {m}분 남음': '{n} h {m} min left', '{n}시간 남음': '{n} h left', '{n}분 남음': '{n} min left',
     // 날짜·날씨·시각
     '날씨 {x}도 {y}도': (a, b) => num(a) && num(b) ? 'Weather ' + a + '° / ' + b + '°' : null,
-    '출발 {n}. {m}': 'Departs {n}/{m}',
+    '출발 {n}. {m}': 'Dep {n}/{m}',
     '+{n}곳': '+{n} more',   // F-14 여행 요약 남은 장소 수
     '{n}월 {m}일 {x}': (m, d, w) => WK[w] ? WK[w] + ', ' + MON[m - 1] + ' ' + d : null,
     '{n}월 {m}일 {x} – {d}일 {y}': (m, d, w, e, z) => WK[w] && WK[z] ? MON[m - 1] + ' ' + d + ' ' + WK[w] + ' – ' + e + ' ' + WK[z] : null,   // 11/23 impeccable E2: 여행 날짜 줄 '11월 4일 금 – 6일 토'가 한글로 남던 것
@@ -234,7 +234,7 @@ window.VZTR_EN = {
 /* ===== 2026-11-22 (3) 검수(qa_sweep 일본 화면)에서 영어가 길어 두 줄·잘림 나던 곳 = 짧게 ===== */
 Object.assign(window.VZTR_EN, {
   '공항 도착': 'At airport', '역 도착': 'At station',
-  '출발 {n}. {m}': 'Departs {n}/{m}',
+  '출발 {n}. {m}': 'Dep {n}/{m}',
   '여권·지갑·충전기 확인': 'Passport · wallet · charger', '신분증·지갑·충전기 확인': 'ID · wallet · charger', '승차권·지갑·충전기 확인': 'Ticket · wallet · charger',
   '와나카 영업시간이 자료마다 달라요 · 전날 전화로 확인': 'Wanaka hours vary · call ahead', '영업시간이 자료마다 달라요 · 전날 전화로 확인': 'Hours vary by source · call ahead',
   '비행기 시각을 넣으면 그날 시간이 정해져요': 'Add flight time to set the day', '비행기 시각을 넣으면 시간표가 완성돼요': 'Add flight time to finish the plan',
