@@ -9,6 +9,9 @@
 (function () {
   var EN = /\/en\//.test(location.pathname) || window.VZTR_LANG === 'en', L = EN ? 'en' : 'ko', KEY = 'vztr-lang';
   window.VZTR_LANG = L; document.documentElement.lang = L;
+  /* 11/23 동우님 '시스템 글꼴' 확정(시안 v2 fonts4.html 1순위): 영어판 영문 = 기기 글꼴(아이폰 SF Pro · 안드로이드는 기기 기본). 한글 원문 칸은 Pretendard 그대로. 로고 .vz(Inter Tight)는 안 바뀜 */
+  if (EN) { var KRF = '"VZTR KR", "Pretendard Variable", Pretendard, "Apple SD Gothic Neo", "Malgun Gothic", sans-serif', SYS = 'system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, ' + KRF;
+    var fs = document.createElement('style'); fs.id = 'vztr-en-font'; fs.textContent = 'html[lang="en"]{--kr:' + SYS + ';--kr-plain:' + SYS + ';--lat:' + SYS + ';--mono:' + SYS + '}html[lang="en"] .vzko,html[lang="en"] [lang="ko"]{font-family:' + KRF + '}'; (document.head || document.documentElement).appendChild(fs); }
   var bot = navigator.webdriver || /HeadlessChrome/.test(navigator.userAgent);
   function other() {   // 같은 화면의 다른 언어 주소
     var p = location.pathname;

@@ -421,6 +421,13 @@ html.ios26 .foot, html.ios26 .board { bottom: calc(max(0.75rem, env(safe-area-in
 .cal .wk span:first-child { color: var(--red); }
 .cal .gd button, .cal .gd span { height: 2.625rem; display: grid; place-items: center; font-size: 0.875rem; font-weight: 600; position: relative; }
 .cal .gd button[disabled] { color: var(--sub); opacity: .35; cursor: default; }
+.cal .gd > button:nth-child(7n+1):not(.s):not(.e), .cal .gd button.hol:not(.s):not(.e) { color: var(--red); }   /* 11/23: 일요일·한국 공휴일 = 빨간 숫자 */
+.cal .gd button.jph::after { content: ""; position: absolute; left: 50%; bottom: 0.0625rem; width: 0.3125rem; height: 0.3125rem; margin-left: -0.15625rem; border-radius: 50%; background: var(--amber); }   /* 일본 공휴일 = 주황 점 */
+.cal .gd button.in-r.jph::after, .cal .gd button.s.jph::after, .cal .gd button.e.jph::after { background: currentColor; }
+.cal .hl { display: flex; flex-wrap: wrap; gap: 0.25rem 0.75rem; padding: 0.625rem 0.25rem 0; margin-top: 0.375rem; border-top: 1px solid var(--hair); font-size: 0.75rem; color: var(--sub); line-height: 1.4; }
+.cal .hl .lg { flex-basis: 100%; display: flex; align-items: center; gap: 0.3125rem; }
+.cal .hl .lg i { width: 0.4375rem; height: 0.4375rem; border-radius: 50%; display: inline-block; } .cal .hl .lg i.r { background: var(--red); } .cal .hl .lg i.j { background: var(--amber); margin-left: 0.5rem; }
+.cal .hl b { font-weight: 700; font-family: var(--lat); } .cal .hl b.r { color: var(--red); } .cal .hl b.j { color: var(--amber); }
 .cal .gd button.s, .cal .gd button.e { color: #fff; }
 /* 11/18 M32: 동그라미 = 정사각형(칸 폭이 달라도 찌그러지지 않음) · 기간 띠 = 동그라미와 같은 높이로 가운데 */
 .cal .gd button::before, .cal .gd button::after { content: ""; position: absolute; top: 50%; pointer-events: none; }
@@ -724,6 +731,10 @@ body { background: transparent; }
 .gchip { display: inline-flex; align-items: center; font-size: 0.75rem; font-weight: 700; letter-spacing: -.01em; color: var(--gi, var(--ink)); background: color-mix(in srgb, var(--ga) 20%, transparent); padding: 0.25rem 0.625rem; border-radius: 999px; white-space: nowrap; margin-top: -0.375rem; position: relative; }
 .rt .rtop { padding: 0.5rem 1.125rem 0; display: grid; grid-template-columns: minmax(0,1fr) 8.75rem; gap: 0.75rem; align-items: center; }
 .rt .rtop .flaps.big { gap: 0.25rem; }
+/* 11/23 동우님: 결과 위 — 오른쪽 위가 비고 캐릭터·묶음 이름이 겹침 → 발급 완료처럼 캐릭터를 위로 올리고 이름은 알약 없이 글자만 캐릭터 밑 */
+.rt .rtop { align-items: end; }
+.rt .rtop .rchar { align-self: start; margin-top: -2.5rem; gap: 0; }
+.rt .rtop .rchar .gchip { background: none; padding: 0; margin-top: -0.375rem; font-size: 0.875rem; font-weight: 700; line-height: 1.2; color: var(--gi, var(--ink)); }
 .rt .rtop .flaps.big .fl { width: 2.25rem; height: 3rem; font-size: 1.5rem; border-radius: 0.2875rem; }
 .rt .lfl .lcol { width: 2.25rem; }
 .rt .bd { padding-top: 1rem; }
@@ -885,7 +896,7 @@ html[data-theme="dark"][data-grp="HE"] { --me-soft: color-mix(in srgb, #C17192 2
 .qask { display: flex; align-items: flex-end; gap: 0.625rem; }
 .qask .qav { flex: none; width: 3.75rem; height: 3.75rem; background: none; }
 .qask .qav svg { width: 100%; height: 100%; overflow: visible; }
-.qbub { position: relative; flex: 1; min-width: 0; background: var(--tile); border: 1px solid var(--tile-edge); border-radius: 1rem; padding: 0.75rem 0.875rem; box-shadow: var(--sh-xs); }
+.qbub { position: relative; flex: 0 1 auto; min-width: 0; background: var(--tile); border: 1px solid var(--tile-edge); border-radius: 1rem; padding: 0.75rem 0.875rem; box-shadow: var(--sh-xs); }
 .qbub::before { content: ""; position: absolute; left: -0.4375rem; bottom: 1rem; width: 0.75rem; height: 0.75rem; background: var(--tile); border-left: 1px solid var(--tile-edge); border-bottom: 1px solid var(--tile-edge); transform: rotate(45deg); }
 .qbub h1 { font-size: 1.3125rem; line-height: 1.3; text-wrap: balance; }
 .qask + p { margin-top: 0.625rem; }
@@ -1285,19 +1296,32 @@ function screen(html, cls = '') {
   qFit(sec);
   return sec;
 }
-/* 11/22 레퍼런스(Duolingo) A안 — 질문 제목 = 왼쪽 캐릭터 + 오른쪽 말풍선. 캐릭터 = 내 유형(없으면 LSRP), 등장 이펙트(gfx)는 chars.js가 보일 때 재생
+/* 11/22 레퍼런스(Duolingo) A안 — 질문 제목 = 왼쪽 캐릭터 + 오른쪽 말풍선. 캐릭터 = 질문 화면은 16유형 돌아가며 · 그 뒤는 내 유형(없으면 LSRP), 등장 이펙트(gfx)는 chars.js가 보일 때 재생
    말풍선 글자는 늘 2줄 안: 넘치면 0.5px씩 줄임(최소 16px) — qFit. 정보 수정(edit) 화면은 빼고 */
 function qAsk(sec) {
   const qh = sec.querySelector('.qh'), h = qh && qh.querySelector(':scope > h1');
   if (!h || !window.GABOJA_CHAR || S.step === 'edit') return;
-  const c = /^[LH][SE][FR][JP]$/.test(S.type || '') ? S.type : 'LSRP', box = document.createElement('div');
+  /* 11/23 동우님: 성향 나오기 전(질문 10개)엔 캐릭터가 매번 다르게 — 16유형을 질문 번호로 돌려 가며(5칸씩 건너 겹치지 않게) · 결과 뒤 화면은 내 캐릭터만 */
+  const qn = /^q(\d+)$/.exec(S.step || ''), c = qn ? ORDER[(+qn[1] * 5 + 9) % 16] : /^[LH][SE][FR][JP]$/.test(S.type || '') ? S.type : 'LSRP', box = document.createElement('div');
   box.className = 'qask'; box.innerHTML = `<div class="av gfx qav" data-c="${c}" data-fxd="200">${GABOJA_CHAR(c, { bg: false })}</div><div class="qbub"></div>`;
   qh.insertBefore(box, h); box.lastChild.appendChild(h);
+  /* 11/23 동우님: 캐릭터 몸 왼쪽 끝 = 아래 설명·카드 왼쪽 끝. 캐릭터마다 칸 안 빈자리가 달라서 그려진 몸(그림자·꽉 찬 바탕 빼고)의 왼쪽을 재서 그만큼 당김.
+     등장 애니메이션(크기 변화) 중에도 맞게 svg 폭 대비 비율로 계산 */
+  requestAnimationFrame(() => { const a = box.firstChild, sv = a && a.querySelector('svg'), vb = sv && sv.viewBox && sv.viewBox.baseVal; if (!sv || !vb || !vb.width || !sv.getScreenCTM()) return;
+    const inv = sv.getScreenCTM().inverse(); let mn = Infinity;   // svg 좌표로 재서 등장 애니메이션(크기 변화)과 무관하게
+    sv.querySelectorAll('path,rect,circle,polygon').forEach(e => { const cs = getComputedStyle(e); if (cs.display === 'none' || cs.visibility === 'hidden' || +cs.opacity === 0 || (cs.fill === 'none' && cs.stroke === 'none')) return;
+      let b; try { b = e.getBBox(); } catch (_) { return; } if (b.width < 2 || b.height < 2 || b.width > vb.width * 0.95) return;
+      const m = inv.multiply(e.getScreenCTM()), x = Math.min(m.a * b.x + m.c * b.y + m.e, m.a * b.x + m.c * (b.y + b.height) + m.e, m.a * (b.x + b.width) + m.c * b.y + m.e); mn = Math.min(mn, x); });
+    if (mn < Infinity) { const off = (mn - vb.x) / vb.width * a.clientWidth; if (off > 1 && off < a.clientWidth / 3) a.style.marginLeft = -off.toFixed(1) + 'px'; } });
 }
 function qFit(sec) {
   const h = sec.querySelector('.qbub h1'); if (!h) return;
-  const run = () => { h.style.removeProperty('font-size'); if (!h.clientWidth) return; const lh = () => parseFloat(getComputedStyle(h).lineHeight) || 26;
-    let f = parseFloat(getComputedStyle(h).fontSize); while (h.getBoundingClientRect().height > lh() * 2.4 && f > 16) { f -= 0.5; h.style.fontSize = f + 'px'; } };
+  const run = () => { if (W5 && window.VZTR_I18N && VZTR_I18N.node) VZTR_I18N.node(h);   /* 영어판: 번역된 글자로 재기(swFit과 같음) */
+    h.style.removeProperty('font-size'); h.style.removeProperty('width'); if (!h.clientWidth) return; const lh = () => parseFloat(getComputedStyle(h).lineHeight) || 26;
+    let f = parseFloat(getComputedStyle(h).fontSize); while (h.getBoundingClientRect().height > lh() * 2.4 && f > 16) { f -= 0.5; h.style.fontSize = f + 'px'; }
+    /* 11/23 동우님: 말풍선 = 글자만 딱 감싸기 — 두 줄로 꺾이면 블록이 칸 폭을 다 차지해 오른쪽이 비므로, 가장 긴 줄 폭으로 맞춤 */
+    const rg = document.createRange(); rg.selectNodeContents(h); const w = Math.max(0, ...[...rg.getClientRects()].map(r => r.width));
+    if (w && w < h.clientWidth - 2) h.style.width = Math.ceil(w + 1) + 'px'; };
   run(); if (document.fonts && document.fonts.status !== 'loaded') document.fonts.ready.then(run);
 }
 addEventListener('resize', () => { const s = document.querySelector('#stage .scr:not(.leaving)'); if (s) qFit(s); });
@@ -2179,15 +2203,25 @@ const WD = ['일', '월', '화', '수', '목', '금', '토'];
 const ymd = d => d.getFullYear() * 10000 + (d.getMonth() + 1) * 100 + d.getDate();
 const fmt = n => { const d = new Date(Math.floor(n / 10000), Math.floor(n / 100) % 100 - 1, n % 100); return `${d.getMonth() + 1}. ${d.getDate()} ${WD[d.getDay()]}`; };
 const ymdAdd = (n, k) => { const d = new Date(Math.floor(n / 10000), Math.floor(n / 100) % 100 - 1, n % 100 + k); return d.getFullYear() * 10000 + (d.getMonth() + 1) * 100 + d.getDate(); };
+/* 11/23 동우님: 날짜 달력에 휴일 표시(11/22 레퍼런스 Airbnb 날짜 고르기 '날마다 정보 색' 제안) —
+   한국 공휴일 = 빨간 숫자(일요일처럼) · 일본 여행이면 일본 공휴일 = 주황 점(현지 붐빔) · 달력 아래 그달 휴일 이름.
+   출처: 한국 = 한국천문연구원 천문우주지식정보 2027 달력자료(우주항공청 2027 월력요항 2026-06-29 발표와 같음) · 2026은 남은 12/25만 /
+   일본 = 内閣府 「国民の祝日」 syukujitsu.csv (2026·2027) — 2028부터는 발표되면 더할 것 */
+const HOL_KR = { 20261225: '기독탄신일', 20270101: '신정(1월 1일)', 20270206: '설날', 20270207: '설날', 20270208: '설날', 20270209: '대체공휴일(설날)', 20270301: '3·1절', 20270501: '노동절', 20270503: '대체공휴일(노동절)', 20270505: '어린이날', 20270513: '부처님오신날', 20270606: '현충일', 20270717: '제헌절', 20270719: '대체공휴일(제헌절)', 20270815: '광복절', 20270816: '대체공휴일(광복절)', 20270914: '추석', 20270915: '추석', 20270916: '추석', 20271003: '개천절', 20271004: '대체공휴일(개천절)', 20271009: '한글날', 20271011: '대체공휴일(한글날)', 20271225: '기독탄신일', 20271227: '대체공휴일(기독탄신일)' };
+const HOL_JP = { 20261123: '근로감사의 날', 20270101: '설날(元日)', 20270111: '성인의 날', 20270211: '건국기념일', 20270223: '일왕 생일', 20270321: '춘분', 20270322: '대체휴일', 20270429: '쇼와의 날', 20270503: '헌법기념일', 20270504: '녹색의 날', 20270505: '어린이날', 20270719: '바다의 날', 20270811: '산의 날', 20270920: '경로의 날', 20270923: '추분', 20271011: '스포츠의 날', 20271103: '문화의 날', 20271123: '근로감사의 날' };
+const JP_DEST = new Set(['kix', 'tyo', 'fuk', 'spk', 'nar', 'kob']);
 function drawCal() {
   const m = S.calM, tr = S.trip, today = ymd(new Date()), y = m.getFullYear(), mo = m.getMonth();
   const first = new Date(y, mo, 1).getDay(), dim = new Date(y, mo + 1, 0).getDate(), now = new Date(), isNow = y === now.getFullYear() && mo === now.getMonth();
   let g = ''; for (let i = 0; i < first; i++) g += '<span></span>';
-  for (let d = 1; d <= dim; d++) { const n = y * 10000 + (mo + 1) * 100 + d, c = [];
+  const jp = JP_DEST.has(DEST[tr.city]), hl = [];
+  for (let d = 1; d <= dim; d++) { const n = y * 10000 + (mo + 1) * 100 + d, c = [], kh = HOL_KR[n], jh = jp && HOL_JP[n];
+    if (kh) { c.push('hol'); hl.push(`<span><b class="r">${mo + 1}/${d}</b> ${kh}</span>`); } if (jh) { c.push('jph'); hl.push(`<span><b class="j">${mo + 1}/${d}</b> 일본 ${jh}</span>`); }
     if (tr.start && n === tr.start) c.push('s'); if (tr.start && !tr.end && n === tr.start) c.push('solo'); if (tr.end && n === tr.end) c.push('e'); if (tr.start && tr.end && n > tr.start && n < tr.end) c.push('in-r');
-    g += `<button data-d="${n}" class="${c.join(' ')}" ${n < today ? 'disabled' : ''} aria-pressed="${c.includes('s') || c.includes('e')}" aria-label="${y}년 ${mo + 1}월 ${d}일${c.includes('s') ? ' 출발' : c.includes('e') ? ' 도착' : ''}">${d}</button>`; }
+    g += `<button data-d="${n}" class="${c.join(' ')}" ${n < today ? 'disabled' : ''} aria-pressed="${c.includes('s') || c.includes('e')}" aria-label="${y}년 ${mo + 1}월 ${d}일${kh && !W5 ? ' 공휴일 ' + kh : ''}${jh && !W5 ? ' 일본 공휴일 ' + jh : ''}${c.includes('s') ? ' 출발' : c.includes('e') ? ' 도착' : ''}">${d}</button>`; }
   $('#cal').innerHTML = `<div class="ch"><button class="ib" id="cPrev" aria-label="이전 달" ${isNow ? 'disabled' : ''}>${ICON.l}</button><b>${y}년 ${mo + 1}월</b><button class="ib" id="cNext" aria-label="다음 달">${ICON.r}</button></div>
-    <div class="wk">${WD.map(w => `<span>${w}</span>`).join('')}</div><div class="gd">${g}</div>`;
+    <div class="wk">${WD.map(w => `<span>${w}</span>`).join('')}</div><div class="gd">${g}</div>
+    <div class="hl"><span class="lg"><i class="r"></i>한국 공휴일${jp ? '<i class="j"></i>일본 공휴일 · 현지 붐빔' : ''}</span>${hl.join('')}</div>`;
   $('#cPrev').onclick = () => { S.calM = new Date(y, mo - 1, 1); drawCal(); $('#cal .gd').classList.add('swap'); };
   $('#cNext').onclick = () => { S.calM = new Date(y, mo + 1, 1); drawCal(); $('#cal .gd').classList.add('swap'); };
   $('#cal .gd').onclick = e => { const b = e.target.closest('[data-d]'); if (!b || b.disabled) return; const n = +b.dataset.d; tap();

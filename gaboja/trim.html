@@ -323,7 +323,7 @@ details.sec > summary + * { margin-top: 0.375rem; }
 .bcard .bacts .btn { flex: 1; }
 
 /* 자세히: 목록 */
-.list { border-radius: var(--r-lg); padding: 0.25rem 1rem; overflow: hidden; }
+.list { border-radius: var(--r-lg); padding: 0.75rem 1rem 0.5rem; overflow: hidden; }   /* 11/23 동우님: 첫 줄(이동 줄)이 위 테두리에 붙어 보여 위 0.25 → 0.75rem */
 .li { display: grid; grid-template-columns: 3.625rem minmax(0,1fr) auto; gap: 0 0.625rem; align-items: center; padding: 0.6875rem 0.375rem; margin: 0 -0.375rem;
   border-top: 1px solid var(--hair); text-align: left; width: calc(100% + 0.75rem); border-radius: 0.3438rem; transition: background .15s; }
 .list > :first-child { border-top: 0; }
@@ -1143,7 +1143,8 @@ html[data-grp="HS"] { --stamp-a: var(--g-hs-a); --stamp-lt: var(--g-hs-lt); } ht
 #dayBody + #warn, #v-plan > #warn { margin-top: 0.5rem; }
 
 /* ── 2차 (11/19 동우님): 시각 미정인 날 상세 타임라인의 '–' 빼기 → 시각 칸 없애고 공간 다시 나눔 ── */
-.list.notm { padding: 0.375rem 1.125rem; }
+.list.notm { padding: 0.875rem 1.125rem 0.5rem; }   /* 11/23 동우님: 시각 미정 날 첫 줄이 위 테두리에 붙던 것 */
+.list.notm > .li.m:first-child { margin-top: 0; }
 .list.notm .li { grid-template-columns: minmax(0,1fr) auto !important; gap: 0 0.5rem !important; }
 .list.notm .li .tm { display: none !important; }
 /* 장소 줄: 칸이 넓어진 만큼 이름을 키우고 한 줄에 더 들어가게 */
@@ -1457,15 +1458,15 @@ details.sec > summary .cnt { min-width: 0; overflow: hidden; text-overflow: elli
 #v-now .nextwrap.moving, #v-now .nextwrap.here { outline: 0 !important; --c: var(--blue); animation: passglow 2.2s ease-in-out infinite; }
 #v-now:has(.nextwrap.moving) #trackPast { overflow: visible; }
 #v-now:has(.nextwrap.moving) #trackPast > :last-child .stop.m .rail::before,
-#v-now:has(.nextwrap.moving) #trackPast > .stop.m:last-child .rail::before { border-left: 0; width: 0.1875rem; bottom: -0.6875rem; height: auto; background: repeating-linear-gradient(to bottom, var(--blue) 0 0.3125rem, transparent 0.3125rem 0.75rem); background-size: 100% 0.75rem; animation: vzflow2 .9s linear infinite; }
+#v-now:has(.nextwrap.moving) #trackPast > .stop.m:last-child .rail::before { border-left: 0; left: 10px; width: 0.3125rem; bottom: -0.6875rem; height: auto; background: radial-gradient(circle, var(--blue) 0 0.15625rem, transparent 0.1875rem) 0 0 / 100% 0.75rem repeat-y; animation: vzflow2 .9s linear infinite; }   /* 11/23 동우님: 네모 점선 → 동그란 점이 흐르게 · 실선과 같은 가운데(left 10 + 폭 5 = 12.5px)
 #v-now:has(.nextwrap.moving) #trackPast::after,
 #v-now:has(.nextwrap.moving) .nextwrap + .track::before { content: ""; display: block; position: absolute; left: var(--rail-x, calc(1.125rem + 0.6875rem)); transform: translateX(-50%); width: 0.1875rem; border: 0;
-  background: repeating-linear-gradient(to bottom, var(--blue) 0 0.3125rem, transparent 0.3125rem 0.75rem); background-size: 100% 0.75rem; animation: vzflow2 .9s linear infinite; pointer-events: none; z-index: 1; }
+  background: radial-gradient(circle, var(--blue) 0 0.15625rem, transparent 0.1875rem) 0 0 / 100% 0.75rem repeat-y; width: 0.3125rem; animation: vzflow2 .9s linear infinite; pointer-events: none; z-index: 1; }
 #v-now:has(.nextwrap.moving) #trackPast::after { top: 100%; height: var(--gap-a, 0.75rem); }
 #v-now:has(.nextwrap.moving) .nextwrap + .track::before { top: calc(-1 * var(--gap-b, 0.75rem)); height: calc(var(--gap-b, 0.75rem) + var(--rail-in, 1.25rem)); opacity: .7; }
 @keyframes vzflow2 { to { background-position: 0 0.75rem; } }
 @media (prefers-reduced-motion: reduce) { #v-now .nextwrap.moving, #v-now .nextwrap.here, #v-now:has(.nextwrap.moving) #trackPast::after, #v-now:has(.nextwrap.moving) .nextwrap + .track::before, #v-now:has(.nextwrap.moving) #trackPast .rail::before { animation: none !important; } }
-#v-now { --rail-x: 1.875rem; --gap-a: 0.75rem; --gap-b: 0.75rem; --rail-in: 1.8125rem; }
+#v-now { --rail-x: calc(1.875rem + 1.5px); --gap-a: 0.75rem; --gap-b: 0.75rem; --rail-in: 1.8125rem; }
 #warn[hidden] { display: none !important; }   /* F-16: 확인할 것이 없으면 주의 상자 자체를 숨김 */
 #tips .srcall [hidden] { display: none; }
 /* 11/22 검수: 영어판 'Departs 12/18'이 3~4px 잘림 → 탑승권 출발 표시만 자간 줄임 */
