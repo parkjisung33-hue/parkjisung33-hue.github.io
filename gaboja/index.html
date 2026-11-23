@@ -1473,6 +1473,16 @@ details.sec > summary .cnt { min-width: 0; overflow: hidden; text-overflow: elli
 @keyframes vzflow2 { to { background-position: 0 0.75rem; } }
 @media (prefers-reduced-motion: reduce) { #v-now .nextwrap.moving, #v-now .nextwrap.here, #v-now:has(.nextwrap.moving) #trackPast::after, #v-now:has(.nextwrap.moving) .nextwrap + .track::before, #v-now:has(.nextwrap.moving) #trackPast .rail::before { animation: none !important; } }
 #v-now { --rail-x: calc(1.875rem + 1.5px); --gap-a: 0.75rem; --gap-b: 0.75rem; --rail-in: 1.8125rem; }
+/* 11/23 동우님: 흐르는 점 = navFlow()가 그린 .vzfl (예전 가상 요소 점은 끔) */
+#v-now { position: relative; }
+#v-now.vzfl-on #trackPast::after, #v-now.vzfl-on .nextwrap + .track::before { display: none !important; }
+#v-now.vzfl-on #trackPast > :last-child .stop.m .rail::before, #v-now.vzfl-on #trackPast > .stop.m:last-child .rail::before { display: none !important; }
+#v-now.vzfl-on #trackPast .stop:has(+ .stop.m:last-child) .rail::before { bottom: calc(100% - 0.75rem) !important; }   /* 지금 떠난 곳 점에서 실선이 끝나고, 그 아래는 .vzfl 점만 흐름 */
+.vzfl { position: absolute; width: 0.375rem; margin-left: -0.1875rem; overflow: hidden; pointer-events: none; z-index: 3; }
+.vzfl.dim { opacity: .7; }
+.vzfl i { position: absolute; left: 0; right: 0; top: -0.75rem; height: calc(100% + 0.75rem); background: radial-gradient(circle at 50% 50%, var(--blue) 0 0.15625rem, transparent 0.1875rem) 0 0 / 100% 0.75rem repeat-y; animation: vzflt .9s linear infinite; will-change: transform; }
+@keyframes vzflt { from { transform: translate3d(0, 0, 0); } to { transform: translate3d(0, 0.75rem, 0); } }
+@media (prefers-reduced-motion: reduce) { .vzfl i { animation: none; } }
 #warn[hidden] { display: none !important; }   /* F-16: 확인할 것이 없으면 주의 상자 자체를 숨김 */
 #tips .srcall [hidden] { display: none; }
 /* 11/22 검수: 영어판 'Departs 12/18'이 3~4px 잘림 → 탑승권 출발 표시만 자간 줄임 */
@@ -2412,6 +2422,18 @@ function centerNow(smooth) {
 function fitNow() {
   if ($('#v-now').hidden) return;
   document.querySelectorAll('#nextCard .nm, #track .stop b, #trackPast .stop b').forEach(n => { n.style.fontSize = ''; if (!n.clientWidth) return; let fs = parseFloat(getComputedStyle(n).fontSize); while (n.scrollWidth > n.clientWidth + 1 && fs > 11) { fs -= 0.5; n.style.fontSize = fs + 'px'; } });
+  navFlow();
+}
+/* 11/23 동우님: 길안내 이동 중 흐르는 점 = 실제 점(.pt) 위치를 재서 그 위에 점 줄을 그림 (전엔 가상 요소 배경 위치 애니 + 고정 숫자 → 아이폰에서 안 움직이고 선과 1~2px 어긋남)
+   ① 지나온 길 마지막 점 → '다음' 카드 위 ② 카드 아래 → 남은 길 첫 점. 움직임 = 안쪽 줄의 transform(GPU) */
+function navFlow() {
+  const v = $('#v-now'); if (!v) return; v.querySelectorAll('.vzfl').forEach(e => e.remove());
+  const nw = v.querySelector('.nextwrap'), on = !v.hidden && nw && nw.classList.contains('moving'); v.classList.toggle('vzfl-on', !!on); if (!on) return;
+  const vr = v.getBoundingClientRect(), nb = nw.getBoundingClientRect(), vis = e => e.offsetWidth > 0 && e.offsetHeight > 0, pts = [...v.querySelectorAll('#trackPast:not([hidden]) .stop .pt')].filter(vis), p0 = pts[pts.length - 1], p1 = [...v.querySelectorAll('#track .stop .pt')].find(vis);   // 이동 줄(.stop.m)의 점은 숨겨져 있어 보이는 점만
+  const ref = p0 || p1; if (!ref) return; const rr = ref.getBoundingClientRect(), x = rr.left + rr.width / 2 - vr.left;
+  const seg = (y1, y2, dim) => { if (y2 - y1 < 6) return; const e = document.createElement('div'); e.className = 'vzfl' + (dim ? ' dim' : ''); e.style.cssText = 'left:' + x + 'px;top:' + y1 + 'px;height:' + (y2 - y1) + 'px'; e.innerHTML = '<i></i>'; v.appendChild(e); };
+  if (p0) { const a = p0.getBoundingClientRect(); seg(a.bottom - vr.top + 2, nb.top - vr.top - 2); }
+  if (p1) { const b = p1.getBoundingClientRect(); seg(nb.bottom - vr.top + 2, b.top - vr.top - 2, true); }
 }
 addEventListener('resize', () => { try { fitNow(); } catch (_) {} });
 const roTx = w => { const c = String(w).replace(/[^가-힣]+$/, '').slice(-1).charCodeAt(0) - 0xAC00; return c >= 0 && c < 11172 ? (c % 28 && c % 28 !== 8 ? '으로' : '로') : '(으)로'; };   // 받침 없거나 ㄹ이면 '로', 있으면 '으로', 한글 아니면 '(으)로'
