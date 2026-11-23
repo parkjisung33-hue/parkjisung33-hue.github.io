@@ -23,7 +23,7 @@
    크기는 전부 rem (390px 폰 = 16px 기준, 앱과 같은 규칙) */
 :root {
   color-scheme: light;
-  --canvas: #EFEFF1; --ink: #16171A; --sub: #6B6E75; --hair: rgba(22,23,26,.09); --on-ink: #FFFFFF;
+  --canvas: #EFEFF1; --ink: #16171A; --sub: #5F6269; --hair: rgba(22,23,26,.09); --on-ink: #FFFFFF;
   --glass: rgba(255,255,255,.62); --glass-hi: rgba(255,255,255,.94); --glass-edge: rgba(255,255,255,.85); --glass-hl: rgba(255,255,255,.9);
   --paper: #FFFFFF; --tile: rgba(255,255,255,.86); --tile-edge: rgba(255,255,255,.98); --field: #FFFFFF;
   --red: #CF3F66; --amber: #E8912A; --blue: #1F5FE0; --on-blue: #FFFFFF; --blue-soft: rgba(31,95,224,.09);
@@ -43,7 +43,7 @@
 }
 @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
   color-scheme: dark;
-  --canvas: #0E1013; --ink: #ECEEF1; --sub: #8F969F; --hair: rgba(255,255,255,.08); --on-ink: #0E1013;
+  --canvas: #0E1013; --ink: #ECEEF1; --sub: #9AA1AA; --hair: rgba(255,255,255,.08); --on-ink: #0E1013;
   --glass: rgba(30,33,38,.62); --glass-hi: rgba(255,255,255,.14); --glass-edge: rgba(255,255,255,.08); --glass-hl: rgba(255,255,255,.06);
   --paper: #1B1E23; --tile: rgba(36,40,46,.9); --tile-edge: rgba(255,255,255,.06); --field: #15181C;
   --red: #F06A8A; --amber: #F0A84A; --blue: #6D97EB; --on-blue: #16171A; --blue-soft: rgba(109,151,235,.12);
@@ -60,7 +60,7 @@
   --sh-xs: 0 1px 2px rgba(0,0,0,.35), 0 0.25rem 0.75rem -0.375rem rgba(0,0,0,.55), inset 0 1px 0 rgba(255,255,255,.05), 0 0 0 1px rgba(255,255,255,.06); } }
 :root[data-theme="dark"] {
   color-scheme: dark;
-  --canvas: #0E1013; --ink: #ECEEF1; --sub: #8F969F; --hair: rgba(255,255,255,.08); --on-ink: #0E1013;
+  --canvas: #0E1013; --ink: #ECEEF1; --sub: #9AA1AA; --hair: rgba(255,255,255,.08); --on-ink: #0E1013;
   --glass: rgba(30,33,38,.62); --glass-hi: rgba(255,255,255,.14); --glass-edge: rgba(255,255,255,.08); --glass-hl: rgba(255,255,255,.06);
   --paper: #1B1E23; --tile: rgba(36,40,46,.9); --tile-edge: rgba(255,255,255,.06); --field: #15181C;
   --red: #F06A8A; --amber: #F0A84A; --blue: #6D97EB; --on-blue: #16171A; --blue-soft: rgba(109,151,235,.12);
@@ -159,6 +159,11 @@ main { flex: 1; display: flex; flex-direction: column; position: relative; overf
 .opt:active { transform: scale(.97); }
 @media (hover: hover) { .opt:hover { box-shadow: var(--shadow); } }
 .opt .top { display: flex; justify-content: space-between; align-items: flex-start; }
+/* 11/23 impeccable #1: 보기 카드 가운데가 텅 비던 것 → 아이콘을 글자 바로 위로 내려 한 덩어리(아이콘 2.75rem), A·B·C·D는 왼쪽 위에 그대로. 카드 높이(11/18 T10)는 유지 */
+.opt { justify-content: flex-end; }
+.opt .top { display: contents; }
+.opt .k { position: absolute; left: 0.875rem; top: 0.875rem; }
+.opt .ic { width: 2.75rem !important; height: 2.75rem !important; margin-left: -0.125rem; }
 .opt .ic { width: 2.125rem; height: 2.125rem; stroke: var(--ink); fill: none; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; opacity: .8; transition: opacity .2s, transform .3s; }
 .opts.done .opt.chosen .ic { opacity: 0; transform: scale(.6); }
 @media (hover: hover) { .opt:hover .ic { transform: translateY(-2px) rotate(-4deg); } }
@@ -374,6 +379,8 @@ html.ios26 .foot, html.ios26 .board { bottom: calc(max(0.75rem, env(safe-area-in
 .two button { position: relative; min-height: 3rem; padding: 0.6875rem 0.625rem; border-radius: var(--r-sm); background: var(--tile); border: 1px solid var(--tile-edge); box-shadow: var(--sh-xs); font-size: 0.875rem; font-weight: 600; line-height: 1.35; word-break: keep-all; color: var(--ink); transition: transform .12s, background .15s; }
 .two button:active { transform: scale(.97); }
 .two button em { display: block; font-style: normal; font-size: 1.125rem; line-height: 1.3; margin-bottom: 0.125rem; }
+/* 11/23 impeccable #2: 컬러 이모지 → 질문 보기와 같은 선 아이콘(굵기 1.5) — 기능 UI에 이모지를 섞지 않음(Dynatrace·New Relic 스타일 가이드) */
+.two button em svg { display: block; width: 1.375rem; height: 1.375rem; stroke: currentColor; fill: none; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; opacity: .85; margin-bottom: 0.25rem; }
 .two button[aria-pressed="true"] { background: var(--ink); color: var(--on-ink); border-color: var(--ink); }
 .two button.vs { display: flex; align-items: center; justify-content: center; gap: 0.5rem; }   /* 11/22 몇 번째 = 신호 막대 아이콘 + 글자 */
 .vb { width: 1rem; height: 0.875rem; flex: none; } .vb rect { fill: currentColor; opacity: .22; } .vb rect.on { opacity: 1; }
@@ -1098,8 +1105,8 @@ const NIGHTS = [[0, '당일치기'], [1, '1박 2일'], [2, '2박 3일'], [3, '3�
 // 취향 칩 -> 장소 DB 태그 (gen.js는 장소 tags와 글자 그대로 맞춤). 칩 하나 = 태그 여러 개. 태그가 없는 칩은 빈 배열(일정에는 영향 없음, 신청서에만 기록)
 // 11/14 #15 A안(NOL식 문장형 2열, 동우님 선택 · 최대 5개): 문장 하나 = 장소 DB 태그 여러 개. '@'로 시작하는 건 엔진 규칙(gen.js score):
 //   @local = 덜 알려진 곳 우선 · @famous = 유명한 곳 우선 · @night = 밤 조각 우선
-const LIKE_OPTS = [['🍜', '관광보다 먹방'], ['☕', '카페·디저트 투어'], ['🏘️', '현지인 동네 골목'], ['📸', '유명한 곳은 꼭'], ['🛍️', '쇼핑은 열정적으로'],
-  ['🖼️', '전시·문화·역사'], ['🌿', '자연 속 산책'], ['🌃', '야경·밤 산책'], ['🍶', '밤엔 술 한잔'], ['♨️', '푹 쉬는 여행']];
+const LIKE_OPTS = [['<path d="M4 11h16a8 8 0 0 1-16 0zM9.5 19.2v1.3h5v-1.3M13.5 3.5L11 10M19.5 4.5L14 10"/>', '관광보다 먹방'], ['<path d="M5 9h11v5a5 5 0 0 1-10 0zM16 10.5h1.5a2.5 2.5 0 0 1 0 5h-2M8.5 3.5V6M12 3.5V6"/>', '카페·디저트 투어'], ['<path d="M2.5 20.5v-9L6 8.5l3.5 3v9zM14.5 20.5v-9l3.5-3 3.5 3v9zM5 20.5v-3h2v3M17 20.5v-3h2v3M12 20.5v-1.25M12 16.5v-1.25M12 12.5v-1.25"/>', '현지인 동네 골목'], ['<rect x="3.5" y="7" width="17" height="12" rx="2.5"/><circle cx="12" cy="13" r="3.4"/><path d="M8.5 7l1.5-2.5h4L15.5 7"/>', '유명한 곳은 꼭'], ['<path d="M5 8h14l-1.2 11.2a1 1 0 0 1-1 .8H7.2a1 1 0 0 1-1-.8zM9 8V6.5a3 3 0 0 1 6 0V8"/>', '쇼핑은 열정적으로'],
+  ['<rect x="3.5" y="5" width="17" height="14" rx="1.5"/><path d="M3.5 16l5-5 4 4 2.5-2.5 5.5 5.5"/><circle cx="15.5" cy="9" r="1.5"/>', '전시·문화·역사'], ['<path d="M5 19C5 11 10 6 19 5c-1 9-6 14-14 14zM5 19l8-8"/>', '자연 속 산책'], ['<path d="M3 20.5h18M5 20.5v-7h4v7M9 20.5V9h5v11.5M14 20.5v-5h4v5"/><path d="M18.5 3a2.6 2.6 0 1 0 2.2 4.2A3 3 0 0 1 18.5 3z"/>', '야경·밤 산책'], ['<path d="M7 3.5h10l-1 7a4 4 0 0 1-8 0zM12 14.5v6M8.5 20.5h7M7.6 7.5h8.8"/>', '밤엔 술 한잔'], ['<path d="M3 18.5v-12M3 14.5h18v4M21 14.5v-2a3 3 0 0 0-3-3h-8.5v5"/><circle cx="6.5" cy="11.75" r="1.75"/>', '푹 쉬는 여행']];
 const LIKE_MAX = 5;
 const LIKE_DEF = { LS: ['현지인 동네 골목', '자연 속 산책'], LE: ['관광보다 먹방', '카페·디저트 투어'], HS: ['유명한 곳은 꼭', '전시·문화·역사'], HE: ['관광보다 먹방', '푹 쉬는 여행'] };   // 유형 묶음별로 미리 골라 두는 것
 const LIKE_TAGS = {
@@ -1172,8 +1179,8 @@ const placeTx = (tr, dflt) => tr.city !== '다른 곳' && tr.picks && tr.picks.l
 const myTitle = tr => String(tr.ttl || '').trim().slice(0, TITLE_MAX);
 const INFO = W5 ? ['city', 'date', 'who', 'book', 'likes', 'theme', 'send'] : ['city', 'date', 'who', 'home', 'book', 'likes', 'theme', 'send'];
 /* 11/22 3축 엔진: 'theme' 단계 = 이번 여행 주제(도시마다, 여러 개) + 이 도시 몇 번째(레벨). 엔진 input.themes · level · seen */
-const THEMES = { sel: [['kpop', '🎤', 'K-팝'], ['kfood', '🍲', 'K-푸드'], ['kbeauty', '💄', 'K-뷰티']],
-  kix: [['anime', '🎬', '애니·만화']], tyo: [['anime', '🎬', '애니·만화']], fuk: [['anime', '🎬', '애니·만화']], spk: [['anime', '🎬', '애니·만화']] };
+const THEMES = { sel: [['kpop', '<rect x="9" y="3" width="6" height="11" rx="3"/><path d="M6 11a6 6 0 0 0 12 0M12 17v4M9 21h6"/>', 'K-팝'], ['kfood', '<path d="M4 11h16v2a6 6 0 0 1-6 6h-4a6 6 0 0 1-6-6zM2.5 11h19M9.5 8c0-1.2 1-1.6 1-3M13.5 8c0-1.2 1-1.6 1-3"/>', 'K-푸드'], ['kbeauty', '<path d="M8 21V11h8v10zM9.5 11V7.5l5-3V11M8 15h8"/>', 'K-뷰티']],
+  kix: [['anime', '<rect x="3.5" y="9" width="17" height="11" rx="1.5"/><path d="M3.5 9l.8-4h15.4l-.8 4M9 5L7.5 9M14 5l-1.5 4"/>', '애니·만화']], tyo: [['anime', '<rect x="3.5" y="9" width="17" height="11" rx="1.5"/><path d="M3.5 9l.8-4h15.4l-.8 4M9 5L7.5 9M14 5l-1.5 4"/>', '애니·만화']], fuk: [['anime', '<rect x="3.5" y="9" width="17" height="11" rx="1.5"/><path d="M3.5 9l.8-4h15.4l-.8 4M9 5L7.5 9M14 5l-1.5 4"/>', '애니·만화']], spk: [['anime', '<rect x="3.5" y="9" width="17" height="11" rx="1.5"/><path d="M3.5 9l.8-4h15.4l-.8 4M9 5L7.5 9M14 5l-1.5 4"/>', '애니·만화']] };
 const VISITS = [[1, '처음이에요'], [2, '두 번째'], [3, '3~4번째'], [4, '5번 이상']];
 const visBars = n => '<svg class="vb" viewBox="0 0 16 14" aria-hidden="true">' + [0, 1, 2, 3].map(k => `<rect x="${k * 4.25}" y="${10 - k * 3}" width="2.75" height="${4 + k * 3}" rx="1.1"${k < n ? ' class="on"' : ''}/>`).join('') + '</svg>';   // 11/22 레퍼런스(Duolingo 'How much do you know?'): 다녀온 횟수 = 늘어나는 신호 막대
 const themeOf = tr => (THEMES[DEST[tr.city]] || []).filter(o => (tr.themes || []).includes(o[0]));
@@ -1818,7 +1825,7 @@ function rInfo(s) {
     if (!tr.likesSet) { tr.likes = (LIKE_DEF[(S.type || 'LSRP').slice(0, 2)] || []).slice(); tr.likesSet = true; } else tr.likes = normLikes(tr.likes);
     tr.avoid = normAvoid(tr.avoid);
     el = screen(head('취향', '이번 여행, 이것만은 꼭!', (S.type ? `${esc(T(S.type).name)} 유형에 맞춰 골라 뒀어요 · ` : '') + '최대 ' + LIKE_MAX + '개') + `
-      <div class="two" id="likeC">${LIKE_OPTS.map(o => `<button data-v="${o[1]}" aria-pressed="${tr.likes.includes(o[1])}"><em aria-hidden="true">${o[0]}</em>${o[1]}</button>`).join('')}</div>
+      <div class="two" id="likeC">${LIKE_OPTS.map(o => `<button data-v="${o[1]}" aria-pressed="${tr.likes.includes(o[1])}"><em aria-hidden="true"><svg viewBox="0 0 24 24">${o[0]}</svg></em>${o[1]}</button>`).join('')}</div>
       <p class="likes-cnt" id="likeCnt"></p>
       <div class="blk"><div class="sub2">이건 빼 주세요<span>여러 개 가능</span></div><div class="two no" id="avoidC">${AVOID.map(x => `<button data-v="${x}" aria-pressed="${tr.avoid.includes(x)}">${x}</button>`).join('')}</div></div>
       <div class="foot"><button class="cta" id="lNext">다음</button></div>`);
@@ -1833,7 +1840,7 @@ function rInfo(s) {
     const opts = THEMES[DEST[tr.city]] || [], cn = placeTx(tr, '') || '이 도시';   // 리뷰: 교토만 → '교토'
     tr.themes = (tr.themes || []).filter(v => opts.some(o => o[0] === v));   // 리뷰 #1: 레벨은 누르거나 '다음'일 때만 정함(건너뛰기 = 안 정함 = 엔진 가중 없음)
     el = screen(head('주제', opts.length ? '이번 여행 주제가 있나요?' : '몇 번째 여행이에요?', opts.length ? '고른 주제의 장소를 먼저 넣어요 · 여러 개 가능' : '다녀온 만큼 유명한 곳은 줄이고 숨은 곳을 늘려요') + `
-      ${opts.length ? `<div class="two" id="thC">${opts.map(o => `<button data-v="${o[0]}" aria-pressed="${tr.themes.includes(o[0])}"><em aria-hidden="true">${o[1]}</em>${o[2]}</button>`).join('')}</div>` : ''}
+      ${opts.length ? `<div class="two" id="thC">${opts.map(o => `<button data-v="${o[0]}" aria-pressed="${tr.themes.includes(o[0])}"><em aria-hidden="true"><svg viewBox="0 0 24 24">${o[1]}</svg></em>${o[2]}</button>`).join('')}</div>` : ''}
       <div class="blk"><div class="sub2">${opts.length ? `${esc(cn)}, 몇 번째예요?` : `${esc(cn)} 여행`}<span>${opts.length ? '숨은 곳 비율이 달라져요' : ''}</span></div><div class="two" id="vsC">${VISITS.map(v => `<button class="vs" data-v="${v[0]}" aria-pressed="${(tr.visit || 1) === v[0]}">${visBars(v[0])}${v[1]}</button>`).join('')}</div></div>
       <div class="foot"><button class="cta" id="thNext">다음</button></div>`);
     if (opts.length) $('#thC').onclick = e => { const b = e.target.closest('[data-v]'); if (!b) return; const v = b.dataset.v, i = tr.themes.indexOf(v); if (i >= 0) tr.themes.splice(i, 1); else tr.themes.push(v); b.setAttribute('aria-pressed', i < 0); tap(); };

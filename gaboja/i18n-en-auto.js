@@ -9196,7 +9196,7 @@ window.VZTR_EN_PLACES = {
 "kob-otonaka-dori-sakaemach": {
 "en": "Otonaka-dori / Sakaemachi retro building area",
 "conf": "official",
-"short": "Otonaka-dori /"
+"short": "Otonaka-dori"
 },
 "kob-rhine-house-former-dre": {
 "en": "Rhine House (Former Drewell Residence)",

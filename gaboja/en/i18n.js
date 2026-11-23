@@ -15,7 +15,7 @@
     var mf = document.createElement('link'); mf.rel = 'stylesheet'; mf.href = 'https://fonts.googleapis.com/css2?family=Mona+Sans:wght@400..800&display=swap'; (document.head || document.documentElement).appendChild(mf);
     /* Mona Sans는 고정폭 숫자(tnum)의 0에 빗금 → Apple 기기가 아니면(= Mona를 쓰면) 숫자만 일반 숫자로. Apple은 SF Pro라 그대로 */
     if (!/iPhone|iPad|iPod|Macintosh/.test(navigator.userAgent)) document.documentElement.classList.add('vz-mona');
-    var fs = document.createElement('style'); fs.id = 'vztr-en-font'; fs.textContent = 'html[lang="en"]{--kr:' + SYS + ';--kr-plain:' + SYS + ';--lat:' + SYS + ';--mono:' + SYS + '}html[lang="en"] .vzko,html[lang="en"] [lang="ko"]{font-family:' + KRF + '}html[lang="en"] #bdS{word-spacing:-2.5px}html[lang="en"] .nmc b{font-size:.9375rem}html[lang="en"] .ticket .nm,html[lang="en"] .pass .city,html[lang="en"] .rec2 b,html[lang="en"] .tile .n.one,html[lang="en"] .li .nm .one{overflow-wrap:normal;word-break:normal}html.vz-mona[lang="en"] body,html.vz-mona[lang="en"] body *{font-variant-numeric:lining-nums proportional-nums!important}'; (document.head || document.documentElement).appendChild(fs); }
+    var fs = document.createElement('style'); fs.id = 'vztr-en-font'; fs.textContent = 'html[lang="en"]{--kr:' + SYS + ';--kr-plain:' + SYS + ';--lat:' + SYS + ';--mono:' + SYS + '}html[lang="en"] .vzko,html[lang="en"] [lang="ko"]{font-family:' + KRF + '}html[lang="en"] #bdS{white-space:normal!important;overflow:visible!important;text-overflow:clip!important;-webkit-line-clamp:unset!important;text-wrap:balance}html[lang="en"] .code.k{white-space:normal!important;overflow:visible!important;text-overflow:clip!important;word-break:normal!important;overflow-wrap:normal!important;text-wrap:balance}html[lang="en"] .pass .place.pl1{flex-wrap:wrap;white-space:normal;column-gap:.25rem;row-gap:0}html[lang="en"] .pass .place.pl1 .pn{overflow:visible;text-overflow:clip}html[lang="en"] .nmc b{font-size:.9375rem}html[lang="en"] .ticket .nm,html[lang="en"] .pass .city,html[lang="en"] .rec2 b,html[lang="en"] .tile .n.one,html[lang="en"] .li .nm .one{overflow-wrap:normal;word-break:normal}html.vz-mona[lang="en"] body,html.vz-mona[lang="en"] body *{font-variant-numeric:lining-nums proportional-nums!important}'; (document.head || document.documentElement).appendChild(fs); }
   var bot = navigator.webdriver || /HeadlessChrome/.test(navigator.userAgent);
   function other() {   // 같은 화면의 다른 언어 주소
     var p = location.pathname;
@@ -49,7 +49,7 @@
   function mount() {
     if (document.querySelector('.vzlang') || !/\/(index\.html|start\.html)?$/.test(location.pathname)) return;   // 리뷰 #9: 덜어내기 보드 등엔 영어판이 없음
     var b = document.createElement('a'); b.className = 'vzlang'; b.href = other(); b.setAttribute('data-noi18n', '');
-    b.innerHTML = '<span class="vzp"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c3 3.2 3 14.8 0 18M12 3c-3 3.2-3 14.8 0 18"/></svg><span class="vzt">' + (EN ? 'KO' : 'EN') + '</span></span>'; b.setAttribute('aria-label', EN ? 'View in Korean' : '영어로 보기'); b.lang = EN ? 'ko' : 'en'; b.setAttribute('hreflang', b.lang);
+    b.innerHTML = '<span class="vzp"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c3 3.2 3 14.8 0 18M12 3c-3 3.2-3 14.8 0 18"/></svg><span class="vzt" lang="' + (EN ? 'ko' : 'en') + '">' + (EN ? '한국어' : document.querySelector('header.bar') ? 'English' : 'EN') + '</span></span>';   /* 11/23 impeccable E7: 바꿀 언어를 그 언어 이름으로(W3C·GOV.UK) — 'KO'는 지금 언어처럼 읽힘 · 한국어판 가이드북 머리는 자리가 좁아 EN 유지 */ b.setAttribute('aria-label', EN ? 'View in Korean' : '영어로 보기'); b.lang = EN ? 'ko' : 'en'; b.setAttribute('hreflang', b.lang);
     b.onclick = function (e) { e.preventDefault(); go(); };
     var bar = document.querySelector('header.bar'), pill = document.querySelector('.top .pill');
     if (bar) { bar.classList.add('vzl'); bar.appendChild(b); }
@@ -103,7 +103,7 @@
       var nums2 = t.replace(PN, '@').match(/\d+/g) || [], v1 = got.length ? D[t2] : null;
       if (v1 != null) { var a = 0, b = 0; r = String(v1).replace(/@/g, function () { return got[a++] || ''; }).replace(/#/g, function () { return nums2[b++] || ''; }); }
     }
-    if (r == null) for (var i2 = 0; i2 < PATS2.length; i2++) { var m2 = t.match(PATS2[i2][0]); if (!m2) continue; var g = m2.slice(1).map(function (v) { return HAN.test(v) ? (tr(v, true) || v).trim() : v; }); if (g.some(function (v) { return HAN.test(v); })) continue; r = PATS2[i2][2]; PATS2[i2][1].forEach(function (n, j) { r = r.replace('{' + n + '}', function () { return g[j]; }); }); break; }   // 리뷰 #2
+    if (r == null) for (var i2 = 0; i2 < PATS2.length; i2++) { var m2 = t.match(PATS2[i2][0]); if (!m2) continue; var g = m2.slice(1).map(function (v) { return HAN.test(v) ? (tr(v, true) || dotJoin(v) || v).trim() : v; }); if (g.some(function (v) { return HAN.test(v); })) continue; r = PATS2[i2][2]; PATS2[i2][1].forEach(function (n, j) { r = r.replace('{' + n + '}', function () { return g[j]; }); }); break; }   // 리뷰 #2
     if (r == null) {   // 11/22 ' · '·' — '·' → ' 로 이어 붙인 문장 = 조각마다 번역해서 다시 이음. 바깥 구분자부터 한 겹씩(조각 이름에 ' → '가 들어 있어도 됨) · 조각이 하나라도 못 옮기면 통째로 빠진 것
       for (var si = 0, SEP = [' · ', ' — ', ' → ']; si < SEP.length; si++) {
         if (t.indexOf(SEP[si]) < 0) continue;
@@ -116,6 +116,8 @@
     if (r == null) { var mk = /\d/.test(t) ? t.replace(/\d+/g, '#') : t; if (PN && t.replace(PN, '@') !== t) mk = t.replace(PN, '@').replace(/\d+/g, '#'); API.miss.set(mk, (API.miss.get(mk) || 0) + 1); return null; }   // 빠진 목록 = 사전 키 모양 그대로(숫자 #, 장소 @)
     return s.replace(t, function () { return r; });   // r 안의 '$' 글자가 치환 기호로 읽히지 않게
   }
+  /* 11/23 impeccable E1: 띄어쓰지 않은 '·'로 이은 도시 묶음('오사카·고베')은 조각마다 옮겨 영어식으로 이음 → 'Osaka & Kobe' · 'Osaka, Kyoto & Nara' (영어엔 가운뎃점을 안 씀) */
+  function dotJoin(v) { if (v.indexOf('·') < 0 || /\s·|·\s/.test(v)) return null; var ps = v.split('·').map(function (x) { return HAN.test(x) ? tr(x, true) : x; }); if (ps.some(function (x) { return x == null || HAN.test(x); })) return null; ps = ps.map(function (x) { return x.trim(); }); return ps.length < 3 ? ps.join(' & ') : ps.slice(0, -1).join(', ') + ' & ' + ps[ps.length - 1]; }
   API.t = window.T = function (s) { var r = tr(String(s)); return r == null ? s : r; };
   API.has = function (s) { return D[String(s).trim()] != null; };   // 사전에 통째 문장이 있는지(틀이 통째 문장을 가로채지 않게)
   API.tq = function (s) { var r = tr(String(s), true); return r == null ? s : r; };   // 조용한 번역(못 옮겨도 빠진 목록에 안 쌓음) — 틀 안에서 조각을 옮길 때
@@ -131,7 +133,7 @@
   API.node = function (el) { if (L === 'en' && el) node(el); };   // 11/22 그 자리에서 바로 번역(한 줄 맞추기 swFit이 영어 폭으로 재게)
   var lastT = ''; function title() { if (document.title === lastT) return; var r = tr(document.title); if (r != null) { lastT = r; document.title = r; } }
   /* 11/23 영어판: 발급 완료 탑승권 도시 이름(.pass .city · .ticket .nm)이 'Osaka·Kyot/o'처럼 단어 중간에서 끊기던 것 → 끊지 않고, 넘치면 글자를 줄여 한 줄에(최소 20px) · 장소 추가 목록 이름 'Cheonggyecheo/n'도(최소 11px) */
-  var nmR = 0; function fitNm() { if (nmR) return; nmR = requestAnimationFrame(function () { nmR = 0; [['.ticket .nm, .pass .city', 20], ['.rec2 b, .tile .n.one, .li .nm .one', 11]].forEach(function (q) { var es = document.querySelectorAll(q[0]); for (var i = 0; i < es.length; i++) { var e = es[i]; if (!e.clientWidth) continue; var k = e.textContent + '|' + e.clientWidth; if (e._vzf === k) continue; e._vzf = k; e.style.fontSize = ''; var fs = parseFloat(getComputedStyle(e).fontSize); while (e.scrollWidth > e.clientWidth + 1 && fs > q[1]) { fs -= 0.5; e.style.fontSize = fs + 'px'; } } }); }); }
+  var nmR = 0; function fitNm() { if (nmR) return; nmR = requestAnimationFrame(function () { nmR = 0; [['.ticket .nm, .pass .city', 20], ['.rec2 b, .tile .n.one, .li .nm .one', 11], ['.pass .route .code', 14]].forEach(function (q) { var es = document.querySelectorAll(q[0]); for (var i = 0; i < es.length; i++) { var e = es[i]; if (!e.clientWidth) continue; var k = e.textContent + '|' + e.clientWidth; if (e._vzf === k) continue; e._vzf = k; e.style.removeProperty('font-size'); var fs = parseFloat(getComputedStyle(e).fontSize); while (e.scrollWidth > e.clientWidth + 1 && fs > q[1]) { fs -= 0.5; e.style.setProperty('font-size', fs + 'px', 'important'); } } }); }); }
   function start() {
     node(document.body); title(); fitNm(); addEventListener('resize', fitNm); try { document.fonts.ready.then(fitNm); } catch (_) {}
     new MutationObserver(function (ms) {

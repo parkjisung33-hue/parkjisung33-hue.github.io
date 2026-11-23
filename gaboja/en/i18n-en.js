@@ -27,7 +27,7 @@ window.VZTR_EN = {
   '어디로': 'Where', '어디로 가세요?': 'Where are you going?', '가는 곳은 계속 늘려 갈게요': 'More cities soon',
   '언제': 'When', '언제 가세요?': 'When are you going?', '누구와': 'Who', '누구와 가세요?': 'Who’s coming?',
   '공항': 'Airport', '어느 공항에 도착하세요?': 'Where do you land?', '도착 공항에서 일정을 시작해요. 시각은 몰라도 돼요.': 'Your plan starts when you land. Times are optional.',
-  '도착 공항': 'Arrival airport', '도착 비행기': 'Arriving flight', '출국 비행기': 'Departing flight', '도착': 'Arrive', '출발': 'Depart', '출처 외교부·JNTO': 'Source: MOFA · JNTO', '사진 Commons 외': 'Photos: Commons etc.', '날씨 Open-Meteo': 'Weather: Open-Meteo', '경로 © OpenStreetMap': 'Routes © OpenStreetMap', '내 나라 대사관 찾기': 'Find your embassy', '일본 외무성 공식 목록': 'Official list · MOFA Japan', '한국 외교부 공식 목록': 'Official list · MOFA Korea', '목록 열기': 'Open list', 'JNTO · 24시간 · 영어·중국어·한국어': 'JNTO · 24 h · EN, ZH, KO', '확인 완료': 'Got it', '야경·밤 산책': 'Night views·walks', '확인함': 'Checked', '확인 완료로 표시했어요': 'Marked as checked', '확인 표시를 지웠어요': 'Check mark removed', '내 링크 복사': 'Copy my link', '다른 폰에서도 열기': 'Open on another phone', '사진 Commons·Openverse·공공누리': 'Photos Commons·Openverse·KOGL', '날씨 Open-Meteo (CC BY 4.0)': 'Weather Open-Meteo (CC BY 4.0)',
+  '도착 공항': 'Arrival airport', '도착 비행기': 'Arriving flight', '출국 비행기': 'Departing flight', '도착': 'Arrive', '출발': 'Depart', '출처 외교부·JNTO': 'Source: MOFA · JNTO', '사진 Commons 외': 'Photos: Commons etc.', '날씨 Open-Meteo': 'Weather: Open-Meteo', '경로 © OpenStreetMap': 'Routes © OpenStreetMap', '내 나라 대사관 찾기': 'Find your embassy', '일본 외무성 공식 목록': 'Official list · MOFA Japan', '한국 외교부 공식 목록': 'Official list · MOFA Korea', '목록 열기': 'Open list', 'JNTO · 24시간 · 영어·중국어·한국어': 'JNTO · 24 h · EN, ZH, KO', '확인 완료': 'Got it', '야경·밤 산책': 'Night views & walks', '확인함': 'Checked', '확인 완료로 표시했어요': 'Marked as checked', '확인 표시를 지웠어요': 'Check mark removed', '내 링크 복사': 'Copy my link', '다른 폰에서도 열기': 'Open on another phone', '사진 Commons·Openverse·공공누리': 'Photos Commons·Openverse·KOGL', '날씨 Open-Meteo (CC BY 4.0)': 'Weather Open-Meteo (CC BY 4.0)',
   '편명 (예: KE902)': 'Flight no. (e.g. KE902)', '편명 (예: OZ221)': 'Flight no. (e.g. OZ221)',
   '숙소': 'Stay', '숙소 이름': 'Hotel name', '동네 이름 (예: 홍대)': 'Area (e.g. Hongdae)', '동네 이름 (예: 해운대)': 'Area (e.g. Haeundae)',
   '모르면 비워 두세요 · 나중에 앱에서 넣어도 돼요': 'Not sure? Leave it blank.',
@@ -54,7 +54,7 @@ window.VZTR_EN = {
   '기록': 'Log', '여행 기록': 'Travel log', '기록 보기': 'View log', '하루가 끝나면 자동으로 저장돼요': 'Saves itself at the end of each day',
   '화면': 'Display', '길안내': 'Navigate', '일정 추가': 'Add to plan', '메뉴': 'Menu', '새 여행': 'New trip', '내 여행': 'My trips', '내 일정': 'My plan', '여행 요약': 'Trip summary',
   '보관함': 'Archive', '여행 정보 수정': 'Edit trip info', '공유하기': 'Share', '설정': 'Settings', '화면 모드': 'Theme', '시스템': 'System', '라이트': 'Light', '다크': 'Dark', '홈 화면에 추가': 'Add to Home Screen',
-  '시작': 'Start', '마무리': 'Wrap-up', '숙소 · 짐': 'Hotel · Bags', '숙소 체크인': 'Hotel check-in', '체크인': 'Check-in', '체크아웃': 'Check-out', '취침': 'Bedtime', '시간 고정': 'Fixed time',
+  '시작': 'Start', '마무리': 'Wrap-up', '숙소 · 짐': 'Check-in & bags', '숙소 체크인': 'Hotel check-in', '체크인': 'Check-in', '체크아웃': 'Check-out', '취침': 'Bedtime', '시간 고정': 'Fixed time',
   '머무는 시간': 'Time here', '15분 줄이기': '15 min less', '15분 늘리기': '15 min more', '메모 적기': 'Add a note', '추가': 'Add', '↑ 앞으로': '↑ Earlier', '↓ 뒤로': '↓ Later', '보관': 'Archive',
   '영업시간 확인': 'Check hours', '가는 순서': 'Route order', '다음 순서': 'Next stop', '수정하기': 'Edit', '수정': 'Edit', '입력하기': 'Enter', '숙소 정하기': 'Set hotel', '다시 보내기': 'Resend',
   '샘플 일정 보기': 'See a sample plan', '발급 완료': 'Done', '동행': 'With', '면': 'Noodles', '바': 'Bar', '야나카긴자 계단 위에 있는 노포예요': 'A long-running shop at the top of the Yanaka Ginza steps', '야나카 #층 크림소다 카페': 'Yanaka cream soda café, floor #', '라무네 맛 크림소다가 간판 메뉴예요': 'Ramune-flavored cream soda is the signature', '직접 만든 반찬과 튀김 정식이 인기예요': 'Popular for homemade sides and tempura set meals', '니시진 학생·동네 정식집': 'Set-meal diner for Nishijin students and locals', '치킨난반 정식이 가장 인기예요': 'The chicken nanban set meal is the favorite', '취향': 'Likes', 'NEXT · 다음 할 일': 'NEXT · To do', '좋아요': 'Like', '패스': 'Pass', '거리': 'Street',
@@ -74,7 +74,7 @@ window.VZTR_EN = {
   'DAY {n} 일정 보기': 'View DAY {n}', 'DAY {n} {m} / {d} 진행': 'DAY {n} · {m} of {d} done', '긴급 연락처 {n}': 'Emergency {n}',
   '{n}곳': '{n} places', '{n}곳 예정': '{n} planned', '장소 {n}곳': '{n} places', '{n}곳 중 {m}곳': '{m} of {n}', '{n}번째': '#{n}', '선택 {n} / {m}': '{n} of {m} picked',
   '강수확률 {n}%': 'Rain {n}%', '날씨 {n}도 {m}도': 'Weather {n}° / {m}°', '{x}에서 {n}일': '{n} days in {x}', '{x} 지도': '{x} map',
-  '걸어서 · 약 {n}분': 'Walk · about {n} min',
+  '걸어서 · 약 {n}분': 'Walk · ~{n} min',
   // 11/22 동네 이름이 끼는 문장 = 틀 하나로 (도시별로 한 줄씩 넣던 방식은 새 동네에서 한글이 남음 — '오다이바 근처')
   '{x} 근처': 'Near {x}', '{x} 역 근처': 'Near {x} Station', '{x} 근처에서 갈 곳을 넣어 보세요': 'Add a place to go near {x}',
   '점심 — {x} 근처': 'Lunch — near {x}', '저녁 — {x} 근처': 'Dinner — near {x}', '브런치 — {x} 근처': 'Brunch — near {x}', '아침 — {x} 근처': 'Breakfast — near {x}',
@@ -106,7 +106,7 @@ window.VZTR_EN = {
   '{x}로 유명해요': x => { const e = window.VZTR_I18N && VZTR_I18N.t(String(x).replace(/으$/, '')); return e && !/[가-힣]/.test(e) ? 'Known for ' + e : null; },
   '대표 {x}': x => { const e = window.VZTR_I18N && VZTR_I18N.t(x); return e && !/[가-힣]/.test(e) ? 'Known for ' + e : null; },
   // 출발 안내판 아래 줄 '로컬, 구경 쪽' = 짧은 축 이름
-  '{x} 쪽': x => { const S = { '로컬': 'Local', '핫플': 'Hotspot', '구경': 'Sights', '즐기기': 'Fun', '알차게': 'Packed', '여유롭게': 'Easy', '계획형': 'Plan', '즉흥형': 'Free' }, p = x.split(/,\s*/); return p.every(w => S[w]) ? p.map(w => S[w]).join(' · ') : null; },
+  '{x} 쪽': x => { const S = { '로컬': 'Local', '핫플': 'Hotspot', '구경': 'Sightseeing', '즐기기': 'Enjoying', '알차게': 'Full', '여유롭게': 'Relaxed', '계획형': 'Planner', '즉흥형': 'Spontaneous' }, p = x.split(/,\s*/); return p.every(w => S[w]) ? p.map(w => S[w]).join(', ') : null; },
   // 하루 제목(엔진 themeTitle) = 짧게
   '{x} 도착, {y}': (c, w) => VZTR_EN_FN.DAYW(w) ? 'Arrive · ' + VZTR_EN_FN.DAYW(w) : null, '{x}에서의 {y}': (c, w) => VZTR_EN_FN.DAYW(w) ? VZTR_EN_FN.DAYW(w) : null,
   '{x}에서 마지막 {y}': (c, w) => VZTR_EN_FN.DAYW(w) ? 'Last · ' + VZTR_EN_FN.DAYW(w) : null, '{x} 당일치기 {y}': (c, w) => VZTR_EN_FN.DAYW(w) ? 'Day trip · ' + VZTR_EN_FN.DAYW(w) : null,
@@ -137,7 +137,7 @@ window.VZTR_EN = {
   '23:30을 넘겨서 이 시간으로는 못 바꿔요': 'That would run past 11:30 PM',
   '23:30 넘어서 끝나요 · 더 이른 시각을 골라 주세요': 'Ends after 11:30 PM · Pick an earlier time',
   // 틀(숫자)
-  '{n}박 {m}일': '{n} nights · {m} days', '약 {n}분': 'about {n} min', '{n}분': '{n} min', '약 {n}시간 {m}분': 'about {n} h {m} min', '{n}시간 {m}분': '{n} h {m} min', '{n}시간': '{n} h',
+  '{n}박 {m}일': '{n} nights · {m} days', '약 {n}분': '~{n} min', '{n}분': '{n} min', '약 {n}시간 {m}분': '~{n} h {m} min', '{n}시간 {m}분': '{n} h {m} min', '{n}시간': '{n} h',
   'DAY {n}': 'DAY {n}',
 };
 
@@ -181,6 +181,7 @@ window.VZTR_EN = {
     '출발 {n}. {m}': 'Departs {n}/{m}',
     '+{n}곳': '+{n} more',   // F-14 여행 요약 남은 장소 수
     '{n}월 {m}일 {x}': (m, d, w) => WK[w] ? WK[w] + ', ' + MON[m - 1] + ' ' + d : null,
+    '{n}월 {m}일 {x} – {d}일 {y}': (m, d, w, e, z) => WK[w] && WK[z] ? MON[m - 1] + ' ' + d + ' ' + WK[w] + ' – ' + e + ' ' + WK[z] : null,   // 11/23 impeccable E2: 여행 날짜 줄 '11월 4일 금 – 6일 토'가 한글로 남던 것
     '{n}일 · {m}월 {d}일 {x} – {y}일 {z}': (n, m, d, w, y, z) => WK[w] && WK[z] && num(y) ? n + ' days · ' + m + '/' + d + ' ' + WK[w] + ' – ' + y + ' ' + WK[z] : null,
     // 사진 출처: 사진 © 이름 · 라이선스  /  사진 · Google · 이름   (이름 = 영어 > 로마자, 라이선스는 영어로)
     '사진 © {x} · {y}': (x, y) => { const e = HAN.test(y) ? FULL(y) : y; return e ? 'Photo © ' + EN1(x) + ' · ' + e : null; },
@@ -208,7 +209,7 @@ window.VZTR_EN = {
     '{x} 역': wrapAfter(' 역', e => e + ' Station'),
     '{x}까지 도착 · 출발 {n}시간 전': (x, n) => { const m = /^(.+) (\d{1,2}:\d{2})$/.exec(x), e = m && FULL(m[1]); return e ? e + ' by ' + m[2] + ' · ' + n + ' h early' : null; },
     '{x}까지 도착 · 출발 {n}분 전': (x, n) => { const m = /^(.+) (\d{1,2}:\d{2})$/.exec(x), e = m && FULL(m[1]); return e ? e + ' by ' + m[2] + ' · ' + n + ' min early' : null; },
-    '{x} 약 {n}분': '{x} · about {n} min', '{x} 약 {n}시간 {m}분': '{x} · about {n} h {m} min', '{x} 약 {n}시간': '{x} · about {n} h',
+    '{x} 약 {n}분': '{x} · ~{n} min', '{x} 약 {n}시간 {m}분': '{x} · ~{n} h {m} min', '{x} 약 {n}시간': '{x} · ~{n} h',
     '{x} 당일치기': '{x} day trip', '{x}에서 자유 시간': wrapAfter('에서 자유 시간', e => 'Free time in ' + e),
     // 코드가 붙은 이름: '골목 산책가' 앞 'LSRJ' · '인천 → 간사이 KE723' · '간사이 KIX' · '부산역 011'
     '{x} {y}': (a, b) => { if (/^[LH][SE][FR][JP]$/.test(a)) { const e = FULL(b); return e ? a + ' ' + e : null; } if (CODE.test(b)) { const e = FULL(a); return e ? e + ' ' + b : null; } return null; },
@@ -264,3 +265,18 @@ Object.assign(window.VZTR_EN, {
     '{x} 숙소에서 출발': x => { const e = FULL(x); return e ? 'Leave from your stay in ' + e : null; },
   });
 })();
+/* 11/23 impeccable 영어 문구: 영어엔 가운뎃점(·)을 안 씀 → '&'·쉼표, 한국어 직역 다듬기 (자동 사전보다 손 사전이 이김) */
+Object.assign(window.VZTR_EN, {
+  '오사카·교토': 'Osaka & Kyoto', '현지 마트·시장 장보기': 'Browse local markets', '카페·디저트 투어': 'Cafés & desserts',
+  '결과는 탑승권 한 장': 'Result = your boarding pass', '안 가 본 동네 골목 걷기': 'Wander a new neighborhood',
+  '약 #시간': '~# h', '도착 #:# 예상': 'Arrives ~#:#',
+  // E9: 자동 번역에 남은 ' / &' (빗금 찌꺼기)
+  '오토나카도리와 나가타 탱크스지': 'Otonaka-dori & Nagata Tankusuji', '오토나카도리와 모토마치 깃사': 'Otonaka-dori & Motomachi Kissa', '오토나카도리와 칼라스 카페&갤러리': 'Otonaka-dori & Calas Cafe',
+  '위 탑승권': 'see pass above',
+  // E6: 시각 미정 안내 = 짧고 같은 말투로 (버튼 안에서 두 줄로 꺾이던 것)
+  '가는 비행기 시각 미입력 · 넣으면 시간이 정해져요': 'Outbound flight time? Add it', '오는 비행기 시각 미입력 · 넣으면 시간이 정해져요': 'Return flight time? Add it',
+  '가는 열차 시각 미입력 · 넣으면 시간이 정해져요': 'Outbound train time? Add it', '오는 열차 시각 미입력 · 넣으면 시간이 정해져요': 'Return train time? Add it',
+  '시각 미입력 · 넣으면 시간이 정해져요': 'Time not set? Add it',
+  '비행기 시각을 넣으면 그날 시간이 정해져요': 'Add the flight time to set this day', '열차 시각을 넣으면 그날 시간이 정해져요': 'Add the train time to set this day', '시각을 넣으면 그날 시간이 정해져요': 'Add a time to set this day',   // 'about 3 h 14 min'이 잘리던 것 → '~3 h 14 min'
+  '로컬': 'Local', '핫플': 'Hotspot', '구경': 'Sightseeing', '즐기기': 'Enjoying', '알차게': 'Full', '여유롭게': 'Relaxed', '계획형': 'Planner', '즉흥형': 'Spontaneous',   // 유형 4축 = 화면마다 같은 낱말 (글자 L·H·S·E·F·R 와 첫 글자 맞춤)
+});

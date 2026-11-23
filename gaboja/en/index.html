@@ -18,7 +18,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400..800&family=Zen+Kaku+Gothic+New:wght@400;700&display=swap">
 <script src="inapp.js?v=1"></script>
-<script src="i18n-en-auto.js?v=3ea1d130"></script><script src="i18n-en.js?v=3ea1d130"></script><script src="i18n.js?v=3ea1d130"></script><!-- 11/20 W5 언어 틀 (영어판 = /en/, 사전 i18n-en.js는 배포 때 en/에만 붙음) -->
+<script src="i18n-en-auto.js?v=4790e0ae"></script><script src="i18n-en.js?v=4790e0ae"></script><script src="i18n.js?v=4790e0ae"></script><!-- 11/20 W5 언어 틀 (영어판 = /en/, 사전 i18n-en.js는 배포 때 en/에만 붙음) -->
 <link rel="stylesheet" href="fonts/vztr-fonts.css?v=2"><!-- 11/19 글꼴: 굵은 한글 IBM Plex Sans KR · 보통 한글 Pretendard · 영문·숫자 IBM Plex Sans -->
 <style>
 /* Pretendard 1.3.9 (SIL OFL 1.1) — 공식 배포본(orioncactus/pretendard)을 fonts/에 함께 올림 */
@@ -30,7 +30,7 @@
    손동작: 꾹 눌러 옮기기(다른 일정이 비켜남, 요약·상세) · 상세 목록만 왼쪽으로 밀면 '보관' 버튼 → 눌러야 보관(11/14) · 눌러서 라벨/색. 비행기·이동은 고정. 라이트/다크/시스템은 메뉴 맨 아래 */
 :root {
   color-scheme: light;
-  --canvas: #F3F3F5; --ink: #16171A; --sub: #6B6E75; --hair: rgba(22,23,26,.09); --on-ink: #FFFFFF;
+  --canvas: #F3F3F5; --ink: #16171A; --sub: #5F6269; --hair: rgba(22,23,26,.09); --on-ink: #FFFFFF;
   --glass: rgba(255,255,255,.62); --glass-hi: rgba(255,255,255,.94); --glass-edge: rgba(255,255,255,.85); --glass-hl: rgba(255,255,255,.9);
   --paper: #FFFFFF; --tile: rgba(255,255,255,.86); --tile-edge: rgba(255,255,255,.98); --field: #FFFFFF; --sheet: rgba(255,255,255,.9);
   --red: #CF3F66; --amber: #E8912A; --blue: #1F5FE0; --on-blue: #FFFFFF; --past: #C9CDD3; --past-tx: #A3A8AF;
@@ -44,7 +44,7 @@
 }
 @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
   color-scheme: dark;
-  --canvas: #0E1013; --ink: #ECEEF1; --sub: #8F969F; --hair: rgba(255,255,255,.08); --on-ink: #0E1013;
+  --canvas: #0E1013; --ink: #ECEEF1; --sub: #9AA1AA; --hair: rgba(255,255,255,.08); --on-ink: #0E1013;
   --glass: rgba(30,33,38,.62); --glass-hi: rgba(255,255,255,.14); --glass-edge: rgba(255,255,255,.08); --glass-hl: rgba(255,255,255,.06);
   --paper: #1B1E23; --tile: rgba(36,40,46,.9); --tile-edge: rgba(255,255,255,.06); --field: #15181C; --sheet: rgba(24,27,31,.94);
   --red: #F06A8A; --amber: #F0A84A; --blue: #6D97EB; --on-blue: #16171A; --past: #3A3F46; --past-tx: #646B75;
@@ -53,7 +53,7 @@
   --sh-xs: 0 1px 2px rgba(0,0,0,.35), 0 0.25rem 0.75rem -0.375rem rgba(0,0,0,.55); } }
 :root[data-theme="dark"] {
   color-scheme: dark;
-  --canvas: #0E1013; --ink: #ECEEF1; --sub: #8F969F; --hair: rgba(255,255,255,.08); --on-ink: #0E1013;
+  --canvas: #0E1013; --ink: #ECEEF1; --sub: #9AA1AA; --hair: rgba(255,255,255,.08); --on-ink: #0E1013;
   --glass: rgba(30,33,38,.62); --glass-hi: rgba(255,255,255,.14); --glass-edge: rgba(255,255,255,.08); --glass-hl: rgba(255,255,255,.06);
   --paper: #1B1E23; --tile: rgba(36,40,46,.9); --tile-edge: rgba(255,255,255,.06); --field: #15181C; --sheet: rgba(24,27,31,.94);
   --red: #F06A8A; --amber: #F0A84A; --blue: #6D97EB; --on-blue: #16171A; --past: #3A3F46; --past-tx: #646B75;
@@ -251,11 +251,11 @@ html.ios-tab.ios26 .thask { bottom: calc(9.75rem + env(safe-area-inset-bottom, 0
 .hint { padding: 0 0.25rem; font-size: 0.75rem; color: var(--sub); }
 /* 주의: 점 색 = 일정 블록의 점 색 (빨강 시간 고정 · 호박 확인 필요 · 회색 알아 두기) */
 .sec { border-radius: var(--r-lg); padding: 0.875rem 1rem 0.375rem; }
-.sec h4 { margin: 0 0 0.25rem; font-size: 0.875rem; font-weight: 700; display: flex; align-items: center; gap: 0.5rem; }
-.sec h4 svg { width: 1.125rem; height: 1.125rem; stroke: currentColor; fill: none; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
-.sec h4.warnh svg { color: var(--amber); }
+.sec h4, .sec h3.warnh { margin: 0 0 0.25rem; font-size: 0.875rem; font-weight: 700; display: flex; align-items: center; gap: 0.5rem; }
+.sec h4 svg, .sec h3.warnh svg { width: 1.125rem; height: 1.125rem; stroke: currentColor; fill: none; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+.sec h3.warnh svg { color: var(--amber); }
 .nrow { display: grid; grid-template-columns: 1.375rem minmax(0,1fr) auto; gap: 0.625rem; align-items: center; padding: 0.625rem 0; border-top: 1px solid var(--hair); width: 100%; text-align: left; font-size: 0.84375rem; }
-.sec h4 + .nrow { border-top: 0; }
+.sec h4 + .nrow, .sec h3.warnh + .nrow { border-top: 0; }
 .nrow .kd { width: 0.5rem; height: 0.5rem; justify-self: center; }
 .kd.gray { background: var(--sub); }
 .nrow .ic { width: 1.375rem; height: 1.375rem; display: grid; place-items: center; color: var(--sub); }
@@ -595,7 +595,7 @@ body { letter-spacing: 0; }
 :root[data-theme="dark"] .pass.live::after { background: linear-gradient(105deg, transparent 38%, rgba(255,255,255,.12) 50%, transparent 62%); }
 @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .pass.live::after { background: linear-gradient(105deg, transparent 38%, rgba(255,255,255,.12) 50%, transparent 62%); } }
 @keyframes passglow { 0%, 100% { box-shadow: 0 0 0 1.5px var(--blue), 0 0 0 0 color-mix(in srgb, var(--blue) 30%, transparent), var(--shadow); }
-  50% { box-shadow: 0 0 0 1.5px var(--blue), 0 0 1.5rem 0.25rem color-mix(in srgb, var(--blue) 28%, transparent), var(--shadow); } }
+  50% { box-shadow: 0 0 0 2.5px var(--blue), 0 0 0 0 transparent, var(--shadow); } }
 @keyframes sheen { 0%, 55% { transform: translateX(-110%); } 85%, 100% { transform: translateX(110%); } }
 .pass .live-tag { color: var(--blue); }
 .tile.flyref .n { color: var(--blue); }
@@ -896,9 +896,9 @@ body { letter-spacing: 0; }
 .pass.flycard.live { box-shadow: inset 0 0 0 1.5px var(--c, var(--blue)), var(--shadow); animation: passglow 2.2s ease-in-out infinite; }
 .pass.flycard.live .perf::before, .pass.flycard.live .perf::after { animation: notchglow 2.2s ease-in-out infinite; }
 @keyframes passglow { 0%, 100% { box-shadow: inset 0 0 0 1.5px var(--c, var(--blue)), inset 0 0 0 0 transparent, var(--shadow); }
-  50% { box-shadow: inset 0 0 0 1.5px var(--c, var(--blue)), inset 0 0 1.25rem 0 color-mix(in srgb, var(--c, var(--blue)) 22%, transparent), var(--shadow); } }
+  50% { box-shadow: inset 0 0 0 2.5px var(--c, var(--blue)), inset 0 0 0 0 transparent, var(--shadow); } }   /* 11/23 impeccable #9: 번지는 파란 빛(흐림 halo) → 테두리 두께만 1.5↔2.5px로 숨쉬기 (AI 티 나는 glow 없앰 · 취향 '광택·입체 X') */
 @keyframes notchglow { 0%, 100% { box-shadow: inset 0 0 0 1.5px var(--c, var(--blue)), 0 0 0 0 transparent; }
-  50% { box-shadow: inset 0 0 0 1.5px var(--c, var(--blue)), 0 0 0.75rem 0 color-mix(in srgb, var(--c, var(--blue)) 22%, transparent); } }
+  50% { box-shadow: inset 0 0 0 2.5px var(--c, var(--blue)), 0 0 0 0 transparent; } }
 .pass.flycard .ban { background: color-mix(in srgb, var(--c, var(--blue)) 12%, transparent); color: color-mix(in srgb, var(--c, var(--blue)) 80%, var(--ink)); }
 .pass.flycard .live-tag { color: color-mix(in srgb, var(--c, var(--blue)) 80%, var(--ink)); }
 @media (prefers-reduced-motion: reduce) { .pass.flycard.live, .pass.flycard.live .perf::before, .pass.flycard.live .perf::after { animation: none; } }
@@ -1299,11 +1299,13 @@ html[data-theme="dark"][data-grp="HE"] { --me-soft: color-mix(in srgb, #C17192 2
 .bh { align-items: center; }
 .bh b { font-size: 0.96875rem; letter-spacing: -0.01em; }
 .band .bh > span { display: none; }
-.bh .dhint { margin-left: auto; display: inline-flex; align-items: center; gap: 0.1875rem; font-style: normal; font-size: max(0.6875rem, 11px); font-weight: 500; color: var(--sub); white-space: nowrap; }
+.bh .dhint { margin-left: auto; display: inline-flex; align-items: center; gap: 0.1875rem; font-style: normal; font-size: max(0.75rem, 12px); font-weight: 600; color: var(--sub);   /* 11/23 impeccable #8: 11px·500 → 12px·600 (안내가 안 보이던 것) */ white-space: nowrap; }
 .bh .dhint svg { width: 0.75rem; height: 0.75rem; stroke: currentColor; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
 #dayBody .tile .t, #dayBody .tile .t * { font-size: 0.75rem !important; }
 #dayBody .tile .t { height: 1rem; line-height: 1rem; }
 #dayBody .tile .t .ti, #dayBody .tile .t .ti svg { width: 0.8125rem; height: 0.8125rem; }
+/* 11/23 impeccable #10: 식사·이동·숙소 구분이 안 보이던 것 → 종류 아이콘 13 → 15px · 회색 → 글자색 75% (색은 주의·지금·직접 추가 표시 전용이라 종류별 색은 안 씀, 11/19 결정) */
+#dayBody .tile .t .ti, #dayBody .tile .t .ti svg { width: 0.9375rem; height: 0.9375rem; } #dayBody .tile .t .ti svg { stroke: color-mix(in srgb, var(--ink) 75%, transparent); }
 #dayBody .tile .n { font-size: 0.9375rem; }
 .li .tm { font-size: 0.8125rem; }
 .li .tm small { font-size: max(0.6875rem, 11px); }
@@ -2203,7 +2205,7 @@ function renderPlan(flashId) {
     const tag = it ? (ack ? 'div role="button" tabindex="0"' : 'button') + ' data-open="' + it.id + '"' : 'div', end = it && !ack ? 'button' : 'div';
     return '<' + tag + ' class="nrow"><i class="kd ' + n.lv + '"></i><span class="nt">' + esc(n.t) + '</span>' + (ack ? '<button type="button" class="ackb" data-acknote="' + i + '">확인 완료</button>' : '<span class="v ' + n.lv + '">' + W[n.lv] + '</span>') + '</' + end + '>';
   }).join('');
-  $('#warn').innerHTML = WL ? '<h4 class="warnh">' + NICON.amber + '주의</h4>' + WL : '';
+  $('#warn').innerHTML = WL ? '<h3 class="warnh">' + NICON.amber + '주의</h3>' + WL : '';
   $('#warn').hidden = !WL;
   $('#dayBody').innerHTML = st.mode === 'simple' ? blocks(d) : list(d);
   if (st.mode === 'simple') fitTiles();
@@ -2225,7 +2227,8 @@ function moveItem(id, toId, after) {
   if (nb) { const ti2 = timeIssue(nb); L.splice(0, L.length, ...L0); recompute(d); renderPlan(); toast(ti2.hard + ' · ' + ti2.fix + '에 옮겨 주세요'); return; }
   renderPlan(id);
   const soft = timeIssue(it).soft;
-  toast(clash ? '비행기 시각과 겹쳐요 · 다시 옮겨 주세요' : anchorWarn(d) || (soft ? soft + ' · 확인 필요' : '‘' + (it.sh || it.n) + '’ 옮김' + (d.tbd ? '' : ' · ' + it.s + ' 시작')));
+  const undo = () => { L.splice(0, L.length, ...L0); recompute(d); renderPlan(id); };   // 11/23 impeccable #8: 옮긴 뒤 4.5초 '되돌리기'(지우기·완료와 같은 방식 · Android 스낵바 실행취소)
+  toast(clash ? '비행기 시각과 겹쳐요 · 다시 옮겨 주세요' : anchorWarn(d) || (soft ? soft + ' · 확인 필요' : '‘' + (it.sh || it.n) + '’ 옮김' + (d.tbd ? '' : ' · ' + it.s + ' 시작')), undo);
 }
 // 시간 고정(빨간 점) 일정이 원래 시각에서 벗어나면 알림 — 옮기기·추가 뒤에 확인
 function anchorWarn(d) {
