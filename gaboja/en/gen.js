@@ -218,11 +218,34 @@
     let base = B.key; const calcName = HOME ? D.clName[HOME] || B.name : B.name;
     // 화면에 쓰는 숙소 이름: 목록에 있으면 동네 이름, 없으면 사용자가 적은 말 그대로(계산만 첫 동네 기준). 지도 검색어도 같은 말 (11/13)
     const exact = input.stayKind === 'yes' && stayRaw;   // 리뷰: '정했어요'(숙소 이름)는 화면 이름·지도 검색어를 적은 그대로 — 계산만 동네(HOME)로
-    const baseName = exact ? stayRaw.slice(0, 14) : HOME || !stayRaw ? calcName : stayRaw.slice(0, 14), BQ = exact ? stayRaw : HOME || !stayRaw ? (D.clQ[HOME || base] || calcName) : stayRaw;
+    let baseName = exact ? stayRaw.slice(0, 14) : HOME || !stayRaw ? calcName : stayRaw.slice(0, 14), BQ = exact ? stayRaw : HOME || !stayRaw ? (D.clQ[HOME || base] || calcName) : stayRaw;
+    /* 11/23 간사이 여러 도시 (동우님: '하루는 오사카, 하루는 고베에서 잘 수도 있고 · 오사카 숙소에서 고베 당일치기도') — input.kx = { cities: ['오사카','고베',…], stays: [1박째 도시, 2박째 도시, …] }
+       밤마다 그 도시 숙소 · 자는 도시가 바뀌는 날 = 체크아웃 → 짐 들고 이동 → 새 숙소에 짐 · 안 자는 도시 = 당일치기(중간 날에 나눠 넣음). kx 없으면 예전과 완전히 같음 */
+    const KXC = { '오사카': 'kix', '교토': 'kyo', '나라': 'nar', '고베': 'kob' };
+    const KX = (input.dest || 'kix') === 'kix' && input.kx && Array.isArray(input.kx.cities) ? (() => {
+      const cities = input.kx.cities.filter(c => KXC[c]).filter((c, k, a) => a.indexOf(c) === k); if (!cities.length) return null;
+      const info = {}; let hit = '';
+      cities.forEach(c => {
+        const cf = c === '오사카' ? D.cfg.kix : c === '교토' ? { ...D.cfg.kix, ...SIDE_ONLY.kix } : D.cfg[KXC[c]]; if (!cf || !cf.bases) return;
+        const h = stayRaw ? stayHome({ ...cf, main: c, side: null }, stayRaw, null) : '';
+        const b0 = h ? cf.bases.slice().sort((a, b) => mins(a.key, h) - mins(b.key, h))[0] : cf.bases[0];
+        const tb = ((cf.toBase || {}).KIX || {})[b0.key] || [80, '전철 (대략)'], add = h && h !== b0.key ? mins(b0.key, h) : 0;
+        if (h && !hit) hit = c;
+        info[c] = { key: h || b0.key, name: h ? D.clName[h] || b0.name : b0.name, tb: add ? [tb[0] + add, tb[1] + ' + 전철'] : tb };
+      });
+      const ok = cities.filter(c => info[c]); if (!ok.length) return null;
+      const st = (Array.isArray(input.kx.stays) ? input.kx.stays : []).map(c => ok.includes(c) ? c : null), stays = [];
+      for (let k = 0; k < nights; k++) stays.push(st[k] || (k ? stays[k - 1] : hit || ok[0]));
+      const own = hit || stays[0] || ok[0];   // 리뷰: 숙소 이름을 적었으면(정했어요) 그 도시 숙소 = 적은 이름 그대로 — 동네를 못 찾으면 첫 밤 도시에 붙임(계산은 그 도시 중심)
+      if (exact) info[own].shown = stayRaw.slice(0, 14);
+      if (hit && nights && !stays.includes(hit)) assumed.push('숙소 칸 ‘' + stayRaw.slice(0, 14) + '’ = ' + hit + ' 숙소인데 ' + hit + '에서 자는 밤이 없어서 안 썼어요');   // 리뷰: 적은 숙소가 조용히 무시되지 않게
+      return { cities: ok, info, stays, hit, trips: DT ? [] : ok.filter(c => !stays.includes(c)) };   // 리뷰: 당일치기(0박)는 첫 도시만 — 당일치기 넣을 날 안내 안 겹치게
+    })() : null;
+    const kxSet = c => { const x = KX.info[c]; base = x.key; baseName = x.shown || x.name; BQ = x.shown ? stayRaw : D.clQ[x.key] || x.name; return x; };   // 그날 숙소(도시)로 기준 바꿈
     // 숙소 동네가 목록에 없으면 첫 동네로 계산 → 1일차 회색 주의에 알림 (아래 notes[1])
-    const stayUnknown = stayRaw && !HOME ? '숙소 ‘' + stayRaw.slice(0, 20) + '’ → 목록에 없는 동네라 이동 시간은 ' + calcName + ' 기준으로 계산' : '';
+    const stayUnknown = stayRaw && !HOME && !(KX && KX.hit) ? '숙소 ‘' + stayRaw.slice(0, 20) + '’ → 목록에 없는 동네라 이동 시간은 ' + (KX ? '도시마다 중심 동네' : calcName) + ' 기준으로 계산' : '';
     if (stayUnknown) assumed.push(stayUnknown);
-    else if (!stayRaw) assumed.push('숙소 미정 → ' + calcName + ' 기준으로 계산');
+    else if (!stayRaw) assumed.push('숙소 미정 → ' + (KX ? '도시마다 중심 동네' : calcName) + ' 기준으로 계산');
     const fnoOut = String(fo.no || '').toUpperCase().slice(0, 8), fnoBack = String(fb.no || '').toUpperCase().slice(0, 8);
     const durK = m => (m >= 60 ? Math.floor(m / 60) + '시간' + (m % 60 ? ' ' + m % 60 + '분' : '') : m + '분');
     let apK = null, AP = null, TB = null, R = null, mode = 'intl', out, back, outOk, backOk, homeMin = 75; // 집 → 인천공항 (주소별 계산은 앱 단계, 지금은 가정)
@@ -238,7 +261,7 @@
       TB = (C.toBase[apK] || {})[base] || [60, '전철'];
     } else {
       // 출발 지역 × 교통수단 → 타는 곳·내리는 곳·소요 시간 (cfg.modes = domestic_moves_add.json 조사값)
-      const M = C.modes || {}, regions = Object.keys(M.train && M.train.regions || {}).concat(Object.keys(M.car && M.car.regions || {}));
+      const M = C.modes || {}, regions = Object.keys(M.train && M.train.regions || {}).concat(Object.keys(M.car && M.car.regions || {})).concat(Object.keys(M.air && M.air.regions || {}));   // 11/23 도시추가: 비행기만 있는 도시(제주)·비행기만 있는 지역(대구←제주)도 출발 지역 인정
       let region = input.region; if (!region || !regions.concat((M.home || {}).regions || []).includes(region)) { region = '수도권'; if (!input.region) assumed.push('출발 지역 미입력 → 수도권 가정'); }
       const can = m => m === 'home' ? !!(M.home && (M.home.regions || []).includes(region)) : !!(M[m] && M[m].regions && M[m].regions[region] && [].concat(M[m].regions[region]).length);
       mode = can(input.mode) ? input.mode : ['home', 'train', 'air', 'car'].find(can) || 'car';
@@ -436,12 +459,23 @@
 
     // 옆 도시(교토 등) 가는 날 수 — 옆 도시가 없는 곳(도쿄)은 0
     const middle = N - 2, kyotoDays = !C.side || middle <= 0 ? 0 : Math.min(middle, Math.max(1, Math.round(middle * (G === 'HS' ? 0.6 : 0.45))));
-    const kyotoIdx = new Set(); for (let i = 0; i < kyotoDays; i++) kyotoIdx.add(2 + i * 2 <= N - 1 ? 2 + i * 2 : 2 + i);
+    const kyotoIdx = new Set(); if (!KX) for (let i = 0; i < kyotoDays; i++) kyotoIdx.add(2 + i * 2 <= N - 1 ? 2 + i * 2 : 2 + i);
+    // 11/23 KX: 날마다 일어나는 도시(wake) · 자는 도시(sleep) · 노는 도시(play). 당일치기 도시는 짐 옮기지 않는 중간 날에 하나씩(2·4·…일째 먼저)
+    const KXD = {};
+    if (KX) {
+      for (let i = 1; i <= N; i++) { const wake = i === 1 ? null : KX.stays[i - 2], sleep = i < N ? KX.stays[i - 1] : null; KXD[i] = { wake, sleep, move: i > 1 && i < N && wake !== sleep, home: i === 1 ? (sleep || KX.cities[0]) : wake }; KXD[i].play = KXD[i].move ? sleep : KXD[i].home; }
+      const free = []; for (let i = 2; i < N; i++) if (!KXD[i].move) free.push(i);
+      const order = free.filter(i => i % 2 === 0).concat(free.filter(i => i % 2 === 1));
+      KX.trips.forEach((c, k) => { if (order[k] != null) KXD[order[k]].play = c; else assumed.push(c + ' 당일치기 넣을 날이 모자라요 · 박 수를 늘리면 들어가요'); });
+      if (DT && KX.cities.length > 1) assumed.push('당일치기 여행은 ' + KXD[1].home + '만 짰어요');
+    }
     const days = [], notes = {}; let carry = 0;
     const fmtD = d => (d.getMonth() + 1) + '. ' + d.getDate() + ' ' + WDK[d.getDay()];
     for (let i = 1; i <= N; i++) {
       const date = new Date(start); date.setDate(start.getDate() + i - 1);
-      const city = kyotoIdx.has(i) ? C.side : C.main;
+      if (KX) { const x = kxSet(KXD[i].home); if (i === 1 || i === N) TB = x.tb; }
+      const city = KX ? KXD[i].play : kyotoIdx.has(i) ? C.side : C.main;
+      const away = KX ? city !== KXD[i].home && !KXD[i].move : city === C.side;   // 숙소 도시 밖으로 당일치기 (예전: 교토 가는 날)
       ate.l = ate.d = false; mustQ = (MUSTD[i - 1] || []).slice();
       const it = [], nt = []; let t, at = base; const blocks = [];
       const push = arr => arr.forEach(x => it.push(x));
@@ -537,20 +571,31 @@
       else {
         const wake = AV.early ? '09:00' : F ? '07:30' : '08:30'; let wakeM = toMin(wake);   // 이른 아침 빼기 = 중간 날 09:00 기상
         if (i === 2 && carry) wakeM = Math.max(wakeM, Math.min(carry + 420, toMin('11:30')));   // 전날 한밤 도착이면 늦게 일어남
-        it.push({ k: 'w', s: wakeM, n: '기상', say: [baseName + ' 숙소에서 출발', city === C.side ? '편한 신발 · ' + C.side + '까지 이동' : ''].filter(Boolean).join(' · ') });   // 11/22 #4: 출발지 = 숙소 동네
+        let mvFrom = null;
+        if (KX && KXD[i].move) {   // 11/23 KX: 자는 도시가 바뀌는 날 = 체크아웃 → 짐 들고 이동 → 새 숙소에 짐 맡기기 → 그 도시에서 하루
+          const oldB = base, oldN = baseName, oldQ = BQ; mvFrom = oldN; kxSet(KXD[i].sleep); const mv = mins(oldB, base);
+          it.push({ k: 'w', s: wakeM, n: '기상', say: '짐 싸기 · 오늘 ' + KXD[i].sleep + '로 숙소 옮기는 날' });
+          const ck = Math.max(wakeM + 45, toMin(F ? '09:00' : '10:00'));
+          it.push({ k: 'p', s: ck, e: ck + 20, sh: '체크아웃', n: oldN + ' · 체크아웃', q: oldQ });
+          it.push({ k: 'm', s: ck + 20, e: ck + 20 + mv, mode: 'train', n: '짐 들고 이동', mv: KXD[i].wake + ' → ' + KXD[i].sleep + ' · 짐 들고 · 약 ' + mnTx(mv) + estTx(oldB, base), to: BQ, tc: base });
+          it.push({ k: 'p', s: ck + 20 + mv, e: ck + 50 + mv, sh: '숙소 · 짐', n: baseName + ' · 숙소에 짐 맡기기', say: '체크인 전 짐만 보관', q: BQ });
+          t = ck + 50 + mv; at = base;
+        } else {
+        it.push({ k: 'w', s: wakeM, n: '기상', say: [baseName + ' 숙소에서 출발', away ? '편한 신발 · ' + city + '까지 이동' : ''].filter(Boolean).join(' · ') });   // 11/22 #4: 출발지 = 숙소 동네
         t = Math.max(toMin(AV.early ? '10:30' : F ? '09:00' : '10:00'), wakeM + 45);
+        }
         addBlock('am', toMin('13:30'));
         if (!ate.l) { t = Math.max(t, toMin('12:00')); if (t <= toMin('14:30')) addMeal('점심'); }
         addBlock('pm', toMin(F ? '18:30' : '17:00'));
         // 오후가 길게 비면 조각 하나 더 (알차게 = 저녁 전까지, 여유롭게 = 휴식 전까지 1시간 40분 이상 남을 때)
         if (t + 100 <= toMin(F ? '18:30' : '16:30')) addBlock('pm', toMin(F ? '18:30' : '17:00'));
-        if (!F) rest(city === C.side ? 45 : 75, '숙소 휴식');
+        if (!F && !(KX && away && mins(at, base) > 45)) rest(away ? 45 : 75, '숙소 휴식');   // 리뷰: 먼 당일치기(나라↔고베 등)는 숙소 왕복 휴식 대신 그 도시에서 저녁까지
         if (!ate.d) { t = Math.max(t, toMin('18:30')); if (t <= toMin('21:00')) addMeal('저녁'); }
         if ((F || likes.has('@night')) && t <= toMin('20:30')) addBlock('night', toMin('22:00'));   // 야경·밤 산책을 고르면 여유형도 밤 조각 하나
         if (mustQ.length) flushMust(toMin('22:00'));
         if (at !== base) { const b = mins(at, base); it.push({ k: 'm', s: t, e: t + b, mode: 'train', n: '숙소로', mv: '숙소로 · 약 ' + mnTx(b) + '' + estTx(at, base), to: BQ }); t += b; }
-        title = (city === C.side ? C.side + ' — ' : '') + (blocks.slice(0, 2).join(' · ') || '자유 일정');
-        route = [baseName].concat(it.filter(x => x.tc).map(x => D.clName[x.tc])).concat(at === base ? [] : [baseName]);
+        title = (away ? city + ' — ' : '') + (blocks.slice(0, 2).join(' · ') || '자유 일정');
+        route = (mvFrom ? [mvFrom] : [baseName]).concat(it.filter(x => x.tc).map(x => D.clName[x.tc])).concat(at === base ? [] : [baseName]);   // 리뷰: 짐 옮기는 날은 전 숙소에서 시작
       }
       function backDom(dt) {
         let hub = null, leave, dep, arr;
@@ -559,7 +604,7 @@
         let leave2 = leave;
         if (dt) dayFill(leave); else t = checkoutMorning(leave);
         if (leave - t >= 150) { addBlock('am', leave - 60); }
-        if (leave - t >= 50 && !ate.l && t <= toMin('14:30')) { const m = meal('점심', C.main, date, t, at); if (m.end + (m.loc === base ? 0 : mins(m.loc, base)) <= leave) { push(m.items); t = m.end; at = m.loc; } else { it.push({ k: 'f', s: t, e: t + 40, n: (t < 660 ? '브런치' : '점심') + ' — ' + baseName + ' 근처', sh: '점심', say: '출발 전 간단히', q: BQ }); t += 40; at = base; } }
+        if (leave - t >= 50 && !ate.l && t <= toMin('14:30')) { const m = meal('점심', city, date, t, at); if (m.end + (m.loc === base ? 0 : mins(m.loc, base)) <= leave) { push(m.items); t = m.end; at = m.loc; } else { it.push({ k: 'f', s: t, e: t + 40, n: (t < 660 ? '브런치' : '점심') + ' — ' + baseName + ' 근처', sh: '점심', say: '출발 전 간단히', q: BQ }); t += 40; at = base; } }
         if (R.pre && leave - t >= 150) { addBlock('pm', leave - 60); }
         if (mustQ.length) flushMust(leave - 60);
         if (at !== base) { const b = mins(at, base); it.push({ k: 'm', s: t, e: t + b, mode: 'train', n: dt ? '이동' : '숙소로', mv: (dt ? '돌아가는 길 · 약 ' : '짐 찾으러 · 약 ') + mnTx(b) + '' + estTx(at, base), to: BQ }); t += b; at = base; }
@@ -589,7 +634,7 @@
         const dep = toMin(back[0]), arr = spanEnd(back[0], back[1]), airport = dep - 120, leave = airport - (TB[0] + 5); let leave2 = leave;
         if (dt) dayFill(leave); else t = checkoutMorning(leave);
         if (leave - t >= 150) { addBlock('am', leave - 60); }
-        if (leave - t >= 50 && !ate.l && t <= toMin('14:30')) { const m = meal('점심', C.main, date, t, at); if (m.end + (m.loc === base ? 0 : mins(m.loc, base)) <= leave) { push(m.items); t = m.end; at = m.loc; } else { it.push({ k: 'f', s: t, e: t + 40, n: (t < 660 ? '브런치' : '점심') + ' — ' + baseName + ' 역 근처', sh: '점심', say: '공항 가기 전 간단히', q: BQ }); t += 40; at = base; } }
+        if (leave - t >= 50 && !ate.l && t <= toMin('14:30')) { const m = meal('점심', city, date, t, at); if (m.end + (m.loc === base ? 0 : mins(m.loc, base)) <= leave) { push(m.items); t = m.end; at = m.loc; } else { it.push({ k: 'f', s: t, e: t + 40, n: (t < 660 ? '브런치' : '점심') + ' — ' + baseName + ' 역 근처', sh: '점심', say: '공항 가기 전 간단히', q: BQ }); t += 40; at = base; } }
         if (mustQ.length) flushMust(leave - 60);
         if (at !== base) { const b = mins(at, base); it.push({ k: 'm', s: t, e: t + b, mode: 'train', n: dt ? '이동' : '숙소로', mv: (dt ? '돌아가는 길 · 약 ' : '짐 찾으러 · 약 ') + mnTx(b) + '' + estTx(at, base), to: BQ }); t += b; at = base; }
         if (t > leave) leave2 = t;
@@ -624,7 +669,7 @@
         if (!areaDay.length) areaDay.push(baseName);
         const ar = areaDay;
         if (i === 1) title = '도착하는 날 — ' + ar[0]; else if (i === N) title = '돌아가는 날';
-        else { title = (city === C.side ? C.side + ' — ' : '') + ar.slice(0, 2).join(' · '); route = [baseName].concat(ar).concat([baseName]); }
+        else { title = (away ? city + ' — ' : '') + ar.slice(0, 2).join(' · '); route = [baseName].concat(ar).concat([baseName]); }
       }
       if (i === 1) carry = Math.max(0, t - 1440);   // 한밤(다음 날) 도착이면 둘째 날 늦게 시작
       it.push({ k: 'w', s: i === N || t > toMin('22:30') ? null : toMin('22:30'), n: '취침' });
@@ -664,7 +709,7 @@
     if (stayUnknown) notes[1].push({ lv: 'gray', t: stayUnknown });
     const end = new Date(start); end.setDate(start.getDate() + nights);
     const f2 = d => (d.getMonth() + 1) + '. ' + d.getDate();
-    return { v: 1, type, title: (PART ? C.label : input.cityLabel || C.label) + (DT ? ' 당일치기' : ' ' + nights + '박 ' + N + '일'), sub: (DT ? f2(start) : f2(start) + ' – ' + f2(end)) + (INB ? ' · 공항에서 공항까지' : ' · 집에서 집까지'), start: start.getFullYear() + '-' + String(start.getMonth() + 1).padStart(2, '0') + '-' + String(start.getDate()).padStart(2, '0'), days, notes, assumed, local: C.local || null, sgg: SG && sgUsed ? SG.name : null, dest: input.dest || 'kix', ...(PART ? { part: PART } : {}), go: DOM ? { mode, line: R.lineTx || null, region: R.region } : { mode: INB ? 'inbound' : 'intl', airport: apK }, carAttr, ...(BLANK ? { blank: true } : {}), inp: JSON.parse(JSON.stringify(input)), made: new Date().toISOString() };   // inp = 11/14 #28: 앱에서 비행기 시각을 바꾸면 그날을 다시 짤 때 씀
+    return { v: 1, type, title: (KX && DT ? KXD[1].home : PART ? C.label : input.cityLabel || C.label) + (DT ? ' 당일치기' : ' ' + nights + '박 ' + N + '일'), sub: (DT ? f2(start) : f2(start) + ' – ' + f2(end)) + (INB ? ' · 공항에서 공항까지' : ' · 집에서 집까지'), start: start.getFullYear() + '-' + String(start.getMonth() + 1).padStart(2, '0') + '-' + String(start.getDate()).padStart(2, '0'), days, notes, assumed, local: C.local || null, sgg: SG && sgUsed ? SG.name : null, dest: input.dest || 'kix', ...(PART ? { part: PART } : {}), go: DOM ? { mode, line: R.lineTx || null, region: R.region } : { mode: INB ? 'inbound' : 'intl', airport: apK }, carAttr, ...(BLANK ? { blank: true } : {}), inp: JSON.parse(JSON.stringify(input)), made: new Date().toISOString() };   // inp = 11/14 #28: 앱에서 비행기 시각을 바꾸면 그날을 다시 짤 때 씀
   }
   // 차 예상 도착 (질문지 start.html도 이 함수를 씀): key 'pt>base' 또는 'sgg:서울 마포구>base' · dep 'HH:MM' · date Date · dest 도시코드 → { dep, arr 'HH:MM', next(다음 날), dur(분), rest(휴게소 쉼 포함) } 또는 null(표에 없음)
   function carEta(key, dep, date, dest) {

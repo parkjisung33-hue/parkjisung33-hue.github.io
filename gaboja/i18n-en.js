@@ -81,7 +81,7 @@ window.VZTR_EN = {
   '점심 — {x} 역 근처': 'Lunch — near {x} Station', '브런치 — {x} 역 근처': 'Brunch — near {x} Station',
   '자유 시간 — {x}': 'Free time — {x}', '오호리 공원': 'Ohori Park', '종로·광화문': 'Jongno/Gwanghwamun',
   '옥내외 전시실에 #만여 점을 전시해요': 'Tens of thousands of pieces on show, indoors and out',
-  '@ 영업시간 전날 확인': 'Check @ hours the day before', '횟수 안 고름': 'Not chosen', '고른 #곳을 중심으로, 남은 시간은 가까운 곳으로 채울게요': 'Built around your # picks · the rest filled with places nearby', '한국': 'Korea', '일본': 'Japan', '도시만 고르면 동선은': 'Just pick a city and the route is', '준비 중': 'Coming soon', '다른 곳': 'Somewhere else', '직접 입력': 'Type it in', '예: 다낭, 타이베이': 'e.g. Da Nang, Taipei', '목록에 없는 동네예요 · 가까운 큰 동네 기준으로 짜요': 'Not on our list · we will plan from the nearest main area',
+  '@ 영업시간 전날 확인': '@ hours?', '횟수 안 고름': 'Not chosen', '고른 #곳을 중심으로, 남은 시간은 가까운 곳으로 채울게요': 'Built around your # picks · the rest filled with places nearby', '한국': 'Korea', '일본': 'Japan', '도시만 고르면 동선은': 'Just pick a city and the route is', '준비 중': 'Coming soon', '다른 곳': 'Somewhere else', '직접 입력': 'Type it in', '예: 다낭, 타이베이': 'e.g. Da Nang, Taipei', '목록에 없는 동네예요 · 가까운 큰 동네 기준으로 짜요': 'Not on our list · we will plan from the nearest main area',
   '#만 보 채우고 웃으며 귀가': 'Hit 10,000 steps and head home smiling', '#층 초장집': 'Chojang raw-fish spot (floor #)',
   '(가정)': '(assumed)', '(기본값)': '(default)', '(다음 날)': '(next day)', '(차 기준, 추정)': '(by car, est.)', '(추정)': '(est.)', '(금) 출발로 가정': '(Fri) departure assumed',
   '날씨 · Open-Meteo (CC BY #.#) · 평년 = #–# 평균': 'Weather · Open-Meteo (CC BY #.#) · Normals = #–# average',
@@ -119,6 +119,8 @@ window.VZTR_EN = {
   '명소 정복자': 'Bucket Lister', '쇼핑 마스터': 'Haul Master', '로컬 탐험형': 'Explorers', '취향 수집형': 'Curators', '명소 정복형': 'Sightseers', '힐링 충전형': 'Rechargers',
   '· {x}': x => { const e = VZTR_EN_FN.TT(x); return e !== x ? '· ' + e : null; },
   '나는 어떤 여행자일까?': 'Find your travel type',
+  // 11/23 장소 고르기 맛집 카드 ★ 줄 머리말(start swPoints) — 메뉴 이름 영어는 i18n-en-auto(메뉴 사전)
+  '인기 메뉴': 'Popular', '인기': 'Popular', '대표': 'Signature',
   '지도에 없는 동네도 동선은 미리. 하루 #만 보는 기본': 'Off-map streets, route planned anyway. 10K steps a day, minimum.',
   '한눈에 보는 여행 성향 #': 'All # travel types', '고를 때마다 한 칸씩 채워져요': 'Each pick fills a slot', '오륙도와 부산항대교가 한눈에 보여요': 'Views of Oryukdo and Busan Harbor Bridge',
   '다음 →': 'Next →',

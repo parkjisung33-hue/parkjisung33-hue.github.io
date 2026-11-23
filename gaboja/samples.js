@@ -8,6 +8,12 @@ window.GABOJA_SAMPLE_INPUTS = {
   'train-kr': { label: '국내 · 기차 (서울역 → 부산 2박)', inp: { type: 'LSFJ', start: '2026-12-11', nights: 2, dest: 'bsn', region: '수도권', mode: 'train', line: 0, fo: { no: '011', dep: '08:00', arr: '10:40' }, fb: { no: '054', dep: '18:00', arr: '20:40' } } },
   'car-kr':   { label: '국내 · 차 (강원 → 서울 2박)', inp: { type: 'HERP', start: '2026-12-18', nights: 2, dest: 'sel', region: '강원', mode: 'car', fo: { dep: '09:00' }, fb: { dep: '15:00' } } },
   // 11/22 테마·레벨 검수용: 새 테마 장소가 많이 나오는 일정
+  // 11/23 새 도시·간사이 섞기 검수용
+  'c-jej':    { label: '국내 · 제주 비행기 2박', inp: { type: 'HEFP', start: '2026-12-11', nights: 2, dest: 'jej', region: '수도권', mode: 'air', fo: { dep: '09:00' }, fb: { dep: '17:00' } } },
+  'c-gyj':    { label: '국내 · 경주 기차 2박', inp: { type: 'LSFJ', start: '2026-12-11', nights: 2, dest: 'gyj', region: '수도권', mode: 'train', line: 0, fo: { dep: '08:00' }, fb: { dep: '18:00' } } },
+  'c-sch':    { label: '국내 · 속초 차 1박', inp: { type: 'HERP', start: '2026-12-18', nights: 1, dest: 'sch', region: '수도권', mode: 'car', fo: { dep: '09:00' }, fb: { dep: '15:00' } } },
+  'c-nar':    { label: '일본 · 나라 2박', inp: { type: 'LEFJ', start: '2026-12-04', nights: 2, dest: 'nar', fo: { no: 'KE723', dep: '09:00', arr: '10:50' }, fb: { no: 'KE724', dep: '15:00', arr: '16:50' } } },
+  'kx-mix':   { label: '일본 · 오사카 2박 + 고베 1박', inp: { type: 'HEFP', start: '2026-12-04', nights: 3, dest: 'kix', cityLabel: '오사카·고베', kx: { cities: ['오사카', '고베'], stays: ['오사카', '오사카', '고베'] }, fo: { no: 'KE723', dep: '09:00', arr: '10:50' }, fb: { no: 'KE724', dep: '15:00', arr: '16:50' } } },
   'th-sel':   { label: '국내 · 서울 테마(K-팝·푸드·뷰티) 3박', inp: { type: 'HEFP', start: '2026-12-18', nights: 3, dest: 'sel', region: '강원', mode: 'car', fo: { dep: '09:00' }, fb: { dep: '15:00' }, themes: ['kpop', 'kfood', 'kbeauty'], level: 2 } },
   'th-sel2':  { label: '국내 · 서울 K-팝·뷰티 고수 3박', inp: { type: 'LSRJ', start: '2026-12-19', nights: 3, dest: 'sel', region: '강원', mode: 'car', fo: { dep: '09:00' }, fb: { dep: '15:00' }, themes: ['kpop', 'kbeauty'], level: 4 } },
   'th-tyo':   { label: '일본 · 도쿄 애니 3박', inp: { type: 'HEFP', start: '2026-12-04', nights: 3, dest: 'tyo', fo: { no: 'KE703', dep: '09:00', arr: '11:20' }, fb: { no: 'KE704', dep: '15:00', arr: '17:30' }, themes: ['anime'], level: 1 } },
