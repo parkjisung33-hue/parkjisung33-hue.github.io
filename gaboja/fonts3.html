@@ -1,0 +1,198 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>VZTR 영어판 영문 폰트 시안 10</title>
+<meta name="robots" content="noindex">
+<!-- 2026-11-23 영어판 영문 글꼴 시안 보드. 원본 = 디자인/gaboja-app/preview/2026-11-23_영문폰트_시안10_v1.html
+     배포 = 산출물/larchive-site/gaboja/fonts3.html (같은 사이트의 en/ 화면을 iframe으로 열고 글꼴만 덮어씀 — 앱 파일은 안 고침) -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link id="gf" rel="stylesheet" href="">
+<style>
+:root { --ink:#16171A; --sub:#6B6E76; --hair:rgba(22,23,26,.1); --bg:#F2F3F5; --card:#fff; --blue:#2F55D4; --red:#E0402F;
+  --kr: "Pretendard Variable", Pretendard, -apple-system, "Apple SD Gothic Neo", "Malgun Gothic", system-ui, sans-serif; }
+@media (prefers-color-scheme: dark) { :root { --ink:#F1F2F4; --sub:#9A9EA6; --hair:rgba(255,255,255,.1); --bg:#141518; --card:#1F2125; --blue:#6E8BFF; } }
+* { box-sizing: border-box; }
+body { margin:0; background:var(--bg); color:var(--ink); font-family:var(--kr); font-size:15px; line-height:1.5; word-break:keep-all; -webkit-text-size-adjust:100%; }
+.wrap { max-width:1180px; margin:0 auto; padding:20px 16px 80px; }
+h1 { font-size:22px; margin:0 0 6px; letter-spacing:-.02em; }
+.intro p { margin:0 0 4px; color:var(--sub); font-size:13.5px; }
+.lay { display:grid; gap:20px; margin-top:16px; }
+.lay > * { min-width:0; }
+@media (min-width: 900px) { .lay { grid-template-columns: 420px 1fr; align-items:start; } .stage { position:sticky; top:12px; } }
+/* 미리보기 */
+.stage { background:var(--card); border-radius:20px; padding:12px; box-shadow:0 0 0 1px var(--hair); }
+.now { display:flex; align-items:baseline; gap:8px; margin:2px 4px 10px; }
+.now b { font-size:17px; } .now span { color:var(--sub); font-size:12.5px; }
+.tabs { display:flex; gap:6px; overflow-x:auto; margin:0 0 10px; scrollbar-width:none; }
+.tabs::-webkit-scrollbar { display:none; }
+.tabs button { all:unset; cursor:pointer; flex:none; padding:7px 12px; border-radius:999px; font-size:13px; font-weight:600; box-shadow:0 0 0 1px var(--hair); white-space:nowrap; }
+.tabs button.on { background:var(--ink); color:var(--card); box-shadow:none; }
+.phone { position:relative; width:100%; overflow:hidden; border-radius:14px; background:#000; box-shadow:0 0 0 1px var(--hair); }
+.phone iframe { position:absolute; left:0; top:0; width:390px; height:800px; border:0; transform-origin:0 0; background:#fff; }
+.phone .ld { position:absolute; inset:0; display:grid; place-items:center; color:#fff; font-size:13px; background:rgba(0,0,0,.35); opacity:0; pointer-events:none; transition:opacity .2s; }
+.phone.loading .ld { opacity:1; }
+.nav { display:flex; gap:8px; margin-top:10px; }
+.nav button { all:unset; cursor:pointer; flex:1; text-align:center; padding:11px 0; border-radius:12px; font-weight:700; font-size:14px; box-shadow:0 0 0 1px var(--hair); }
+.hint { color:var(--sub); font-size:12px; margin:8px 4px 0; }
+/* 폰트 카드 */
+.list { display:grid; gap:12px; }
+@media (min-width: 640px) and (max-width: 899px) { .list { grid-template-columns:1fr 1fr; } }
+@media (min-width: 1100px) { .list { grid-template-columns:1fr 1fr; } }
+.fc { background:var(--card); border-radius:18px; padding:14px 14px 12px; box-shadow:0 0 0 1px var(--hair); cursor:pointer; transition:box-shadow .15s; }
+.fc.cur { box-shadow:0 0 0 2px var(--blue); }
+.fc .hd { display:flex; align-items:center; gap:8px; }
+.fc .no { font-size:12px; font-weight:700; color:var(--sub); min-width:22px; }
+.fc h3 { margin:0; font-size:15px; }
+.fc .tag { margin-left:auto; font-size:11.5px; color:var(--sub); white-space:nowrap; }
+.fc .feel { margin:4px 0 10px; font-size:13px; color:var(--sub); }
+.spec { border-radius:12px; background:var(--bg); padding:12px 12px 10px; overflow:hidden; }
+.spec .a { font-size:26px; font-weight:800; letter-spacing:-.03em; line-height:1.1; }
+.spec .b { font-size:15px; font-weight:600; margin-top:6px; }
+.spec .c { font-size:13px; font-weight:400; color:var(--sub); margin-top:4px; font-variant-numeric:tabular-nums; }
+.spec .d { font-size:11px; font-weight:700; letter-spacing:.1em; text-transform:uppercase; color:var(--sub); margin-top:8px; }
+.pick { display:flex; gap:6px; margin-top:10px; }
+.pick button { all:unset; cursor:pointer; flex:1; text-align:center; padding:8px 0; border-radius:10px; font-size:13px; font-weight:700; box-shadow:0 0 0 1px var(--hair); }
+.pick button.on[data-v="1"] { background:var(--blue); color:#fff; box-shadow:none; }
+.pick button.on[data-v="2"] { background:var(--ink); color:var(--card); box-shadow:none; }
+.pick button.on[data-v="x"] { background:var(--sub); color:var(--card); box-shadow:none; }
+.fc textarea { width:100%; margin-top:8px; border:0; border-radius:10px; background:var(--bg); color:var(--ink); font:13px/1.4 var(--kr); padding:8px 10px; resize:vertical; min-height:36px; }
+/* 답 */
+.ans { margin-top:20px; background:var(--card); border-radius:18px; padding:14px; box-shadow:0 0 0 1px var(--hair); }
+.ans h2 { font-size:16px; margin:0 0 8px; }
+.ans pre { white-space:pre-wrap; font:13px/1.5 var(--kr); background:var(--bg); border-radius:10px; padding:10px; margin:0 0 10px; min-height:40px; }
+.ans button { all:unset; cursor:pointer; display:block; text-align:center; padding:13px 0; border-radius:12px; background:var(--blue); color:#fff; font-weight:700; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="intro">
+    <h1>영어판 영문 폰트 시안 10</h1>
+    <p>실제 영어판(larchive.page/gaboja/en/) 화면을 그대로 열고 <b>영문 글꼴만</b> 바꿔 끼웠습니다. 로고(VZTR)와 한글 원문 칸은 그대로예요.</p>
+    <p>카드를 누르면 위 화면이 그 글꼴로 바뀌고, 화면 안은 직접 눌러 넘겨 볼 수 있습니다. 10종 모두 Google Fonts 배포 OFL 1.1(상업·웹 사용 가능). 지난번(11/19) 후보 10종과 겹치지 않게 골랐어요.</p>
+  </div>
+  <div class="lay">
+    <div class="stage">
+      <div class="now"><b id="nowName">—</b><span id="nowFeel"></span></div>
+      <div class="tabs" id="tabs"></div>
+      <div class="phone loading" id="phone"><iframe id="fr" title="VZTR 영어판 미리보기"></iframe><div class="ld">불러오는 중…</div></div>
+      <div class="nav"><button id="prev">← 이전 폰트</button><button id="next">다음 폰트 →</button></div>
+      <p class="hint">같은 화면에서 폰트만 바꿔 보려면 이전·다음을 누르세요.</p>
+    </div>
+    <div>
+      <div class="list" id="list"></div>
+      <div class="ans">
+        <h2>고른 답</h2>
+        <pre id="out">아직 고른 게 없어요</pre>
+        <button id="copy">답 복사</button>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+const FONTS = [
+  { id:'0', nm:'IBM Plex Sans', tag:'지금 (비교용)', feel:'단정하고 기계적인 엔지니어링 느낌', css:null, fam:'"VZTR EN"' },
+  { id:'1', nm:'Inter', tag:'표준·중립', feel:'화면용 표준 산세리프. 가장 무난하고 작은 글자도 잘 읽힘', css:'Inter:wght@400..800' },
+  { id:'2', nm:'Space Grotesk', tag:'괴짜 테크', feel:'글자 끝이 살짝 엇나간 레트로 테크. 숫자·코드가 개성 있음', css:'Space+Grotesk:wght@400..700' },
+  { id:'3', nm:'Bricolage Grotesque', tag:'잡지·개성', feel:'굵을수록 꽉 조이는 그로테스크. 제목에 힘이 셈, 예상 밖의 맛', css:'Bricolage+Grotesque:wght@400..800' },
+  { id:'4', nm:'Instrument Sans', tag:'에디토리얼', feel:'정제된 네오 그로테스크. 조용하고 고급스러운 편집 디자인 느낌', css:'Instrument+Sans:wght@400..700' },
+  { id:'5', nm:'Sora', tag:'넓고 미래적', feel:'폭 넓고 둥근 기하학. 여유 있고 깨끗한 앱 느낌', css:'Sora:wght@400..800' },
+  { id:'6', nm:'Schibsted Grotesk', tag:'저널·정보', feel:'신문사 서체. 정보 많은 화면에서 또렷하고 믿음직함', css:'Schibsted+Grotesk:wght@400..800' },
+  { id:'7', nm:'Familjen Grotesk', tag:'북유럽 디자인', feel:'살짝 좁고 단단한 디자인 스튜디오 느낌. 담백함 속 디테일', css:'Familjen+Grotesk:wght@400..700' },
+  { id:'8', nm:'Onest', tag:'부드러운 친근', feel:'모서리가 순한 현대 산세리프. 친근하고 깔끔', css:'Onest:wght@400..800' },
+  { id:'9', nm:'Archivo', tag:'단단·정보', feel:'단단한 그로테스크. 시각·편명 같은 숫자와 표에 강함', css:'Archivo:wght@400..800' },
+  { id:'10', nm:'Syne', tag:'아트·패션', feel:'굵어질수록 넓어지는 아트센터 서체. 가장 튀는 선택지', css:'Syne:wght@400..800' },
+];
+const SCREENS = [
+  { nm:'첫 화면', u:'en/start.html' },
+  { nm:'질문', u:'en/start.html?s=q0' },
+  { nm:'유형 결과', u:'en/start.html?s=result' },
+  { nm:'장소 고르기', u:'en/start.html?s=swipe&city=%EB%8F%84%EC%BF%84' },
+  { nm:'가이드북 (일본)', u:'en/index.html#sample=air-jp' },
+  { nm:'가이드북 (서울)', u:'en/index.html#sample=in-sel' },
+];
+const KR = '"VZTR KR", "Pretendard Variable", Pretendard, -apple-system, "Apple SD Gothic Neo", "Malgun Gothic", system-ui, sans-serif';
+const fam = f => f.fam || '"' + f.nm + '"';
+const KEY = 'vztr-fontboard-en-1123';
+let st = { cur:'0', scr:0, pick:{}, memo:{} };
+try { Object.assign(st, JSON.parse(localStorage.getItem(KEY) || '{}')); } catch (_) {}
+{ const q = new URLSearchParams(location.search); if (q.has('f')) st.cur = q.get('f'); if (q.has('s')) st.scr = +q.get('s') || 0; }
+const save = () => { try { localStorage.setItem(KEY, JSON.stringify(st)); } catch (_) {} };
+
+// 보드 쪽 견본 글꼴 한 번에
+document.getElementById('gf').href = 'https://fonts.googleapis.com/css2?' + FONTS.filter(f => f.css).map(f => 'family=' + f.css).join('&') + '&display=swap';
+
+const list = document.getElementById('list');
+list.innerHTML = FONTS.map(f => `<section class="fc" data-id="${f.id}">
+  <div class="hd"><span class="no">${f.id === '0' ? '지금' : f.id}</span><h3>${f.nm}</h3><span class="tag">${f.tag}</span></div>
+  <p class="feel">${f.feel}</p>
+  <div class="spec" style="font-family:${fam(f).replace(/"/g, "'")}, ${KR.replace(/"/g, "'")}">
+    <div class="a">3 nights in Kyoto</div>
+    <div class="b">Side Quester · Fushimi Inari Taisha</div>
+    <div class="c">09:40 KE723 ICN → KIX · Day 2 of 4 · 18 min walk</div>
+    <div class="d">Your travel type</div>
+  </div>
+  ${f.id === '0' ? '' : `<div class="pick"><button data-v="1">1순위</button><button data-v="2">후보</button><button data-v="x">별로</button></div>
+  <textarea placeholder="메모 (예: 제목은 좋은데 숫자가 별로)"></textarea>`}
+</section>`).join('');
+
+const tabs = document.getElementById('tabs');
+tabs.innerHTML = SCREENS.map((s, i) => `<button data-i="${i}">${s.nm}</button>`).join('');
+
+const fr = document.getElementById('fr'), phone = document.getElementById('phone');
+function fit() { const w = phone.clientWidth, k = Math.min(1, w / 390); fr.style.transform = `scale(${k})`; phone.style.height = Math.round(800 * k) + 'px'; }
+addEventListener('resize', fit); fit();
+
+function inject() {
+  const f = FONTS.find(x => x.id === st.cur); let d;
+  try { d = fr.contentDocument; } catch (_) { return; }
+  if (!d || !d.documentElement) return;
+  d.getElementById('fb-gf') && d.getElementById('fb-gf').remove();
+  d.getElementById('fb-st') && d.getElementById('fb-st').remove();
+  if (f.css) { const l = d.createElement('link'); l.id = 'fb-gf'; l.rel = 'stylesheet'; l.href = 'https://fonts.googleapis.com/css2?family=' + f.css + '&display=swap'; d.head.appendChild(l); }
+  const F = fam(f);
+  const s = d.createElement('style'); s.id = 'fb-st';
+  s.textContent = f.css ? `:root, html:root, html:root[data-theme] { --kr: ${F}, ${KR} !important; --kr-plain: ${F}, ${KR} !important; --lat: ${F}, ${KR} !important; --mono: ${F}, ${KR} !important; }` : '';
+  d.head.appendChild(s);
+  const w = fr.contentWindow, refit = () => { try { w.dispatchEvent(new w.Event('resize')); w.fitTitle && w.fitTitle(); w.fitLines && w.fitLines(); } catch (_) {} };
+  try { d.fonts.ready.then(refit); setTimeout(refit, 600); setTimeout(refit, 1500); } catch (_) {}
+}
+fr.addEventListener('load', () => { inject(); phone.classList.remove('loading'); });
+
+function render() {
+  const f = FONTS.find(x => x.id === st.cur);
+  document.getElementById('nowName').textContent = (f.id === '0' ? '지금 · ' : f.id + '. ') + f.nm;
+  document.getElementById('nowFeel').textContent = f.tag;
+  list.querySelectorAll('.fc').forEach(c => {
+    const id = c.dataset.id; c.classList.toggle('cur', id === st.cur);
+    c.querySelectorAll('.pick button').forEach(b => b.classList.toggle('on', st.pick[id] === b.dataset.v));
+    const t = c.querySelector('textarea'); if (t && document.activeElement !== t) t.value = st.memo[id] || '';
+  });
+  tabs.querySelectorAll('button').forEach(b => b.classList.toggle('on', +b.dataset.i === st.scr));
+  const L = [], C = [], X = [];
+  FONTS.forEach(f => { const v = st.pick[f.id], m = (st.memo[f.id] || '').trim(); const line = f.id + '. ' + f.nm + (m ? ' — ' + m : '');
+    if (v === '1') L.push(line); else if (v === '2') C.push(line); else if (v === 'x') X.push(line); else if (m) C.push(line + ' (표시 없음)'); });
+  document.getElementById('out').textContent = (L.length || C.length || X.length) ? ['[VZTR 영어판 영문 폰트 시안 10]', L.length ? '1순위: ' + L.join(' / ') : '', C.length ? '후보: ' + C.join(' / ') : '', X.length ? '별로: ' + X.join(' / ') : ''].filter(Boolean).join('\n') : '아직 고른 게 없어요';
+}
+function load() { phone.classList.add('loading'); fr.src = SCREENS[st.scr].u; }
+function setFont(id) { st.cur = id; save(); render(); inject(); }
+
+list.addEventListener('click', e => {
+  const c = e.target.closest('.fc'); if (!c) return; const id = c.dataset.id;
+  const b = e.target.closest('.pick button');
+  if (b) { const v = b.dataset.v; if (v === '1') Object.keys(st.pick).forEach(k => { if (st.pick[k] === '1') delete st.pick[k]; }); st.pick[id] === v ? delete st.pick[id] : st.pick[id] = v; save(); }
+  if (e.target.tagName === 'TEXTAREA') { if (st.cur !== id) setFont(id); return; }
+  if (st.cur !== id) { setFont(id); if (innerWidth < 900) document.querySelector('.stage').scrollIntoView({ behavior:'smooth', block:'start' }); } else render();
+});
+list.addEventListener('input', e => { const c = e.target.closest('.fc'); if (!c) return; st.memo[c.dataset.id] = e.target.value; save(); render(); });
+tabs.addEventListener('click', e => { const b = e.target.closest('button'); if (!b) return; st.scr = +b.dataset.i; save(); render(); load(); });
+const step = d => { const i = FONTS.findIndex(f => f.id === st.cur); setFont(FONTS[(i + d + FONTS.length) % FONTS.length].id); };
+document.getElementById('prev').onclick = () => step(-1);
+document.getElementById('next').onclick = () => step(1);
+document.getElementById('copy').onclick = async () => { const t = document.getElementById('out').textContent; try { await navigator.clipboard.writeText(t); } catch (_) { const a = document.createElement('textarea'); a.value = t; document.body.appendChild(a); a.select(); document.execCommand('copy'); a.remove(); } const b = document.getElementById('copy'); b.textContent = '복사했어요'; setTimeout(() => b.textContent = '답 복사', 1500); };
+render(); load();
+</script>
+</body>
+</html>
