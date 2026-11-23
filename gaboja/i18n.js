@@ -10,8 +10,12 @@
   var EN = /\/en\//.test(location.pathname) || window.VZTR_LANG === 'en', L = EN ? 'en' : 'ko', KEY = 'vztr-lang';
   window.VZTR_LANG = L; document.documentElement.lang = L;
   /* 11/23 동우님 '시스템 글꼴' 확정(시안 v2 fonts4.html 1순위): 영어판 영문 = 기기 글꼴(아이폰 SF Pro · 안드로이드는 기기 기본). 한글 원문 칸은 Pretendard 그대로. 로고 .vz(Inter Tight)는 안 바뀜 */
-  if (EN) { var KRF = '"VZTR KR", "Pretendard Variable", Pretendard, "Apple SD Gothic Neo", "Malgun Gothic", sans-serif', SYS = 'system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, ' + KRF;
-    var fs = document.createElement('style'); fs.id = 'vztr-en-font'; fs.textContent = 'html[lang="en"]{--kr:' + SYS + ';--kr-plain:' + SYS + ';--lat:' + SYS + ';--mono:' + SYS + '}html[lang="en"] .vzko,html[lang="en"] [lang="ko"]{font-family:' + KRF + '}'; (document.head || document.documentElement).appendChild(fs); }
+  /* 11/23 저녁: 아이폰·맥 = SF Pro(-apple-system·BlinkMacSystemFont는 Apple 기기만 알아들음) · 갤럭시·PC = Mona Sans(OFL, 시안 v3 fonts5.html 1순위). system-ui는 갤럭시도 알아들어 뺌. Mona는 쓰는 기기에서만 내려받음 */
+  if (EN) { var KRF = '"VZTR KR", "Pretendard Variable", Pretendard, "Apple SD Gothic Neo", "Malgun Gothic", sans-serif', SYS = '-apple-system, BlinkMacSystemFont, "Mona Sans", "Segoe UI", Roboto, Arial, ' + KRF;
+    var mf = document.createElement('link'); mf.rel = 'stylesheet'; mf.href = 'https://fonts.googleapis.com/css2?family=Mona+Sans:wght@400..800&display=swap'; (document.head || document.documentElement).appendChild(mf);
+    /* Mona Sans는 고정폭 숫자(tnum)의 0에 빗금 → Apple 기기가 아니면(= Mona를 쓰면) 숫자만 일반 숫자로. Apple은 SF Pro라 그대로 */
+    if (!/iPhone|iPad|iPod|Macintosh/.test(navigator.userAgent)) document.documentElement.classList.add('vz-mona');
+    var fs = document.createElement('style'); fs.id = 'vztr-en-font'; fs.textContent = 'html[lang="en"]{--kr:' + SYS + ';--kr-plain:' + SYS + ';--lat:' + SYS + ';--mono:' + SYS + '}html[lang="en"] .vzko,html[lang="en"] [lang="ko"]{font-family:' + KRF + '}html[lang="en"] #bdS{word-spacing:-2.5px}html[lang="en"] .nmc b{font-size:.9375rem}html[lang="en"] .ticket .nm,html[lang="en"] .pass .city,html[lang="en"] .rec2 b,html[lang="en"] .tile .n.one,html[lang="en"] .li .nm .one{overflow-wrap:normal;word-break:normal}html.vz-mona[lang="en"] body,html.vz-mona[lang="en"] body *{font-variant-numeric:lining-nums proportional-nums!important}'; (document.head || document.documentElement).appendChild(fs); }
   var bot = navigator.webdriver || /HeadlessChrome/.test(navigator.userAgent);
   function other() {   // 같은 화면의 다른 언어 주소
     var p = location.pathname;
@@ -126,9 +130,12 @@
   }
   API.node = function (el) { if (L === 'en' && el) node(el); };   // 11/22 그 자리에서 바로 번역(한 줄 맞추기 swFit이 영어 폭으로 재게)
   var lastT = ''; function title() { if (document.title === lastT) return; var r = tr(document.title); if (r != null) { lastT = r; document.title = r; } }
+  /* 11/23 영어판: 발급 완료 탑승권 도시 이름(.pass .city · .ticket .nm)이 'Osaka·Kyot/o'처럼 단어 중간에서 끊기던 것 → 끊지 않고, 넘치면 글자를 줄여 한 줄에(최소 20px) · 장소 추가 목록 이름 'Cheonggyecheo/n'도(최소 11px) */
+  var nmR = 0; function fitNm() { if (nmR) return; nmR = requestAnimationFrame(function () { nmR = 0; [['.ticket .nm, .pass .city', 20], ['.rec2 b, .tile .n.one, .li .nm .one', 11]].forEach(function (q) { var es = document.querySelectorAll(q[0]); for (var i = 0; i < es.length; i++) { var e = es[i]; if (!e.clientWidth) continue; var k = e.textContent + '|' + e.clientWidth; if (e._vzf === k) continue; e._vzf = k; e.style.fontSize = ''; var fs = parseFloat(getComputedStyle(e).fontSize); while (e.scrollWidth > e.clientWidth + 1 && fs > q[1]) { fs -= 0.5; e.style.fontSize = fs + 'px'; } } }); }); }
   function start() {
-    node(document.body); title();
+    node(document.body); title(); fitNm(); addEventListener('resize', fitNm); try { document.fonts.ready.then(fitNm); } catch (_) {}
     new MutationObserver(function (ms) {
+      fitNm();
       if (ms.some(function (m) { var e = m.target.nodeType === 1 ? m.target : m.target.parentNode, tb = e && e.closest && e.closest('.pill .ttl b'); return !tb || tb.textContent !== rfT; })) refit();   // 리뷰: refit이 제목을 줄이며 만든 변화로 다시 refit → 매 프레임 반복되던 것 막음
       for (var i = 0; i < ms.length; i++) { var m = ms[i];
         if (m.type === 'characterData') node(m.target);
