@@ -83,7 +83,10 @@ function soft(code, bg) {
 }
 window.GABOJA_CHAR_LINE = (code, o = {}) => { if (!(code in IDX)) return ''; ensureFx(); const g = grp(code); return wrap(o.bg === false ? 'none' : g.bg, body(code, g), g).replace('<svg ', '<svg aria-hidden="true" focusable="false" '); };
 /* 11/20 동우님: 짐마다 키·좌우가 달라(바닥선 기준으로 그려 위가 비어 있음) 옆 글자와 가운데가 안 맞음 → 그림 둘레에 같은 여백을 두고 정사각형으로 잘라 칸 가운데에. pad = 그림 크기 대비 여백(이펙트 자리) */
-window.GABOJA_FIT = (svg, k = 1.5) => { if (!svg || svg.dataset.fit) return; const g = svg.querySelector('.fx-b'); if (!g) return; let b; try { b = g.getBBox(); } catch (_) { return; } if (!b.width) return;
+window.GABOJA_FIT = (svg, k = 1.5) => { if (!svg || svg.dataset.fit) return; const g = svg.querySelector('.fx-b'); if (!g) return; let b;
+  /* 11/24 동우님 #2·#19: 가운데 = 몸통 기준 — 평소 안 보이는 이펙트(opacity 0: 버스 연기·불꽃·Zz 등)는 빼고 잼 */
+  const hid = [...g.querySelectorAll('[opacity="0"]')]; hid.forEach(e => { e.dataset.fd = e.style.display; e.style.display = 'none'; });
+  try { b = g.getBBox(); } catch (_) { b = null; } hid.forEach(e => { e.style.display = e.dataset.fd || ''; delete e.dataset.fd; }); if (!b || !b.width) return;
   /* 11/20 동우님: 크기 = 그림 넓이(√가로×세로) 기준으로 통일 — 옆으로 긴 버스·신발이 폭 때문에 작아지던 것. k = 칸 한 변 / √넓이(작을수록 큼), 단 긴 변은 칸 안(여백 3) */
   const S = Math.sqrt(b.width * b.height), sz = Math.max(Math.max(b.width, b.height) + 6, S * k), cx = b.x + b.width / 2, cy = b.y + b.height / 2;
   svg.setAttribute('viewBox', `${(cx - sz / 2).toFixed(1)} ${(cy - sz / 2).toFixed(1)} ${sz.toFixed(1)} ${sz.toFixed(1)}`); svg.dataset.fit = '1'; };

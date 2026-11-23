@@ -21,6 +21,7 @@ window.GABOJA_SAMPLE_INPUTS = {
   'th-in-sel': { label: '외국인 · 서울 테마 3박', inp: { type: 'LEFP', start: '2026-12-04', nights: 3, dest: 'sel', inbound: 'ICN', fo: { no: 'KE902', arr: '14:30' }, fb: { no: 'KE901', dep: '19:40' }, themes: ['kpop', 'kfood', 'kbeauty'], level: 1 } },
   'in-sel':   { label: '외국인 · 인천 도착 (서울 3박)', inp: { type: 'HSFJ', start: '2026-12-04', nights: 3, dest: 'sel', inbound: 'ICN', fo: { no: 'KE902', arr: '14:30' }, fb: { no: 'KE901', dep: '19:40' }, stayTx: '홍대', likes: ['맛집', '쇼핑'] } },   // 11/20 W5 F1
   'in-bsn':   { label: '외국인 · 김해 도착 (부산 2박)', inp: { type: 'LEFP', start: '2026-12-11', nights: 2, dest: 'bsn', inbound: 'PUS', fo: { no: '', arr: '' }, fb: { no: '', dep: '' } } },
+  'spk-food': { label: '일본 · 삿포로 맛집 4박 (11/24 피드백 재현)', inp: { type: 'HSRP', start: '2026-12-04', nights: 4, dest: 'spk', who: '연인', fo: { no: '', dep: '', arr: '' }, fb: { no: '', dep: '', arr: '' }, likes: ['맛집', '카페', '시장'] } },   // 11/24 #9 하루 식사 상한·제목 확인용
   'day-kr':   { label: '국내 · 기차 당일치기 (서울역 → 부산)', inp: { type: 'LEFJ', start: '2026-12-12', daytrip: true, nights: 0, dest: 'bsn', region: '수도권', mode: 'train', line: 0, fo: { no: '001', dep: '06:00', arr: '08:35' }, fb: { no: '070', dep: '20:00', arr: '22:40' } } }
 };
 (() => {

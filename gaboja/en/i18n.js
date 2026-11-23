@@ -15,7 +15,7 @@
     var mf = document.createElement('link'); mf.rel = 'stylesheet'; mf.href = 'https://fonts.googleapis.com/css2?family=Mona+Sans:wght@400..800&display=swap'; (document.head || document.documentElement).appendChild(mf);
     /* Mona Sans는 고정폭 숫자(tnum)의 0에 빗금 → Apple 기기가 아니면(= Mona를 쓰면) 숫자만 일반 숫자로. Apple은 SF Pro라 그대로 */
     if (!/iPhone|iPad|iPod|Macintosh/.test(navigator.userAgent)) document.documentElement.classList.add('vz-mona');
-    var fs = document.createElement('style'); fs.id = 'vztr-en-font'; fs.textContent = 'html[lang="en"]{--kr:' + SYS + ';--kr-plain:' + SYS + ';--lat:' + SYS + ';--mono:' + SYS + '}html[lang="en"] .vzko,html[lang="en"] [lang="ko"]{font-family:' + KRF + '}html[lang="en"] .lfl .lb{display:none}html[lang="en"] #bdS{white-space:normal!important;overflow:visible!important;text-overflow:clip!important;-webkit-line-clamp:unset!important;text-wrap:balance}html[lang="en"] .code.k{white-space:normal!important;overflow:visible!important;text-overflow:clip!important;word-break:normal!important;overflow-wrap:normal!important;text-wrap:balance}html[lang="en"] .pass .place.pl1{flex-wrap:wrap;white-space:normal;column-gap:.25rem;row-gap:0}html[lang="en"] .pass .place.pl1 .pn{overflow:visible;text-overflow:clip}html[lang="en"] .nmc b{font-size:.9375rem}html[lang="en"] .ticket .nm,html[lang="en"] .pass .city,html[lang="en"] .rec2 b,html[lang="en"] .tile .n.one,html[lang="en"] .li .nm .one{overflow-wrap:normal;word-break:normal}html.vz-mona[lang="en"] body,html.vz-mona[lang="en"] body *{font-variant-numeric:lining-nums proportional-nums!important}'; (document.head || document.documentElement).appendChild(fs); }
+    var fs = document.createElement('style'); fs.id = 'vztr-en-font'; fs.textContent = 'html[lang="en"]{--kr:' + SYS + ';--kr-plain:' + SYS + ';--lat:' + SYS + ';--mono:' + SYS + '}html[lang="en"] .vzko,html[lang="en"] [lang="ko"]{font-family:' + KRF + '}html[lang="en"] .lfl .lb{display:none}html[lang="en"] #bdS{white-space:nowrap!important;overflow:hidden!important;text-overflow:clip!important;-webkit-line-clamp:unset!important}html[lang="en"] .code.k{white-space:normal!important;overflow:visible!important;text-overflow:clip!important;word-break:normal!important;overflow-wrap:normal!important;text-wrap:balance}html[lang="en"] .pass .place.pl1{flex-wrap:wrap;white-space:normal;column-gap:.25rem;row-gap:0}html[lang="en"] .pass .place.pl1 .pn{overflow:visible;text-overflow:clip}html[lang="en"] .nmc b{font-size:.9375rem}html[lang="en"] .ticket .nm,html[lang="en"] .pass .city,html[lang="en"] .rec2 b,html[lang="en"] .tile .n.one,html[lang="en"] .li .nm .one{overflow-wrap:normal;word-break:normal}html.vz-mona[lang="en"] body,html.vz-mona[lang="en"] body *{font-variant-numeric:lining-nums proportional-nums!important}'; (document.head || document.documentElement).appendChild(fs); }
   var bot = navigator.webdriver || /HeadlessChrome/.test(navigator.userAgent);
   function other() {   // 같은 화면의 다른 언어 주소
     var p = location.pathname;
@@ -30,7 +30,7 @@
   } catch (_) {}
   function go() { try { localStorage.setItem(KEY, EN ? 'ko' : 'en'); } catch (_) {} location.href = other(); }
 
-  var API = window.VZTR_I18N = { lang: L, en: EN, other: other, go: go, miss: new Map(), list: function () { return Array.from(API.miss.keys()); } };
+  var API = window.VZTR_I18N = { lang: L, en: EN, other: other, go: go, miss: new Map(), log: /[?&]vzlog=1/.test(location.search) ? {} : null, list: function () { return Array.from(API.miss.keys()); } };
   window.T = function (s) { return s; };   // 코드에서 쓰는 번역(한국어판 = 그대로)
 
   /* 머리 언어 전환 — start.html: header.bar 오른쪽 / index.html: 맨 위 상자(.pill) 메뉴 옆 */
@@ -102,15 +102,15 @@
     places();
     var r = null;
     for (var i = 0; i < PAT.length; i++) { var m = t.match(PAT[i][0]); if (m) { try { r = PAT[i][2].apply(null, m.slice(1)); } catch (_) { r = null; } if (r != null) break; } }   // 함수 틀 먼저(모르는 말이면 null → 다음)
-    if (r == null) r = D[t];
+    var KK = null; if (r == null) { r = D[t]; if (r != null) KK = t; }
     if (r == null && /\d/.test(t)) {   // 숫자만 다른 문장 = 키에서 숫자를 '#'로 (예 '강수확률 #%' → 'Rain #%'), 값의 '#'에 같은 순서로 다시 넣음
       var nums = t.match(/\d+/g), v0 = D[t.replace(/\d+/g, '#')];
-      if (v0 != null) { var q = 0; r = String(v0).replace(/#/g, function () { return nums[q++] || ''; }); }
+      if (v0 != null) { KK = t.replace(/\d+/g, '#'); var q = 0; r = String(v0).replace(/#/g, function () { return nums[q++] || ''; }); }
     }
     if (r == null && PN) {   // 장소 이름이 들어간 문장 = 이름을 '@'로 (예 '‘@’ 근처 인기 장소'), 값의 '@'에 영어 이름
       var got = []; var t2 = t.replace(PN, function (w) { got.push(D[w] || w); return '@'; }).replace(/\d+/g, '#');
       var nums2 = t.replace(PN, '@').match(/\d+/g) || [], v1 = got.length ? D[t2] : null;
-      if (v1 != null) { var a = 0, b = 0; r = String(v1).replace(/@/g, function () { return got[a++] || ''; }).replace(/#/g, function () { return nums2[b++] || ''; }); }
+      if (v1 != null) { KK = t2; var a = 0, b = 0; r = String(v1).replace(/@/g, function () { return got[a++] || ''; }).replace(/#/g, function () { return nums2[b++] || ''; }); }
     }
     if (r == null) for (var i2 = 0; i2 < PATS2.length; i2++) { var m2 = t.match(PATS2[i2][0]); if (!m2) continue; var g = m2.slice(1).map(function (v) { return HAN.test(v) ? (tr(v, true) || dotJoin(v) || v).trim() : v; }); if (g.some(function (v) { return HAN.test(v); })) continue; r = PATS2[i2][2]; PATS2[i2][1].forEach(function (n, j) { r = r.replace('{' + n + '}', function () { return g[j]; }); }); break; }   // 리뷰 #2
     if (r == null) {   // 11/22 ' · '·' — '·' → ' 로 이어 붙인 문장 = 조각마다 번역해서 다시 이음. 바깥 구분자부터 한 겹씩(조각 이름에 ' → '가 들어 있어도 됨) · 조각이 하나라도 못 옮기면 통째로 빠진 것
@@ -123,6 +123,7 @@
     }
     if (r == null && quiet) return null;
     if (r == null) { var mk = /\d/.test(t) ? t.replace(/\d+/g, '#') : t; if (PN && t.replace(PN, '@') !== t) mk = t.replace(PN, '@').replace(/\d+/g, '#'); API.miss.set(mk, (API.miss.get(mk) || 0) + 1); return null; }   // 빠진 목록 = 사전 키 모양 그대로(숫자 #, 장소 @)
+    if (API.log && KK) API.log[KK] = D[KK];   /* 11/24 검수용: 화면에 실제로 쓰인 사전 키 모으기(qa_lines --harvest) */
     return s.replace(t, function () { return r; });   // r 안의 '$' 글자가 치환 기호로 읽히지 않게
   }
   /* 11/23 impeccable E1: 띄어쓰지 않은 '·'로 이은 도시 묶음('오사카·고베')은 조각마다 옮겨 영어식으로 이음 → 'Osaka & Kobe' · 'Osaka, Kyoto & Nara' (영어엔 가운뎃점을 안 씀) */
@@ -184,4 +185,26 @@
     }).join(' '));
   }
   API.roman = roman;
+})();
+
+/* 11/24 동우님 '두 줄 금지': 한 줄이어야 하는 칸 = 줄바꿈 없이(nowrap), 넘치면 글자를 0.5px씩 줄임(최소 11px, 칸에 data-one="12"면 그 값)
+   한국어·영어 두 판 공통(이 파일은 두 판 다 불러옴). 칸 목록 = ONE_SEL — 새 한 줄 칸이 생기면 여기에 더하고 tools/qa_lines.py ONE에도 */
+(function () {
+  var ONE_SEL = ['#bdS', '#rxT', '.swhd h1', '.li .nm .one', '.rhy .rr > span:last-child', '.one:not(.n)', '.hrow .eyebrow', '.agree b', 'h1.city', '.hero h1', '#cT', '#bdT', '.nowacts + .acts .btn.ghost', '#warn .nt', '.facts span', '.rhy .rr .tm', '.ticks div > span:last-child', '.dayline h2', '.agree .pv li > span', '.bsteps li > span', '.mvp', '.sub2', '.chips .chip', '.hero-chips span', '.gchip', '.tnm', '.ttbl .k', '.ttbl dt', '[data-one]'];
+  var t = 0;
+  function run() {
+    t = 0;
+    var MINS = { '#bdS': 10.5, '#rxT': 16, '.swhd h1': 20, '.li .nm .one': 12, '.pass h1.city': 20, 'h1.city': 20, '.hero h1': 24, '.dayline h2': 16, '#cT': 18 };   // 큰 제목은 너무 작아지지 않게 칸별 최소
+    document.querySelectorAll(ONE_SEL.join(',')).forEach(function (e) {
+      if (!e.offsetWidth || !e.clientWidth) return;   // 인라인 칸(clientWidth 0)은 잴 수 없음 → 건너뜀
+      e.style.fontSize = ''; e.style.whiteSpace = 'nowrap';
+      if (e.dataset.sh && e.dataset.fw !== String(e.clientWidth)) { if (!e.dataset.full) e.dataset.full = e.textContent; e.dataset.fw = String(e.clientWidth); if (e.textContent !== e.dataset.full) e.textContent = e.dataset.full; if (e.scrollWidth > e.clientWidth + 1) e.textContent = e.dataset.sh; }   // 넘치면 짧은 이름 먼저(폭이 바뀔 때만 다시 정함 — 글자 바꾸기가 다시 부르는 고리 막기)
+      var fs = parseFloat(getComputedStyle(e).fontSize), mn = parseFloat(e.dataset.one) || 11, n = 0; for (var k in MINS) if (e.matches(k)) mn = MINS[k];
+      while (e.scrollWidth > e.clientWidth + 1 && fs > mn && n++ < 40) { fs -= 0.5; e.style.fontSize = fs + 'px'; }
+    });
+  }
+  function q() { if (!t) t = requestAnimationFrame(run); }
+  window.VZTR_ONE = { run: q, add: function (s) { ONE_SEL.push(s); q(); } };
+  function go() { new MutationObserver(q).observe(document.body, { childList: true, subtree: true, characterData: true, attributes: true, attributeFilter: ['hidden', 'aria-pressed', 'open'] });   /* 숨겨 둔 탭이 보일 때도 다시 잼 */ addEventListener('resize', q); try { document.fonts.ready.then(q); } catch (_) {} q(); }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', go); else go();
 })();
