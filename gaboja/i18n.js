@@ -15,7 +15,7 @@
     var mf = document.createElement('link'); mf.rel = 'stylesheet'; mf.href = 'https://fonts.googleapis.com/css2?family=Mona+Sans:wght@400..800&display=swap'; (document.head || document.documentElement).appendChild(mf);
     /* Mona Sans는 고정폭 숫자(tnum)의 0에 빗금 → Apple 기기가 아니면(= Mona를 쓰면) 숫자만 일반 숫자로. Apple은 SF Pro라 그대로 */
     if (!/iPhone|iPad|iPod|Macintosh/.test(navigator.userAgent)) document.documentElement.classList.add('vz-mona');
-    var fs = document.createElement('style'); fs.id = 'vztr-en-font'; fs.textContent = 'html[lang="en"]{--kr:' + SYS + ';--kr-plain:' + SYS + ';--lat:' + SYS + ';--mono:' + SYS + '}html[lang="en"] .vzko,html[lang="en"] [lang="ko"]{font-family:' + KRF + '}html[lang="en"] #bdS{white-space:normal!important;overflow:visible!important;text-overflow:clip!important;-webkit-line-clamp:unset!important;text-wrap:balance}html[lang="en"] .code.k{white-space:normal!important;overflow:visible!important;text-overflow:clip!important;word-break:normal!important;overflow-wrap:normal!important;text-wrap:balance}html[lang="en"] .pass .place.pl1{flex-wrap:wrap;white-space:normal;column-gap:.25rem;row-gap:0}html[lang="en"] .pass .place.pl1 .pn{overflow:visible;text-overflow:clip}html[lang="en"] .nmc b{font-size:.9375rem}html[lang="en"] .ticket .nm,html[lang="en"] .pass .city,html[lang="en"] .rec2 b,html[lang="en"] .tile .n.one,html[lang="en"] .li .nm .one{overflow-wrap:normal;word-break:normal}html.vz-mona[lang="en"] body,html.vz-mona[lang="en"] body *{font-variant-numeric:lining-nums proportional-nums!important}'; (document.head || document.documentElement).appendChild(fs); }
+    var fs = document.createElement('style'); fs.id = 'vztr-en-font'; fs.textContent = 'html[lang="en"]{--kr:' + SYS + ';--kr-plain:' + SYS + ';--lat:' + SYS + ';--mono:' + SYS + '}html[lang="en"] .vzko,html[lang="en"] [lang="ko"]{font-family:' + KRF + '}html[lang="en"] .lfl .lb{display:none}html[lang="en"] #bdS{white-space:normal!important;overflow:visible!important;text-overflow:clip!important;-webkit-line-clamp:unset!important;text-wrap:balance}html[lang="en"] .code.k{white-space:normal!important;overflow:visible!important;text-overflow:clip!important;word-break:normal!important;overflow-wrap:normal!important;text-wrap:balance}html[lang="en"] .pass .place.pl1{flex-wrap:wrap;white-space:normal;column-gap:.25rem;row-gap:0}html[lang="en"] .pass .place.pl1 .pn{overflow:visible;text-overflow:clip}html[lang="en"] .nmc b{font-size:.9375rem}html[lang="en"] .ticket .nm,html[lang="en"] .pass .city,html[lang="en"] .rec2 b,html[lang="en"] .tile .n.one,html[lang="en"] .li .nm .one{overflow-wrap:normal;word-break:normal}html.vz-mona[lang="en"] body,html.vz-mona[lang="en"] body *{font-variant-numeric:lining-nums proportional-nums!important}'; (document.head || document.documentElement).appendChild(fs); }
   var bot = navigator.webdriver || /HeadlessChrome/.test(navigator.userAgent);
   function other() {   // 같은 화면의 다른 언어 주소
     var p = location.pathname;
@@ -53,6 +53,15 @@
     b.onclick = function (e) { e.preventDefault(); go(); };
     var bar = document.querySelector('header.bar'), pill = document.querySelector('.top .pill');
     if (bar) { bar.classList.add('vzl'); bar.appendChild(b); }
+    else if (pill && document.getElementById('drawer')) {   /* 11/23 동우님(보드 답 E7): 가이드북은 머리 대신 왼쪽 메뉴 '설정' 안에 한 줄 — 머리가 깔끔해지고 제목 칸이 넓어짐 */
+      var dr = document.getElementById('drawer'), th = dr.querySelector('.themes');
+      b.className = 'vzrow'; b.setAttribute('data-m', 'lang'); b.setAttribute('lang', EN ? 'ko' : 'en');
+      b.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c3 3.2 3 14.8 0 18M12 3c-3 3.2-3 14.8 0 18"/></svg><span>' + (EN ? '한국어로 보기' : 'View in English') + '</span>';
+      b.onclick = function (e) { e.preventDefault(); e.stopPropagation(); go(); };
+      if (th && th.nextSibling) dr.insertBefore(b, th.nextSibling); else dr.appendChild(b);
+      addEventListener('hashchange', function () { b.href = other(); });
+      refit(); addEventListener('resize', refit); return;   // 제목 맞춤(영어판 'N days in X' → 'X')은 그대로
+    }
     else if (pill) { var m = pill.querySelector('#modeSeg'); pill.insertBefore(b, m || null); }
     else return;
     addEventListener('hashchange', function () { b.href = other(); });

@@ -106,7 +106,7 @@ window.VZTR_EN = {
   '{x}로 유명해요': x => { const e = window.VZTR_I18N && VZTR_I18N.t(String(x).replace(/으$/, '')); return e && !/[가-힣]/.test(e) ? 'Known for ' + e : null; },
   '대표 {x}': x => { const e = window.VZTR_I18N && VZTR_I18N.t(x); return e && !/[가-힣]/.test(e) ? 'Known for ' + e : null; },
   // 출발 안내판 아래 줄 '로컬, 구경 쪽' = 짧은 축 이름
-  '{x} 쪽': x => { const S = { '로컬': 'Local', '핫플': 'Hotspot', '구경': 'Sightseeing', '즐기기': 'Enjoying', '알차게': 'Full', '여유롭게': 'Relaxed', '계획형': 'Planner', '즉흥형': 'Spontaneous' }, p = x.split(/,\s*/); return p.every(w => S[w]) ? p.map(w => S[w]).join(', ') : null; },
+  '{x} 쪽': x => { const S = { '로컬': 'Local', '핫플': 'Hotspot', '구경': 'Sightseeing', '즐기기': 'Experience', '알차게': 'Fast-paced', '여유롭게': 'Relaxed', '계획형': 'Organized', '즉흥형': 'Unscripted' }, p = x.split(/,\s*/); return p.every(w => S[w]) ? p.map(w => S[w]).join(', ') : null; },
   // 하루 제목(엔진 themeTitle) = 짧게
   '{x} 도착, {y}': (c, w) => VZTR_EN_FN.DAYW(w) ? 'Arrive · ' + VZTR_EN_FN.DAYW(w) : null, '{x}에서의 {y}': (c, w) => VZTR_EN_FN.DAYW(w) ? VZTR_EN_FN.DAYW(w) : null,
   '{x}에서 마지막 {y}': (c, w) => VZTR_EN_FN.DAYW(w) ? 'Last · ' + VZTR_EN_FN.DAYW(w) : null, '{x} 당일치기 {y}': (c, w) => VZTR_EN_FN.DAYW(w) ? 'Day trip · ' + VZTR_EN_FN.DAYW(w) : null,
@@ -212,7 +212,7 @@ window.VZTR_EN = {
     '{x} 약 {n}분': '{x} · ~{n} min', '{x} 약 {n}시간 {m}분': '{x} · ~{n} h {m} min', '{x} 약 {n}시간': '{x} · ~{n} h',
     '{x} 당일치기': '{x} day trip', '{x}에서 자유 시간': wrapAfter('에서 자유 시간', e => 'Free time in ' + e),
     // 코드가 붙은 이름: '골목 산책가' 앞 'LSRJ' · '인천 → 간사이 KE723' · '간사이 KIX' · '부산역 011'
-    '{x} {y}': (a, b) => { if (/^[LH][SE][FR][JP]$/.test(a)) { const e = FULL(b); return e ? a + ' ' + e : null; } if (CODE.test(b)) { const e = FULL(a); return e ? e + ' ' + b : null; } return null; },
+    '{x} {y}': (a, b) => { if (/^[LH][SE][FR][JPOU]$/.test(a)) { const e = FULL(b); return e ? a + ' ' + e : null; } if (CODE.test(b)) { const e = FULL(a); return e ? e + ' ' + b : null; } return null; },
     'KTX {x}': x => { const e = FULL(x); return e ? 'KTX ' + e : null; },
     '차 {x}': x => { const e = FULL(x); return e ? 'Car ' + e : null; },
     '출국 비행기 {x}': x => { if (HAS('출국 비행기 ' + x)) return null; const e = HAN.test(x) ? FULL(x) : x; return e ? 'Departing flight ' + e : null; },
@@ -278,5 +278,5 @@ Object.assign(window.VZTR_EN, {
   '가는 열차 시각 미입력 · 넣으면 시간이 정해져요': 'Outbound train time? Add it', '오는 열차 시각 미입력 · 넣으면 시간이 정해져요': 'Return train time? Add it',
   '시각 미입력 · 넣으면 시간이 정해져요': 'Time not set? Add it',
   '비행기 시각을 넣으면 그날 시간이 정해져요': 'Add the flight time to set this day', '열차 시각을 넣으면 그날 시간이 정해져요': 'Add the train time to set this day', '시각을 넣으면 그날 시간이 정해져요': 'Add a time to set this day',   // 'about 3 h 14 min'이 잘리던 것 → '~3 h 14 min'
-  '로컬': 'Local', '핫플': 'Hotspot', '구경': 'Sightseeing', '즐기기': 'Enjoying', '알차게': 'Full', '여유롭게': 'Relaxed', '계획형': 'Planner', '즉흥형': 'Spontaneous',   // 유형 4축 = 화면마다 같은 낱말 (글자 L·H·S·E·F·R 와 첫 글자 맞춤)
+  '로컬': 'Local', '핫플': 'Hotspot', '구경': 'Sightseeing', '즐기기': 'Experience', '알차게': 'Fast-paced', '여유롭게': 'Relaxed', '계획형': 'Organized', '즉흥형': 'Unscripted',   // 유형 4축 = 화면마다 같은 낱말 (글자 L·H·S·E·F·R 와 첫 글자 맞춤)
 });
