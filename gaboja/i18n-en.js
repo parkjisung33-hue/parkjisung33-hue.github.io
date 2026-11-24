@@ -121,7 +121,7 @@ window.VZTR_EN = {
   '흘러가는 대로 vs 오픈 시간 계산': 'Go with the flow vs. plan to open', '느긋한 즉흥 같고 동네·명소 보완': 'Easygoing; adds areas and sights',
   '명소 정복자': 'Bucket Lister', '쇼핑 마스터': 'Haul Master', '로컬 탐험형': 'Explorers', '취향 수집형': 'Curators', '명소 정복형': 'Sightseers', '힐링 충전형': 'Rechargers',
   '· {x}': x => { const e = VZTR_EN_FN.TT(x); return e !== x ? '· ' + e : null; },
-  '나는 어떤 여행자일까?': 'Find your travel type',
+  '이번 여행, 나답게.': 'Travel true to you.',   // 11/25 첫 화면 제목 4번 시안
   // 11/23 장소 고르기 맛집 카드 ★ 줄 머리말(start swPoints) — 메뉴 이름 영어는 i18n-en-auto(메뉴 사전)
   '인기 메뉴': 'Popular', '인기': 'Popular', '대표': 'Signature',
   '지도에 없는 동네도 동선은 미리. 하루 #만 보는 기본': 'Off-map streets, route planned anyway. 10K steps a day, minimum.',
@@ -351,6 +351,8 @@ Object.assign(window.VZTR_EN, {
     '열차 {x} 출발 · 기다리는 동안 역 근처 식사·카페 · 승차권 · 타는 곳 확인': 'Train leaves {x} · eat or grab a coffee near the station meanwhile · check ticket & platform', '열차 {x} 출발 · 기다리는 동안 역 근처 식사·카페 · 갈아탈 열차 타는 곳 확인': 'Train leaves {x} · eat or grab a coffee near the station meanwhile · find your connecting platform',
     '열차 시각 = 코레일 시간표 · 코레일에서 예매': 'Times from Korail timetable · book on Korail', '{x} 가는 막차 지남 · 코레일 확인': 'Last train to {x} gone · check Korail',   // 11/25 '주의' 칸 = 한 줄(최소 11px) → 짧게
     '짐 맡기고 산책': 'Stroll, bags stored', '{x} · 짐 맡기고 근처 산책': '{x} · leave your bags, stroll nearby', '숙소에 짐 맡기고 · 열차 시각에 맞춰 출발': 'Leave bags at the hotel · head out in time for the train',
+    '{x} + 택시 (대략) · 약 {n}시간 {m}분': '{x} + taxi (approx.) · about {n} h {m} min', '{x} + 택시 (대략) · 약 {n}분': '{x} + taxi (approx.) · about {n} min', '{x} + 택시 (대략)': '{x} + taxi (approx.)',   // 11/25 공항 → 버스 터미널(공항철도 + 택시)
+    '{x} + 걷기 · 약 {n}시간 {m}분': '{x} + walk · about {n} h {m} min', '{x} + 걷기 · 약 {n}분': '{x} + walk · about {n} min', '{x} + 걷기': '{x} + walk',
     '터미널 도착': 'At terminal', '고속버스': 'Express bus', '시외버스': 'Intercity bus', '고속버스 · {x} → {y}': 'Express bus · {x} → {y}', '시외버스 · {x} → {y}': 'Intercity bus · {x} → {y}', '버스 시각은 대략 · 터미널에서 예매': 'Bus times approx. · book at the terminal',   // 11/25 속초·통영 버스
     '서울고속버스터미널': 'Seoul Express Bus Terminal', '동서울터미널': 'Dong Seoul Terminal', '동서울': 'Dong Seoul', '속초고속버스터미널': 'Sokcho Express Terminal', '속초시외버스터미널': 'Sokcho Intercity Terminal', '강릉시외버스터미널': 'Gangneung Intercity Terminal', '통영종합버스터미널': 'Tongyeong Bus Terminal',
     '현지어': 'Local name', '명동': 'Myeongdong', '남산': 'Namsan', '동대문': 'Dongdaemun', '감천': 'Gamcheon', '구좌': 'Gujwa', '엑스포': 'Expo', '강정': 'Gangjeong', '소래': 'Sorae',   // 11/25 추가 카드 동네 앞 이름   // 11/25 왼쪽 칸 4.75rem — 'Local language' 넘침(칸 내용 = 현지어 이름)
