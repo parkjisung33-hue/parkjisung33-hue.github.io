@@ -16,7 +16,7 @@
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="stylesheet" href="fonts/google/gf.css?v=1"><!-- 11/24 Inter Tight·Zen Kaku Gothic New 자체 호스팅(구글 서버로 IP 안 감, OFL) -->
 <script src="inapp.js?v=1"></script>
-<script src="i18n-en-auto.js?v=1a18c906"></script><script src="i18n-en.js?v=1a18c906"></script><script src="i18n.js?v=1a18c906"></script><!-- 11/20 W5 언어 틀 (영어판 = /en/, 사전 i18n-en.js는 배포 때 en/에만 붙음) -->
+<script src="i18n-en-auto.js?v=13fc61c3"></script><script src="i18n-en.js?v=13fc61c3"></script><script src="i18n.js?v=13fc61c3"></script><!-- 11/20 W5 언어 틀 (영어판 = /en/, 사전 i18n-en.js는 배포 때 en/에만 붙음) -->
 <link rel="stylesheet" href="fonts/vztr-fonts.css?v=2"><!-- 11/19 글꼴: 굵은 한글 IBM Plex Sans KR · 보통 한글 Pretendard · 영문·숫자 IBM Plex Sans -->
 <style>
 /* Pretendard 1.3.9 (SIL OFL 1.1) — 공식 배포본(orioncactus/pretendard)을 fonts/에 함께 올림 */
@@ -1239,6 +1239,7 @@ html[data-grp="HS"] { --stamp-a: var(--g-hs-a); --stamp-lt: var(--g-hs-lt); } ht
 #warn .nrow .kd { margin-top: 0 !important; align-self: center; }
 /* 7. 탑승권: 편명 칸 오른쪽 정렬 · 살아 있는 탑승권 빛은 바깥으로 은은하게 */
 .flycard .fields .fld:last-child { text-align: right; }
+html[lang="en"] .flycard .fields { grid-template-columns: repeat(3, max-content); justify-content: space-between; }   /* 11/25 영어판: 'Sun 12/13'처럼 긴 날짜가 3등분 칸에서 잘림 → 글자 폭만큼 칸 */
 .flycard .fields .fld:nth-child(2) { text-align: center; }
 .flycard .hd { padding-top: 1.125rem; padding-bottom: 0.9375rem; } .flycard .fields { padding-top: 0.9375rem; padding-bottom: 1.125rem; }   /* 11/19 #10: 탑승권 위아래 숨 조금 더 */   /* 공항 도착 = 가운데 */
 /* 살아 있는 탑승권 빛: 바깥 테두리에만 은은하게. 카드 자체의 그림자를 숨 쉬게 함(::after는 '처음 한 번 빛줄기'가 쓰고 있어 겹치면 PC에서 왼쪽에 빈 상자가 보였음 → 11/19 수정)
@@ -1683,7 +1684,7 @@ details.sec > summary .cnt { min-width: 0; overflow: hidden; text-overflow: elli
 <script src="weather.js"></script>
 <script src="types.js"></script>
 <script src="chars.js?v=fit3"></script>
-<script>/* 공유용 샘플(#sample=키): 엔진·장소 DB·샘플 입력을 바로 불러와 그 자리에서 일정을 만듦 (저장 안 함) */ if (window.VZTR_LANG === 'en' || /#sample=[\w-]+|#v=\w{12}/.test(location.hash)) document.write('<script src="gen-data.js?v=13"><\/script><script src="gen.js?v=14"><\/script><script src="samples.js?v=5"><\/script>');</script>
+<script>/* 공유용 샘플(#sample=키): 엔진·장소 DB·샘플 입력을 바로 불러와 그 자리에서 일정을 만듦 (저장 안 함) */ if (window.VZTR_LANG === 'en' || /#sample=[\w-]+|#v=\w{12}/.test(location.hash)) document.write('<script src="gen-data.js?v=13"><\/script><script src="gen.js?v=15"><\/script><script src="samples.js?v=6"><\/script>');</script>
 <script>/* 11/19 W8 보기 전용 공유 링크(#v=id): 서버에 보관된 가이드북을 샘플처럼 띄움 — 이 기기엔 저장 안 함(made 없음). 편집 반영은 VZTR_VIEW_EDITS */
 (function () { var m = location.hash.match(/^#v=([A-Za-z0-9]{12})$/); if (!m) return;
   try { var x = new XMLHttpRequest(); x.open('GET', 'https://vztr-api.d-chive33-a29.workers.dev/plan/' + m[1], false); x.send();
@@ -2138,6 +2139,8 @@ const carDurAt = (c, depMin) => c.car && c.car.d ? c.car.d[Math.min(23, Math.max
 // 공항·역 이름 + 시각 한 줄 ('01:40(다음 날)' → '01:40⁺¹')
 // 11/15: 시각이 비면(시각 미정) 이름만 — 가운데에 '시각 미정'이 이미 있어 이름이 잘리지 않게
 /* 11/23 동우님 보드 답 E3: 영어판 탑승권 장소 줄 = 'Seoul Station 06:00'(가운뎃점 없음, 넘치면 시각만 다음 줄) */
+/* 11/25 영어판 기차표: 큰 글자(코드) = 'Dongdaegu' 밑 칸에 'Dongdaegu Station'을 또 쓰면 두 줄 → 'Station'만 (한국어판·비행기는 그대로) */
+const pnOf = (c, k) => { const nm = c.fly[k], I = window.VZTR_I18N; if (c.ride === 'train' && window.VZTR_LANG === 'en' && I && I.t) { const f = I.t(nm), cd = I.t(c.fly[k - 1]); if (f && cd && f === cd + ' Station') return 'Station'; } return esc(nm); };
 const plLine = (name, tx) => '<div class="place pl1">' + (name ? '<span class="pn">' + name + '</span>' + (tx ? '<span class="tt">' + (window.VZTR_LANG === 'en' ? '' : '· ') : '') : '<span class="tt">') + (tx || !name ? String(tx).replace(/\(다음 날\)/, '<sup>+1</sup>') + '</span>' : '') + '</div>';
 function flyCard(d, c, cls, top) {
   const CAR = isCar(c), TR = c.ride === 'train', tbd = !!d.tbd, nw = nowOf(d), live = / live/.test(cls || '');
@@ -2157,9 +2160,9 @@ function flyCard(d, c, cls, top) {
   const pl = tx => plLine('', tx);
   if (tbd) {
     return open + '<div class="hd">' + hdL
-      + '<div class="route"><div>' + code(0) + (CAR ? pl('출발 시각 미정') : plLine(esc(c.fly[1]), '')) + '</div>'
+      + '<div class="route"><div>' + code(0) + (CAR ? pl('출발 시각 미정') : plLine(pnOf(c, 1), '')) + '</div>'
       + '<div class="plane' + (CAR || TR ? ' tr' : '') + '">' + ic + '<small>시각 미정</small></div>'
-      + '<div class="to">' + code(2) + (CAR ? pl('도착 = 출발 뒤 계산') : plLine(esc(c.fly[3]), '')) + '</div></div></div>'
+      + '<div class="to">' + code(2) + (CAR ? pl('도착 = 출발 뒤 계산') : plLine(pnOf(c, 3), '')) + '</div></div></div>'
       + '<div class="perf"></div><div class="tbdrow"><span>' + rideWord(c) + ' 시각을 넣으면 그날 시간이 정해져요</span><button class="btn pri sm" type="button">입력</button></div></div>';
   }
   if (CAR) {
@@ -2174,9 +2177,9 @@ function flyCard(d, c, cls, top) {
   }
   return open
     + '<div class="hd">' + hdL
-    + '<div class="route"><div><div class="code">' + c.fly[0] + '</div>' + plLine(esc(c.fly[1]), c.s) + '</div>'
+    + '<div class="route"><div><div class="code">' + c.fly[0] + '</div>' + plLine(pnOf(c, 1), c.s) + '</div>'
     + '<div class="plane' + (TR ? ' tr' : '') + '">' + ic + '<small>' + durTx(c.du) + '</small></div>'
-    + '<div class="to"><div class="code">' + c.fly[2] + '</div>' + plLine(esc(c.fly[3]), c.e) + '</div></div></div>'
+    + '<div class="to"><div class="code">' + c.fly[2] + '</div>' + plLine(pnOf(c, 3), c.e) + '</div></div></div>'
     + '<div class="perf"></div>'
     + '<div class="fields"><div class="fld"><span>날짜</span><b>' + d.date + '</b></div><div class="fld"><span>' + (TR ? '역 도착' : '공항 도착') + '</span><b>' + arr + '까지</b></div><div class="fld"><span>' + (c.fno ? (TR ? '열차' : '편명') : TR ? '소요' : '비행') + '</span><b>' + (c.fno ? esc((TR && c.line ? c.line + ' ' : '') + c.fno) : durTx(c.du)) + '</b></div></div></div>';
 }
@@ -3191,7 +3194,7 @@ function fixNotes(d, c) {
 // 엔진 입력 = PLAN.inp (없는 옛 일정은 유형·날짜·도시로 복원). 다른 날·메모(같은 장소)·여행 메모는 그대로
 function loadGen(cb) {
   if (window.GABOJA_GEN) { loadGD(() => cb(window.GABOJA_GEN)); return; }
-  loadGD(() => { try { fetch('gen.js?v=14').then(r => r.arrayBuffer()).then(b => { (0, eval)(new TextDecoder('utf-8').decode(b)); cb(window.GABOJA_GEN || null); }).catch(() => cb(null)); } catch (_) { cb(null); } });
+  loadGD(() => { try { fetch('gen.js?v=15').then(r => r.arrayBuffer()).then(b => { (0, eval)(new TextDecoder('utf-8').decode(b)); cb(window.GABOJA_GEN || null); }).catch(() => cb(null)); } catch (_) { cb(null); } });
 }
 let regenBusy = false;
 function regenDay(d, c, dep, arr, fno, done0) {

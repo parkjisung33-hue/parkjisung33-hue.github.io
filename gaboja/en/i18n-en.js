@@ -339,7 +339,14 @@ Object.assign(window.VZTR_EN, {
     '{x} 대중교통이면 {y}': (a, b) => { const f = RTE(a), t = TRV(b); return f && t ? f + ': ' + t : null; /* 한 줄 칸이라 짧게 */ },
     // 11/24 동우님: 오늘 오전 전 엔진으로 만든 '저장된 일정'의 옛 주의 줄 → 영어판에서 한글로 남던 것
     '못 넣은 곳: {x}({y})': (a, b) => { const x = PNM(a) || TQ(a), y = TQ(b); return x && y ? 'Not added: ' + x + ' (' + y + ')' : null; },
-    '짐 싸기 · 오늘 {x}로 숙소 옮기는 날': 'Pack up · moving to {x} today', '{x} → {y} · 짐 들고 · 약 {n}분': '{x} → {y} · with luggage · ~{n} min',
+    '짐 싸기 · 오늘 {x}로 숙소 옮기는 날': 'Pack up · moving to {x} today', 
+    /* 11/25 영어판 한국 여러 도시(KTX) */
+    '짐 싸기 · 오늘 {x}으로 숙소 옮기는 날': 'Pack up · moving to {x} today', '기상 · 짐 싸기 · 오늘 {x}로 숙소 옮기는 날': 'Wake up · moving to {x} today', '기상 · 짐 싸기 · 오늘 {x}으로 숙소 옮기는 날': 'Wake up · moving to {x} today', '택시': 'Taxi', '{x} {n}:{m} 문 열 때 맞춰 도착': (x, h, m) => { const e = VZTR_EN_FN.TT(x); return /[가-힣]/.test(e) ? null : 'Arrive when ' + e + ' opens at ' + h + ':' + m; }, '리무진 버스 + 긴테쓰': 'Limousine bus + Kintetsu', '걷기 + 전철': 'Walk + train', '걷기 + 전철 · 약 {n}분': 'Walk + train · ~{n} min', '고도': 'Godo', '{x} · 갈아타기': '{x} · Transfer', '갈아탈 열차 타는 곳 확인': 'Find the platform for your next train', '승차권 · 타는 곳 확인': 'Ticket · check the platform',
+    '기차 시각은 대략 · 코레일에서 예매': 'Train times are approximate · book on Korail', 'KTX · {x} → {y}': 'KTX · {x} → {y}', 'ITX-새마을 · {x} → {y}': 'ITX-Saemaeul · {x} → {y}', '열차 · {x} → {y}': 'Train · {x} → {y}', 'ITX-새마을': 'ITX-Saemaeul', '열차': 'Train',
+    '{x} 당일치기는 멀어서 뺐어요 · {y}에서 자는 밤을 넣어 주세요': '{x} is too far for a day trip · add a night there', '기차·버스 (대략)': 'Train or bus (approx.)', '전철 (대략)': 'Train (approx.)',
+    '출국 공항': 'Departure airport', '도시 사이는 기차(KTX)로 이어서 짜요': 'We link the cities by KTX train', '여러 도시를 함께 고를 수 있어요 · 예: 서울 + 부산 + 대구': 'Pick several cities · e.g. Seoul + Busan + Daegu',
+    '안 자는 도시는 당일치기로 다녀와요 · 도시를 옮기는 날은 KTX로 짐 들고 이동': 'Cities you don’t sleep in become day trips · on moving days, take the KTX with your bags',
+    '동대구': 'Dongdaegu', '신경주': 'Singyeongju', '청량리': 'Cheongnyangni', '여수엑스포': 'Yeosu Expo', '광주송정': 'Gwangju-Songjeong', '수서': 'Suseo', '대구 TAE': 'Daegu TAE', '대구공항': 'Daegu Airport', '대구공항 도착': 'Arrive at Daegu Airport', '{x} → {y} · 짐 들고 · 약 {n}분': '{x} → {y} · with luggage · ~{n} min',
     '못 넣은 곳: {x}': a => { const x = PNM(a) || TQ(a); return x ? 'Not added: ' + x : null; }, '대중교통': 'Transit', '대중교통 · 약 {n}분': 'Transit · ~{n} min',
     // 정보 화면
     '비워 두면 자동으로 붙어요': 'Leave blank to auto-name', '출발지는 #일, 나머지는 #년 뒤 지워요': 'Start area deleted in # days, the rest in # year',
