@@ -94,7 +94,8 @@ window.VZTR_EN = {
   '밤 #시까지': 'Until #:00',   // 자동 번역 'p.m.' 바로잡음 (24시 표기)
   // 검수(11/20): 영어가 길어 넘치던 곳 = 짧게 (한 줄 원칙)
   '관광보다 먹방': 'Food over sights', '현지인 동네 골목': 'Local alleys', '유명한 곳은 꼭': 'Famous spots', '전시·문화·역사': 'Museums · history',
-  '찾아보고, 내 성향에 맞는 여행 일정도 받아 보세요.': 'Find yours and get a plan that fits.',
+  '계획파일까, 즉흥파일까?': 'Do you plan it all, or wing it?',   // 11/25 첫 화면 설명 2번 시안
+  '답하다 보면 내 여행이 보여요.': 'Answer a few, and your trip takes shape.',
   '#곳 다녀옴 · #:# 마무리': '# visited · done #:#', '#곳 예정 · #:# 마무리': '# planned · ends #:#',
   '인천공항 #:#까지 도착 · 출발 #시간 전': 'Incheon Airport by #:# · # h early', '김포공항 #:#까지 도착 · 출발 #시간 전': 'Gimpo Airport by #:# · # h early', '김해공항 #:#까지 도착 · 출발 #시간 전': 'Gimhae Airport by #:# · # h early',
   '4칸이 다 차면 내 여행 유형': '4 letters = your type',
