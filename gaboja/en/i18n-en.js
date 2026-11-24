@@ -309,6 +309,13 @@ Object.assign(window.VZTR_EN, {
   const GEN = /\s+(Palace|Hanok Village|Hanok|Village|Market|Street|Park|Temple|Shrine|Tower|Station|Museum|Garden|Alleys?|Arcade|Store|Shop)$/i;
   const two = (a, b, f) => { const x = PNM(a), y = PNM(b); if (!x || !y) return null; const r = f(x, y); return r.length <= 26 ? r : f(x.replace(GEN, ''), y.replace(GEN, '')); };   // 제목 한 줄: 길면 'Palace'·'Market' 같은 꼬리말을 뺌
   const one = (a, f) => { const x = PNM(a); return x ? f(x) : null; };
+  /* 11/24 동우님: 이동 문구(수단 이름 + 시간)를 영어로 — '공항버스 6200 약 1시간 30분' → 'Airport bus 6200 · ~1 h 30 min'. 한글이 남으면 null(다음 틀로) */
+  const HANX = /[가-힣]/, TQ = x => { const r = window.VZTR_I18N && VZTR_I18N.t ? VZTR_I18N.t(x) : null; return r && !HANX.test(r) ? r : null; };   // (이 안의 TT는 장소 이름 표라 직접 부름)
+  const MODE = [['공항리무진버스', 'Airport limousine bus'], ['공항리무진', 'Airport limousine'], ['리무진버스', 'Limousine bus'], ['리무진', 'Limousine'], ['공항버스', 'Airport bus'], ['공항철도', 'Airport Railroad'], ['대중교통', 'Transit'], ['지하철', 'Subway'], ['전철', 'Train'], ['시내버스', 'City bus'], ['고속버스', 'Express bus'], ['버스', 'Bus'], ['택시', 'Taxi'], ['기차', 'Train'], ['열차', 'Train'], ['차', 'Car'], ['걸어서', 'Walk'], ['도보', 'Walk']];
+  const TRV = x => { const m = /^(.+?)\s*약\s*(?:(\d+)시간)?\s*(?:(\d+)분)?\s*(\((?:추정|가정)\))?$/.exec(String(x).trim()); if (!m || (!m[2] && !m[3])) return null;
+    let md = m[1].trim(); MODE.forEach(([k, v]) => { md = md.split(k).join(v); }); if (HANX.test(md)) { const t = TQ(m[1].trim()); if (!t) return null; md = t; }
+    return md + ' · ~' + (m[2] ? m[2] + ' h' + (m[3] ? ' ' + m[3] + ' min' : '') : m[3] + ' min') + (m[4] ? ' (est.)' : ''); };
+  const RTE = x => { const m = /^(.+?)\s*→\s*(.+)$/.exec(String(x).trim()); if (!m) return null; const W = { 집: 'Home', 공항: 'airport', 숙소: 'your stay' }, f = W[m[1]] || PNM(m[1]), g = W[m[2]] || PNM(m[2]); return f && g ? f + ' → ' + g : null; };
   Object.assign(window.VZTR_EN, {
     // 하루 제목(gen.js themeTitle 11/24) — 장소 이름은 사전 영어 이름으로
     '{x}에서 {y}까지': (a, b) => two(a, b, (x, y) => x + ' to ' + y),
@@ -325,7 +332,12 @@ Object.assign(window.VZTR_EN, {
     '가는 비행기 시각을 넣으면 시간이 정해져요': 'Add your outbound flight time', '오는 비행기 시각을 넣으면 시간이 정해져요': 'Add your return flight time',
     '가는 열차 시각을 넣으면 시간이 정해져요': 'Add your outbound train time', '오는 열차 시각을 넣으면 시간이 정해져요': 'Add your return train time',
     '차 출발 #:#로 계산 · 차 카드에서 바꿔요': 'Leaving at #:# · edit on the car card', '돌아오는 차 #:# 출발로 계산': 'Driving back at #:#',
-    '대중교통이면 {x}': a => one(a, x => 'By transit: ' + x), '대중교통': 'Transit', '대중교통 · 약 {n}분': 'Transit · ~{n} min',
+    '대중교통이면 {x}': a => { const t = TRV(a); return t ? 'By transit: ' + t : one(a, x => 'By transit: ' + x); },   // 11/24 동우님: '대중교통이면 공항버스 6200 약 1시간 30분'이 한글로 남던 것(장소 이름만 받던 틀)
+    '{x} 대중교통이면 {y}': (a, b) => { const f = RTE(a), t = TRV(b); return f && t ? f + ': ' + t : null; /* 한 줄 칸이라 짧게 */ },
+    // 11/24 동우님: 오늘 오전 전 엔진으로 만든 '저장된 일정'의 옛 주의 줄 → 영어판에서 한글로 남던 것
+    '못 넣은 곳: {x}({y})': (a, b) => { const x = PNM(a) || TQ(a), y = TQ(b); return x && y ? 'Not added: ' + x + ' (' + y + ')' : null; },
+    '짐 싸기 · 오늘 {x}로 숙소 옮기는 날': 'Pack up · moving to {x} today', '{x} → {y} · 짐 들고 · 약 {n}분': '{x} → {y} · with luggage · ~{n} min',
+    '못 넣은 곳: {x}': a => { const x = PNM(a) || TQ(a); return x ? 'Not added: ' + x : null; }, '대중교통': 'Transit', '대중교통 · 약 {n}분': 'Transit · ~{n} min',
     // 정보 화면
     '비워 두면 자동으로 붙어요': 'Leave blank to auto-name', '출발지는 #일, 나머지는 #년 뒤 지워요': 'Start area deleted in # days, the rest in # year',
     // 쇼핑 테마(일본)
