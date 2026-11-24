@@ -704,8 +704,16 @@ html.fit .foot::before { display: none; }
 .agree .pv { list-style: none; margin: 0.375rem 0 0; padding: 0; display: flex; flex-direction: column; gap: 0.375rem; }
 .agree .pv li { display: flex; align-items: center; gap: 0.5rem; font-size: 0.78125rem; color: var(--sub); line-height: 1.35; }
 .agree .pvl { align-self: flex-start; margin-top: 0.25rem; font-size: 0.75rem; color: var(--sub); text-decoration: underline; text-underline-offset: 2px; }   /* 11/24 처리방침 링크 */
-.agree.age { margin-top: 0.5rem; align-items: center; }
-.agree.age input { margin: 0; }
+.legal { display: flex; justify-content: center; gap: 1rem; margin: 0.25rem 0 0; font-size: 0.6875rem; }   /* 11/24 첫 화면 아래 법적 고지 */
+.legal a { color: var(--sub); text-decoration: none; }
+.legal b { font-weight: 700; }
+.agrees { display: flex; flex-direction: column; gap: 0.5rem; }   /* 11/24 동의 묶음 */
+.agree.row, .agree.all { align-items: center; }
+.agree.row input, .agree.all input { margin: 0; }
+.agree.row > span { flex: 1; }
+.agree.row > .pvl { margin: 0; flex: none; }
+.agree.all { background: transparent; box-shadow: none; border-style: dashed; }
+.agree.all small { display: block; }
 .agree .pv svg { width: 1rem; height: 1rem; flex: none; stroke: currentColor; fill: none; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
 .rgsub { margin: 0.25rem 0 0; font-size: 0.8125rem; color: var(--sub); }
 /* 11/18 T9: 반응 시트 오른쪽 위 문구가 길어지면 두 줄까지 */
@@ -975,6 +983,7 @@ html[lang="en"] .rhy .rr { grid-template-columns: 4.875rem minmax(0,1fr); }
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
 <script>/* 11/15 #23: 아이폰 사파리 26(떠 있는 아래 주소창) = 아래 고정 버튼을 그만큼 올림 */ (function () { try { const ua = navigator.userAgent, ios = /iP(hone|od|ad)/.test(ua) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1), solo = navigator.standalone === true || matchMedia('(display-mode: standalone)').matches, v = +((ua.match(/Version\/(\d+)/) || [])[1] || 0); if (ios && !solo && v >= 26) document.documentElement.classList.add('ios26'); } catch (_) {} })();</script>
+<script src="legal/flags.js?v=1"></script><!-- 11/24 약관 스위치·버전(tools/build_legal.py가 만듦) -->
 <script src="types.js"></script>
 <script src="chars.js?v=fit3"></script>
 <script src="gen-data.js?v=13"></script>
@@ -1236,6 +1245,8 @@ function tally(ans) { const v = { L: 0, H: 0, S: 0, E: 0, F: 0, R: 0, J: 0, P: 0
 function letters(v) { return AX.map(x => { const A = v[x.a[0]], B = v[x.b[0]]; return A + B === 0 ? null : (A >= B ? x.a[0] : x.b[0]); }); }
 
 /* ── 화면 그리기 ── */
+/* 11/24 약관·처리방침 스위치·버전 (legal/flags.js) — 동의 기록에 버전을 남김 */
+const LEGAL = Object.assign({ flags: {}, v: { terms: '', privacy: '' } }, window.VZTR_LEGAL || {}, { url: d => (window.VZTR_LANG === 'en' ? '../' + d + '.html#en' : d + '.html') });
 const PV_IC = {   // 11/18 M39: 개인정보 안내 줄 아이콘
   use: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 3.5h7l4 4V19a1.5 1.5 0 0 1-1.5 1.5h-9A1.5 1.5 0 0 1 6 19V5a1.5 1.5 0 0 1 1-1.5zM14 3.5V8h4M9 12.5h6M9 16h4"/></svg>',
   clock: '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/></svg>',
@@ -1409,6 +1420,7 @@ function rIntro() {
     <div class="foot">
       <button class="cta" id="startBtn">내 유형 알아보기 ${ICON.arrow}</button>
       <button class="ghost" id="allBtn">16가지 여행 성향 둘러보기</button>
+      <p class="legal"><a href="${LEGAL.url('privacy')}" target="_blank" rel="noopener"><b>개인정보처리방침</b></a><a href="${LEGAL.url('terms')}" target="_blank" rel="noopener">이용약관</a></p>
     </div>`, 'intro');
   depRun(pick);
   $('#startBtn').onclick = () => { S.ans = []; S.shuffle = Q.map(q => shuffled(q.o.map((_, i) => i))); S.hist = []; go('q0'); };
@@ -1917,20 +1929,28 @@ function rInfo(s) {
       <div class="blk"><div class="sub2">이메일</div>
         <input class="in" id="toIn" autocomplete="off" value="${esc(tr.to || '')}"><span class="err" id="toErr"></span></div>
       <input id="hpIn" name="website" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;width:1px;height:1px;opacity:0">
-      <label class="agree" id="agBox"><input type="checkbox" id="agIn" ${tr.agree ? 'checked' : ''}><span><b>개인정보 수집·이용에 동의해요</b>
+      <div class="agrees" role="group" aria-label="약관 동의">
+      <label class="agree all"><input type="checkbox" id="agAll"><span><b>전체 동의</b><small>필수 항목${LEGAL.flags.newsletter ? '과 선택 항목' : ''}에 모두 동의해요</small></span></label>
+      <label class="agree row"><input type="checkbox" id="tmIn" ${tr.terms ? 'checked' : ''}><span><b>[필수] 이용약관 동의</b></span><a class="pvl" href="${LEGAL.url('terms')}" target="_blank" rel="noopener">보기</a></label>
+      <label class="agree" id="agBox"><input type="checkbox" id="agIn" ${tr.agree ? 'checked' : ''}><span><b>[필수] 개인정보 수집·이용 동의</b>
         <ul class="pv"><li>${PV_IC.use}<span>닉네임·이메일·여행 정보는 가이드북에만 써요</span></li><li>${PV_IC.clock}<span>출발지는 7일, 나머지는 1년 뒤 지워요</span></li><li>${PV_IC.globe}<span>해외(미국) 서버에 맡겨 보관해요</span></li><li>${PV_IC.mail}<span>‘삭제해 주세요’ 답장 한 번이면 바로 지워요</span></li><li>${PV_IC.no}<span>동의하지 않으면 신청할 수 없어요</span></li></ul>
-        <a class="pvl" href="${window.VZTR_LANG === 'en' ? '../privacy.html#en' : 'privacy.html'}" target="_blank" rel="noopener">개인정보처리방침 전문 보기</a><a class="pvl" href="${window.VZTR_LANG === 'en' ? '../terms.html#en' : 'terms.html'}" target="_blank" rel="noopener">이용약관 보기</a></span></label>
-      <label class="agree age" id="ageBox"><input type="checkbox" id="ageIn" ${tr.age ? 'checked' : ''}><span><b>만 14세 이상이에요</b></span></label>
+        <a class="pvl" href="${LEGAL.url('privacy')}" target="_blank" rel="noopener">개인정보처리방침 전문 보기</a></span></label>
+      <label class="agree row" id="ageBox"><input type="checkbox" id="ageIn" ${tr.age ? 'checked' : ''}><span><b>[필수] 만 14세 이상입니다</b></span></label>
+      ${LEGAL.flags.newsletter ? `<label class="agree row"><input type="checkbox" id="mkIn" ${tr.mkt ? 'checked' : ''}><span><b>[선택] 여행 소식·혜택 메일 받기</b><small>동의하지 않아도 가이드북은 받을 수 있어요 · 2년마다 다시 여쭤봐요</small></span></label>` : ''}
+      </div>
       <div class="foot"><button class="cta" id="sNext" disabled>가이드북 신청하기 ${ICON.arrow}</button></div>`);
+    function syncAll() { const al = $('#agAll'), bx = ['#tmIn', '#agIn', '#ageIn', '#mkIn'].map(x => $(x)).filter(Boolean); if (al) al.checked = bx.every(b => b.checked); }   // 11/24 전체 동의 표시 맞춤(upd보다 먼저 정의)
     const toIn = $('#toIn'), ph = () => { toIn.placeholder = tr.toKind === 'mail' ? '예: name@gmail.com' : '예: gaboja_trip'; toIn.type = tr.toKind === 'mail' ? 'email' : 'text'; toIn.inputMode = tr.toKind === 'mail' ? 'email' : 'text'; };
     const ok = () => { const v = (tr.to || '').trim(); return tr.toKind === 'mail' ? RE_MAIL.test(v) : RE_KAKAO.test(v); };
-    const upd = (showErr) => { const good = ok(); $('#toErr').textContent = showErr && tr.to && !good ? (tr.toKind === 'mail' ? '이메일 주소 형식을 확인해 주세요' : '영문·숫자·._- 4~20자로 적어 주세요') : ''; $('#sNext').disabled = !(good && (tr.nick || '').trim() && tr.agree && tr.age); };   // 11/24: 만 14세 미만은 받지 않음(개인정보보호법 22조의2)
+    const upd = (showErr) => { const good = ok(); $('#toErr').textContent = showErr && tr.to && !good ? (tr.toKind === 'mail' ? '이메일 주소 형식을 확인해 주세요' : '영문·숫자·._- 4~20자로 적어 주세요') : ''; $('#sNext').disabled = !(good && (tr.nick || '').trim() && tr.agree && tr.age && tr.terms); syncAll(); };   // 11/24: 만 14세 미만은 받지 않음(개인정보보호법 22조의2)
     ph(); upd(false);
     $('#nkIn').oninput = e => { tr.nick = e.target.value; upd(false); };
     $('#ttIn').oninput = e => { tr.ttl = e.target.value; $('#ttCnt').textContent = myTitle(tr).length + ' / ' + TITLE_MAX; };
     toIn.oninput = e => { tr.to = e.target.value; upd(false); }; toIn.onblur = () => upd(true);
-    $('#agIn').onchange = e => { tr.agree = e.target.checked; upd(true); };
-    $('#ageIn').onchange = e => { tr.age = e.target.checked; upd(true); };
+    /* 11/24 동의 구분(개인정보보호법 22조①: 동의 사항을 구분해 각각) · 전체 동의 = 아래 칸을 한꺼번에 체크(선택 항목도 개별로 풀 수 있음) */
+    const AG = [['#tmIn', 'terms'], ['#agIn', 'agree'], ['#ageIn', 'age'], ['#mkIn', 'mkt']].filter(a => $(a[0]));
+    AG.forEach(([sel, k]) => { $(sel).onchange = e => { tr[k] = e.target.checked; upd(true); }; });
+    $('#agAll').onchange = e => { AG.forEach(([sel, k]) => { tr[k] = e.target.checked; $(sel).checked = e.target.checked; }); upd(true); };
     $('#sNext').onclick = () => { tr.hp = $('#hpIn').value; next(s); };
   }
   if (s === 'likes') {
@@ -2366,7 +2386,7 @@ function dateSum() {
 let SEND = null; // { st: 'wait'|'ok'|'bad', row, err }
 function payload() {
   const tr = S.trip, d = n => n ? `${Math.floor(n / 10000)}-${String(Math.floor(n / 100) % 100).padStart(2, '0')}-${String(n % 100).padStart(2, '0')}` : '';
-  return { agree: tr.agree === true, age14: tr.age === true, hp: tr.hp || '', nick: (tr.nick || '').trim(), toKind: tr.toKind === 'mail' ? '이메일' : '카카오톡', to: (tr.to || '').trim(),
+  return { agree: tr.agree === true, age14: tr.age === true, terms: tr.terms === true, mkt: tr.mkt === true, legal: 'terms ' + LEGAL.v.terms + ' · privacy ' + LEGAL.v.privacy, hp: tr.hp || '', nick: (tr.nick || '').trim(), toKind: tr.toKind === 'mail' ? '이메일' : '카카오톡', to: (tr.to || '').trim(),
     type: S.type || '', typeName: S.type ? T(S.type).name : '', votes: S.votes ? JSON.stringify(S.votes) : '',
     answers: S.ans.map((oi, i) => oi == null ? '' : `${i + 1}.${plain(Q[i].o[oi][0])}`).filter(Boolean).join(' / '),
     method: (METHOD.find(m => m[0] === tr.method) || ['', ''])[1], city: cityTx(tr, '') + (myTitle(tr) ? ' · 제목 ‘' + myTitle(tr) + '’' : ''),   // 시트 칸은 그대로(Apps Script 안 바꿈) → 묶음 선택·제목은 도시 칸에 붙임

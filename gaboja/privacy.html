@@ -6,148 +6,201 @@
 <meta name="robots" content="noindex">
 <title>VZTR 개인정보처리방침</title>
 <link rel="icon" href="icons/favicon-32.png">
+<!-- 자동 생성: tools/build_legal.py (원본 app/legal/src/) — 이 파일을 직접 고치지 말 것 -->
 <style>
-/* 11/24 개인정보처리방침 — 앱과 같은 글꼴·색. 한국어 기본, #en 이면 영어 */
 @font-face { font-family: "Pretendard Variable"; font-weight: 45 920; font-display: swap; src: url("fonts/PretendardVariable.woff2") format("woff2-variations"); }
-:root { --ink: #16171A; --sub: #5F6269; --mut: #8F969F; --hair: #E8EAEE; --blue: #1F5FE0; --bg: #FFFFFF; color-scheme: light; }
-@media (prefers-color-scheme: dark) { :root { --ink: #ECEEF2; --sub: #A9AFB8; --mut: #7E858F; --hair: #2B2E35; --blue: #6E9BF5; --bg: #111317; color-scheme: dark; } }
+:root { --ink: #16171A; --sub: #4A4E55; --mut: #8F969F; --hair: #E8EAEE; --blue: #1F5FE0; --bg: #FFFFFF; --tile: #F6F7F9; color-scheme: light; }
+@media (prefers-color-scheme: dark) { :root { --ink: #ECEEF2; --sub: #B9BEC6; --mut: #7E858F; --hair: #2B2E35; --blue: #6E9BF5; --bg: #111317; --tile: #1A1D22; color-scheme: dark; } }
 * { box-sizing: border-box; }
-body { margin: 0; background: var(--bg); color: var(--ink); font: 15px/1.7 "Pretendard Variable", -apple-system, "Apple SD Gothic Neo", "Malgun Gothic", sans-serif; }
-main { max-width: 720px; margin: 0 auto; padding: max(28px, env(safe-area-inset-top)) max(20px, env(safe-area-inset-right)) 64px max(20px, env(safe-area-inset-left)); }
-.top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 28px; }
+body { margin: 0; background: var(--bg); color: var(--ink); font: 15px/1.75 "Pretendard Variable", -apple-system, "Apple SD Gothic Neo", "Malgun Gothic", sans-serif; word-break: keep-all; overflow-wrap: break-word; -webkit-text-size-adjust: 100%; }
+main { max-width: 760px; margin: 0 auto; padding: max(28px, env(safe-area-inset-top)) max(20px, env(safe-area-inset-right)) 72px max(20px, env(safe-area-inset-left)); }
+.top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 32px; }
 .logo { font-weight: 800; font-size: 22px; letter-spacing: -.04em; color: var(--ink); text-decoration: none; }
 .logo i { color: var(--blue); font-style: normal; }
-.lang a { color: var(--mut); font-size: 13px; text-decoration: none; margin-left: 10px; }
+.lang a { color: var(--mut); font-size: 13px; text-decoration: none; margin-left: 12px; }
 .lang a[aria-current="true"] { color: var(--ink); font-weight: 700; }
 h1 { font-size: 26px; line-height: 1.3; margin: 0 0 6px; letter-spacing: -.02em; }
 .eff { color: var(--mut); font-size: 13px; margin: 0 0 28px; }
-h2 { font-size: 16px; margin: 28px 0 8px; }
-p, li { color: var(--sub); }
-ul { padding-left: 20px; margin: 6px 0; }
-table { width: 100%; border-collapse: collapse; font-size: 14px; margin: 8px 0; }
-th, td { text-align: left; vertical-align: top; padding: 9px 10px; border-top: 1px solid var(--hair); color: var(--sub); }
-th { color: var(--ink); font-weight: 700; width: 30%; }
-.wrap { overflow-x: auto; }
+.old { background: var(--tile); border-radius: 10px; padding: 10px 14px; font-size: 13px; color: var(--sub); margin: 0 0 20px; }
+h2 { font-size: 16px; line-height: 1.45; margin: 32px 0 8px; scroll-margin-top: 16px; }
+p, li, td { color: var(--sub); }
+.lead { margin: 0 0 8px; }
+ul, ol { padding-left: 22px; margin: 6px 0; }
+li { margin: 4px 0; }
+li > ul { margin-top: 4px; }
+.key { background: var(--tile); border-radius: 14px; padding: 16px 18px; margin: 0 0 8px; }
+.key b { color: var(--ink); }
+.key ul { margin: 8px 0 0; }
+table { width: 100%; border-collapse: collapse; font-size: 14px; margin: 10px 0; }
+th, td { text-align: left; vertical-align: top; padding: 10px 10px; border-top: 1px solid var(--hair); }
+tr:last-child th, tr:last-child td { border-bottom: 1px solid var(--hair); }
+th { color: var(--ink); font-weight: 700; width: 28%; }
+@media (max-width: 520px) { th, td { display: block; width: auto; } th { padding-bottom: 2px; border-bottom: 0; } td { border-top: 0; padding-top: 0; } tr:last-child th { border-bottom: 0; } }
 a { color: var(--blue); }
+a.ref { color: inherit; text-decoration: underline; text-underline-offset: 2px; text-decoration-color: var(--mut); }
+.hist { margin-top: 40px; padding-top: 18px; border-top: 1px solid var(--hair); font-size: 13px; }
+.hist h3 { font-size: 14px; margin: 0 0 6px; color: var(--ink); }
+.hist ul { padding-left: 18px; }
+.hist li, .hist p { color: var(--mut); }
+.foot { margin-top: 28px; font-size: 13px; color: var(--mut); }
+.foot a { color: var(--mut); margin-right: 14px; }
 [hidden] { display: none !important; }
 </style>
 </head>
 <body>
 <main>
 <div class="top"><a class="logo" href="./">vztr<i>.</i></a><nav class="lang"><a href="#" id="lk">한국어</a><a href="#en" id="le">English</a></nav></div>
-
 <article id="ko" lang="ko">
 <h1>개인정보처리방침</h1>
-<p class="eff">시행일 2026년 11월 24일 · VZTR 테스트 서비스</p>
-<p>VZTR(이하 ‘서비스’)는 「개인정보 보호법」에 따라 여행 성향 테스트와 가이드북을 만들어 보내 드리는 데 꼭 필요한 정보만 받고, 아래와 같이 다룹니다.</p>
+<p class="eff">시행일 2026년 11월 24일 · 버전 2026-11-24b</p>
+<p class="lead">VZTR(이하 ‘서비스’)는 「개인정보 보호법」 등 관련 법령을 준수하며, 이용자의 개인정보를 보호하고 관련 고충을 신속하게 처리하기 위하여 다음과 같이 개인정보처리방침을 수립·공개합니다.</p>
 
-<h2>1. 처리하는 정보와 목적</h2>
+<h2 id="items">1. 처리하는 개인정보의 항목 및 목적</h2>
 <div class="wrap"><table>
-<tr><th>받는 정보(필수)</th><td>닉네임, 이메일 주소, 성향 테스트 답과 결과, 여행 정보(도시·날짜·동행·출발 지역(시·구까지)·항공편·숙소·취향·여행 제목), 만 14세 이상 확인 여부</td></tr>
-<tr><th>목적</th><td>가이드북을 만들고 보내 드리기, 가이드북을 다른 기기에서 열고 고치기, 테스트 서비스 개선</td></tr>
-<tr><th>잠깐 거쳐 가는 정보</th><td>집 출발 시간 계산을 쓰면 입력한 주소 검색어와 출발 좌표가 서비스 서버를 거쳐 카카오(국내)에 전달돼 계산에만 쓰이고 <b>저장하지 않아요</b>. 접속 IP는 남용 방지(요청 횟수 제한)를 위해 잠깐 처리되고 저장하지 않아요.</td></tr>
-<tr><th>받지 않는 정보</th><td>집 상세 주소·전화번호는 저장하지 않아요. 기기의 위치(GPS)는 쓰지 않아요. 광고·마케팅에는 쓰지 않아요.</td></tr>
+<tr><th>수집 항목(필수)</th><td>닉네임, 이메일 주소, 여행 성향 테스트 응답 및 결과, 여행 정보(도시, 일정, 동행 유형, 출발 지역(시·군·구 단위), 항공편, 숙소, 선호 항목, 여행 제목), 만 14세 이상 확인 여부</td></tr>
+<tr><th>처리 목적</th><td>여행 가이드북 작성 및 발송, 다른 기기에서의 가이드북 열람·수정 지원, 테스트 서비스 품질 개선</td></tr>
+<tr><th>일시적으로 처리되는 정보</th><td>출발 시간 계산 기능 이용 시 입력한 주소 검색어 및 출발 좌표는 서비스 서버를 거쳐 주식회사 카카오 및 주식회사 카카오모빌리티에 전달되어 계산에만 이용되며, 저장되지 않습니다. 접속 IP 주소는 비정상적인 대량 접근을 막기 위하여 일시적으로 처리되며, 저장되지 않습니다.</td></tr>
+<tr><th>수집하지 않는 정보</th><td>상세 주소 및 전화번호는 저장하지 않습니다. 단말기의 위치정보(GPS)는 이용하지 않습니다.</td></tr>
 </table></div>
+<p>서비스는 수집한 개인정보를 광고 또는 마케팅 목적으로 이용하지 않습니다.</p>
 
-<h2>2. 보관 기간과 파기</h2>
-<ul><li>출발 지역 정보(시·구): 받은 날부터 7일</li><li>신청서: 받은 날부터 1년</li><li>서버에 저장한 가이드북: 마지막으로 고친 날부터 1년</li><li>삭제를 요청하시면 기간과 상관없이 바로 지워요.</li><li>기간이 지난 정보는 매일 자동으로, 삭제 요청은 받는 즉시 서버 데이터베이스·스프레드시트에서 다시 살릴 수 없는 방법으로 지워요.</li></ul>
 
-<h2>3. 다른 곳에 주는 경우(제3자 제공)</h2>
-<p>받은 정보를 다른 곳에 팔거나 제공하지 않아요. 법령에 따라 요구되는 경우만 예외예요.</p>
+<h2 id="retention">2. 개인정보의 처리 및 보유 기간</h2>
+<ul>
+<li>출발 지역 정보(시·군·구 단위): 수집일로부터 7일</li>
+<li>가이드북 신청서: 수집일로부터 1년</li>
+<li>서버에 저장된 가이드북: 최종 수정일로부터 1년</li>
+<li>이용자가 삭제를 요청하는 경우, 보유 기간과 관계없이 지체 없이 파기합니다.</li>
+</ul>
 
-<h2>4. 맡기는 곳(처리 위탁)과 국외 이전</h2>
-<p>서비스는 아래 업체의 시스템에 처리를 맡겨요. 서비스 이용(가이드북 만들기·보내기)에 필요한 처리위탁·보관이라 이 방침에 공개하는 것으로 알려 드려요(「개인정보 보호법」 제28조의8 제1항 제3호).</p>
+<h2 id="destroy">3. 개인정보의 파기 절차 및 방법</h2>
+<p>보유 기간이 경과한 개인정보는 매일 자동으로 파기하며, 삭제 요청을 받은 경우에는 지체 없이 파기합니다. 전자적 파일 형태의 정보는 복구할 수 없는 방법으로 영구 삭제합니다.</p>
+
+<h2 id="third">4. 개인정보의 제3자 제공</h2>
+<p>서비스는 이용자의 개인정보를 제3자에게 판매하거나 제공하지 않습니다. 다만, 법령에 특별한 규정이 있는 경우에는 예외로 합니다.</p>
+
+
+<h2 id="entrust">5. 개인정보 처리의 위탁 및 국외 이전</h2>
+<p>서비스는 원활한 서비스 제공을 위하여 아래와 같이 개인정보 처리를 위탁하고 있습니다. 이는 이용자와의 계약 이행에 필요한 처리위탁·보관으로서, 「개인정보 보호법」 제28조의8 제1항 제3호에 따라 본 방침에 공개합니다.</p>
 <div class="wrap"><table>
-<tr><th>이전받는 곳 · 연락처</th><td><b>Cloudflare, Inc.</b> · privacyquestions@cloudflare.com<br><b>Resend, Inc.</b> · privacy@resend.com<br><b>Google LLC</b> · support.google.com/policies</td></tr>
-<tr><th>이전되는 나라</th><td>미국(Cloudflare는 전 세계 데이터센터를 거칠 수 있음)</td></tr>
-<tr><th>이전 항목</th><td>Cloudflare: 가이드북(여행 정보·닉네임) · Resend: 이메일 주소·닉네임·가이드북 요약 · Google: 신청서 전체(1번 항목)</td></tr>
-<tr><th>시기와 방법</th><td>가이드북을 신청하거나 저장할 때마다 암호화된 인터넷 연결(HTTPS)로 전송</td></tr>
-<tr><th>이용 목적</th><td>Cloudflare: 가이드북 저장·불러오기 서버 · Resend: 가이드북 안내 메일 발송 · Google: 신청서 보관(스프레드시트)</td></tr>
-<tr><th>보유 기간</th><td>2번의 보관 기간과 같음(위탁 계약이 끝나면 즉시 파기)</td></tr>
-<tr><th>거부 방법과 효과</th><td>신청 화면에서 동의하지 않거나 <a href="mailto:vztr@larchive.page">vztr@larchive.page</a>로 거부 의사를 알려 주세요. 거부하시면 가이드북을 메일로 받거나 서버에 저장할 수 없어요(성향 테스트와 기기 안 일정은 그대로 쓸 수 있어요).</td></tr>
+<tr><th>이전받는 자 및 연락처</th><td>Cloudflare, Inc. (privacyquestions@cloudflare.com)<br>Resend, Inc. (privacy@resend.com)<br>Google LLC (support.google.com/policies)</td></tr>
+<tr><th>이전 국가</th><td>미국(Cloudflare, Inc.는 전 세계 데이터센터를 경유할 수 있음)</td></tr>
+<tr><th>이전 항목</th><td>Cloudflare: 가이드북(여행 정보, 닉네임) / Resend: 이메일 주소, 닉네임, 가이드북 요약 / Google: 가이드북 신청서 전체 항목</td></tr>
+<tr><th>이전 시기 및 방법</th><td>가이드북 신청 또는 저장 시 암호화된 통신(HTTPS)으로 전송</td></tr>
+<tr><th>이용 목적</th><td>Cloudflare: 가이드북 저장 및 조회 서버 운영 / Resend: 가이드북 안내 메일 발송 / Google: 신청서 보관(스프레드시트)</td></tr>
+<tr><th>보유 및 이용 기간</th><td><a href="#retention" class="ref">2번 항목</a>의 보유 기간과 동일하며, 위탁 계약 종료 시 지체 없이 파기</td></tr>
+<tr><th>거부 방법 및 효과</th><td>신청 화면에서 동의하지 않거나 <a href="mailto:vztr@larchive.page">vztr@larchive.page</a>로 거부 의사를 알릴 수 있습니다. 거부하는 경우 가이드북의 메일 수신 및 서버 저장이 제한되며, 성향 테스트와 단말기 내 일정 기능은 계속 이용할 수 있습니다.</td></tr>
 </table></div>
-<p>국내 위탁: 주식회사 카카오·카카오모빌리티(주소 검색·출발 시간 계산, 저장 안 함).</p>
+<p>국내 수탁자: 주식회사 카카오, 주식회사 카카오모빌리티(주소 검색 및 이동 시간 계산, 저장하지 않음)</p>
 
-<h2>5. 기기에 저장하는 정보(자동 수집 장치)</h2>
-<p>서비스는 광고·추적용 쿠키를 쓰지 않아요. 만든 일정과 설정은 이용자 기기의 브라우저 저장소(localStorage)에만 저장돼요. 브라우저 설정에서 사이트 데이터를 지우면 함께 지워져요. 글꼴은 서비스 서버에서 직접 받아 외부로 접속 기록이 가지 않아요.</p>
 
-<h2>6. 만 14세 미만</h2>
-<p>만 14세 미만 아동의 신청은 받지 않아요. 신청할 때 만 14세 이상인지 확인해요. 만 14세 미만의 정보가 들어온 것을 알게 되면 바로 지워요.</p>
+<h2 id="auto">6. 개인정보 자동 수집 장치의 설치·운영 및 거부</h2>
+<p>서비스는 광고 또는 이용 행태 추적을 위한 쿠키를 사용하지 않습니다.</p>
+<p>이용자가 작성한 일정 및 설정은 이용자 단말기의 브라우저 저장소(localStorage)에만 저장되며, 브라우저 설정에서 사이트 데이터를 삭제하면 함께 삭제됩니다. 서비스에 사용되는 글꼴은 서비스 서버에서 직접 제공되므로, 글꼴 이용 과정에서 외부로 접속 기록이 전송되지 않습니다.</p>
 
-<h2>7. 이용자의 권리와 행사 방법</h2>
-<p>언제든 내 정보의 열람·정정·삭제·처리 정지를 요청하실 수 있어요. 받으신 안내 메일에 ‘삭제해 주세요’라고 답장하시거나 <a href="mailto:vztr@larchive.page">vztr@larchive.page</a>로 연락해 주세요. 대리인을 통해서도 요청할 수 있어요. 요청을 받으면 10일 안에 처리하고 결과를 알려 드려요.</p>
 
-<h2>8. 가이드북 링크</h2>
-<p>메일로 받은 가이드북 링크를 가진 사람은 누구나 그 일정을 보고 고칠 수 있어요. 다른 사람에게는 앱의 공유 → 보기 전용 링크를 보내 주세요.</p>
+<h2 id="child">7. 만 14세 미만 아동의 개인정보</h2>
+<p>서비스는 만 14세 미만 아동의 가이드북 신청을 받지 않으며, 신청 시 만 14세 이상인지 확인합니다. 만 14세 미만 아동의 개인정보가 수집된 사실을 확인한 경우에는 지체 없이 파기합니다.</p>
 
-<h2>9. 안전하게 지키는 방법</h2>
-<ul><li>모든 연결은 암호화(HTTPS)돼요.</li><li>가이드북을 여는 열쇠는 원래 값이 아니라 변환한 값(해시)으로 저장해요.</li><li>관리 계정은 운영자만 쓰고, 요청 횟수 제한으로 무단 대량 접근을 막아요.</li></ul>
+<h2 id="rights">8. 정보주체의 권리·의무 및 행사 방법</h2>
+<p>이용자는 언제든지 개인정보의 열람, 정정, 삭제, 처리 정지를 요구할 수 있습니다. 수신한 안내 메일에 회신하거나 <a href="mailto:vztr@larchive.page">vztr@larchive.page</a>로 요청할 수 있으며, 대리인을 통하여도 요청할 수 있습니다. 서비스는 요청을 받은 날부터 10일 이내에 조치하고 그 결과를 알려 드립니다.</p>
 
-<h2>10. 개인정보 보호책임자</h2>
-<p>개인정보 보호책임자: 김동우(VZTR 운영자) · <a href="mailto:vztr@larchive.page">vztr@larchive.page</a><br>
-개인정보 침해 신고·상담: 개인정보침해신고센터(privacy.kisa.or.kr, 국번 없이 118) · 개인정보분쟁조정위원회(kopico.go.kr, 1833-6972) · 대검찰청(spo.go.kr, 1301) · 경찰청(ecrm.police.go.kr, 182)</p>
+<h2 id="link">9. 가이드북 링크에 관한 안내</h2>
+<p>메일로 발송된 가이드북 편집 링크를 알고 있는 사람은 누구나 해당 일정을 열람하고 수정할 수 있습니다. 다른 사람과 공유할 때에는 서비스 화면의 ‘공유하기’에서 보기 전용 링크를 이용하시기 바랍니다.</p>
 
-<h2>11. 바뀔 때</h2>
-<p>이 방침이 바뀌면 시행 7일 전부터 이 페이지에 알려 드려요. 이전 방침: 2026년 11월 24일 첫 시행.</p>
+<h2 id="safety">10. 개인정보의 안전성 확보 조치</h2>
+<ul>
+<li>모든 통신 구간을 암호화(HTTPS)합니다.</li>
+<li>가이드북 접근 키는 원문이 아닌 단방향 암호화(해시) 값으로 저장합니다.</li>
+<li>관리 계정은 운영자만 이용하며, 요청 횟수 제한을 통하여 비정상적인 대량 접근을 차단합니다.</li>
+</ul>
+
+<h2 id="officer">11. 개인정보 보호책임자</h2>
+<p>개인정보 보호책임자: 김동우(VZTR 운영자) · <a href="mailto:vztr@larchive.page">vztr@larchive.page</a></p>
+<p>개인정보 침해에 대한 신고나 상담이 필요한 경우 아래 기관에 문의할 수 있습니다.<br>개인정보침해신고센터(privacy.kisa.or.kr, 국번 없이 118) · 개인정보분쟁조정위원회(kopico.go.kr, 1833-6972) · 대검찰청(spo.go.kr, 국번 없이 1301) · 경찰청(ecrm.police.go.kr, 국번 없이 182)</p>
+
+<h2 id="change">12. 개인정보처리방침의 변경</h2>
+<p>본 방침의 내용이 추가, 삭제 또는 수정되는 경우 시행일 7일 전부터 서비스 화면을 통하여 공지하며, 이용자 권리에 중요한 변경이 있는 경우에는 30일 전부터 공지하고 신청 시 받은 이메일로 개별 안내합니다. 이전 방침은 아래 ‘변경 이력’에서 확인할 수 있습니다.</p>
+<div class="hist"><h3>변경 이력</h3><ul><li>현행 2026-11-24b — 2026년 11월 24일 시행 · 문체 정비 및 조항 보완</li><li><a href="legal/v/2026-11-24a/privacy.html">2026-11-24a</a> — 2026년 11월 24일 시행 · 최초 시행</li></ul></div>
+<p class="foot"><a href="terms.html">이용약관</a><a href="mailto:vztr@larchive.page">문의</a></p>
 </article>
-
 <article id="en" lang="en" hidden>
 <h1>Privacy Policy</h1>
-<p class="eff">Effective November 24, 2026 · VZTR test service</p>
-<p>VZTR (the “Service”) collects only what it needs to run the travel-type test and send you a guidebook, and handles it as described below, in line with Korea’s Personal Information Protection Act.</p>
+<p class="eff">Effective November 24, 2026 · Version 2026-11-24b</p>
+<p class="lead">VZTR (the “Service”) complies with Korea’s Personal Information Protection Act and related laws, and establishes and discloses this Privacy Policy to protect users’ personal data and handle related concerns promptly.</p>
 
-<h2>1. What we process and why</h2>
+<h2 id="en-items">1. Personal data we process and why</h2>
 <div class="wrap"><table>
-<tr><th>Collected (required)</th><td>Nickname, email address, test answers and result, trip details (city, dates, companions, departure area at district level, flights, stay, interests, trip title), confirmation that you are 14 or older</td></tr>
-<tr><th>Purpose</th><td>Creating and sending your guidebook, opening and editing it on other devices, improving the test service</td></tr>
-<tr><th>Passed through only</th><td>If you use door-to-door timing, your address search text and departure coordinates pass through our server to Kakao (Korea) for the calculation only and are <b>not stored</b>. Your IP address is processed briefly to limit abuse and is not stored.</td></tr>
-<tr><th>Not collected</th><td>Your full home address and phone number are not stored. We do not use your device location (GPS). Nothing is used for ads or marketing.</td></tr>
+<tr><th>Collected (required)</th><td>Nickname, email address, travel-type test answers and result, trip details (city, dates, travel companions, departure area at city/district level, flights, accommodation, preferences, trip title), confirmation that you are 14 or older</td></tr>
+<tr><th>Purpose</th><td>Creating and sending your guidebook, letting you view and edit it on other devices, improving the test service</td></tr>
+<tr><th>Processed temporarily</th><td>If you use departure-time calculation, the address you search for and your departure coordinates pass through our server to Kakao Corp. and Kakao Mobility Corp. for the calculation only and are not stored. Your IP address is processed temporarily to prevent abnormal bulk access and is not stored.</td></tr>
+<tr><th>Not collected</th><td>We do not store your full address or phone number. We do not use your device location (GPS).</td></tr>
 </table></div>
+<p>We do not use your personal data for advertising or marketing.</p>
 
-<h2>2. Retention and deletion</h2>
-<ul><li>Departure area (city/district): 7 days from collection</li><li>Sign-up form: 1 year from collection</li><li>Guidebooks saved on our server: 1 year from your last edit</li><li>If you ask us to delete it, we delete it right away regardless of these periods.</li><li>Expired data is deleted automatically every day, and deletion requests right away, from our database and spreadsheet in a way that cannot be recovered.</li></ul>
 
-<h2>3. Sharing with third parties</h2>
-<p>We do not sell or provide your data to others, except where required by law.</p>
+<h2 id="en-retention">2. Retention period</h2>
+<ul>
+<li>Departure area (city/district level): 7 days from collection</li>
+<li>Guidebook request form: 1 year from collection</li>
+<li>Guidebooks saved on our server: 1 year from the last edit</li>
+<li>If you request deletion, we delete your data without delay regardless of these periods.</li>
+</ul>
 
-<h2>4. Service providers and international transfer</h2>
-<p>We entrust processing to the providers below. Because this is needed to provide the Service, we disclose it in this policy under Article 28-8(1)(3) of the Act.</p>
+<h2 id="en-destroy">3. Deletion procedure and method</h2>
+<p>Data past its retention period is deleted automatically every day, and data subject to a deletion request is deleted without delay. Electronic files are permanently deleted in a way that cannot be recovered.</p>
+
+<h2 id="en-third">4. Provision to third parties</h2>
+<p>We do not sell or provide your personal data to third parties, except where specifically required by law.</p>
+
+
+<h2 id="en-entrust">5. Outsourcing and international transfer</h2>
+<p>We entrust the processing of personal data as follows to provide the Service. As this outsourcing and storage is necessary to perform our agreement with you, we disclose it in this policy under Article 28-8(1)(3) of the Personal Information Protection Act.</p>
 <div class="wrap"><table>
-<tr><th>Recipient · contact</th><td><b>Cloudflare, Inc.</b> · privacyquestions@cloudflare.com<br><b>Resend, Inc.</b> · privacy@resend.com<br><b>Google LLC</b> · support.google.com/policies</td></tr>
-<tr><th>Country</th><td>United States (Cloudflare may route through data centers worldwide)</td></tr>
-<tr><th>Data</th><td>Cloudflare: guidebook (trip details, nickname) · Resend: email address, nickname, guidebook summary · Google: full sign-up form (section 1)</td></tr>
-<tr><th>When and how</th><td>Sent over an encrypted connection (HTTPS) each time you request or save a guidebook</td></tr>
-<tr><th>Purpose</th><td>Cloudflare: storing and loading guidebooks · Resend: sending guidebook emails · Google: keeping sign-ups (Google Sheets)</td></tr>
-<tr><th>Retention</th><td>Same as section 2 (deleted when the service contract ends)</td></tr>
-<tr><th>How to refuse</th><td>Do not agree on the sign-up screen, or tell us at <a href="mailto:vztr@larchive.page">vztr@larchive.page</a>. If you refuse, we cannot email or store your guidebook (the test and on-device trips still work).</td></tr>
+<tr><th>Recipient and contact</th><td>Cloudflare, Inc. (privacyquestions@cloudflare.com)<br>Resend, Inc. (privacy@resend.com)<br>Google LLC (support.google.com/policies)</td></tr>
+<tr><th>Country</th><td>United States (Cloudflare, Inc. may route data through data centers worldwide)</td></tr>
+<tr><th>Data transferred</th><td>Cloudflare: guidebooks (trip details, nickname) / Resend: email address, nickname, guidebook summary / Google: all fields of the guidebook request form</td></tr>
+<tr><th>When and how</th><td>Sent over an encrypted connection (HTTPS) when you request or save a guidebook</td></tr>
+<tr><th>Purpose</th><td>Cloudflare: operating the server that stores and loads guidebooks / Resend: sending guidebook emails / Google: keeping request forms (Google Sheets)</td></tr>
+<tr><th>Retention</th><td>Same as <a href="#en-retention" class="ref">Section 2</a>; deleted without delay when the outsourcing contract ends</td></tr>
+<tr><th>How to refuse and effect</th><td>You may decline on the request screen or tell us at <a href="mailto:vztr@larchive.page">vztr@larchive.page</a>. If you refuse, we cannot email your guidebook or store it on our server; the travel-type test and on-device trip features remain available.</td></tr>
 </table></div>
-<p>Provider in Korea: Kakao Corp. and Kakao Mobility (address search and travel-time calculation, not stored).</p>
+<p>Processor in Korea: Kakao Corp. and Kakao Mobility Corp. (address search and travel-time calculation; data not stored)</p>
 
-<h2>5. Data stored on your device</h2>
-<p>We do not use advertising or tracking cookies. Your trips and settings are saved only in your browser’s storage (localStorage) and are removed when you clear site data. Fonts are served from our own server, so no access logs go to third parties.</p>
 
-<h2>6. Children under 14</h2>
-<p>We do not accept sign-ups from children under 14 and ask you to confirm your age. If we learn that we hold data from a child under 14, we delete it right away.</p>
+<h2 id="en-auto">6. Automatic collection tools</h2>
+<p>We do not use cookies for advertising or behavioral tracking.</p>
+<p>Your trips and settings are stored only in your browser’s storage (localStorage) on your device and are deleted when you clear site data in your browser settings. Fonts are served from our own server, so no access logs are sent to third parties when fonts load.</p>
 
-<h2>7. Your rights</h2>
-<p>You can ask to view, correct, delete or stop processing your data at any time. Reply “delete” to the email you received, or write to <a href="mailto:vztr@larchive.page">vztr@larchive.page</a>. You may also ask through a representative. We will respond within 10 days.</p>
 
-<h2>8. Your guidebook link</h2>
-<p>Anyone with the guidebook link from your email can view and edit that trip. To share with others, send the view-only link from Share in the app.</p>
+<h2 id="en-child">7. Children under 14</h2>
+<p>We do not accept guidebook requests from children under 14 and ask you to confirm your age when you sign up. If we find that we have collected personal data from a child under 14, we delete it without delay.</p>
 
-<h2>9. How we protect it</h2>
-<ul><li>All connections are encrypted (HTTPS).</li><li>The key that opens a guidebook is stored as a hash, not the original value.</li><li>Only the operator can access admin accounts, and rate limits block bulk access.</li></ul>
+<h2 id="en-rights">8. Your rights and how to exercise them</h2>
+<p>You may request access to, correction, deletion or suspension of processing of your personal data at any time. Reply to our email or write to <a href="mailto:vztr@larchive.page">vztr@larchive.page</a>; you may also act through a representative. We will act on your request within 10 days and inform you of the result.</p>
 
-<h2>10. Privacy officer</h2>
-<p>Privacy officer: Dongwoo Kim (VZTR operator) · <a href="mailto:vztr@larchive.page">vztr@larchive.page</a><br>
-You may also contact Korea’s Personal Information Infringement Report Center (privacy.kisa.or.kr, +82 118) or the Personal Information Dispute Mediation Committee (kopico.go.kr).</p>
+<h2 id="en-link">9. About guidebook links</h2>
+<p>Anyone who knows the guidebook edit link sent by email can view and edit that trip. When sharing with others, please use the view-only link from “Share” in the Service.</p>
 
-<h2>11. Changes</h2>
-<p>We will post changes on this page at least 7 days before they take effect. First version effective November 24, 2026.</p>
+<h2 id="en-safety">10. Security measures</h2>
+<ul>
+<li>All connections are encrypted (HTTPS).</li>
+<li>Guidebook access keys are stored as one-way hashes, not in their original form.</li>
+<li>Only the operator can use administrative accounts, and rate limits block abnormal bulk access.</li>
+</ul>
+
+<h2 id="en-officer">11. Privacy officer</h2>
+<p>Privacy officer: Dongwoo Kim (VZTR operator) · <a href="mailto:vztr@larchive.page">vztr@larchive.page</a></p>
+<p>For reports or advice on privacy infringement, you may also contact Korea’s Personal Information Infringement Report Center (privacy.kisa.or.kr, +82 118) or the Personal Information Dispute Mediation Committee (kopico.go.kr).</p>
+
+<h2 id="en-change">12. Changes to this policy</h2>
+<p>We will announce any additions, deletions or amendments in the Service at least 7 days before they take effect, or at least 30 days before for changes that materially affect your rights, together with an individual notice to the email you provided. Previous versions are available under “Version history” below.</p>
+<div class="hist"><h3>Version history</h3><ul><li>Current 2026-11-24b — effective November 24, 2026 · Wording and structure revised</li><li><a href="legal/v/2026-11-24a/privacy.html#en">2026-11-24a</a> — Effective November 24, 2026 · First version</li></ul></div>
+<p class="foot"><a href="terms.html#en">Terms of Use</a><a href="mailto:vztr@larchive.page">Contact</a></p>
 </article>
 </main>
 <script>
-function show() { const en = location.hash === '#en'; document.getElementById('ko').hidden = en; document.getElementById('en').hidden = !en; document.documentElement.lang = en ? 'en' : 'ko'; document.title = en ? 'VZTR Privacy Policy' : 'VZTR 개인정보처리방침';
+function show() { const en = location.hash === '#en' || location.hash.indexOf('#en-') === 0; document.getElementById('ko').hidden = en; document.getElementById('en').hidden = !en; document.documentElement.lang = en ? 'en' : 'ko'; document.title = en ? "VZTR Privacy Policy" : "VZTR \uac1c\uc778\uc815\ubcf4\ucc98\ub9ac\ubc29\uce68";
   document.getElementById('lk').setAttribute('aria-current', !en); document.getElementById('le').setAttribute('aria-current', en); }
 addEventListener('hashchange', show); show();
 </script>
