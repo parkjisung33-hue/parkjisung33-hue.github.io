@@ -403,6 +403,12 @@ Object.assign(window.VZTR_EN, {
   "개인정보처리방침": "Privacy Policy",
   "이용약관": "Terms of Use",
   "문의": "Contact",
+  "약관 동의": "Agreements",   // 11/25 동의 카드
+  "이용약관 동의": "Terms of Use",
+  "개인정보 수집·이용 동의": "Use of personal data",
+  "만 14세 이상입니다": "I am 14 or older",
+  "여행 소식·혜택 메일 받기": "Travel news and offers by email",
+  "개인정보처리방침 보기": "View Privacy Policy",
   "오른쪽으로 밀면 ♥ · 왼쪽으로 밀면 패스예요": "Swipe right for ♥, left to pass",
   "이 날은 추천에 맡길게요": "Fill this day for me",
   "자연·산책 · 카페": "Nature & cafes",

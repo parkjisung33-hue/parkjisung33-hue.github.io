@@ -9,7 +9,7 @@
 <meta name="theme-color" content="#EFEFF1">
 <link rel="stylesheet" href="fonts/google/gf.css?v=1"><!-- 11/24 Inter Tight·Zen Kaku Gothic New 자체 호스팅(구글 서버로 IP 안 감, OFL) -->
 <script src="inapp.js?v=1"></script>
-<script src="i18n-en-auto.js?v=41862089"></script><script src="i18n-en.js?v=41862089"></script><script src="i18n.js?v=41862089"></script><!-- 11/20 W5 언어 틀 (영어판 = /en/, 사전 i18n-en.js는 배포 때 en/에만 붙음) -->
+<script src="i18n-en-auto.js?v=1a18c906"></script><script src="i18n-en.js?v=1a18c906"></script><script src="i18n.js?v=1a18c906"></script><!-- 11/20 W5 언어 틀 (영어판 = /en/, 사전 i18n-en.js는 배포 때 en/에만 붙음) -->
 <link rel="stylesheet" href="fonts/vztr-fonts.css?v=2"><!-- 11/19 글꼴: 굵은 한글 IBM Plex Sans KR · 보통 한글 Pretendard · 영문·숫자 IBM Plex Sans -->
 <link rel="icon" href="icons/favicon-32.png">
 <link rel="apple-touch-icon" href="icons/icon-180.png">
@@ -701,20 +701,30 @@ html.fit .foot::before { display: none; }
 .ticket .bd .ln { margin-top: -0.375rem; color: var(--sub); }
 
 /* 11/18 M39: 개인정보 안내 = 아이콘 세 줄 */
-.agree .pv { list-style: none; margin: 0.375rem 0 0; padding: 0; display: flex; flex-direction: column; gap: 0.375rem; }
-.agree .pv li { display: flex; align-items: center; gap: 0.5rem; font-size: 0.78125rem; color: var(--sub); line-height: 1.35; }
-.agree .pvl { align-self: flex-start; margin-top: 0.25rem; font-size: 0.75rem; color: var(--sub); text-decoration: underline; text-underline-offset: 2px; }   /* 11/24 처리방침 링크 */
 .legal { display: flex; justify-content: center; gap: 1rem; margin: 0.25rem 0 0; font-size: 0.6875rem; }   /* 11/24 첫 화면 아래 법적 고지 */
 .legal a { color: var(--sub); text-decoration: none; }
 .legal b { font-weight: 700; }
-.agrees { display: flex; flex-direction: column; gap: 0.5rem; }   /* 11/24 동의 묶음 */
-.agree.row, .agree.all { align-items: center; }
-.agree.row input, .agree.all input { margin: 0; }
-.agree.row > span { flex: 1; }
-.agree.row > .pvl { margin: 0; flex: none; }
-.agree.all { background: transparent; box-shadow: none; border-style: dashed; }
-.agree.all small { display: block; }
-.agree .pv svg { width: 1rem; height: 1rem; flex: none; stroke: currentColor; fill: none; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
+.agrees { border-radius: var(--r-md); background: var(--tile); border: 1px solid var(--tile-edge); box-shadow: var(--sh-xs); padding: 0.25rem 1rem 0.5rem; }   /* 11/25 동의 카드: 한 장 안에 전체 동의 + 줄들(앱 카드와 같은 면·그림자) */
+.ag { display: flex; align-items: center; gap: 0.625rem; min-height: 2.75rem; cursor: pointer; flex: 1; min-width: 0; -webkit-tap-highlight-color: transparent; }
+.ag input { position: absolute; opacity: 0; width: 1px; height: 1px; pointer-events: none; }
+.ag .ck { flex: none; width: 1.25rem; height: 1.25rem; border-radius: 50%; border: 1.5px solid color-mix(in srgb, var(--sub) 45%, transparent); display: grid; place-items: center; transition: background .15s, border-color .15s; }
+.ag .ck svg { width: 0.8125rem; height: 0.8125rem; fill: none; stroke: transparent; stroke-width: 2.6; stroke-linecap: round; stroke-linejoin: round; transition: stroke .15s; }
+.ag input:checked + .ck { background: var(--blue); border-color: var(--blue); }
+.ag input:checked + .ck svg { stroke: var(--on-blue); }
+.ag input:focus-visible + .ck { box-shadow: 0 0 0 3px var(--blue-soft); }
+.ag.all { min-height: 3.25rem; border-bottom: 1px solid var(--hair); margin-bottom: 0.25rem; }
+.ag.all .ck { width: 1.375rem; height: 1.375rem; }
+.ag.all b { font-size: 0.9375rem; font-weight: 700; color: var(--ink); }
+.ag .t { font-size: 0.875rem; font-weight: 500; color: var(--ink); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.ag .t em { font-style: normal; font-size: 0.75rem; font-weight: 700; color: var(--blue); margin-right: 0.375rem; }
+.ag .t em.op { color: var(--sub); }
+.ag-row { display: flex; align-items: center; gap: 0.25rem; }
+.ag-go { flex: none; display: grid; place-items: center; width: 2.25rem; height: 2.25rem; margin-right: -0.5rem; color: var(--sub); }
+.ag-go .go { width: 1rem; height: 1rem; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+.agrees .pv { list-style: none; margin: -0.125rem 0 0.375rem 1.875rem; padding: 0; display: flex; flex-direction: column; gap: 0.25rem; }
+.agrees .pv li { display: flex; align-items: center; gap: 0.375rem; font-size: 0.6875rem; color: var(--sub); line-height: 1.35; }
+.agrees .pv svg { width: 0.75rem; height: 0.75rem; flex: none; stroke: currentColor; fill: none; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; opacity: .8; }
+.ag-note { margin: -0.25rem 0 0.25rem 1.875rem; font-size: 0.6875rem; color: var(--sub); }
 .rgsub { margin: 0.25rem 0 0; font-size: 0.8125rem; color: var(--sub); }
 /* 11/18 T9: 반응 시트 오른쪽 위 문구가 길어지면 두 줄까지 */
 .rx .rh .step { white-space: normal; text-align: right; line-height: 1.3; max-width: 11rem; }
@@ -1929,15 +1939,15 @@ function rInfo(s) {
       <div class="blk"><div class="sub2">이메일</div>
         <input class="in" id="toIn" autocomplete="off" value="${esc(tr.to || '')}"><span class="err" id="toErr"></span></div>
       <input id="hpIn" name="website" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;width:1px;height:1px;opacity:0">
+      <div class="blk"><div class="sub2">약관 동의</div>
       <div class="agrees" role="group" aria-label="약관 동의">
-      <label class="agree all"><input type="checkbox" id="agAll"><span><b>전체 동의</b><small>필수 항목${LEGAL.flags.newsletter ? '과 선택 항목' : ''}에 모두 동의해요</small></span></label>
-      <label class="agree row"><input type="checkbox" id="tmIn" ${tr.terms ? 'checked' : ''}><span><b>[필수] 이용약관 동의</b></span><a class="pvl" href="${LEGAL.url('terms')}" target="_blank" rel="noopener">보기</a></label>
-      <label class="agree" id="agBox"><input type="checkbox" id="agIn" ${tr.agree ? 'checked' : ''}><span><b>[필수] 개인정보 수집·이용 동의</b>
+        <label class="ag all"><input type="checkbox" id="agAll"><i class="ck" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M6 12.5l4 4 8-8.5"/></svg></i><b>전체 동의</b></label>
+        <div class="ag-row"><label class="ag"><input type="checkbox" id="tmIn" ${tr.terms ? 'checked' : ''}><i class="ck" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M6 12.5l4 4 8-8.5"/></svg></i><span class="t"><em>${window.VZTR_LANG === 'en' ? 'Required' : '필수'}</em>이용약관 동의</span></label><a class="ag-go" href="${LEGAL.url('terms')}" target="_blank" rel="noopener" aria-label="이용약관 보기"><svg class="go" viewBox="0 0 24 24" aria-hidden="true"><path d="M9.5 6l6 6-6 6"/></svg></a></div>
+        <div class="ag-row"><label class="ag" id="agBox"><input type="checkbox" id="agIn" ${tr.agree ? 'checked' : ''}><i class="ck" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M6 12.5l4 4 8-8.5"/></svg></i><span class="t"><em>${window.VZTR_LANG === 'en' ? 'Required' : '필수'}</em>개인정보 수집·이용 동의</span></label><a class="ag-go" href="${LEGAL.url('privacy')}" target="_blank" rel="noopener" aria-label="개인정보처리방침 보기"><svg class="go" viewBox="0 0 24 24" aria-hidden="true"><path d="M9.5 6l6 6-6 6"/></svg></a></div>
         <ul class="pv"><li>${PV_IC.use}<span>닉네임·이메일·여행 정보는 가이드북에만 써요</span></li><li>${PV_IC.clock}<span>출발지는 7일, 나머지는 1년 뒤 지워요</span></li><li>${PV_IC.globe}<span>해외(미국) 서버에 맡겨 보관해요</span></li><li>${PV_IC.mail}<span>‘삭제해 주세요’ 답장 한 번이면 바로 지워요</span></li><li>${PV_IC.no}<span>동의하지 않으면 신청할 수 없어요</span></li></ul>
-        <a class="pvl" href="${LEGAL.url('privacy')}" target="_blank" rel="noopener">개인정보처리방침 전문 보기</a></span></label>
-      <label class="agree row" id="ageBox"><input type="checkbox" id="ageIn" ${tr.age ? 'checked' : ''}><span><b>[필수] 만 14세 이상입니다</b></span></label>
-      ${LEGAL.flags.newsletter ? `<label class="agree row"><input type="checkbox" id="mkIn" ${tr.mkt ? 'checked' : ''}><span><b>[선택] 여행 소식·혜택 메일 받기</b><small>동의하지 않아도 가이드북은 받을 수 있어요 · 2년마다 다시 여쭤봐요</small></span></label>` : ''}
-      </div>
+        <div class="ag-row"><label class="ag" id="ageBox"><input type="checkbox" id="ageIn" ${tr.age ? 'checked' : ''}><i class="ck" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M6 12.5l4 4 8-8.5"/></svg></i><span class="t"><em>${window.VZTR_LANG === 'en' ? 'Required' : '필수'}</em>만 14세 이상입니다</span></label></div>
+        ${LEGAL.flags.newsletter ? `<div class="ag-row"><label class="ag"><input type="checkbox" id="mkIn" ${tr.mkt ? 'checked' : ''}><i class="ck" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M6 12.5l4 4 8-8.5"/></svg></i><span class="t"><em class="op">${window.VZTR_LANG === 'en' ? 'Optional' : '선택'}</em>여행 소식·혜택 메일 받기</span></label></div><p class="ag-note">동의하지 않아도 가이드북은 받을 수 있어요 · 2년마다 다시 여쭤봐요</p>` : ''}
+      </div></div>
       <div class="foot"><button class="cta" id="sNext" disabled>가이드북 신청하기 ${ICON.arrow}</button></div>`);
     function syncAll() { const al = $('#agAll'), bx = ['#tmIn', '#agIn', '#ageIn', '#mkIn'].map(x => $(x)).filter(Boolean); if (al) al.checked = bx.every(b => b.checked); }   // 11/24 전체 동의 표시 맞춤(upd보다 먼저 정의)
     const toIn = $('#toIn'), ph = () => { toIn.placeholder = tr.toKind === 'mail' ? '예: name@gmail.com' : '예: gaboja_trip'; toIn.type = tr.toKind === 'mail' ? 'email' : 'text'; toIn.inputMode = tr.toKind === 'mail' ? 'email' : 'text'; };
