@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>VZTR 영어판 첫 화면 제목 시안</title>
+<style>
+:root { --ink:#16171A; --sub:#5F6269; --blue:#2B5BE8; }
+* { box-sizing:border-box; }
+body { margin:0; background:#E4E4E8; color:var(--ink); font-family:-apple-system,"Apple SD Gothic Neo","Malgun Gothic",sans-serif; word-break:keep-all; padding-bottom:4.5rem; }
+header { padding:1.5rem 1.25rem .5rem; max-width:52rem; margin:0 auto; }
+header h1 { font-size:1.25rem; margin:0 0 .25rem; }
+header p { margin:0; color:var(--sub); font-size:.875rem; line-height:1.5; }
+.grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(23rem,1fr)); gap:1rem; padding:1rem 1.25rem 2rem; max-width:52rem; margin:0 auto; }
+.card { background:#fff; border-radius:1rem; padding:.875rem; border:2px solid transparent; cursor:pointer; position:relative; }
+.card.on { border-color:var(--blue); }
+.tag { font-size:.8125rem; color:var(--sub); margin-bottom:.5rem; line-height:1.4; }
+.tag b { background:var(--ink); color:#fff; border-radius:.375rem; padding:0 .45rem; margin-right:.375rem; }
+.tag em { font-style:normal; color:var(--ink); font-weight:700; }
+.frame { width:360px; max-width:100%; height:330px; margin:0 auto; border-radius:.75rem; overflow:hidden; position:relative; }
+.frame iframe { width:360px; height:780px; border:0; pointer-events:none; }
+.card::after { content:""; position:absolute; inset:0; }
+.bar { position:fixed; left:0; right:0; bottom:0; background:rgba(255,255,255,.96); border-top:1px solid #ddd; padding:.75rem 1.25rem; display:flex; gap:.5rem; }
+.bar input { flex:1; height:2.5rem; border:1px solid #ccc; border-radius:.5rem; padding:0 .75rem; font:inherit; font-size:.875rem; }
+.bar button { height:2.5rem; border:0; border-radius:.5rem; padding:0 1rem; background:var(--ink); color:#fff; font-family:inherit; font-weight:700; font-size:.875rem; }
+</style></head><body>
+<header>
+  <h1>영어판 첫 화면 제목 — 시안 10개</h1>
+  <p>실제 영어판 화면(폭 360, 실제 글꼴)에 제목만 바꿔 넣어 보여 드려요. 한국어 ‘이번 여행, 나답게.’처럼 나다움·성향 쪽으로 골랐어요. 고르고 메모 → ‘답 복사’.</p>
+</header>
+<div class="grid" id="g"></div>
+<div class="bar"><input id="memo" placeholder="메모 (선택)"><button id="cp">답 복사</button></div>
+<script>
+const C = [
+  ['지금', 'Travel true to you.', '현재(비교용)'],
+  ['1', 'Go as you are.', '있는 그대로 떠나요 — ‘나답게’에 가장 가까움'],
+  ['2', 'Travel like you.', '나처럼 여행하기 — 가장 짧음'],
+  ['3', 'Your trip, your type.', '내 여행, 내 타입 — 성향 테스트가 바로 읽힘'],
+  ['4', 'Find the traveler in you.', '내 안의 여행자 찾기'],
+  ['5', 'Pack your personality.', '짐 대신 내 성격을 챙겨요 — 위트'],
+  ['6', 'Be your own kind of traveler.', '나만의 여행자 되기'],
+  ['7', 'Know your type, then go.', '타입 알고 출발 — 할 일이 보임'],
+  ['8', 'The trip that fits you.', '나에게 맞는 여행 — 일정까지 연결'],
+  ['9', 'Every trip, a bit more you.', '여행할수록 더 나다워져요 — 감성'],
+  ['10', 'You, on the road.', '길 위의 나 — 짧고 영화 같은 느낌'],
+];
+const g = document.getElementById('g'), pick = new Set();
+C.forEach(([k, h, note]) => {
+  const el = document.createElement('div'); el.className = 'card';
+  el.innerHTML = `<div class="tag"><b>${k}</b><em>${h}</em><br>${note}</div><div class="frame"><iframe loading="lazy" src="en/start.html"></iframe></div>`;
+  const f = el.querySelector('iframe');
+  f.onload = () => { const set = () => { try { const t = f.contentDocument.querySelector('.hero h1'); if (t && t.textContent !== h) t.textContent = h; } catch (_) {} }; set(); [300, 900, 2000].forEach(ms => setTimeout(set, ms)); };
+  if (k !== '지금') el.onclick = () => { pick.has(k) ? pick.delete(k) : pick.add(k); el.classList.toggle('on'); };
+  g.appendChild(el);
+});
+document.getElementById('cp').onclick = () => {
+  const s = '영어판 첫 화면 제목: ' + ([...pick].sort((x, y) => x - y).join(', ') || '(안 고름)') + (memo.value.trim() ? ' / 메모: ' + memo.value.trim() : '');
+  navigator.clipboard.writeText(s).then(() => { cp.textContent = '복사됨'; setTimeout(() => cp.textContent = '답 복사', 1500); });
+};
+</script></body></html>
