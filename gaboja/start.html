@@ -2114,7 +2114,8 @@ function swHours(p) { const o = String(p.oTx || ''); if (!o || /^거리/.test(o)
    사진은 원본 URL로 직접 표시(저장 안 함). 저작자·라이선스는 사진 아래 한 줄. 실패(onerror)하면 다음 단계. ---------- */
 const VZTR_API = 'https://vztr-api.d-chive33-a29.workers.dev';   // 11/19 E0: 구글 사진 = 우리 서버(Cloudflare Worker)가 대신 찾음 → 페이지에 사진 키 없음 (server/worker.js)
 const PH_KEY_G = () => /^(https:\/\/(www\.)?larchive\.page|http:\/\/(localhost|127\.0\.0\.1)(:\d+)?)$/.test(location.origin), PH_KEY_M = () => window.GABOJA_MAPS_KEY || '';
-const phCredit = (a, l) => '사진 © ' + String(a || '').replace(/저작권자\s*[:：]\s*/g, '').replace(/\s*공동저작자\s*[:：]\s*/g, ' · ').trim().slice(0, 60) + ' · ' + String(l || '').trim();   // 11/20 검수: 긴 저작권 문구 줄임(라벨만 뺌, 이름은 그대로)
+// 11/24 오사카관광국 사진(license 'OCTB'): 일본어 외 표기 = '©Osaka Convention & Tourism Bureau' 그대로(관광국 회신 11/24, 한·영 같은 문구)
+const phCredit = (a, l) => /^OCTB$/i.test(String(l || '').trim()) ? '©Osaka Convention & Tourism Bureau' : '사진 © ' + String(a || '').replace(/저작권자\s*[:：]\s*/g, '').replace(/\s*공동저작자\s*[:：]\s*/g, ' · ').trim().slice(0, 60) + ' · ' + String(l || '').trim();   // 11/20 검수: 긴 저작권 문구 줄임(라벨만 뺌, 이름은 그대로)
 function phGoogle(p, cb) {   // ② 구글 장소 사진 1장 — 서버 /photo가 키로 찾아 키 없는 사진 주소만 돌려줌. 결과는 세션 동안만(sessionStorage)
   const ck = 'gaboja-gph2:' + (p.n || '');
   if (!PH_KEY_G()) { cb(null); return; }

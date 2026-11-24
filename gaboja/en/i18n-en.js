@@ -59,7 +59,7 @@ window.VZTR_EN = {
   '영업시간 확인': 'Check hours', '가는 순서': 'Route order', '다음 순서': 'Next stop', '수정하기': 'Edit', '수정': 'Edit', '입력하기': 'Enter', '숙소 정하기': 'Set hotel', '다시 보내기': 'Resend',
   '샘플 일정 보기': 'See a sample plan', '발급 완료': 'Done', '동행': 'With', '면': 'Noodles', '바': 'Bar', '야나카긴자 계단 위에 있는 노포예요': 'A long-running shop at the top of the Yanaka Ginza steps', '야나카 #층 크림소다 카페': 'Yanaka cream soda café, floor #', '라무네 맛 크림소다가 간판 메뉴예요': 'Ramune-flavored cream soda is the signature', '직접 만든 반찬과 튀김 정식이 인기예요': 'Popular for homemade sides and tempura set meals', '니시진 학생·동네 정식집': 'Set-meal diner for Nishijin students and locals', '치킨난반 정식이 가장 인기예요': 'The chicken nanban set meal is the favorite', '취향': 'Likes', 'NEXT · 다음 할 일': 'NEXT · To do', '좋아요': 'Like', '패스': 'Pass', '거리': 'Street',
   // 신청 화면 뼈대
-  '10번 고르면 끝': 'Just 10 picks', '출발 안내': 'Departures', '여행 성향들': 'Travel types', '나': 'Me', '확인 전': 'Pending', '다시 하기': 'Retake', '16가지 성향 보기': 'See all 16 types',
+  '10번 고르면 끝': '10 picks', '출발 안내': 'Departures', '여행 성향들': 'Travel types', '나': 'Me', '확인 전': 'Pending', '다시 하기': 'Retake', '16가지 성향 보기': 'See all 16 types',
   '일정 방식': 'Planning style', '추천': 'Recommended', '이전 달': 'Previous month', '다음 달': 'Next month', '날짜 미정이면': 'No dates yet?', '하루 줄이기': 'One day less', '하루 늘리기': 'One day more',
   '혼자': 'Solo', '내 속도대로': 'At my own pace', '연인': 'Partner', '둘이서': 'Just the two of us', '친구': 'Friends', '여럿이': 'In a group', '가족 (아이 포함)': 'Family (with kids)', '가족 (어른만)': 'Family (adults)',
   '이건 빼 주세요': 'Leave these out', '여러 개 가능': 'Pick any', '줄 서는 맛집': 'Long queues', '많이 걷는 코스': 'Lots of walking', '붐비는 관광지': 'Crowded sights', '이른 아침 일정': 'Early mornings', '날것·회': 'Raw fish', '매운 음식': 'Spicy food',
@@ -180,6 +180,8 @@ window.VZTR_EN = {
     '{n}시간 {m}분 남음': '{n} h {m} min left', '{n}시간 남음': '{n} h left', '{n}분 남음': '{n} min left',
     // 11/24 보드 11·15·3: 길안내 실제 시각 · 남은 분 · 상세 이동 줄 · 공유 카드
     '약 {n}분 남음': '~{n} min left', '곧 도착': 'Almost there',
+    '로그인 필요 없어요': 'No login',   /* 11/24 검수: 360px 폰에서 소개 칩 3개가 3px 넘쳐 잘리던 것 → 짧게(아래 2개도) */
+    '탑승권 코드 # / #': 'Pass code # / #',   /* 숫자 '#' 키 = 자동 사전과 같은 자리라 손 사전이 이김 */
     '전철 {n}시간 {m}분': 'Train {n} h {m} min', '전철 {n}시간': 'Train {n} h', '니시테쓰 공항버스': 'Nishitetsu Airport Bus',
     '도착 {x}': x => /^\d{1,2}:\d{2}$/.test(x) ? 'Arrived ' + x : null, '{x} 출발': x => /^\d{1,2}:\d{2}$/.test(x) ? 'Left ' + x : null,
     '차로': 'By car', '추정': 'est.', '숙소로': 'To your stay',
@@ -348,7 +350,7 @@ Object.assign(window.VZTR_EN, { '어느 나라에서 오든 도착 공항부터 
 
 /* 11/24 영어 원어민 검토 117개 (직역 → 자연스러운 앱 문구) — 표 = 문서/여행앱/2026-11-24_VZTR_영어문구_원어민검토_v1.md */
 Object.assign(window.VZTR_EN, {
-  "결과는 탑승권 한 장": "Result: a boarding pass",
+  "결과는 탑승권 한 장": "A boarding pass",
   "평점 좋은 카페에서 커피 한 잔": "Coffee at a top-rated cafe",
   "현지인 가는|시장에서 군것질": "Snacks at a|local market",
   "지도에 없는 골목 산책": "Wander off-map alleys",
