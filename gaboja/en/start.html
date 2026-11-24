@@ -701,7 +701,10 @@ html.fit .foot::before { display: none; }
 .ticket .bd .ln { margin-top: -0.375rem; color: var(--sub); }
 
 /* 11/18 M39: 개인정보 안내 = 아이콘 세 줄 */
-.legal { display: flex; justify-content: center; gap: 1rem; margin: 0.25rem 0 0; font-size: 0.6875rem; }   /* 11/24 첫 화면 아래 법적 고지 */
+.legal { display: grid; grid-template-columns: 1fr 1fr; column-gap: 1rem; margin: 0.25rem 0 0; font-size: 0.6875rem; }   /* 11/24 첫 화면 아래 법적 고지 · 11/25 동우님: 두 링크 사이 틈이 화면 가운데에 오게(글자 길이가 달라도 위 버튼들과 축이 맞아 보이게) */
+.legal a:first-child { justify-self: end; }
+.legal a:last-child { justify-self: start; }
+.intro .foot .cta > svg { margin-right: -1.625rem; }   /* 11/25 동우님: 화살표가 있어도 글자만 정확히 가운데(화살표 폭+간격만큼 오른쪽 여백을 빼서 가운데 계산에서 뺌) */
 .legal a { color: color-mix(in srgb, var(--sub) 65%, var(--canvas)); text-decoration: none; font-weight: 400; }   /* 11/24 동우님: 둘 다 일반 굵기·더 연한 회색(밝게·어둡게 둘 다 바탕 쪽으로 섞음) */
 .agrees { border-radius: var(--r-sm); background: var(--field); border: 1px solid var(--hair); box-shadow: none; padding: 0.25rem 1rem 0.5rem; }   /* 11/25 입력칸과 같은 흰 면·얇은 선(페이지 배경과 통일) */   /* 11/25 동의 카드: 한 장 안에 전체 동의 + 줄들(앱 카드와 같은 면·그림자) */
 .agrees .ag { display: flex; align-items: center; gap: 0.625rem; min-height: 2.75rem; cursor: pointer; flex: 1; min-width: 0; -webkit-tap-highlight-color: transparent; }   /* 11/25 .agrees 안으로 한정 — 결과 화면 .ag(유형 글자 뜻)와 이름이 겹쳐 글자판이 찌그러졌음 */
