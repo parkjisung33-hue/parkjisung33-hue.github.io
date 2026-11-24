@@ -702,8 +702,7 @@ html.fit .foot::before { display: none; }
 
 /* 11/18 M39: 개인정보 안내 = 아이콘 세 줄 */
 .legal { display: flex; justify-content: center; gap: 1rem; margin: 0.25rem 0 0; font-size: 0.6875rem; }   /* 11/24 첫 화면 아래 법적 고지 */
-.legal a { color: var(--sub); text-decoration: none; }
-.legal b { font-weight: 700; }
+.legal a { color: color-mix(in srgb, var(--sub) 65%, var(--canvas)); text-decoration: none; font-weight: 400; }   /* 11/24 동우님: 둘 다 일반 굵기·더 연한 회색(밝게·어둡게 둘 다 바탕 쪽으로 섞음) */
 .agrees { border-radius: var(--r-sm); background: var(--field); border: 1px solid var(--hair); box-shadow: none; padding: 0.25rem 1rem 0.5rem; }   /* 11/25 입력칸과 같은 흰 면·얇은 선(페이지 배경과 통일) */   /* 11/25 동의 카드: 한 장 안에 전체 동의 + 줄들(앱 카드와 같은 면·그림자) */
 .agrees .ag { display: flex; align-items: center; gap: 0.625rem; min-height: 2.75rem; cursor: pointer; flex: 1; min-width: 0; -webkit-tap-highlight-color: transparent; }   /* 11/25 .agrees 안으로 한정 — 결과 화면 .ag(유형 글자 뜻)와 이름이 겹쳐 글자판이 찌그러졌음 */
 .agrees .ag input { position: absolute; opacity: 0; width: 1px; height: 1px; pointer-events: none; }
@@ -1440,7 +1439,7 @@ function rIntro() {
     <div class="foot">
       <button class="cta" id="startBtn">내 유형 알아보기 ${ICON.arrow}</button>
       <button class="ghost" id="allBtn">16가지 여행 성향 둘러보기</button>
-      <p class="legal"><a href="${LEGAL.url('privacy')}" target="_blank" rel="noopener"><b>개인정보처리방침</b></a><a href="${LEGAL.url('terms')}" target="_blank" rel="noopener">이용약관</a></p>
+      <p class="legal"><a href="${LEGAL.url('privacy')}" target="_blank" rel="noopener">개인정보처리방침</a><a href="${LEGAL.url('terms')}" target="_blank" rel="noopener">이용약관</a></p>
     </div>`, 'intro');
   depRun(pick);
   $('#startBtn').onclick = () => { S.ans = []; S.shuffle = Q.map(q => shuffled(q.o.map((_, i) => i))); S.hist = []; go('q0'); };
