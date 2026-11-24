@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>VZTR 첫 화면 아래 정렬 시안</title>
+<style>
+@font-face { font-family: "Pretendard Variable"; font-weight: 45 920; src: url("fonts/PretendardVariable.woff2") format("woff2-variations"); }
+:root { --canvas:#EFEFF1; --ink:#16171A; --sub:#5F6269; --paper:#fff; --blue:#2B5BE8; }
+* { box-sizing:border-box; }
+body { margin:0; background:#E4E4E8; color:var(--ink); font-family:"Pretendard Variable",-apple-system,"Apple SD Gothic Neo",sans-serif; letter-spacing:-.01em; word-break:keep-all; }
+header { padding:1.5rem 1.25rem .5rem; max-width:52rem; margin:0 auto; }
+header h1 { font-size:1.25rem; margin:0 0 .25rem; }
+header p { margin:0; color:var(--sub); font-size:.875rem; line-height:1.5; }
+.grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(20rem,1fr)); gap:1rem; padding:1rem 1.25rem 2rem; max-width:52rem; margin:0 auto; }
+.card { background:var(--paper); border-radius:1rem; padding:1rem; border:2px solid transparent; cursor:pointer; }
+.card.on { border-color:var(--blue); }
+.card h2 { font-size:1rem; margin:0 0 .25rem; display:flex; gap:.5rem; align-items:center; }
+.card h2 .k { background:var(--ink); color:#fff; border-radius:.375rem; padding:0 .45rem; font-size:.8125rem; }
+.card .d { color:var(--sub); font-size:.8125rem; margin:0 0 .75rem; line-height:1.45; }
+.phone { position:relative; width:22.5rem; max-width:100%; margin:0 auto; background:var(--canvas); border-radius:.75rem; padding:1.25rem 1.625rem 1rem; overflow:hidden; }
+.axis { position:absolute; top:0; bottom:0; left:50%; width:1px; background:rgba(43,91,232,.35); display:none; }
+body.showaxis .axis { display:block; }
+.foot { display:flex; flex-direction:column; gap:.25rem; }
+.cta { position:relative; width:100%; height:3.5rem; border-radius:.625rem; background:var(--ink); color:#fff; font:700 1rem/1 inherit; font-family:inherit; display:flex; align-items:center; justify-content:center; gap:.5rem; border:0; }
+.cta svg, .row svg { width:1.125rem; height:1.125rem; stroke:currentColor; fill:none; stroke-width:2.2; stroke-linecap:round; stroke-linejoin:round; }
+.ghost { height:2.75rem; background:transparent; color:var(--sub); border:0; font:700 1rem/1 inherit; font-family:inherit; }
+.legal { margin:.25rem 0 0; font-size:.6875rem; color:color-mix(in srgb,var(--sub) 65%,var(--canvas)); display:flex; justify-content:center; gap:1rem; }
+/* B: 화살표 오른쪽 끝 고정 */
+.v-b .cta svg { position:absolute; right:1.25rem; top:50%; transform:translateY(-50%); }
+.v-b .legal, .v-c .legal { gap:.5rem; }
+.dot { opacity:.7; }
+/* D: 링크를 반반 칸, 각 칸 가운데 + 가운데 세로줄 */
+.v-d .cta svg { position:absolute; right:1.25rem; top:50%; transform:translateY(-50%); }
+.v-d .legal { display:grid; grid-template-columns:1fr 1px 1fr; gap:0; align-items:center; }
+.v-d .legal a { text-align:center; }
+.v-d .legal i { height:.625rem; background:currentColor; opacity:.5; }
+/* E: 지금(별로) */
+.v-e .cta svg { margin-right:-1.625rem; }
+.v-e .legal { display:grid; grid-template-columns:1fr 1fr; column-gap:1rem; }
+.v-e .legal a:first-child { justify-self:end; } .v-e .legal a:last-child { justify-self:start; }
+.bar { position:sticky; bottom:0; background:rgba(255,255,255,.96); border-top:1px solid #ddd; padding:.75rem 1.25rem; display:flex; gap:.5rem; align-items:center; flex-wrap:wrap; }
+.bar input[type=text] { flex:1 1 12rem; height:2.5rem; border:1px solid #ccc; border-radius:.5rem; padding:0 .75rem; font:inherit; font-size:.875rem; }
+.bar button { height:2.5rem; border:0; border-radius:.5rem; padding:0 1rem; background:var(--ink); color:#fff; font:inherit; font-weight:700; font-size:.875rem; }
+.bar label { font-size:.8125rem; color:var(--sub); display:flex; gap:.25rem; align-items:center; }
+</style></head><body>
+<header>
+  <h1>첫 화면 아래 세 줄 — 정렬 시안</h1>
+  <p>마음에 드는 걸 누르고(여러 개 가능) 메모 → ‘답 복사’ 해서 보내 주세요. ‘가운데 선 보기’를 켜면 화면 가운데 축이 파란 선으로 보입니다.</p>
+</header>
+<div class="grid" id="g"></div>
+<div class="bar"><label><input type="checkbox" id="ax"> 가운데 선 보기</label><input type="text" id="memo" placeholder="메모 (선택)"><button id="cp">답 복사</button></div>
+<script>
+const AR = '<svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg>';
+const V = [
+  ['A', '원래대로', '세 줄 모두 ‘덩어리 전체’를 가운데에. 화살표·긴 단어 때문에 글자가 살짝 왼쪽으로 쏠려 보임.', 'a', true, '<a>개인정보처리방침</a><a>이용약관</a>'],
+  ['B', '화살표 오른쪽 끝 + 가운데점', '버튼 글자는 정확히 가운데, 화살표는 버튼 오른쪽 끝에 고정(목록 버튼처럼). 아래 링크는 ‘·’로 이어 한 덩어리로 가운데.', 'b', true, '<a>개인정보처리방침</a><span class="dot">·</span><a>이용약관</a>'],
+  ['C', '화살표 없애기 + 가운데점', '버튼은 글자만(정확히 가운데). 아래 링크는 ‘·’로 이어 한 덩어리로 가운데.', 'c', false, '<a>개인정보처리방침</a><span class="dot">·</span><a>이용약관</a>'],
+  ['D', '화살표 오른쪽 끝 + 반반 칸', '버튼은 B와 같음. 아래 링크는 화면을 반으로 나눠 각 칸 가운데에 두고, 가운데에 짧은 세로줄.', 'd', true, '<a>개인정보처리방침</a><i></i><a>이용약관</a>'],
+  ['E', '지금 배포된 것(참고)', '버튼 글자만 가운데·화살표는 밖으로, 링크 사이 틈이 가운데. 동우님이 이상하다고 하신 것.', 'e', true, '<a>개인정보처리방침</a><a>이용약관</a>'],
+];
+const g = document.getElementById('g'), pick = new Set();
+V.forEach(([k, t, d, c, arrow, legal]) => {
+  const el = document.createElement('div'); el.className = 'card'; el.dataset.k = k;
+  el.innerHTML = `<h2><span class="k">${k}</span>${t}</h2><p class="d">${d}</p>
+  <div class="phone v-${c}"><div class="axis"></div><div class="foot">
+    <button class="cta">내 유형 알아보기${arrow ? ' ' + AR : ''}</button>
+    <button class="ghost">16가지 여행 성향 둘러보기</button>
+    <p class="legal">${legal}</p></div></div>`;
+  el.onclick = () => { pick.has(k) ? pick.delete(k) : pick.add(k); el.classList.toggle('on'); };
+  g.appendChild(el);
+});
+document.getElementById('ax').onchange = e => document.body.classList.toggle('showaxis', e.target.checked);
+document.getElementById('cp').onclick = () => {
+  const s = '첫 화면 아래 정렬: ' + ([...pick].sort().join(', ') || '(안 고름)') + (memo.value.trim() ? ' / 메모: ' + memo.value.trim() : '');
+  navigator.clipboard.writeText(s).then(() => { cp.textContent = '복사됨'; setTimeout(() => cp.textContent = '답 복사', 1500); });
+};
+</script></body></html>
