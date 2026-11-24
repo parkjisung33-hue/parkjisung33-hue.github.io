@@ -754,7 +754,7 @@
       const railRun = (Rt, t0, toQ, dry) => { let t1 = t0, pr = false; const out = dry ? [] : it;   // dry = 시험 계산만(줄 안 넣음)
         Rt.segs.forEach((g, k) => {
           if (g.t === 'rail') { const A = g.from, Bn = g.to, R = realTrain(A, Bn, t1 + 20), ln = R ? R.grade || g.line : g.line;
-            if (!dry && !R && RT && Array.isArray(RT[A + '|' + Bn + '|' + ymd(date)])) railMiss.push(A + ' → ' + Bn);   // 시각표는 있는데 그 뒤 열차 없음 = 막차 지남
+            if (!dry && !R && RT && Array.isArray(RT[A + '|' + Bn + '|' + ymd(date)])) railMiss.push(Bn.replace(/역$/, ''));   // 시각표는 있는데 그 뒤 열차 없음 = 막차 지남
             const wt = R ? R.d - t1 : 0;   // 역에서 기다리는 분 (실제 열차)
             out.push({ k: 'p', s: t1, e: R ? R.d : t1 + 20, sh: A, n: pr ? A + ' · 갈아타기' : A, say: (wt >= 60 ? '열차 ' + R.dep + ' 출발 · 기다리는 동안 역 근처 식사·카페 · ' : '') + (pr ? '갈아탈 열차 타는 곳 확인' : '승차권 · 타는 곳 확인'), q: A }); t1 = R ? R.d : t1 + 20;
             const ride = R ? R.a - R.d : g.m;
@@ -976,8 +976,8 @@
       }
       if (i === 1) carry = Math.max(0, t - 1440);   // 한밤(다음 날) 도착이면 둘째 날 늦게 시작
       it.push({ k: 'w', s: i === N || t > toMin('22:30') ? null : toMin('22:30'), n: '취침' });
-      if (railMiss.length) nt.unshift({ lv: 'red', t: railMiss[0] + ' 그 시각 뒤 열차 없음 · 코레일에서 막차 확인' });   // 11/25
-      if (railUsed) nt.splice(Math.min(nt.length, 2), 0, { lv: 'gray', t: railEst ? '기차 시각은 대략 · 코레일에서 예매' : '열차 시각 = 코레일 시간표(국토교통부 TAGO) · 코레일에서 예매' });   // 11/25 KRM: 실제 시각표를 못 받은 구간이 있으면 '대략'
+      if (railMiss.length) nt.unshift({ lv: 'red', t: railMiss[0] + ' 가는 막차 지남 · 코레일 확인' });   // 11/25
+      if (railUsed) nt.splice(Math.min(nt.length, 2), 0, { lv: 'gray', t: railEst ? '기차 시각은 대략 · 코레일에서 예매' : '열차 시각 = 코레일 시간표 · 코레일에서 예매' });   // 11/25 KRM: 실제 시각표를 못 받은 구간이 있으면 '대략'
       if (blocks.length && !BLANK) nt.push({ lv: 'gray', t: '늦어지면 ' + blocks[blocks.length - 1] + ' 먼저 빼기' });
       const flyS = it.filter(x => x.fly && x.s != null).map(x => x.s);
       const items = it.filter(x => x.s != null).map(x => { const o = { ...x }; if (x.fly) { o.s = toT(x.s); o.e = toT(x.e); } else { o.s = toT(r5(x.s)); if (x.e != null) { let e = Math.max(r5(x.e), r5(x.s)); const nf = flyS.find(f => f >= x.s && f < e); if (nf != null) e = Math.max(nf, r5(x.s)); o.e = toT(e); } }   /* 5분 올림이 뒤 열차·비행기 출발 시각을 넘지 않게 */   /* 비행기·열차 = 실제 시각 그대로 */ delete o.tc; delete o.meal; delete o._sl; delete o._ml;   /* pid는 남김: 앱의 '문 닫았어요'가 장소 DB에서 같은 종류를 찾을 때 씀 */ if (!o.info) delete o.info; return o; });
