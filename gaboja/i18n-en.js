@@ -121,7 +121,7 @@ window.VZTR_EN = {
   '흘러가는 대로 vs 오픈 시간 계산': 'Go with the flow vs. plan to open', '느긋한 즉흥 같고 동네·명소 보완': 'Easygoing; adds areas and sights',
   '명소 정복자': 'Bucket Lister', '쇼핑 마스터': 'Haul Master', '로컬 탐험형': 'Explorers', '취향 수집형': 'Curators', '명소 정복형': 'Sightseers', '힐링 충전형': 'Rechargers',
   '· {x}': x => { const e = VZTR_EN_FN.TT(x); return e !== x ? '· ' + e : null; },
-  '이번 여행, 나답게.': 'Travel true to you.',   // 11/25 첫 화면 제목 4번 시안
+  '이번 여행, 나답게.': 'Pack your personality.',   // 11/25 첫 화면 제목(한 4번 시안 · 영 5번 시안)
   // 11/23 장소 고르기 맛집 카드 ★ 줄 머리말(start swPoints) — 메뉴 이름 영어는 i18n-en-auto(메뉴 사전)
   '인기 메뉴': 'Popular', '인기': 'Popular', '대표': 'Signature',
   '지도에 없는 동네도 동선은 미리. 하루 #만 보는 기본': 'Off-map streets, route planned anyway. 10K steps a day, minimum.',
