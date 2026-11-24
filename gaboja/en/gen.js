@@ -161,7 +161,17 @@
       toBase: { KIX: { 'kyo-station': [80, 'JR 특급 하루카'], 'kyo-center': [100, 'JR 하루카 + 지하철·버스'] } }, say: { KIX: '입국 심사 → JR 표지판 · 하루카 타는 곳' } }
   };
   /* 11/22 동우님 #4: 숙소 글자 → 숙소 동네(클러스터) 키. 동네 이름·줄임말·일본어 > DB 장소 이름 > 기준 동네(bases) 정규식. 못 찾으면 '' */
-  function stayHome(C, stayRaw, matchB) {
+  /* 11/25 동우님 피드백: 숙소를 주소·지도 링크로 넣으면 좌표(stayLL) → 그 도시 장소 중 가장 가까운 곳의 동네(5km 안). 글자 맞추기보다 먼저 */
+  function nearCl(C, ll) {
+    if (!ll || !isFinite(ll[0]) || !isFinite(ll[1])) return '';
+    let best = '', bd = 5;
+    Object.values(PL).forEach(p => { if (!p.cl || !p.ll || p.kind === 'hub' || (p.city !== C.main && p.city !== C.side)) return;
+      const dy = (p.ll[0] - ll[0]) * 111, dx = (p.ll[1] - ll[1]) * 111 * Math.cos(ll[0] * Math.PI / 180), d = Math.hypot(dx, dy);
+      if (d < bd) { bd = d; best = p.cl; } });
+    return best;
+  }
+  function stayHome(C, stayRaw, matchB, ll) {
+    const nc = nearCl(C, ll); if (nc) return nc;
     if (!stayRaw) return '';
     const CLS = [...new Set(Object.values(PL).filter(p => p.city === C.main || p.city === C.side).map(p => p.cl).filter(Boolean))];
     const AKA = { 'osk-minami': '도톤보리|신사이바시|닛폰바시|難波|心斎橋|Namba', 'osk-kita': '오사카역|梅田|Umeda', 'osk-tennoji': '아베노|신세카이|天王寺', 'osk-bay': '유니버설|USJ|베이 에리어', 'kyo-center': '시조|기온|가라스마|河原町|祇園|四条', 'kyo-station': '京都駅', 'kyo-arashiyama': '嵐山', 'kyo-fushimi': '伏見',
@@ -172,10 +182,10 @@
     const plHit = stayRaw.length >= 2 ? Object.values(PL).find(p => (p.city === C.main || p.city === C.side) && p.cl && p.kind !== 'hub' && ((p.n && p.n.length >= 3 && (stayRaw.includes(p.n) || p.n.includes(stayRaw) && stayRaw.length >= 3)) || (p.l && p.l.length >= 3 && stayRaw.includes(p.l)))) : null;
     return CLS.find(clHit) || (plHit && plHit.cl) || (matchB && matchB.key) || '';
   }
-  function stayArea(dest, raw) {   // 시작 화면 숙소 칸 아래 '○○에서 출발해요' (엔진과 같은 규칙)
+  function stayArea(dest, raw, ll) {   // 시작 화면 숙소 칸 아래 '○○에서 출발해요' (엔진과 같은 규칙) · ll = 숙소 좌표(주소·지도 링크로 넣었을 때)
     const C = D.cfg && D.cfg[dest]; raw = String(raw || '').trim(); if (!C || !raw) return '';
     const mb = C.bases.find(b => b.re && new RegExp(b.re).test(raw)) || C.bases.find(b => raw.includes(b.name.split('·')[0].trim()));
-    const k = stayHome(C, raw, mb); return k ? D.clName[k] || '' : '';
+    const k = stayHome(C, raw, mb, ll); return k ? D.clName[k] || '' : '';
   }
   /* 11/25 영어판 한국 여러 도시(서울 → 부산 → 대구 등) · 공항 없는 도시(경주·강릉 등 = 인천 도착 → 기차): 도시 사이 = 기차.
      표 = 한국 도시 설정 modes.train을 한데 모은 그래프 — regions(역 ↔ 역 소요 분, 조사값) · toBase(역 → 숙소 동네). 역의 도시 = toBase 동네의 도시
@@ -338,7 +348,7 @@
     const stayRaw = String(input.stayTx || '').trim(), matchB = C.bases.find(b => b.re && new RegExp(b.re).test(stayRaw)) || (stayRaw && C.bases.find(b => stayRaw.includes(b.name.split('·')[0].trim())));
     /* 11/22 동우님 #4: 숙소에 적은 동네·장소(예: 아키하바라·호텔 이름 속 동네·DB 장소 이름) = 그 동네(클러스터)에서 매일 출발·복귀.
        공항·역·차 표는 기준 동네(bases)에만 있으니 표는 가장 가까운 기준 동네 + 동네 사이 시간으로 계산 */
-    const HOME = stayHome(C, stayRaw, matchB);
+    const HOME = stayHome(C, stayRaw, matchB, input.stayLL);
     const B = matchB || (HOME ? C.bases.slice().sort((a, b) => mins(a.key, HOME) - mins(b.key, HOME))[0] : null) || C.bases[0];
     let base = B.key; const calcName = HOME ? D.clName[HOME] || B.name : B.name;
     // 화면에 쓰는 숙소 이름: 목록에 있으면 동네 이름, 없으면 사용자가 적은 말 그대로(계산만 첫 동네 기준). 지도 검색어도 같은 말 (11/13)
@@ -352,7 +362,7 @@
       const info = {}; let hit = '';
       cities.forEach(c => {
         const cf = KRM ? D.cfg[KXC[c]] : c === '오사카' ? D.cfg.kix : c === '교토' ? { ...D.cfg.kix, ...SIDE_ONLY.kix } : D.cfg[KXC[c]]; if (!cf || !cf.bases) return;
-        const h = stayRaw ? stayHome({ ...cf, main: c, side: null }, stayRaw, null) : '';
+        const h = stayRaw ? stayHome({ ...cf, main: c, side: null }, stayRaw, null, input.stayLL) : '';
         const b0 = h ? cf.bases.slice().sort((a, b) => mins(a.key, h) - mins(b.key, h))[0] : cf.bases[0];
         const tb = ((cf.toBase || {}).KIX || {})[b0.key] || [80, '전철 (대략)'], add = h && h !== b0.key ? mins(b0.key, h) : 0;
         if (h && !hit) hit = c;
