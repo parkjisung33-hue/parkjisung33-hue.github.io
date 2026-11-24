@@ -43,7 +43,7 @@ window.VZTR_EN = {
   '입국 심사 → 짐 찾기 → 공항철도(AREX) 표지판': 'Immigration → Baggage → follow AREX signs',
   '입국 심사 → 짐 찾기 → 지하철 표지판': 'Immigration → Baggage → follow Subway signs',
   '입국 심사 → 짐 찾기 → 경전철 표지판': 'Immigration → Baggage → follow Light Rail signs',
-  '입국 심사·짐 찾기 약 1시간으로 잡았어요 · 붐비면 더 걸려요': 'Allow ~1 h for immigration and bags · more when busy',
+  '입국 심사·짐 찾기 약 1시간으로 잡았어요 · 붐비면 더 걸려요': 'Immigration & bags ~1 h · longer if busy', '입국 심사·짐 찾기 약 1시간 · 붐비면 더 걸려요': 'Immigration & bags ~1 h · longer if busy',   // 11/25 주의 칸 한 줄
   '세금 환급(택스 리펀드)은 출국 심사 전에': 'Claim your tax refund before passport control',
   '체크인 전 짐만 보관': 'Drop bags before check-in',
   // 가이드북 뼈대(메뉴·탭·머리)
@@ -90,7 +90,7 @@ window.VZTR_EN = {
   '빵': 'Bakeries', '짐': 'Bags', '집': 'Home', '도착 = 출발 뒤 계산': 'Arrival = worked out from departure', '도착 = 출발': 'Arrival = departure',
   '차 시간 = 도로×혼잡+휴게소 (추정)': 'Drive time = road × traffic + rest stops (est.)', '차 시간 = 도로 기준 × 시간대 혼잡 + 휴게소 쉼(#시간마다 #분)': 'Drive time = road time × traffic by hour + rest stops (every # h, # min)',
   '집 ↔ 공항·역 = 카카오 길찾기 문 앞 기준 (차는 그 시각 교통 예측 · 공항은 주차 #분 더함)': 'Home ↔ airport/station = Kakao door-to-door (car uses predicted traffic · airport adds # min parking)',
-  '해돋이마을': 'Haedoji Village', '늦어지면 @ · @ 먼저 빼기': 'Running late? Skip @ · @ first', '해돋이마을 전망과 미피카페': 'Haedoji Village views and Miffy Cafe', '책·잡지 #만 #천 권을 고른 서점': 'Bookstore with a hand-picked shelf of books and magazines',
+  '해돋이마을': 'Haedoji Village', '늦어지면 @ · @ 먼저 빼기': 'If late, skip @ · @', '해돋이마을 전망과 미피카페': 'Haedoji Village views and Miffy Cafe', '책·잡지 #만 #천 권을 고른 서점': 'Bookstore with a hand-picked shelf of books and magazines',
   '밤 #시까지': 'Until #:00',   // 자동 번역 'p.m.' 바로잡음 (24시 표기)
   // 검수(11/20): 영어가 길어 넘치던 곳 = 짧게 (한 줄 원칙)
   '관광보다 먹방': 'Food over sights', '현지인 동네 골목': 'Local alleys', '유명한 곳은 꼭': 'Famous spots', '전시·문화·역사': 'Museums · history',
@@ -175,7 +175,7 @@ window.VZTR_EN = {
     '{x}으로': x => { if (HAS(x + '으로')) return null; const M = { '공항': 'the airport', '숙소': 'your stay', '집': 'home' }, e = M[x] || FULL(x); return e ? 'To ' + e : null; },
     '{x}로': x => { if (HAS(x + '로')) return null; const M = { '공항': 'the airport', '숙소': 'your stay', '집': 'home' }, e = M[x] || FULL(x); return e ? 'To ' + e : null; },
     '{x}까지 이동': x => { const e = FULL(x); return e ? 'Head to ' + e : null; },
-    '늦어지면 {x} 먼저 빼기': x => { const e = FULL(x); return e ? 'Running late? Skip ' + e + ' first' : null; },
+    '늦어지면 {x} 먼저 빼기': x => { const e = FULL(x); return e ? 'If late, skip ' + e : null; },   // 11/25 주의 칸 한 줄(짧게)
     '다음 {x}': x => { const m = /^(\d{1,2}:\d{2}) (.+)$/.exec(x); if (!m) return null; const e = FULL(m[2]); return e ? 'Next ' + m[1] + ' ' + e : null; },
     '{n}시간 {m}분 남음': '{n} h {m} min left', '{n}시간 남음': '{n} h left', '{n}분 남음': '{n} min left',
     // 11/24 보드 11·15·3: 길안내 실제 시각 · 남은 분 · 상세 이동 줄 · 공유 카드
@@ -350,6 +350,7 @@ Object.assign(window.VZTR_EN, {
     '열차 {x} 출발 · 기다리는 동안 역 근처 식사·카페 · 승차권 · 타는 곳 확인': 'Train leaves {x} · eat or grab a coffee near the station meanwhile · check ticket & platform', '열차 {x} 출발 · 기다리는 동안 역 근처 식사·카페 · 갈아탈 열차 타는 곳 확인': 'Train leaves {x} · eat or grab a coffee near the station meanwhile · find your connecting platform',
     '열차 시각 = 코레일 시간표 · 코레일에서 예매': 'Times from Korail timetable · book on Korail', '{x} 가는 막차 지남 · 코레일 확인': 'Last train to {x} gone · check Korail',   // 11/25 '주의' 칸 = 한 줄(최소 11px) → 짧게
     '짐 맡기고 산책': 'Stroll, bags stored', '{x} · 짐 맡기고 근처 산책': '{x} · leave your bags, stroll nearby', '숙소에 짐 맡기고 · 열차 시각에 맞춰 출발': 'Leave bags at the hotel · head out in time for the train',
+    '현지어': 'Local name', '명동': 'Myeongdong', '남산': 'Namsan', '동대문': 'Dongdaemun', '감천': 'Gamcheon', '구좌': 'Gujwa', '엑스포': 'Expo', '강정': 'Gangjeong', '소래': 'Sorae',   // 11/25 추가 카드 동네 앞 이름   // 11/25 왼쪽 칸 4.75rem — 'Local language' 넘침(칸 내용 = 현지어 이름)
     'KTX-이음': 'KTX-Eum', 'ITX-마음': 'ITX-Maeum', '누리로': 'Nuriro', '무궁화호': 'Mugunghwa', 'KTX-이음 · {x} → {y}': 'KTX-Eum · {x} → {y}', 'ITX-마음 · {x} → {y}': 'ITX-Maeum · {x} → {y}', '누리로 · {x} → {y}': 'Nuriro · {x} → {y}', '무궁화호 · {x} → {y}': 'Mugunghwa · {x} → {y}',
     '동대구': 'Dongdaegu', '신경주': 'Singyeongju', '청량리': 'Cheongnyangni', '여수엑스포': 'Yeosu Expo', '광주송정': 'Gwangju-Songjeong', '수서': 'Suseo', '대구 TAE': 'Daegu TAE', '대구공항': 'Daegu Airport', '대구공항 도착': 'Arrive at Daegu Airport', '{x} → {y} · 짐 들고 · 약 {n}분': '{x} → {y} · with luggage · ~{n} min',
     '못 넣은 곳: {x}': a => { const x = PNM(a) || TQ(a); return x ? 'Not added: ' + x : null; }, '대중교통': 'Transit', '대중교통 · 약 {n}분': 'Transit · ~{n} min',

@@ -836,7 +836,7 @@
         const arr = toMin(out[1]), ex = 60, tr = TB[0], Rt = KRM ? krRoute('AP:' + apK, base) : null;   // 11/25 KRM: 공항 → (기차) → 숙소 도시
         it.push({ k: 'p', s: arr, e: arr + ex, sh: AP.name + '공항', n: AP.name + '공항 도착', l: AP.l, say: AP.say, q: AP.q });
         const t1 = Rt ? railGo(Rt, arr + ex, BQ) : (it.push({ k: 'm', s: arr + ex, e: arr + ex + tr, mode: 'train', n: TB[1], mv: TB[1] + ' · 약 ' + mnTx(tr), to: BQ }), arr + ex + tr);
-        nt.push({ lv: 'gray', t: '입국 심사·짐 찾기 약 1시간으로 잡았어요 · 붐비면 더 걸려요' });
+        nt.push({ lv: 'gray', t: '입국 심사·짐 찾기 약 1시간 · 붐비면 더 걸려요' });
         t = r5(t1); if (!DT) { arriveTail('체크인 전 짐만 보관'); if (mustQ.length && t < toMin('21:30')) flushMust(toMin('22:30')); }
         title = '도착하자마자 ' + (blocks[0] || '동네 산책'); route = [AP.name + '공항'].concat(Rt ? Rt.segs.filter(g => g.t === 'rail').flatMap(g => [g.from, g.to]) : [], [baseName]);
         if (DT) { const ro = route; backIntl(true); title = '당일치기 — ' + (blocks[0] || '동네 산책'); route = ro.concat(route.slice(1)); }

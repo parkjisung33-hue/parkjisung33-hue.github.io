@@ -197,10 +197,12 @@
     var MINS = { '#bdS': 10.5, '#rxT': 16, '.swhd h1': 20, '.li .nm .one': 12, '.pass h1.city': 20, 'h1.city': 20, '.hero h1': 24, '.dayline h2': 16, '#cT': 18 };   // 큰 제목은 너무 작아지지 않게 칸별 최소
     document.querySelectorAll(ONE_SEL.join(',')).forEach(function (e) {
       if (!e.offsetWidth || !e.clientWidth) return;   // 인라인 칸(clientWidth 0)은 잴 수 없음 → 건너뜀
+      if (e.matches('.dayline h2, #sheet h3#sheetTitle, #v-log .ttl2.one, .drawer #typeNm')) return;   // 11/25 이 칸들은 index.html fitLines가 맡음(CSS !important라 여기서 넣는 글자 크기가 안 먹고 둘이 다툼)
       e.style.fontSize = ''; e.style.whiteSpace = 'nowrap';
       if (e.dataset.sh && e.dataset.fw !== String(e.clientWidth)) { if (!e.dataset.full) e.dataset.full = e.textContent; e.dataset.fw = String(e.clientWidth); if (e.textContent !== e.dataset.full) e.textContent = e.dataset.full; if (e.scrollWidth > e.clientWidth + 1) e.textContent = e.dataset.sh; }   // 넘치면 짧은 이름 먼저(폭이 바뀔 때만 다시 정함 — 글자 바꾸기가 다시 부르는 고리 막기)
       var fs = parseFloat(getComputedStyle(e).fontSize), mn = parseFloat(e.dataset.one) || 11, n = 0; for (var k in MINS) if (e.matches(k)) mn = MINS[k];
       while (e.scrollWidth > e.clientWidth + 1 && fs > mn && n++ < 40) { fs -= 0.5; e.style.fontSize = fs + 'px'; }
+      if (e.scrollWidth > e.clientWidth + 1) e.style.whiteSpace = 'normal';   // 11/25 동우님 폰: 최소 글자로도 안 들어가면 칸 밖으로 넘치지 않게 줄바꿈(넘침 < 두 줄)
     });
   }
   function q() { if (!t) t = requestAnimationFrame(run); }

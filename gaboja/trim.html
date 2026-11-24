@@ -1576,6 +1576,7 @@ details.sec > summary .cnt { min-width: 0; overflow: hidden; text-overflow: elli
 @media (prefers-reduced-motion: reduce) { .vzrt .sw, .vzrt .bd::after, .stop.land .pt, .stop.land .rail::after, .stop.lift .rail::after, .ldlist .ldfl.a i::after { animation: none !important; } .vzrt .rf, .vzrt .bd { transition: none; } }
 /* 11/24 최종 검수: 기록 카드 제목이 도장(4rem, 오른쪽 위에 얹힘) 밑으로 들어가던 것 → 글자 칸 오른쪽을 도장만큼 비움 */
 .trip .ttl2.one, .trip .codes.one { max-width: calc(100% - 4.25rem); }
+.trip .ttl2.one { padding-right: 0; }   /* 11/25 도장 자리를 max-width와 padding-right(4.5rem) 두 번 비워 제목 칸이 95px까지 좁아지던 것 — max-width만 */
 </style>
 
 <div class="bgfx" aria-hidden="true"></div><!-- 11/19 다크 배경(A 연하게) — 밝은 모드에선 안 보임 -->
@@ -2266,13 +2267,13 @@ function list(d) {
       h += '<div class="li m' + nowCls(c) + '" data-key="' + c.id + '" data-fixed="1" style="--h:' + mh + 'rem"><span class="tm">' + tmx(d, c) + '</span>' + RL('<i class="mvb">' + mvIc(c) + '</i>') + '<span class="c one" aria-label="' + esc(c.mv) + '">' + mvLab(c) + '</span><span></span></div>';
       return;
     }
-    if (c.fly && isPinned(c)) { h += '<div class="li m fy" data-key="' + c.id + '" data-fixed="1"><span class="tm">' + tmx(d, c) + '</span>' + RL('<i class="mvb">' + mvIc(c) + '</i>') + '<span class="c one" style="color:var(--blue);font-weight:600">' + flyHtml(c, 1, 3) + ' · 위 ' + (c.ride === 'train' ? '승차권' : '탑승권') + '</span><span></span></div>'; return; }
+    if (c.fly && isPinned(c)) { h += '<div class="li m fy" data-key="' + c.id + '" data-fixed="1"><span class="tm">' + tmx(d, c) + '</span>' + RL('<i class="mvb">' + mvIc(c) + '</i>') + '<span class="c one" style="color:var(--blue);font-weight:600">' + flyHtml(c, 1, 3) + (window.VZTR_LANG === 'en' ? '' : ' · 위 ' + (c.ride === 'train' ? '승차권' : '탑승권')) + '</span><span></span></div>'; return; }
     if (c.fly) { h += flyCard(d, c, nowCls(c)); return; }
     const parts = c.n.split(' — '), main = parts[1] || parts[0], ti = timeIssue(c);   /* 11/18 D-4 ②: 설명 줄 없음(장소 상세에서 봄) · 시간 문제만 작은 글자로 남김 */
     const fx = fixedOf(c), mu = mapUrl(d, c), P = window.GABOJA_DATA && GABOJA_DATA.places, ev = !!(c.pid && P && P[c.pid] && P[c.pid].kind === 'event');
     h += '<div class="li ' + c.k + (ev ? ' ev' : '') + nowCls(c) + '" data-key="' + c.id + '"' + (fx ? ' data-fixed="1"' : '') + ' role="button" tabindex="0">'
       + '<span class="tm">' + tmx(d, c) + '</span>' + RL(d.tbd ? '<i class="dt n">' + (++no) + '</i>' : '')
-      + '<span class="c"><span class="nm">' + (ev ? EV_STAR : dotHtml(d, c)) + '<span class="one"' + (c.sh && c.sh !== main && !/^(점심|저녁|브런치|간식)$/.test(c.sh) ? ' data-sh="' + esc(c.sh) + '"' : '') + '>' + esc(main) + '</span>' + (nw && c === nw.cur ? '<span class="now-pill">지금</span>' : '') + memoBadge(c) + (c.ck ? '<i class="ckd' + (c.ck === 'ok' ? '' : ' no') + '" role="img" aria-label="' + (c.ck === 'ok' ? '영업시간 확인' : '확인 필요') + '"></i>' : '') + '</span>'
+      + '<span class="c"><span class="nm">' + (ev ? EV_STAR : dotHtml(d, c)) + '<span class="one"' + ((x => x && x !== main ? ' data-sh="' + esc(x) + '"' : '')(c.sh && c.sh !== main && !/^(점심|저녁|브런치|간식)$/.test(c.sh) ? c.sh : window.VZTR_LANG === 'en' ? '' : String(main).replace(/\s+(본점|본관|[^\s]{1,5}점)$/, ''))   /* 11/25 지점명 뺀 짧은 이름은 한국어판만(영어판은 이 글자가 번역 안 됨) */) + '>' + esc(main) + '</span>' + (nw && c === nw.cur ? '<span class="now-pill">지금</span>' : '') + memoBadge(c) + (c.ck ? '<i class="ckd' + (c.ck === 'ok' ? '' : ' no') + '" role="img" aria-label="' + (c.ck === 'ok' ? '영업시간 확인' : '확인 필요') + '"></i>' : '') + '</span>'
       + (ti.hard || ti.soft ? '<span class="s one"><span class="off">' + (ti.hard ? '시간대 안 맞음' : '영업시간 밖') + '</span></span>' : '') + '</span>'
       + (mu ? '<a class="pin" href="' + mu + '" target="_blank" rel="noopener" aria-label="' + esc(main) + ' 지도">' + PIN_SVG + '</a>' : '<span></span>') + '</div>';
   });
@@ -2993,19 +2994,21 @@ function phScan() {   // 시트 안 .phbox 를 찾아 사진을 붙임 (시트�
 try { new MutationObserver(phScan).observe(document.getElementById('sheetIn'), { childList: true }); } catch (_) {}
 /* 11/19 ④ 화면 디자인 — 전체 3: 하루 제목·창 제목 한 줄(넘치면 0.5px씩 줄임) · 9a: 맨 위 제목 늘 한 줄(--tk로 줄여 토글과 안 겹침) */
 // F-06 (11/21): 넘침 = 실제 글자 폭 > 안쪽 칸(좌우 여백 뺀 폭). scrollWidth는 오른쪽 여백(스탬프 자리) 안으로 넘친 글자를 못 잡음
-function lnOver(el) { const cs = getComputedStyle(el), inner = el.clientWidth - (parseFloat(cs.paddingLeft) || 0) - (parseFloat(cs.paddingRight) || 0); const r = document.createRange(); r.selectNodeContents(el); return r.getBoundingClientRect().width > inner + 1; }
+function lnOver(el) { const cs = getComputedStyle(el), inner = el.clientWidth - (parseFloat(cs.paddingLeft) || 0) - (parseFloat(cs.paddingRight) || 0); const r = document.createRange(); r.selectNodeContents(el); return r.getBoundingClientRect().width > inner + 1 || el.scrollWidth > el.clientWidth + 1; }   // 11/25 칸넘침: 글자 범위 폭은 맞아도 scrollWidth가 넘치는 기기(폰 글꼴)가 있음
 function fitSrc() {   // F-11: 출처 한 줄이 넘치면 '사진 Commons 외' 조각부터 뺌(사진 출처는 사진마다 아래에 따로 있음)
   const e = document.querySelector('#tips .srcall'); if (!e || !e.clientWidth) return;
   const o = e.querySelector('[data-opt]'); if (o) { o.hidden = false; if (o.nextSibling && o.nextSibling.nodeType === 3) o.nextSibling.textContent = ' · '; }
   if (o && lnOver(e)) { o.hidden = true; if (o.nextSibling && o.nextSibling.nodeType === 3) o.nextSibling.textContent = ''; }
 }
-function fitLines() { try { fitSrc(); } catch (_) {}
+let fitAgain = 0;
+function fitLines() { try { fitSrc(); } catch (_) {} let wrapped = false;
   document.querySelectorAll('.dayline h2, #sheet h3#sheetTitle, #v-log .ttl2.one, .drawer #typeNm').forEach(el => {   // 11/21: 기록 탭 하루 제목도 한 줄(넘치면 글자만 줄임, 최소 12px)
-    el.classList.add('fitln'); el.style.removeProperty('font-size'); if (!el.clientWidth) return;
-    let f = parseFloat(getComputedStyle(el).fontSize); const min = el.matches('.dayline h2') ? 18 : el.matches('.ttl2, #typeNm') ? 12 : el.matches('#sheetTitle') ? 14 : 16;   // 11/24 검수: 시트 제목(영어 'Hongdae·Yeonnam · Drop bags')이 닫기 버튼에 닿던 것 — 14px까지 줄이고 그래도 길면 줄바꿈
+    el.classList.add('fitln'); el.style.removeProperty('font-size'); el.style.removeProperty('white-space'); if (!el.clientWidth) return;
+    let f = parseFloat(getComputedStyle(el).fontSize); const min = el.matches('.dayline h2') ? 18 : el.matches('.ttl2') ? 10.5 : el.matches('#typeNm') ? 12 : el.matches('#sheetTitle') ? 14 : 16;   // 11/24 검수: 시트 제목(영어 'Hongdae·Yeonnam · Drop bags')이 닫기 버튼에 닿던 것 — 14px까지 줄이고 그래도 길면 줄바꿈
     while (lnOver(el) && f > min) { f -= 0.5; el.style.setProperty('font-size', f + 'px', 'important'); }
-    if (lnOver(el)) { el.classList.remove('fitln'); el.style.removeProperty('font-size'); }   // 최소 크기에서도 넘치면 줄바꿈
+    if (lnOver(el)) { el.classList.remove('fitln'); el.style.removeProperty('font-size'); el.style.setProperty('white-space', 'normal', 'important'); wrapped = true; }   // 최소 크기에서도 넘치면 줄바꿈 (11/25: .one 의 nowrap 이 남아 칸 밖으로 넘치던 것)
   });
+  if (wrapped && fitAgain < 3) { fitAgain++; setTimeout(() => requestAnimationFrame(fitLines), 350); } else if (!wrapped) fitAgain = 0;   // 11/25: 탭이 열리는 도중(폭이 덜 잡힘)에 재서 줄바꿈된 채 남던 것 — 잠시 뒤 다시 잼
 }
 function fitTitle() {
   const b = document.querySelector('.pill .ttl b'), t = b && b.parentElement; if (!b || !t.clientWidth) return;
@@ -3014,9 +3017,9 @@ function fitTitle() {
 }
 try {
   const fl = () => requestAnimationFrame(fitLines);
-  new MutationObserver(fl).observe(document.getElementById('sheetIn'), { childList: true });
-  new MutationObserver(fl).observe(document.getElementById('dayHead'), { childList: true, subtree: true });
-  { const lg = document.getElementById('v-log'); if (lg) { new MutationObserver(fl).observe(lg, { childList: true, subtree: true, attributes: true, attributeFilter: ['hidden'] }); } }
+  new MutationObserver(fl).observe(document.getElementById('sheetIn'), { childList: true, subtree: true, characterData: true });   // 11/25: 영어 번역은 글자만 바꿈(characterData) → 그때도 다시 맞춤
+  new MutationObserver(fl).observe(document.getElementById('dayHead'), { childList: true, subtree: true, characterData: true });
+  { const lg = document.getElementById('v-log'); if (lg) { new MutationObserver(fl).observe(lg, { childList: true, subtree: true, characterData: true, attributes: true, attributeFilter: ['hidden'] }); } }
   addEventListener('resize', () => { fitTitle(); fitLines(); });
   document.fonts && document.fonts.ready.then(() => { fitTitle(); fitLines(); });
   fitTitle(); fitLines();
@@ -3484,11 +3487,11 @@ function recsFor(d) {
   return L.slice(0, 6);
 }
 function recsHtml(d) {
-  const L = recsFor(d);
+  const L = recsFor(d), EN = window.VZTR_LANG === 'en';   // 11/25 반 칸 카드 영어: 'Recommended' 빼고 시각만 · 동네는 앞 이름만(Jongno/Gwanghwamun → Jongno)
   if (!L.length) return '<p class="sub" style="grid-column:1/-1">' + '추천할 곳이 없어요 · 위에서 직접 찾아 보세요' + '</p>';
   return L.map(r => '<button class="rec2" role="checkbox" aria-checked="false" data-rc="' + r.p.id + '"><i class="box"><svg viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></i>'
-    + '<b class="one" data-one="9.5">' + esc(r.p.n) + '</b><span class="one"><span class="nw">' + esc(r.p.a) + '</span> · <span class="nw">' + (r.p.o ? '<span class="on">영업 중</span>' : '확인 필요') + '</span></span>'
-    + '<span class="one"><span class="nw">추천 <span class="tm">' + toT(r.sg.s) + '</span></span> · <span class="nw">' + durTx(r.du) + '</span></span></button>').join('');   // 11/20 검수: 줄바꿈은 · 자리에서만(30분·필요 혼자 안 넘어가게)
+    + '<b class="one" data-one="9.5">' + esc(r.p.sh || r.p.n) + '</b><span class="one"><span class="nw">' + esc(EN ? String(r.p.a).split(/[\/·]/)[0].trim() : r.p.a) + '</span> · <span class="nw">' + (r.p.o ? '<span class="on">영업 중</span>' : '확인 필요') + '</span></span>'
+    + '<span class="one"><span class="nw">' + (EN ? '' : '추천 ') + '<span class="tm">' + toT(r.sg.s) + '</span></span> · <span class="nw">' + durTx(r.du) + '</span></span></button>').join('');   // 11/20 검수: 줄바꿈은 · 자리에서만(30분·필요 혼자 안 넘어가게)
 }
 function updAddBar() {
   const n = document.querySelectorAll('#recList [data-rc][aria-checked="true"]').length, b = $('#addBar'); if (!b) return;
