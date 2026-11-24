@@ -1004,7 +1004,7 @@ html[lang="en"] .rhy .rr { grid-template-columns: 4.875rem minmax(0,1fr); }
 <script src="chars.js?v=fit3"></script>
 <script src="gen-data.js?v=15"></script>
 <script src="sgg.js"></script>
-<script src="gen.js?v=19"></script>
+<script src="gen.js?v=20"></script>
 <script>
 /* ── 데이터: 확정본 v2 (문서/여행앱/2026-11-12_가보자_첫화면질문·16유형_제안_v2.md) ── */
 const AX = [ // 축: 코드 글자 · 이름
@@ -1121,7 +1121,7 @@ function stayHint() {
     h.innerHTML = ha ? `${ICON.check}<span>${esc(hitC)}에서 자는 날은 ${esc(ha)}에서 출발·복귀해요</span>` : `<span>목록에 없는 동네예요 · 도시마다 중심 동네 기준으로 짜요</span>`; return;
   }
   h.className = 'sthint' + (a ? ' ok' : '');
-  const s2 = tr.stay2 && String(tr.stay2.tx || '').trim() && nOf(tr) >= 2 ? tr.stay2 : null;   // 11/25 두 번째 숙소가 있으면 '매일' 대신 첫 숙소 박 수
+  const s2 = tr.stay2 && String(tr.stay2.tx || '').trim() && nOf(tr) >= 2 && !kxIn(tr) ? tr.stay2 : null;   // 11/25 두 번째 숙소가 있으면 '매일' 대신 첫 숙소 박 수
   h.innerHTML = a ? `${ICON.check}<span>${s2 ? (s2.from - 1) + '박은 ' + esc(a) + '에서 출발·복귀해요' : '매일 ' + esc(a) + '에서 출발·복귀하는 동선으로 짜요'}</span>` : `<span>목록에 없는 동네예요 · 가까운 큰 동네 기준으로 짜요</span>`;
 }
 /* 11/25 동우님 피드백 '숙소 주소 검색이 안 된다': 숙소 칸 = 이름·주소·구글 지도 링크.

@@ -630,6 +630,10 @@
     // 옆 도시(교토 등) 가는 날 수 — 옆 도시가 없는 곳(도쿄)은 0
     const middle = N - 2, kyotoDays = !C.side || middle <= 0 ? 0 : Math.min(middle, Math.max(1, Math.round(middle * (G === 'HS' ? 0.6 : 0.45))));
     const kyotoIdx = new Set(); if (!KX) for (let i = 0; i < kyotoDays; i++) kyotoIdx.add(2 + i * 2 <= N - 1 ? 2 + i * 2 : 2 + i);
+    if (SW && kyotoIdx.has(SW.from)) {   // 리뷰 11/25: 숙소 옮기는 날엔 교토 당일치기를 넣지 않음 → 다른 중간 날로
+      kyotoIdx.delete(SW.from); let j = 2; while (j < N && (kyotoIdx.has(j) || j === SW.from)) j++;
+      if (j < N) kyotoIdx.add(j); else assumed.push(C.side + ' 당일치기 넣을 날이 모자라요 · 숙소 옮기는 날과 겹쳐서 뺐어요');
+    }
     // 11/23 KX: 날마다 일어나는 도시(wake) · 자는 도시(sleep) · 노는 도시(play). 당일치기 도시는 짐 옮기지 않는 중간 날에 하나씩(2·4·…일째 먼저)
     const KXD = {};
     if (KX) {

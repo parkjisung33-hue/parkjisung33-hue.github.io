@@ -1686,7 +1686,7 @@ details.sec > summary .cnt { min-width: 0; overflow: hidden; text-overflow: elli
 <script src="weather.js"></script>
 <script src="types.js"></script>
 <script src="chars.js?v=fit3"></script>
-<script>/* 공유용 샘플(#sample=키): 엔진·장소 DB·샘플 입력을 바로 불러와 그 자리에서 일정을 만듦 (저장 안 함) */ if (window.VZTR_LANG === 'en' || /#sample=[\w-]+|#v=\w{12}/.test(location.hash)) document.write('<script src="gen-data.js?v=15"><\/script><script src="gen.js?v=19"><\/script><script src="samples.js?v=8"><\/script>');</script>
+<script>/* 공유용 샘플(#sample=키): 엔진·장소 DB·샘플 입력을 바로 불러와 그 자리에서 일정을 만듦 (저장 안 함) */ if (window.VZTR_LANG === 'en' || /#sample=[\w-]+|#v=\w{12}/.test(location.hash)) document.write('<script src="gen-data.js?v=15"><\/script><script src="gen.js?v=20"><\/script><script src="samples.js?v=8"><\/script>');</script>
 <script>/* 11/19 W8 보기 전용 공유 링크(#v=id): 서버에 보관된 가이드북을 샘플처럼 띄움 — 이 기기엔 저장 안 함(made 없음). 편집 반영은 VZTR_VIEW_EDITS */
 (function () { var m = location.hash.match(/^#v=([A-Za-z0-9]{12})$/); if (!m) return;
   try { var x = new XMLHttpRequest(); x.open('GET', 'https://vztr-api.d-chive33-a29.workers.dev/plan/' + m[1], false); x.send();
@@ -3206,7 +3206,7 @@ function fixNotes(d, c) {
 // 엔진 입력 = PLAN.inp (없는 옛 일정은 유형·날짜·도시로 복원). 다른 날·메모(같은 장소)·여행 메모는 그대로
 function loadGen(cb) {
   if (window.GABOJA_GEN) { loadGD(() => cb(window.GABOJA_GEN)); return; }
-  loadGD(() => { try { fetch('gen.js?v=19').then(r => r.arrayBuffer()).then(b => { (0, eval)(new TextDecoder('utf-8').decode(b)); cb(window.GABOJA_GEN || null); }).catch(() => cb(null)); } catch (_) { cb(null); } });
+  loadGD(() => { try { fetch('gen.js?v=20').then(r => r.arrayBuffer()).then(b => { (0, eval)(new TextDecoder('utf-8').decode(b)); cb(window.GABOJA_GEN || null); }).catch(() => cb(null)); } catch (_) { cb(null); } });
 }
 let regenBusy = false;
 function regenDay(d, c, dep, arr, fno, done0) {
@@ -3552,11 +3552,11 @@ function onAddInput() {
     } catch (_) {}
   }, 350);
 }
-function pickPlace(id) {
-  const ex0 = /^x\d+$/.test(id) ? addExt[+id.slice(1)] : null;
+function pickPlace(id, exObj) {   // 리뷰 11/25: 구글 위치를 받아 온 뒤엔 그 후보(exObj)를 그대로 씀 — 그사이 목록이 바뀌어도 엉뚱한 곳이 안 들어가게
+  const ex0 = exObj || (/^x\d+$/.test(id) ? addExt[+id.slice(1)] : null);
   if (ex0 && ex0.gid && !ex0.ll) {   // 구글 후보 = 고를 때 위치·주소만 받아 옴(장소 상세 Essentials)
     fetch(VZTR_API + '/gdet?id=' + encodeURIComponent(ex0.gid) + '&s=' + addSess + '&lang=' + (window.VZTR_LANG === 'en' ? 'en' : 'ko')).then(r => r.json()).then(j => {
-      addSess = newSess(); if (j && isFinite(j.lat)) { ex0.ll = [j.lat, j.lng]; ex0.addr = j.addr || ex0.addr; pickPlace(id); } else $('#addErr').textContent = j && j.off ? '이름 검색을 잠시 쉬어요 · 주소나 구글 지도 링크를 넣어 주세요' : '위치를 못 찾았어요 · 주소나 구글 지도 링크를 넣어 주세요';
+      addSess = newSess(); if (j && isFinite(j.lat)) { ex0.ll = [j.lat, j.lng]; ex0.addr = j.addr || ex0.addr; pickPlace(id, ex0); } else $('#addErr').textContent = j && j.off ? '이름 검색을 잠시 쉬어요 · 주소나 구글 지도 링크를 넣어 주세요' : '위치를 못 찾았어요 · 주소나 구글 지도 링크를 넣어 주세요';
     }).catch(() => { $('#addErr').textContent = '위치를 못 찾았어요 · 주소나 구글 지도 링크를 넣어 주세요'; });
     return;
   }
