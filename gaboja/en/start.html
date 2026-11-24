@@ -9,7 +9,7 @@
 <meta name="theme-color" content="#EFEFF1">
 <link rel="stylesheet" href="fonts/google/gf.css?v=1"><!-- 11/24 Inter Tight·Zen Kaku Gothic New 자체 호스팅(구글 서버로 IP 안 감, OFL) -->
 <script src="inapp.js?v=1"></script>
-<script src="i18n-en-auto.js?v=3574ddfa"></script><script src="i18n-en.js?v=3574ddfa"></script><script src="i18n.js?v=3574ddfa"></script><!-- 11/20 W5 언어 틀 (영어판 = /en/, 사전 i18n-en.js는 배포 때 en/에만 붙음) -->
+<script src="i18n-en-auto.js?v=904db3c8"></script><script src="i18n-en.js?v=904db3c8"></script><script src="i18n.js?v=904db3c8"></script><!-- 11/20 W5 언어 틀 (영어판 = /en/, 사전 i18n-en.js는 배포 때 en/에만 붙음) -->
 <link rel="stylesheet" href="fonts/vztr-fonts.css?v=2"><!-- 11/19 글꼴: 굵은 한글 IBM Plex Sans KR · 보통 한글 Pretendard · 영문·숫자 IBM Plex Sans -->
 <link rel="icon" href="icons/favicon-32.png">
 <link rel="apple-touch-icon" href="icons/icon-180.png">
@@ -1131,19 +1131,37 @@ async function linkLL(s) {   // 구글 지도 링크 → { ll, name } (못 읽�
   if (!ll && /maps\.app\.goo\.gl|goo\.gl|g\.co\//i.test(s)) { try { const j = await fetch(VZTR_API + '/unlink?u=' + encodeURIComponent(s)).then(r => r.json()); if (j && j.u) { ll = llFromUrl(j.u); nm = nm || nameFromUrl(j.u); } } catch (_) {} }
   return ll ? { ll, name: nm } : null;
 }
+/* 11/25 동우님: 구글 장소 검색(서버 /gac 자동완성 → /gdet 위치·주소만) = 매달 무료 한도 안에서만. 서버가 9,000건에서 멈추면(off) 주소·지도 링크 방식만.
+   한국 여행 = 카카오(/addr) 먼저 · 없으면 구글 / 일본 여행 = 일본어 주소면 CSIS(/addr) 먼저 · 그 밖엔 구글 */
+const jpOnly = s => /[\u3040-\u30ff\u4e00-\u9fff]/.test(s) && !/[\uac00-\ud7a3]/.test(s);
+const gSess = () => (crypto.randomUUID ? crypto.randomUUID() : String(Math.random()).slice(2) + Date.now());
+async function placeFind(v, cc, sess) {   // → { list: [{ name, sub, ll? , gid? }], src: 'kakao'|'csis'|'google', off }
+  const lang = W5 ? 'en' : 'ko', A = a => ({ name: a.name || a.road || a.jibun, sub: a.name ? (a.road || a.jibun) : '', ll: [a.lat, a.lng] });
+  if (cc === 'kr' || jpOnly(v)) { const j = await fetch(VZTR_API + '/addr?q=' + encodeURIComponent(v)).then(r => r.json()); const L = ((j && j.list) || []).map(A); if (L.length) return { list: L, src: j.jp ? 'csis' : 'kakao' }; }
+  const g = await fetch(VZTR_API + '/gac?q=' + encodeURIComponent(v) + '&s=' + sess + '&cc=' + cc + '&lang=' + lang).then(r => r.json());
+  if (g && g.off) return { list: [], off: 1 };
+  return { list: ((g && g.list) || []).map(x => ({ name: x.name, sub: x.sub, gid: x.id })), src: 'google' };
+}
+async function placeLL(x, sess) {   // 구글 후보 → 좌표 (세션 끝)
+  if (x.ll) return x.ll; const j = await fetch(VZTR_API + '/gdet?id=' + encodeURIComponent(x.gid) + '&s=' + sess + '&lang=' + (W5 ? 'en' : 'ko')).then(r => r.json());
+  return j && isFinite(j.lat) ? [j.lat, j.lng] : null;
+}
+const srcNote = s => s === 'csis' ? '<p class="cr"><a href="https://geocode.csis.u-tokyo.ac.jp/" target="_blank" rel="noopener">CSISシンプルジオコーディング実験を利用</a></p>' : s === 'google' ? '<p class="cr">Google Maps</p>' : '';
 function stayWire() {
   const tr = S.trip, inp = $('#sIn'), box = $('#sList'); if (!inp) return;
   let T = 0, N = 0;
   const pick = (name, ll) => { tr.stayTx = name; tr.stayLL = ll; inp.value = name; box.hidden = true; N++; stayHint(); };
+  let sess = gSess();
   const find = async v => { const my = ++N; v = v.trim(); if (v.length < 2 || !PH_KEY_G()) { box.hidden = true; return; }
     if (isMapLink(v)) { const r = await linkLL(v); if (my !== N) return;
       if (r) { pick(r.name || '지도에서 고른 숙소', r.ll); return; }
       box.hidden = false; box.innerHTML = '<p class="cr">지도 링크에서 위치를 못 읽었어요 · 숙소 주소를 적어 주세요</p>'; return; }
-    try { const j = await fetch(VZTR_API + '/addr?q=' + encodeURIComponent(v)).then(r => r.json()); if (my !== N) return; const L = (j && j.list) || [];
+    try { const cc = isDom(tr) || isKR(tr) ? 'kr' : 'jp', R = await placeFind(v, cc, sess); if (my !== N) return; const L = R.list;
+      if (R.off) { box.hidden = false; box.innerHTML = '<p class="cr">이름 검색을 잠시 쉬어요 · 숙소 주소나 구글 지도 링크를 넣어 주세요</p>'; return; }
       box.hidden = !L.length; if (!L.length) return;
-      box.innerHTML = L.map((a, i) => `<button type="button" data-si="${i}"><b>${esc(a.name || a.road || a.jibun)}</b><span>${esc(a.name ? (a.road || a.jibun) : a.jibun || '이 주소로 위치 정하기')}</span></button>`).join('')
-        + (j.jp ? '<p class="cr"><a href="https://geocode.csis.u-tokyo.ac.jp/" target="_blank" rel="noopener">CSISシンプルジオコーディング実験を利用</a></p>' : '');
-      box.onclick = e => { const b = e.target.closest('[data-si]'); if (!b) return; const a = L[+b.dataset.si]; pick(a.name || a.road || a.jibun, [a.lat, a.lng]); };
+      box.innerHTML = L.map((a, i) => `<button type="button" data-si="${i}"><b>${esc(a.name)}</b><span>${esc(a.sub || '이 주소로 위치 정하기')}</span></button>`).join('') + srcNote(R.src);
+      box.onclick = async e => { const b = e.target.closest('[data-si]'); if (!b) return; const a = L[+b.dataset.si]; const ll = await placeLL(a, sess).catch(() => null); sess = gSess();
+        if (ll) pick(a.name, ll); else { box.innerHTML = '<p class="cr">위치를 못 찾았어요 · 숙소 주소나 구글 지도 링크를 넣어 주세요</p>'; } };
     } catch (_) { if (my === N) box.hidden = true; } };
   inp.oninput = e => { tr.stayTx = e.target.value; tr.stayLL = null; stayHint(); clearTimeout(T); T = setTimeout(() => find(e.target.value), 350); };
   stayHint();

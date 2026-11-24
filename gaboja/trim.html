@@ -3506,7 +3506,7 @@ function updAddBar() {
   b.hidden = !n; $('#addMultiGo').textContent = n + '곳 추가';
 }
 function addSheet() {
-  const d = DAYS[st.day]; addPick = null;
+  const d = DAYS[st.day]; addPick = null; addSess = newSess();
   if (d.tbd) { const rc = d.list.find(x => x.fly); toast((rc ? rideWord(rc) : '이동') + ' 시각을 넣으면 일정을 추가할 수 있어요'); return; }
   openSheet('<div class="shd"><div><h3 id="sheetTitle">일정 추가</h3><p class="sub one">장소 이름 · 주소 · 구글 지도 링크</p></div>' + X_BTN + '</div><div class="body">'
     + '<div class="field"><input id="addName" placeholder="예: 구로몬 시장 · 주소 · 지도 링크" autocomplete="off" enterkeyhint="search" aria-label="장소 이름 · 주소 · 구글 지도 링크"><span class="err" id="addErr"></span></div>'
@@ -3516,15 +3516,21 @@ function addSheet() {
 /* 11/25 동우님 피드백 '일정 추가에 장소 검색 방법이 없다': 우리 장소 목록 + 구글 지도 링크(좌표 바로 읽음 · 짧은 링크는 서버 /unlink) + 주소·이름(서버 /addr: 한국 = 카카오, 일본어 주소 = 도쿄대 CSIS)
    고르면 좌표(ll)가 들어가 지도·이동 시간에 씀. 유료 구글 검색은 안 씀 */
 const llFromUrl = s => { const m = String(s).match(/!3d(-?\d+\.\d+)!4d(-?\d+\.\d+)/) || String(s).match(/[?&](?:q|query|ll|center|destination|daddr)=(-?\d+\.\d+)(?:,|%2C)\s*(-?\d+\.\d+)/i) || String(s).match(/@(-?\d+\.\d+),(-?\d+\.\d+)/); return m ? [+m[1], +m[2]] : null; };
-let addExt = [], addT = 0, addN = 0;   // 링크·주소로 찾은 후보 [{ name, ll, addr }]
+let addExt = [], addT = 0, addN = 0, addSess = '';
+const jpOnlyTx = s => /[぀-ヿ一-鿿]/.test(s) && !/[가-힣]/.test(s);
+const newSess = () => (crypto.randomUUID ? crypto.randomUUID() : String(Math.random()).slice(2) + Date.now());
+function ccNow() {   // 지금 여행 나라: 일정 장소 좌표가 한국 안이면 'kr', 아니면 'jp'
+  for (const d of DAYS) for (const x of d.list || []) if (x.ll && isFinite(x.ll[0])) return x.ll[0] > 33 && x.ll[0] < 38.7 && x.ll[1] > 124.5 && x.ll[1] < 131 ? 'kr' : 'jp';
+  return 'jp';
+}   // 링크·주소로 찾은 후보 [{ name, ll, addr }]
 function onAddInput() {
   const v = $('#addName').value.trim(), r = linkName(v), q = r.name;
   $('#addErr').textContent = '';
   const hits = r.link || r.short ? [] : findPlaces(q);
-  const extHtml = () => addExt.map((x, i) => '<button data-pk="x' + i + '"><span class="one"><b>' + esc(x.name) + '</b> <span class="muted">' + esc(x.addr || '지도 링크 위치') + '</span></span><span class="muted">위치 확인</span></button>').join('');
+  const extHtml = () => addExt.map((x, i) => '<button data-pk="x' + i + '"><span class="one"><b>' + esc(x.name) + '</b> <span class="muted">' + esc(x.addr || '지도 링크 위치') + '</span></span><span class="muted">' + (x.gid ? '' : '위치 확인') + '</span></button>').join('');
   const draw = () => { $('#addSug').innerHTML = v ? hits.map(p => '<button data-pk="' + p.id + '"><span class="one"><b>' + esc(p.n) + '</b> <span class="muted">' + esc(p.c + ' ' + p.a) + '</span></span><span class="muted">' + (p.o ? hoursTx(p) : '') + '</span></button>').join('')
     + extHtml() + (q ? '<button data-pk="raw"><span class="one">‘' + esc(q) + '’ 그대로 추가</span><span class="muted">위치 정보 없음</span></button>' : '')
-    + (addExt.jp ? '<p class="muted cr"><a href="https://geocode.csis.u-tokyo.ac.jp/" target="_blank" rel="noopener">CSISシンプルジオコーディング実験を利用</a></p>' : '') : ''; };
+    + (addExt.jp ? '<p class="muted cr"><a href="https://geocode.csis.u-tokyo.ac.jp/" target="_blank" rel="noopener">CSISシンプルジオコーディング実験を利用</a></p>' : addExt.g ? '<p class="muted cr">Google Maps</p>' : '') : ''; };
   addExt = []; draw(); clearTimeout(addT); const my = ++addN;
   if (!v || !PH_KEY_G()) return;
   addT = setTimeout(async () => {
@@ -3534,16 +3540,27 @@ function onAddInput() {
         if (!ll && r.short) { const j = await fetch(VZTR_API + '/unlink?u=' + encodeURIComponent(v)).then(x => x.json()); if (j && j.u) { ll = llFromUrl(j.u); nm = nm || linkName(j.u).name; } }
         if (my !== addN) return;
         if (ll) addExt = [{ name: nm || '지도에서 고른 곳', ll, addr: '' }]; else $('#addErr').textContent = '지도 링크에서 위치를 못 읽었어요 · 장소 이름이나 주소로 적어 주세요';
-      } else if (q.length >= 2 && hits.length < 3) {
-        const j = await fetch(VZTR_API + '/addr?q=' + encodeURIComponent(q)).then(x => x.json()); if (my !== addN) return;
-        addExt = ((j && j.list) || []).slice(0, 4).map(a => ({ name: a.name || a.road || a.jibun, ll: [a.lat, a.lng], addr: a.name ? a.road || a.jibun : '주소로 찾은 위치' })); addExt.jp = !!(j && j.jp);
+      } else if (q.length >= 2 && hits.length < 3) {   /* 11/25: 한국 = 카카오 먼저 · 일본어 주소 = CSIS 먼저 · 그 밖엔 구글(서버가 무료 한도 9,000건에서 멈추면 off → 주소·링크 안내) */
+        const cc = ccNow(), lang = window.VZTR_LANG === 'en' ? 'en' : 'ko';
+        if (cc === 'kr' || jpOnlyTx(q)) { const j = await fetch(VZTR_API + '/addr?q=' + encodeURIComponent(q)).then(x => x.json()); if (my !== addN) return;
+          addExt = ((j && j.list) || []).slice(0, 4).map(a => ({ name: a.name || a.road || a.jibun, ll: [a.lat, a.lng], addr: a.name ? a.road || a.jibun : '주소로 찾은 위치' })); addExt.jp = !!(j && j.jp); }
+        if (!addExt.length) { const g = await fetch(VZTR_API + '/gac?q=' + encodeURIComponent(q) + '&s=' + addSess + '&cc=' + cc + '&lang=' + lang).then(x => x.json()); if (my !== addN) return;
+          if (g && g.off) $('#addErr').textContent = '이름 검색을 잠시 쉬어요 · 주소나 구글 지도 링크를 넣어 주세요';
+          else { addExt = ((g && g.list) || []).slice(0, 4).map(x => ({ name: x.name, gid: x.id, addr: x.sub || '' })); addExt.g = addExt.length > 0; } }
       }
       if (my === addN) draw();
     } catch (_) {}
   }, 350);
 }
 function pickPlace(id) {
-  const d = DAYS[st.day], ex = /^x\d+$/.test(id) ? addExt[+id.slice(1)] : null, p = id === 'raw' || ex ? null : PLACES.find(x => x.id === id);
+  const ex0 = /^x\d+$/.test(id) ? addExt[+id.slice(1)] : null;
+  if (ex0 && ex0.gid && !ex0.ll) {   // 구글 후보 = 고를 때 위치·주소만 받아 옴(장소 상세 Essentials)
+    fetch(VZTR_API + '/gdet?id=' + encodeURIComponent(ex0.gid) + '&s=' + addSess + '&lang=' + (window.VZTR_LANG === 'en' ? 'en' : 'ko')).then(r => r.json()).then(j => {
+      addSess = newSess(); if (j && isFinite(j.lat)) { ex0.ll = [j.lat, j.lng]; ex0.addr = j.addr || ex0.addr; pickPlace(id); } else $('#addErr').textContent = j && j.off ? '이름 검색을 잠시 쉬어요 · 주소나 구글 지도 링크를 넣어 주세요' : '위치를 못 찾았어요 · 주소나 구글 지도 링크를 넣어 주세요';
+    }).catch(() => { $('#addErr').textContent = '위치를 못 찾았어요 · 주소나 구글 지도 링크를 넣어 주세요'; });
+    return;
+  }
+  const d = DAYS[st.day], ex = ex0, p = id === 'raw' || ex ? null : PLACES.find(x => x.id === id);
   const name = p ? p.n : ex ? ex.name : linkName($('#addName').value.trim()).name; if (!name) return;
   const du = p ? Math.min(120, Math.max(30, Math.round(p.st / 30) * 30)) : 60;
   addPick = { p, name, du, when: 'sug', tw: p ? twOfPlace(p) : TW_NAME.test(name) ? 'night' : '', ll: ex ? ex.ll : null, addr: ex ? ex.addr : '' };
