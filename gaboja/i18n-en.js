@@ -76,6 +76,8 @@ window.VZTR_EN = {
   '강수확률 {n}%': 'Rain {n}%', '날씨 {n}도 {m}도': 'Weather {n}° / {m}°', '{x}에서 {n}일': '{n} days in {x}', '{x} 지도': '{x} map',
   '걸어서 · 약 {n}분': 'Walk · ~{n} min',
   // 11/22 동네 이름이 끼는 문장 = 틀 하나로 (도시별로 한 줄씩 넣던 방식은 새 동네에서 한글이 남음 — '오다이바 근처')
+  '{x} 근처라 이동 +{n}분': 'Near {x} · +{n} min travel',   // 11/24 일정 추가 추천 이유(동선)
+  '뒤 일정이 밀림': 'Later plans pushed back',
   '{x} 근처': 'Near {x}', '{x} 역 근처': 'Near {x} Station', '{x} 근처에서 갈 곳을 넣어 보세요': 'Add a place to go near {x}',
   '점심 — {x} 근처': 'Lunch — near {x}', '저녁 — {x} 근처': 'Dinner — near {x}', '브런치 — {x} 근처': 'Brunch — near {x}', '아침 — {x} 근처': 'Breakfast — near {x}',
   '점심 — {x} 역 근처': 'Lunch — near {x} Station', '브런치 — {x} 역 근처': 'Brunch — near {x} Station',
@@ -176,6 +178,13 @@ window.VZTR_EN = {
     '늦어지면 {x} 먼저 빼기': x => { const e = FULL(x); return e ? 'Running late? Skip ' + e + ' first' : null; },
     '다음 {x}': x => { const m = /^(\d{1,2}:\d{2}) (.+)$/.exec(x); if (!m) return null; const e = FULL(m[2]); return e ? 'Next ' + m[1] + ' ' + e : null; },
     '{n}시간 {m}분 남음': '{n} h {m} min left', '{n}시간 남음': '{n} h left', '{n}분 남음': '{n} min left',
+    // 11/24 보드 11·15·3: 길안내 실제 시각 · 남은 분 · 상세 이동 줄 · 공유 카드
+    '약 {n}분 남음': '~{n} min left', '곧 도착': 'Almost there',
+    '전철 {n}시간 {m}분': 'Train {n} h {m} min', '전철 {n}시간': 'Train {n} h', '니시테쓰 공항버스': 'Nishitetsu Airport Bus',
+    '도착 {x}': x => /^\d{1,2}:\d{2}$/.test(x) ? 'Arrived ' + x : null, '{x} 출발': x => /^\d{1,2}:\d{2}$/.test(x) ? 'Left ' + x : null,
+    '차로': 'By car', '추정': 'est.', '숙소로': 'To your stay',
+    '내 여행 유형': 'My travel type', '너는 어떤 여행자야?': 'What kind of traveler are you?',
+    '카드 이미지를 저장했어요': 'Card image saved', '카드 이미지를 저장하고 링크를 복사했어요': 'Card image saved · link copied',
     // 날짜·날씨·시각
     '날씨 {x}도 {y}도': (a, b) => num(a) && num(b) ? 'Weather ' + a + '° / ' + b + '°' : null,
     '출발 {n}. {m}': 'Dep {n}/{m}',

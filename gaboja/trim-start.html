@@ -978,7 +978,7 @@ html[lang="en"] .rhy .rr { grid-template-columns: 4.875rem minmax(0,1fr); }
 <script src="chars.js?v=fit3"></script>
 <script src="gen-data.js?v=13"></script>
 <script src="sgg.js"></script>
-<script src="gen.js?v=12"></script>
+<script src="gen.js?v=14"></script>
 <script>
 /* ── 데이터: 확정본 v2 (문서/여행앱/2026-11-12_가보자_첫화면질문·16유형_제안_v2.md) ── */
 const AX = [ // 축: 코드 글자 · 이름
@@ -1625,7 +1625,8 @@ function rResult(c, mine) {
         : `<button class="cta" id="nextBtn">${mine ? '이 유형으로 내 여행 만들기' : (S.type ? '내 유형으로 여행 만들기' : '나도 해 보기')} ${ICON.arrow}</button>`}
     </div>`);
   el.querySelectorAll('.pair .mini').forEach((b, k) => b.onclick = () => pairSheet(b.dataset.code, k === 0 ? t.bestWhy : t.clashWhy, k === 0));   // 11/14 #13a: 페이지 이동 대신 아래 시트
-  $('#copyBtn').onclick = () => copyLink(c);
+  $('#copyBtn').onclick = () => shareCard(c);   // 11/24 보드 3 = A: 이미지 카드로 공유 (안 되면 링크 공유로)
+  setTimeout(() => cardBlob(c), 600);   // 미리 그려 둠 — 아이폰은 누른 직후에만 공유창을 열어 줘서, 누른 뒤 그리면 막힘
   $('#redoBtn').onclick = () => { S.ans = []; S.shuffle = Q.map(q => shuffled(q.o.map((_, i) => i))); S.hist = ['intro']; clearHash(); go('q0', { noHist: true }); };
   $('#allBtn2').onclick = () => go('types');
   $('#nextBtn').onclick = () => { if (S.type) { clearHash(); go('method'); } else { S.ans = []; S.hist = ['intro']; clearHash(); go('q0', { noHist: true }); } };
@@ -1638,6 +1639,80 @@ function copyLink(c) {
   const url = url0, txt = `나는 ‘${t0.name}’(${DC(c)}) 여행자래. 너는 어떤 여행자야? ${Q.length}번만 고르면 나와 ${url}`;
   const ok = () => toast('공유 문구를 복사했어요 · 친구에게 붙여 넣어 보내 보세요'), bad = () => { toast('복사할 수 없어요. 주소창 링크를 길게 눌러 복사해 주세요.'); };
   try { navigator.clipboard.writeText(txt).then(ok, bad); } catch (_) { bad(); }
+}
+
+/* 11/24 동우님 보드 3 = A '이미지 카드' + 메모: 캐릭터는 아웃라인 말고 앱과 같은 입체 캐릭터 · 오른쪽 아래 QR 자리엔 vztr. 로고.
+   1080×1350(4:5, 인스타 피드·스토리·카톡 사진에 맞는 세로) PNG를 캔버스로 그려 폰 공유창(navigator.share files)으로.
+   파일 공유가 안 되는 브라우저(PC 등) = PNG 저장 + 링크 복사. 움직이는 카드(영상)는 확인만 함 — 세션요약 참고 */
+const TR = s => (W5 && window.VZTR_I18N && VZTR_I18N.t ? VZTR_I18N.t(s) : s);
+const INK = { LS: '#2F6B73', LE: '#9A4A62', HS: '#2F557A', HE: '#8E3A63' };
+function charImg(c, px) {   // 화면과 같은 캐릭터(스타일 3)를 그림으로: 전역 그라디언트·필터(#gbjFx)를 SVG 안에 넣고, 몸통 기준 정사각형으로 맞춤
+  return new Promise(res => {
+    const host = document.createElement('div'); host.style.cssText = 'position:absolute;left:-9999px;top:0;width:300px;height:300px;visibility:hidden';
+    host.innerHTML = GABOJA_CHAR(c, { bg: false }); document.body.appendChild(host);
+    const svg = host.querySelector('svg'); if (!svg) { host.remove(); return res(null); }
+    if (window.GABOJA_FIT) GABOJA_FIT(svg, 1.18);
+    svg.querySelectorAll('[opacity="0"]').forEach(e => e.remove());   // 평소 안 보이는 이펙트(연기·Zz 등)는 빼고
+    const fx = document.getElementById('gbjFx'); if (fx) svg.insertAdjacentHTML('afterbegin', fx.innerHTML);
+    svg.setAttribute('xmlns', 'http://www.w3.org/2000/svg'); svg.setAttribute('width', px); svg.setAttribute('height', px);
+    const src = new XMLSerializer().serializeToString(svg); host.remove();
+    const im = new Image(); im.onload = () => res(im); im.onerror = () => res(null);
+    im.src = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(src);
+  });
+}
+async function cardPng(c) {
+  const t = T(c), g = c.slice(0, 2), bg = GRPC[g].bg, ink = INK[g], W = 1080, H = 1350;
+  const LAT = '"Inter Tight", "VZTR EN", "VZTR KR", "Pretendard Variable", sans-serif', KR = '"VZTR KR", "Pretendard Variable", "Apple SD Gothic Neo", sans-serif';
+  try { await Promise.all([`800 80px "Inter Tight"`, `800 80px "VZTR KR"`, `500 40px "VZTR KR"`, `700 40px "Pretendard Variable"`].map(f => document.fonts.load(f, '가A'))); } catch (_) {}
+  const cv = document.createElement('canvas'); cv.width = W; cv.height = H; const x = cv.getContext('2d');
+  const rr = (X, Y, w, h, r) => { x.beginPath(); x.roundRect ? x.roundRect(X, Y, w, h, r) : x.rect(X, Y, w, h); };
+  // 바탕: 묶음 색 → 조금 더 밝게
+  const gd = x.createLinearGradient(0, 0, 0, H); gd.addColorStop(0, bg); gd.addColorStop(1, '#FFFFFF'); x.fillStyle = gd; x.fillRect(0, 0, W, H);
+  // 탑승권: 흰 종이 + 위 띠(묶음 색) + 절취선·양옆 반원
+  const L = 64, T0 = 72, CW = W - L * 2, CH = H - T0 * 2, CUT = 812;
+  x.save(); x.shadowColor = 'rgba(22,23,26,.14)'; x.shadowBlur = 40; x.shadowOffsetY = 16; rr(L, T0, CW, CH, 44); x.fillStyle = '#FFFFFF'; x.fill(); x.restore();
+  x.save(); rr(L, T0, CW, CH, 44); x.clip(); x.fillStyle = bg; x.fillRect(L, T0, CW, CUT - T0); x.restore();
+  x.fillStyle = gd; [L, L + CW].forEach(cx => { x.beginPath(); x.arc(cx, CUT, 30, 0, Math.PI * 2); x.fill(); });
+  x.strokeStyle = 'rgba(22,23,26,.18)'; x.lineWidth = 4; x.setLineDash([14, 12]); x.beginPath(); x.moveTo(L + 50, CUT); x.lineTo(L + CW - 50, CUT); x.stroke(); x.setLineDash([]);
+  // 머리: 왼쪽 '내 여행 유형' · 오른쪽 BOARDING PASS
+  x.fillStyle = ink; x.textBaseline = 'alphabetic'; x.textAlign = 'left'; x.font = `700 36px ${KR}`; x.fillText(TR('내 여행 유형'), L + 56, T0 + 84);
+  x.textAlign = 'right'; x.font = `700 28px ${LAT}`; x.globalAlpha = .7; x.fillText('BOARDING PASS', L + CW - 56, T0 + 82); x.globalAlpha = 1;
+  // 글자판 4칸 + 뜻
+  const FW = 112, FH = 148, GAP = 20, fx0 = (W - (FW * 4 + GAP * 3)) / 2, fy = T0 + 128;   // 글자판 가운데(캐릭터와 한 줄)
+  c.split('').forEach((l, k) => { const X = fx0 + k * (FW + GAP); rr(X, fy, FW, FH, 14); x.fillStyle = ink; x.fill();
+    x.strokeStyle = 'rgba(0,0,0,.28)'; x.lineWidth = 2; x.beginPath(); x.moveTo(X, fy + FH / 2); x.lineTo(X + FW, fy + FH / 2); x.stroke();
+    x.fillStyle = '#FFFFFF'; x.textAlign = 'center'; x.textBaseline = 'middle'; x.font = `800 84px ${LAT}`; x.fillText(DL(l), X + FW / 2, fy + FH / 2 + 4);
+    x.fillStyle = ink; x.textBaseline = 'alphabetic'; let lf = 26; do { x.font = `700 ${lf}px ${W5 ? LAT : KR}`; lf -= 1; } while (x.measureText(LMEAN[l]).width > FW + GAP - 6 && lf > 16); x.fillText(LMEAN[l], X + FW / 2, fy + FH + 44); });   // 영어 'Sightseeing'도 칸 안
+  // 캐릭터(입체) — 가운데 크게
+  const CS = 380, im = await charImg(c, CS); if (im) x.drawImage(im, (W - CS) / 2, fy + FH + 70, CS, CS);   // 글자판 뜻 아래 ~ 절취선 위
+  // 아래: 묶음 · 이름 · 한 줄
+  x.textAlign = 'left'; x.textBaseline = 'alphabetic'; const PX = L + 56, PW = CW - 112;
+  x.fillStyle = ink; x.font = `700 34px ${KR}`; x.fillText(TR(t.group), PX, CUT + 86);
+  let nf = 96; do { x.font = `800 ${nf}px ${KR}`; nf -= 4; } while (x.measureText(TR(t.name)).width > PW && nf > 48);
+  x.fillStyle = '#16181D'; x.fillText(TR(t.name), PX, CUT + 184);
+  const ln = TR(t.line); let lf = 38; do { x.font = `500 ${lf}px ${KR}`; lf -= 2; } while (x.measureText(ln).width > PW && lf > 26);
+  x.fillStyle = '#5F6269'; x.fillText(ln, PX, CUT + 246);
+  // 맨 아래: 왼쪽 초대 문구·주소 / 오른쪽 vztr. 로고 (QR 자리)
+  const BY = T0 + CH - 64;
+  x.fillStyle = '#16181D'; x.font = `700 32px ${KR}`; x.fillText(TR('너는 어떤 여행자야?'), PX, BY - 44);
+  x.fillStyle = '#5F6269'; x.font = `500 28px ${LAT}`; x.fillText('larchive.page/gaboja', PX, BY);
+  x.textAlign = 'right'; x.font = `800 76px ${LAT}`; x.fillStyle = '#0F1F33'; const lw = x.measureText('vztr').width, RX = L + CW - 56 - 22;
+  try { x.letterSpacing = '-3px'; } catch (_) {} x.fillText('vztr', RX, BY + 2); try { x.letterSpacing = '0px'; } catch (_) {}
+  x.fillStyle = '#3D63F5'; x.beginPath(); x.arc(RX + 17, BY - 9, 11, 0, Math.PI * 2); x.fill();
+  return new Promise(res => cv.toBlob(b => res(b), 'image/png'));
+}
+const CARD = {}; function cardBlob(c) { return CARD[c] || (CARD[c] = cardPng(c).catch(() => null)); }
+async function shareCard(c) {
+  const btn = $('#copyBtn'); if (btn) btn.disabled = true;
+  try {
+    const url = location.origin + location.pathname + '#r-' + c, t0 = T(c), txt = W5 ? `I'm a '${TR(t0.name)}' (${DC(c)}) traveler. What about you?` : `나는 ‘${t0.name}’(${DC(c)}) 여행자래. 너는 어떤 여행자야?`;
+    const blob = await cardBlob(c), file = blob && new File([blob], `vztr-${DC(c)}.png`, { type: 'image/png' });
+    if (file && navigator.canShare && navigator.canShare({ files: [file] })) {
+      try { await navigator.share({ files: [file], title: 'VZTR', text: txt + ' ' + url }); return; } catch (e) { if (e && e.name === 'AbortError') return; }   // 그 밖의 오류(권한 등) = 아래 저장 + 링크 복사로
+    }
+    if (blob) { const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = file.name; document.body.appendChild(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(a.href), 4000); }
+    try { await navigator.clipboard.writeText(txt + ' ' + url); toast(blob ? '카드 이미지를 저장하고 링크를 복사했어요' : '공유 문구를 복사했어요 · 친구에게 붙여 넣어 보내 보세요'); } catch (_) { if (!blob) copyLink(c); else toast('카드 이미지를 저장했어요'); }
+  } finally { if (btn) btn.disabled = false; }
 }
 
 /* 11/18 4: 16유형 카드 — 캐릭터를 색 상자 안 가로·세로 가운데로 (바닥선에 맞춰 그려져 아래로 붙던 것 보정, chars.js는 그대로). 그림자 타원은 빼고 몸통 기준 */

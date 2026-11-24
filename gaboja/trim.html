@@ -839,6 +839,7 @@ body { letter-spacing: 0; }
 .rec2 span { font-size: 0.75rem; color: var(--sub); }
 .rec2 .on { color: var(--green); font-weight: 700; }
 .rec2 .tm { color: var(--blue); font-weight: 700; }
+.rec2 { padding-right: 0.75rem !important; } .rec2 > b.one { margin-right: 1.5rem; }   /* 11/24 검수: 긴 가게 이름(TAMBURINS Samcheong)이 오른쪽 위 체크 상자에 닿던 것 → 상자 옆은 이름 줄만 비우고 아래 두 줄은 칸 끝까지 · 이름은 9.5px까지 줄임(data-one) */
 .rec2 .box { position: absolute; right: 0.5625rem; top: 0.5625rem; width: 1.25rem; height: 1.25rem; border-radius: 0.2687rem; border: 2px solid color-mix(in srgb, var(--sub) 55%, transparent); display: grid; place-items: center; color: transparent; }
 .rec2 .box svg { width: 0.75rem; height: 0.75rem; stroke: currentColor; fill: none; stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; }
 .rec2[aria-checked="true"] { background: var(--ink); color: var(--on-ink); border-color: var(--ink); }
@@ -1510,6 +1511,67 @@ details.sec > summary .cnt { min-width: 0; overflow: hidden; text-overflow: elli
 .ldlist .ldfl { left: 4rem; z-index: 0; }
 .ldlist .ldfl.a { top: calc(50% + 0.5rem); bottom: 0; }
 .ldlist .ldfl.b { top: 0; bottom: calc(50% + 0.5rem); }
+/* 11/24 보드 11 = B: 수단 아이콘이 실제 진행 자리에 · 실선 안에서 빛이 아이콘 쪽으로 흐름 · 아이콘 둘레 잔물결 (위아래 흔들림 없음) */
+.vzrt { position: absolute; width: 1.75rem; margin-left: -0.875rem; pointer-events: none; z-index: 3; }
+.vzrt .rd { position: absolute; left: 50%; top: 0; bottom: 0; width: 0.1875rem; margin-left: -0.09375rem; border-radius: 0.125rem; background: repeating-linear-gradient(to bottom, color-mix(in srgb, var(--blue) 38%, transparent) 0 0.25rem, transparent 0.25rem 0.5rem); }
+.vzrt.fut .rd { opacity: .75; }
+.vzrt .rf { position: absolute; left: 50%; top: 0; width: 0.1875rem; margin-left: -0.09375rem; height: calc(1rem + var(--p, 0) * (100% - 2rem));   /* 아이콘(가운데)까지 실선 · 아이콘이 양 끝 점을 덮지 않게 1rem씩 띄움 */ border-radius: 0.125rem; background: var(--blue); overflow: hidden; transition: height .9s cubic-bezier(.3,.7,.2,1); }
+.vzrt .sw { position: absolute; left: 0; right: 0; height: 2.25rem; top: -2.25rem; background: linear-gradient(to bottom, transparent, rgba(255,255,255,.9), transparent); animation: vzsw 1.9s cubic-bezier(.45,0,.55,1) infinite; }
+@keyframes vzsw { from { top: -2.25rem; } to { top: 100%; } }
+.vzrt .bd { position: absolute; left: 50%; top: calc(1rem + var(--p, 0) * (100% - 2rem)); width: 1.5rem; height: 1.5rem; margin: -0.75rem 0 0 -0.75rem; border-radius: 50%; background: var(--blue); color: #fff; display: flex; align-items: center; justify-content: center; box-shadow: 0 0 0 0.1875rem var(--paper); transition: top .9s cubic-bezier(.3,.7,.2,1); }
+.vzrt .bd .mic svg { width: 0.9375rem; height: 0.9375rem; stroke: #fff; stroke-width: 2; }
+.vzrt .bd::after { content: ""; position: absolute; inset: 0; border-radius: 50%; border: 0.125rem solid var(--blue); animation: vzring 2.2s ease-out infinite; }
+@keyframes vzring { from { transform: scale(1); opacity: .65; } to { transform: scale(2.2); opacity: 0; } }
+/* 도착 = 도착한 점이 '쏙' + 고리 한 번 / 출발 = 떠난 점에서 고리 한 번 */
+.stop.land .pt, .stop.lift .pt { background: var(--blue); border-color: var(--blue); }
+.stop.land .pt { animation: vzland .55s cubic-bezier(.2,1.7,.4,1); }
+@keyframes vzland { from { transform: scale(.3); } to { transform: scale(1); } }
+.stop.land .rail::after, .stop.lift .rail::after { content: ""; position: absolute; left: 50%; top: calc(0.4375rem + 0.3125rem); width: 0.625rem; height: 0.625rem; margin: -0.3125rem 0 0 -0.3125rem; border-radius: 50%; border: 0.125rem solid var(--blue); opacity: 0; animation: vzburst .95s ease-out 1 forwards; z-index: 2; }
+@keyframes vzburst { 0% { transform: scale(1); opacity: .85; } 100% { transform: scale(3.4); opacity: 0; } }
+.stop .s2.act { color: var(--blue); font-weight: 600; font-variant-numeric: tabular-nums; }
+.next .lo.mvl b.left { color: var(--blue); font-weight: 700; white-space: nowrap; }
+.next .lo.mvl b.left::before { content: "· "; color: var(--sub); font-weight: 600; }
+/* 기록 시트도 같은 말: 지나온 만큼 실선 안 빛 흐름 · 남은 쪽 옅은 점선 */
+.ldlist .ldfl.a i { top: 0 !important; height: 100% !important; background: var(--blue) !important; animation: none !important; overflow: hidden; }
+.ldlist .ldfl.a i::after { content: ""; position: absolute; left: 0; right: 0; height: 1.75rem; top: -1.75rem; background: linear-gradient(to bottom, transparent, rgba(255,255,255,.9), transparent); animation: vzsw 1.9s cubic-bezier(.45,0,.55,1) infinite; }
+.ldlist .ldfl.b i { top: 0 !important; height: 100% !important; animation: none !important; background: repeating-linear-gradient(to bottom, color-mix(in srgb, var(--blue) 38%, transparent) 0 0.25rem, transparent 0.25rem 0.5rem) !important; }
+.ldlist .ldfl { width: 0.1875rem !important; margin-left: -0.09375rem !important; }
+/* 11/24 동우님 보드 15 = C '간격 = 이동 시간' + 메모(시각 미정 날도 예쁘게 · 가독성 확실히)
+   [시각] [선 칸: 가운데 선 하나, 끊김 없음] [이름 왼쪽 정렬] [지도] · 이동 줄 = 선 위 수단 동그라미 + '걸어서 10분'(분은 진하게), 줄 높이 = 이동 분
+   시각 미정 날 = 시각 칸 없이 선 칸에 순서 번호(1·2·3) → '몇 번째'로 읽힘 · 이동 간격은 똑같이 */
+#v-plan .list.vzc .li { grid-template-columns: 3.125rem 1.5rem minmax(0,1fr) auto !important; gap: 0 0.5rem !important; }
+#v-plan .list.vzc.notm .li { grid-template-columns: 1.75rem minmax(0,1fr) auto !important; gap: 0 0.625rem !important; }
+.list.vzc .li { border-top: 0 !important; }
+.list.vzc .li .rl { position: relative; align-self: stretch; display: flex; align-items: center; justify-content: center; }
+.list.vzc .li .rl::before { content: ""; position: absolute; left: 50%; top: -1.25rem; bottom: -1.25rem; width: 0.125rem; margin-left: -0.0625rem; background: color-mix(in srgb, var(--sub) 26%, var(--paper)); }
+.list.vzc > .li:first-child .rl::before { top: 50%; }
+.list.vzc > .li:last-child .rl::before { bottom: 50%; }
+.list.vzc .rl i { position: relative; z-index: 1; display: flex; align-items: center; justify-content: center; font-style: normal; }
+.list.vzc .rl .dt { width: 0.625rem; height: 0.625rem; border-radius: 50%; background: var(--ink); box-shadow: 0 0 0 0.1875rem var(--paper); }
+.list.vzc .rl .dt.o { width: 0.5rem; height: 0.5rem; background: var(--paper); border: 0.125rem solid color-mix(in srgb, var(--sub) 55%, var(--paper)); }
+.list.vzc .rl .dt.n { width: 1.5rem; height: 1.5rem; background: var(--ink); color: var(--paper); font: 700 0.75rem/1 var(--lat, inherit); font-variant-numeric: tabular-nums; }
+.list.vzc .li.now-on .rl .dt { background: var(--blue); }
+.list.vzc .li.past-on .rl .dt { background: color-mix(in srgb, var(--ink) 35%, var(--paper)); }
+.list.vzc .rl .mvb { width: 1.5rem; height: 1.5rem; border-radius: 50%; background: var(--paper); border: 0.0625rem solid color-mix(in srgb, var(--sub) 30%, var(--paper)); color: var(--sub); }
+.list.vzc .rl .mvb .mic svg { width: 0.8125rem; height: 0.8125rem; }
+#v-plan .list.vzc .li.m { min-height: var(--h, 2.25rem); padding: 0.125rem 0.375rem !important; margin: 0 -0.375rem !important; align-items: center !important; }   /* 선 칸이 장소 줄과 같은 x (시각 미정 날 왼쪽 0.125rem 들여쓰기 없앰) */
+#v-plan .list.vzc .li.m .c, #v-plan .list.vzc .li.m .c.one { font-size: 0.8125rem !important; color: var(--sub); display: block !important; line-height: 1.35; }   /* 한 줄(i18n.js '두 줄 금지'가 넘치면 글자를 줄임) — 긴 버스 이름은 mvLab에서 괄호 설명을 뺌 */
+.list.vzc .li.m .c::before { content: none !important; }
+.list.vzc .li.m .c .mm { color: var(--ink); font-weight: 700; font-variant-numeric: tabular-nums; }
+.list.vzc .li.m .c .me { display: inline-block; vertical-align: 0.0625rem; font-size: 0.6875rem; color: var(--sub); border: 1px solid var(--hair); border-radius: 0.25rem; padding: 0 0.25rem; margin-left: 0.25rem; }
+#v-plan .list.vzc:not(.notm) .li.m .tm { display: block !important; visibility: hidden; }   /* 시각 칸 자리는 남겨 선이 한 줄로 */
+#v-plan .list.vzc .li:not(.m):not(.w) { padding-block: 0.625rem !important; }
+#v-plan .list.vzc .li .nm .one, #v-plan .list.vzc .li .c { text-align: left !important; }
+#v-plan .list.vzc .li:not(.m) > .c { align-items: stretch !important; }
+#v-plan .list.vzc .li .nm .one { flex: 0 1 auto !important; }
+#v-plan .list.vzc .li.m.fy .c, #v-plan .list.vzc .li.m.fy .c.one { display: flex !important; align-items: center; gap: 0.25rem; white-space: nowrap !important; }   /* 탑승권 줄(인천 ✈ 간사이 · 위 탑승권)은 한 줄 */   /* 영업 점(●)은 이름 바로 뒤 */   /* 이름 왼쪽 정렬(전엔 .c가 가운데로 모아 이름이 가운데·긴 이름은 넘침) */
+.list.vzc > .li.m:first-child, .list.vzc > .li.m:last-child { min-height: 2.25rem; }   /* 첫·끝 이동 줄은 위·아래가 비어 보이지 않게 */
+#v-plan .list.vzc .li.w { padding-block: 0.375rem !important; }
+#v-plan .list.vzc .li.w .c { text-align: left !important; }
+#v-plan .list.vzc .li .tm { color: var(--ink); font-variant-numeric: tabular-nums; }
+#v-plan .list.vzc .li.w .tm { color: var(--sub); }
+.list.vzc.notm .li:not(.m):not(.w) .nm { font-size: 1.0625rem !important; }
+@media (prefers-reduced-motion: reduce) { .vzrt .sw, .vzrt .bd::after, .stop.land .pt, .stop.land .rail::after, .stop.lift .rail::after, .ldlist .ldfl.a i::after { animation: none !important; } .vzrt .rf, .vzrt .bd { transition: none; } }
 /* 11/24 최종 검수: 기록 카드 제목이 도장(4rem, 오른쪽 위에 얹힘) 밑으로 들어가던 것 → 글자 칸 오른쪽을 도장만큼 비움 */
 .trip .ttl2.one, .trip .codes.one { max-width: calc(100% - 4.25rem); }
 </style>
@@ -1619,7 +1681,7 @@ details.sec > summary .cnt { min-width: 0; overflow: hidden; text-overflow: elli
 <script src="weather.js"></script>
 <script src="types.js"></script>
 <script src="chars.js?v=fit3"></script>
-<script>/* 공유용 샘플(#sample=키): 엔진·장소 DB·샘플 입력을 바로 불러와 그 자리에서 일정을 만듦 (저장 안 함) */ if (window.VZTR_LANG === 'en' || /#sample=[\w-]+|#v=\w{12}/.test(location.hash)) document.write('<script src="gen-data.js?v=13"><\/script><script src="gen.js?v=12"><\/script><script src="samples.js?v=5"><\/script>');</script>
+<script>/* 공유용 샘플(#sample=키): 엔진·장소 DB·샘플 입력을 바로 불러와 그 자리에서 일정을 만듦 (저장 안 함) */ if (window.VZTR_LANG === 'en' || /#sample=[\w-]+|#v=\w{12}/.test(location.hash)) document.write('<script src="gen-data.js?v=13"><\/script><script src="gen.js?v=14"><\/script><script src="samples.js?v=5"><\/script>');</script>
 <script>/* 11/19 W8 보기 전용 공유 링크(#v=id): 서버에 보관된 가이드북을 샘플처럼 띄움 — 이 기기엔 저장 안 함(made 없음). 편집 반영은 VZTR_VIEW_EDITS */
 (function () { var m = location.hash.match(/^#v=([A-Za-z0-9]{12})$/); if (!m) return;
   try { var x = new XMLHttpRequest(); x.open('GET', 'https://vztr-api.d-chive33-a29.workers.dev/plan/' + m[1], false); x.send();
@@ -2178,23 +2240,32 @@ function blankCard(d) {
 const WALK_SVG = '<svg viewBox="0 0 24 24"><circle cx="13" cy="4.5" r="1.8"/><path d="M10 21l2-6 3 3v3M9 11l2-3 4 1 2 3M11 8l-1 6"/></svg>';
 const EV_STAR = '<svg class="evs" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l2.6 5.6 6 .7-4.5 4.1 1.2 6L12 16.4 6.7 19.4l1.2-6L3.4 9.3l6-.7z"/></svg>';
 const mvIc = c => '<i class="mic">' + (c.mode === 'walk' || (!c.mode && /걸어서|도보/.test(c.mv || '')) ? WALK_SVG : c.mode === 'car' ? CAR_SVG : /비행기/.test(c.mv || '') ? PLANE_SVG : TRAIN_SVG) + '</i>';
+/* 11/24 보드 15: 이동 줄 글 = '걸어서 10분' · '대중교통 17분' (수단 + 분만, '약'·'·' 없앰 — 아이콘이 수단을 이미 보여 줌) */
+function mvLab(c) {
+  const mv = String(c.mv || ''), p0 = mv.split(' · ')[0].replace(/\s*\([^)]*\)\s*$/, '').trim(), est = /추정|가정/.test(mv);
+  const w = c.mode === 'walk' || /걸어서|도보/.test(mv) ? '걸어서' : /^약\s*\d/.test(p0) ? (c.mode === 'car' ? '차로' : '이동') : p0;
+  const m = c.du ? durTx(c.du) : (mv.match(/(\d+시간\s*)?\d+분/) || [''])[0];
+  return m ? '<span class="mw">' + esc(w) + '</span> <b class="mm">' + esc(m) + '</b>' + (est ? '<small class="me">추정</small>' : '') : esc(mv);
+}
 function list(d) {
-  let h = tbdNote(d) + '<div class="list glass' + (d.tbd ? ' notm' : '') + '">', wi = 0;   // 11/19: 시각 미정 날 = 시각 칸 없음(notm)
+  let h = tbdNote(d) + '<div class="list glass vzc' + (d.tbd ? ' notm' : '') + '">', wi = 0, no = 0;   // 11/19: 시각 미정 날 = 시각 칸 없음(notm) · 11/24 보드 15 = C: 가운데 선 하나 + 간격 = 이동 시간(vzc)
+  const RL = x => '<span class="rl" aria-hidden="true">' + (x || '<i class="dt"></i>') + '</span>';   // 선 칸: 장소 = 점(시각 미정 날은 순서 번호) · 이동 = 수단 동그라미
   const nw = nowOf(d), nowCls = c => nw && c === nw.cur ? ' now-on' : pastOf(nw, c) ? ' past-on' : '';
-  const flush = upto => { if (d.tbd) { wi = d.wake.length; return; } while (wi < d.wake.length && toMin(d.wake[wi].s) <= upto) { const w = d.wake[wi++]; h += '<div class="li w' + (nw && toMin(w.s) < nw.min ? ' past-on' : '') + '"><span class="tm">' + w.s + '</span><span class="c one">' + esc(w.n) + (w.say ? ' · ' + esc(w.say) : '') + '</span><span></span></div>'; } };
+  const flush = upto => { if (d.tbd) { wi = d.wake.length; return; } while (wi < d.wake.length && toMin(d.wake[wi].s) <= upto) { const w = d.wake[wi++]; h += '<div class="li w' + (nw && toMin(w.s) < nw.min ? ' past-on' : '') + '"><span class="tm">' + w.s + '</span>' + RL('<i class="dt o"></i>') + '<span class="c one">' + esc(w.n) + (w.say ? ' · ' + esc(w.say) : '') + '</span><span></span></div>'; } };
   d.list.forEach(c => {
     if (d.tbd && c.fly) return;   // 11/21 #11: 시각 미정 날 탑승권은 맨 위(liveTop)
     flush(toMin(c.s));
     if (c.k === 'm') {   /* 11/18 D-4 ②: 이동 = 들여쓴 회색 한 줄 [수단 아이콘] 문구 (길찾기 글자 링크 없음 · 길찾기는 장소 상세·길안내에서) */
-      h += '<div class="li m' + nowCls(c) + '" data-key="' + c.id + '" data-fixed="1"><span class="tm">' + tmx(d, c) + '</span><span class="c one">' + mvIc(c) + esc(c.mv) + '</span><span></span></div>';
+      const mh = Math.min(4.5, 1.75 + (c.du || 0) * 0.075).toFixed(2);   // 이동이 길수록 사이가 벌어짐(3분 2rem · 10분 2.5 · 30분 4 · 최대 4.5)
+      h += '<div class="li m' + nowCls(c) + '" data-key="' + c.id + '" data-fixed="1" style="--h:' + mh + 'rem"><span class="tm">' + tmx(d, c) + '</span>' + RL('<i class="mvb">' + mvIc(c) + '</i>') + '<span class="c one" aria-label="' + esc(c.mv) + '">' + mvLab(c) + '</span><span></span></div>';
       return;
     }
-    if (c.fly && isPinned(c)) { h += '<div class="li m" data-key="' + c.id + '" data-fixed="1"><span class="tm">' + tmx(d, c) + '</span><span class="c one" style="color:var(--blue);font-weight:600">' + flyHtml(c, 1, 3) + ' · 위 ' + (c.ride === 'train' ? '승차권' : '탑승권') + '</span><span></span></div>'; return; }
+    if (c.fly && isPinned(c)) { h += '<div class="li m fy" data-key="' + c.id + '" data-fixed="1"><span class="tm">' + tmx(d, c) + '</span>' + RL('<i class="mvb">' + mvIc(c) + '</i>') + '<span class="c one" style="color:var(--blue);font-weight:600">' + flyHtml(c, 1, 3) + ' · 위 ' + (c.ride === 'train' ? '승차권' : '탑승권') + '</span><span></span></div>'; return; }
     if (c.fly) { h += flyCard(d, c, nowCls(c)); return; }
     const parts = c.n.split(' — '), main = parts[1] || parts[0], ti = timeIssue(c);   /* 11/18 D-4 ②: 설명 줄 없음(장소 상세에서 봄) · 시간 문제만 작은 글자로 남김 */
     const fx = fixedOf(c), mu = mapUrl(d, c), P = window.GABOJA_DATA && GABOJA_DATA.places, ev = !!(c.pid && P && P[c.pid] && P[c.pid].kind === 'event');
     h += '<div class="li ' + c.k + (ev ? ' ev' : '') + nowCls(c) + '" data-key="' + c.id + '"' + (fx ? ' data-fixed="1"' : '') + ' role="button" tabindex="0">'
-      + '<span class="tm">' + tmx(d, c) + '</span>'
+      + '<span class="tm">' + tmx(d, c) + '</span>' + RL(d.tbd ? '<i class="dt n">' + (++no) + '</i>' : '')
       + '<span class="c"><span class="nm">' + (ev ? EV_STAR : dotHtml(d, c)) + '<span class="one"' + (c.sh && c.sh !== main && !/^(점심|저녁|브런치|간식)$/.test(c.sh) ? ' data-sh="' + esc(c.sh) + '"' : '') + '>' + esc(main) + '</span>' + (nw && c === nw.cur ? '<span class="now-pill">지금</span>' : '') + memoBadge(c) + (c.ck ? '<i class="ckd' + (c.ck === 'ok' ? '' : ' no') + '" role="img" aria-label="' + (c.ck === 'ok' ? '영업시간 확인' : '확인 필요') + '"></i>' : '') + '</span>'
       + (ti.hard || ti.soft ? '<span class="s one"><span class="off">' + (ti.hard ? '시간대 안 맞음' : '영업시간 밖') + '</span></span>' : '') + '</span>'
       + (mu ? '<a class="pin" href="' + mu + '" target="_blank" rel="noopener" aria-label="' + esc(main) + ' 지도">' + PIN_SVG + '</a>' : '<span></span>') + '</div>';
@@ -2445,15 +2516,34 @@ function fitNow() {
 }
 /* 11/23 동우님: 길안내 이동 중 흐르는 점 = 실제 점(.pt) 위치를 재서 그 위에 점 줄을 그림 (전엔 가상 요소 배경 위치 애니 + 고정 숫자 → 아이폰에서 안 움직이고 선과 1~2px 어긋남)
    ① 지나온 길 마지막 점 → '다음' 카드 위 ② 카드 아래 → 남은 길 첫 점. 움직임 = 안쪽 줄의 transform(GPU) */
+/* 11/24 동우님 보드 11 = B '수단 아이콘이 따라감' + 메모(위아래로 왔다 갔다 말고 다른 느낌 · 실제 출발/도착 표시 다듬기)
+   ① 이동 중: 떠난 곳 점 → '다음' 카드 사이 = 지나온 만큼 파란 실선 + 남은 길 옅은 점선 + 그 끝에 수단 아이콘(걷기·지하철·차·비행기).
+      아이콘 자리 = 실제 진행(출발 누른 시각 → 이동 분), 1분마다 앞으로. 움직임 = 실선 안에서 빛이 아이콘 쪽으로 흘러감 + 아이콘 둘레 잔물결(제자리, 흔들림 없음)
+   ② 출발 누른 순간: 선이 떠난 점에서 지금 자리까지 차오름 + 떠난 점 한 번 퍼짐 · 도착 누른 순간: 도착한 점에 파란 고리가 한 번 퍼지고 점이 '쏙'
+   ③ 지나온 곳 이름 아래 = 실제 '도착 12:34 · 12:58 출발'(actTx) · 카드 아래 남은 길은 흐름 없이 옅은 점선 */
+const hm = v => { const t = new Date(v); return String(t.getHours()).padStart(2, '0') + ':' + String(t.getMinutes()).padStart(2, '0'); };
+function actTx(di, x) { const a = (st.act || {})[di + ':' + x.id]; if (!a) return ''; const tx = [a.a ? '도착 ' + hm(a.a) : '', a.d ? hm(a.d) + ' 출발' : ''].filter(Boolean).join(' · '); return tx ? '<span class="s2 act">' + tx + '</span>' : ''; }
+function navProg() {   // 이동 진행 0~1 (출발 누른 시각 기준, 없으면 예정 시각, 그것도 없으면 가운데)
+  const di = navDay(), d = DAYS[di], p = posOf(di), c = p.i >= 0 ? d.list[p.i] : null; if (!c) return .5;
+  const du = Math.max(1, c.du || 0), now = clock().getTime();
+  let r = st.cur && st.cur.id === c.id && st.cur.t ? (now - st.cur.t) / (du * 60000) : (!d.tbd && c.s ? (clock().getHours() * 60 + clock().getMinutes() - toMin(c.s)) / du : .5);
+  return { r: Math.min(.92, Math.max(.06, isFinite(r) ? r : .5)), c, left: st.cur && st.cur.t ? Math.max(0, Math.round(du - (now - st.cur.t) / 60000)) : null };
+}
 function navFlow() {
-  const v = $('#v-now'); if (!v) return; v.querySelectorAll('.vzfl').forEach(e => e.remove()); v.querySelectorAll('.stop.flc').forEach(e => { e.classList.remove('flc'); e.style.removeProperty('--flc'); });
-  const nw = v.querySelector('.nextwrap'), on = !v.hidden && nw && nw.classList.contains('moving'); v.classList.toggle('vzfl-on', !!on); if (!on) return;
-  const vr = v.getBoundingClientRect(), nb = nw.getBoundingClientRect(), vis = e => e.offsetWidth > 0 && e.offsetHeight > 0, pts = [...v.querySelectorAll('#trackPast:not([hidden]) .stop .pt')].filter(vis), p0 = pts[pts.length - 1], p1 = [...v.querySelectorAll('#track .stop .pt')].find(vis);   // 이동 줄(.stop.m)의 점은 숨겨져 있어 보이는 점만
+  const v = $('#v-now'); if (!v) return; v.querySelectorAll('.vzfl,.vzrt').forEach(e => e.remove()); v.querySelectorAll('.stop.flc').forEach(e => { e.classList.remove('flc'); e.style.removeProperty('--flc'); });
+  const nw = v.querySelector('.nextwrap'), on = !v.hidden && nw && nw.classList.contains('moving'), fx = st._fx && Date.now() - st._fx.t < 2500 ? st._fx : null; v.classList.toggle('vzfl-on', !!on);
+  const vr = v.getBoundingClientRect(), vis = e => e.offsetWidth > 0 && e.offsetHeight > 0, pts = [...v.querySelectorAll('#trackPast:not([hidden]) .stop .pt')].filter(vis), p0 = pts[pts.length - 1];
+  if (fx && p0 && !calm()) { const s0 = p0.closest('.stop'); s0.classList.remove('land', 'lift'); void s0.offsetWidth; s0.classList.add(fx.k === 'arr' ? 'land' : 'lift'); }   // ② 도착 = 도착한 점 / 출발 = 떠난 점
+  if (!on) return;
+  const nb = nw.getBoundingClientRect(), p1 = [...v.querySelectorAll('#track .stop .pt')].find(vis);
   const ref = p0 || p1; if (!ref) return; const rr = ref.getBoundingClientRect(), x = rr.left + rr.width / 2 - vr.left;
-  const seg = (y1, y2, dim) => { if (y2 - y1 < 6) return; const e = document.createElement('div'); e.className = 'vzfl' + (dim ? ' dim' : ''); e.style.cssText = 'left:' + x + 'px;top:' + y1 + 'px;height:' + (y2 - y1) + 'px'; e.innerHTML = '<i></i>'; v.appendChild(e); };
-  if (p0) { const a = p0.getBoundingClientRect(); seg(a.bottom - vr.top + 2, nb.top - vr.top - 2); }
-  if (p1) { const b = p1.getBoundingClientRect(); seg(nb.bottom - vr.top + 2, b.top - vr.top - 2, true);
-    /* 11/24 동우님 #11: 점이 흐르는 구간엔 뒤의 회색 선을 지움 — 남은 길 첫 점까지의 줄(이동 줄 + 첫 점 위쪽)만 선을 잘라 냄(clip-path) */
+  const seg = (y1, y2, cls, inner) => { if (y2 - y1 < 6) return null; const e = document.createElement('div'); e.className = 'vzrt ' + cls; e.setAttribute('aria-hidden', 'true'); e.style.cssText = 'left:' + x + 'px;top:' + y1 + 'px;height:' + (y2 - y1) + 'px'; e.innerHTML = inner; v.appendChild(e); return e; };
+  if (p0) { const a = p0.getBoundingClientRect(), pg = navProg(), ic = pg.c ? mvIc(pg.c) : '';
+    const e = seg(a.bottom - vr.top + 3, nb.top - vr.top - 4, 'go', '<i class="rd"></i><i class="rf"><i class="sw"></i></i><span class="bd">' + ic + '</span>');
+    if (e) { const fresh = fx && fx.k === 'dep' && !calm(); e.style.setProperty('--p', fresh ? 0 : pg.r); if (fresh) requestAnimationFrame(() => requestAnimationFrame(() => e.style.setProperty('--p', pg.r))); }
+    const lt = $('#nextCard .mvl span, #nextCard .lo.mvl span'); if (lt && pg.left != null && !lt.dataset.left) { lt.dataset.left = 1; lt.insertAdjacentHTML('afterend', '<b class="left">' + (pg.left > 0 ? '약 ' + pg.left + '분 남음' : '곧 도착') + '</b>'); } }
+  if (p1) { const b = p1.getBoundingClientRect(); seg(nb.bottom - vr.top + 4, b.top - vr.top - 3, 'fut', '<i class="rd"></i>');
+    /* 11/24 #11: 남은 길 첫 점까지의 회색 선은 지우고 옅은 점선 하나만 */
     const st1 = p1.closest('.stop'), mid = b.top + b.height / 2;
     [...v.querySelectorAll('#track .stop')].forEach(s0 => { const rl = s0.querySelector('.rail'); if (!rl) return; const rr = rl.getBoundingClientRect(), top = rr.top - 11;
       if (s0 === st1) { s0.classList.add('flc'); s0.style.setProperty('--flc', Math.max(0, mid - top) + 'px'); }
@@ -2500,7 +2590,8 @@ function renderNow() {
     return (can ? '<div class="stopw" data-sw="' + x.id + '"><div class="swb"><button class="sk" data-skip="' + x.id + '">건너뛰기</button><button class="rm" data-rmv="' + x.id + '">빼기</button></div>' : '')
       + '<div class="stop ' + cls + (x.k === 'm' ? ' m' : '') + (can ? ' can' : '') + '"><span class="rail"><span class="pt"></span>' + fl + '</span><span class="t">' + (x.k === 'm' ? '' : String(tmx(d, x)).replace('(다음 날)', '')) + '</span><span class="nmc">'
       + (x.k === 'm' ? '<span class="mvp" aria-label="' + esc(x.mv) + '">' + mvIc(x) + (x.du ? durTx(x.du) : esc(nm)) + '</span>' : '<b>' + (x.fly ? flyHtml(x, 1, 3) : esc(nm)) + '</b>')
-      + (sh && !cls && x.k !== 'm' ? '<span class="moved">처음 예정 ' + toT(x.b) + '</span>' : '')   /* 11/15 #18: 밀림·당겨짐 문구 없이 처음 시각만 */ + '</span>'
+      + (sh && !cls && x.k !== 'm' ? '<span class="moved">처음 예정 ' + toT(x.b) + '</span>' : '')
+      + (cls && x.k !== 'm' ? actTx(di, x) : '')   /* 11/24 보드 11: 지나온 곳엔 실제 도착·출발 시각 */   /* 11/15 #18: 밀림·당겨짐 문구 없이 처음 시각만 */ + '</span>'
       + (can ? '<button class="more" type="button" data-stopm="' + x.id + '" aria-label="건너뛰기·빼기">···</button></div></div>' : '</div>');
   });
   { // 11/21 동우님 #13a: 다음 카드(제목·도착)가 타임라인 제자리에 — 위 = 지나온 길(지금까지), 카드 = 다음 하나, 아래 = 그 뒤
@@ -3034,7 +3125,7 @@ function saveEdits(now) { if (!PLAN || !PLAN.made) return; clearTimeout(saveT); 
 function doSave() {
   try {
     let all = {}; try { all = JSON.parse(localStorage.getItem(EDIT_KEY)) || {}; } catch (_) {}
-    all[PLAN.made] = { v: 1, at: Date.now(), uid: st.uid, cur: st.cur, tripMemo: st.tripMemo || [], notes: NOTES,
+    all[PLAN.made] = { v: 1, at: Date.now(), uid: st.uid, cur: st.cur, act: st.act || {}, tripMemo: st.tripMemo || [], notes: NOTES,
       archive: st.archive.map(r => ({ day: r.d.no, it: r.it, sl: r.sl, closed: !!r.closed })),
       days: DAYS.map(d => ({ no: d.no, list: d.list, slots: d.slots, wake: d.wake, lates: d.lates || null, clash: !!d.clash, tbd: !!d.tbd })) };
     Object.keys(all).sort((a, b) => (all[b].at || 0) - (all[a].at || 0)).slice(3).forEach(k => delete all[k]);
@@ -3064,7 +3155,7 @@ function loadEdits() {
   try {
     (e.days || []).forEach(sd => { const d = DAYS.find(x => x.no === sd.no); if (!d || !Array.isArray(sd.list) || !Array.isArray(sd.slots)) return; minFixItems(sd.list); d.list = sd.list; d.slots = sd.slots; if (Array.isArray(sd.wake)) d.wake = sd.wake; d.lates = sd.lates || null; d.clash = !!sd.clash; d.tbd = !!sd.tbd; });
     if (e.notes) { minFixNotes(e.notes); Object.keys(NOTES).forEach(k => delete NOTES[k]); Object.assign(NOTES, e.notes); }
-    st.uid = e.uid || 0; st.cur = e.cur && DAYS[e.cur.day] ? e.cur : null; st.tripMemo = Array.isArray(e.tripMemo) ? e.tripMemo : [];
+    st.uid = e.uid || 0; st.cur = e.cur && DAYS[e.cur.day] ? e.cur : null; st.act = e.act && typeof e.act === 'object' ? e.act : {}; st.tripMemo = Array.isArray(e.tripMemo) ? e.tripMemo : [];
     st.archive = (e.archive || []).map(r => ({ d: DAYS.find(x => x.no === r.day), it: r.it, sl: r.sl, closed: !!r.closed })).filter(r => r.d && r.it);
   } catch (_) {}
 }
@@ -3094,7 +3185,7 @@ function fixNotes(d, c) {
 // 엔진 입력 = PLAN.inp (없는 옛 일정은 유형·날짜·도시로 복원). 다른 날·메모(같은 장소)·여행 메모는 그대로
 function loadGen(cb) {
   if (window.GABOJA_GEN) { loadGD(() => cb(window.GABOJA_GEN)); return; }
-  loadGD(() => { try { fetch('gen.js?v=12').then(r => r.arrayBuffer()).then(b => { (0, eval)(new TextDecoder('utf-8').decode(b)); cb(window.GABOJA_GEN || null); }).catch(() => cb(null)); } catch (_) { cb(null); } });
+  loadGD(() => { try { fetch('gen.js?v=14').then(r => r.arrayBuffer()).then(b => { (0, eval)(new TextDecoder('utf-8').decode(b)); cb(window.GABOJA_GEN || null); }).catch(() => cb(null)); } catch (_) { cb(null); } });
 }
 let regenBusy = false;
 function regenDay(d, c, dep, arr, fno, done0) {
@@ -3291,7 +3382,7 @@ let addPick = null;   // { p: 장소 DB 항목 또는 null, name, du, sug, when 
   const apply = () => {
     const D = window.GABOJA_DATA; if (!D || !D.places) return;
     PLACES = Object.entries(D.places).map(([id, p]) => { const h = p.h, o = h && h.o && h.o[0] && !/^거리/.test(p.oTx || '') ? h.o[0] : null;
-      return { id, n: p.n, l: p.l || '', c: p.city, a: (D.clName && D.clName[p.cl]) || '', t: p.tg || [], o, x: (h && h.x) || [], st: p.st || 60, say: p.say || '', q: p.q || p.n, k: p.kind }; });
+      return { id, n: p.n, l: p.l || '', c: p.city, a: (D.clName && D.clName[p.cl]) || '', t: p.tg || [], o, x: (h && h.x) || [], st: p.st || 60, say: p.say || '', q: p.q || p.n, k: p.kind, ll: p.ll || null }; });
   };
   if (window.GABOJA_DATA) apply(); else { try { fetch('gen-data.js?v=13').then(r => r.arrayBuffer()).then(b => { (0, eval)(new TextDecoder('utf-8').decode(b)); apply(); }).catch(() => {}); } catch (_) {} }   /* 페이지 글자 설정과 상관없이 UTF-8로 읽음 */
 })();
@@ -3326,20 +3417,47 @@ function findPlaces(q) {
 const DAY_CAP = 1410, FULL_MSG = '이날은 일정이 꽉 찼어요 · 더 넣을 수 없어요', LATE_MSG = '23:30을 넘겨서 이 시간으로는 못 바꿔요', LATE_ADD = '23:30 넘어서 끝나요 · 더 이른 시각을 골라 주세요';
 const dayEnd = d => d.list.reduce((m, c) => Math.max(m, toMin(c.e || c.s)), 0);
 const overCap = (d, before) => dayEnd(d) > Math.max(DAY_CAP, before);
+/* 11/24 동선: 영업시간에 더해 위치도 봄 — 빈 시간 자리마다 앞·뒤 장소 사이에 끼웠을 때 늘어나는 이동(분)이 가장 적은 자리를 추천 + 이유('○○ 근처라 이동 +6분').
+   좌표 = 장소 DB ll(일정의 pid · 직접 추가한 곳의 ll) · 숙소 줄을 만나면 거기서 끊음 · 이동 분 = 엔진 GABOJA_GEN.legLL(있으면) 아니면 같은 식의 기본값 */
+const PLL = p => p ? p.ll || (window.GABOJA_DATA && GABOJA_DATA.places && GABOJA_DATA.places[p.id] && GABOJA_DATA.places[p.id].ll) || null : null;
+const cLL = c => c.ll || (c.pid && window.GABOJA_DATA && GABOJA_DATA.places && GABOJA_DATA.places[c.pid] && GABOJA_DATA.places[c.pid].ll) || null;
+function legMin(a, b, city) {
+  const G = window.GABOJA_GEN; if (G && G.legLL) return G.legLL(a, b, city);
+  const r = Math.PI / 180, dl = (b[0] - a[0]) * r, dn = (b[1] - a[1]) * r, x = Math.sin(dl / 2) ** 2 + Math.cos(a[0] * r) * Math.cos(b[0] * r) * Math.sin(dn / 2) ** 2, d = 12742 * Math.asin(Math.sqrt(x));
+  const wk = Math.max(3, Math.round(d * 1.3 / 4.5 * 60)), tr = Math.round(10 + (a[1] > 128.5 && a[0] > 33.5 && a[1] < 146 ? 2.5 : 1.6) * d); return d * 1.3 <= 1.6 && wk <= tr ? wk : tr;
+}
+// i 자리(L[i] 앞)에 넣을 때: 앞·뒤로 가장 가까운 좌표 있는 일정 → { add 늘어나는 분, near 가까운 쪽 이름 }
+function detourAt(d, P, i) {
+  if (!P) return null; const L = d.list; let pv = null, nx = null;
+  for (let k = i - 1; k >= 0; k--) { const c = L[k]; if (c.fly || isStay(c)) break; const ll = cLL(c); if (ll) { pv = [c, ll]; break; } }
+  for (let k = i; k < L.length; k++) { const c = L[k]; if (c.fly || isStay(c)) break; const ll = cLL(c); if (ll) { nx = [c, ll]; break; } }
+  if (!pv && !nx) return null;
+  // 한쪽이 숙소·하루 끝이면(좌표 모름) 그쪽에서 갔다 오는 셈 = 가까운 쪽 왕복으로 어림
+  const a = pv ? legMin(pv[1], P, d.city) : 0, b = nx ? legMin(P, nx[1], d.city) : 0, add = pv && nx ? Math.max(0, a + b - legMin(pv[1], nx[1], d.city)) : 2 * (a || b);
+  const nr = !nx || (pv && a <= b) ? pv[0] : nx[0], nm = String(nr.sh || nr.n || '').split(' — ').pop();
+  return { add, near: nm };
+}
+const nearWhy = (dt, base) => dt && dt.near ? dt.near + ' 근처라 이동 +' + dt.add + '분' : base;
 function suggest(d, p, du, tw) {
   let [o, c] = p && p.o ? [toMin(p.o[0]), toMin(p.o[1])] : [600, 1260];
   if (tw === 'night') o = Math.max(o, NIGHT_FROM);   // 밤 전용 = 17:30 이후에서만 추천
   if (tw === 'morning') c = Math.min(c, MORN_TO + du);   // 아침 전용 = 정오 전에 시작
-  const nw = nowOf(d), from = nw ? Math.ceil(nw.min / 10) * 10 : 0, L = d.list;   // 오늘이면 지금 이후(10분 단위)만
+  const nw = nowOf(d), from = nw ? Math.ceil(nw.min / 10) * 10 : 0, L = d.list, P = PLL(p);   // 오늘이면 지금 이후(10분 단위)만
+  const pick = list => { if (!list.length) return null; if (!P) return list[0]; list.forEach(g => { g.dt = detourAt(d, P, g.i); });
+    return list.slice().sort((x, y) => (x.dt ? x.dt.add : 999) - (y.dt ? y.dt.add : 999) || x.s - y.s)[0]; };
+  const free = [];
   for (let i = 0; i <= L.length; i++) {
     const pe = i ? toMin(L[i - 1].e) : 480, ns = i < L.length ? toMin(L[i].s) : 1350, s = Math.max(pe, o, from);
-    if (s + du <= Math.min(ns, c)) return { s, why: '빈 시간' + (p && p.o ? ' · 영업 중' : '') };
+    if (s + du <= Math.min(ns, c)) free.push({ i, s });
   }
+  const g1 = pick(free); if (g1) return { s: g1.s, why: nearWhy(g1.dt, '빈 시간' + (p && p.o ? ' · 영업 중' : '')), add: g1.dt ? g1.dt.add : null };
+  const push = [];
   for (let i = 1; i <= L.length; i++) {
     const pe = toMin(L[i - 1].e), s = Math.max(pe, o, from);
     if (L[i] && s > toMin(L[i].s)) continue;   // 하고 있는 일정 한가운데엔 안 넣음
-    if (s + du <= Math.min(c, DAY_CAP) && !(L[i] && L[i].fly) && !L[i - 1].fly) return { s, why: '빈 시간 없음 · 뒤 일정이 밀림', push: 1 };
+    if (s + du <= Math.min(c, DAY_CAP) && !(L[i] && L[i].fly) && !L[i - 1].fly) push.push({ i, s });
   }
+  const g2 = pick(push); if (g2) return { s: g2.s, why: g2.dt && g2.dt.near ? nearWhy(g2.dt) + ' · 뒤 일정이 밀림' : '빈 시간 없음 · 뒤 일정이 밀림', push: 1, add: g2.dt ? g2.dt.add : null };
   return { s: Math.max(o, 540), why: '영업시간 안에 자리 없음', push: 1 };
 }
 const recDur = p => Math.min(120, Math.max(30, Math.round(p.st / 30) * 30));
@@ -3352,14 +3470,14 @@ function recsFor(d) {
     if (sg.why === '영업시간 안에 자리 없음' || sg.s + du > 1380 || (sg.push && Math.max(end0, DAY_CAP - du) + du > DAY_CAP)) return;   // V-01: 밀어서 23:30 넘길 곳은 추천 안 함
     L.push({ p, du, tw, sg });
   });
-  L.sort((a, b) => (a.sg.push ? 1 : 0) - (b.sg.push ? 1 : 0) || a.sg.s - b.sg.s);
+  L.sort((a, b) => (a.sg.push ? 1 : 0) - (b.sg.push ? 1 : 0) || (a.sg.add == null ? 99 : a.sg.add) - (b.sg.add == null ? 99 : b.sg.add) || a.sg.s - b.sg.s);   // 11/24: 동선에서 덜 돌아가는 곳 먼저
   return L.slice(0, 6);
 }
 function recsHtml(d) {
   const L = recsFor(d);
   if (!L.length) return '<p class="sub" style="grid-column:1/-1">' + '추천할 곳이 없어요 · 위에서 직접 찾아 보세요' + '</p>';
   return L.map(r => '<button class="rec2" role="checkbox" aria-checked="false" data-rc="' + r.p.id + '"><i class="box"><svg viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></i>'
-    + '<b class="one">' + esc(r.p.n) + '</b><span class="one"><span class="nw">' + esc(r.p.a) + '</span> · <span class="nw">' + (r.p.o ? '<span class="on">영업 중</span>' : '확인 필요') + '</span></span>'
+    + '<b class="one" data-one="9.5">' + esc(r.p.n) + '</b><span class="one"><span class="nw">' + esc(r.p.a) + '</span> · <span class="nw">' + (r.p.o ? '<span class="on">영업 중</span>' : '확인 필요') + '</span></span>'
     + '<span class="one"><span class="nw">추천 <span class="tm">' + toT(r.sg.s) + '</span></span> · <span class="nw">' + durTx(r.du) + '</span></span></button>').join('');   // 11/20 검수: 줄바꿈은 · 자리에서만(30분·필요 혼자 안 넘어가게)
 }
 function updAddBar() {
@@ -3429,7 +3547,7 @@ function doAdd() {
   toast(clash ? '비행기 시각과 겹쳐요 · 옮겨 주세요' : anchorWarn(d) || (softW ? softW + ' · 확인 필요' : '') || '‘' + a.name + '’ 추가 · ' + c.s + (a.sug.push && a.when === 'sug' ? ' · 뒤 일정 밀림' : ''));
 }
 function mkAdded(p, name, du, tw, start) {
-  return { s: toT(start), o: toT(start), du, du0: du, k: 'u', tw, oh: p && p.o ? [p.o[0], p.o[1]] : undefined, sh: name, n: name, l: p && p.l, say: p ? p.a + (p.t[0] ? ' · ' + p.t[0] : '') : '직접 추가', q: p ? p.q : name, id: 'u' + (++st.uid), memo: [],
+  return { s: toT(start), o: toT(start), du, du0: du, k: 'u', tw, oh: p && p.o ? [p.o[0], p.o[1]] : undefined, ll: PLL(p) || undefined, sh: name, n: name, l: p && p.l, say: p ? p.a + (p.t[0] ? ' · ' + p.t[0] : '') : '직접 추가', q: p ? p.q : name, id: 'u' + (++st.uid), memo: [],
     info: p && p.o ? [['영업', hoursTx(p)]] : [] };
 }
 // 고른 여러 곳을 각자 추천 시각에 추가 (하나씩 추가 규칙 그대로: 겹치면 뒤 일정이 밀림 · 시간대가 안 맞는 곳은 제외) → 되돌리기 한 번에
@@ -3676,7 +3794,9 @@ document.addEventListener('click', e => {
   const bk = e.target.closest('[data-blank]'); if (bk) { addSheet(); setTimeout(() => { const el = bk.dataset.blank === 'find' ? $('#addName') : $('#addRecs'); if (!el) return; if (bk.dataset.blank === 'find') el.focus(); else el.scrollIntoView({ block: 'center', behavior: calm() ? 'auto' : 'smooth' }); }, 80); return; }
   const gt = e.target.closest('[data-goto]');
   if (gt) { const el = document.querySelector('#dayBody [data-key="' + gt.dataset.goto + '"]'); if (el) { el.scrollIntoView({ behavior: calm() ? 'auto' : 'smooth', block: 'center' }); el.classList.remove('just'); void el.offsetWidth; el.classList.add('just'); } return; }
-  if (e.target.id === 'arriveBtn') { const di = navDay(), L = DAYS[di].list, p = posOf(di), nx = L[p.i + 1]; if (nx) { const prev = st.cur ? { ...st.cur } : null; st.cur = { day: di, id: nx.id }; st._center = 1; refreshAll(); toast((nx.k === 'm' || isCar(nx) ? '출발 처리 · ' : '도착 처리 · ') + (nx.k === 'm' ? nx.n : (nx.sh || nx.n)), () => { st.cur = prev; refreshAll(); }, 5000); } return; }
+  if (e.target.id === 'arriveBtn') { const di = navDay(), L = DAYS[di].list, p = posOf(di), nx = L[p.i + 1]; if (nx) { const prev = st.cur ? { ...st.cur } : null, now = clock().getTime(), dep = nx.k === 'm' || isCar(nx), pa = !dep && p.i >= 0 ? L[p.i] : null;   /* 11/24 보드 11: 실제 누른 시각 = 출발·도착 표시 + 이동 진행 */
+    st.act = st.act || {}; const act0 = JSON.stringify(st.act), k0 = di + ':' + nx.id; if (dep) { const fr = p.i >= 0 ? L[p.i] : null; if (fr && fr.k !== 'm') st.act[di + ':' + fr.id] = { ...(st.act[di + ':' + fr.id] || {}), d: now }; } else st.act[k0] = { ...(st.act[k0] || {}), a: now };
+    st.cur = { day: di, id: nx.id, t: now }; st._fx = { k: dep ? 'dep' : 'arr', id: nx.id, t: Date.now(), from: pa && pa.k === 'm' ? pa.id : null }; st._center = 1; refreshAll(); toast((nx.k === 'm' || isCar(nx) ? '출발 처리 · ' : '도착 처리 · ') + (nx.k === 'm' ? nx.n : (nx.sh || nx.n)), () => { st.cur = prev; st.act = JSON.parse(act0); st._fx = null; refreshAll(); }, 5000); } return; }   // 되돌리기 = 기록한 실제 시각도 되돌림
   if (e.target.closest('#prevBtn')) { prevGo(); return; }
   const skp = e.target.closest('[data-skip]'); if (skp) { const di = navDay(); if (sheetMode === 'stop') closeAll(); removeItem(skp.dataset.skip, di, true); return; }
   const rmv = e.target.closest('[data-rmv]'); if (rmv) { const di = navDay(); if (sheetMode === 'stop') closeAll(); removeItem(rmv.dataset.rmv, di, false); return; }
