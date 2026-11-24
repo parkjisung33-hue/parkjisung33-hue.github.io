@@ -1686,7 +1686,7 @@ details.sec > summary .cnt { min-width: 0; overflow: hidden; text-overflow: elli
 <script src="weather.js"></script>
 <script src="types.js"></script>
 <script src="chars.js?v=fit3"></script>
-<script>/* 공유용 샘플(#sample=키): 엔진·장소 DB·샘플 입력을 바로 불러와 그 자리에서 일정을 만듦 (저장 안 함) */ if (window.VZTR_LANG === 'en' || /#sample=[\w-]+|#v=\w{12}/.test(location.hash)) document.write('<script src="gen-data.js?v=15"><\/script><script src="gen.js?v=17"><\/script><script src="samples.js?v=8"><\/script>');</script>
+<script>/* 공유용 샘플(#sample=키): 엔진·장소 DB·샘플 입력을 바로 불러와 그 자리에서 일정을 만듦 (저장 안 함) */ if (window.VZTR_LANG === 'en' || /#sample=[\w-]+|#v=\w{12}/.test(location.hash)) document.write('<script src="gen-data.js?v=15"><\/script><script src="gen.js?v=18"><\/script><script src="samples.js?v=8"><\/script>');</script>
 <script>/* 11/19 W8 보기 전용 공유 링크(#v=id): 서버에 보관된 가이드북을 샘플처럼 띄움 — 이 기기엔 저장 안 함(made 없음). 편집 반영은 VZTR_VIEW_EDITS */
 (function () { var m = location.hash.match(/^#v=([A-Za-z0-9]{12})$/); if (!m) return;
   try { var x = new XMLHttpRequest(); x.open('GET', 'https://vztr-api.d-chive33-a29.workers.dev/plan/' + m[1], false); x.send();
@@ -3206,7 +3206,7 @@ function fixNotes(d, c) {
 // 엔진 입력 = PLAN.inp (없는 옛 일정은 유형·날짜·도시로 복원). 다른 날·메모(같은 장소)·여행 메모는 그대로
 function loadGen(cb) {
   if (window.GABOJA_GEN) { loadGD(() => cb(window.GABOJA_GEN)); return; }
-  loadGD(() => { try { fetch('gen.js?v=17').then(r => r.arrayBuffer()).then(b => { (0, eval)(new TextDecoder('utf-8').decode(b)); cb(window.GABOJA_GEN || null); }).catch(() => cb(null)); } catch (_) { cb(null); } });
+  loadGD(() => { try { fetch('gen.js?v=18').then(r => r.arrayBuffer()).then(b => { (0, eval)(new TextDecoder('utf-8').decode(b)); cb(window.GABOJA_GEN || null); }).catch(() => cb(null)); } catch (_) { cb(null); } });
 }
 let regenBusy = false;
 function regenDay(d, c, dep, arr, fno, done0) {
