@@ -9,7 +9,7 @@
 <meta name="theme-color" content="#EFEFF1">
 <link rel="stylesheet" href="fonts/google/gf.css?v=1"><!-- 11/24 Inter Tight·Zen Kaku Gothic New 자체 호스팅(구글 서버로 IP 안 감, OFL) -->
 <script src="inapp.js?v=1"></script>
-<script src="i18n-en-auto.js?v=095d0b6e"></script><script src="i18n-en.js?v=095d0b6e"></script><script src="i18n.js?v=095d0b6e"></script><!-- 11/20 W5 언어 틀 (영어판 = /en/, 사전 i18n-en.js는 배포 때 en/에만 붙음) -->
+<script src="i18n-en-auto.js?v=cd44a72d"></script><script src="i18n-en.js?v=cd44a72d"></script><script src="i18n.js?v=cd44a72d"></script><!-- 11/20 W5 언어 틀 (영어판 = /en/, 사전 i18n-en.js는 배포 때 en/에만 붙음) -->
 <link rel="stylesheet" href="fonts/vztr-fonts.css?v=2"><!-- 11/19 글꼴: 굵은 한글 IBM Plex Sans KR · 보통 한글 Pretendard · 영문·숫자 IBM Plex Sans -->
 <link rel="icon" href="icons/favicon-32.png">
 <link rel="apple-touch-icon" href="icons/icon-180.png">
@@ -996,9 +996,9 @@ html[lang="en"] .rhy .rr { grid-template-columns: 4.875rem minmax(0,1fr); }
 <script src="legal/flags.js?v=1"></script><!-- 11/24 약관 스위치·버전(tools/build_legal.py가 만듦) -->
 <script src="types.js"></script>
 <script src="chars.js?v=fit3"></script>
-<script src="gen-data.js?v=14"></script>
+<script src="gen-data.js?v=15"></script>
 <script src="sgg.js"></script>
-<script src="gen.js?v=16"></script>
+<script src="gen.js?v=17"></script>
 <script>
 /* ── 데이터: 확정본 v2 (문서/여행앱/2026-11-12_가보자_첫화면질문·16유형_제안_v2.md) ── */
 const AX = [ // 축: 코드 글자 · 이름
@@ -1183,7 +1183,7 @@ const PARTS = [['both', '둘 다'], ['main', '오사카만'], ['side', '교토�
 /* 11/25 영어판 한국 여러 도시: 기차로 이어지는 7곳(서울·부산·대구·경주·강릉·전주·여수) = 지역 'kr' → 여러 곳 함께 고름(고른 순서 = 여행 순서) · 밤마다 자는 도시 ·
    도착 공항 ≠ 숙소 도시(인천 도착 → 기차로 경주)·출국 공항 따로(tr.outAp) = 엔진 input.kx + inbound + outbound(gen.js KRM). 속초·통영(버스)·인천·수원(기차 표 없음)은 준비 중 */
 const CGRP = W5 ? [['일본', [['오사카', 'kix', 'kx'], ['교토', 'kix', 'kx'], ['나라', 'nar', 'kx'], ['고베', 'kob', 'kx'], ['도쿄', 'tyo', 'tyo'], ['후쿠오카', 'fuk', 'fuk'], ['삿포로', 'spk', 'hk']]],
-  ['한국', [['서울', 'sel', 'kr'], ['부산', 'bsn', 'kr'], ['제주', 'jej', 'jj'], ['대구', 'dgu', 'kr'], ['경주', 'gyj', 'kr'], ['강릉', 'gng', 'kr'], ['속초', '', 'sc'], ['전주', 'jnj', 'kr'], ['여수', 'ysu', 'kr'], ['통영', '', 'ty'], ['인천', '', 'ic'], ['수원', 'swn', 'kr']]]] : [
+  ['한국', [['서울', 'sel', 'kr'], ['부산', 'bsn', 'kr'], ['제주', 'jej', 'jj'], ['대구', 'dgu', 'kr'], ['경주', 'gyj', 'kr'], ['강릉', 'gng', 'kr'], ['속초', 'sch', 'kr'], ['전주', 'jnj', 'kr'], ['여수', 'ysu', 'kr'], ['통영', 'tyg', 'kr'], ['인천', '', 'ic'], ['수원', 'swn', 'kr']]]] : [
   ['일본', [['오사카', 'kix', 'kx'], ['교토', 'kix', 'kx'], ['나라', 'nar', 'kx'], ['고베', 'kob', 'kx'], ['도쿄', 'tyo', 'tyo'], ['후쿠오카', 'fuk', 'fuk'], ['삿포로', 'spk', 'hk'], ['오타루', '', 'hk']]],
   ['한국', [['서울', 'sel', 'sel'], ['부산', 'bsn', 'bsn'], ['제주', 'jej', 'jj'], ['경주', 'gyj', 'gj'], ['강릉', 'gng', 'gn'], ['속초', 'sch', 'sc'], ['전주', 'jnj', 'jn'], ['여수', 'ysu', 'ys'], ['통영', 'tyg', 'ty'], ['대구', 'dgu', 'dg'], ['인천', 'icn', 'ic'], ['수원', 'swn', 'sw']]]];
 const CPK = Object.fromEntries(CGRP.flatMap(g => g[1].map(c => [c[0], c])));
@@ -2164,7 +2164,8 @@ function swHours(p) { const o = String(p.oTx || ''); if (!o || /^거리/.test(o)
 const VZTR_API = 'https://vztr-api.d-chive33-a29.workers.dev';   // 11/19 E0: 구글 사진 = 우리 서버(Cloudflare Worker)가 대신 찾음 → 페이지에 사진 키 없음 (server/worker.js)
 const PH_KEY_G = () => /^(https:\/\/(www\.)?larchive\.page|http:\/\/(localhost|127\.0\.0\.1)(:\d+)?)$/.test(location.origin), PH_KEY_M = () => window.GABOJA_MAPS_KEY || '';
 // 11/24 오사카관광국 사진(license 'OCTB'): 일본어 외 표기 = '©Osaka Convention & Tourism Bureau' 그대로(관광국 회신 11/24, 한·영 같은 문구)
-const phCredit = (a, l) => /^OCTB$/i.test(String(l || '').trim()) ? '©Osaka Convention & Tourism Bureau' : '사진 © ' + String(a || '').replace(/저작권자\s*[:：]\s*/g, '').replace(/\s*공동저작자\s*[:：]\s*/g, ' · ').trim().slice(0, 60) + ' · ' + String(l || '').trim();   // 11/20 검수: 긴 저작권 문구 줄임(라벨만 뺌, 이름은 그대로)
+// 11/24 도쿄관광재단 사진(license 'TCVB'): '©Tokyo Convention & Visitors Bureau' 그대로(재단 회신 11/24)
+const phCredit = (a, l) => /^OCTB$/i.test(String(l || '').trim()) ? '©Osaka Convention & Tourism Bureau' : /^TCVB$/i.test(String(l || '').trim()) ? '©Tokyo Convention & Visitors Bureau' :'사진 © ' + String(a || '').replace(/저작권자\s*[:：]\s*/g, '').replace(/\s*공동저작자\s*[:：]\s*/g, ' · ').trim().slice(0, 60) + ' · ' + String(l || '').trim();   // 11/20 검수: 긴 저작권 문구 줄임(라벨만 뺌, 이름은 그대로)
 function phGoogle(p, cb) {   // ② 구글 장소 사진 1장 — 서버 /photo가 키로 찾아 키 없는 사진 주소만 돌려줌. 결과는 세션 동안만(sessionStorage)
   const ck = 'gaboja-gph2:' + (p.n || '');
   if (!PH_KEY_G()) { cb(null); return; }

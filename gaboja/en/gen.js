@@ -181,7 +181,7 @@
      표 = 한국 도시 설정 modes.train을 한데 모은 그래프 — regions(역 ↔ 역 소요 분, 조사값) · toBase(역 → 숙소 동네). 역의 도시 = toBase 동네의 도시
      기차 탈 때마다 역에서 20분(표·타는 곳 [추정], cfg train.pre와 같음) · 내려서 10분 [추정] · 같은 도시 역 ↔ 역 = 두 역의 toBase 합(가장 짧은 동네 경유, 대략)
      열차 시각표는 없음 → 기차 시각은 대략(그날 메모로 알림) */
-  const KRC = { '서울': 'sel', '부산': 'bsn', '대구': 'dgu', '경주': 'gyj', '강릉': 'gng', '전주': 'jnj', '여수': 'ysu', '수원': 'swn' };   // 11/25 수원 = TAGO 직통(서울·용산·부산 등)
+  const KRC = { '서울': 'sel', '부산': 'bsn', '대구': 'dgu', '경주': 'gyj', '강릉': 'gng', '전주': 'jnj', '여수': 'ysu', '수원': 'swn', '속초': 'sch', '통영': 'tyg' };   // 11/25 수원 = TAGO 직통(서울·용산·부산 등) · 속초·통영 = 버스(D.krBus)
   const RAIL = (() => {
     const E = {}, STB = {}, CITY = {}, SC = {};
     const add = (a, b, m, line) => { if (!(m > 0)) return; const L = E[a] = E[a] || [], o = L.find(x => x.to === b); if (!o) L.push({ to: b, m, line }); else if (m < o.m) { o.m = m; o.line = line; } };
@@ -195,8 +195,12 @@
       Object.entries(KR.toBase || {}).forEach(([st, o]) => Object.entries(o).forEach(([b, v]) => { (STB[st] = STB[st] || {})[b] = v; if (D.cityOf[b]) CITY[st] = D.cityOf[b]; }));
       KR.pairs.forEach(r => { if (!(r.min > 0) || !STB[r.from] || !STB[r.to]) return; const L = E[r.from] = E[r.from] || [], o = L.find(x => x.to === r.to), v = { to: r.to, m: r.min, line: r.line || '열차', pen: Math.min(60, Math.round(450 / Math.max(1, r.n || 1))) };
         if (o) Object.assign(o, v); else L.push(v); }); }
+    /* 11/25 버스(D.krBus): 터미널도 같은 그래프의 '역'으로 — 소요 = TAGO 고속·시외버스, 터미널 → 숙소 동네 = 택시 (대략). 버스 구간 = bus:1 (가이드북은 기차표와 같은 카드에 버스 아이콘) */
+    const KB = D.krBus, TERM = {}; if (KB && Array.isArray(KB.edges)) {
+      Object.entries(KB.toBase || {}).forEach(([st, o]) => { TERM[st] = (KB.short || {})[st] || st.replace(/(고속|시외|종합)?버스터미널$|터미널$/, ''); Object.entries(o).forEach(([b, v]) => { (STB[st] = STB[st] || {})[b] = v; if (D.cityOf[b]) CITY[st] = D.cityOf[b]; }); });
+      KB.edges.forEach(r => { if (!(r.min > 0) || !STB[r.from] || !STB[r.to]) return; (E[r.from] = E[r.from] || []).push({ to: r.to, m: r.min, line: r.line || '버스', bus: 1, pen: Math.min(60, Math.round(450 / Math.max(1, r.n || 1))) }); }); }
     Object.keys(STB).forEach(st => { const k = Object.keys(STB[st]).find(b => STB[st][b][0] <= 5); if (k) SC[st] = k; });
-    return { E, STB, CITY, SC };
+    return { E, STB, CITY, SC, TERM };
   })();
   function make(input) {
     const type =/^[LH][SE][FR][JP]$/.test(input.type || '') ? input.type : 'LSRP';
@@ -272,11 +276,11 @@
       const dist = { [a]: 0 }, prev = {}, Q = [a], done = new Set();
       const nb = n => { const o = [];
         if (n === a) { Object.keys(RAIL.STB).forEach(st => { if (RAIL.CITY[st] !== ca) return; const L = locSt(a, st); if (L) o.push([st, L[0], { t: 'loc', m: L[0], how: L[1] }]); }); return o; }
-        (RAIL.E[n] || []).forEach(e => o.push([e.to, e.m + 20 + (e.pen || 0), { t: 'rail', m: e.m, line: e.line, pen: e.pen || 0 }]));   // 11/25 pen = 편수 적은 구간 기다림 벌점(경로 고르기만)
+        (RAIL.E[n] || []).forEach(e => o.push([e.to, e.m + 20 + (e.pen || 0), { t: 'rail', m: e.m, line: e.line, pen: e.pen || 0, bus: e.bus || 0 }]));   // 11/25 pen = 편수 적은 구간 기다림 벌점(경로 고르기만)
         if (RAIL.CITY[n] === cb) { const L = locSt(b, n); if (L) o.push([b, L[0] + 10, { t: 'loc', m: L[0] + 10, how: L[1] }]); }
         Object.keys(RAIL.STB).forEach(st => { if (st === n || RAIL.CITY[st] !== RAIL.CITY[n]) return; let m = null;
           Object.keys(RAIL.STB[n]).forEach(k => { const v = RAIL.STB[st][k]; if (v && D.cityOf[k] === RAIL.CITY[n] && (m == null || RAIL.STB[n][k][0] + v[0] < m)) m = RAIL.STB[n][k][0] + v[0]; });
-          if (m != null) o.push([st, m + 10, { t: 'loc', m: m + 10, how: '전철' }]); });
+          if (m != null) o.push([st, m + 10, { t: 'loc', m: m + 10, how: RAIL.TERM[st] || RAIL.TERM[n] ? '택시 (대략)' : '전철' }]); });   // 11/25 역 ↔ 터미널은 택시
         return o; };
       while (Q.length) {
         let qi = 0; Q.forEach((x, j) => { if (dist[x] < dist[Q[qi]]) qi = j; }); const n = Q.splice(qi, 1)[0]; if (n === b) break; done.add(n);
@@ -743,7 +747,7 @@
       const flushMust = until => { while (mustQ.length && t < until) { const m = takeMust(date, t, at, until); if (!m) break; push(decorate(m)); nt.push(...m.warn); blocks.push(m.pc.name); t = m.end; at = m.loc; POS = m.pos || m.loc; } };   // 그날 must가 남았으면 빈 시간에 끼움
       const addMeal = kind => { const m = meal(kind, city, date, t, at); push(m.items); nt.push(...m.warn); t = m.end; at = m.loc; POS = m.pos || POS; };
       // 11/25 KRM: 기차 경로 줄 — 역 타는 곳(20분, 갈아탈 땐 '갈아타기') → 기차(승차권 카드) → 내려서 10분 → 시내 이동. 끝 시각을 돌려줌
-      let railUsed = false, railReal = 0, railEst = false;
+      let railUsed = false, railReal = 0, railEst = false, busUsed = false;
       /* 11/25 실제 열차 시각: input.rt['서울역|강릉역|20261202'] = [{ no, grade, dep, arr }] (시작 화면이 서버 /train = 국토교통부 TAGO 로 받아 넣음)
          역 도착 + 20분 뒤에 떠나는 열차 중 가장 빨리 도착하는 편(자정 넘는 편 빼고) · 없으면 조사값 소요(대략) */
       const ymd = x => x.getFullYear() + String(x.getMonth() + 1).padStart(2, '0') + String(x.getDate()).padStart(2, '0');
@@ -753,12 +757,12 @@
       let railMiss = [];
       const railRun = (Rt, t0, toQ, dry) => { let t1 = t0, pr = false; const out = dry ? [] : it;   // dry = 시험 계산만(줄 안 넣음)
         Rt.segs.forEach((g, k) => {
-          if (g.t === 'rail') { const A = g.from, Bn = g.to, R = realTrain(A, Bn, t1 + 20), ln = R ? R.grade || g.line : g.line;
-            if (!dry && !R && RT && Array.isArray(RT[A + '|' + Bn + '|' + ymd(date)])) railMiss.push(Bn.replace(/역$/, ''));   // 시각표는 있는데 그 뒤 열차 없음 = 막차 지남
+          if (g.t === 'rail') { const A = g.from, Bn = g.to, R = g.bus ? null : realTrain(A, Bn, t1 + 20), ln = R ? R.grade || g.line : g.line, sn = x => RAIL.TERM[x] || x.replace(/역$/, '');   // 11/25 버스 = 실제 시각 없음(TAGO 버스는 당일만)
+            if (!dry && !R && !g.bus && RT && Array.isArray(RT[A + '|' + Bn + '|' + ymd(date)])) railMiss.push(Bn.replace(/역$/, ''));   // 시각표는 있는데 그 뒤 열차 없음 = 막차 지남
             const wt = R ? R.d - t1 : 0;   // 역에서 기다리는 분 (실제 열차)
             out.push({ k: 'p', s: t1, e: R ? R.d : t1 + 20, sh: A, n: pr ? A + ' · 갈아타기' : A, say: (wt >= 60 ? '열차 ' + R.dep + ' 출발 · 기다리는 동안 역 근처 식사·카페 · ' : '') + (pr ? '갈아탈 열차 타는 곳 확인' : '승차권 · 타는 곳 확인'), q: A }); t1 = R ? R.d : t1 + 20;
             const ride = R ? R.a - R.d : g.m;
-            out.push({ k: 'x', s: t1, e: t1 + ride, fly: [A.replace(/역$/, ''), A, Bn.replace(/역$/, ''), Bn], ride: 'train', line: ln, pre: 20, n: ln + ' · ' + A + ' → ' + Bn, mv: ln, ...(R ? { fno: String(R.no).replace(/^0+/, ''), real: 1 } : {}) }); t1 += ride; pr = true; if (!dry) { railUsed = true; if (R) railReal++; else railEst = true; } return; }
+            out.push({ k: 'x', s: t1, e: t1 + ride, fly: [sn(A), A, sn(Bn), Bn], ride: 'train', ...(g.bus ? { bus: 1 } : {}), line: ln, pre: 20, n: ln + ' · ' + A + ' → ' + Bn, mv: ln, ...(R ? { fno: String(R.no).replace(/^0+/, ''), real: 1 } : {}) }); t1 += ride; pr = true; if (!dry) { if (g.bus) busUsed = true; else { railUsed = true; if (R) railReal++; else railEst = true; } } return; }
           let m = g.m; if (pr) { out.push({ k: 'p', s: t1, e: t1 + 10, sh: g.from, n: g.from + ' 도착', q: g.from }); t1 += 10; m -= 10; }
           if (m > 0) { out.push({ k: 'm', s: t1, e: t1 + m, mode: /^걷기/.test(g.how) ? 'walk' : 'train', n: g.how, mv: g.how + ' · 약 ' + mnTx(m), to: k === Rt.segs.length - 1 ? toQ : g.to }); t1 += m; }
           pr = false; });
@@ -976,6 +980,7 @@
       }
       if (i === 1) carry = Math.max(0, t - 1440);   // 한밤(다음 날) 도착이면 둘째 날 늦게 시작
       it.push({ k: 'w', s: i === N || t > toMin('22:30') ? null : toMin('22:30'), n: '취침' });
+      if (busUsed) nt.splice(Math.min(nt.length, 2), 0, { lv: 'gray', t: '버스 시각은 대략 · 터미널에서 예매' });   // 11/25 버스 = 실제 시각 없음
       if (railMiss.length) nt.unshift({ lv: 'red', t: railMiss[0] + ' 가는 막차 지남 · 코레일 확인' });   // 11/25
       if (railUsed) nt.splice(Math.min(nt.length, 2), 0, { lv: 'gray', t: railEst ? '기차 시각은 대략 · 코레일에서 예매' : '열차 시각 = 코레일 시간표 · 코레일에서 예매' });   // 11/25 KRM: 실제 시각표를 못 받은 구간이 있으면 '대략'
       if (blocks.length && !BLANK) nt.push({ lv: 'gray', t: '늦어지면 ' + blocks[blocks.length - 1] + ' 먼저 빼기' });
