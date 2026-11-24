@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>VZTR 첫 화면 제목 시안 2</title>
+<style>
+@font-face { font-family: "Pretendard Variable"; font-weight: 45 920; src: url("fonts/PretendardVariable.woff2") format("woff2-variations"); }
+:root { --canvas:#EFEFF1; --ink:#16171A; --sub:#5F6269; --blue:#2B5BE8; }
+* { box-sizing:border-box; }
+body { margin:0; background:#E4E4E8; color:var(--ink); font-family:"Pretendard Variable",-apple-system,"Apple SD Gothic Neo",sans-serif; letter-spacing:-.01em; word-break:keep-all; padding-bottom:4.5rem; }
+header { padding:1.5rem 1.25rem .5rem; max-width:52rem; margin:0 auto; }
+header h1 { font-size:1.25rem; margin:0 0 .25rem; }
+header p { margin:0; color:var(--sub); font-size:.875rem; line-height:1.5; }
+.grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(22.5rem,1fr)); gap:1rem; padding:1rem 1.25rem 2rem; max-width:52rem; margin:0 auto; }
+.card { background:#fff; border-radius:1rem; padding:.875rem; border:2px solid transparent; cursor:pointer; }
+.card.on { border-color:var(--blue); }
+.tag { display:flex; gap:.5rem; align-items:center; font-size:.8125rem; color:var(--sub); margin-bottom:.5rem; }
+.tag b { background:var(--ink); color:#fff; border-radius:.375rem; padding:0 .45rem; }
+.phone { width:22.5rem; max-width:100%; margin:0 auto; background:var(--canvas); border-radius:.75rem; padding:1.25rem 1.625rem; overflow:hidden; }
+.brand { font-size:.8125rem; color:var(--sub); font-weight:600; margin-bottom:.75rem; } .brand b { color:var(--ink); font-weight:800; }
+.hero { display:flex; flex-direction:column; gap:.75rem; }
+.hero h1 { text-wrap:balance; margin:0; font-size:2.125rem; font-weight:800; letter-spacing:-.045em; line-height:1.18; }
+.hero p { margin:0; color:var(--sub); font-size:.9375rem; line-height:1.5; }
+.hero p span { white-space:nowrap; }
+.chips { display:flex; gap:.375rem; flex-wrap:wrap; }
+.chips span { background:rgba(22,23,26,.07); border-radius:.5rem; padding:.375rem .625rem; font-size:.8125rem; font-weight:600; }
+.over { outline:2px dashed #E5484D; }
+.bar { position:fixed; left:0; right:0; bottom:0; background:rgba(255,255,255,.96); border-top:1px solid #ddd; padding:.75rem 1.25rem; display:flex; gap:.5rem; }
+.bar input { flex:1; height:2.5rem; border:1px solid #ccc; border-radius:.5rem; padding:0 .75rem; font:inherit; font-size:.875rem; }
+.bar button { height:2.5rem; border:0; border-radius:.5rem; padding:0 1rem; background:var(--ink); color:#fff; font-family:inherit; font-weight:700; font-size:.875rem; }
+</style></head><body>
+<header>
+  <h1>첫 화면 제목 — 시안 10개 더 (11~20)</h1>
+  <p>바로 아래 설명(계획파일까, 즉흥파일까? / 답하다 보면 내 여행이 보여요.)과 칩은 그대로 두고 큰 제목만 바꿉니다. 폰 폭(360)으로 보여요. 고르고 메모 → ‘답 복사’.</p>
+</header>
+<div class="grid" id="g"></div>
+<div class="bar"><input id="memo" placeholder="메모 (선택) — 줄만 바꾸고 싶다, 섞고 싶다 등"><button id="cp">답 복사</button></div>
+<script>
+const C = [
+  ['지금', '나는 어떤 여행자일까?', '현재 제목(비교용)'],
+  ['11', '내 여행을 네 글자로', '결과가 LSRO 같은 4글자 코드라서'],
+  ['12', '오늘의 행선지: 나', '출발 안내판 말투 · 살짝 위트'],
+  ['13', '어디로보다, 어떻게.', '여행은 장소보다 방식 · 짧고 단단'],
+  ['14', '짐보다 먼저, 내 취향', '떠나기 전 챙길 것 비틀기'],
+  ['15', '행선지 미정, 성향 확인 중', '안내판 상태 표시처럼 · 장난스럽게'],
+  ['16', '여행 스타일에도 이름이 있어요', '16유형 이름(골목 산책가 등)으로 연결'],
+  ['17', '지도 말고, 나를 펼쳐 봐요', '여행 소품 비틀기 · 감성'],
+  ['18', '나의 탑승 코드는?', '결과 = 탑승권 · 코드 컨셉'],
+  ['19', '같은 도시, 다른 여행', '사람마다 다르다는 공감'],
+  ['20', '여행하는 방식이 곧 나', '자기 발견 · 선언형'],
+];
+const g = document.getElementById('g'), pick = new Set();
+C.forEach(([k, h, note]) => {
+  const el = document.createElement('div'); el.className = 'card'; el.dataset.k = k;
+  el.innerHTML = `<div class="tag"><b>${k}</b>${note}</div><div class="phone"><div class="brand"><b>vztr.</b> 여행 성향 테스트</div><div class="hero">
+    <h1>${h}</h1><p><span>계획파일까, 즉흥파일까?</span><br><span>답하다 보면 내 여행이 보여요.</span></p>
+    <div class="chips"><span>10번 고르면 끝</span><span>결과는 탑승권 한 장</span><span>로그인 필요 없어요</span></div></div></div>`;
+  if (k !== '지금') el.onclick = () => { pick.has(k) ? pick.delete(k) : pick.add(k); el.classList.toggle('on'); };
+  g.appendChild(el);
+  const ph = el.querySelector('.phone'); el.querySelectorAll('.hero p span').forEach(s => { if (s.getBoundingClientRect().right > ph.getBoundingClientRect().right - 26) s.classList.add('over'); });
+});
+document.getElementById('cp').onclick = () => {
+  const s = '첫 화면 제목: ' + ([...pick].sort((x, y) => x - y).join(', ') || '(안 고름)') + (memo.value.trim() ? ' / 메모: ' + memo.value.trim() : '');
+  navigator.clipboard.writeText(s).then(() => { cp.textContent = '복사됨'; setTimeout(() => cp.textContent = '답 복사', 1500); });
+};
+</script></body></html>
