@@ -996,9 +996,9 @@ html[lang="en"] .rhy .rr { grid-template-columns: 4.875rem minmax(0,1fr); }
 <script src="legal/flags.js?v=1"></script><!-- 11/24 약관 스위치·버전(tools/build_legal.py가 만듦) -->
 <script src="types.js"></script>
 <script src="chars.js?v=fit3"></script>
-<script src="gen-data.js?v=13"></script>
+<script src="gen-data.js?v=14"></script>
 <script src="sgg.js"></script>
-<script src="gen.js?v=15"></script>
+<script src="gen.js?v=16"></script>
 <script>
 /* ── 데이터: 확정본 v2 (문서/여행앱/2026-11-12_가보자_첫화면질문·16유형_제안_v2.md) ── */
 const AX = [ // 축: 코드 글자 · 이름
@@ -1183,7 +1183,7 @@ const PARTS = [['both', '둘 다'], ['main', '오사카만'], ['side', '교토�
 /* 11/25 영어판 한국 여러 도시: 기차로 이어지는 7곳(서울·부산·대구·경주·강릉·전주·여수) = 지역 'kr' → 여러 곳 함께 고름(고른 순서 = 여행 순서) · 밤마다 자는 도시 ·
    도착 공항 ≠ 숙소 도시(인천 도착 → 기차로 경주)·출국 공항 따로(tr.outAp) = 엔진 input.kx + inbound + outbound(gen.js KRM). 속초·통영(버스)·인천·수원(기차 표 없음)은 준비 중 */
 const CGRP = W5 ? [['일본', [['오사카', 'kix', 'kx'], ['교토', 'kix', 'kx'], ['나라', 'nar', 'kx'], ['고베', 'kob', 'kx'], ['도쿄', 'tyo', 'tyo'], ['후쿠오카', 'fuk', 'fuk'], ['삿포로', 'spk', 'hk']]],
-  ['한국', [['서울', 'sel', 'kr'], ['부산', 'bsn', 'kr'], ['제주', 'jej', 'jj'], ['대구', 'dgu', 'kr'], ['경주', 'gyj', 'kr'], ['강릉', 'gng', 'kr'], ['속초', '', 'sc'], ['전주', 'jnj', 'kr'], ['여수', 'ysu', 'kr'], ['통영', '', 'ty'], ['인천', '', 'ic'], ['수원', '', 'sw']]]] : [
+  ['한국', [['서울', 'sel', 'kr'], ['부산', 'bsn', 'kr'], ['제주', 'jej', 'jj'], ['대구', 'dgu', 'kr'], ['경주', 'gyj', 'kr'], ['강릉', 'gng', 'kr'], ['속초', '', 'sc'], ['전주', 'jnj', 'kr'], ['여수', 'ysu', 'kr'], ['통영', '', 'ty'], ['인천', '', 'ic'], ['수원', 'swn', 'kr']]]] : [
   ['일본', [['오사카', 'kix', 'kx'], ['교토', 'kix', 'kx'], ['나라', 'nar', 'kx'], ['고베', 'kob', 'kx'], ['도쿄', 'tyo', 'tyo'], ['후쿠오카', 'fuk', 'fuk'], ['삿포로', 'spk', 'hk'], ['오타루', '', 'hk']]],
   ['한국', [['서울', 'sel', 'sel'], ['부산', 'bsn', 'bsn'], ['제주', 'jej', 'jj'], ['경주', 'gyj', 'gj'], ['강릉', 'gng', 'gn'], ['속초', 'sch', 'sc'], ['전주', 'jnj', 'jn'], ['여수', 'ysu', 'ys'], ['통영', 'tyg', 'ty'], ['대구', 'dgu', 'dg'], ['인천', 'icn', 'ic'], ['수원', 'swn', 'sw']]]];
 const CPK = Object.fromEntries(CGRP.flatMap(g => g[1].map(c => [c[0], c])));
@@ -2467,12 +2467,31 @@ function doorNow(p) {
     .then(() => { clearTimeout(tm); if (!Object.keys(v).length) { DOOR = { st: 'off' }; return null; } tr.door = { ll: String(ll), v }; store.set(TRIP_KEY, tr); DOOR = { st: 'ok' }; return v; });
 }
 
+/* 11/25 실제 열차 시각 — 영어판 한국 여러 도시(isKR + kxIn)에서 만든 일정의 기차 줄(ride 'train')마다 그날 시각표를 서버 /train(국토교통부 TAGO)에서 받아
+   tr.rail = { st: 출발일, v: { '서울역|강릉역|20261202': [{ no, grade, dep, arr }] } } → planInput rt → 엔진이 탈 수 있는 열차를 고름. 실패하면 지금 일정(대략 시각) 그대로 */
+const RAIL_GRADE = g => /^KTX-산천|^KTX-청룡/.test(g) ? 'KTX' : g === '새마을호' ? 'ITX-새마을' : g;   // 엔진 줄 이름은 짧게(산천 A/B·청룡 = KTX)
+function railNow(p) {
+  const tr = S.trip; if (!p || !p.start || !isKR(tr) || !kxIn(tr)) return Promise.resolve(null);
+  const st = new Date(p.start + 'T00:00:00'), z = n => String(n).padStart(2, '0'), need = {};
+  (p.days || []).forEach(d => (d.items || []).forEach(x => { if (x.ride !== 'train' || !x.fly) return;
+    const t = new Date(st.getTime() + ((d.no || 1) - 1) * 864e5), ds = '' + t.getFullYear() + z(t.getMonth() + 1) + z(t.getDate());
+    need[x.fly[1] + '|' + x.fly[3] + '|' + ds] = [x.fly[1], x.fly[3], ds]; }));
+  const keys = Object.keys(need).filter(k => !(tr.rail && tr.rail.st === tr.start && tr.rail.v && tr.rail.v[k])).slice(0, 8);   // 서버 /train 남용 막기 = 1분 10번
+  if (!keys.length) return Promise.resolve(null);
+  const ctl = new AbortController(), tm = setTimeout(() => ctl.abort(), 8000), v = tr.rail && tr.rail.st === tr.start ? { ...tr.rail.v } : {};
+  let got = 0;
+  return Promise.all(keys.map(k => { const [a, b, ds] = need[k];
+    return fetch(VZTR_API + '/train?' + new URLSearchParams({ from: a, to: b, date: ds }), { signal: ctl.signal }).then(r => r.json())
+      .then(j => { if (j && Array.isArray(j.list) && j.list.length) { v[k] = j.list.map(x => ({ no: x.no, grade: RAIL_GRADE(x.grade || ''), dep: x.dep, arr: x.arr })); got++; } }).catch(() => {}); }))
+    .then(() => { clearTimeout(tm); if (!got) return null; tr.rail = { st: tr.start, v }; store.set(TRIP_KEY, tr); return v; });
+}
+
 const carDep = (tr, f) => f && isDom(tr) && tr.mode === 'car' ? { dep: f.dep } : f; // 차는 출발 시각만 (도착은 엔진이 계산)
 let PLANNED = null; // 방금 만든 일정 (DEST에 있는 도시만 — 오사카·교토·도쿄, 나머지는 아키가 만들어 보냄)
 function planInput() { // 일정 엔진 입력 (스와이프 미리 만들기·최종 만들기 공통)
   const tr = S.trip, dest = DEST[tr.city];
   const d = n => n ? `${Math.floor(n / 10000)}-${String(Math.floor(n / 100) % 100).padStart(2, '0')}-${String(n % 100).padStart(2, '0')}` : null;
-  return { type: S.type, start: d(tr.start), nights: nOf(tr), daytrip: !!tr.day || undefined, likes: likeTags(tr.likes), avoid: normAvoid(tr.avoid), flightTx: tr.flight === 'yes' ? tr.flightTx : '', depAp: tr.flight === 'yes' && tr.depAp && tr.depAp !== 'ICN' ? tr.depAp : undefined, fo: tr.flight === 'yes' ? carDep(tr, tr.fo) : null, fb: tr.flight === 'yes' ? carDep(tr, tr.fb) : null, stayTx: tr.stay !== 'no' ? tr.stayTx : '', stayKind: tr.stay, cityLabel: kxIn(tr) ? kxPicks(tr).join('·') : tr.city, part: kxIn(tr) ? undefined : partOf(tr) || undefined, kx: kxIn(tr) || undefined, dest, airport: krAp(tr) || tr.airport || ((AIRPORTS[dest] || [[]])[0] || [])[0], region: tr.region, sgg: tr.sgg = effSgg(tr), mode: tr.mode, line: tr.line || 0, door: tr.door && tr.door.ll === String(tr.homeLL) ? tr.door.v : undefined, inbound: W5 ? krAp(tr) || tr.airport || ((AIRPORTS[dest] || [[]])[0] || [])[0] : undefined, outbound: isKR(tr) && kxIn(tr) && tr.outAp && tr.outAp !== krAp(tr) ? tr.outAp : undefined, themes: themeOf(tr).map(o => o[0]), level: tr.visit || undefined, seen: (tr.visit || 1) >= 2 ? seenOf(tr, dest) : undefined };   // 11/20 W5 F1 한국 도착 공항   // 11/20 문 앞 시간(doorNow)
+  return { type: S.type, start: d(tr.start), nights: nOf(tr), daytrip: !!tr.day || undefined, likes: likeTags(tr.likes), avoid: normAvoid(tr.avoid), flightTx: tr.flight === 'yes' ? tr.flightTx : '', depAp: tr.flight === 'yes' && tr.depAp && tr.depAp !== 'ICN' ? tr.depAp : undefined, fo: tr.flight === 'yes' ? carDep(tr, tr.fo) : null, fb: tr.flight === 'yes' ? carDep(tr, tr.fb) : null, stayTx: tr.stay !== 'no' ? tr.stayTx : '', stayKind: tr.stay, cityLabel: kxIn(tr) ? kxPicks(tr).join('·') : tr.city, part: kxIn(tr) ? undefined : partOf(tr) || undefined, kx: kxIn(tr) || undefined, dest, airport: krAp(tr) || tr.airport || ((AIRPORTS[dest] || [[]])[0] || [])[0], region: tr.region, sgg: tr.sgg = effSgg(tr), mode: tr.mode, line: tr.line || 0, door: tr.door && tr.door.ll === String(tr.homeLL) ? tr.door.v : undefined, inbound: W5 ? krAp(tr) || tr.airport || ((AIRPORTS[dest] || [[]])[0] || [])[0] : undefined, outbound: isKR(tr) && kxIn(tr) && tr.outAp && tr.outAp !== krAp(tr) ? tr.outAp : undefined, rt: isKR(tr) && kxIn(tr) && tr.rail && tr.rail.st === tr.start ? tr.rail.v : undefined, themes: themeOf(tr).map(o => o[0]), level: tr.visit || undefined, seen: (tr.visit || 1) >= 2 ? seenOf(tr, dest) : undefined };   // 11/20 W5 F1 한국 도착 공항   // 11/20 문 앞 시간(doorNow)
 }
 function buildPlan() {
   const tr = S.trip; PLANNED = null;
@@ -2488,7 +2507,7 @@ function buildPlan() {
 }
 function rBuild() {
   /* 시안: 전송 안 함 */ if (!E1_NOSEND && (!SEND || SEND.st !== 'ok')) sendNow(); else if (E1_NOSEND) SEND = { st: 'off' };
-  buildPlan(); doorNow(PLANNED).then(v => { if (v) buildPlan(); mailNow(); });   // 11/20: 문 앞 시간 받으면 다시 만들고 → 메일
+  buildPlan(); doorNow(PLANNED).then(v => { if (v) buildPlan(); return railNow(PLANNED); }).then(v => { if (v) buildPlan(); mailNow(); });   // 11/25: 열차 시각 받으면 한 번 더   // 11/20: 문 앞 시간 받으면 다시 만들고 → 메일
   setBar('info', INFO.length + 1, INFO.length + 1, { t: '만드는 중' });
   const tr = S.trip, t = S.type ? T(S.type) : null, city = placeTx(tr, '여행지');
   const lines = [tr.home ? (isDom(tr) ? '집 문 앞에서 ' + (tr.mode === 'air' ? '공항' : tr.mode === 'train' ? '역' : '숙소') + '까지 시간 계산' : '집 문 앞에서 공항까지 시간 계산') : '출발 시각 정하기', `${String(city).split('·')[0]}에서 내 취향 장소 고르기`, '영업시간·휴무일 맞춰 보기', tr.nights ? `${tr.nights + 1}일 동선 짜기` : '하루 동선 짜기', '가이드북 한 권으로 정리'];

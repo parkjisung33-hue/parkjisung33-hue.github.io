@@ -1684,7 +1684,7 @@ details.sec > summary .cnt { min-width: 0; overflow: hidden; text-overflow: elli
 <script src="weather.js"></script>
 <script src="types.js"></script>
 <script src="chars.js?v=fit3"></script>
-<script>/* 공유용 샘플(#sample=키): 엔진·장소 DB·샘플 입력을 바로 불러와 그 자리에서 일정을 만듦 (저장 안 함) */ if (window.VZTR_LANG === 'en' || /#sample=[\w-]+|#v=\w{12}/.test(location.hash)) document.write('<script src="gen-data.js?v=13"><\/script><script src="gen.js?v=15"><\/script><script src="samples.js?v=6"><\/script>');</script>
+<script>/* 공유용 샘플(#sample=키): 엔진·장소 DB·샘플 입력을 바로 불러와 그 자리에서 일정을 만듦 (저장 안 함) */ if (window.VZTR_LANG === 'en' || /#sample=[\w-]+|#v=\w{12}/.test(location.hash)) document.write('<script src="gen-data.js?v=14"><\/script><script src="gen.js?v=16"><\/script><script src="samples.js?v=7"><\/script>');</script>
 <script>/* 11/19 W8 보기 전용 공유 링크(#v=id): 서버에 보관된 가이드북을 샘플처럼 띄움 — 이 기기엔 저장 안 함(made 없음). 편집 반영은 VZTR_VIEW_EDITS */
 (function () { var m = location.hash.match(/^#v=([A-Za-z0-9]{12})$/); if (!m) return;
   try { var x = new XMLHttpRequest(); x.open('GET', 'https://vztr-api.d-chive33-a29.workers.dev/plan/' + m[1], false); x.send();
@@ -2140,6 +2140,7 @@ const carDurAt = (c, depMin) => c.car && c.car.d ? c.car.d[Math.min(23, Math.max
 // 11/15: 시각이 비면(시각 미정) 이름만 — 가운데에 '시각 미정'이 이미 있어 이름이 잘리지 않게
 /* 11/23 동우님 보드 답 E3: 영어판 탑승권 장소 줄 = 'Seoul Station 06:00'(가운뎃점 없음, 넘치면 시각만 다음 줄) */
 /* 11/25 영어판 기차표: 큰 글자(코드) = 'Dongdaegu' 밑 칸에 'Dongdaegu Station'을 또 쓰면 두 줄 → 'Station'만 (한국어판·비행기는 그대로) */
+const lnS = l => window.VZTR_LANG === 'en' ? l : String(l).replace(/^(KTX|ITX)-(?=[가-힣])/, '');   // 11/25 한국어 승차권 '열차' 칸: 'KTX-이음 752' → '이음 752'(칸이 좁음 · 영어판은 사전이 번역)
 const pnOf = (c, k) => { const nm = c.fly[k], I = window.VZTR_I18N; if (c.ride === 'train' && window.VZTR_LANG === 'en' && I && I.t) { const f = I.t(nm), cd = I.t(c.fly[k - 1]); if (f && cd && f === cd + ' Station') return 'Station'; } return esc(nm); };
 const plLine = (name, tx) => '<div class="place pl1">' + (name ? '<span class="pn">' + name + '</span>' + (tx ? '<span class="tt">' + (window.VZTR_LANG === 'en' ? '' : '· ') : '') : '<span class="tt">') + (tx || !name ? String(tx).replace(/\(다음 날\)/, '<sup>+1</sup>') + '</span>' : '') + '</div>';
 function flyCard(d, c, cls, top) {
@@ -2181,7 +2182,7 @@ function flyCard(d, c, cls, top) {
     + '<div class="plane' + (TR ? ' tr' : '') + '">' + ic + '<small>' + durTx(c.du) + '</small></div>'
     + '<div class="to"><div class="code">' + c.fly[2] + '</div>' + plLine(pnOf(c, 3), c.e) + '</div></div></div>'
     + '<div class="perf"></div>'
-    + '<div class="fields"><div class="fld"><span>날짜</span><b>' + d.date + '</b></div><div class="fld"><span>' + (TR ? '역 도착' : '공항 도착') + '</span><b>' + arr + '까지</b></div><div class="fld"><span>' + (c.fno ? (TR ? '열차' : '편명') : TR ? '소요' : '비행') + '</span><b>' + (c.fno ? esc((TR && c.line ? c.line + ' ' : '') + c.fno) : durTx(c.du)) + '</b></div></div></div>';
+    + '<div class="fields"><div class="fld"><span>날짜</span><b>' + d.date + '</b></div><div class="fld"><span>' + (TR ? '역 도착' : '공항 도착') + '</span><b>' + arr + '까지</b></div><div class="fld"><span>' + (c.fno ? (TR ? '열차' : '편명') : TR ? '소요' : '비행') + '</span><b>' + (c.fno ? esc((TR && c.line ? lnS(c.line) + ' ' : '') + c.fno) : durTx(c.du)) + '</b></div></div></div>';
 }
 // 11/15 #24: 시각 미정인 날 = 블록이 왜 순서만 있는지 한 줄 안내
 function tbdNote(d) {
@@ -3194,7 +3195,7 @@ function fixNotes(d, c) {
 // 엔진 입력 = PLAN.inp (없는 옛 일정은 유형·날짜·도시로 복원). 다른 날·메모(같은 장소)·여행 메모는 그대로
 function loadGen(cb) {
   if (window.GABOJA_GEN) { loadGD(() => cb(window.GABOJA_GEN)); return; }
-  loadGD(() => { try { fetch('gen.js?v=15').then(r => r.arrayBuffer()).then(b => { (0, eval)(new TextDecoder('utf-8').decode(b)); cb(window.GABOJA_GEN || null); }).catch(() => cb(null)); } catch (_) { cb(null); } });
+  loadGD(() => { try { fetch('gen.js?v=16').then(r => r.arrayBuffer()).then(b => { (0, eval)(new TextDecoder('utf-8').decode(b)); cb(window.GABOJA_GEN || null); }).catch(() => cb(null)); } catch (_) { cb(null); } });
 }
 let regenBusy = false;
 function regenDay(d, c, dep, arr, fno, done0) {
@@ -3295,7 +3296,7 @@ function setStay(id, du, ok) {
    장소 DB = gen-data.js (처음 누를 때 불러옴). 좌표는 DB에 없어 '같은 동네 묶음 → 동네 사이 이동 분' 순 */
 function loadGD(cb) {
   if (window.GABOJA_DATA) { cb(window.GABOJA_DATA); return; }
-  try { fetch('gen-data.js?v=13').then(r => r.arrayBuffer()).then(b => { (0, eval)(new TextDecoder('utf-8').decode(b)); cb(window.GABOJA_DATA || null); }).catch(() => cb(null)); } catch (_) { cb(null); }
+  try { fetch('gen-data.js?v=14').then(r => r.arrayBuffer()).then(b => { (0, eval)(new TextDecoder('utf-8').decode(b)); cb(window.GABOJA_DATA || null); }).catch(() => cb(null)); } catch (_) { cb(null); }
 }
 const WDN = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'];
 // gen.js openAt와 같은 기준 (기간·장 서는 날·휴무 요일·n번째 요일·휴무일·영업 구간). 기다림 없이 그 시각에 열려 있는지만
@@ -3393,7 +3394,7 @@ let addPick = null;   // { p: 장소 DB 항목 또는 null, name, du, sug, when 
     PLACES = Object.entries(D.places).map(([id, p]) => { const h = p.h, o = h && h.o && h.o[0] && !/^거리/.test(p.oTx || '') ? h.o[0] : null;
       return { id, n: p.n, l: p.l || '', c: p.city, a: (D.clName && D.clName[p.cl]) || '', t: p.tg || [], o, x: (h && h.x) || [], st: p.st || 60, say: p.say || '', q: p.q || p.n, k: p.kind, ll: p.ll || null }; });
   };
-  if (window.GABOJA_DATA) apply(); else { try { fetch('gen-data.js?v=13').then(r => r.arrayBuffer()).then(b => { (0, eval)(new TextDecoder('utf-8').decode(b)); apply(); }).catch(() => {}); } catch (_) {} }   /* 페이지 글자 설정과 상관없이 UTF-8로 읽음 */
+  if (window.GABOJA_DATA) apply(); else { try { fetch('gen-data.js?v=14').then(r => r.arrayBuffer()).then(b => { (0, eval)(new TextDecoder('utf-8').decode(b)); apply(); }).catch(() => {}); } catch (_) {} }   /* 페이지 글자 설정과 상관없이 UTF-8로 읽음 */
 })();
 // 장소 DB 항목 → 시간대 제약 (gen.js twOf와 같은 기준: 술집·이름 글자·17시 이후에만 영업 = night / 14시 안에 영업 끝 = morning, 식당은 제약 없음)
 function twOfPlace(p) {
@@ -3738,7 +3739,7 @@ function buildPrintDoc() {
       const parts = (c.n || '').split(' — '), main = c.fly ? rideWord(c) + ' ' + c.fly[1] + ' → ' + c.fly[3] : (parts[1] || parts[0]);
       const sub = [];
       if (c.fly) sub.push(d.tbd ? '시각 미정' : '출발 ' + c.s + ' → 도착 ' + c.e); else if (parts[1]) sub.push(parts[0]);
-      if (c.fly && c.fno) sub.push((c.ride === 'train' && c.line ? c.line + ' ' : '') + c.fno);
+      if (c.fly && c.fno) sub.push((c.ride === 'train' && c.line ? lnS(c.line) + ' ' : '') + c.fno);
       if (c.say) sub.push(c.say);
       if (c.k === 'u') sub.push('직접 추가');
       h += '<div class="it"><div class="r1"><span class="t">' + esc(tm) + '</span><b>' + esc(main) + '</b>' + mapA(d, c) + '</div>'

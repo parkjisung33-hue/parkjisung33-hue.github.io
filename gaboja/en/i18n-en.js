@@ -346,6 +346,11 @@ Object.assign(window.VZTR_EN, {
     '{x} 당일치기는 멀어서 뺐어요 · {y}에서 자는 밤을 넣어 주세요': '{x} is too far for a day trip · add a night there', '기차·버스 (대략)': 'Train or bus (approx.)', '전철 (대략)': 'Train (approx.)',
     '출국 공항': 'Departure airport', '도시 사이는 기차(KTX)로 이어서 짜요': 'We link the cities by KTX train', '여러 도시를 함께 고를 수 있어요 · 예: 서울 + 부산 + 대구': 'Pick several cities · e.g. Seoul + Busan + Daegu',
     '안 자는 도시는 당일치기로 다녀와요 · 도시를 옮기는 날은 KTX로 짐 들고 이동': 'Cities you don’t sleep in become day trips · on moving days, take the KTX with your bags',
+    '경주역': 'Gyeongju Station', '부전': 'Bujeon', '부전역': 'Bujeon Station', '용산': 'Yongsan', '용산역': 'Yongsan Station', '수원역': 'Suwon Station',   // 11/25 TAGO 기차(신경주역 → 경주역 2023-12-28 역명 변경)
+    '열차 {x} 출발 · 기다리는 동안 역 근처 식사·카페 · 승차권 · 타는 곳 확인': 'Train leaves {x} · eat or grab a coffee near the station meanwhile · check ticket & platform', '열차 {x} 출발 · 기다리는 동안 역 근처 식사·카페 · 갈아탈 열차 타는 곳 확인': 'Train leaves {x} · eat or grab a coffee near the station meanwhile · find your connecting platform',
+    '열차 시각 = 코레일 시간표(국토교통부 TAGO) · 코레일에서 예매': 'Train times from the Korail timetable (MOLIT TAGO) · book on Korail', '{x} 그 시각 뒤 열차 없음 · 코레일에서 막차 확인': 'No train after this time for {x} · check the last train on Korail',
+    '짐 맡기고 산책': 'Stroll, bags stored', '{x} · 짐 맡기고 근처 산책': '{x} · leave your bags, stroll nearby', '숙소에 짐 맡기고 · 열차 시각에 맞춰 출발': 'Leave bags at the hotel · head out in time for the train',
+    'KTX-이음': 'KTX-Eum', 'ITX-마음': 'ITX-Maeum', '누리로': 'Nuriro', '무궁화호': 'Mugunghwa', 'KTX-이음 · {x} → {y}': 'KTX-Eum · {x} → {y}', 'ITX-마음 · {x} → {y}': 'ITX-Maeum · {x} → {y}', '누리로 · {x} → {y}': 'Nuriro · {x} → {y}', '무궁화호 · {x} → {y}': 'Mugunghwa · {x} → {y}',
     '동대구': 'Dongdaegu', '신경주': 'Singyeongju', '청량리': 'Cheongnyangni', '여수엑스포': 'Yeosu Expo', '광주송정': 'Gwangju-Songjeong', '수서': 'Suseo', '대구 TAE': 'Daegu TAE', '대구공항': 'Daegu Airport', '대구공항 도착': 'Arrive at Daegu Airport', '{x} → {y} · 짐 들고 · 약 {n}분': '{x} → {y} · with luggage · ~{n} min',
     '못 넣은 곳: {x}': a => { const x = PNM(a) || TQ(a); return x ? 'Not added: ' + x : null; }, '대중교통': 'Transit', '대중교통 · 약 {n}분': 'Transit · ~{n} min',
     // 정보 화면
