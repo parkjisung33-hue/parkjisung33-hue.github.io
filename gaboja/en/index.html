@@ -14,11 +14,9 @@
 </head>
 <body>
 <meta name="claude:viewport-fit-sides" content="cover">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400..800&family=Zen+Kaku+Gothic+New:wght@400;700&display=swap">
+<link rel="stylesheet" href="fonts/google/gf.css?v=1"><!-- 11/24 Inter Tight·Zen Kaku Gothic New 자체 호스팅(구글 서버로 IP 안 감, OFL) -->
 <script src="inapp.js?v=1"></script>
-<script src="i18n-en-auto.js?v=5ac7150c"></script><script src="i18n-en.js?v=5ac7150c"></script><script src="i18n.js?v=5ac7150c"></script><!-- 11/20 W5 언어 틀 (영어판 = /en/, 사전 i18n-en.js는 배포 때 en/에만 붙음) -->
+<script src="i18n-en-auto.js?v=b2d075cb"></script><script src="i18n-en.js?v=b2d075cb"></script><script src="i18n.js?v=b2d075cb"></script><!-- 11/20 W5 언어 틀 (영어판 = /en/, 사전 i18n-en.js는 배포 때 en/에만 붙음) -->
 <link rel="stylesheet" href="fonts/vztr-fonts.css?v=2"><!-- 11/19 글꼴: 굵은 한글 IBM Plex Sans KR · 보통 한글 Pretendard · 영문·숫자 IBM Plex Sans -->
 <style>
 /* Pretendard 1.3.9 (SIL OFL 1.1) — 공식 배포본(orioncactus/pretendard)을 fonts/에 함께 올림 */
@@ -2834,14 +2832,17 @@ const VZTR_API = 'https://vztr-api.d-chive33-a29.workers.dev';   // 11/19 E0: �
 const PH_KEY_G = () => /^(https:\/\/(www\.)?larchive\.page|http:\/\/(localhost|127\.0\.0\.1)(:\d+)?)$/.test(location.origin), PH_KEY_M = () => window.GABOJA_MAPS_KEY || '';
 // 11/24 오사카관광국 사진(license 'OCTB'): 일본어 외 표기 = '©Osaka Convention & Tourism Bureau' 그대로(관광국 회신 11/24, 한·영 같은 문구)
 const phCredit = (a, l) => /^OCTB$/i.test(String(l || '').trim()) ? '©Osaka Convention & Tourism Bureau' : '사진 © ' + String(a || '').replace(/저작권자\s*[:：]\s*/g, '').replace(/\s*공동저작자\s*[:：]\s*/g, ' · ').trim().slice(0, 60) + ' · ' + String(l || '').trim();   // 11/20 검수: 긴 저작권 문구 줄임(라벨만 뺌, 이름은 그대로)
-function phGoogle(p, cb) {   // ② 구글 장소 사진 1장 — 서버 /photo가 키로 찾아 키 없는 사진 주소만 돌려줌. 결과는 세션 동안만(sessionStorage)
-  const ck = 'gaboja-gph2:' + (p.n || '');
+/* 11/24 구글 약관: Places 사진(photo name·주소)은 저장·캐시 허용 근거 없음 → 서버 캐시 끔 · 브라우저도 sessionStorage에 안 두고 이 페이지 메모리에서만(새로 열면 다시 물음)
+   표기 = 작가 이름(링크) + 'Google Maps' 텍스트(번역·줄바꿈 금지) — developers.google.com/maps/documentation/places/web-service/policies */
+const GPH = new Map();
+function phGoogle(p, cb) {   // ② 구글 장소 사진 1장 — 서버 /photo가 키로 찾아 키 없는 사진 주소만 돌려줌
+  const ck = p.n || '';
   if (!PH_KEY_G()) { cb(null); return; }
-  try { const s = sessionStorage.getItem(ck); if (s) { cb(s === '-' ? null : JSON.parse(s)); return; } } catch (_) {}
+  if (GPH.has(ck)) { cb(GPH.get(ck)); return; }
   const q = new URLSearchParams({ q: p.q || p.n || '' }); if (p.ll) { q.set('lat', p.ll[0]); q.set('lng', p.ll[1]); }
   fetch(VZTR_API + '/photo?' + q).then(r => r.ok ? r.json() : null).then(j => {
-    const r = j && j.u ? { u: j.u, a: j.a || 'Google' } : null;
-    if (!(j && j.e)) try { sessionStorage.setItem(ck, r ? JSON.stringify(r) : '-'); } catch (_) {}
+    const r = j && j.u ? { u: j.u, a: j.a || '', l: j.l || '' } : null;
+    if (!(j && j.e)) GPH.set(ck, r);
     cb(r);
   }).catch(() => cb(null));
 }
@@ -2971,7 +2972,7 @@ function phMount(host, p, o) {
   const next = () => {
     const s = steps.shift();
     if (s === 'ph') show(p.ph.u, phCredit(p.ph.a, p.ph.l), o.link ? p.ph.p : '');
-    else if (s === 'g') phGoogle(p, r => { if (r) show(r.u, '사진 · Google · ' + r.a, '', 1); else next(); });
+    else if (s === 'g') phGoogle(p, r => { if (r) show(r.u, '사진 · Google Maps' + (r.a ? ' · ' + r.a : ''), o.link ? r.l : '', 1); else next(); });   // 11/24 표기 = Google Maps(앞에 둬서 말줄임에 안 잘림) · 작가(링크)
     else if (s === 'sv') sv();
     else none();
   };

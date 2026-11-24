@@ -198,6 +198,7 @@ window.VZTR_EN = {
     '사진 © {x} · {y}': (x, y) => { const e = HAN.test(y) ? FULL(y) : y; return e ? 'Photo © ' + EN1(x) + ' · ' + e : null; },
     '사진 © {x}': x => 'Photo © ' + EN1(x),
     '사진 · Google · {x}': x => 'Photo · Google · ' + EN1(x),
+    '사진 · Google Maps · {x}': x => 'Photo · Google Maps · ' + EN1(x),   // 11/24 구글 표기 'Google Maps'는 번역 안 함
   });
 })();
 
@@ -383,6 +384,13 @@ Object.assign(window.VZTR_EN, {
   "숨은 곳 비율이 달라져요": "Sets the hidden-gem mix",
   "가이드북에 들어갈 이름": "Shown in your guidebook",
   "닉네임·받을 곳·여행 정보는 가이드북에만 써요": "Nickname, email and trip info are only used for your guidebook",
+  "닉네임·이메일·여행 정보는 가이드북에만 써요": "Nickname, email and trip info are only used for your guidebook",   // 11/24 동의 상자
+  "해외(미국) 서버에 맡겨 보관해요": "Stored with our service providers in the US",
+  "동의하지 않으면 신청할 수 없어요": "You can't sign up without agreeing",
+  "개인정보처리방침 전문 보기": "Read the full privacy policy",
+  "이용약관 보기": "Terms of use",
+  "사진 · Google Maps": "Photo · Google Maps",
+  "만 14세 이상이에요": "I'm 14 or older",
   "오른쪽으로 밀면 ♥ · 왼쪽으로 밀면 패스예요": "Swipe right for ♥, left to pass",
   "이 날은 추천에 맡길게요": "Fill this day for me",
   "자연·산책 · 카페": "Nature & cafes",
