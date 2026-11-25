@@ -14,6 +14,8 @@
 <script src="inapp.js?v=1"></script>
 <script src="i18n-en-auto.js?v=30560f64"></script><script src="i18n-en.js?v=30560f64"></script><script src="i18n.js?v=30560f64"></script>
 <link rel="stylesheet" href="fonts/vztr-fonts.css?v=2">
+<script>/* 11/26: 기기(브라우저) 시스템 모드를 따름 — 다크 = 밤 객실 · 라이트 = 밝은 객실. ?theme=dark|light = 미리보기 */
+(function () { try { var q = new URLSearchParams(location.search).get('theme'), d = q === 'dark' || q === 'light' ? q === 'dark' : matchMedia('(prefers-color-scheme: dark)').matches; if (d) document.documentElement.setAttribute('data-theme', 'dark'); } catch (e) {} })();</script>
 <!-- 2026-11-25 새 첫 페이지(랜딩) — 시안 10차 확정본(디자인/2026-11-25_VZTR_첫페이지시안/board_v10_src.html)을 그대로 옮김.
      화면 = 설계 크기(PC 1440×900 / 폰 390×844)로 그리고 브라우저 크기에 맞춰 통째로 비율 유지(반응형 등비 스케일).
      버튼: 내 유형 알아보기 → start.html?go=q0 · 여행 성향들 둘러보기 → start.html?go=types · 언어 = i18n.js(영어판 /en/landing.html) -->
@@ -47,7 +49,8 @@ html.pc .stage { width: 1440px; height: 900px; } html.ph .stage { width: 390px; 
 html.pc .top { padding: 0 64px 40px; } html.ph .top { padding: 0 22px 24px; }
 .lg .vz { display: block; font: 800 34px/1 var(--lat); font-family: "Inter Tight", var(--kr); letter-spacing: -.05em; color: var(--ink); }
 .vz i { font-style: normal; color: var(--ac); }
-html.pc .lg { transform: translateY(-1px); }   /* 실측: 로고 글자 중심 = 토글 중심 */
+html.pc .lg { transform: translateY(-1px); }
+html.pc .lang { transform: translateY(var(--lgy, 0px)); }   /* 11/26: 토글 아래선 = 로고 아래선(JS 실측) */
 html.ph .lg .vz { font-size: 26px; }
 .lang { display: flex; gap: 2px; background: var(--pill); border-radius: 999px; padding: 3px; align-items: stretch; font: 600 15px/1 var(--kr); height: 40px; }
 .lang > * { display: grid; place-items: center; padding: 0 18px; border-radius: 999px; color: var(--sb); font-weight: 600; }
@@ -55,7 +58,7 @@ html.ph .lg .vz { font-size: 26px; }
 .lang a:hover { color: var(--ink); }
 html.ph .lang { height: 32px; font-size: 13px; } html.ph .lang > * { padding: 0 13px; }
 .legal { position: absolute; left: 50%; bottom: var(--lgb, 47px); margin: 0; transform: translateX(-50%); display: flex; gap: 14px; font: 300 12px/1 var(--kr); color: var(--sb); }   /* 얇게 · 아래선 = 로고 기준선(JS가 실측해 --lgb 맞춤) */
-html.ph .legal { left: 86px; transform: none; font-size: 10.5px; gap: 7px; }   /* 폰: 로고 바로 오른쪽(가운데 두면 토글과 겹침) */
+html.ph .legal { left: 82px; transform: none; font-size: 10.5px; gap: 7px; }   /* 폰: 로고 바로 오른쪽(가운데 두면 토글과 겹침) */
 .legal a:hover { color: var(--ink); }
 /* 글 */
 .tx { position: absolute; text-align: center; z-index: 5; }
@@ -150,13 +153,13 @@ html.ph .win:not(.dk) > .halo::after { box-shadow: 0 0 30cqw 2cqw color-mix(in s
 <script>
 (() => {
 const EN = window.VZTR_LANG === 'en';
-/* 테마: 앱과 같은 규칙 — ?theme= 미리보기 > 앱에서 고른 값(gaboja-theme) > 기본 밝게 */
+/* 테마: 기기 시스템 모드를 따름(바뀌면 바로 따라감) · ?theme= 미리보기 */
 const setTheme = t => { if (t === 'dark') document.documentElement.setAttribute('data-theme', 'dark'); else document.documentElement.removeAttribute('data-theme');
   const m = document.querySelector('meta[name="theme-color"]'); if (m) m.content = t === 'dark' ? '#1B1622' : '#F8F8FA'; };
-let THEME = 'light';
-try { const q = new URLSearchParams(location.search).get('theme'), s = localStorage.getItem('gaboja-theme');
-  THEME = q === 'dark' || q === 'light' ? q : s === 'dark' ? 'dark' : s === 'system' && matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'; } catch (_) {}
-setTheme(THEME); const DK = THEME === 'dark';
+const MQ = matchMedia('(prefers-color-scheme: dark)');
+let QT = ''; try { QT = new URLSearchParams(location.search).get('theme') || ''; } catch (_) {}
+let DK = QT === 'dark' || QT === 'light' ? QT === 'dark' : MQ.matches;
+setTheme(DK ? 'dark' : 'light');
 /* 언어 토글 · 약관(영어판은 한 단계 위의 문서 + #en) */
 const lang = document.getElementById('lang'), other = () => (window.VZTR_I18N ? VZTR_I18N.other() : (EN ? '../landing.html' : 'en/landing.html'));
 lang.innerHTML = EN ? `<a href="${other()}" hreflang="ko" lang="ko">한국어</a><b aria-current="true">English</b>` : `<b aria-current="true">한국어</b><a href="${other()}" hreflang="en" lang="en">English</a>`;
@@ -225,10 +228,14 @@ const legal = document.getElementById('legal'), topRow = document.querySelector(
 const baseOf = el => { const m = document.createElement('span'); m.style.cssText = 'display:inline-block;width:0;height:0;vertical-align:baseline'; el.appendChild(m); const y = m.getBoundingClientRect().top; m.remove(); return y; };
 const alignLegal = () => { const sc = stage.getBoundingClientRect().width / (stage.offsetWidth || 1) || 1, a = legal.querySelector('a'); legal.style.removeProperty('--lgb');
   const d = (baseOf(document.querySelector('.top .vz')) - baseOf(a)) / sc; const cur = parseFloat(getComputedStyle(legal).bottom) || 0; legal.style.setProperty('--lgb', (cur - d).toFixed(1) + 'px'); };
-const all = () => { if (pick() !== MODE) build(); fit(); fitHl(); alignLegal(); layout(); tick(performance.now()); };
+const alignLang = () => { const l = document.getElementById('lang'); l.style.removeProperty('--lgy'); if (MODE !== 'pc') return; const sc = stage.getBoundingClientRect().width / (stage.offsetWidth || 1) || 1;
+  const dy = (baseOf(document.querySelector('.top .vz')) - l.getBoundingClientRect().bottom) / sc; l.style.setProperty('--lgy', dy.toFixed(1) + 'px'); };
+const all = () => { if (pick() !== MODE) build(); fit(); fitHl(); alignLang(); alignLegal(); layout(); tick(performance.now()); };
 build(); all(); if (!REDUCED) requestAnimationFrame(tick);
 let rq = 0; addEventListener('resize', () => { cancelAnimationFrame(rq); rq = requestAnimationFrame(all); });
-if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => { fitHl(); alignLegal(); layout(); });
+const onScheme = e => { if (QT === 'dark' || QT === 'light') return; DK = e.matches; setTheme(DK ? 'dark' : 'light'); build(); all(); };
+if (MQ.addEventListener) MQ.addEventListener('change', onScheme); else if (MQ.addListener) MQ.addListener(onScheme);
+if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => { fitHl(); alignLang(); alignLegal(); layout(); });
 })();
 </script>
 </body>
