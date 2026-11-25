@@ -710,3 +710,4 @@ Object.assign(window.VZTR_EN, { '앞 두 글자는 아직 바뀔 수 있어요':
 Object.assign(window.VZTR_EN, { '날짜는 ‘여행 정보 수정’에서 · 도착이 빠르면 다음 날로': 'Dates: Edit trip info · Early arrival = next day', '날짜는 메뉴의 ‘여행 정보 수정’에서 바꿔요': 'Change dates in Edit trip info', '이 시간에 맞는 곳이 없어요 · 위에서 검색해 보세요': 'Nothing fits this time · Try the search above' });
 /* 11/25 UI 규칙 v1(가이드북 세션): 장소 시트·다음 일정 카드 새 버튼 문구 · 고정 표시 · 영어판 크롤에서 잡힌 빠진 문장 */
 Object.assign(window.VZTR_EN, { '추천 장소': 'Nearby', '고정': 'Fixed', '공항철도 + 택시': 'AREX + taxi', '한글로 보여 주기': 'In Korean' });   // 3칸 줄(103px)에 들어가게 짧게
+Object.assign(window.VZTR_EN, { '안 자는 도시는 당일치기 · 옮기는 날은 짐 들고 이동': 'Day trips elsewhere · bags on moving days' });   // 11/25 #14 다시

@@ -1665,9 +1665,10 @@ function rQ(i) {
   const q = Q[i], ord = S.shuffle[i], prev = S.ans[i];
   setBar('test', i, Q.length, prev != null ? { t: '다음 →', fn: () => { if (busy) return; go(i + 1 < Q.length ? 'q' + (i + 1) : 'calc'); } } : null);   /* V-07·Q-03: 위 칸 진행 막대만(‘n/10’ 뺌) · 이미 답한 질문은 오른쪽 ‘다음 →’로 바로 넘어감(뒤 답 유지) */
   const ls = boardLetters(i - 1), known = i > 0;
+  const g0 = letters(tally(S.ans.slice(0, i))), gNow = g0[0] && g0[1] ? g0[0] + g0[1] : '';   // 11/25 동우님: 계획/즉흥 질문 고른 보기 = 지금까지 답으로 정해진 내 성향(앞 두 글자) 파스텔 · 아직 없으면 보기 자리 색
   const el = screen(`
     <div class="qh"><h1>${esc(q.h)}</h1><p>${esc(QSUB[q.h] || '제일 끌리는 쪽 하나만 골라 주세요')}</p></div>
-    <div class="opts" id="opts">${ord.map((oi, n) => `<button class="opt ${prev === oi ? 'prev' : ''}" data-oi="${oi}"${gStyle(/^[LH][SE]$/.test(q.o[oi][1]) ? q.o[oi][1] : ['LS', 'LE', 'HS', 'HE'][n])}><span class="top"><span class="k">${'ABCD'[n]}</span><span class="ic em" aria-hidden="true">${QE[i][oi]}</span></span><span class="tx">${brk(q.o[oi][0])}</span><span class="stamp">${ICON.check}</span></button>`).join('')}</div>
+    <div class="opts" id="opts">${ord.map((oi, n) => `<button class="opt ${prev === oi ? 'prev' : ''}" data-oi="${oi}"${gStyle(/^[LH][SE]$/.test(q.o[oi][1]) ? q.o[oi][1] : gNow || ['LS', 'LE', 'HS', 'HE'][n])}><span class="top"><span class="k">${'ABCD'[n]}</span><span class="ic em" aria-hidden="true">${QE[i][oi]}</span></span><span class="tx">${brk(q.o[oi][0])}</span><span class="stamp">${ICON.check}</span></button>`).join('')}</div>
     <div class="board glass" id="board">
       ${flapsHtml(ls, false, i - 1)}
       <div class="lb"><b id="bdT">${known ? `탑승권 코드 ${SHOWN[i - 1]} / 4` : '고를 때마다 한 칸씩 채워져요'}</b><span id="bdS">${known ? boardSub(ls) : '4칸이 다 차면 내 여행 유형'}</span></div>
@@ -2052,7 +2053,7 @@ function rInfo(s) {
       <div class="blk" ${tr.day ? 'hidden' : ''}><div class="sub2">숙소</div><div class="seg" id="sSeg"><button data-s="no" aria-pressed="${tr.stay === 'no'}">아직</button><button data-s="area" aria-pressed="${tr.stay === 'area'}">동네만</button><button data-s="yes" aria-pressed="${tr.stay === 'yes'}">정했어요</button></div>
         <input class="in" id="sIn" value="${esc(tr.stayTx || '')}" ${tr.stay === 'no' ? 'hidden' : ''} placeholder="${tr.stay === 'area' ? '동네 이름 (예: ' + ex + ')' : '숙소 이름 · 주소 · 지도 링크'}"><p class="sthint" id="sHint" hidden></p><div class="adr st" id="sList" hidden></div><div class="sw2" id="sw2"></div></div>
       ${kxStays(tr).length ? `<div class="blk"><div class="sub2">밤마다 어디서 자요?</div>${kxStays(tr).map((c, j) => `<div class="flr"><span class="fll">${j + 1}박째</span><div class="seg" data-kn="${j}">${kxPicks(tr).map(x => `<button data-kc="${x}" aria-pressed="${c === x}">${x}</button>`).join('')}</div></div>`).join('')}
-        <div class="note">${ICON.info}<span>안 자는 도시는 당일치기로 다녀와요</span></div></div>` : ''}
+        <div class="note">${ICON.info}<span>안 자는 도시는 당일치기 · 옮기는 날은 짐 들고 이동</span></div></div>` : ''}
       <div class="foot"><button class="cta" id="bNext">다음</button></div>`);   /* 11/24 영어판도 간사이 여러 도시 = 밤마다 숙소 */
     el.querySelectorAll('[data-kn]').forEach(sg => sg.onclick = e => { const b = e.target.closest('[data-kc]'); if (!b) return; const st = kxStays(tr); st[+sg.dataset.kn] = b.dataset.kc; tr.kxStays = st; sg.querySelectorAll('button').forEach(x => x.setAttribute('aria-pressed', x === b)); tap(); });   // 11/23 밤마다 숙소 도시
     const outSync = () => { const o = $('#outSeg'); if (o) o.querySelectorAll('[data-oa]').forEach(x => x.setAttribute('aria-pressed', x.dataset.oa === (tr.outAp || tr.airport))); };
@@ -2117,7 +2118,7 @@ function rInfo(s) {
       <div class="blk" ${tr.day ? 'hidden' : ''}><div class="sub2">숙소</div><div class="seg" id="sSeg"><button data-s="no" aria-pressed="${tr.stay === 'no'}">아직</button><button data-s="area" aria-pressed="${tr.stay === 'area'}">동네만</button><button data-s="yes" aria-pressed="${tr.stay === 'yes'}">정했어요</button></div>
         <input class="in" id="sIn" value="${esc(tr.stayTx || '')}" ${tr.stay === 'no' ? 'hidden' : ''} placeholder="${tr.stay === 'area' ? '동네 이름 (예: ' + (partOf(tr) === 'side' ? '가와라마치' : '난바') + ')' : '숙소 이름 · 주소 · 지도 링크'}"><p class="sthint" id="sHint" hidden></p><div class="adr st" id="sList" hidden></div><div class="sw2" id="sw2"></div></div>
       ${kxStays(tr).length ? `<div class="blk"><div class="sub2">밤마다 어디서 자요?</div>${kxStays(tr).map((c, j) => `<div class="flr"><span class="fll">${j + 1}박째</span><div class="seg" data-kn="${j}">${kxPicks(tr).map(x => `<button data-kc="${x}" aria-pressed="${c === x}">${x}</button>`).join('')}</div></div>`).join('')}
-        <div class="note">${ICON.info}<span>안 자는 도시는 당일치기로 다녀와요</span></div></div>` : ''}
+        <div class="note">${ICON.info}<span>안 자는 도시는 당일치기 · 옮기는 날은 짐 들고 이동</span></div></div>` : ''}
       <div class="foot"><button class="cta" id="bNext">다음</button></div>`);
     el.querySelectorAll('[data-kn]').forEach(sg => sg.onclick = e => { const b = e.target.closest('[data-kc]'); if (!b) return; const st = kxStays(tr); st[+sg.dataset.kn] = b.dataset.kc; tr.kxStays = st; sg.querySelectorAll('button').forEach(x => x.setAttribute('aria-pressed', x === b)); tap(); });   // 11/23 밤마다 숙소 도시
     $('#fSeg').onclick = e => { const b = e.target.closest('[data-f]'); if (!b) return; tr.flight = b.dataset.f; $('#fSeg').querySelectorAll('button').forEach(x => x.setAttribute('aria-pressed', x === b)); $('#fBox').hidden = tr.flight !== 'yes'; if (tr.flight === 'yes') $('#fBox input').focus(); blankHint(); };

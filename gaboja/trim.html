@@ -3110,7 +3110,7 @@ function sheetHtml(d, c) {
   const recB = canClose(c) ? '<button class="btn sec" type="button" data-closed="' + c.id + '">추천 장소</button>' : '';
   const gmB = mu ? '<a class="btn sec" href="' + mu + '" target="_blank" rel="noopener">구글 지도' + EXT_IC + '</a>' : '';
   const nvB = nu ? '<a class="btn pri" href="' + nu + '" target="_blank" rel="noopener"><svg viewBox="0 0 24 24"><path d="M12 3l7 17-7-4-7 4z"/></svg>길찾기</a>' : '';
-  const row2 = w5m ? '<button class="btn sec" type="button" data-kosh="' + c.id + '">한글로 보여 주기</button>' + recB + arcB : recB + gmB + arcB, n2 = (row2.match(/<(?:a|button) class="btn/g) || []).length;
+  const row2 = w5m ? '<button class="btn sec" type="button" data-kosh="' + c.id + '">한글로 보여 주기</button>' + arcB + recB : gmB + arcB + recB   /* 11/25 동우님: '추천 장소'는 다음 일정 카드와 같은 자리(맨 끝) */, n2 = (row2.match(/<(?:a|button) class="btn/g) || []).length;
   if (nvB || n2) h += '<div class="pbtns">' + nvB + (n2 ? '<div class="acts sec' + n2 + '">' + row2 + '</div>' : '') + '</div>';
   if (w5m) h += '<div class="w5alt">' + w5m + '</div>';   // 11/25 리뷰: 영어판 한국 = 주 버튼 줄이 먼저, 네이버·카카오는 그 아래 다른 앱으로
   return h + '</div>';
