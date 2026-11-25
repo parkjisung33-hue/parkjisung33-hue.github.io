@@ -54,8 +54,8 @@ html.ph .lg .vz { font-size: 26px; }
 .lang b { background: var(--pillon); color: var(--ink); font-weight: 700; box-shadow: 0 1px 2px rgba(0,0,0,.08); }
 .lang a:hover { color: var(--ink); }
 html.ph .lang { height: 32px; font-size: 13px; } html.ph .lang > * { padding: 0 13px; }
-.legal { position: absolute; left: 50%; transform: translateX(-50%); display: flex; gap: 14px; font: 500 12px/1 var(--kr); color: var(--sb); opacity: .85; }
-html.ph .legal { top: auto; bottom: 5px; font-size: 10px; gap: 10px; opacity: .7; }   /* 폰: 로고·토글 줄 아래 맨 끝 작은 줄 (토글과 겹치지 않게) */
+.legal { position: absolute; left: 50%; bottom: var(--lgb, 47px); margin: 0; transform: translateX(-50%); display: flex; gap: 14px; font: 300 12px/1 var(--kr); color: var(--sb); }   /* 얇게 · 아래선 = 로고 기준선(JS가 실측해 --lgb 맞춤) */
+html.ph .legal { left: 86px; transform: none; font-size: 10.5px; gap: 7px; }   /* 폰: 로고 바로 오른쪽(가운데 두면 토글과 겹침) */
 .legal a:hover { color: var(--ink); }
 /* 글 */
 .tx { position: absolute; text-align: center; z-index: 5; }
@@ -124,7 +124,7 @@ html.ph .win:not(.dk) > .halo::after { box-shadow: 0 0 30cqw 2cqw color-mix(in s
 .glass .stars i { position: absolute; width: 1.2cqw; height: 1.2cqw; border-radius: 50%; background: #fff; opacity: .75; }
 .glass .sky-cl { position: absolute; left: 0; top: 0; height: 100%; will-change: transform; }
 .glass .sky-cl svg { display: block; height: 100%; }
-.chw { position: absolute; left: 50%; bottom: 13%; width: 62%; transform: translateX(-50%); animation: bob 3.4s ease-in-out infinite; z-index: 2; }
+.chw { position: absolute; left: 19%; bottom: 13%; width: 62%; animation: bob 3.4s ease-in-out infinite; z-index: 2; }   /* 가운데 = (100 - 62) / 2. transform을 쓰면 chars.js 반복 이펙트가 덮어써 오른쪽으로 밀림(실측 48px) */
 .chw svg { width: 100%; height: auto; display: block; overflow: visible; }
 .win.dk .chw { filter: drop-shadow(0 0 3cqw rgba(255,255,255,.25)); }
 @keyframes bob { 0%, 100% { translate: 0 0; } 50% { translate: 0 -4%; } }
@@ -221,10 +221,14 @@ function startCycle() { const box = wins.querySelector('.solo'), w = box.querySe
 /* 제목 한 줄: 넘치면 글자만 줄임(영어판 넓은 글꼴 대비, 최소 26px) */
 const hl = document.querySelector('.hl');
 const fitHl = () => { hl.style.whiteSpace = 'nowrap'; hl.style.fontSize = ''; let f = parseFloat(getComputedStyle(hl).fontSize); while (hl.scrollWidth > hl.clientWidth + 1 && f > 26) { f -= 1; hl.style.fontSize = f + 'px'; } };
-const all = () => { if (pick() !== MODE) build(); fit(); fitHl(); layout(); tick(performance.now()); };
+const legal = document.getElementById('legal'), topRow = document.querySelector('.top');
+const baseOf = el => { const m = document.createElement('span'); m.style.cssText = 'display:inline-block;width:0;height:0;vertical-align:baseline'; el.appendChild(m); const y = m.getBoundingClientRect().top; m.remove(); return y; };
+const alignLegal = () => { const sc = stage.getBoundingClientRect().width / (stage.offsetWidth || 1) || 1, a = legal.querySelector('a'); legal.style.removeProperty('--lgb');
+  const d = (baseOf(document.querySelector('.top .vz')) - baseOf(a)) / sc; const cur = parseFloat(getComputedStyle(legal).bottom) || 0; legal.style.setProperty('--lgb', (cur - d).toFixed(1) + 'px'); };
+const all = () => { if (pick() !== MODE) build(); fit(); fitHl(); alignLegal(); layout(); tick(performance.now()); };
 build(); all(); if (!REDUCED) requestAnimationFrame(tick);
 let rq = 0; addEventListener('resize', () => { cancelAnimationFrame(rq); rq = requestAnimationFrame(all); });
-if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => { fitHl(); layout(); });
+if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => { fitHl(); alignLegal(); layout(); });
 })();
 </script>
 </body>
