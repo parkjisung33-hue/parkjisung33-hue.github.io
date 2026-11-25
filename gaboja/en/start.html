@@ -1,6 +1,7 @@
 <!doctype html>
 <html lang="en">
 <head>
+<script src="migrate.js?v=1"></script>
 <meta charset="utf-8">
 <title>VZTR 여행 유형</title>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
@@ -9,7 +10,7 @@
 <meta name="theme-color" content="#EFEFF1">
 <link rel="stylesheet" href="fonts/google/gf.css?v=1"><!-- 11/24 Inter Tight·Zen Kaku Gothic New 자체 호스팅(구글 서버로 IP 안 감, OFL) -->
 <script src="inapp.js?v=1"></script>
-<script src="i18n-en-auto.js?v=30560f64"></script><script src="i18n-en.js?v=30560f64"></script><script src="i18n.js?v=30560f64"></script><!-- 11/20 W5 언어 틀 (영어판 = /en/, 사전 i18n-en.js는 배포 때 en/에만 붙음) -->
+<script src="i18n-en-auto.js?v=bf21704f"></script><script src="i18n-en.js?v=bf21704f"></script><script src="i18n.js?v=bf21704f"></script><!-- 11/20 W5 언어 틀 (영어판 = /en/, 사전 i18n-en.js는 배포 때 en/에만 붙음) -->
 <link rel="stylesheet" href="fonts/vztr-fonts.css?v=2"><!-- 11/19 글꼴: 굵은 한글 IBM Plex Sans KR · 보통 한글 Pretendard · 영문·숫자 IBM Plex Sans -->
 <link rel="icon" href="icons/favicon-32.png">
 <link rel="apple-touch-icon" href="icons/icon-180.png">
@@ -1919,7 +1920,7 @@ async function cardPng(c) {
   // 맨 아래: 왼쪽 초대 문구·주소 / 오른쪽 vztr. 로고 (QR 자리)
   const BY = T0 + CH - 64;
   x.fillStyle = '#16181D'; x.font = `700 32px ${KR}`; x.fillText(TR('너는 어떤 여행자야?'), PX, BY - 44);
-  x.fillStyle = '#6B6E75'; x.font = `500 28px ${LAT}`; x.fillText('larchive.page/gaboja', PX, BY);
+  x.fillStyle = '#6B6E75'; x.font = `500 28px ${LAT}`; x.fillText('vztr.app', PX, BY);
   x.textAlign = 'right'; x.font = `800 76px ${LAT}`; x.fillStyle = '#0F1F33'; const lw = x.measureText('vztr').width, RX = L + CW - 56 - 22;
   try { x.letterSpacing = '-3px'; } catch (_) {} x.fillText('vztr', RX, BY + 2); try { x.letterSpacing = '0px'; } catch (_) {}
   x.fillStyle = '#3D63F5'; x.beginPath(); x.arc(RX + 17, BY - 9, 11, 0, Math.PI * 2); x.fill();
@@ -2351,7 +2352,7 @@ function swHours(p) { const o = String(p.oTx || ''); if (!o || /^거리/.test(o)
 /* ---------- 장소 사진 (11/14) — ① 위키·Openverse 사진(ph) → ② 구글 장소 사진(키 있을 때) → ③ 스트리트뷰 → ④ 선 아이콘.
    사진은 원본 URL로 직접 표시(저장 안 함). 저작자·라이선스는 사진 아래 한 줄. 실패(onerror)하면 다음 단계. ---------- */
 const VZTR_API = 'https://vztr-api.d-chive33-a29.workers.dev';   // 11/19 E0: 구글 사진 = 우리 서버(Cloudflare Worker)가 대신 찾음 → 페이지에 사진 키 없음 (server/worker.js)
-const PH_KEY_G = () => /^(https:\/\/(www\.)?larchive\.page|http:\/\/(localhost|127\.0\.0\.1)(:\d+)?)$/.test(location.origin), PH_KEY_M = () => window.GABOJA_MAPS_KEY || '';
+const PH_KEY_G = () => /^(https:\/\/(www\.)?(larchive\.page|vztr\.app)|https:\/\/vztr-api\.d-chive33-a29\.workers\.dev|http:\/\/(localhost|127\.0\.0\.1)(:\d+)?)$/.test(location.origin), PH_KEY_M = () => window.GABOJA_MAPS_KEY || '';
 // 11/24 오사카관광국 사진(license 'OCTB'): 일본어 외 표기 = '©Osaka Convention & Tourism Bureau' 그대로(관광국 회신 11/24, 한·영 같은 문구)
 // 11/24 도쿄관광재단 사진(license 'TCVB'): '©Tokyo Convention & Visitors Bureau' 그대로(재단 회신 11/24)
 const phCredit = (a, l) => /^OCTB$/i.test(String(l || '').trim()) ? '©Osaka Convention & Tourism Bureau' : /^TCVB$/i.test(String(l || '').trim()) ? '©Tokyo Convention & Visitors Bureau' :'사진 © ' + String(a || '').replace(/저작권자\s*[:：]\s*/g, '').replace(/\s*공동저작자\s*[:：]\s*/g, ' · ').trim().slice(0, 60) + ' · ' + String(l || '').trim();   // 11/20 검수: 긴 저작권 문구 줄임(라벨만 뺌, 이름은 그대로)
@@ -2613,7 +2614,7 @@ function sendNow() {
   SEND = { st: 'wait' }; const ctl = new AbortController(), to = setTimeout(() => ctl.abort(), 15000);
   return fetch(INTAKE, { method: 'POST', body: JSON.stringify(payload()), signal: ctl.signal }) // text/plain → 사전 요청 없이 감
     .then(r => r.json()).then(j => { SEND = j.ok ? { st: 'ok', row: j.row } : { st: 'bad', err: j.err || '저장 실패' }; })
-    .catch(e => { SEND = { st: 'bad', err: e.name === 'AbortError' ? '응답이 늦어요' : (/larchive\.page|localhost/.test(location.hostname) ? '인터넷 연결을 확인해 주세요' : '이 미리보기에선 막혀 있어요 · larchive.page 주소에서 신청') }; })
+    .catch(e => { SEND = { st: 'bad', err: e.name === 'AbortError' ? '응답이 늦어요' : (/larchive\.page|vztr\.app|workers\.dev|localhost/.test(location.hostname) ? '인터넷 연결을 확인해 주세요' : '이 미리보기에선 막혀 있어요 · vztr.app 주소에서 신청') }; })
     .finally(() => clearTimeout(to));
 }
 
@@ -2625,7 +2626,7 @@ function mailNow() {
   const tr = S.trip, p = PLANNED, to = (tr.to || '').trim();
   if (!MAIL_ON) { MAIL = { st: 'off' }; return Promise.resolve(); }   // Resend 연결 전엔 안 보냄
   if (MAIL && (MAIL.st === 'ok' || MAIL.st === 'wait')) return Promise.resolve();   // 한 번 신청에 한 통
-  if (!p || !p.made || !RE_MAIL.test(to) || !/^(https:\/\/(www\.)?larchive\.page|http:\/\/(localhost|127\.0\.0\.1)(:\d+)?)$/.test(location.origin)) { MAIL = { st: 'off' }; return Promise.resolve(); }
+  if (!p || !p.made || !RE_MAIL.test(to) || !/^(https:\/\/(www\.)?(larchive\.page|vztr\.app)|https:\/\/vztr-api\.d-chive33-a29\.workers\.dev|http:\/\/(localhost|127\.0\.0\.1)(:\d+)?)$/.test(location.origin)) { MAIL = { st: 'off' }; return Promise.resolve(); }
   MAIL = { st: 'wait' };
   let t = { ...tr }; ['home', 'homeName', 'homeLL', 'to', 'hp', 'door'].forEach(k => delete t[k]);   // M34: 집 주소·연락처는 서버에 안 올림
   const ctl = new AbortController(), tm = setTimeout(() => ctl.abort(), 15000), J = { 'Content-Type': 'application/json' };
