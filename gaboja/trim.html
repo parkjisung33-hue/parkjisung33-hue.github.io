@@ -2567,7 +2567,10 @@ function centerNow(smooth) {
 }
 function fitNow() {
   if ($('#v-now').hidden) return;
-  document.querySelectorAll('#nextCard .nm, #track .stop b, #trackPast .stop b').forEach(n => { n.style.fontSize = ''; if (!n.clientWidth) return; let fs = parseFloat(getComputedStyle(n).fontSize); while (n.scrollWidth > n.clientWidth + 1 && fs > 11) { fs -= 0.5; n.style.fontSize = fs + 'px'; } });
+  document.querySelectorAll('#nextCard .nm, #track .stop b, #trackPast .stop b').forEach(n => { n.style.fontSize = ''; if (n.dataset.full && n.textContent !== n.dataset.full) n.textContent = n.dataset.full; if (!n.clientWidth) return; let fs = parseFloat(getComputedStyle(n).fontSize);
+    const shrink = () => { while (n.scrollWidth > n.clientWidth + 1 && fs > 11) { fs -= 0.5; n.style.fontSize = fs + 'px'; } }; shrink();
+    /* 11/25 삿포로 '175°DENO 탄탄멘 삿포로 기타구치점'(S25 360) 3px 넘침: 11px에서도 넘치면 한국어판은 지점명 뺀 짧은 이름(일정 목록 .li .nm 과 같은 규칙) */
+    if (n.scrollWidth > n.clientWidth + 1 && window.VZTR_LANG !== 'en' && !n.children.length) { const full = n.dataset.full || n.textContent, sh = full.replace(/\s+(본점|본관|[^\s]{1,5}점)$/, ''); if (sh !== full) { n.dataset.full = full; n.title = full; n.textContent = sh; n.style.fontSize = ''; fs = parseFloat(getComputedStyle(n).fontSize); shrink(); } } });
   navFlow();
 }
 /* 11/23 동우님: 길안내 이동 중 흐르는 점 = 실제 점(.pt) 위치를 재서 그 위에 점 줄을 그림 (전엔 가상 요소 배경 위치 애니 + 고정 숫자 → 아이폰에서 안 움직이고 선과 1~2px 어긋남)
