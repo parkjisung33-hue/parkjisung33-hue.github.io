@@ -347,6 +347,7 @@ Object.assign(window.VZTR_EN, {
     '{x} 당일치기는 멀어서 뺐어요 · {y}에서 자는 밤을 넣어 주세요': '{x} is too far for a day trip · add a night there', '기차·버스 (대략)': 'Train or bus (approx.)', '전철 (대략)': 'Train (approx.)',
     '출국 공항': 'Departure airport', '도시 사이는 기차(KTX)로 이어서 짜요': 'We link the cities by KTX train', '여러 도시를 함께 고를 수 있어요 · 예: 서울 + 부산 + 대구': 'Pick several cities · e.g. Seoul + Busan + Daegu',
     '안 자는 도시는 당일치기로 다녀와요 · 도시를 옮기는 날은 KTX로 짐 들고 이동': 'Cities you don’t sleep in become day trips · on moving days, take the KTX with your bags',
+    '안 자는 도시는 당일치기로 다녀와요': 'Cities you don’t sleep in are day trips',   // 11/25 #14 한 줄로
     '경주역': 'Gyeongju Station', '부전': 'Bujeon', '부전역': 'Bujeon Station', '용산': 'Yongsan', '용산역': 'Yongsan Station', '수원역': 'Suwon Station',   // 11/25 TAGO 기차(신경주역 → 경주역 2023-12-28 역명 변경)
     '열차 {x} 출발 · 기다리는 동안 역 근처 식사·카페 · 승차권 · 타는 곳 확인': 'Train leaves {x} · eat or grab a coffee near the station meanwhile · check ticket & platform', '열차 {x} 출발 · 기다리는 동안 역 근처 식사·카페 · 갈아탈 열차 타는 곳 확인': 'Train leaves {x} · eat or grab a coffee near the station meanwhile · find your connecting platform',
     '열차 시각 = 코레일 시간표 · 코레일에서 예매': 'Times from Korail timetable · book on Korail', '{x} 가는 막차 지남 · 코레일 확인': 'Last train to {x} gone · check Korail',   // 11/25 '주의' 칸 = 한 줄(최소 11px) → 짧게
@@ -458,13 +459,19 @@ Object.assign(window.VZTR_EN, {
   "지금은 가는 순서만 보여요": "Showing visit order only for now",
   "입국 심사 → 짐 찾기 → 경전철 표지판": "Immigration → baggage → Light Rail signs",
   "경전철·지하철 · 약 #분": "Light rail/subway, about # min",
-  "전망대나|유명 명소 하나 더": "One more|viewpoint or landmark",
-  "소문난|디저트 가게나 스파": "A famous|dessert spot or spa",
+  "전망대나|유명 명소 하나 더": "One more|view or sight",   // 11/25 #17 보기 2줄 안
+  "소문난|디저트 가게나 스파": "Famed desserts|or a spa",
   "정답은 없어요. 끌리는 대로 골라 주세요.": "No wrong answers. Go with your gut.",
-  "늦잠, 짐 싸고 동네 한 바퀴": "Sleep in, pack, wander the block",
-  "늦잠 자고|미리 찜해 둔 브런치": "Sleep in, then|your saved brunch",
+  "늦잠, 짐 싸고 동네 한 바퀴": "Sleep in, pack, stroll",   // 11/25 #17
+  "늦잠 자고|미리 찜해 둔 브런치": "Sleep in,|booked brunch",   // 11/25 #17
   "“진짜 푹 쉬다 왔어”": "“I really rested up”",
-  "“사진으로만 보던 곳,|진짜 가 봤어”": "“Saw it in person,|not just in photos”",
+  "“사진 속 거기,|진짜 가 봤어”": "“Finally saw it|for real”",   // 11/25 #17 한국어 3줄 → 2줄 (영어도 2줄 안)
+  "“관광객 하나도 없는 동네 찾았어”": "“Found a no-tourist area”",   // 11/25 #17 (자동 사전 덮어씀)
+  "미리 찾아 둔|플랜 B로 이동": "Go to the|prepped Plan B",
+  "눈에 띄는 카페에서|멍때리기": "Zone out at|a random cafe",
+  "근처 다른 곳|찾아서 바로 이동": "Go somewhere|nearby",
+  "체크아웃 전까지|계획한 곳 하나 더": "One last|planned stop",
+  "공항 가는 길에 들를 곳 찾기": "A stop on the way home",
   "다녀와서 몸이 가벼우면 그게 성공한 여행이에요": "Come home refreshed? That's a win",
   "가 봐야 할 곳은 직접 가 보는 분이시군요?": "So you see the must-sees in person?",
   "사진으로만 보던 곳 앞에 서는 순간이 최고예요": "Nothing beats seeing a place you only knew from photos",
@@ -488,25 +495,25 @@ Object.assign(window.VZTR_EN, {
   "시장·소품샵에서 건진 것들": "Market & shop finds",
   "뷰 좋은 방·푹신한 침대": "Great view, soft bed",
   "주택가 골목 안, 동네 분위기": "Residential alley, local vibe",
-  "걸어서 가는|시장과 단골 식당": "Walkable markets and|local favorites",
-  "명소까지|걸어서 가는 위치": "Walking distance|to landmarks",
-  "시간 단위로 정리 끝, 동선까지 확인": "Hour-by-hour plan, route checked",
+  "걸어서 가는|시장과 단골 식당": "Walk to markets|& eats",   // 11/25 #17
+  "명소까지|걸어서 가는 위치": "Walk to|the landmarks",
+  "시간 단위로 정리 끝, 동선까지 확인": "Hourly plan, route set",
   "가고 싶은 곳만 잔뜩, 순서는 가서": "Long must-go list, order TBD",
   "하루 두세 곳만, 예약까지 완료": "2–3 stops a day, all booked",
-  "항공·숙소만. 나머진 가서 생각": "Just flights and hotel. Wing the rest",
+  "항공·숙소만. 나머진 가서 생각": "Flights & hotel. Wing it",   // 11/25 #17
   "출발 전날 밤, 내 일정표는?": "The night before: what's your itinerary like?",
   "평소 내 모습에 가장 가까운 걸로": "Pick what's most like you",
-  "숙소에서 쉬다가|저녁 예약 시간에 출발": "Rest up, then head|to your dinner booking",
-  "지도 켜고 근처 한 곳 더": "Check the map for one more spot",
+  "숙소에서 쉬다가|예약한 저녁 먹으러": "Rest, then|dinner booking",   // 11/25 #17
+  "지도 켜고 근처 한 곳 더": "Map out one more spot",
   "오후 #시, 오늘 갈 곳을 벌써 다 돌았다면?": "Done with today's list by # PM?",
-  "우산 쓰고 일단 출발": "Grab an umbrella and go",
+  "우산 쓰고 일단 출발": "Umbrella up and go",   // 11/25 #17
   "준비해 둔|실내 코스로 그대로": "Switch to|your indoor plan",
   "오전은 숙소, 오후 일정만 살리기": "Hotel till noon, then plans",
   "아침에 일어났더니 비가 온다면?": "You wake up to rain?",
   "창밖을 본 순간 드는 생각은요?": "First thought when you look outside?",
-  "기다린다.|시간은 비워 뒀으니까": "Wait it out.|Time's set aside",
-  "예약해 둔|다른 식당으로 바로": "Head to another|booked restaurant",
-  "줄 서다 옆 가게가 끌리면 거기로": "Next door looks better? Go there",
+  "기다린다.|시간 비워 뒀으니까": "Wait.|Time's set aside",   // 11/25 #17
+  "예약해 둔|다른 식당으로 바로": "Off to my|backup booking",   // 11/25 #17
+  "줄 서다 옆 가게가 끌리면 거기로": "Go next door instead",   // 11/25 #17
   "가고 싶던 식당에 줄이 #시간이라면?": "The place you want has a # h wait?",
   "라그탱 삿포로": "Ragtag Sapporo",
   "무인양품 삿포로 스텔라플레이스": "MUJI Sapporo Stellar Place",
@@ -699,3 +706,7 @@ Object.assign(window.VZTR_EN, {
 Object.assign(window.VZTR_EN, { '난바': 'Namba', '우메다': 'Umeda', '오사카성': 'Osaka Castle', '텐노지': 'Tennoji', '가와라마치': 'Kawaramachi', '교토역': 'Kyoto Station', '후시미': 'Fushimi', '아라시야마': 'Arashiyama', '금각사': 'Kinkaku-ji', '니조': 'Nijo', '사쿄': 'Sakyo', '우지': 'Uji', '신주쿠': 'Shinjuku', '시부야': 'Shibuya', '하라주쿠': 'Harajuku', '시모키타자와': 'Shimokitazawa', '기치조지': 'Kichijoji', '이케부쿠로': 'Ikebukuro', '긴자': 'Ginza', '도쿄역': 'Tokyo Station', '아사쿠사': 'Asakusa', '우에노': 'Ueno', '아키하바라': 'Akihabara', '오다이바': 'Odaiba', '시나가와': 'Shinagawa', '하카타역': 'Hakata Station', '나카스': 'Nakasu', '텐진': 'Tenjin', '오호리': 'Ohori', '모모치': 'Momochi', '다자이후': 'Dazaifu', '삿포로역': 'Sapporo Station', '오도리': 'Odori', '스스키노': 'Susukino', '마루야마': 'Maruyama', '모이와산': 'Mt. Moiwa', '미야노사와': 'Miyanosawa', '오타루': 'Otaru', '조잔케이': 'Jozankei', '나라공원': 'Nara Park', '나라마치': 'Naramachi', '니시노쿄': 'Nishinokyo', '호류지': 'Horyu-ji', '산노미야': 'Sannomiya', '모토마치': 'Motomachi', '난킨마치': 'Nankinmachi', '기타노': 'Kitano', '하버랜드': 'Harborland', '롯코산': 'Mt. Rokko', '아리마': 'Arima', '나가타 혼쇼켄 산노미야': 'Nagata Honshoken Sannomiya', '다카시마야': 'Takashimaya', '키타카로': 'Kitakaro', '가이유칸': 'Kaiyukan' });
 Object.assign(window.VZTR_EN, { '먼저 넣는 곳: {x}': x => { const e = (window.VZTR_I18N || {}).tq ? VZTR_I18N.tq(x) : x; return /[가-힣]/.test(e) ? null : 'First up: ' + e; }, '앞 두 글자는 아직 바뀔 수 있어요': 'First 2 letters may still change' });   // 11/24 최종 검수
 Object.assign(window.VZTR_EN, { '앞 두 글자는 아직 바뀔 수 있어요': 'Letters 1–2 may change' });
+/* 11/25 UI 통일감 피드백(가이드북 세션): 4 비행기 시트 한 줄 안내 · 9 추천 없음 문구 */
+Object.assign(window.VZTR_EN, { '날짜는 ‘여행 정보 수정’에서 · 도착이 빠르면 다음 날로': 'Dates: Edit trip info · Early arrival = next day', '날짜는 메뉴의 ‘여행 정보 수정’에서 바꿔요': 'Change dates in Edit trip info', '이 시간에 맞는 곳이 없어요 · 위에서 검색해 보세요': 'Nothing fits this time · Try the search above' });
+/* 11/25 UI 규칙 v1(가이드북 세션): 장소 시트·다음 일정 카드 새 버튼 문구 · 고정 표시 · 영어판 크롤에서 잡힌 빠진 문장 */
+Object.assign(window.VZTR_EN, { '추천 장소': 'Nearby', '고정': 'Fixed', '공항철도 + 택시': 'AREX + taxi', '한글로 보여 주기': 'In Korean' });   // 3칸 줄(103px)에 들어가게 짧게

@@ -16,7 +16,7 @@
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="stylesheet" href="fonts/google/gf.css?v=1"><!-- 11/24 Inter Tight·Zen Kaku Gothic New 자체 호스팅(구글 서버로 IP 안 감, OFL) -->
 <script src="inapp.js?v=1"></script>
-<script src="i18n-en-auto.js?v=79752e56"></script><script src="i18n-en.js?v=79752e56"></script><script src="i18n.js?v=79752e56"></script><!-- 11/20 W5 언어 틀 (영어판 = /en/, 사전 i18n-en.js는 배포 때 en/에만 붙음) -->
+<script src="i18n-en-auto.js?v=3b16fc6f"></script><script src="i18n-en.js?v=3b16fc6f"></script><script src="i18n.js?v=3b16fc6f"></script><!-- 11/20 W5 언어 틀 (영어판 = /en/, 사전 i18n-en.js는 배포 때 en/에만 붙음) -->
 <link rel="stylesheet" href="fonts/vztr-fonts.css?v=2"><!-- 11/19 글꼴: 굵은 한글 IBM Plex Sans KR · 보통 한글 Pretendard · 영문·숫자 IBM Plex Sans -->
 <style>
 /* Pretendard 1.3.9 (SIL OFL 1.1) — 공식 배포본(orioncactus/pretendard)을 fonts/에 함께 올림 */
@@ -28,7 +28,7 @@
    손동작: 꾹 눌러 옮기기(다른 일정이 비켜남, 요약·상세) · 상세 목록만 왼쪽으로 밀면 '보관' 버튼 → 눌러야 보관(11/14) · 눌러서 라벨/색. 비행기·이동은 고정. 라이트/다크/시스템은 메뉴 맨 아래 */
 :root {
   color-scheme: light;
-  --canvas: #F3F3F5; --ink: #16171A; --sub: #5F6269; --hair: rgba(22,23,26,.09); --on-ink: #FFFFFF;
+  --canvas: #F3F3F5; --ink: #16171A; --sub: #6B6E75; --hair: rgba(22,23,26,.09); --on-ink: #FFFFFF;
   --glass: rgba(255,255,255,.62); --glass-hi: rgba(255,255,255,.94); --glass-edge: rgba(255,255,255,.85); --glass-hl: rgba(255,255,255,.9);
   --paper: #FFFFFF; --tile: rgba(255,255,255,.86); --tile-edge: rgba(255,255,255,.98); --field: #FFFFFF; --sheet: rgba(255,255,255,.9);
   --red: #CF3F66; --amber: #E8912A; --blue: #1F5FE0; --on-blue: #FFFFFF; --past: #C9CDD3; --past-tx: #A3A8AF;
@@ -42,7 +42,7 @@
 }
 @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
   color-scheme: dark;
-  --canvas: #0E1013; --ink: #ECEEF1; --sub: #9AA1AA; --hair: rgba(255,255,255,.08); --on-ink: #0E1013;
+  --canvas: #0E1013; --ink: #ECEEF1; --sub: #8A9099; --hair: rgba(255,255,255,.08); --on-ink: #0E1013;
   --glass: rgba(30,33,38,.62); --glass-hi: rgba(255,255,255,.14); --glass-edge: rgba(255,255,255,.08); --glass-hl: rgba(255,255,255,.06);
   --paper: #1B1E23; --tile: rgba(36,40,46,.9); --tile-edge: rgba(255,255,255,.06); --field: #15181C; --sheet: rgba(24,27,31,.94);
   --red: #F06A8A; --amber: #F0A84A; --blue: #6D97EB; --on-blue: #16171A; --past: #3A3F46; --past-tx: #646B75;
@@ -51,7 +51,7 @@
   --sh-xs: 0 1px 2px rgba(0,0,0,.35), 0 0.25rem 0.75rem -0.375rem rgba(0,0,0,.55); } }
 :root[data-theme="dark"] {
   color-scheme: dark;
-  --canvas: #0E1013; --ink: #ECEEF1; --sub: #9AA1AA; --hair: rgba(255,255,255,.08); --on-ink: #0E1013;
+  --canvas: #0E1013; --ink: #ECEEF1; --sub: #8A9099; --hair: rgba(255,255,255,.08); --on-ink: #0E1013;
   --glass: rgba(30,33,38,.62); --glass-hi: rgba(255,255,255,.14); --glass-edge: rgba(255,255,255,.08); --glass-hl: rgba(255,255,255,.06);
   --paper: #1B1E23; --tile: rgba(36,40,46,.9); --tile-edge: rgba(255,255,255,.06); --field: #15181C; --sheet: rgba(24,27,31,.94);
   --red: #F06A8A; --amber: #F0A84A; --blue: #6D97EB; --on-blue: #16171A; --past: #3A3F46; --past-tx: #646B75;
@@ -301,6 +301,8 @@ details.sec > summary + * { margin-top: 0.375rem; }
 /* 11/20 보드: 묶음 머리 줄 숨김(제목 줄 '긴급 연락처 6 · 생활 정보 2'가 대신 말해 줌, PDF는 grp2 글자를 그대로 씀) */
 #tips .grp2 { display: none; }
 #tips .grp2 + .nrow { margin-top: 0.375rem; border-top: 1px solid var(--hair); }
+#tips .grp2 + .crow { margin-top: 0.875rem; }   /* 11/25 피드백 11: 제목과 첫 칸(경찰)이 붙음 — summary + * 여백은 숨은 grp2에 걸려 안 보였음 */
+#tips .crow .nm2, #tips .nrow > .one { position: relative; top: 1px; }   /* 11/25 피드백 11: 실측(폰 DPR 3 글자 잉크 중심) — 글자가 아이콘·번호보다 칸 가운데에서 1px쯤 위에 앉아 있어 1px 내림(칸 높이는 그대로) */
 .crow .ic { width: 1.375rem; height: 1.375rem; display: grid; place-items: center; color: var(--sub); }
 .crow .ic svg { width: 1.1875rem; height: 1.1875rem; stroke: currentColor; fill: none; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
 .crow b { font-weight: 600; }
@@ -529,9 +531,8 @@ html.locked, html.locked body { overflow: hidden; }
   border-radius: 0 0.6813rem 0.6813rem 0; padding: calc(1.375rem + env(safe-area-inset-top, 0px)) 0.75rem calc(1.125rem + env(safe-area-inset-bottom, 0px)) max(0.75rem, env(safe-area-inset-left, 0px));
   display: flex; flex-direction: column; gap: 2px; background: var(--sheet); overflow-y: auto; overscroll-behavior: contain; }
 .drawer.on { transform: translateX(0); }
-.dlegal { margin-top: auto; padding: 1rem 0.25rem 0.25rem; display: flex; flex-wrap: wrap; gap: 0.25rem 0.875rem; font-size: 0.75rem; }   /* 11/24 메뉴 맨 아래 법적 고지 */
-.dlegal a { color: var(--sub); text-decoration: none; }
-.dlegal b { font-weight: 700; color: var(--ink); }
+.dlegal { margin-top: auto; padding: 1rem 0.875rem 0.25rem; display: flex; flex-wrap: wrap; gap: 0.25rem 0.875rem; font-size: 0.75rem; }   /* 11/24 메뉴 맨 아래 법적 고지 · 11/25 피드백 5: 왼쪽 선 = 메뉴 글자와 같은 0.875rem */
+.dlegal a { color: var(--sub); opacity: .8; font-weight: 400; text-decoration: none; }   /* 11/25 피드백 6: 셋 다 같은 굵기·더 연한 회색(처리방침 볼드 뺌) */
 .drawer .brand { font-size: 1.625rem; padding: 0.25rem 0.75rem 0.75rem; }
 .drawer .brand span { margin-top: 0.4375rem; }
 .drawer .brand span { font-family: var(--mono); font-weight: 400; font-size: 0.71875rem; letter-spacing: .1em; color: var(--sub); display: block; }
@@ -635,8 +636,7 @@ body { letter-spacing: 0; }
 #v-now .nextwrap + .track { position: relative; overflow: visible; }
 #v-now .nextwrap + .track::before { content: ""; position: absolute; left: calc(1.125rem + 0.6875rem); top: -1.25rem; height: 1.25rem; transform: translateX(-50%); border-left: 0.1875rem solid var(--blue); }
 .next .hrow .rt { display: flex; align-items: center; gap: 0.375rem; flex: none; }
-.navs { display: inline-flex; align-items: center; gap: 0.25rem; height: 1.875rem; padding: 0 0.6875rem; border-radius: 0.4562rem; font-size: 0.78125rem; font-weight: 700; color: var(--blue); background: color-mix(in srgb, var(--blue) 10%, transparent); text-decoration: none; }
-.navs svg { width: 0.875rem; height: 0.875rem; stroke: currentColor; fill: none; stroke-width: 2.2; stroke-linejoin: round; }
+/* 11/25: 코발트 '길찾기' 칩(.navs) 삭제 → 카드 아래 주 버튼 */
 /* #36: 일정표 남은 줄 = ··· 버튼(시트) · 왼쪽으로 밀면 건너뛰기·빼기 */
 .stop.can { grid-template-columns: 1.375rem 3.125rem minmax(0,1fr) 2rem; }
 .stop .more { width: 2rem; height: 1.5rem; display: grid; place-items: center; color: var(--sub); border-radius: 0.3063rem; font-weight: 800; letter-spacing: .05em; line-height: 1; }
@@ -688,6 +688,7 @@ body { letter-spacing: 0; }
 .rideedit { display: flex; flex-direction: column; gap: 0.625rem; padding: 0.875rem; border-radius: var(--r-md); background: var(--field); border: 1px solid var(--hair); }
 .rideedit .mh { font-size: 0.78125rem; color: var(--sub); }
 .rideedit .sub { margin: 0; }
+.rideedit #rfNote:not(.off) { font-size: 0.75rem; line-height: 1.4; }   /* 11/25 피드백 4: 안내 한 줄 = 보조 글자(오류 문구는 그대로 큼) */
 /* 11/20 동우님: 입력 시트 시각 칸 = 시작 화면과 같은 모양 (편명 한 칸 + 출발·도착 두 칸 한 줄) */
 .rideedit .rfno { height: 2.75rem; border-radius: var(--r-sm); border: 1px solid var(--hair); background: var(--paper); color: var(--ink); padding: 0 0.875rem; font: inherit; font-size: max(16px, 0.9375rem); text-transform: uppercase; }
 .rideedit .rfno::placeholder { text-transform: none; color: var(--sub); }
@@ -1365,8 +1366,7 @@ html #dayBody .tile .t { color: var(--sub) !important; }
 #sheet .ckline .ckv { order: 2; }
 #sheet .memos .mh { display: none; }
 #sheet .memos .madd { padding-top: 0; }
-#sheet .body > .acts:not(.two):has(> .btn.sec.sm) { margin-top: -0.625rem; }
-#sheet .body > .acts:not(.two) > .btn.sec.sm { border: 0; background: none; box-shadow: none; height: auto; padding: 0.25rem 0; color: var(--sub); font-weight: 600; text-decoration: underline; text-underline-offset: 3px; text-decoration-color: color-mix(in srgb, currentColor 35%, transparent); }
+/* 11/25: 시트 밑줄 글자 버튼('닫혀 있나요?') 규칙 삭제 → '추천 장소' 보조 버튼 */
 #sheet .ordrow { margin-top: -0.75rem; gap: 1.25rem; }
 #sheet .ordrow > i { display: none; }
 /* 13b: 길안내 '지금' 카드 — 시각 + 이름 한 줄, 닫혀 있나요 = 글자 버튼, 시간 조정 얇게 */
@@ -1381,7 +1381,7 @@ html #dayBody .tile .t { color: var(--sub) !important; }
 #nextCard .acts.nowacts { margin-top: 0.25rem !important; }
 #nextCard .acts.nowacts .btn { height: 2.5rem; }
 #nextCard .acts:not(.nowacts) { margin-top: 0 !important; justify-content: center; }
-#nextCard .acts:not(.nowacts) > .btn.ghost.sm { border: 0; background: none; box-shadow: none; height: auto; padding: 0.125rem 0; color: var(--sub); font-size: 0.78125rem; font-weight: 600; }
+/* 11/25: 길안내 카드 '닫혀 있나요?' 글자 버튼 규칙 삭제 */
 .nextwrap .late { border-top: 0 !important; padding-top: 0 !important; gap: 0.25rem !important; }
 .nextwrap .late .adj { padding-block: 0.25rem !important; }
 
@@ -1578,6 +1578,55 @@ details.sec > summary .cnt { min-width: 0; overflow: hidden; text-overflow: elli
 /* 11/24 최종 검수: 기록 카드 제목이 도장(4rem, 오른쪽 위에 얹힘) 밑으로 들어가던 것 → 글자 칸 오른쪽을 도장만큼 비움 */
 .trip .ttl2.one, .trip .codes.one { max-width: calc(100% - 4.25rem); }
 .trip .ttl2.one { padding-right: 0; }   /* 11/25 도장 자리를 max-width와 padding-right(4.5rem) 두 번 비워 제목 칸이 95px까지 좁아지던 것 — max-width만 */
+
+/* ============================================================
+   11/25 UI 규칙 v1 (동우님 확정 · 문서/여행앱/2026-11-25_VZTR_UI규칙_v1.md)
+   버튼 = 주(검정) · 보조(연회색 #ECECEF + 검은 글자) 두 가지, 높이 44 · 곡률 12 · 글자 15/700 · 비활성 = 보조 바탕 + 연회색 글자(투명도 금지)
+   배치 = 첫 줄 주 버튼 꽉 찬 폭 / 둘째 줄 보조 2~3개 같은 폭 · 스테퍼 = 연회색 알약 하나 · 코발트는 버튼에 안 씀
+   ============================================================ */
+:root { --sub3: #A3A6AD; --btn2: #ECECEF; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --sub3: #5E636B; --btn2: #2C2E33; } }
+:root[data-theme="dark"] { --sub3: #5E636B; --btn2: #2C2E33; }
+.btn { height: 2.75rem; border-radius: 0.75rem; font-size: 0.9375rem; font-weight: 700; }
+.btn.sm { height: 2.75rem; font-size: 0.9375rem; }
+.btn.sec, .btn.ghost, .acts.two .btn.sec, .acts.three .btn.sec, .acts.prow .btn.sec { background: var(--btn2); border: 0; color: var(--ink); }
+.btn:disabled, .btn[disabled], .btn.pri:disabled { opacity: 1; background: var(--btn2); color: var(--sub3); }
+.acts.sec1, .acts.sec2, .acts.sec3 { display: grid; gap: 0.5rem; }
+.acts.sec1 { grid-template-columns: minmax(0, 1fr); } .acts.sec2 { grid-template-columns: repeat(2, minmax(0, 1fr)); } .acts.sec3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.acts.sec1 > .btn, .acts.sec2 > .btn, .acts.sec3 > .btn { padding: 0 0.25rem; }
+.pbtns, .nbtns { display: grid; gap: 0.75rem; }
+.pbtns > .btn.pri, .nbtns > .btn.pri { width: 100%; }
+#nextCard > .nbtns { margin-top: 0.375rem; }
+.pbtns > .btn svg:not(.extic), .nbtns > .btn svg:not(.extic) { width: 1.0625rem; height: 1.0625rem; stroke: currentColor; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; flex: none; }
+.btn svg.extic { width: 0.9375rem; height: 0.9375rem; stroke: currentColor; fill: none; stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; flex: none; margin-left: -0.0625rem; }
+.next .hrow { align-items: center; }
+.tbtn { flex: none; align-self: center; min-height: 2.75rem; margin: -0.875rem -0.5rem -0.875rem 0; padding: 0 0.5rem; background: none; border: 0; color: var(--sub); font-size: 0.9375rem; font-weight: 700; white-space: nowrap; }
+.tbtn:active { opacity: .6; }
+/* 고정 일정 = 제목 위 작은 줄 'DAY 1 · 07:00 · 📌고정' */
+.eyebrow .esep { font-style: normal; margin: 0 0.4em; }
+.eyebrow .fxp { display: inline-flex; align-items: center; gap: 0.25rem; vertical-align: bottom; }
+.eyebrow svg.pinic { width: 0.8125rem; height: 0.8125rem; stroke: currentColor; fill: none; stroke-width: 1.9; stroke-linecap: round; stroke-linejoin: round; }
+/* 스테퍼 = 연회색 알약 하나(− + 칸 44×40 · 값은 가운데 15/700) */
+.step { display: inline-flex; align-items: center; gap: 0; flex: none; height: 2.5rem; border-radius: 1.25rem; background: var(--btn2); }
+.step button, .late .adj .step button, .nextwrap .late .adj .step button, .stayrow2 .step button, #sheet .stayrow2 .step button { width: 2.75rem !important; height: 2.5rem !important; border-radius: 1.25rem !important; background: none !important; box-shadow: none !important; font-size: 1.125rem !important; color: var(--ink); }
+.step button:disabled, .late .adj .step button:disabled { opacity: 1 !important; color: var(--sub3); background: none !important; }
+.step b, .late .adj .step b { min-width: 4.25rem !important; font-size: 0.9375rem !important; font-weight: 700; }
+.late .adj, .nextwrap .late .adj { background: none; padding: 0 !important; }
+.late .adj .adjl { font-size: 0.8125rem; font-weight: 500; color: var(--sub); }
+.stayrow2 .stayok { height: 2.5rem; min-width: 3.5rem; border-radius: 0.75rem; font-size: 0.9375rem; padding: 0 0.875rem; }
+.stayrow2 .stayok:not(:disabled) { background: var(--ink); color: var(--on-ink); }
+/* 선택 칩: 비선택 = 보조 연회색, 선택 = 검정 채움 */
+.chips button { height: 2.5rem; border: 0; background: var(--btn2); color: var(--ink); font-size: 0.875rem; font-weight: 700; }
+.chips button[aria-pressed="true"] { background: var(--ink); color: var(--on-ink); }
+.madd input { height: 2.75rem; }
+/* 밀어서 보관(스와이프) = 코발트 버튼 → 검정/연회색 */
+.swbg { background: var(--btn2); color: var(--ink); }
+.swbg.go, .swbtn { background: var(--ink); color: var(--on-ink); }
+/* 회색 글자 2단계: --sub(설명·메타) / --sub3(출처·약관·자리표시·비활성) */
+.dlegal a { color: var(--sub3); opacity: 1; font-weight: 500; }
+input::placeholder, textarea::placeholder, .rideedit .rfno::placeholder, .rideedit .tmw .tm::placeholder { color: var(--sub3); opacity: 1; }
+#tips .cattr.srcall, .cattr { color: var(--sub3); }
+#tips .cattr.srcall { opacity: 1; }
 </style>
 
 <div class="bgfx" aria-hidden="true"></div><!-- 11/19 다크 배경(A 연하게) — 밝은 모드에선 안 보임 -->
@@ -1670,7 +1719,7 @@ details.sec > summary .cnt { min-width: 0; overflow: hidden; text-overflow: elli
     </div>
   </div>
   <button data-m="install"><svg viewBox="0 0 24 24"><rect x="7" y="3" width="10" height="18" rx="2"/><path d="M12 8v6M9.5 11.5L12 14l2.5-2.5"/></svg><span>홈 화면에 추가</span></button>
-  <div class="dlegal"><a href="privacy.html" target="_blank" rel="noopener"><b>개인정보처리방침</b></a><a href="terms.html" target="_blank" rel="noopener">이용약관</a><a href="mailto:vztr@larchive.page">문의</a></div><!-- 11/24 법적 고지 링크(개인정보위 작성지침: 서비스 메뉴·설정에서 쉽게 확인) -->
+  <div class="dlegal"><a href="privacy.html" target="_blank" rel="noopener">개인정보처리방침</a><a href="terms.html" target="_blank" rel="noopener">이용약관</a><a href="mailto:vztr@larchive.page">문의</a></div><!-- 11/24 법적 고지 링크(개인정보위 작성지침: 서비스 메뉴·설정에서 쉽게 확인) -->
 </nav>
 <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs>
   <filter id="gbRough" filterUnits="userSpaceOnUse" x="-6" y="-6" width="112" height="112" color-interpolation-filters="sRGB">
@@ -1835,7 +1884,7 @@ function w5Maps(d, c) {
   const nv = ll ? 'nmap://route/' + md + '?dlat=' + ll[0] + '&dlng=' + ll[1] + '&dname=' + nm + APN : 'nmap://search?query=' + nm + APN;
   const kk = ll ? 'https://map.kakao.com/link/to/' + nm + ',' + ll[0] + ',' + ll[1] : 'https://map.kakao.com/link/search/' + nm;
   const gg = ll ? 'https://www.google.com/maps/dir/?api=1&destination=' + ll[0] + ',' + ll[1] + '&travelmode=' + (md === 'walk' ? 'walking' : md === 'car' ? 'driving' : 'transit') : gdir(k.n, c.mode);
-  return '<div class="acts three"><a class="btn pri" href="' + nv + '">네이버 지도</a><a class="btn sec" href="' + kk + '" target="_blank" rel="noopener">카카오맵</a><a class="btn sec" href="' + gg + '" target="_blank" rel="noopener">구글 지도</a></div>'
+  return '<div class="acts three"><a class="btn sec" href="' + nv + '">네이버 지도</a><a class="btn sec" href="' + kk + '" target="_blank" rel="noopener">카카오맵</a><a class="btn sec" href="' + gg + '" target="_blank" rel="noopener">구글 지도</a></div>'
     + '<p class="sub">네이버 지도는 앱이 있어야 열려요 · 없으면 카카오맵(웹)</p>';
 }
 function koShow(d, c) {   // 한글로 보여 주기 — 택시 기사·현지인에게 화면째 보여 줌
@@ -1899,6 +1948,8 @@ function prepDay(d, tag) {   // tag = 다시 짠 날의 id 꼬리(보관함 옛 
 }
 DAYS.forEach(d => prepDay(d));
 const fixedOf = c => !!(c.fly || c.k === 'm');
+const EXT_IC = '<svg class="extic" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17L17 7M9 7h8v8"/></svg>';   // 11/25 '구글 지도 ↗'
+const PIN_IC = '<svg class="pinic" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 3h6l-1 6 3 3v2H7v-2l3-3z"/><path d="M12 14v7"/></svg>';   // 11/25 고정 표시 핀 아이콘
 const isCar = c => !!c && !!c.fly && c.ride === 'car';
 const dayOf = c => c && /^\d/.test(c.id || '') ? DAYS[parseInt(c.id, 10) - 1] : null;   // 일정 id '2-5' → 그 날 (직접 추가 'u3'는 null)
 const tmx = (d, c) => d && d.tbd ? '–' : c.s;   // 시각 미정인 날은 시각 대신 –
@@ -2572,10 +2623,11 @@ function renderNow() {
   if (nx && nx.k === 'm' && !tb && nx.e && (st.cur || n.phase === 'during')) head = '다음 · ' + nx.e + ' 도착 예정';   // 11/18 D-4 ④: 이동 차례면 도착 예정 시각
   const canPrev = p.i > 0 || (!!st.cur && st.cur.day === di && st.cur.id !== '__pre' && p.i >= 0);   // 잘못 눌렀을 때 지난 일정으로 한 칸
   const nu0 = nx && navUrl(d, nx);
-  let h = '<div class="hrow"><span class="eyebrow">' + head + '</span><span class="rt">' + (canPrev ? '<button class="btn ghost xs" id="prevBtn" type="button">← 이전</button>' : '')
-    + (nu0 ? '<a class="navs" href="' + nu0 + '" target="_blank" rel="noopener"><svg viewBox="0 0 24 24"><path d="M12 3l7 17-7-4-7 4z"/></svg>길찾기</a>' : '') + '</span></div>';
+  let h = '<div class="hrow"><span class="eyebrow">' + head + '</span>' + (canPrev ? '<button class="tbtn" id="prevBtn" type="button">← 이전</button>' : '') + '</div>';   // 11/25 UI 규칙 5: '이전' = 카드 오른쪽 위 글자 버튼(테두리 없음) · 코발트 '길찾기' 칩은 아래 주 버튼으로
   const ct = p.at && canClose(L[p.i]) ? L[p.i] : canClose(nx) ? nx : null;
-  const closedBtn = ct ? '<div class="acts"><button class="btn ghost sm" data-closed-now="' + ct.id + '">‘' + esc((ct.sh || ct.n).split(' — ').pop()) + '’ 닫혀 있나요? 다른 곳 보기</button></div>' : '';
+  const recBtn = ct ? '<button class="btn sec" type="button" data-closed-now="' + ct.id + '">추천 장소</button>' : '';   // 11/25: '‘이름’ 닫혀 있나요? 다른 곳 보기' 줄·밑줄 없앰 → 보조 버튼 '추천 장소'(동작 그대로 = 같은 종류·그 시각 영업 중·가까운 3곳)
+  const navB = nu0 ? '<a class="btn pri" href="' + nu0 + '" target="_blank" rel="noopener"><svg viewBox="0 0 24 24"><path d="M12 3l7 17-7-4-7 4z"/></svg>길찾기</a>' : '';
+  const nbtns = (pri, secs) => { const sec = secs.filter(Boolean), n = sec.length; return '<div class="nbtns">' + (pri || '') + (n ? '<div class="acts sec' + n + '">' + sec.join('') + '</div>' : '') + '</div>'; };   // 11/25: 첫 줄 주 버튼 꽉 찬 폭 / 둘째 줄 보조 같은 폭
   if (nx) {   // 11/18 D-4 ④: 큰 시각 40px → 제목(줄바꿈 허용, '…' 없음) → 작은 보조 줄 → 주 버튼(+보조)
     const parts = nx.n.split(' — '), sh = tb ? 0 : toMin(nx.s) - nx.b, dst = nx.k === 'm' ? L.slice(p.i + 2).find(x => x.k !== 'm') : null;
     const dn = dst ? (dst.sh || dst.n).split(' — ').pop() : '';
@@ -2587,9 +2639,9 @@ function renderNow() {
       + (nx.k === 'm' ? '<div class="lo">' + esc(dn ? nx.mv : mvp.slice(1).join(' · ')) + '</div>' : nx.fly && nx.fno ? '<div class="lo">' + esc(nx.fno) + '</div>' : '')
       + (nx.l ? '<div class="lo one"><span class="jp">' + esc(nx.l) + '</span>' + (nx.r ? ' · ' + esc(nx.r) : '') + '</div>' : '')
       + (nx.say ? '<div class="lo one">' + esc(nx.say) + '</div>' : '')
-      + '<div class="acts nowacts"><button class="btn pri" id="arriveBtn">' + (nx.k === 'm' || isCar(nx) ? '출발' : '도착') + '</button>'
-      + (canSkip(nx) ? '<button class="btn sec" type="button" data-skip="' + nx.id + '">건너뛰기</button>' : '') + '</div>' + closedBtn;
-  } else if (p.at) { const c = L[p.i]; h += '<div class="nm one">마지막 · ' + esc(c.k === 'm' ? c.mv : (c.sh || c.n)) + '</div><div class="acts"><button class="btn pri" id="endDayBtn">오늘 일정 끝</button></div>' + closedBtn; }
+      + (() => { const arr = '<button class="btn ' + (navB ? 'sec' : 'pri') + '" id="arriveBtn">' + (nx.k === 'm' || isCar(nx) ? '출발' : '도착') + '</button>', skp = canSkip(nx) ? '<button class="btn sec" type="button" data-skip="' + nx.id + '">건너뛰기</button>' : '';
+        return navB ? nbtns(navB, [arr, skp, recBtn]) : nbtns(arr, [skp, recBtn]); })();   // 11/25: 길찾기가 있으면 길찾기(검정) / 도착·건너뛰기·추천 장소(같은 폭) · 길찾기 없으면 도착이 주 버튼
+  } else if (p.at) { const c = L[p.i]; h += '<div class="nm one">마지막 · ' + esc(c.k === 'm' ? c.mv : (c.sh || c.n)) + '</div>' + nbtns('<button class="btn pri" id="endDayBtn">오늘 일정 끝</button>', [recBtn]); }
   else h += '<div class="nm">' + (n.phase === 'after' && !st.cur ? '다녀왔어요' : '오늘 일정 끝') + '</div><div class="lo">기록에 DAY ' + d.no + ' 저장</div>'
       + (di < DAYS.length - 1 ? '<div class="acts"><button class="btn sec" id="nextDayBtn">DAY ' + (d.no + 1) + ' 미리 따라가기</button></div>' : '');
   const nwr = $('#v-now .nextwrap'), vis = !$('#v-now').hidden, y0 = vis ? nwr.getBoundingClientRect().top : 0;
@@ -2836,7 +2888,7 @@ function rideEditHtml(d, c) {
   h += CAR ? '<div class="rtms one">' + tf('dep', '출발', dep) + '</div>' + row('도착', '<b id="rfArr">' + (tb ? '출발 시각을 입력하면 계산돼요' : hh(c.e) + ' · 자동 계산 (추정)') + '</b>')
            : '<div class="rtms">' + tf('dep', '출발', dep) + tf('arr', '도착', arr) + '</div>';
   if (!CAR && !TR) h += '<p class="fnh" id="rfHint" aria-live="polite"></p>';
-  h += '<p class="sub" id="rfNote">날짜는 그대로예요 · 바꾸려면 메뉴의 ‘여행 정보 수정’을 눌러 주세요' + (CAR ? '' : ' · 도착이 출발보다 이르면 다음 날로 계산해요') + '</p>';
+  h += '<p class="sub" id="rfNote">' + (CAR ? '날짜는 메뉴의 ‘여행 정보 수정’에서 바꿔요' : '날짜는 ‘여행 정보 수정’에서 · 도착이 빠르면 다음 날로') + '</p>';   // 11/25 피드백 4: 두 문장 → 한 줄 보조 글자(뜻은 그대로: 날짜 바꾸는 곳 · 도착이 출발보다 이르면 다음 날)
   return h + '<div class="acts"><button class="btn pri" data-ride-save>저장</button></div></div>';
 }
 // 장소 일정이 '문 닫았어요' 대상인지 (이동·비행기·숙소·집 제외)
@@ -3043,7 +3095,7 @@ function openChip(d, c) {
 function sheetHtml(d, c) {
   const fx = fixedOf(c), parts = c.n.split(' — '), key = d.no + ':' + c.id, L = c.memo || [], tb = d.tbd, ed = !c.fly && c.k !== 'm';
   /* 11/18 D-4 ③: 머리 = 작은 줄(DAY · 시각) / 이름 / 설명 / 영업시간 칩 (종류 글자는 뺌) */
-  let h = '<div class="shd"><div>' + (c.chg ? '<span class="eyebrow one"><span class="chgtag">변경됨</span></span>' : '')   /* 11/19 ④ #12 동우님: 위 'DAY · 시각' 줄 뺌 (변경됨 표시만) */
+  let h = '<div class="shd"><div>' + (c.chg || fx ? '<span class="eyebrow one">' + (c.chg ? '<span class="chgtag">변경됨</span>' : '') + (fx ? (c.chg ? '<i class="esep">·</i>' : '') + '<span class="fxe">DAY ' + d.no + (tb || !c.s ? '' : ' · ' + c.s) + '</span><i class="esep">·</i><span class="fxp">' + PIN_IC + '고정</span>' : '') + '</span>' : '')   /* 11/19 ④ #12 변경됨 표시만 → 11/25 UI 규칙 3: 고정 일정 = 제목 위 작은 줄 'DAY 1 · 07:00 · 📌고정'(버튼 밑 '고정된 일정' 글은 없앰) */
     + (() => { const tt = parts[1] || parts[0], m = W5 ? null : String(tt).match(/^(.+?)\s*(\([^)]*\))\s*$/); return '<h3 class="one" id="sheetTitle">' + esc(m ? m[1] : tt) + '</h3>' + (m ? '<span class="par one">' + esc(m[2]) + '</span>' : ''); })()   /* V-28: 괄호 부분은 다음 줄로 */ + (W5 && koOf(d, c) && c.k !== 'm' ? '<span class="vzko one" lang="ko">' + esc(koOf(d, c).n) + '</span>' : '') + (c.say ? '<p class="sub one">' + esc(c.say) + '</p>' : '') + openChip(d, c) + '</div>' + X_BTN + '</div><div class="body">'
     + (c.pid && !c.fly ? '<div class="phbox" data-pid="' + esc(c.pid) + '"></div>' : '');
   if (c.fly) h += rideEditHtml(d, c);
@@ -3063,11 +3115,13 @@ function sheetHtml(d, c) {
   h += '<div class="memos"><span class="mh">메모' + (L.length ? ' ' + L.length : '') + '</span>' + memoLines(L, key) + memoAdd(key, '예: 여기선 셔츠 보기') + '</div>';
   const nu = navUrl(d, c), mu = c.k === 'm' ? '' : mapUrl(d, c), w5m = W5 ? w5Maps(d, c) : '';
   const arcB = fx ? '' : '<button class="btn sec" type="button" data-del>보관</button>';
-  if (w5m) h += w5m + '<div class="acts kobtn"><button class="btn sec" type="button" data-kosh="' + c.id + '">한글로 보여 주기</button>' + arcB + '</div>';
-  else if (nu || mu || arcB) h += '<div class="acts prow">' + (nu ? '<a class="btn pri" href="' + nu + '" target="_blank" rel="noopener"><svg viewBox="0 0 24 24"><path d="M12 3l7 17-7-4-7 4z"/></svg>길찾기</a>' : '<span></span>')
-    + (mu ? '<a class="btn sec" href="' + mu + '" target="_blank" rel="noopener">장소 자세히 보기</a>' : '<span></span>') + (arcB || '<span></span>') + '</div>';   // V-11·V-12: '지도' → '장소 자세히 보기' · 앞으로/뒤로 뺌(눌러서 옮기기) · 한 줄
-  if (canClose(c)) h += '<div class="acts"><button class="btn sec sm" data-closed="' + c.id + '">닫혀 있나요? 근처 다른 곳 보기</button></div>';
-  if (fx) h += '<p class="sub">고정된 일정</p>';
+  /* 11/25 UI 규칙 1·2·4(동우님 확정): 첫 줄 = 길찾기(검정, 꽉 찬 폭) / 둘째 줄 = 추천 장소 · 구글 지도 ↗ · 보관(보조, 같은 폭 · 없는 건 빠지고 남은 칸이 같은 폭으로 꽉 참). '장소 자세히 보기' → '구글 지도', 밑줄 '닫혀 있나요? 근처 다른 곳 보기' → '추천 장소' 보조 버튼 */
+  const recB = canClose(c) ? '<button class="btn sec" type="button" data-closed="' + c.id + '">추천 장소</button>' : '';
+  const gmB = mu ? '<a class="btn sec" href="' + mu + '" target="_blank" rel="noopener">구글 지도' + EXT_IC + '</a>' : '';
+  const nvB = nu ? '<a class="btn pri" href="' + nu + '" target="_blank" rel="noopener"><svg viewBox="0 0 24 24"><path d="M12 3l7 17-7-4-7 4z"/></svg>길찾기</a>' : '';
+  const row2 = w5m ? '<button class="btn sec" type="button" data-kosh="' + c.id + '">한글로 보여 주기</button>' + recB + arcB : recB + gmB + arcB, n2 = (row2.match(/<(?:a|button) class="btn/g) || []).length;
+  if (w5m) h += w5m;
+  if (nvB || n2) h += '<div class="pbtns">' + nvB + (n2 ? '<div class="acts sec' + n2 + '">' + row2 + '</div>' : '') + '</div>';
   return h + '</div>';
 }
 const memoTotal = () => DAYS.reduce((a, d) => a + d.list.reduce((b, c) => b + (c.memo ? c.memo.length : 0), 0), 0) + (st.tripMemo || []).length;
@@ -3497,7 +3551,7 @@ function recsFor(d) {
 }
 function recsHtml(d) {
   const L = recsFor(d), EN = window.VZTR_LANG === 'en';   // 11/25 반 칸 카드 영어: 'Recommended' 빼고 시각만 · 동네는 앞 이름만(Jongno/Gwanghwamun → Jongno)
-  if (!L.length) return '<p class="sub" style="grid-column:1/-1">' + '추천할 곳이 없어요 · 위에서 직접 찾아 보세요' + '</p>';
+  if (!L.length) return '<p class="sub" style="grid-column:1/-1">' + '이 시간에 맞는 곳이 없어요 · 위에서 검색해 보세요' + '</p>';
   return L.map(r => '<button class="rec2" role="checkbox" aria-checked="false" data-rc="' + r.p.id + '"><i class="box"><svg viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></i>'
     + '<b class="one" data-one="9.5">' + esc(r.p.sh || r.p.n) + '</b><span class="one"><span class="nw">' + esc(EN ? String(r.p.a).split(/[\/·]/)[0].trim() : r.p.a) + '</span> · <span class="nw">' + (r.p.o ? '<span class="on">영업 중</span>' : '확인 필요') + '</span></span>'
     + '<span class="one"><span class="nw">' + (EN ? '' : '추천 ') + '<span class="tm">' + toT(r.sg.s) + '</span></span> · <span class="nw">' + durTx(r.du) + '</span></span></button>').join('');   // 11/20 검수: 줄바꿈은 · 자리에서만(30분·필요 혼자 안 넘어가게)
