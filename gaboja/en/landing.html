@@ -1,0 +1,231 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#F8F8FA">
+<title>VZTR — 이번 여행, 나답게.</title>
+<meta name="description" content="10번만 고르면, 내 여행 성향에 맞춘 여행 일정이 탑승권 한 장으로 나와요.">
+<link rel="icon" href="icons/favicon-32.png">
+<link rel="apple-touch-icon" href="icons/icon-180.png">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="stylesheet" href="fonts/google/gf.css?v=1">
+<script src="inapp.js?v=1"></script>
+<script src="i18n-en-auto.js?v=30560f64"></script><script src="i18n-en.js?v=30560f64"></script><script src="i18n.js?v=30560f64"></script>
+<link rel="stylesheet" href="fonts/vztr-fonts.css?v=2">
+<!-- 2026-11-25 새 첫 페이지(랜딩) — 시안 10차 확정본(디자인/2026-11-25_VZTR_첫페이지시안/board_v10_src.html)을 그대로 옮김.
+     화면 = 설계 크기(PC 1440×900 / 폰 390×844)로 그리고 브라우저 크기에 맞춰 통째로 비율 유지(반응형 등비 스케일).
+     버튼: 내 유형 알아보기 → start.html?go=q0 · 여행 성향들 둘러보기 → start.html?go=types · 언어 = i18n.js(영어판 /en/landing.html) -->
+<style>
+:root { color-scheme: light; padding-top: env(safe-area-inset-top, 0px); padding-bottom: env(safe-area-inset-bottom, 0px);
+  --kr: "VZTR KR", "Pretendard Variable", Pretendard, -apple-system, "Apple SD Gothic Neo", "Malgun Gothic", system-ui, sans-serif;
+  --krb: var(--kr); --lat: "Inter Tight", var(--kr);
+  --ink: #16171A; --sb: #6B6E75; --bb: #16171A; --bf: #FFFFFF; --pill: rgba(22,23,26,.06); --pillon: #FFFFFF; --ac: #1F5FE0;
+  --bg: linear-gradient(180deg, #EEEEF2 0%, #F8F8FA 15%, #FFFFFF 42%, #FEFEFF 62%, #F3F3F6 100%); --cl: #FFFFFF; --sd: rgba(22,23,26,.035); --fd: rgba(22,23,26,.025); --base: #F8F8FA; }
+:root[data-theme="dark"] { color-scheme: dark;
+  --ink: #F2F1F7; --sb: #A29DB6; --bb: #F2F1F7; --bf: #0E0C15; --pill: rgba(255,255,255,.08); --pillon: rgba(255,255,255,.16); --ac: #8AB0FF;
+  --bg: linear-gradient(180deg, #100D16 0%, #211B2B 18%, #2A2433 46%, #251F2D 64%, #120F18 100%); --cl: rgba(180,160,235,.28); --sd: rgba(0,0,0,.38); --fd: rgba(0,0,0,.3); --base: #1B1622; }
+html[lang="en"] { --krb: var(--kr); }   /* 영어판: i18n.js가 --kr을 기기 글꼴로 바꿈 → 굵은 글자도 같이 */
+* { box-sizing: border-box; }
+html, body { height: 100%; }
+body { margin: 0; background: var(--base); color: var(--ink); font-family: var(--kr); letter-spacing: -.01em; word-break: keep-all; -webkit-font-smoothing: antialiased; overflow: hidden; }
+[hidden] { display: none !important; }
+a { color: inherit; text-decoration: none; }
+/* 화면 전체 = 둥근 동체 + 천장 빛 (브라우저 크기 전체를 채움) */
+.vp { position: fixed; inset: 0; background: var(--bg); overflow: hidden; }
+.vp .ceil { position: absolute; left: -14%; right: -14%; top: -170px; height: 380px; border-radius: 50%; background: radial-gradient(closest-side, var(--cl), transparent); pointer-events: none; }
+.vp .side { position: absolute; inset: 0; background: linear-gradient(90deg, var(--sd), transparent 22%, transparent 78%, var(--sd)); pointer-events: none; }
+.vp .flr { position: absolute; left: 0; right: 0; bottom: 0; height: 30%; background: linear-gradient(180deg, transparent, var(--fd)); pointer-events: none; }
+html.ph .vp .ceil { top: -120px; height: 250px; }
+/* 무대 = 설계 크기 그대로, JS가 화면에 맞춰 비율 유지해 키우고 줄임 */
+.shell { position: fixed; inset: 0; overflow: hidden; }   /* 설계 크기 무대가 레이아웃 폭을 넓히지 않게(360px 폰에서 화면이 390으로 잡히던 것) */
+.stage { position: absolute; left: 0; top: 0; transform-origin: 0 0; }
+html.pc .stage { width: 1440px; height: 900px; } html.ph .stage { width: 390px; height: 844px; }
+/* 아래 줄: 로고 · (약관) · 언어 */
+.top { position: absolute; left: 0; right: 0; bottom: 0; display: flex; justify-content: space-between; align-items: center; z-index: 20; }
+html.pc .top { padding: 0 64px 40px; } html.ph .top { padding: 0 22px 24px; }
+.lg .vz { display: block; font: 800 34px/1 var(--lat); font-family: "Inter Tight", var(--kr); letter-spacing: -.05em; color: var(--ink); }
+.vz i { font-style: normal; color: var(--ac); }
+html.pc .lg { transform: translateY(-1px); }   /* 실측: 로고 글자 중심 = 토글 중심 */
+html.ph .lg .vz { font-size: 26px; }
+.lang { display: flex; gap: 2px; background: var(--pill); border-radius: 999px; padding: 3px; align-items: stretch; font: 600 15px/1 var(--kr); height: 40px; }
+.lang > * { display: grid; place-items: center; padding: 0 18px; border-radius: 999px; color: var(--sb); font-weight: 600; }
+.lang b { background: var(--pillon); color: var(--ink); font-weight: 700; box-shadow: 0 1px 2px rgba(0,0,0,.08); }
+.lang a:hover { color: var(--ink); }
+html.ph .lang { height: 32px; font-size: 13px; } html.ph .lang > * { padding: 0 13px; }
+.legal { position: absolute; left: 50%; transform: translateX(-50%); display: flex; gap: 14px; font: 500 12px/1 var(--kr); color: var(--sb); opacity: .85; }
+html.ph .legal { top: auto; bottom: 5px; font-size: 10px; gap: 10px; opacity: .7; }   /* 폰: 로고·토글 줄 아래 맨 끝 작은 줄 (토글과 겹치지 않게) */
+.legal a:hover { color: var(--ink); }
+/* 글 */
+.tx { position: absolute; text-align: center; z-index: 5; }
+html.pc .tx { left: 0; right: 0; bottom: 80px; } html.ph .tx { left: 22px; right: 22px; top: 566px; }
+.hl { margin: 0; font: 700 56px/1.12 var(--krb); letter-spacing: -.045em; color: var(--ink); text-wrap: balance; }
+html.ph .hl { font-size: 34px; letter-spacing: -.04em; }
+.q { margin: 12px 0 0; font: 500 24px/1.3 var(--kr); color: var(--sb); letter-spacing: -.02em; }
+html.ph .q { font-size: 17px; margin-top: 8px; }
+.ctas { display: flex; flex-direction: column; align-items: center; gap: 4px; margin-top: 26px; }
+.cta { display: inline-grid; place-items: center; height: 56px; padding: 0 36px; border-radius: 12px; background: var(--bb); color: var(--bf); font: 700 17px/1 var(--krb); letter-spacing: -.02em; }
+.cta:hover { filter: brightness(1.12); }
+.gh { font: 600 15px/1 var(--krb); color: var(--sb); padding: 14px 2px; letter-spacing: -.01em; }
+.gh:hover { color: var(--ink); }
+html.pc .gh { padding-bottom: 0; }
+html.ph .ctas { align-items: stretch; } html.ph .cta { width: 100%; } html.ph .gh { text-align: center; font-size: 14px; }
+.cta:focus-visible, .gh:focus-visible, .lang a:focus-visible, .legal a:focus-visible { outline: 2px solid var(--ac); outline-offset: 3px; border-radius: 12px; }
+/* 창 줄(PC) · 창 하나(폰) */
+.seats { position: absolute; left: 0; right: 0; top: 100px; display: flex; justify-content: center; gap: 48px; }
+.seat { display: grid; justify-items: center; gap: 14px; }
+.seat .win { position: relative; width: 280px; }
+.seat b, .solo b { font: 700 16px/1 var(--krb); color: var(--ink); } .seat small, .solo small { font: 600 12px/1 var(--lat); color: var(--sb); letter-spacing: .08em; }
+.solo { position: absolute; left: 0; right: 0; top: 72px; display: grid; justify-items: center; gap: 14px; }
+.solo .win { position: relative; width: 290px; }
+.solo .lbl { display: grid; justify-items: center; gap: 6px; transition: opacity 1.2s ease 1.2s; }
+.solo .lbl.fade { opacity: 0; transition: opacity .6s ease; }
+.solo b { font-size: 18px; }
+
+/* ===== 비행기 창: 벽에 번진 빛 → 창 가장자리 선 → 안쪽 몰딩 → 얇은 선 → 유리 · 위 = 가리개 상자 + 가리개(손잡이 홈). 창 폭 : 높이 = 300 : 420 ===== */
+.win { position: absolute; aspect-ratio: 300 / 420; container-type: inline-size;
+  --sh: .16; --edge: #A9ADB7; --lin: #E4E6EB; --lin2: #D7DAE1; --lin-hi: #FBFBFD; --lip: #B7BBC4; --glow: rgba(200,205,215,.55);
+  --shd: #E7E8EC; --shd2: #DDDFE4; --band: #D9DBE1; --cap: #C9CCD3; --hdl: #C4C7CF; --hdl2: #B5B8C1; --sky1: #9DC3E2; --sky2: #E8F1F8; }
+.win > .halo { position: absolute; inset: 0; border-radius: 50% / 32%;
+  box-shadow: 0 0 10cqw 0 color-mix(in srgb, var(--glow) 82%, transparent), 0 0 32cqw 3cqw color-mix(in srgb, var(--glow) 42%, transparent);
+  transition: opacity 2.8s cubic-bezier(.4,0,.2,1) .7s; }
+.win.dk > .halo { box-shadow: 0 0 12cqw 2cqw var(--glow), 0 0 38cqw 9cqw color-mix(in srgb, var(--glow) 56%, transparent); }
+html.ph .win:not(.dk) > .halo { box-shadow: 0 0 12cqw 0 color-mix(in srgb, var(--glow) 85%, transparent), 0 0 26cqw 0 color-mix(in srgb, var(--glow) 30%, transparent); }
+.win.dim > .halo { opacity: 0; transition: opacity 1.5s ease; }   /* 닫힐 땐 빛이 스르르 꺼지고, 열릴 땐 늦게 천천히 들어옴 */
+/* 빛 가장 바깥 = 숨 쉬듯 은은하게, 창마다 박자 엇갈림 */
+.win > .halo::after { content: ""; position: absolute; inset: 0; border-radius: inherit; pointer-events: none;
+  box-shadow: 0 0 46cqw 12cqw color-mix(in srgb, var(--glow) 40%, transparent); animation: gpulse 5.2s ease-in-out infinite; }
+.win.dk > .halo::after { box-shadow: 0 0 50cqw 14cqw color-mix(in srgb, var(--glow) 45%, transparent); }
+html.ph .win:not(.dk) > .halo::after { box-shadow: 0 0 30cqw 2cqw color-mix(in srgb, var(--glow) 22%, transparent); }
+.seat:nth-child(2) .halo::after { animation-delay: -1.3s; } .seat:nth-child(3) .halo::after { animation-delay: -2.6s; } .seat:nth-child(4) .halo::after { animation-delay: -3.9s; }
+@keyframes gpulse { 0%, 100% { opacity: .25; scale: 1; } 50% { opacity: 1; scale: 1.035; } }
+.win > .glass { position: absolute; left: 8%; top: 5.238%; width: 84%; height: 86.67%; border-radius: 50% / 31.9%; overflow: hidden; background: linear-gradient(180deg, var(--sky1), var(--sky2)); z-index: 0; }
+.win > svg.fr { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; z-index: 1; }
+.fr .hi { fill: none; stroke: var(--lin-hi); stroke-width: 9; }
+.fr .lip { fill: none; stroke: var(--lip); stroke-width: 1.4; }
+.fr .ol { fill: none; stroke: var(--edge); stroke-width: 3; }
+.fr .shg { transform: translateY(calc(var(--sh) * 430px)); transition: transform 1s cubic-bezier(.65,0,.35,1); }
+.solo .win .fr .shg { transition-duration: 1.9s; }
+.fr .shd { fill: var(--shd); } .fr .shl { fill: var(--shd2); }
+.fr .hdl { fill: var(--hdl); } .fr .hdl2 { fill: var(--hdl2); }
+.fr .band { fill: var(--band); } .fr .cap { fill: var(--cap); }
+.win.dk { --edge: #120D18; --shd: #2A2131; --shd2: #241C2B; --band: #4A3446; --cap: #231A2B; --hdl: #1B1420; --hdl2: #140F18; }
+/* 성향 묶음 4색: 로컬 탐험 = 민트 · 취향 수집 = 복숭아 · 명소 정복 = 페리윙클 · 힐링 충전 = 라일락 */
+.win.ls { --sky1: #79C6C2; --sky2: #E3F6F1; --lin: #CDECE8; --lin2: #B7E0DB; --lin-hi: #F2FBF9; --lip: #8DC6C0; --glow: rgba(121,198,194,.5); }
+.win.le { --sky1: #F4AEBB; --sky2: #FFF0E8; --lin: #F9D8D9; --lin2: #F2C3C6; --lin-hi: #FFF6F2; --lip: #E2A1AC; --glow: rgba(244,174,187,.5); }
+.win.hs { --sky1: #8AA5EA; --sky2: #E6ECFC; --lin: #D5DEF8; --lin2: #C1CEF3; --lin-hi: #F4F7FF; --lip: #9BB0E4; --glow: rgba(138,165,234,.5); }
+.win.he { --sky1: #C99BDC; --sky2: #F7E5F3; --lin: #EAD2F0; --lin2: #DDBCE8; --lin-hi: #FBF2FC; --lip: #BE95CE; --glow: rgba(201,155,220,.5); }
+.win.dk.ls { --sky1: #1F2E5A; --sky2: #74CDC4; --lin: #4FA7A1; --lin2: #3C8C87; --lin-hi: #BDEDE5; --lip: #2A6763; --glow: rgba(98,200,190,.55); }
+.win.dk.le { --sky1: #33254F; --sky2: #F6AFB9; --lin: #D88893; --lin2: #BF6F7C; --lin-hi: #FFE0E1; --lip: #8E4655; --glow: rgba(240,150,165,.55); }
+.win.dk.hs { --sky1: #1C2660; --sky2: #8EADF2; --lin: #6B86D6; --lin2: #566FBE; --lin-hi: #D6E1FF; --lip: #39509A; --glow: rgba(130,160,240,.55); }
+.win.dk.he { --sky1: #31205A; --sky2: #DE9CD6; --lin: #B479C7; --lin2: #9A61AF; --lin-hi: #F3D9FA; --lip: #6B3D82; --glow: rgba(210,140,215,.55); }
+.glass .stars { position: absolute; inset: 0; }
+.glass .stars i { position: absolute; width: 1.2cqw; height: 1.2cqw; border-radius: 50%; background: #fff; opacity: .75; }
+.glass .sky-cl { position: absolute; left: 0; top: 0; height: 100%; will-change: transform; }
+.glass .sky-cl svg { display: block; height: 100%; }
+.chw { position: absolute; left: 50%; bottom: 13%; width: 62%; transform: translateX(-50%); animation: bob 3.4s ease-in-out infinite; z-index: 2; }
+.chw svg { width: 100%; height: auto; display: block; overflow: visible; }
+.win.dk .chw { filter: drop-shadow(0 0 3cqw rgba(255,255,255,.25)); }
+@keyframes bob { 0%, 100% { translate: 0 0; } 50% { translate: 0 -4%; } }
+@media (prefers-reduced-motion: reduce) { .chw, .win > .halo::after { animation: none !important; } .win > .halo::after { opacity: .6; } }
+</style>
+</head>
+<body>
+<div class="vp" aria-hidden="true"><i class="ceil"></i><i class="side"></i><i class="flr"></i></div>
+<div class="shell"><main class="stage" id="stage">
+  <div id="wins" aria-hidden="true"></div>
+  <div class="tx">
+    <h1 class="hl">이번 여행, 나답게.</h1>
+    <p class="q">내 자리는 어디일까?</p>
+    <div class="ctas"><a class="cta" href="start.html?go=q0">내 유형 알아보기</a><a class="gh" href="start.html?go=types">여행 성향들 둘러보기</a></div>
+  </div>
+  <div class="top">
+    <div class="lg"><b class="vz" data-noi18n>vztr<i>.</i></b></div>
+    <p class="legal" id="legal"><a href="privacy.html" target="_blank" rel="noopener">개인정보처리방침</a><a href="terms.html" target="_blank" rel="noopener">이용약관</a></p>
+    <nav class="lang" id="lang" aria-label="언어" data-noi18n></nav>
+  </div>
+</main></div>
+<script src="chars.js?v=fit3"></script>
+<script>
+(() => {
+const EN = window.VZTR_LANG === 'en';
+/* 테마: 앱과 같은 규칙 — ?theme= 미리보기 > 앱에서 고른 값(gaboja-theme) > 기본 밝게 */
+const setTheme = t => { if (t === 'dark') document.documentElement.setAttribute('data-theme', 'dark'); else document.documentElement.removeAttribute('data-theme');
+  const m = document.querySelector('meta[name="theme-color"]'); if (m) m.content = t === 'dark' ? '#1B1622' : '#F8F8FA'; };
+let THEME = 'light';
+try { const q = new URLSearchParams(location.search).get('theme'), s = localStorage.getItem('gaboja-theme');
+  THEME = q === 'dark' || q === 'light' ? q : s === 'dark' ? 'dark' : s === 'system' && matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'; } catch (_) {}
+setTheme(THEME); const DK = THEME === 'dark';
+/* 언어 토글 · 약관(영어판은 한 단계 위의 문서 + #en) */
+const lang = document.getElementById('lang'), other = () => (window.VZTR_I18N ? VZTR_I18N.other() : (EN ? '../landing.html' : 'en/landing.html'));
+lang.innerHTML = EN ? `<a href="${other()}" hreflang="ko" lang="ko">한국어</a><b aria-current="true">English</b>` : `<b aria-current="true">한국어</b><a href="${other()}" hreflang="en" lang="en">English</a>`;
+lang.querySelector('a').addEventListener('click', e => { if (window.VZTR_I18N) { e.preventDefault(); VZTR_I18N.go(); } });
+if (EN) document.querySelectorAll('#legal a').forEach(a => { a.href = '../' + a.getAttribute('href') + '#en'; });
+/* 창 그림 */
+const rr = (x, y, w, h, rx, ry) => `M${x + rx},${y} H${x + w - rx} A${rx},${ry} 0 0 1 ${x + w},${y + ry} V${y + h - ry} A${rx},${ry} 0 0 1 ${x + w - rx},${y + h} H${x + rx} A${rx},${ry} 0 0 1 ${x},${y + h - ry} V${y + ry} A${rx},${ry} 0 0 1 ${x + rx},${y} Z`;
+const OP = rr(0, 0, 300, 420, 150, 134), GL = rr(24, 22, 252, 364, 126, 116), LP = rr(19, 17, 262, 375, 131, 121);
+let WID = 0;
+const WIN = (o = {}) => { const id = 'w' + (++WID);
+  return `<div class="win ${o.cls || ''}" style="--sh:${o.sh ?? .16}"><i class="halo"></i><div class="glass">${o.inner || ''}</div>
+  <svg class="fr" viewBox="0 0 300 420" aria-hidden="true" focusable="false"><defs><clipPath id="${id}c"><path d="${OP}"/></clipPath>
+    <linearGradient id="${id}g" x1="0" y1="0" x2="0" y2="1"><stop offset="0" style="stop-color:var(--lin2)"/><stop offset=".55" style="stop-color:var(--lin)"/><stop offset="1" style="stop-color:var(--lin2)"/></linearGradient></defs>
+    <path d="${OP} ${GL}" fill-rule="evenodd" fill="url(#${id}g)"/><path class="lip" d="${LP}"/><path class="hi" d="${GL}" clip-path="url(#${id}c)"/>
+    <g clip-path="url(#${id}c)"><g class="shg"><rect class="shd" x="-10" y="-440" width="320" height="440"/><rect class="shl" x="-10" y="-5" width="320" height="5"/>
+      <rect class="hdl" x="108" y="-40" width="84" height="20" rx="10"/><rect class="hdl2" x="113" y="-36" width="74" height="9" rx="4.5"/></g>
+      <ellipse class="band" cx="150" cy="14" rx="112" ry="30"/><ellipse class="cap" cx="150" cy="4" rx="106" ry="24"/></g>
+    <path class="ol" d="${OP}"/></svg></div>`; };
+/* 구름: 모양·크기 제각각, 창 여러 개가 한 하늘을 같이 봄(오른쪽 창의 구름이 왼쪽 창으로 넘어감) */
+const rng = s => () => (s = (s + 0x6D2B79F5) | 0, s = Math.imul(s ^ (s >>> 15), s | 1), s ^= s + Math.imul(s ^ (s >>> 7), s | 61), ((s ^ (s >>> 14)) >>> 0) / 4294967296);
+const cloudPath = (r, x, y, w) => { const n = 3 + Math.floor(r() * 4), h = w * (.2 + r() * .12); let d = '';
+  for (let i = 0; i < n; i++) { const cx = x + w * (.16 + .68 * i / Math.max(1, n - 1)) + (r() - .5) * w * .07, rad = h * (.45 + r() * .45) * (i === 0 || i === n - 1 ? .68 : 1); d += `<circle cx="${cx.toFixed(1)}" cy="${(y - rad).toFixed(1)}" r="${rad.toFixed(1)}"/>`; }
+  return d + `<rect x="${x.toFixed(1)}" y="${(y - h * .5).toFixed(1)}" width="${w.toFixed(1)}" height="${(h * .5).toFixed(1)}" rx="${(h * .25).toFixed(1)}"/>`; };
+const CLOUDS = (seed, L, H, far, dark) => { const r = rng(seed); let out = ''; const n = Math.round(L / (far ? 115 : 180));
+  const fill = dark ? (far ? '#B9A9CF' : '#F1E2EE') : '#FFFFFF', sh = dark ? '#2A2142' : '#C7CEE0';
+  for (let i = 0; i < n; i++) { const w = far ? H * (.07 + r() * .12) : H * (.2 + r() * .32), x = (i + r() * .6) * L / n, y = far ? H * (.18 + r() * .3) : H * (.5 + r() * .46), op = far ? (dark ? .3 + r() * .25 : .55 + r() * .3) : (dark ? .62 + r() * .25 : .9 + r() * .1);
+    const c = cloudPath(r, x, y, w); out += `<g fill="${sh}" opacity="${(op * .2).toFixed(2)}" transform="translate(0 ${(w * .03).toFixed(1)})">${c}</g><g fill="${fill}" opacity="${op.toFixed(2)}">${c}</g>`; }
+  return `<svg viewBox="0 0 ${L * 2} ${H}" width="${L * 2}" height="${H}" preserveAspectRatio="none">${out}<g transform="translate(${L} 0)">${out}</g></svg>`; };
+const SKYL = dk => `${dk ? '<div class="stars">' + Array.from({ length: 14 }, (_, i) => `<i style="left:${(i * 41) % 92 + 4}%;top:${(i * 29) % 34 + 6}%;opacity:${.4 + (i % 3) * .2}"></i>`).join('') + '</div>' : ''}<div class="sky-cl far" data-v="14"></div><div class="sky-cl near" data-v="34"></div>`;
+const SEATS = [['LSRP', '로컬 탐험형', 'L · S', 'ls'], ['LEFJ', '취향 수집형', 'L · E', 'le'], ['HSRJ', '명소 정복형', 'H · S', 'hs'], ['HERP', '힐링 충전형', 'H · E', 'he']];
+const CH = (k, i) => `<div class="chw gfx" data-c="${k}" data-fxd="${i * 500}" style="animation-delay:${-i * .85}s">${window.GABOJA_CHAR ? GABOJA_CHAR(k, { bg: false }) : ''}</div>`;
+const SEATWIN = (s, i) => WIN({ cls: (DK ? 'dk ' : '') + s[3], inner: SKYL(DK) + CH(s[0], i) });
+/* 화면: PC(가로가 넓을 때) = 창 넷 · 폰(좁거나 세로로 길 때) = 창 하나가 닫혔다 열리며 성향이 바뀜 */
+const stage = document.getElementById('stage'), wins = document.getElementById('wins');
+let MODE = '', cycleT = 0;
+const pick = () => (innerWidth < 760 || innerWidth / innerHeight < .78 ? 'ph' : 'pc');
+const build = () => { MODE = pick(); document.documentElement.classList.toggle('pc', MODE === 'pc'); document.documentElement.classList.toggle('ph', MODE === 'ph');
+  clearTimeout(cycleT);
+  wins.innerHTML = MODE === 'pc'
+    ? `<div class="seats" data-sky>${SEATS.map((s, i) => `<div class="seat">${SEATWIN(s, i)}<b>${s[1]}</b><small>${s[2]}</small></div>`).join('')}</div>`
+    : `<div class="solo" data-sky>${SEATWIN(SEATS[0], 0)}<div class="lbl"><b>${SEATS[0][1]}</b><small>${SEATS[0][2]}</small></div></div>`;
+  if (MODE === 'ph') startCycle(); };
+const fit = () => { const W = MODE === 'pc' ? 1440 : 390, H = MODE === 'pc' ? 900 : 844, s = Math.min(innerWidth / W, innerHeight / H);
+  stage.style.transform = `translate(${((innerWidth - W * s) / 2).toFixed(1)}px, ${((innerHeight - H * s) / 2).toFixed(1)}px) scale(${s})`; };
+/* 구름 깔기 */
+const REDUCED = matchMedia('(prefers-reduced-motion: reduce)').matches;
+const LAYERS = [];
+const layout = () => { LAYERS.length = 0; const grp = wins.querySelector('[data-sky]'); if (!grp) return;
+  const sc = stage.getBoundingClientRect().width / (stage.offsetWidth || 1) || 1, gr = grp.getBoundingClientRect(), glasses = [...grp.querySelectorAll('.glass')]; if (!glasses.length) return;
+  const H = Math.round(glasses[0].getBoundingClientRect().height / sc), L = Math.max(1400, Math.round(gr.width / sc) * 2);
+  glasses.forEach(g => { const gx = (g.getBoundingClientRect().left - gr.left) / sc;
+    g.querySelectorAll('.sky-cl').forEach(el => { const far = el.classList.contains('far'); if (el.dataset.h !== String(H)) { el.innerHTML = CLOUDS(far ? 11 : 29, L, H, far, DK); el.dataset.h = H; } LAYERS.push({ el, gx, L, v: +el.dataset.v }); }); }); };
+const T0 = performance.now();
+const tick = now => { const t = (now - T0) / 1000; LAYERS.forEach(o => { o.el.style.transform = `translateX(${(-((o.gx + t * o.v) % o.L)).toFixed(1)}px)`; }); if (!REDUCED) requestAnimationFrame(tick); };
+/* 폰: 열린 채 4초 → 닫힘 1.9초(빛 꺼짐, 이름은 거의 닫혔을 때 사라짐) → 닫힌 채 1.2초 → 다음 성향으로 바꿔 열림(빛은 늦게 차오름) */
+function startCycle() { const box = wins.querySelector('.solo'), w = box.querySelector('.win'), lbl = box.querySelector('.lbl'); let k = 0; if (REDUCED) return;
+  const close = () => { w.classList.add('dim'); w.style.setProperty('--sh', 1.02); setTimeout(() => lbl.classList.add('fade'), 1300); cycleT = setTimeout(swap, 3100); };
+  const swap = () => { k = (k + 1) % SEATS.length; const s = SEATS[k]; ['ls', 'le', 'hs', 'he'].forEach(c => w.classList.remove(c)); w.classList.add(s[3]);
+    w.querySelector('.chw').outerHTML = CH(s[0], 0); lbl.innerHTML = `<b>${s[1]}</b><small>${s[2]}</small>`;
+    requestAnimationFrame(() => { w.style.setProperty('--sh', .16); w.classList.remove('dim'); lbl.classList.remove('fade'); cycleT = setTimeout(close, 5900); }); };
+  cycleT = setTimeout(close, 4000); }
+/* 제목 한 줄: 넘치면 글자만 줄임(영어판 넓은 글꼴 대비, 최소 26px) */
+const hl = document.querySelector('.hl');
+const fitHl = () => { hl.style.whiteSpace = 'nowrap'; hl.style.fontSize = ''; let f = parseFloat(getComputedStyle(hl).fontSize); while (hl.scrollWidth > hl.clientWidth + 1 && f > 26) { f -= 1; hl.style.fontSize = f + 'px'; } };
+const all = () => { if (pick() !== MODE) build(); fit(); fitHl(); layout(); tick(performance.now()); };
+build(); all(); if (!REDUCED) requestAnimationFrame(tick);
+let rq = 0; addEventListener('resize', () => { cancelAnimationFrame(rq); rq = requestAnimationFrame(all); });
+if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => { fitHl(); layout(); });
+})();
+</script>
+</body>
+</html>

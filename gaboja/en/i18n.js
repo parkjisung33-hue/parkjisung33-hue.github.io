@@ -25,7 +25,7 @@
   }
   try {
     var saved = localStorage.getItem(KEY);
-    if (!EN && !saved && !bot && /^https?:/.test(location.protocol) && /\/(index\.html|start\.html)?$/.test(location.pathname) && !/^ko\b/i.test(navigator.language || 'ko')) { location.replace(other()); try { document.documentElement.style.visibility = 'hidden'; } catch (_) {} return; }   // 11/22 해외(영어 폰)에서 빈 화면: window.stop()이 영어판으로 넘어가는 것까지 취소했음 → 멈추지 않고 화면만 숨김
+    if (!EN && !saved && !bot && /^https?:/.test(location.protocol) && /\/(index\.html|start\.html|landing\.html)?$/.test(location.pathname) && !/^ko\b/i.test(navigator.language || 'ko')) { location.replace(other()); try { document.documentElement.style.visibility = 'hidden'; } catch (_) {} return; }   // 11/22 해외(영어 폰)에서 빈 화면: window.stop()이 영어판으로 넘어가는 것까지 취소했음 → 멈추지 않고 화면만 숨김
     if (!saved || saved !== L) { /* 주소로 들어온 언어는 고른 것으로 치지 않음 — 버튼으로만 기억 */ }
   } catch (_) {}
   function go() { try { localStorage.setItem(KEY, EN ? 'ko' : 'en'); } catch (_) {} location.href = other(); }
