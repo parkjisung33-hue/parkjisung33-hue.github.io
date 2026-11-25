@@ -3055,7 +3055,7 @@ let fitAgain = 0;
 function fitLines() { try { fitSrc(); } catch (_) {} let wrapped = false;
   document.querySelectorAll('.dayline h2, #sheet h3#sheetTitle, #v-log .ttl2.one, .drawer #typeNm').forEach(el => {   // 11/21: 기록 탭 하루 제목도 한 줄(넘치면 글자만 줄임, 최소 12px)
     el.classList.add('fitln'); el.style.removeProperty('font-size'); el.style.removeProperty('white-space'); if (!el.clientWidth) return;
-    let f = parseFloat(getComputedStyle(el).fontSize); const min = el.matches('.dayline h2') ? 18 : el.matches('.ttl2') ? 10.5 : el.matches('#typeNm') ? 12 : el.matches('#sheetTitle') ? 14 : 16;   // 11/24 검수: 시트 제목(영어 'Hongdae·Yeonnam · Drop bags')이 닫기 버튼에 닿던 것 — 14px까지 줄이고 그래도 길면 줄바꿈
+    let f = parseFloat(getComputedStyle(el).fontSize); const min = el.matches('.dayline h2') ? 18 : el.matches('.ttl2') ? 9.5 /* 11/25 Verdana 긴 이름 */ : el.matches('#typeNm') ? 12 : el.matches('#sheetTitle') ? 14 : 16;   // 11/24 검수: 시트 제목(영어 'Hongdae·Yeonnam · Drop bags')이 닫기 버튼에 닿던 것 — 14px까지 줄이고 그래도 길면 줄바꿈
     while (lnOver(el) && f > min) { f -= 0.5; el.style.setProperty('font-size', f + 'px', 'important'); }
     if (lnOver(el)) { el.classList.remove('fitln'); el.style.removeProperty('font-size'); el.style.setProperty('white-space', 'normal', 'important'); wrapped = true; }   // 최소 크기에서도 넘치면 줄바꿈 (11/25: .one 의 nowrap 이 남아 칸 밖으로 넘치던 것)
   });

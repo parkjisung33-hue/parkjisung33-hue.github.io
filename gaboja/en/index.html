@@ -16,7 +16,7 @@
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="stylesheet" href="fonts/google/gf.css?v=1"><!-- 11/24 Inter Tight·Zen Kaku Gothic New 자체 호스팅(구글 서버로 IP 안 감, OFL) -->
 <script src="inapp.js?v=1"></script>
-<script src="i18n-en-auto.js?v=3bf762df"></script><script src="i18n-en.js?v=3bf762df"></script><script src="i18n.js?v=3bf762df"></script><!-- 11/20 W5 언어 틀 (영어판 = /en/, 사전 i18n-en.js는 배포 때 en/에만 붙음) -->
+<script src="i18n-en-auto.js?v=f3a6a6e7"></script><script src="i18n-en.js?v=f3a6a6e7"></script><script src="i18n.js?v=f3a6a6e7"></script><!-- 11/20 W5 언어 틀 (영어판 = /en/, 사전 i18n-en.js는 배포 때 en/에만 붙음) -->
 <link rel="stylesheet" href="fonts/vztr-fonts.css?v=2"><!-- 11/19 글꼴: 굵은 한글 IBM Plex Sans KR · 보통 한글 Pretendard · 영문·숫자 IBM Plex Sans -->
 <style>
 /* Pretendard 1.3.9 (SIL OFL 1.1) — 공식 배포본(orioncactus/pretendard)을 fonts/에 함께 올림 */
@@ -3055,7 +3055,7 @@ let fitAgain = 0;
 function fitLines() { try { fitSrc(); } catch (_) {} let wrapped = false;
   document.querySelectorAll('.dayline h2, #sheet h3#sheetTitle, #v-log .ttl2.one, .drawer #typeNm').forEach(el => {   // 11/21: 기록 탭 하루 제목도 한 줄(넘치면 글자만 줄임, 최소 12px)
     el.classList.add('fitln'); el.style.removeProperty('font-size'); el.style.removeProperty('white-space'); if (!el.clientWidth) return;
-    let f = parseFloat(getComputedStyle(el).fontSize); const min = el.matches('.dayline h2') ? 18 : el.matches('.ttl2') ? 10.5 : el.matches('#typeNm') ? 12 : el.matches('#sheetTitle') ? 14 : 16;   // 11/24 검수: 시트 제목(영어 'Hongdae·Yeonnam · Drop bags')이 닫기 버튼에 닿던 것 — 14px까지 줄이고 그래도 길면 줄바꿈
+    let f = parseFloat(getComputedStyle(el).fontSize); const min = el.matches('.dayline h2') ? 18 : el.matches('.ttl2') ? 9.5 /* 11/25 Verdana 긴 이름 */ : el.matches('#typeNm') ? 12 : el.matches('#sheetTitle') ? 14 : 16;   // 11/24 검수: 시트 제목(영어 'Hongdae·Yeonnam · Drop bags')이 닫기 버튼에 닿던 것 — 14px까지 줄이고 그래도 길면 줄바꿈
     while (lnOver(el) && f > min) { f -= 0.5; el.style.setProperty('font-size', f + 'px', 'important'); }
     if (lnOver(el)) { el.classList.remove('fitln'); el.style.removeProperty('font-size'); el.style.setProperty('white-space', 'normal', 'important'); wrapped = true; }   // 최소 크기에서도 넘치면 줄바꿈 (11/25: .one 의 nowrap 이 남아 칸 밖으로 넘치던 것)
   });
