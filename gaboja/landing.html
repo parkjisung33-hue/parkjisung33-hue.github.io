@@ -52,11 +52,11 @@ html.pc .top { padding: 0 64px 40px; } html.ph .top { padding: 0 22px 24px; }
 html.pc .lg { transform: translateY(-1px); }
 html.pc .lang { transform: translateY(var(--lgy, 0px)); }   /* 11/26: 토글 아래선 = 로고 아래선(JS 실측) */
 html.ph .lg .vz { font-size: 26px; }
-.lang { display: flex; gap: 2px; background: var(--pill); border-radius: 999px; padding: 3px; align-items: stretch; font: 600 15px/1 var(--kr); height: 40px; }
-.lang > * { display: grid; place-items: center; padding: 0 18px; border-radius: 999px; color: var(--sb); font-weight: 600; }
+.lang { display: flex; gap: 2px; background: var(--pill); border-radius: 999px; padding: 3px; align-items: stretch; font: 600 14px/1 var(--kr); height: 36px; }   /* 11/26: 40 → 36 (로고에 더 가깝게) */
+.lang > * { display: grid; place-items: center; padding: 0 16px; border-radius: 999px; color: var(--sb); font-weight: 600; }
 .lang b { background: var(--pillon); color: var(--ink); font-weight: 700; box-shadow: 0 1px 2px rgba(0,0,0,.08); }
 .lang a:hover { color: var(--ink); }
-html.ph .lang { height: 32px; font-size: 13px; } html.ph .lang > * { padding: 0 13px; }
+html.ph .lang { height: 29px; font-size: 12px; } html.ph .lang > * { padding: 0 12px; }   /* 11/26: 32 → 29 */
 .legal { position: absolute; left: 50%; bottom: var(--lgb, 47px); margin: 0; transform: translateX(-50%); display: flex; gap: 14px; font: 300 12px/1 var(--kr); color: var(--sb); }   /* 얇게 · 아래선 = 로고 기준선(JS가 실측해 --lgb 맞춤) */
 html.pc .legal { left: 143px; transform: none; gap: 10px; }   /* 11/26 B안: PC도 로고 바로 옆(로고 오른쪽 끝 129 + 14), 사이 선 없음 — 폰과 같은 방식 */
 html.ph .legal { left: 82px; transform: none; font-size: 10.5px; gap: 7px; }   /* 폰: 로고 바로 오른쪽(가운데 두면 토글과 겹침) */
