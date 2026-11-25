@@ -1243,12 +1243,12 @@ const gSess = () => (crypto.randomUUID ? crypto.randomUUID() : String(Math.rando
 async function placeFind(v, cc, sess) {   // → { list: [{ name, sub, ll? , gid? }], src: 'kakao'|'csis'|'google', off }
   const lang = W5 ? 'en' : 'ko', A = a => ({ name: a.name || a.road || a.jibun, sub: a.name ? (a.road || a.jibun) : '', ll: [a.lat, a.lng] });
   if (cc === 'kr' || jpOnly(v)) { const j = await fetch(VZTR_API + '/addr?q=' + encodeURIComponent(v)).then(r => r.json()); const L = ((j && j.list) || []).map(A); if (L.length) return { list: L, src: j.jp ? 'csis' : 'kakao' }; }
-  const g = await fetch(VZTR_API + '/gac?q=' + encodeURIComponent(v) + '&s=' + sess + '&cc=' + cc + '&lang=' + lang).then(r => r.json());
+  const g = await fetch(VZTR_API + '/gac?q=' + encodeURIComponent(v) + GDEV + '&s=' + sess + '&cc=' + cc + '&lang=' + lang).then(r => r.json());
   if (g && g.off) return { list: [], off: 1 };
   return { list: ((g && g.list) || []).map(x => ({ name: x.name, sub: x.sub, gid: x.id })), src: 'google' };
 }
 async function placeLL(x, sess) {   // 구글 후보 → 좌표 (세션 끝)
-  if (x.ll) return x.ll; const j = await fetch(VZTR_API + '/gdet?id=' + encodeURIComponent(x.gid) + '&s=' + sess + '&lang=' + (W5 ? 'en' : 'ko')).then(r => r.json());
+  if (x.ll) return x.ll; const j = await fetch(VZTR_API + '/gdet?id=' + encodeURIComponent(x.gid) + GDEV + '&s=' + sess + '&lang=' + (W5 ? 'en' : 'ko')).then(r => r.json());
   return j && isFinite(j.lat) ? [j.lat, j.lng] : null;
 }
 const srcNote = s => s === 'csis' ? '<p class="cr"><a href="https://geocode.csis.u-tokyo.ac.jp/" target="_blank" rel="noopener">CSISシンプルジオコーディング実験を利用</a></p>' : s === 'google' ? '<p class="cr">Google Maps</p>' : '';
@@ -2352,6 +2352,7 @@ function swHours(p) { const o = String(p.oTx || ''); if (!o || /^거리/.test(o)
 /* ---------- 장소 사진 (11/14) — ① 위키·Openverse 사진(ph) → ② 구글 장소 사진(키 있을 때) → ③ 스트리트뷰 → ④ 선 아이콘.
    사진은 원본 URL로 직접 표시(저장 안 함). 저작자·라이선스는 사진 아래 한 줄. 실패(onerror)하면 다음 단계. ---------- */
 const VZTR_API = 'https://vztr-api.d-chive33-a29.workers.dev';   // 11/19 E0: 구글 사진 = 우리 서버(Cloudflare Worker)가 대신 찾음 → 페이지에 사진 키 없음 (server/worker.js)
+const GDEV = (() => { try { if (/[?&]dev=1/.test(location.search)) localStorage.setItem('vztr-dev', '1'); if (/[?&]dev=0/.test(location.search)) localStorage.removeItem('vztr-dev'); return localStorage.getItem('vztr-dev') === '1' ? '&dev=1' : ''; } catch (_) { return ''; } })();   // 11/26 작업용 기기(?dev=1 한 번)는 구글 유료 호출 안 함 → 서버가 대신 '없음' 응답
 const PH_KEY_G = () => /^(https:\/\/(www\.)?(larchive\.page|vztr\.app)|https:\/\/vztr-api\.d-chive33-a29\.workers\.dev|http:\/\/(localhost|127\.0\.0\.1)(:\d+)?)$/.test(location.origin), PH_KEY_M = () => window.GABOJA_MAPS_KEY || '';
 // 11/24 오사카관광국 사진(license 'OCTB'): 일본어 외 표기 = '©Osaka Convention & Tourism Bureau' 그대로(관광국 회신 11/24, 한·영 같은 문구)
 // 11/24 도쿄관광재단 사진(license 'TCVB'): '©Tokyo Convention & Visitors Bureau' 그대로(재단 회신 11/24)
@@ -2361,7 +2362,7 @@ function phGoogle(p, cb) {   // ② 구글 장소 사진 1장 — 서버 /photo�
   if (!PH_KEY_G()) { cb(null); return; }
   try { const s = sessionStorage.getItem(ck); if (s) { cb(s === '-' ? null : JSON.parse(s)); return; } } catch (_) {}
   const q = new URLSearchParams({ q: p.q || p.n || '' }); if (p.ll) { q.set('lat', p.ll[0]); q.set('lng', p.ll[1]); }
-  fetch(VZTR_API + '/photo?' + q).then(r => r.ok ? r.json() : null).then(j => {
+  fetch(VZTR_API + '/photo?' + q + GDEV).then(r => r.ok ? r.json() : null).then(j => {
     const r = j && j.u ? { u: j.u, a: j.a || 'Google' } : null;
     if (!(j && j.e)) try { sessionStorage.setItem(ck, r ? JSON.stringify(r) : '-'); } catch (_) {}
     cb(r);
