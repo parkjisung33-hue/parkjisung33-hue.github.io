@@ -5,6 +5,9 @@
 (function () {
   var KEYS = /^(gaboja|vztr)-(?!wx)/, NEW = 'https://vztr.app';
   try {
+    /* 11/26 작업용 기기 표시: 아무 페이지나 ?dev=1 로 한 번 열면 이 기기는 구글 유료 호출 안 함(앱이 &dev=1), ?dev=0 이면 해제. 다른 화면으로 넘어가기 전에 먼저 저장 */
+    if (/[?&]dev=1(&|$)/.test(location.search)) localStorage.setItem('vztr-dev', '1');
+    if (/[?&]dev=0(&|$)/.test(location.search)) localStorage.removeItem('vztr-dev');
     var old = /^(www\.)?larchive\.page$/.test(location.hostname) && location.pathname.indexOf('/gaboja/') === 0, www = location.hostname === 'www.vztr.app';
     if (old || www) {
       var d = {}, n = 0;
