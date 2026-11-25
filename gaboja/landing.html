@@ -231,12 +231,16 @@ const alignLegal = () => { const sc = stage.getBoundingClientRect().width / (sta
   const d = (baseOf(document.querySelector('.top .vz')) - baseOf(a)) / sc; const cur = parseFloat(getComputedStyle(legal).bottom) || 0; legal.style.setProperty('--lgb', (cur - d).toFixed(1) + 'px'); };
 const alignLang = () => { const l = document.getElementById('lang'); l.style.removeProperty('--lgy'); if (MODE !== 'pc') return; const sc = stage.getBoundingClientRect().width / (stage.offsetWidth || 1) || 1;
   const dy = (baseOf(document.querySelector('.top .vz')) - l.getBoundingClientRect().bottom) / sc; l.style.setProperty('--lgy', dy.toFixed(1) + 'px'); };
-const all = () => { if (pick() !== MODE) build(); fit(); fitHl(); alignLang(); alignLegal(); layout(); tick(performance.now()); };
+/* PC: 글 묶음 아래 끝 = 언어 토글 윗선 (토글 크기·위치가 바뀌면 같이 따라감) */
+const tx = document.querySelector('.tx');
+const alignText = () => { tx.style.bottom = ''; if (MODE !== 'pc') return; const sc = stage.getBoundingClientRect().width / (stage.offsetWidth || 1) || 1, st = stage.getBoundingClientRect();
+  const top = (document.getElementById('lang').getBoundingClientRect().top - st.top) / sc; tx.style.bottom = (900 - top).toFixed(1) + 'px'; };
+const all = () => { if (pick() !== MODE) build(); fit(); fitHl(); alignLang(); alignText(); alignLegal(); layout(); tick(performance.now()); };
 build(); all(); if (!REDUCED) requestAnimationFrame(tick);
 let rq = 0; addEventListener('resize', () => { cancelAnimationFrame(rq); rq = requestAnimationFrame(all); });
 const onScheme = e => { if (QT === 'dark' || QT === 'light') return; DK = e.matches; setTheme(DK ? 'dark' : 'light'); build(); all(); };
 if (MQ.addEventListener) MQ.addEventListener('change', onScheme); else if (MQ.addListener) MQ.addListener(onScheme);
-if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => { fitHl(); alignLang(); alignLegal(); layout(); });
+if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => { fitHl(); alignLang(); alignText(); alignLegal(); layout(); });
 })();
 </script>
 </body>
