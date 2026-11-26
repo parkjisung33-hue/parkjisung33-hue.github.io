@@ -2961,7 +2961,7 @@ async function cloudPush() {
     cloudSet(a2);
   } catch (e) { window.__cloudErr = 'net'; } finally { cloudBusy = false; if (cloudAgain) { cloudAgain = false; cloudSync(1000); } }
 }
-/* 11/19 W8 카카오톡 공유 — 카카오디벨로퍼스 앱 'VZTR'(ID 1658308) JavaScript 키(공개용, JS SDK 도메인 larchive.page만 허용) · SDK 2.8.5(SRI) */
+/* 11/19 W8 카카오톡 공유 — 카카오디벨로퍼스 앱 'VZTR'(ID 1658308) JavaScript 키(공개용, JS SDK 도메인 larchive.page·vztr.app) · 11/26 밤 '제품 링크 관리' 웹 도메인에 vztr.app 추가·기본(전엔 larchive.page만 → vztr.app 링크 공유가 막혔을 수 있음) · SDK 2.8.5(SRI) */
 const KAKAO_JS = '622ad43472a1ec6f087657bf0be1a4f3', KAKAO_SDK = 'https://t1.kakaocdn.net/kakao_js_sdk/2.8.5/kakao.min.js', KAKAO_SRI = 'sha384-v6JKY3z4FUkWq21oZDHZe74YvuPk/WUrVLrDHTBojHXClOSa3iXy7sCXPY1jkFbj';
 function kakaoLoad() {   // 공유 창 열 때 미리 불러 둠 → 누르는 순간 바로 카카오톡이 열리게
   if (window.Kakao || document.getElementById('kakaoSdk') || !/^(www\.)?(larchive\.page|vztr\.app)$/.test(location.hostname)) return;
