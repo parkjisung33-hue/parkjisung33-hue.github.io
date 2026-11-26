@@ -10,7 +10,7 @@
 <meta name="theme-color" content="#EFEFF1">
 <link rel="stylesheet" href="fonts/google/gf.css?v=1"><!-- 11/24 Inter Tight·Zen Kaku Gothic New 자체 호스팅(구글 서버로 IP 안 감, OFL) -->
 <script src="inapp.js?v=1"></script>
-<script src="i18n-en-auto.js?v=bf21704f"></script><script src="i18n-en.js?v=bf21704f"></script><script src="i18n.js?v=bf21704f"></script><!-- 11/20 W5 언어 틀 (영어판 = /en/, 사전 i18n-en.js는 배포 때 en/에만 붙음) -->
+<script src="i18n-en-auto.js?v=e2ca6712"></script><script src="i18n-en.js?v=e2ca6712"></script><script src="i18n.js?v=e2ca6712"></script><!-- 11/20 W5 언어 틀 (영어판 = /en/, 사전 i18n-en.js는 배포 때 en/에만 붙음) -->
 <link rel="stylesheet" href="fonts/vztr-fonts.css?v=2"><!-- 11/19 글꼴: 굵은 한글 IBM Plex Sans KR · 보통 한글 Pretendard · 영문·숫자 IBM Plex Sans -->
 <link rel="icon" href="icons/favicon-32.png">
 <link rel="apple-touch-icon" href="icons/icon-180.png">
@@ -510,6 +510,13 @@ html.ios26 .foot, html.ios26 .board { bottom: calc(max(0.75rem, env(safe-area-in
 .erow b small { display: block; font-size: 0.75rem; font-weight: 500; color: var(--sub); }
 .erow button { height: 2.25rem; padding: 0 0.875rem; border-radius: 0.625rem; background: var(--blue-soft); color: var(--blue); font-size: 0.8125rem; font-weight: 700; }
 .rx .ghost { height: 2.75rem; }
+/* 11/26 S2 공유 시트: 미리보기 · 모양 고르기 · 공유하기 · 카톡/저장 */
+.rx .shp { flex: none; display: flex; justify-content: center; height: min(42svh, 20rem); }
+.rx .shp img { height: 100%; width: auto; max-width: 100%; object-fit: contain; border-radius: 0.75rem; box-shadow: 0 2px 12px rgba(22,23,26,.14); }
+.rx .shp img:not([src]) { visibility: hidden; }
+.rx .shrow { grid-template-columns: 1fr 1fr; }
+.rx #shGo { display: flex; align-items: center; justify-content: center; gap: 0.375rem; }
+.rx #shGo svg { width: 1.125rem; height: 1.125rem; stroke: currentColor; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
 /* ── E1: 왜 이 유형인지 막대 ── */
 .card.why { padding: 0.875rem 1.125rem 0.75rem; display: flex; flex-direction: column; gap: 0.875rem; }
 .why .wr { display: flex; flex-direction: column; gap: 0.375rem; }
@@ -1851,7 +1858,7 @@ function rResult(c, mine) {
     </div>`);
   el.querySelectorAll('.pair .mini').forEach((b, k) => b.onclick = () => pairSheet(b.dataset.code, k === 0 ? t.bestWhy : t.clashWhy, k === 0));   // 11/14 #13a: 페이지 이동 대신 아래 시트
   $('#copyBtn').onclick = () => shareCard(c);   // 11/24 보드 3 = A: 이미지 카드로 공유 (안 되면 링크 공유로)
-  setTimeout(() => cardBlob(c), 600);   // 미리 그려 둠 — 아이폰은 누른 직후에만 공유창을 열어 줘서, 누른 뒤 그리면 막힘
+  setTimeout(() => { cardBlob(c, 's'); cardBlob(c, 'q'); }, 600);   // 미리 그려 둠 — 아이폰은 누른 직후에만 공유창을 열어 줘서, 누른 뒤 그리면 막힘 (11/26 두 모양)
   $('#redoBtn').onclick = () => { S.ans = []; S.shuffle = Q.map(q => shuffled(q.o.map((_, i) => i))); S.hist = ['intro']; clearHash(); go('q0', { noHist: true }); };
   $('#allBtn2').onclick = () => go('types');
   $('#nextBtn').onclick = () => { if (S.type) { clearHash(); go('method'); } else { S.ans = []; S.hist = ['intro']; clearHash(); go('q0', { noHist: true }); } };
@@ -1885,59 +1892,120 @@ function charImg(c, px) {   // 화면과 같은 캐릭터(스타일 3)를 그림
     im.src = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(src);
   });
 }
-async function cardPng(c) {
-  const t = T(c), g = c.slice(0, 2), bg = GRPC[g].bg, ink = INK[g], W = 1080, H = 1350;
-  const LAT = '"Inter Tight", "VZTR EN", "VZTR KR", "Pretendard Variable", sans-serif', KR = '"VZTR KR", "Pretendard Variable", "Apple SD Gothic Neo", sans-serif';
-  try { await Promise.all([`800 80px "Inter Tight"`, `800 80px "VZTR KR"`, `500 40px "VZTR KR"`, `700 40px "Pretendard Variable"`].map(f => document.fonts.load(f, '가A'))); } catch (_) {}
+/* 11/26 동우님 보드 답: 결과 카드 = 9:16 'A 탑승권'(스토리) · 1:1 'B 가운데'(피드·카톡) — 4:5는 뺌. 공유 = S2(미리보기 시트에서 모양 고르고 공유, 카톡은 두 번째)
+   시안 = preview/2026-11-26_결과카드_916_11_시안_v2.html · 글꼴 두 가지(한글 VZTR KR · 글자판·주소 Inter Tight) · 간격 8의 배수 · 설명은 글자 줄이지 않고 두 줄 */
+const CF = { s: [1080, 1920], q: [1080, 1080] };
+async function cardPng(c, f = 's') {
+  const t = T(c), g = c.slice(0, 2), bg = GRPC[g].bg, ink = INK[g], [W, H] = CF[f] || CF.s;
+  const LAT = '"Inter Tight", "VZTR EN", "VZTR KR", "Pretendard Variable", sans-serif', KR = '"VZTR KR", "Pretendard Variable", "Apple SD Gothic Neo", sans-serif', NMF = W5 ? LAT : KR;
+  try { await Promise.all([`800 80px "Inter Tight"`, `600 30px "Inter Tight"`, `700 80px "VZTR KR"`, `500 40px "VZTR KR"`, `600 30px "VZTR KR"`].map(q => document.fonts.load(q, '가A'))); } catch (_) {}
   const cv = document.createElement('canvas'); cv.width = W; cv.height = H; const x = cv.getContext('2d');
   const rr = (X, Y, w, h, r) => { x.beginPath(); x.roundRect ? x.roundRect(X, Y, w, h, r) : x.rect(X, Y, w, h); };
-  // 바탕: 묶음 색 → 조금 더 밝게
+  const ls = v => { try { x.letterSpacing = v; } catch (_) {} };
+  const fit = (s, wt, f0, fmin, fam, w, st = 2) => { let z = f0; do { x.font = `${wt} ${z}px ${fam}`; if (x.measureText(s).width <= w) break; z -= st; } while (z > fmin); return z; };
+  const two = (s, wt, f0, fmin, fam, w, force2) => {   // 두 줄까지(11/26 밤 한 문장 소개에 맞춤): 한 줄에 들어가면 한 줄(force2면 늘 두 줄) · 아니면 쉼표·마침표 → 낱말 사이 중 두 줄 길이가 가장 비슷한 곳에서 나눔(한 낱말만 남는 줄 없게)
+    for (let z = f0; z >= fmin; z -= 2) { x.font = `${wt} ${z}px ${fam}`; const W_ = q => x.measureText(q).width;
+      if (!force2 && W_(s) <= w) return [[s], z];
+      const sn = s.split(/(?<=[.?!,])\s+/); if (sn.length === 2 && sn.every(q => W_(q) <= w) && Math.min(W_(sn[0]), W_(sn[1])) > w * .3) return [sn, z];
+      const ws = s.split(' '); let best = null;
+      for (let i = 1; i < ws.length; i++) { const a = ws.slice(0, i).join(' '), b = ws.slice(i).join(' '), m = Math.max(W_(a), W_(b)); if (m <= w && (!best || m < best[0])) best = [m, [a, b]]; }
+      if (best) return [best[1], z]; if (W_(s) <= w) return [[s], z]; }
+    return [[s], fmin]; };
+  const logo = (RX, BY, S) => { const k = S / 76, dr = 11 * k, DX = RX - 2 * dr - 6 * k; x.textAlign = 'right'; x.textBaseline = 'alphabetic'; x.font = `800 ${S}px ${LAT}`; x.fillStyle = '#0F1F33';
+    ls((-3 * k) + 'px'); x.fillText('vztr', DX, BY); ls('0px'); x.fillStyle = '#3D63F5'; x.beginPath(); x.arc(DX + 17 * k, BY - 9 * k, dr, 0, Math.PI * 2); x.fill(); };
+  const flaps = (X0, Y, FW, FH, GAP, mean) => { const MF = W5 ? LAT : KR; let mz = mean; c.split('').forEach(l => { mz = Math.min(mz, fit(LMEAN[l], 600, mean, 18, MF, FW + GAP - 8, 1)); });   // 뜻 네 칸 = 같은 크기(가장 긴 낱말에 맞춤, 영어 'Sightseeing')
+    c.split('').forEach((l, k) => { const X = X0 + k * (FW + GAP);   // 11/25 UI 규칙 확정 7: 흰 판 + dk 글자 + 가운데 줄 dk 18%
+    rr(X, Y, FW, FH, Math.round(FW * .12)); x.save(); x.shadowColor = 'rgba(22,23,26,.10)'; x.shadowBlur = 8; x.shadowOffsetY = 3; x.fillStyle = '#FFFFFF'; x.fill(); x.restore();
+    x.strokeStyle = ink + '2E'; x.lineWidth = 2; x.beginPath(); x.moveTo(X + 1, Y + FH / 2); x.lineTo(X + FW - 1, Y + FH / 2); x.stroke();
+    x.fillStyle = ink; x.textAlign = 'center'; x.textBaseline = 'middle'; x.font = `800 ${Math.round(FH * .56)}px ${LAT}`; x.fillText(DL(l), X + FW / 2, Y + FH / 2 + Math.round(FH * .03));
+    x.textBaseline = 'alphabetic'; x.font = `600 ${mz}px ${MF}`; x.fillText(LMEAN[l], X + FW / 2, Y + FH + Math.round(mean * 1.6)); }); };
+  /* 11/26 밤 동우님 보드 v2: 캐릭터 크기 통일 — 그림 상자가 아니라 실제로 칠해진 면적(픽셀)으로 맞춤(버스는 납작·지도는 커 보이던 것). 가운데 (cx, cy), 칠해진 면적의 √ = A, 최대 mw×mh */
+  const charDraw = async (cx, cy, A, mw, mh) => { const RS = 1000, im = await charImg(c, RS); if (!im) return;
+    const oc = document.createElement('canvas'); oc.width = oc.height = RS; const o = oc.getContext('2d'); o.drawImage(im, 0, 0, RS, RS);
+    const d = o.getImageData(0, 0, RS, RS).data; let n = 0, x0 = RS, y0 = RS, x1 = -1, y1 = -1;
+    for (let yy = 0; yy < RS; yy++) for (let xx = 0; xx < RS; xx++) if (d[(yy * RS + xx) * 4 + 3] > 40) { n++; if (xx < x0) x0 = xx; if (xx > x1) x1 = xx; if (yy < y0) y0 = yy; if (yy > y1) y1 = yy; }
+    if (!n) return; const bw = x1 - x0 + 1, bh = y1 - y0 + 1, k = Math.min(A / Math.sqrt(n), mw / bw, mh / bh);
+    x.drawImage(oc, x0, y0, bw, bh, cx - bw * k / 2, cy - bh * k / 2, bw * k, bh * k); };
+  const txL = (q, X, Y) => { const m = x.measureText(q); x.fillText(q, X + (m.actualBoundingBoxLeft || 0), Y); };   // 왼쪽 정렬 = 글자 잉크 왼쪽 끝을 X에 (글꼴 여백·자간 때문에 줄마다 조금씩 어긋나던 것)
   const gd = x.createLinearGradient(0, 0, 0, H); gd.addColorStop(0, bg); gd.addColorStop(1, '#FFFFFF'); x.fillStyle = gd; x.fillRect(0, 0, W, H);
-  // 탑승권: 흰 종이 + 위 띠(묶음 색) + 절취선·양옆 반원
-  const L = 64, T0 = 72, CW = W - L * 2, CH = H - T0 * 2, CUT = 812;
-  x.save(); x.shadowColor = 'rgba(22,23,26,.14)'; x.shadowBlur = 40; x.shadowOffsetY = 16; rr(L, T0, CW, CH, 44); x.fillStyle = '#FFFFFF'; x.fill(); x.restore();
-  x.save(); rr(L, T0, CW, CH, 44); x.clip(); x.fillStyle = bg; x.fillRect(L, T0, CW, CUT - T0); x.restore();
-  x.fillStyle = gd; [L, L + CW].forEach(cx => { x.beginPath(); x.arc(cx, CUT, 30, 0, Math.PI * 2); x.fill(); });
-  x.strokeStyle = 'rgba(22,23,26,.18)'; x.lineWidth = 4; x.setLineDash([14, 12]); x.beginPath(); x.moveTo(L + 50, CUT); x.lineTo(L + CW - 50, CUT); x.stroke(); x.setLineDash([]);
-  // 머리: 왼쪽 '내 여행 유형' · 오른쪽 BOARDING PASS
-  x.fillStyle = ink; x.textBaseline = 'alphabetic'; x.textAlign = 'left'; x.font = `700 36px ${KR}`; x.fillText(TR('내 여행 유형'), L + 56, T0 + 84);
-  x.textAlign = 'right'; x.font = `700 28px ${LAT}`; x.globalAlpha = .7; x.fillText('BOARDING PASS', L + CW - 56, T0 + 82); x.globalAlpha = 1;
-  // 글자판 4칸 + 뜻
-  const FW = 112, FH = 148, GAP = 20, fx0 = (W - (FW * 4 + GAP * 3)) / 2, fy = T0 + 128;   // 글자판 가운데(캐릭터와 한 줄)
-  c.split('').forEach((l, k) => { const X = fx0 + k * (FW + GAP); rr(X, fy, FW, FH, 14); x.save(); x.shadowColor = 'rgba(22,23,26,.10)'; x.shadowBlur = 6; x.shadowOffsetY = 3; x.fillStyle = '#FFFFFF'; x.fill(); x.restore();   // 11/25 UI 규칙 확정 7: 흰 판 + dk 글자 + 가운데 줄 dk 18%
-    x.strokeStyle = ink + '2E'; x.lineWidth = 2; x.beginPath(); x.moveTo(X, fy + FH / 2); x.lineTo(X + FW, fy + FH / 2); x.stroke();
-    x.fillStyle = ink; x.textAlign = 'center'; x.textBaseline = 'middle'; x.font = `800 84px ${LAT}`; x.fillText(DL(l), X + FW / 2, fy + FH / 2 + 4);
-    x.fillStyle = ink; x.textBaseline = 'alphabetic'; let lf = 26; do { x.font = `700 ${lf}px ${W5 ? LAT : KR}`; lf -= 1; } while (x.measureText(LMEAN[l]).width > FW + GAP - 6 && lf > 16); x.fillText(LMEAN[l], X + FW / 2, fy + FH + 44); });   // 영어 'Sightseeing'도 칸 안
-  // 캐릭터(입체) — 가운데 크게
-  const CS = 380, im = await charImg(c, CS); if (im) x.drawImage(im, (W - CS) / 2, fy + FH + 70, CS, CS);   // 글자판 뜻 아래 ~ 절취선 위
-  // 아래: 묶음 · 이름 · 한 줄
-  x.textAlign = 'left'; x.textBaseline = 'alphabetic'; const PX = L + 56, PW = CW - 112;
-  x.fillStyle = ink; x.font = `700 34px ${KR}`; x.fillText(TR(t.group), PX, CUT + 86);
-  let nf = 96; do { x.font = `800 ${nf}px ${KR}`; nf -= 4; } while (x.measureText(TR(t.name)).width > PW && nf > 48);
-  x.fillStyle = '#16181D'; x.fillText(TR(t.name), PX, CUT + 184);
-  const ln = TR(t.line); let lf = 38; do { x.font = `500 ${lf}px ${KR}`; lf -= 2; } while (x.measureText(ln).width > PW && lf > 26);
-  x.fillStyle = '#6B6E75'; x.fillText(ln, PX, CUT + 246);
-  // 맨 아래: 왼쪽 초대 문구·주소 / 오른쪽 vztr. 로고 (QR 자리)
-  const BY = T0 + CH - 64;
-  x.fillStyle = '#16181D'; x.font = `700 32px ${KR}`; x.fillText(TR('너는 어떤 여행자야?'), PX, BY - 44);
-  x.fillStyle = '#6B6E75'; x.font = `500 28px ${LAT}`; x.fillText('vztr.app', PX, BY);
-  x.textAlign = 'right'; x.font = `800 76px ${LAT}`; x.fillStyle = '#0F1F33'; const lw = x.measureText('vztr').width, RX = L + CW - 56 - 22;
-  try { x.letterSpacing = '-3px'; } catch (_) {} x.fillText('vztr', RX, BY + 2); try { x.letterSpacing = '0px'; } catch (_) {}
-  x.fillStyle = '#3D63F5'; x.beginPath(); x.arc(RX + 17, BY - 9, 11, 0, Math.PI * 2); x.fill();
+  const name = TR(t.name), line = TR(t.line), grp = TR(t.group), inv = TR('너는 어떤 여행자야?');
+  if (f === 'q') {   // ===== 1:1 B 가운데 — 여백 80 · 머리 → 글자판 → 캐릭터 → 이름 → 설명 → 초대 알약
+    const M = 80; x.textBaseline = 'alphabetic'; x.textAlign = 'left'; x.fillStyle = ink; x.font = `700 36px ${KR}`; x.fillText(TR('내 여행 유형'), M, M + 40); logo(W - M, M + 40, 50);   // 11/26 밤: 로고 60 → 50
+    const FW = 104, FH = 136, GAP = 20; flaps((W - (FW * 4 + GAP * 3)) / 2, 168, FW, FH, GAP, 30);
+    await charDraw(W / 2, 504, 182, 400, 264);   // 11/26 밤: 캐릭터 크기 통일
+    x.textAlign = 'center'; ls('-2px'); fit(name, 700, 96, 56, NMF, W - M * 2, 4); x.fillStyle = '#16181D'; x.fillText(name, W / 2, 752); ls('0px');
+    const [ln, lz] = two(line, 500, 36, 30, KR, W - M * 2); x.fillStyle = '#6B6E75'; x.font = `500 ${lz}px ${KR}`; ln.forEach((q, i) => x.fillText(q, W / 2, (ln.length > 1 ? 830 : 842) + i * 46));   // 11/26 밤 v3 답: 이름 ↔ 소개 간격 넓힘   // 11/26 밤: 글자 줄이지 않고 두 줄
+    x.font = `700 32px ${KR}`; const aw = x.measureText(inv).width;   // 11/26 밤: 주소 빼고 초대 글만 알약 가운데
+    const PW = aw + 80, PH = 72, PX = (W - PW) / 2, PY = 920; rr(PX, PY, PW, PH, PH / 2); x.fillStyle = 'rgba(255,255,255,.85)'; x.fill();
+    x.textAlign = 'center'; x.textBaseline = 'middle'; x.fillStyle = '#16181D'; x.fillText(inv, W / 2, PY + PH / 2 + 1);
+  } else {   // ===== 9:16 A 탑승권 — 위 240·아래 240 비움(스토리 글자·버튼 자리, 어림값)
+    const L = 72, T0 = 240, CW = W - L * 2, CH = 1440, CUT = 1112, P = 64, PX = L + P, PW = CW - P * 2, RX = L + CW - P;
+    x.save(); x.shadowColor = 'rgba(22,23,26,.14)'; x.shadowBlur = 40; x.shadowOffsetY = 16; rr(L, T0, CW, CH, 44); x.fillStyle = '#FFFFFF'; x.fill(); x.restore();
+    x.save(); rr(L, T0, CW, CH, 44); x.clip(); x.fillStyle = bg; x.fillRect(L, T0, CW, CUT - T0); x.restore();
+    x.fillStyle = gd; [L, L + CW].forEach(cx => { x.beginPath(); x.arc(cx, CUT, 30, 0, Math.PI * 2); x.fill(); });
+    x.strokeStyle = 'rgba(22,23,26,.18)'; x.lineWidth = 4; x.setLineDash([14, 12]); x.beginPath(); x.moveTo(L + 50, CUT); x.lineTo(L + CW - 50, CUT); x.stroke(); x.setLineDash([]);
+    x.textBaseline = 'alphabetic'; x.textAlign = 'left'; x.fillStyle = ink; x.font = `700 40px ${KR}`; txL(TR('내 여행 유형'), PX, T0 + 96);
+    x.textAlign = 'right'; x.font = `600 26px ${LAT}`; ls('3px'); x.globalAlpha = .6; x.fillText('BOARDING PASS', RX, T0 + 92); x.globalAlpha = 1; ls('0px');
+    const FW = 136, FH = 176, GAP = 24; flaps((W - (FW * 4 + GAP * 3)) / 2, T0 + 136, FW, FH, GAP, 34);
+    await charDraw(W / 2, 860, 250, 560, 380);   // 11/26 밤: 캐릭터 크기 통일
+    x.textAlign = 'left'; x.fillStyle = ink; x.font = `700 40px ${KR}`; txL(grp, PX, CUT + 104);
+    ls('-2px'); fit(name, 700, 104, 60, NMF, PW, 4); x.fillStyle = '#16181D'; txL(name, PX, CUT + 224); ls('0px');   // 11/26 밤: 120 → 104
+    const [ln, lz] = two(line, 500, 42, 32, KR, PW, true); x.fillStyle = '#6B6E75'; x.font = `500 ${lz}px ${KR}`; ln.forEach((q, i) => txL(q, PX, CUT + 318 + i * 60));   // 11/26 밤 v3 답: 이름 ↔ 소개 간격 넓힘(+18)
+    const BY = T0 + CH - 64; let iz = 36; do { x.font = `700 ${iz}px ${KR}`; if (x.measureText(inv).width <= RX - 180 - PX) break; iz -= 1; } while (iz > 26);   // 11/26 밤: 주소 빼고 초대 글만 · 로고 72 → 60
+    x.fillStyle = '#16181D'; txL(inv, PX, BY); logo(RX, BY + 2, 60);
+  }
   return new Promise(res => cv.toBlob(b => res(b), 'image/png'));
 }
-const CARD = {}; function cardBlob(c) { return CARD[c] || (CARD[c] = cardPng(c).catch(() => null)); }
-async function shareCard(c) {
-  const btn = $('#copyBtn'); if (btn) btn.disabled = true;
-  try {
-    const url = location.origin + location.pathname + '#r-' + c, t0 = T(c), txt = W5 ? `I'm a '${TR(t0.name)}' (${DC(c)}) traveler. What about you?` : `나는 ‘${t0.name}’(${DC(c)}) 여행자래. 너는 어떤 여행자야?`;
-    const blob = await cardBlob(c), file = blob && new File([blob], `vztr-${DC(c)}.png`, { type: 'image/png' });
-    if (file && navigator.canShare && navigator.canShare({ files: [file] })) {
-      try { await navigator.share({ files: [file], title: 'VZTR', text: txt + ' ' + url }); return; } catch (e) { if (e && e.name === 'AbortError') return; }   // 그 밖의 오류(권한 등) = 아래 저장 + 링크 복사로
-    }
-    if (blob) { const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = file.name; document.body.appendChild(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(a.href), 4000); }
-    try { await navigator.clipboard.writeText(txt + ' ' + url); toast(blob ? '카드 이미지를 저장하고 링크를 복사했어요' : '공유 문구를 복사했어요 · 친구에게 붙여 넣어 보내 보세요'); } catch (_) { if (!blob) copyLink(c); else toast('카드 이미지를 저장했어요'); }
-  } finally { if (btn) btn.disabled = false; }
+const CARD = {}; function cardBlob(c, f = 's') { const k = c + f; return CARD[k] || (CARD[k] = cardPng(c, f).catch(() => null)); }
+/* 카톡(두 번째): 카카오 JS SDK — 키·SRI는 가이드북(index.html)과 같음. 1:1 카드를 시트 열 때 미리 카카오 서버에 올려 둠(5MB 이하·최대 100일 보관, 카카오 문서)
+   → 누르는 순간 바로 sendDefault (올린 다음에 부르면 폰에서 막힐 수 있어서) */
+const KAKAO_JS = '622ad43472a1ec6f087657bf0be1a4f3', KAKAO_SDK = 'https://t1.kakaocdn.net/kakao_js_sdk/2.8.5/kakao.min.js', KAKAO_SRI = 'sha384-v6JKY3z4FUkWq21oZDHZe74YvuPk/WUrVLrDHTBojHXClOSa3iXy7sCXPY1jkFbj';
+const KK_HOST = () => /^(www\.)?(larchive\.page|vztr\.app)$/.test(location.hostname);
+function kakaoLoad() { if (window.Kakao || document.getElementById('kakaoSdk') || !KK_HOST()) return;
+  const sc = document.createElement('script'); sc.id = 'kakaoSdk'; sc.src = KAKAO_SDK; sc.integrity = KAKAO_SRI; sc.crossOrigin = 'anonymous';
+  sc.onload = () => { try { if (!Kakao.isInitialized()) Kakao.init(KAKAO_JS); } catch (_) {} }; document.head.appendChild(sc); }
+const kakaoReady = () => new Promise(r => { let n = 0; (function w() { if (window.Kakao && Kakao.isInitialized && Kakao.isInitialized()) r(true); else if (++n > 40) r(false); else setTimeout(w, 150); })(); });
+const KKIMG = {};
+function kakaoImg(c) { return KKIMG[c] || (KKIMG[c] = (async () => { if (!KK_HOST() || !(await kakaoReady())) return '';
+  const b = await cardBlob(c, 'q'); if (!b) return ''; const dt = new DataTransfer(); dt.items.add(new File([b], `vztr-${DC(c)}.png`, { type: 'image/png' }));
+  const r = await Kakao.Share.uploadImage({ file: dt.files });   // 카카오 문서 예제: response.infos.original.url (레퍼런스는 감싸는 infos 없이 적혀 있어 둘 다 봄)
+  return (r && ((r.infos && r.infos.original && r.infos.original.url) || (r.original && r.original.url))) || ''; })().catch(() => '')); }
+function shareTxt(c) { const t0 = T(c); return W5 ? `I'm a '${TR(t0.name)}' (${DC(c)}) traveler. What about you?` : `나는 ‘${t0.name}’(${DC(c)}) 여행자래. 너는 어떤 여행자야?`; }
+function shareUrlOf(c) { return location.origin + location.pathname + '#r-' + c; }
+async function saveCard(c, f) { const b = await cardBlob(c, f); if (!b) { toast('카드를 만들지 못했어요'); return; }
+  const a = document.createElement('a'); a.href = URL.createObjectURL(b); a.download = `vztr-${DC(c)}${f === 'q' ? '-1x1' : ''}.png`; document.body.appendChild(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(a.href), 4000); }
+/* S2 공유 시트: 미리보기 · 모양(스토리 9:16 / 정사각 1:1) · 공유하기(폰 공유창) · 카카오톡(영어판 = 링크 복사) · 이미지 저장 */
+function shareCard(c) {
+  if (!W5) kakaoLoad();
+  const rx = $('#rx'), sc = $('#rxScrim'); rx.style.removeProperty('--auto'); let f = 's', url0 = '';
+  rx.innerHTML = `<h2 id="rxT">내 카드 공유</h2>
+    <div class="shp" id="shBox"><img id="shImg" alt="${esc(T(c).name)} 카드 미리보기"></div>
+    <div class="seg" id="shSeg" role="group" aria-label="카드 모양"><button type="button" data-f="s" aria-pressed="true">스토리 9:16</button><button type="button" data-f="q" aria-pressed="false">정사각 1:1</button></div>
+    <button class="cta" id="shGo">${ICON.share}공유하기</button>
+    <div class="acts shrow">${W5 ? '<button type="button" id="shLink">링크 복사</button>' : '<button type="button" id="shKk">카카오톡</button>'}<button type="button" id="shSave">이미지 저장</button></div>`;
+  sc.hidden = false; void rx.offsetWidth; void sc.offsetWidth; sc.classList.add('on'); rx.classList.add('on');
+  const img = $('#shImg'), box = $('#shBox');
+  const show = async () => { box.dataset.f = f; const b = await cardBlob(c, f); if (!b || box.dataset.f !== f) return; if (url0) URL.revokeObjectURL(url0); url0 = URL.createObjectURL(b); img.src = url0; };
+  show(); if (!W5) kakaoImg(c);
+  rx.querySelectorAll('#shSeg button').forEach(bt => bt.onclick = () => { f = bt.dataset.f; rx.querySelectorAll('#shSeg button').forEach(z => z.setAttribute('aria-pressed', z === bt ? 'true' : 'false')); show(); });
+  sc.onclick = closeRx;
+  $('#shGo').onclick = async () => { const btn = $('#shGo'); btn.disabled = true;
+    try { const b = await cardBlob(c, f), file = b && new File([b], `vztr-${DC(c)}.png`, { type: 'image/png' }), txt = shareTxt(c), url = shareUrlOf(c);
+      if (file && navigator.canShare && navigator.canShare({ files: [file] })) { try { await navigator.share({ files: [file], title: 'VZTR', text: txt + ' ' + url }); return; } catch (e) { if (e && e.name === 'AbortError') return; } }
+      if (b) await saveCard(c, f);   // 파일 공유가 안 되는 브라우저(PC 등) = 저장 + 링크 복사 (예전과 같음)
+      try { await navigator.clipboard.writeText(txt + ' ' + url); toast(b ? '카드 이미지를 저장하고 링크를 복사했어요' : '공유 문구를 복사했어요 · 친구에게 붙여 넣어 보내 보세요'); } catch (_) { if (b) toast('카드 이미지를 저장했어요'); else copyLink(c); }
+    } finally { btn.disabled = false; } };
+  $('#shSave').onclick = () => saveCard(c, f);
+  if (W5) $('#shLink').onclick = () => { const t = shareTxt(c) + ' ' + shareUrlOf(c); try { navigator.clipboard.writeText(t).then(() => toast('Link copied'), () => toast('Couldn’t copy the link')); } catch (_) { toast('Couldn’t copy the link'); } };
+  else $('#shKk').onclick = () => {
+    if (!KK_HOST()) { toast('카카오톡 공유는 vztr.app에서만 돼요'); return; }
+    const send = im => { const url = shareUrlOf(c), lk = { mobileWebUrl: url, webUrl: url };
+      try { Kakao.Share.sendDefault({ objectType: 'feed', content: { title: `나는 ‘${T(c).name}’ 여행자래`, description: `너는 어떤 여행자야? ${Q.length}번만 고르면 나와`, imageUrl: im || 'https://vztr.app/icons/icon-512.png', imageWidth: im ? 1080 : 512, imageHeight: im ? 1080 : 512, link: lk },
+        buttons: [{ title: '내 유형 알아보기', link: lk }] }); } catch (_) { toast('카카오톡을 열지 못했어요 · 링크 복사를 이용해 주세요'); } };
+    const p = kakaoImg(c);   // 보통 시트 열 때 이미 올라가 있음 → 누른 순간 바로 보냄. 아직이면 기다렸다 보냄(카드 없이 아이콘으로라도)
+    Promise.race([p, new Promise(r => setTimeout(() => r(null), 50))]).then(u => { if (u !== null) send(u); else { toast('카톡 준비 중…'); p.then(send); } });
+  };
+  rx.tabIndex = -1; setTimeout(() => rx.focus({ preventScroll: true }), 60);
 }
 
 /* 11/18 4: 16유형 카드 — 캐릭터를 색 상자 안 가로·세로 가운데로 (바닥선에 맞춰 그려져 아래로 붙던 것 보정, chars.js는 그대로). 그림자 타원은 빼고 몸통 기준 */

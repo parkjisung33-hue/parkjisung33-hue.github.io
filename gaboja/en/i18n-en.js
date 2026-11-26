@@ -713,3 +713,5 @@ Object.assign(window.VZTR_EN, { '추천 장소': 'Nearby', '고정': 'Fixed', '�
 Object.assign(window.VZTR_EN, { '안 자는 도시는 당일치기 · 옮기는 날은 짐 들고 이동': 'Day trips elsewhere · bags on moving days' });   // 11/25 #14 다시
 /* 11/25 새 첫 페이지(landing.html) */
 Object.assign(window.VZTR_EN, { '내 자리는 어디일까?': 'Which seat is yours?', '여행 성향들 둘러보기': 'Browse travel types', '내 유형 알아보기': 'Find your type', '언어': 'Language' });
+/* 11/26 결과 카드 S2 공유 시트(start.html shareCard) */
+Object.assign(window.VZTR_EN, { '내 카드 공유': 'Share my card', '스토리 9:16': 'Story 9:16', '정사각 1:1': 'Square 1:1', '이미지 저장': 'Save image', '링크 복사': 'Copy link', '카드를 만들지 못했어요': 'Couldn’t make the card' });
