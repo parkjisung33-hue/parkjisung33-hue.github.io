@@ -13,7 +13,7 @@
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="stylesheet" href="fonts/google/gf.css?v=1">
 <script src="inapp.js?v=1"></script>
-<script src="i18n-en-auto.js?v=65174011"></script><script src="i18n-en.js?v=65174011"></script><script src="i18n.js?v=65174011"></script>
+<script src="i18n-en-auto.js?v=ef103e46"></script><script src="i18n-en.js?v=ef103e46"></script><script src="i18n.js?v=ef103e46"></script>
 <link rel="stylesheet" href="fonts/vztr-fonts.css?v=2">
 <script>/* 11/26: 기기(브라우저) 시스템 모드를 따름 — 다크 = 밤 객실 · 라이트 = 밝은 객실. ?theme=dark|light = 미리보기 */
 (function () { try { var q = new URLSearchParams(location.search).get('theme'), d = q === 'dark' || q === 'light' ? q === 'dark' : matchMedia('(prefers-color-scheme: dark)').matches; if (d) document.documentElement.setAttribute('data-theme', 'dark'); } catch (e) {} })();</script>
@@ -105,17 +105,20 @@ html.fx-noglow .win > .halo { display: none; }
   --shd: #E7E8EC; --shd2: #DDDFE4; --band: #D9DBE1; --cap: #C9CCD3; --hdl: #C4C7CF; --hdl2: #B5B8C1; --sky1: #9DC3E2; --sky2: #E8F1F8; }
 .win > .halo { position: absolute; inset: 0; border-radius: 50% / 32%;
   box-shadow: 0 0 10cqw 0 color-mix(in srgb, var(--glow) 82%, transparent), 0 0 32cqw 3cqw color-mix(in srgb, var(--glow) 42%, transparent);
-  transition: opacity 2.8s cubic-bezier(.4,0,.2,1) .7s; }
+  opacity: .999; will-change: opacity; transition: opacity 2.8s cubic-bezier(.4,0,.2,1) .7s; }
+/* 11/26 밤 동우님 S24 울트라 크롬 다크: 빛 끔(?fx=1~3)·여닫기 멈춤(?fx=4) 둘 다 번쩍임 없음 → 원인 = 창 빛이 꺼지고 켜지는 전환.
+   빛 안에서 펄스(::after)가 계속 움직이는데, 바깥 빛의 투명도가 정확히 0·1에 닿는 순간 크롬이 그 겹을 통째로 새로 만들며 한 번 비는 것으로 봄
+   → 0·1에 안 닿게(.001 ~ .999): 겹이 처음부터 끝까지 그대로라 다시 만드는 순간이 없음. 눈으로는 차이 없음 */
 .win.dk > .halo { box-shadow: 0 0 12cqw 2cqw var(--glow), 0 0 38cqw 9cqw color-mix(in srgb, var(--glow) 56%, transparent); }
 html.ph .win:not(.dk) > .halo { box-shadow: 0 0 12cqw 0 color-mix(in srgb, var(--glow) 85%, transparent), 0 0 26cqw 0 color-mix(in srgb, var(--glow) 30%, transparent); }
-.win.dim > .halo { opacity: 0; transition: opacity 1.5s ease; }   /* 닫힐 땐 빛이 스르르 꺼지고, 열릴 땐 늦게 천천히 들어옴 */
+.win.dim > .halo { opacity: .001; transition: opacity 1.5s ease; }   /* 닫힐 땐 빛이 스르르 꺼지고, 열릴 땐 늦게 천천히 들어옴 */
 /* 빛 가장 바깥 = 숨 쉬듯 은은하게, 창마다 박자 엇갈림 */
 .win > .halo::after { content: ""; position: absolute; inset: 0; border-radius: inherit; pointer-events: none;
   box-shadow: 0 0 46cqw 12cqw color-mix(in srgb, var(--glow) 40%, transparent); animation: gpulse 5.2s ease-in-out infinite; }
 .win.dk > .halo::after { box-shadow: 0 0 50cqw 14cqw color-mix(in srgb, var(--glow) 45%, transparent); }
 html.ph .win:not(.dk) > .halo::after { box-shadow: 0 0 30cqw 2cqw color-mix(in srgb, var(--glow) 22%, transparent); }
 .seat:nth-child(2) .halo::after { animation-delay: -1.3s; } .seat:nth-child(3) .halo::after { animation-delay: -2.6s; } .seat:nth-child(4) .halo::after { animation-delay: -3.9s; }
-@keyframes gpulse { 0%, 100% { opacity: .25; scale: 1; } 50% { opacity: 1; scale: 1.035; } }
+@keyframes gpulse { 0%, 100% { opacity: .25; scale: 1; } 50% { opacity: .999; scale: 1.035; } }
 .win > .glass { position: absolute; left: 8%; top: 5.238%; width: 84%; height: 86.67%; border-radius: 50% / 31.9%; overflow: hidden; background: linear-gradient(180deg, var(--sky1), var(--sky2)); z-index: 0; }
 .win > svg.fr { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; z-index: 1; }
 .fr .hi { fill: none; stroke: var(--lin-hi); stroke-width: 9; }
