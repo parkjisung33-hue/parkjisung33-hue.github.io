@@ -2082,7 +2082,7 @@ function kakaoImg(c) { return KKIMG[c] || (KKIMG[c] = (async () => { if (!KK_HOS
   const b = await cardBlob(c, 'q'); if (!b) return ''; const dt = new DataTransfer(); dt.items.add(new File([b], `vztr-${DC(c)}.png`, { type: 'image/png' }));
   const r = await Kakao.Share.uploadImage({ file: dt.files });   // 카카오 문서 예제: response.infos.original.url (레퍼런스는 감싸는 infos 없이 적혀 있어 둘 다 봄)
   return (r && ((r.infos && r.infos.original && r.infos.original.url) || (r.original && r.original.url))) || ''; })().catch(() => '')); }
-function shareTxt(c) { const t0 = T(c), n = TR(t0.name); return W5 ? `I'm ${/^[AEIOU]/i.test(n) ? 'an' : 'a'} ‘${n}’ traveler, what about you?` : `나는 ‘${t0.name}’ 여행자래, 너는?`; }   // 11/26 동우님: 공유 문구는 짧게 한 문장
+function shareTxt(c) { const t0 = T(c), n = TR(t0.name); return W5 ? `I'm ${/^[AEIOU]/i.test(n) ? 'an' : 'a'} ‘${n}’ traveler, what about you?` : `내 여행 유형은 ${t0.name}, 너는?`; }   // 11/26 동우님: 공유 문구는 짧게 한 문장 · 11/26 밤 '나는 ‘…’ 여행자래' 어색 → 이 문장('호캉스 여행자 여행자' 겹침도 없앰)
 /* 11/26 2주차: 공유 링크 = vztr.app/r/코드 — 서버가 그 유형의 미리보기(제목·카드 그림)를 넣어 줌(# 뒤는 서버로 안 가서 예전 주소는 16유형이 다 같은 미리보기). p = 궁합 초대. localhost 미리보기는 예전 주소 */
 function shareUrlOf(c, p) { return /^(www\.)?(vztr\.app|larchive\.page)$/.test(location.hostname) ? 'https://vztr.app/' + (W5 ? 'en/' : '') + 'r/' + c + (p ? '?p=1' : '') : location.origin + location.pathname + '#r-' + c; }
 async function saveCard(c, f) { const b = await cardBlob(c, f); if (!b) { toast('카드를 만들지 못했어요'); return; }
@@ -2113,7 +2113,7 @@ function shareCard(c) {
   else $('#shKk').onclick = () => { if (window.vztrHit) vztrHit('share');
     if (!KK_HOST()) { toast('카카오톡 공유는 vztr.app에서만 돼요'); return; }
     const send = im => { const url = shareUrlOf(c), lk = { mobileWebUrl: url, webUrl: url };
-      try { Kakao.Share.sendDefault({ objectType: 'feed', content: { title: `나는 ‘${T(c).name}’ 여행자래`, description: `${Q.length}번 고르면 너의 여행 유형도 나와요.`, imageUrl: im || 'https://vztr.app/icons/icon-512.png', imageWidth: im ? 1080 : 512, imageHeight: im ? 1080 : 512, link: lk },
+      try { Kakao.Share.sendDefault({ objectType: 'feed', content: { title: `내 여행 유형은 ${T(c).name}`, description: `${Q.length}번 골라 내 여행 유형 찾기`, imageUrl: im || 'https://vztr.app/icons/icon-512.png', imageWidth: im ? 1080 : 512, imageHeight: im ? 1080 : 512, link: lk },
         buttons: [{ title: '내 유형 알아보기', link: lk }] }); } catch (_) { toast('카카오톡을 열지 못했어요 · 링크 복사를 이용해 주세요'); } };
     const p = kakaoImg(c);   // 보통 시트 열 때 이미 올라가 있음 → 누른 순간 바로 보냄. 아직이면 기다렸다 보냄(카드 없이 아이콘으로라도)
     Promise.race([p, new Promise(r => setTimeout(() => r(null), 50))]).then(u => { if (u !== null) send(u); else { toast('카톡 준비 중…'); p.then(send); } });
