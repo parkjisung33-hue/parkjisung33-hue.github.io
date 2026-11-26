@@ -29,6 +29,11 @@
 <title>VZTR</title>
 </head>
 <body>
+<script>/* 11/26 동우님: vztr.app 주소만 치고 처음 온 사람(이 기기에 일정 없음 + 주소 뒤 # 없음) → 첫 페이지(랜딩). ?dev=1·utm 등은 그대로 넘김.
+   # 있는 주소(#sample·#v=·#g= 공유/메일 링크)·저장된 일정이 있으면 가이드북 그대로. migrate.js(#mig= 이전)가 먼저 돌고 나서 봄. 검수(localhost)·옛 주소 보드는 대상 아님 */
+(function () { try { if (!/^(www\.)?vztr\.app$/.test(location.hostname) || (location.hash && location.hash !== '#')) return;
+  var p = JSON.parse(localStorage.getItem('gaboja-plan') || 'null'); if (p && Array.isArray(p.days) && p.days.length) return;
+  document.documentElement.style.visibility = 'hidden'; location.replace('landing.html' + location.search); } catch (e) {} })();</script>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="stylesheet" href="fonts/google/gf.css?v=1"><!-- 11/24 Inter Tight·Zen Kaku Gothic New 자체 호스팅(구글 서버로 IP 안 감, OFL) -->
 <script src="inapp.js?v=1"></script>
