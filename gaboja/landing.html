@@ -2,6 +2,8 @@
 <html lang="ko">
 <head>
 <script src="migrate.js?v=2"></script>
+<script>/* 11/27 vztr.app/ = 늘 첫 페이지. 주소 뒤 #가 있는 링크(메일 #g= · 공유 #v= · #sample)는 가이드북(/trip)으로 그대로 넘김 — migrate.js(#mig=)가 먼저 돎 */
+(function () { try { var h = location.hash; if (h && h !== '#') { document.documentElement.style.visibility = 'hidden'; location.replace('trip' + location.search + h); } } catch (e) {} })();</script>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="robots" content="noindex, nofollow">
@@ -12,7 +14,7 @@
 <meta property="og:site_name" content="VZTR">
 <meta property="og:title" content="VZTR — 이번 여행, 나답게.">
 <meta property="og:description" content="내 여행 유형이랑 맞춤 일정을 받아보자!">
-<meta property="og:url" content="https://vztr.app/landing.html">
+<meta property="og:url" content="https://vztr.app/">
 <meta property="og:locale" content="ko_KR">
 <meta property="og:image" content="https://vztr.app/og/ko-main.png?v=2">
 <meta property="og:image:width" content="1200">
@@ -35,7 +37,7 @@
 (function () { try { var q = new URLSearchParams(location.search).get('theme'), d = q === 'dark' || q === 'light' ? q === 'dark' : matchMedia('(prefers-color-scheme: dark)').matches; if (d) document.documentElement.setAttribute('data-theme', 'dark'); } catch (e) {} })();</script>
 <!-- 2026-11-25 새 첫 페이지(랜딩) — 시안 10차 확정본(디자인/2026-11-25_VZTR_첫페이지시안/board_v10_src.html)을 그대로 옮김.
      화면 = 설계 크기(PC 1440×900 / 폰 390×844)로 그리고 브라우저 크기에 맞춰 통째로 비율 유지(반응형 등비 스케일).
-     버튼: 내 유형 알아보기 → start.html?go=q0 · 여행 성향들 둘러보기 → start.html?go=types · 언어 = i18n.js(영어판 /en/landing.html) -->
+     버튼: 내 유형 알아보기 → test · 여행 성향들 둘러보기 → types (11/27 깔끔한 주소) · 언어 = i18n.js(영어판 /en/landing.html) -->
 <style>
 :root { color-scheme: light; padding-top: env(safe-area-inset-top, 0px); padding-bottom: env(safe-area-inset-bottom, 0px);
   --kr: "VZTR KR", "Pretendard Variable", Pretendard, -apple-system, "Apple SD Gothic Neo", "Malgun Gothic", system-ui, sans-serif;
@@ -167,6 +169,7 @@ html.ph .win > .halo::after { display: none; }
 .al1 { appearance: none; border: 0; background: none; cursor: pointer; font: 600 14px/1 var(--krb); color: var(--ac); padding: 8px 2px 4px; letter-spacing: -.01em; }
 html.pc .al1 { padding-top: 10px; }
 html.ph .ctas .gh { padding-bottom: 6px; }
+.al1#myTrip { display: inline-block; text-align: center; text-decoration: none; } .al1#myTrip[hidden] { display: none; }
 .al1:focus-visible { outline: 2px solid var(--ac); outline-offset: 3px; border-radius: 8px; }
 .alsc { position: fixed; inset: 0; z-index: 60; background: rgba(10,12,16,.38); opacity: 0; transition: opacity .22s; }
 .alsc.on { opacity: 1; }
@@ -207,11 +210,11 @@ html.pc .alsh { bottom: 50%; border-radius: 24px; transform: translate(-50%, 50%
   <div class="tx">
     <h1 class="hl">이번 여행, 나답게.</h1>
     <p class="q">내 자리는 어디일까?</p>
-    <div class="ctas"><a class="cta" href="start.html?go=q0">내 유형 알아보기</a><a class="gh" href="start.html?go=types">여행 성향들 둘러보기</a><button type="button" class="al1" id="alBtn" hidden data-noi18n></button></div>
+    <div class="ctas"><a class="cta" href="test">내 유형 알아보기</a><a class="gh" href="types">여행 성향들 둘러보기</a><button type="button" class="al1" id="alBtn" hidden data-noi18n></button><a class="al1" id="myTrip" href="trip" hidden>내 일정 이어보기 ›</a></div>
   </div>
   <div class="top">
     <div class="lg"><b class="vz" data-noi18n>vztr<i>.</i></b></div>
-    <p class="legal" id="legal"><a href="privacy.html" target="_blank" rel="noopener">개인정보처리방침</a><a href="terms.html" target="_blank" rel="noopener">이용약관</a></p>
+    <p class="legal" id="legal"><a href="privacy" target="_blank" rel="noopener">개인정보처리방침</a><a href="terms" target="_blank" rel="noopener">이용약관</a></p>
     <nav class="lang" id="lang" aria-label="언어" data-noi18n></nav>
   </div>
 </main></div>
@@ -227,7 +230,7 @@ let QT = ''; try { QT = new URLSearchParams(location.search).get('theme') || '';
 let DK = QT === 'dark' || QT === 'light' ? QT === 'dark' : MQ.matches;
 setTheme(DK ? 'dark' : 'light');
 /* 언어 토글 · 약관(영어판은 한 단계 위의 문서 + #en) */
-const lang = document.getElementById('lang'), other = () => (window.VZTR_I18N ? VZTR_I18N.other() : (EN ? '../landing.html' : 'en/landing.html'));
+const lang = document.getElementById('lang'), other = () => (window.VZTR_I18N ? VZTR_I18N.other() : (EN ? '../' : 'en/'));
 lang.innerHTML = EN ? `<a href="${other()}" hreflang="ko" lang="ko">한국어</a><b aria-current="true">English</b>` : `<b aria-current="true">한국어</b><a href="${other()}" hreflang="en" lang="en">English</a>`;
 lang.querySelector('a').addEventListener('click', e => { if (window.VZTR_I18N) { e.preventDefault(); VZTR_I18N.go(); } });
 if (EN) document.querySelectorAll('#legal a').forEach(a => { a.href = '../' + a.getAttribute('href') + '#en'; });
@@ -322,6 +325,8 @@ if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => { fi
 (() => {
   const EN = window.VZTR_LANG === 'en', OPEN = Date.UTC(2026, 11, 24, 15);   // 2026-12-25 00:00 KST부터 숨김
   if (window.vztrHit) vztrHit('land');
+  /* 11/27 이 기기에 만든 일정이 있으면(써 본 사람) 알림 줄 자리에 '내 일정 이어보기' → /trip */
+  try { const pl = JSON.parse(localStorage.getItem('gaboja-plan') || 'null'); if (pl && Array.isArray(pl.days) && pl.days.length) { document.getElementById('myTrip').hidden = false; return; } } catch (_) {}
   const btn = document.getElementById('alBtn'); if (!btn || Date.now() >= OPEN) return;
   const L = EN ? { b: 'Get notified when we launch Dec 25 ›', h: 'Launch alert for Dec 25', s: 'We’ll send you one email on the day we open.', ph: 'Email address',
       a1: 'Consent to collect and use personal information', a1s: 'Email address · to send the launch alert · deleted within 7 days after sending', a1n: 'Without consent we can’t send the alert. ', pv: 'Privacy policy',
@@ -332,7 +337,7 @@ if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => { fi
       a2: '오픈 알림(광고성 정보) 메일 받기', a2s: 'VZTR 정식 오픈 소식 1통 · 수신 거부는 메일 아래 링크로', go: '알림 받기', req: '필수', bad: '이메일 주소를 확인해 주세요.', err: '신청하지 못했어요. 잠시 후 다시 시도해 주세요.', off: '신청은 vztr.app에서만 돼요.',
       ok: '신청됐어요', okS: '확인 메일을 보냈어요. 12월 25일에 만나요.', close: '닫기' };
   btn.textContent = L.b; btn.hidden = false;
-  const RE = /^[^\s@<>"',;]+@[^\s@<>"',;]+\.[^\s@<>"',;]{2,}$/, PV = ((window.VZTR_LEGAL || {}).v || {}).privacy || '', priv = EN ? '../privacy.html#en' : 'privacy.html';
+  const RE = /^[^\s@<>"',;]+@[^\s@<>"',;]+\.[^\s@<>"',;]{2,}$/, PV = ((window.VZTR_LEGAL || {}).v || {}).privacy || '', priv = EN ? '../privacy#en' : 'privacy';
   const ck = '<span class="ck" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M6 12.5l4 4 8-8.5"/></svg></span>';
   const sc = document.createElement('div'); sc.className = 'alsc'; sc.hidden = true;
   const sh = document.createElement('div'); sh.className = 'alsh'; sh.hidden = true; sh.setAttribute('role', 'dialog'); sh.setAttribute('aria-modal', 'true'); sh.setAttribute('aria-labelledby', 'alH'); sh.setAttribute('data-noi18n', '');

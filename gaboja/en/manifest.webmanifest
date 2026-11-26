@@ -2,7 +2,7 @@
   "name": "VZTR",
   "short_name": "VZTR",
   "lang": "en",
-  "start_url": "./",
+  "start_url": "trip",
   "scope": "./",
   "display": "standalone",
   "background_color": "#EFEFF1",

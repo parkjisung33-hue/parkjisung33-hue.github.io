@@ -25,7 +25,7 @@
   }
   try {
     var saved = localStorage.getItem(KEY);
-    if (!EN && !saved && !bot && /^https?:/.test(location.protocol) && /\/(index\.html|start\.html|landing\.html)?$/.test(location.pathname) && !/^ko\b/i.test(navigator.language || 'ko')) { location.replace(other()); try { document.documentElement.style.visibility = 'hidden'; } catch (_) {} return; }   // 11/22 해외(영어 폰)에서 빈 화면: window.stop()이 영어판으로 넘어가는 것까지 취소했음 → 멈추지 않고 화면만 숨김
+    if (!EN && !saved && !bot && /^https?:/.test(location.protocol) && /\/(index\.html|start\.html|landing\.html|trip|test|types)?$/.test(location.pathname) && !/^ko\b/i.test(navigator.language || 'ko')) { location.replace(other()); try { document.documentElement.style.visibility = 'hidden'; } catch (_) {} return; }   // 11/22 해외(영어 폰)에서 빈 화면: window.stop()이 영어판으로 넘어가는 것까지 취소했음 → 멈추지 않고 화면만 숨김
     if (!saved || saved !== L) { /* 주소로 들어온 언어는 고른 것으로 치지 않음 — 버튼으로만 기억 */ }
   } catch (_) {}
   function go() { try { localStorage.setItem(KEY, EN ? 'ko' : 'en'); } catch (_) {} location.href = other(); }
@@ -47,7 +47,7 @@
     b.style.textOverflow = 'ellipsis'; b.style.overflow = 'hidden'; b.style.whiteSpace = 'nowrap'; rfT = b.textContent; } } catch (_) {} }); }   // 머리 제목 맞춤 = 버튼이 붙거나 제목이 번역된 뒤 다시
   window.VZTR_REFIT = function () { rfT = null; refit(); };   // F-03: 탭이 바뀌어 제목 칸 넓이가 달라지면 다시 맞춤
   function mount() {
-    if (document.querySelector('.vzlang') || !/\/(index\.html|start\.html)?$/.test(location.pathname)) return;   // 리뷰 #9: 덜어내기 보드 등엔 영어판이 없음
+    if (document.querySelector('.vzlang') || !/\/(index\.html|start\.html|trip|test|types)?$/.test(location.pathname)) return;   // 리뷰 #9: 덜어내기 보드 등엔 영어판이 없음
     var b = document.createElement('a'); b.className = 'vzlang'; b.href = other(); b.setAttribute('data-noi18n', '');
     b.innerHTML = '<span class="vzp"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c3 3.2 3 14.8 0 18M12 3c-3 3.2-3 14.8 0 18"/></svg><span class="vzt" lang="' + (EN ? 'ko' : 'en') + '">' + (EN ? '한국어' : document.querySelector('header.bar') ? 'English' : 'EN') + '</span></span>';   /* 11/23 impeccable E7: 바꿀 언어를 그 언어 이름으로(W3C·GOV.UK) — 'KO'는 지금 언어처럼 읽힘 · 한국어판 가이드북 머리는 자리가 좁아 EN 유지 */ b.setAttribute('aria-label', EN ? 'View in Korean' : '영어로 보기'); b.lang = EN ? 'ko' : 'en'; b.setAttribute('hreflang', b.lang);
     b.onclick = function (e) { e.preventDefault(); go(); };

@@ -13,11 +13,11 @@
 <title>VZTR 덜어내기 — 가이드북</title>
 </head>
 <body>
-<script>/* 11/26 동우님: vztr.app 주소만 치고 처음 온 사람(이 기기에 일정 없음 + 주소 뒤 # 없음) → 첫 페이지(랜딩). ?dev=1·utm 등은 그대로 넘김.
+<script>/* 11/26 동우님: vztr.app 주소만 치고 처음 온 사람(이 기기에 일정 없음 + 주소 뒤 # 없음) → 첫 페이지(랜딩). 11/27~ 주소만(vztr.app/)은 늘 첫 페이지, 가이드북 = /trip — 여기는 /trip에 일정 없이 온 경우. ?dev=1·utm 등은 그대로 넘김.
    # 있는 주소(#sample·#v=·#g= 공유/메일 링크)·저장된 일정이 있으면 가이드북 그대로. migrate.js(#mig= 이전)가 먼저 돌고 나서 봄. 검수(localhost)·옛 주소 보드는 대상 아님 */
 (function () { try { if (!/^(www\.)?vztr\.app$/.test(location.hostname) || (location.hash && location.hash !== '#')) return;
   var p = JSON.parse(localStorage.getItem('gaboja-plan') || 'null'); if (p && Array.isArray(p.days) && p.days.length) return;
-  document.documentElement.style.visibility = 'hidden'; location.replace('landing.html' + location.search); } catch (e) {} })();</script>
+  document.documentElement.style.visibility = 'hidden'; location.replace('./' + location.search); } catch (e) {} })();</script>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="stylesheet" href="fonts/google/gf.css?v=1"><!-- 11/24 Inter Tight·Zen Kaku Gothic New 자체 호스팅(구글 서버로 IP 안 감, OFL) -->
 <script src="inapp.js?v=1"></script>
@@ -1704,7 +1704,7 @@ input::placeholder, textarea::placeholder, .rideedit .rfno::placeholder, .rideed
 <div class="sheet glass" id="sheet" role="dialog" aria-modal="true" aria-labelledby="sheetTitle"><div class="grab"></div><div id="sheetIn"></div></div>
 <nav class="drawer glass" id="drawer" aria-label="메뉴">
   <div class="brand"><b class="vz">vztr<i></i></b><span>TRAVEL PLANNER</span></div>
-  <a class="tcard" data-m="type" href="start.html?from=app#types"><span class="tav" id="typeAv" hidden></span><b id="typeN" hidden></b><span class="one" id="typeNm">내 여행 유형 알아보기</span><svg viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg></a>
+  <a class="tcard" data-m="type" href="test?from=app#types"><span class="tav" id="typeAv" hidden></span><b id="typeN" hidden></b><span class="one" id="typeNm">내 여행 유형 알아보기</span><svg viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg></a>
   <button class="nbtn" data-m="new"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>새 여행</button>
   <button data-m="trips" id="tripsRow" hidden><svg viewBox="0 0 24 24"><rect x="4" y="8" width="16" height="11" rx="2"/><path d="M9 8V6a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2M4 13h16"/></svg><span>내 여행</span><span class="muted" id="tripsN" style="margin-left:auto;font-weight:500"></span></button>
   <div class="hr"></div>
@@ -1712,7 +1712,7 @@ input::placeholder, textarea::placeholder, .rideedit .rfno::placeholder, .rideed
   <button data-m="sum"><svg viewBox="0 0 24 24"><path d="M5 6h14M5 12h14M5 18h9"/></svg>여행 요약</button>
   <button data-m="memo"><svg viewBox="0 0 24 24"><path d="M5 4h14v11l-5 5H5z"/><path d="M14 20v-5h5M8 9h8M8 13h4"/></svg><span>메모</span><span class="muted" id="memoN" style="margin-left:auto;font-weight:500"></span></button>
   <button data-m="arc"><svg viewBox="0 0 24 24"><rect x="4" y="5" width="16" height="4" rx="1"/><path d="M5 9v9a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V9M10 13h4"/></svg><span>보관함</span><span class="muted" id="arcN" style="margin-left:auto;font-weight:500"></span></button>
-  <a data-m="trip" href="start.html?edit=1"><svg viewBox="0 0 24 24"><path d="M4 20h4l10-10-4-4L4 16z"/></svg>여행 정보 수정</a>
+  <a data-m="trip" href="test?edit=1"><svg viewBox="0 0 24 24"><path d="M4 20h4l10-10-4-4L4 16z"/></svg>여행 정보 수정</a>
   <div class="hr"></div>
   <button data-m="shares"><svg viewBox="0 0 24 24"><path d="M12 15V4M8 8l4-4 4 4M5 12v7a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-7"/></svg><span>공유하기</span><svg class="chev" viewBox="0 0 24 24" style="margin-left:auto"><path d="M9 6l6 6-6 6"/></svg></button>
   <div class="hr"></div>
@@ -1723,7 +1723,7 @@ input::placeholder, textarea::placeholder, .rideedit .rfno::placeholder, .rideed
     </div>
   </div>
   <button data-m="install"><svg viewBox="0 0 24 24"><rect x="7" y="3" width="10" height="18" rx="2"/><path d="M12 8v6M9.5 11.5L12 14l2.5-2.5"/></svg><span>홈 화면에 추가</span></button>
-  <div class="dlegal"><a href="privacy.html" target="_blank" rel="noopener">개인정보처리방침</a><a href="terms.html" target="_blank" rel="noopener">이용약관</a><a href="mailto:vztr@larchive.page">문의</a></div><!-- 11/24 법적 고지 링크(개인정보위 작성지침: 서비스 메뉴·설정에서 쉽게 확인) -->
+  <div class="dlegal"><a href="privacy" target="_blank" rel="noopener">개인정보처리방침</a><a href="terms" target="_blank" rel="noopener">이용약관</a><a href="mailto:vztr@larchive.page">문의</a></div><!-- 11/24 법적 고지 링크(개인정보위 작성지침: 서비스 메뉴·설정에서 쉽게 확인) -->
 </nav>
 <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs>
   <filter id="gbRough" filterUnits="userSpaceOnUse" x="-6" y="-6" width="112" height="112" color-interpolation-filters="sRGB">
@@ -1936,7 +1936,7 @@ setTimeout(() => {
   document.body.appendChild(a); requestAnimationFrame(() => a.classList.add('on'));
   a.onclick = e => { const b = e.target.closest('[data-a]'); if (!b) return; if (b.dataset.a === 'dark') setTheme('dark', true); else { try { localStorage.setItem('gaboja-theme', 'light'); } catch (_) {} } a.classList.remove('on'); setTimeout(() => a.remove(), 300); };
 }, 2800);
-try { const ty = JSON.parse(localStorage.getItem('gaboja-type')); if (ty && /^[LH][SE][FR][JP]$/.test(ty.code)) { document.documentElement.dataset.grp = ty.code.slice(0, 2); const tn = document.getElementById('typeN'); tn.textContent = ty.code.slice(0, 3) + (ty.code[3] === 'J' ? 'O' : 'U');   /* 11/23 4축 글자 화면 표시 O·U */ tn.hidden = false; const av = document.getElementById('typeAv'); if (av && window.GABOJA_CHAR) { av.innerHTML = GABOJA_CHAR(ty.code, { bg: false }); if (window.GABOJA_FIT) requestAnimationFrame(() => GABOJA_FIT(av.querySelector('svg'), 1.5)); av.dataset.c = ty.code; av.classList.add('gfx'); av.hidden = false; } const TY = window.GABOJA_TYPES && window.GABOJA_TYPES[ty.code]; document.getElementById('typeNm').textContent = TY && TY.name ? TY.name : '내 여행 유형'; document.querySelector('[data-m="type"]').href = 'start.html?from=app#r-' + ty.code; } } catch (_) {}
+try { const ty = JSON.parse(localStorage.getItem('gaboja-type')); if (ty && /^[LH][SE][FR][JP]$/.test(ty.code)) { document.documentElement.dataset.grp = ty.code.slice(0, 2); const tn = document.getElementById('typeN'); tn.textContent = ty.code.slice(0, 3) + (ty.code[3] === 'J' ? 'O' : 'U');   /* 11/23 4축 글자 화면 표시 O·U */ tn.hidden = false; const av = document.getElementById('typeAv'); if (av && window.GABOJA_CHAR) { av.innerHTML = GABOJA_CHAR(ty.code, { bg: false }); if (window.GABOJA_FIT) requestAnimationFrame(() => GABOJA_FIT(av.querySelector('svg'), 1.5)); av.dataset.c = ty.code; av.classList.add('gfx'); av.hidden = false; } const TY = window.GABOJA_TYPES && window.GABOJA_TYPES[ty.code]; document.getElementById('typeNm').textContent = TY && TY.name ? TY.name : '내 여행 유형'; document.querySelector('[data-m="type"]').href = 'test?from=app#r-' + ty.code; } } catch (_) {}
 document.querySelector('.pill .ttl b').textContent = TRIP_TITLE;
 
 $('#themeSeg').onclick = e => { const b = e.target.closest('[data-th]'); if (b) setTheme(b.dataset.th, true); };
@@ -3758,7 +3758,7 @@ function swapTrip(id) {
   layerOn = false; try { history.replaceState(null, ''); } catch (_) {}
   location.reload();
 }
-function goNewTrip() { layerOn = false; try { history.replaceState(null, ''); } catch (_) {} location.href = 'start.html?from=app'; }
+function goNewTrip() { layerOn = false; try { history.replaceState(null, ''); } catch (_) {} location.href = 'test?from=app'; }
 function newTripSheet() {   // 바로 이동하지 않고: 지금 여행은 목록에 보관된다고 알린 뒤 [새로 만들기] [취소]
   const p = rawPlan(); if (!p) { goNewTrip(); return; }
   openSheet('<div class="shd"><div><h3 id="sheetTitle">새 여행을 만들까요?</h3></div>' + X_BTN + '</div><div class="body"><div><p class="sub one">지금 여행은 내 여행 목록에 보관돼요</p><p class="cfm one">' + esc(planCity(p) + ' · ' + planDates(p)) + '</p></div>'
