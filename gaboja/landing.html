@@ -118,6 +118,14 @@ html.ph .win:not(.dk) > .halo { box-shadow: 0 0 12cqw 0 color-mix(in srgb, var(-
 .win.dk > .halo::after { box-shadow: 0 0 50cqw 14cqw color-mix(in srgb, var(--glow) 45%, transparent); }
 html.ph .win:not(.dk) > .halo::after { box-shadow: 0 0 30cqw 2cqw color-mix(in srgb, var(--glow) 22%, transparent); }
 .seat:nth-child(2) .halo::after { animation-delay: -1.3s; } .seat:nth-child(3) .halo::after { animation-delay: -2.6s; } .seat:nth-child(4) .halo::after { animation-delay: -3.9s; }
+/* 11/26 밤 2차 시험(?fx=5~8, 기본은 그대로): 5 = 빛 안 펄스 끔 · 6 = 빛을 성향마다 따로 4장(색이 안 바뀜) · 7 = 6 + 펄스 끔 · 8 = 6 + 닫힐 때도 빛 안 꺼짐(전환 없음) */
+html.fx-nopulse .win > .halo::after { display: none; }
+.win > .halo.hx { opacity: .001; transition: opacity 2.8s cubic-bezier(.4,0,.2,1) .7s; }
+.win > .halo.hx.on { opacity: .999; }
+.win.dim > .halo.hx, .win.dim > .halo.hx.on { opacity: .001; transition: opacity 1.5s ease; }
+html.fx-hold .win > .halo.hx, html.fx-hold .win.dim > .halo.hx { transition: none; } html.fx-hold .win.dim > .halo.hx.on { opacity: .999; }
+.halo.hx.ls { --glow: rgba(121,198,194,.5); } .halo.hx.le { --glow: rgba(244,174,187,.5); } .halo.hx.hs { --glow: rgba(138,165,234,.5); } .halo.hx.he { --glow: rgba(201,155,220,.5); }
+.win.dk > .halo.hx.ls { --glow: rgba(98,200,190,.55); } .win.dk > .halo.hx.le { --glow: rgba(240,150,165,.55); } .win.dk > .halo.hx.hs { --glow: rgba(130,160,240,.55); } .win.dk > .halo.hx.he { --glow: rgba(210,140,215,.55); }
 @keyframes gpulse { 0%, 100% { opacity: .25; scale: 1; } 50% { opacity: .999; scale: 1.035; } }
 .win > .glass { position: absolute; left: 8%; top: 5.238%; width: 84%; height: 86.67%; border-radius: 50% / 31.9%; overflow: hidden; background: linear-gradient(180deg, var(--sky1), var(--sky2)); z-index: 0; }
 .win > svg.fr { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; z-index: 1; }
@@ -169,8 +177,8 @@ html.ph .win:not(.dk) > .halo::after { box-shadow: 0 0 30cqw 2cqw color-mix(in s
 <script>
 (() => {
 const EN = window.VZTR_LANG === 'en';
-const FX = (() => { try { const n = +(new URLSearchParams(location.search).get('fx') || 0); return n >= 1 && n <= 4 ? n : 0; } catch (_) { return 0; } })();   // 번쩍임 찾기 시험 스위치
-if (FX) { if (FX <= 3) document.documentElement.classList.add('fx-noglow'); document.body.insertAdjacentHTML('beforeend', `<span class="fxbadge">TEST ${FX}</span>`); }
+const FX = (() => { try { const n = +(new URLSearchParams(location.search).get('fx') || 0); return n >= 1 && n <= 8 ? n : 0; } catch (_) { return 0; } })();   // 번쩍임 찾기 시험 스위치
+if (FX) { if (FX <= 3) document.documentElement.classList.add('fx-noglow'); if (FX === 5 || FX === 7) document.documentElement.classList.add('fx-nopulse'); if (FX === 8) document.documentElement.classList.add('fx-hold'); document.body.insertAdjacentHTML('beforeend', `<span class="fxbadge">TEST ${FX}</span>`); }
 /* 테마: 기기 시스템 모드를 따름(바뀌면 바로 따라감) · ?theme= 미리보기 */
 const setTheme = t => { if (t === 'dark') document.documentElement.setAttribute('data-theme', 'dark'); else document.documentElement.removeAttribute('data-theme');
   const m = document.querySelector('meta[name="theme-color"]'); if (m) m.content = t === 'dark' ? '#1B1622' : '#F8F8FA'; };
@@ -188,7 +196,7 @@ const rr = (x, y, w, h, rx, ry) => `M${x + rx},${y} H${x + w - rx} A${rx},${ry} 
 const OP = rr(0, 0, 300, 420, 150, 134), GL = rr(24, 22, 252, 364, 126, 116), LP = rr(19, 17, 262, 375, 131, 121);
 let WID = 0;
 const WIN = (o = {}) => { const id = 'w' + (++WID);
-  return `<div class="win ${o.cls || ''}" style="--sh:${o.sh ?? .16}"><i class="halo"></i><div class="glass">${o.inner || ''}</div>
+  return `<div class="win ${o.cls || ''}" style="--sh:${o.sh ?? .16}">${o.halo || '<i class="halo"></i>'}<div class="glass">${o.inner || ''}</div>
   <svg class="fr" viewBox="0 0 300 420" aria-hidden="true" focusable="false"><defs><clipPath id="${id}c"><path d="${OP}"/></clipPath>
     <linearGradient id="${id}g" x1="0" y1="0" x2="0" y2="1"><stop offset="0" style="stop-color:var(--lin2)"/><stop offset=".55" style="stop-color:var(--lin)"/><stop offset="1" style="stop-color:var(--lin2)"/></linearGradient></defs>
     <path d="${OP} ${GL}" fill-rule="evenodd" fill="url(#${id}g)"/><path class="lip" d="${LP}"/><path class="hi" d="${GL}" clip-path="url(#${id}c)"/>
@@ -212,7 +220,7 @@ const SEATS = [['LSRP', '로컬 탐험형', 'L · S', 'ls'], ['LEFJ', '취향 �
 const GFX = (k, i, on) => `<div class="${FX === 2 || FX === 3 ? 'gfx0' : 'gfx'}${on ? ' on' : ''}" data-c="${k}" data-fxd="${i * 500}">${window.GABOJA_CHAR ? GABOJA_CHAR(k, { bg: false }) : ''}</div>`;
 const CH = (k, i) => `<div class="chw" style="animation-delay:${-i * .85}s">${GFX(k, i, true)}</div>`;
 const SEATWIN = (s, i) => WIN({ cls: (DK ? 'dk ' : '') + s[3], inner: SKYL(DK) + CH(s[0], i) });
-const SOLOWIN = () => WIN({ cls: (DK ? 'dk ' : '') + SEATS[0][3], inner: SKYL(DK) + `<div class="chw">${SEATS.map((s, i) => GFX(s[0], 0, i === 0)).join('')}</div>` });
+const SOLOWIN = () => WIN({ cls: (DK ? 'dk ' : '') + SEATS[0][3], halo: FX >= 6 ? SEATS.map((q, i) => `<i class="halo hx ${q[3]}${i === 0 ? ' on' : ''}"></i>`).join('') : '', inner: SKYL(DK) + `<div class="chw">${SEATS.map((s, i) => GFX(s[0], 0, i === 0)).join('')}</div>` });
 /* 화면: PC(가로가 넓을 때) = 창 넷 · 폰(좁거나 세로로 길 때) = 창 하나가 닫혔다 열리며 성향이 바뀜 */
 const stage = document.getElementById('stage'), wins = document.getElementById('wins');
 let MODE = '', cycleT = 0;
@@ -244,7 +252,7 @@ function startCycle() { const box = wins.querySelector('.solo'), win = box.query
   if (REDUCED || FX === 4) return;
   const close = () => { win.classList.add('dim'); win.style.setProperty('--sh', 1.02); setTimeout(() => lbls[k].classList.remove('on'), 1300); cycleT = setTimeout(swap, 3100); };
   const swap = () => { const p = k; k = (k + 1) % SEATS.length;
-    win.classList.remove(SEATS[p][3]); win.classList.add(SEATS[k][3]); gfx[p].classList.remove('on'); gfx[k].classList.add('on');
+    win.classList.remove(SEATS[p][3]); win.classList.add(SEATS[k][3]); const hx = win.querySelectorAll('.halo.hx'); if (hx.length) { hx[p].classList.remove('on'); hx[k].classList.add('on'); } gfx[p].classList.remove('on'); gfx[k].classList.add('on');
     if (window.GABOJA_CHAR_PLAY && gfx[k].classList.contains('gfx')) GABOJA_CHAR_PLAY(gfx[k]);   // 열리기 전에 등장 동작을 미리 끝내 둠(열릴 때 캐릭터는 이미 보임)
     requestAnimationFrame(() => requestAnimationFrame(() => { win.style.setProperty('--sh', .16); win.classList.remove('dim'); lbls[k].classList.add('on'); cycleT = setTimeout(close, 5900); })); };
   cycleT = setTimeout(close, 4000); }
