@@ -9,6 +9,7 @@
 <meta name="theme-color" content="#EFEFF1">
 <link rel="stylesheet" href="fonts/google/gf.css?v=1"><!-- 11/24 Inter Tight·Zen Kaku Gothic New 자체 호스팅(구글 서버로 IP 안 감, OFL) -->
 <script src="inapp.js?v=1"></script>
+<script src="hit.js?v=1"></script><!-- 11/26 2주차: 유입 숫자 세기(합계만) -->
 <script src="i18n.js?v=2"></script><!-- 11/20 W5 언어 틀 (영어판 = /en/, 사전 i18n-en.js는 배포 때 en/에만 붙음) -->
 <link rel="stylesheet" href="fonts/vztr-fonts.css?v=2"><!-- 11/19 글꼴: 굵은 한글 IBM Plex Sans KR · 보통 한글 Pretendard · 영문·숫자 IBM Plex Sans -->
 <link rel="icon" href="icons/favicon-32.png">
@@ -1081,6 +1082,27 @@ html.typed[data-grp] .flaps:not(.dr .flaps) .fl:not(.empty)::after, .pass .flaps
 .pass .todo .t button::after { content: "›"; margin-left: 0.25rem; }
 .sent button { text-decoration: none; min-height: var(--tap); }   /* 앱 안 동작엔 밑줄 없음 */
 .sent button::after { content: " ›"; }
+
+/* 11/26 궁합 S안 */
+.acts .pairb { grid-column: 1 / -1; }
+.pairx .card { display: grid; gap: 0.875rem; }
+.pairx .pp { display: grid; grid-template-columns: minmax(0,1fr) auto minmax(0,1fr); align-items: center; gap: 0.5rem; }
+.pairx .pw { display: grid; justify-items: center; gap: 0.25rem; text-align: center; min-width: 0; }
+.pairx .pw .av { width: 4.5rem; height: 4.5rem; }
+.pairx .pw b { font-size: 0.9375rem; font-weight: 700; line-height: 1.25; word-break: keep-all; }
+.pairx .pw .cd, .pairx .pl { font-size: 0.75rem; color: var(--tx-2, #6B6E75); font-weight: 600; }
+.pairx .ps { display: grid; justify-items: center; gap: 0.125rem; padding: 0 0.25rem; }
+.pairx .ps b { font: 800 1.75rem/1 "Inter Tight", var(--kr, sans-serif); } .pairx .ps b i { font-style: normal; font-size: 1rem; color: var(--tx-3, #A3A6AD); }
+.pairx .ps span { font-size: 0.6875rem; color: var(--tx-2, #6B6E75); white-space: nowrap; }
+.pairx .ph { margin: 0; text-align: center; font-size: 1.0625rem; font-weight: 700; word-break: keep-all; }
+.pairx .pt { margin: 0; font-size: 0.8125rem; line-height: 1.5; color: var(--tx-2, #6B6E75); text-align: center; } .pairx .pt em { font-style: normal; font-weight: 700; margin-right: 0.375rem; } .pairx .pt.ok em { color: var(--blue); } .pairx .pt.no em { color: var(--red); }
+.pairx .pli { margin: 0; padding: 0; list-style: none; display: grid; gap: 0.375rem; }
+.pairx .pli li { font-size: 0.8125rem; line-height: 1.45; padding-left: 1.125rem; position: relative; color: var(--tx-2, #6B6E75); word-break: keep-all; }
+.pairx .pli li::before { content: ''; position: absolute; left: 0.25rem; top: 0.5em; width: 0.375rem; height: 0.375rem; border-radius: 50%; background: var(--tx-3, #A3A6AD); }
+.pairx .pli li.ok { color: var(--ink, #16171A); } .pairx .pli li.ok::before { background: var(--blue); }
+.pairx .cta2 { height: 2.75rem; border-radius: 12px; background: #ECECEF; color: #16171A; font-weight: 700; font-size: 0.875rem; display: flex; align-items: center; justify-content: center; gap: 0.375rem; }
+.pairx .cta2 svg { width: 1rem; height: 1rem; stroke: currentColor; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+:root[data-theme="dark"] .pairx .cta2 { background: rgba(255,255,255,.1); color: #F1F1F4; }
 </style>
 </head>
 <body>
@@ -1516,6 +1538,7 @@ function go(step, opt = {}) {
   if (!opt.noHist && S.step !== step) S.hist.push(S.step);
   SCROLL[S.step] = window.scrollY; NAV++; busy = false; clearInterval(spinT);
   dir = opt.back ? -1 : 1; S.step = step; render();
+  if (window.vztrHit) { if (step === 'q0') vztrHit('start'); else if (step === 'result') vztrHit('done'); }   // 11/26 2주차: 질문 시작 · 결과 나옴(한 번 열 때 한 번)
   window.scrollTo({ top: opt.back && SCROLL[step] ? SCROLL[step] : 0 });
   const h = document.querySelector('.scr:not(.leaving) h1, .scr:not(.leaving) h2'); if (h && !opt.noFocus) { h.tabIndex = -1; h.focus({ preventScroll: true }); }
 }
@@ -1867,6 +1890,7 @@ function rResult(c, mine) {
       <div class="gz">${gaugeHtml(c, v)}</div>
       ${ansHtml(c)}` : ''}
     </article>
+    ${mine ? pairBox(c) : ''}
     ${t.scenes ? `<div class="sec"><h3>이런 장면, 익숙하죠?</h3><div class="card">${t.scenes.map(s => `<div class="scene"><span class="ck">${ICON.check}</span><span>${esc(s)}</span></div>`).join('')}</div></div>` : ''}
     ${day ? `<div class="sec"><h3>이 유형의 하루</h3><div class="card rhy">${day}</div></div>` : ''}
     <div class="sec"><h3>이 성향이면 이렇게 짜 드려요</h3><div class="card how">${howHtml(c)}</div></div>
@@ -1874,7 +1898,7 @@ function rResult(c, mine) {
       <div><div class="lab ok">잘 맞아요</div>${miniHtml(t.best, t.bestWhy)}</div>
       <div><div class="lab no">부딪힐 수 있어요</div>${miniHtml(t.clash, t.clashWhy)}</div></div></div>` : ''}
     <div class="acts">
-      <button id="copyBtn" class="share">${ICON.share}친구에게 공유하기</button>
+      <button id="copyBtn" class="share">${ICON.share}친구에게 공유하기</button>${mine ? `<button id="pairBtn" class="pairb">${ICON.heart || ''}친구랑 궁합 보기</button>` : ''}
       <button id="redoBtn">${ICON.redo}다시 하기</button>
       <button id="allBtn2">${ICON.grid}16가지 성향 보기</button>
     </div>
@@ -1883,6 +1907,8 @@ function rResult(c, mine) {
         : `<button class="cta" id="nextBtn">${mine ? '이 유형으로 내 여행 만들기' : (S.type ? '내 유형으로 여행 만들기' : '나도 해 보기')} ${ICON.arrow}</button>`}
     </div>`);
   el.querySelectorAll('.pair .mini').forEach((b, k) => b.onclick = () => pairSheet(b.dataset.code, k === 0 ? t.bestWhy : t.clashWhy, k === 0));   // 11/14 #13a: 페이지 이동 대신 아래 시트
+  if ($('#pairBtn')) $('#pairBtn').onclick = () => pairInvite(c);   // 11/26 궁합 S안
+  if ($('#pairShare')) $('#pairShare').onclick = () => pairShare(c);
   $('#copyBtn').onclick = () => shareCard(c);   // 11/24 보드 3 = A: 이미지 카드로 공유 (안 되면 링크 공유로)
   setTimeout(() => { cardBlob(c, 's'); cardBlob(c, 'q'); }, 600);   // 미리 그려 둠 — 아이폰은 누른 직후에만 공유창을 열어 줘서, 누른 뒤 그리면 막힘 (11/26 두 모양)
   $('#redoBtn').onclick = () => { S.ans = []; S.shuffle = Q.map(q => shuffled(q.o.map((_, i) => i))); S.hist = ['intro']; clearHash(); go('q0', { noHist: true }); };
@@ -1892,9 +1918,9 @@ function rResult(c, mine) {
 function hasPlan() { try { return !!JSON.parse(localStorage.getItem('gaboja-plan')); } catch (_) { return false; } }
 function openType(c) { if (S.step === 'view') { S.viewStack.push(S.view); S.hist.push('view'); } S.view = c; go('view', { noHist: S.step === 'view' }); try { history.replaceState(null, '', '#r-' + c); } catch (_) {} }
 function copyLink(c) {
-  const url0 = location.origin + location.pathname + '#r-' + c, t0 = T(c);
-  if (navigator.share) { navigator.share({ title: 'VZTR 여행 유형', text: `나는 ‘${t0.name}’(${DC(c)}) 여행자래. 너는 어떤 여행자야? ${Q.length}번만 고르면 나와`, url: url0 }).catch(() => {}); return; }
-  const url = url0, txt = `나는 ‘${t0.name}’(${DC(c)}) 여행자래. 너는 어떤 여행자야? ${Q.length}번만 고르면 나와 ${url}`;
+  const url0 = shareUrlOf(c);
+  if (navigator.share) { navigator.share({ title: 'VZTR', text: shareTxt(c), url: url0 }).catch(() => {}); return; }
+  const url = url0, txt = shareTxt(c) + ' ' + url;
   const ok = () => toast('공유 문구를 복사했어요 · 친구에게 붙여 넣어 보내 보세요'), bad = () => { toast('복사할 수 없어요. 주소창 링크를 길게 눌러 복사해 주세요.'); };
   try { navigator.clipboard.writeText(txt).then(ok, bad); } catch (_) { bad(); }
 }
@@ -1982,6 +2008,66 @@ async function cardPng(c, f = 's') {
   }
   return new Promise(res => cv.toBlob(b => res(b), 'image/png'));
 }
+
+/* ===== 11/26 궁합 S안(동우님 보드 q9): 링크로만 하는 1:1 궁합 — 서버 저장·개인정보 없음 =====
+   친구가 보낸 결과 링크(vztr.app/r/코드)로 들어오면 서버가 window.VZTR_SHARED = { c: 보낸 사람 유형 } 을 넣어 줌 → 이 기기에 3일 기억(vztr-pair)
+   → 내 테스트 결과 맨 위에 '링크를 보낸 친구와 나의 궁합'(네 축 같음·다름 + n/4 + 추천·부딪히는 짝) · 궁합 카드 공유 */
+const PAIR_KEY = 'vztr-pair', PAIR_TTL = 3 * 864e5;
+try { const me = JSON.parse(localStorage.getItem('gaboja-type') || 'null'); if (window.VZTR_SHARED && /^[LH][SE][FR][JP]$/.test(VZTR_SHARED.c) && !(me && me.code === VZTR_SHARED.c)) localStorage.setItem(PAIR_KEY, JSON.stringify({ c: VZTR_SHARED.c, t: Date.now() })); } catch (_) {}   // 내가 보낸 링크를 내가 열면 저장 안 함(서버가 넣는 스크립트도 같은 규칙)
+function pairOf() { try { const o = JSON.parse(localStorage.getItem(PAIR_KEY)); return o && /^[LH][SE][FR][JP]$/.test(o.c) && Date.now() - o.t < PAIR_TTL ? o.c : ''; } catch (_) { return ''; } }
+const PAIR_SAME = W5 ? { L: 'Both local-first: you hunt for neighborhood spots', H: 'Both hotspot fans: you go where it’s buzzing', S: 'Both sightseers: seeing and walking is the trip', E: 'Both doers: eating, shopping and trying things is the trip', F: 'Both fast-paced: a packed day suits you', R: 'Both relaxed: slow days win', J: 'Both planners: routes are set ahead', P: 'Both spontaneous: you decide on the spot' }
+  : { L: '둘 다 로컬파 · 동네 가게부터 찾아요', H: '둘 다 핫플파 · 지금 뜨는 곳부터 가요', S: '둘 다 구경파 · 보고 걷는 게 여행이에요', E: '둘 다 즐기기파 · 먹고 사고 해 보는 게 여행이에요', F: '둘 다 알차게 · 하루를 꽉 채워도 좋아요', R: '둘 다 여유롭게 · 느긋한 하루가 좋아요', J: '둘 다 계획파 · 동선은 미리 짜 둬요', P: '둘 다 즉흥파 · 가서 정해도 괜찮아요' };
+const PAIR_DIFF = W5 ? ['Local vs. hotspot: take turns picking the day', 'Seeing vs. doing: sights in the morning, food and shops after', 'Packed vs. relaxed: full mornings, easy afternoons', 'Planner vs. free spirit: set the outline, wing the rest']
+  : ['로컬 vs 핫플 · 하루씩 번갈아 골라요', '구경 vs 즐기기 · 오전엔 구경, 오후엔 먹고 사기', '알차게 vs 여유 · 오전은 꽉, 오후는 쉬엄쉬엄', '계획 vs 즉흥 · 큰 틀만 짜고 나머지는 그때그때'];
+const PAIR_HEAD = W5 ? ['Total opposites. Split the days and it works', 'More different than alike, which keeps it fresh', 'Half alike, half each other’s missing piece', 'You click on almost everything', 'Mirror-image travel buddies']
+  : ['정반대 · 하루씩 나눠 고르면 최고예요', '다른 게 더 많아서 새로운 사이', '반은 같고 반은 채워 주는 사이', '척하면 척, 잘 맞는 사이', '거울 같은 여행 메이트'];
+function pairCalc(a, b) { const same = [0, 1, 2, 3].filter(k => a[k] === b[k]).length, ta = T(a), tb = T(b);
+  const best = ta.best === b || tb.best === a, clash = !best && (ta.clash === b || tb.clash === a), why = best ? (ta.best === b ? ta.bestWhy : tb.bestWhy) : clash ? (ta.clash === b ? ta.clashWhy : tb.clashWhy) : '';
+  return { same, best, clash, why, lines: [0, 1, 2, 3].map(k => a[k] === b[k] ? { ok: 1, t: PAIR_SAME[a[k]] } : { ok: 0, t: PAIR_DIFF[k] }) }; }
+function pairBox(me) { const f = pairOf(); if (!f) return ''; const r = pairCalc(f, me), tf = T(f), tm = T(me);
+  if (window.vztrHit) vztrHit('pair');
+  const who = (c, t, lab) => `<div class="pw"><span class="pl">${lab}</span>${AV(c)}<b>${esc(TR(t.name))}</b><span class="cd">${DC(c)}</span></div>`;
+  return `<div class="sec pairx" data-noi18n><h3>${W5 ? 'You & the friend who sent this link' : '링크를 보낸 친구와 나의 여행 궁합'}</h3><div class="card">
+    <div class="pp">${who(f, tf, W5 ? 'Friend' : '친구')}<div class="ps"><b>${r.same}<i>/4</i></b><span>${W5 ? 'in common' : '같은 축'}</span></div>${who(me, tm, W5 ? 'Me' : '나')}</div>
+    <p class="ph">${esc(PAIR_HEAD[r.same])}</p>
+    ${r.best || r.clash ? `<p class="pt ${r.best ? 'ok' : 'no'}"><em>${r.best ? (W5 ? 'Recommended match' : '추천 짝') : (W5 ? 'Might clash' : '부딪힐 수 있는 짝')}</em>${esc(TR(r.why))}</p>` : ''}
+    <ul class="pli">${r.lines.map(x => `<li class="${x.ok ? 'ok' : ''}">${esc(x.t)}</li>`).join('')}</ul>
+    <button type="button" class="cta2" id="pairShare">${ICON.share}${W5 ? 'Share our match card' : '궁합 카드 공유하기'}</button></div></div>`; }
+async function pairInvite(c) {   // 내 결과 → '나랑 여행 궁합 볼래?' 링크(받은 친구가 테스트를 끝내면 궁합이 나옴)
+  const url = shareUrlOf(c, true), txt = W5 ? 'Travel match with me?' : '나랑 여행 궁합 볼래?';
+  if (window.vztrHit) vztrHit('share');
+  if (navigator.share) { try { await navigator.share({ title: 'VZTR', text: txt, url }); return; } catch (e) { if (e && e.name === 'AbortError') return; } }
+  try { await navigator.clipboard.writeText(txt + ' ' + url); toast(W5 ? 'Link copied. Send it to a friend' : '궁합 링크를 복사했어요 · 친구에게 보내 보세요'); } catch (_) { toast(W5 ? 'Couldn’t copy the link' : '복사할 수 없어요'); }
+}
+async function pairPng(a, b) {   // 궁합 카드 1:1 1080 — 결과 카드(cardPng)와 같은 글꼴·캐릭터
+  const W = 1080, H = 1080, r = pairCalc(a, b), LAT = '"Inter Tight", "VZTR EN", "VZTR KR", "Pretendard Variable", sans-serif', KR = '"VZTR KR", "Pretendard Variable", "Apple SD Gothic Neo", sans-serif', NMF = W5 ? LAT : KR;
+  try { await Promise.all([`800 80px "Inter Tight"`, `700 80px "VZTR KR"`, `500 40px "VZTR KR"`].map(q => document.fonts.load(q, '가A'))); } catch (_) {}
+  const cv = document.createElement('canvas'); cv.width = W; cv.height = H; const x = cv.getContext('2d');
+  const rr = (X, Y, w, h, rad) => { x.beginPath(); x.roundRect ? x.roundRect(X, Y, w, h, rad) : x.rect(X, Y, w, h); };
+  const fit = (s, wt, f0, fmin, fam, w) => { let z = f0; do { x.font = `${wt} ${z}px ${fam}`; if (x.measureText(s).width <= w) break; z -= 2; } while (z > fmin); return z; };
+  const gd = x.createLinearGradient(0, 0, 0, H); gd.addColorStop(0, '#EEF0F6'); gd.addColorStop(1, '#FFFFFF'); x.fillStyle = gd; x.fillRect(0, 0, W, H);
+  x.textBaseline = 'alphabetic'; x.textAlign = 'left'; x.fillStyle = '#16181D'; x.font = `700 40px ${KR}`; x.fillText(W5 ? 'Our travel match' : '우리 둘의 여행 궁합', 80, 124);
+  { const S0 = 50, k = S0 / 76, dr = 11 * k, RX = W - 80, DX = RX - 2 * dr - 6 * k; x.textAlign = 'right'; x.font = `800 ${S0}px ${LAT}`; x.fillStyle = '#0F1F33'; try { x.letterSpacing = (-3 * k) + 'px'; } catch (_) {} x.fillText('vztr', DX, 124); try { x.letterSpacing = '0px'; } catch (_) {} x.fillStyle = '#3D63F5'; x.beginPath(); x.arc(DX + 17 * k, 124 - 9 * k, dr, 0, Math.PI * 2); x.fill(); }
+  for (const [c, X] of [[a, 100], [b, 580]]) {
+    rr(X, 190, 400, 400, 48); x.fillStyle = GRPC[c.slice(0, 2)].bg; x.fill();
+    const im = await charImg(c, 600); if (im) x.drawImage(im, X + 70, 260, 260, 260);
+    x.textAlign = 'center'; x.fillStyle = '#16181D'; fit(TR(T(c).name), 700, 46, 28, NMF, 400); x.fillText(TR(T(c).name), X + 200, 660);
+    x.fillStyle = '#6B6E75'; x.font = `600 28px ${LAT}`; x.fillText(DC(c), X + 200, 706);
+  }
+  x.fillStyle = '#16181D'; x.textAlign = 'center'; x.font = `800 30px ${LAT}`; x.fillText(r.same + ' / 4', W / 2, 400);
+  x.fillStyle = '#16181D'; fit(PAIR_HEAD[r.same], 700, 52, 32, KR, W - 160); x.fillText(PAIR_HEAD[r.same], W / 2, 820);
+  const inv = W5 ? 'Try it with a friend' : '너도 친구랑 해 봐'; x.font = `700 32px ${KR}`; const aw = x.measureText(inv).width, PW = aw + 80, PH = 72, PX = (W - PW) / 2, PY = 900;
+  rr(PX, PY, PW, PH, PH / 2); x.fillStyle = 'rgba(255,255,255,.9)'; x.fill(); x.textBaseline = 'middle'; x.fillStyle = '#16181D'; x.fillText(inv, W / 2, PY + PH / 2 + 1);
+  return new Promise(res => cv.toBlob(bl => res(bl), 'image/png'));
+}
+async function pairShare(me) { const f = pairOf(); if (!f) return; const btn = $('#pairShare'); if (btn) btn.disabled = true;
+  try { if (window.vztrHit) vztrHit('share');
+    const b = await pairPng(f, me).catch(() => null), url = shareUrlOf(me, true), txt = W5 ? 'Our travel match, try it with yours:' : '우리 둘의 여행 궁합, 너도 해 봐';
+    const file = b && new File([b], `vztr-match-${DC(f)}-${DC(me)}.png`, { type: 'image/png' });
+    if (file && navigator.canShare && navigator.canShare({ files: [file] })) { try { await navigator.share({ files: [file], title: 'VZTR', text: txt + ' ' + url }); return; } catch (e) { if (e && e.name === 'AbortError') return; } }
+    if (b) { const a = document.createElement('a'); a.href = URL.createObjectURL(b); a.download = file.name; document.body.appendChild(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(a.href), 4000); }
+    try { await navigator.clipboard.writeText(txt + ' ' + url); toast(W5 ? 'Card saved and link copied' : '궁합 카드를 저장하고 링크를 복사했어요'); } catch (_) { if (b) toast(W5 ? 'Card saved' : '궁합 카드를 저장했어요'); }
+  } finally { if (btn) btn.disabled = false; } }
 const CARD = {}; function cardBlob(c, f = 's') { const k = c + f; return CARD[k] || (CARD[k] = cardPng(c, f).catch(() => null)); }
 /* 카톡(두 번째): 카카오 JS SDK — 키·SRI는 가이드북(index.html)과 같음. 1:1 카드를 시트 열 때 미리 카카오 서버에 올려 둠(5MB 이하·최대 100일 보관, 카카오 문서)
    → 누르는 순간 바로 sendDefault (올린 다음에 부르면 폰에서 막힐 수 있어서) */
@@ -1996,8 +2082,9 @@ function kakaoImg(c) { return KKIMG[c] || (KKIMG[c] = (async () => { if (!KK_HOS
   const b = await cardBlob(c, 'q'); if (!b) return ''; const dt = new DataTransfer(); dt.items.add(new File([b], `vztr-${DC(c)}.png`, { type: 'image/png' }));
   const r = await Kakao.Share.uploadImage({ file: dt.files });   // 카카오 문서 예제: response.infos.original.url (레퍼런스는 감싸는 infos 없이 적혀 있어 둘 다 봄)
   return (r && ((r.infos && r.infos.original && r.infos.original.url) || (r.original && r.original.url))) || ''; })().catch(() => '')); }
-function shareTxt(c) { const t0 = T(c); return W5 ? `I'm a '${TR(t0.name)}' (${DC(c)}) traveler. What about you?` : `나는 ‘${t0.name}’(${DC(c)}) 여행자래. 너는 어떤 여행자야?`; }
-function shareUrlOf(c) { return location.origin + location.pathname + '#r-' + c; }
+function shareTxt(c) { const t0 = T(c), n = TR(t0.name); return W5 ? `I'm ${/^[AEIOU]/i.test(n) ? 'an' : 'a'} ‘${n}’ traveler, what about you?` : `나는 ‘${t0.name}’ 여행자래, 너는?`; }   // 11/26 동우님: 공유 문구는 짧게 한 문장
+/* 11/26 2주차: 공유 링크 = vztr.app/r/코드 — 서버가 그 유형의 미리보기(제목·카드 그림)를 넣어 줌(# 뒤는 서버로 안 가서 예전 주소는 16유형이 다 같은 미리보기). p = 궁합 초대. localhost 미리보기는 예전 주소 */
+function shareUrlOf(c, p) { return /^(www\.)?(vztr\.app|larchive\.page)$/.test(location.hostname) ? 'https://vztr.app/' + (W5 ? 'en/' : '') + 'r/' + c + (p ? '?p=1' : '') : location.origin + location.pathname + '#r-' + c; }
 async function saveCard(c, f) { const b = await cardBlob(c, f); if (!b) { toast('카드를 만들지 못했어요'); return; }
   const a = document.createElement('a'); a.href = URL.createObjectURL(b); a.download = `vztr-${DC(c)}${f === 'q' ? '-1x1' : ''}.png`; document.body.appendChild(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(a.href), 4000); }
 /* S2 공유 시트: 미리보기 · 모양(스토리 9:16 / 정사각 1:1) · 공유하기(폰 공유창) · 카카오톡(영어판 = 링크 복사) · 이미지 저장 */
@@ -2015,18 +2102,18 @@ function shareCard(c) {
   show(); if (!W5) kakaoImg(c);
   rx.querySelectorAll('#shSeg button').forEach(bt => bt.onclick = () => { f = bt.dataset.f; rx.querySelectorAll('#shSeg button').forEach(z => z.setAttribute('aria-pressed', z === bt ? 'true' : 'false')); show(); });
   sc.onclick = closeRx;
-  $('#shGo').onclick = async () => { const btn = $('#shGo'); btn.disabled = true;
+  $('#shGo').onclick = async () => { const btn = $('#shGo'); btn.disabled = true; if (window.vztrHit) vztrHit('share');
     try { const b = await cardBlob(c, f), file = b && new File([b], `vztr-${DC(c)}.png`, { type: 'image/png' }), txt = shareTxt(c), url = shareUrlOf(c);
       if (file && navigator.canShare && navigator.canShare({ files: [file] })) { try { await navigator.share({ files: [file], title: 'VZTR', text: txt + ' ' + url }); return; } catch (e) { if (e && e.name === 'AbortError') return; } }
       if (b) await saveCard(c, f);   // 파일 공유가 안 되는 브라우저(PC 등) = 저장 + 링크 복사 (예전과 같음)
       try { await navigator.clipboard.writeText(txt + ' ' + url); toast(b ? '카드 이미지를 저장하고 링크를 복사했어요' : '공유 문구를 복사했어요 · 친구에게 붙여 넣어 보내 보세요'); } catch (_) { if (b) toast('카드 이미지를 저장했어요'); else copyLink(c); }
     } finally { btn.disabled = false; } };
-  $('#shSave').onclick = () => saveCard(c, f);
-  if (W5) $('#shLink').onclick = () => { const t = shareTxt(c) + ' ' + shareUrlOf(c); try { navigator.clipboard.writeText(t).then(() => toast('Link copied'), () => toast('Couldn’t copy the link')); } catch (_) { toast('Couldn’t copy the link'); } };
-  else $('#shKk').onclick = () => {
+  $('#shSave').onclick = () => { if (window.vztrHit) vztrHit('share'); saveCard(c, f); };
+  if (W5) $('#shLink').onclick = () => { if (window.vztrHit) vztrHit('share'); const t = shareTxt(c) + ' ' + shareUrlOf(c); try { navigator.clipboard.writeText(t).then(() => toast('Link copied'), () => toast('Couldn’t copy the link')); } catch (_) { toast('Couldn’t copy the link'); } };
+  else $('#shKk').onclick = () => { if (window.vztrHit) vztrHit('share');
     if (!KK_HOST()) { toast('카카오톡 공유는 vztr.app에서만 돼요'); return; }
     const send = im => { const url = shareUrlOf(c), lk = { mobileWebUrl: url, webUrl: url };
-      try { Kakao.Share.sendDefault({ objectType: 'feed', content: { title: `나는 ‘${T(c).name}’ 여행자래`, description: `너는 어떤 여행자야? ${Q.length}번만 고르면 나와`, imageUrl: im || 'https://vztr.app/icons/icon-512.png', imageWidth: im ? 1080 : 512, imageHeight: im ? 1080 : 512, link: lk },
+      try { Kakao.Share.sendDefault({ objectType: 'feed', content: { title: `나는 ‘${T(c).name}’ 여행자래`, description: `${Q.length}번 고르면 너의 여행 유형도 나와요.`, imageUrl: im || 'https://vztr.app/icons/icon-512.png', imageWidth: im ? 1080 : 512, imageHeight: im ? 1080 : 512, link: lk },
         buttons: [{ title: '내 유형 알아보기', link: lk }] }); } catch (_) { toast('카카오톡을 열지 못했어요 · 링크 복사를 이용해 주세요'); } };
     const p = kakaoImg(c);   // 보통 시트 열 때 이미 올라가 있음 → 누른 순간 바로 보냄. 아직이면 기다렸다 보냄(카드 없이 아이콘으로라도)
     Promise.race([p, new Promise(r => setTimeout(() => r(null), 50))]).then(u => { if (u !== null) send(u); else { toast('카톡 준비 중…'); p.then(send); } });
@@ -2792,7 +2879,7 @@ function buildPlan() {
   return PLANNED;
 }
 function rBuild() {
-  /* 시안: 전송 안 함 */ if (!E1_NOSEND && (!SEND || SEND.st !== 'ok')) sendNow(); else if (E1_NOSEND) SEND = { st: 'off' };
+  /* 시안: 전송 안 함 */ if (!E1_NOSEND && (!SEND || SEND.st !== 'ok')) { sendNow(); if (window.vztrHit) vztrHit('plan'); } else if (E1_NOSEND) SEND = { st: 'off' };
   buildPlan(); doorNow(PLANNED).then(v => { if (v) buildPlan(); return railNow(PLANNED); }).then(v => { if (v) buildPlan(); mailNow(); });   // 11/25: 열차 시각 받으면 한 번 더   // 11/20: 문 앞 시간 받으면 다시 만들고 → 메일
   setBar(null, 0, 0, null);   // 11/25 동우님 #12: 위 진행 줄·'만드는 중' 뺌 — 질문 화면에선 '몇 번째 질문인지'지만 여기선 늘 꽉 찬 줄이라 정보가 없고, 아래 제목·막대·%와 겹침
   const tr = S.trip, t = S.type ? T(S.type) : null, city = placeTx(tr, '여행지');

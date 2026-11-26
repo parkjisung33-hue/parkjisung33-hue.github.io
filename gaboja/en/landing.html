@@ -6,14 +6,30 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="robots" content="noindex, nofollow">
 <meta name="theme-color" content="#F8F8FA">
-<title>VZTR — 이번 여행, 나답게.</title>
-<meta name="description" content="10번만 고르면, 내 여행 성향에 맞춘 여행 일정이 탑승권 한 장으로 나와요.">
+<title>VZTR — Pack your personality.</title>
+<meta name="description" content="10 quick picks for your travel type and a trip that fits.">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="VZTR">
+<meta property="og:title" content="VZTR — Pack your personality.">
+<meta property="og:description" content="10 quick picks for your travel type and a trip that fits.">
+<meta property="og:url" content="https://vztr.app/en/landing.html">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://vztr.app/og/en-main.png?v=1">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="VZTR — Pack your personality.">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="VZTR — Pack your personality.">
+<meta name="twitter:description" content="10 quick picks for your travel type and a trip that fits.">
+<meta name="twitter:image" content="https://vztr.app/og/en-main.png?v=1">
 <link rel="icon" href="icons/favicon-32.png">
 <link rel="apple-touch-icon" href="icons/icon-180.png">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="stylesheet" href="fonts/google/gf.css?v=1">
 <script src="inapp.js?v=1"></script>
-<script src="i18n-en-auto.js?v=e8d9d271"></script><script src="i18n-en.js?v=e8d9d271"></script><script src="i18n.js?v=e8d9d271"></script>
+<script src="hit.js?v=1"></script><!-- 11/26 2주차: 유입 숫자 세기(합계만) -->
+<script src="legal/flags.js?v=1"></script>
+<script src="i18n-en-auto.js?v=f6b8ad2d"></script><script src="i18n-en.js?v=f6b8ad2d"></script><script src="i18n.js?v=f6b8ad2d"></script>
 <link rel="stylesheet" href="fonts/vztr-fonts.css?v=2">
 <script>/* 11/26: 기기(브라우저) 시스템 모드를 따름 — 다크 = 밤 객실 · 라이트 = 밝은 객실. ?theme=dark|light = 미리보기 */
 (function () { try { var q = new URLSearchParams(location.search).get('theme'), d = q === 'dark' || q === 'light' ? q === 'dark' : matchMedia('(prefers-color-scheme: dark)').matches; if (d) document.documentElement.setAttribute('data-theme', 'dark'); } catch (e) {} })();</script>
@@ -147,6 +163,40 @@ html.ph .win > .halo::after { display: none; }
 .chw svg { width: 100%; height: auto; display: block; overflow: visible; }
 .win.dk .chw { filter: drop-shadow(0 0 3cqw rgba(255,255,255,.25)); }
 @keyframes bob { 0%, 100% { translate: 0 0; } 50% { translate: 0 -4%; } }
+/* 11/26 2주차 출시 알림(동우님 보드 q6 = L1): 버튼 아래 글자 줄 → 아래에서 올라오는 시트. 12/25 00시(KST)부터 자동으로 숨김 */
+.al1 { appearance: none; border: 0; background: none; cursor: pointer; font: 600 14px/1 var(--krb); color: var(--ac); padding: 8px 2px 4px; letter-spacing: -.01em; }
+html.pc .al1 { padding-top: 10px; }
+html.ph .ctas .gh { padding-bottom: 6px; }
+.al1:focus-visible { outline: 2px solid var(--ac); outline-offset: 3px; border-radius: 8px; }
+.alsc { position: fixed; inset: 0; z-index: 60; background: rgba(10,12,16,.38); opacity: 0; transition: opacity .22s; }
+.alsc.on { opacity: 1; }
+.alsh { position: fixed; left: 50%; bottom: 0; z-index: 61; width: min(100%, 460px); transform: translate(-50%, 104%); transition: transform .28s cubic-bezier(.2,.8,.2,1);
+  background: var(--sh-bg); color: var(--sh-ink); border-radius: 24px 24px 0 0; padding: 26px 22px calc(26px + env(safe-area-inset-bottom, 0px)); font-family: var(--kr); text-align: left; box-shadow: 0 -8px 30px rgba(0,0,0,.12); }
+html.pc .alsh { bottom: 50%; border-radius: 24px; transform: translate(-50%, 50%) scale(.98); opacity: 0; transition: opacity .2s, transform .2s; padding-bottom: 26px; }
+.alsh.on { transform: translate(-50%, 0); } html.pc .alsh.on { transform: translate(-50%, 50%); opacity: 1; }
+:root { --sh-bg: #FFFFFF; --sh-ink: #16171A; --sh-sub: #6B6E75; --sh-in: #F2F2F4; --sh-btn: #16171A; --sh-btx: #FFFFFF; --sh-off: #ECECEF; --sh-offtx: #A3A6AD; --sh-err: #D2463C; }
+:root[data-theme="dark"] { --sh-bg: #1E1A26; --sh-ink: #F2F1F7; --sh-sub: #A29DB6; --sh-in: rgba(255,255,255,.08); --sh-btn: #F2F1F7; --sh-btx: #0E0C15; --sh-off: rgba(255,255,255,.08); --sh-offtx: #6E6880; --sh-err: #FF8A80; }
+.alsh h2 { margin: 0; font: 700 21px/1.3 var(--krb); letter-spacing: -.03em; }
+.alsh .s { margin: 6px 0 18px; font: 500 14px/1.45 var(--kr); color: var(--sh-sub); }
+.alsh input[type=email] { width: 100%; height: 52px; border-radius: 12px; border: 0; background: var(--sh-in); color: var(--sh-ink); padding: 0 16px; font: 500 16px var(--kr); outline: none; }
+.alsh input[type=email]:focus-visible { box-shadow: 0 0 0 2px var(--ac); }
+.alsh input[type=email].bad { box-shadow: 0 0 0 2px var(--sh-err); }
+.alsh .ag { display: flex; gap: 10px; align-items: flex-start; margin-top: 14px; font: 600 14px/1.4 var(--kr); cursor: pointer; }
+.alsh .ag input { position: absolute; opacity: 0; width: 1px; height: 1px; }
+.alsh .ag .ck { flex: none; width: 22px; height: 22px; border-radius: 6px; background: var(--sh-off); display: grid; place-items: center; margin-top: -1px; }
+.alsh .ag .ck svg { width: 14px; height: 14px; stroke: transparent; fill: none; stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; }
+.alsh .ag input:checked + .ck { background: var(--sh-btn); } .alsh .ag input:checked + .ck svg { stroke: var(--sh-btx); }
+.alsh .ag input:focus-visible + .ck { box-shadow: 0 0 0 2px var(--ac); }
+.alsh .ag em { font-style: normal; color: var(--ac); margin-right: 4px; }
+.alsh .ag small { display: block; font: 500 12.5px/1.5 var(--kr); color: var(--sh-sub); margin-top: 3px; }
+.alsh .ag small a { text-decoration: underline; text-underline-offset: 2px; }
+.alsh .go { display: block; width: 100%; margin-top: 20px; height: 54px; border: 0; border-radius: 12px; background: var(--sh-btn); color: var(--sh-btx); font: 700 16px/1 var(--krb); cursor: pointer; }
+.alsh .go:disabled { background: var(--sh-off); color: var(--sh-offtx); cursor: default; }
+.alsh .msg { margin: 12px 0 0; min-height: 1.2em; font: 500 13px/1.45 var(--kr); color: var(--sh-err); text-align: center; }
+.alsh .msg.ok { color: var(--sh-sub); }
+.alsh .x { position: absolute; right: 12px; top: 12px; width: 40px; height: 40px; border: 0; background: none; color: var(--sh-sub); cursor: pointer; border-radius: 50%; font-size: 22px; line-height: 1; }
+.alsh .done { text-align: center; padding: 18px 0 6px; } .alsh .done b { display: block; font: 700 20px/1.35 var(--krb); margin-bottom: 8px; } .alsh .done span { color: var(--sh-sub); font-size: 14px; line-height: 1.5; }
+@media (prefers-reduced-motion: reduce) { .alsc, .alsh { transition: none; } }
 @media (prefers-reduced-motion: reduce) { .chw, .win > .halo::after { animation: none !important; } .win > .halo::after { opacity: .6; } }
 </style>
 </head>
@@ -157,7 +207,7 @@ html.ph .win > .halo::after { display: none; }
   <div class="tx">
     <h1 class="hl">이번 여행, 나답게.</h1>
     <p class="q">내 자리는 어디일까?</p>
-    <div class="ctas"><a class="cta" href="start.html?go=q0">내 유형 알아보기</a><a class="gh" href="start.html?go=types">여행 성향들 둘러보기</a></div>
+    <div class="ctas"><a class="cta" href="start.html?go=q0">내 유형 알아보기</a><a class="gh" href="start.html?go=types">여행 성향들 둘러보기</a><button type="button" class="al1" id="alBtn" hidden data-noi18n></button></div>
   </div>
   <div class="top">
     <div class="lg"><b class="vz" data-noi18n>vztr<i>.</i></b></div>
@@ -265,6 +315,55 @@ let rq = 0; addEventListener('resize', () => { cancelAnimationFrame(rq); rq = re
 const onScheme = e => { if (QT === 'dark' || QT === 'light') return; DK = e.matches; setTheme(DK ? 'dark' : 'light'); build(); all(); };
 if (MQ.addEventListener) MQ.addEventListener('change', onScheme); else if (MQ.addListener) MQ.addListener(onScheme);
 if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => { fitHl(); alignLang(); alignText(); alignLegal(); layout(); });
+})();
+</script>
+<script>
+/* ===== 11/26 2주차 출시 알림 신청 (동우님 보드 q6 L1 · q7 확인 메일) — 이메일만 받음 · 동의 두 칸 · 서버 /alert(D1) ===== */
+(() => {
+  const EN = window.VZTR_LANG === 'en', OPEN = Date.UTC(2026, 11, 24, 15);   // 2026-12-25 00:00 KST부터 숨김
+  if (window.vztrHit) vztrHit('land');
+  const btn = document.getElementById('alBtn'); if (!btn || Date.now() >= OPEN) return;
+  const L = EN ? { b: 'Get notified when we launch Dec 25 ›', h: 'Launch alert for Dec 25', s: 'We’ll send you one email on the day we open.', ph: 'Email address',
+      a1: 'Consent to collect and use personal information', a1s: 'Email address · to send the launch alert · deleted within 7 days after sending', a1n: 'Without consent we can’t send the alert. ', pv: 'Privacy policy',
+      a2: 'Receive the launch alert email (advertising)', a2s: 'One email about the VZTR launch · unsubscribe from the link in the email', go: 'Notify me', req: 'Required', bad: 'Check your email address.', err: 'Couldn’t sign you up. Please try again shortly.', off: 'Sign-up works on vztr.app only.',
+      ok: 'You’re on the list', okS: 'We sent a confirmation email. See you on December 25.', close: 'Close' }
+    : { b: '12월 25일 정식 오픈 알림 받기 ›', h: '12월 25일 정식 오픈 알림', s: '문을 여는 날 메일 한 통만 보내 드려요.', ph: '이메일 주소',
+      a1: '개인정보 수집·이용 동의', a1s: '이메일 주소 · 오픈 알림 발송 · 보낸 뒤 7일 안에 삭제', a1n: '동의하지 않으면 알림을 받을 수 없어요. ', pv: '처리방침 보기',
+      a2: '오픈 알림(광고성 정보) 메일 받기', a2s: 'VZTR 정식 오픈 소식 1통 · 수신 거부는 메일 아래 링크로', go: '알림 받기', req: '필수', bad: '이메일 주소를 확인해 주세요.', err: '신청하지 못했어요. 잠시 후 다시 시도해 주세요.', off: '신청은 vztr.app에서만 돼요.',
+      ok: '신청됐어요', okS: '확인 메일을 보냈어요. 12월 25일에 만나요.', close: '닫기' };
+  btn.textContent = L.b; btn.hidden = false;
+  const RE = /^[^\s@<>"',;]+@[^\s@<>"',;]+\.[^\s@<>"',;]{2,}$/, PV = ((window.VZTR_LEGAL || {}).v || {}).privacy || '', priv = EN ? '../privacy.html#en' : 'privacy.html';
+  const ck = '<span class="ck" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M6 12.5l4 4 8-8.5"/></svg></span>';
+  const sc = document.createElement('div'); sc.className = 'alsc'; sc.hidden = true;
+  const sh = document.createElement('div'); sh.className = 'alsh'; sh.hidden = true; sh.setAttribute('role', 'dialog'); sh.setAttribute('aria-modal', 'true'); sh.setAttribute('aria-labelledby', 'alH'); sh.setAttribute('data-noi18n', '');
+  sh.innerHTML = `<button type="button" class="x" id="alX" aria-label="${L.close}">×</button><form id="alF" novalidate><h2 id="alH">${L.h}</h2><p class="s">${L.s}</p>
+    <input type="email" id="alE" name="email" autocomplete="email" inputmode="email" placeholder="${L.ph}" aria-label="${L.ph}" maxlength="120" required>
+    <label class="ag"><input type="checkbox" id="alA1">${ck}<div><em>${L.req}</em>${L.a1}<small>${L.a1s}<br>${L.a1n}<a href="${priv}" target="_blank" rel="noopener">${L.pv}</a></small></div></label>
+    <label class="ag"><input type="checkbox" id="alA2">${ck}<div><em>${L.req}</em>${L.a2}<small>${L.a2s}</small></div></label>
+    <button type="submit" class="go" id="alGo" disabled>${L.go}</button><p class="msg" id="alM" aria-live="polite"></p></form>`;
+  document.body.append(sc, sh);
+  const $ = id => document.getElementById(id), E = $('alE'), A1 = $('alA1'), A2 = $('alA2'), GO = $('alGo'), M = $('alM');
+  const valid = () => RE.test(E.value.trim()) && A1.checked && A2.checked, upd = () => { GO.disabled = !valid(); };
+  [E, A1, A2].forEach(el => el.addEventListener('input', () => { E.classList.remove('bad'); M.textContent = ''; upd(); }));
+  let last = null, hideT = 0;
+  const shell = document.querySelector('.shell');
+  const open = () => { clearTimeout(hideT); last = document.activeElement; if (shell) shell.inert = true; sc.hidden = sh.hidden = false; void sh.offsetWidth; sc.classList.add('on'); sh.classList.add('on'); setTimeout(() => E.focus({ preventScroll: true }), 280); };
+  const close = () => { if (sh.hidden) return; sc.classList.remove('on'); sh.classList.remove('on'); if (shell) shell.inert = false; hideT = setTimeout(() => { sc.hidden = sh.hidden = true; }, 300); if (last) last.focus({ preventScroll: true }); };
+  btn.addEventListener('click', open); sc.addEventListener('click', close); $('alX').addEventListener('click', close);
+  document.addEventListener('keydown', e => { if (sh.hidden || !sh.classList.contains('on')) return; if (e.key === 'Escape') close();
+    if (e.key === 'Tab') { const f = [...sh.querySelectorAll('button:not([disabled]),input,a[href]')].filter(x => x.offsetParent); const a = f[0], z = f[f.length - 1];
+      if (e.shiftKey && document.activeElement === a) { e.preventDefault(); z.focus(); } else if (!e.shiftKey && document.activeElement === z) { e.preventDefault(); a.focus(); } } });
+  $('alF').addEventListener('submit', async e => { e.preventDefault();
+    if (!RE.test(E.value.trim())) { E.classList.add('bad'); M.textContent = L.bad; return; }
+    if (!valid()) return;
+    if (!/^(www\.)?vztr\.app$/.test(location.hostname)) { M.textContent = L.off; return; }   // 미리보기·검수(localhost)는 실제 신청 안 함
+    GO.disabled = true; M.className = 'msg'; M.textContent = '';
+    try { const r = await fetch('/alert', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ email: E.value.trim(), lang: EN ? 'en' : 'ko', pv: PV, ok: 1 }) }), j = await r.json();
+      if (!j.ok) throw new Error(j.e || 'x');
+      if (window.vztrHit) vztrHit('alert');
+      $('alF').innerHTML = `<div class="done" tabindex="-1" id="alOk"><b>${L.ok}</b><span>${L.okS}</span></div>`; $('alOk').focus(); btn.hidden = true;
+    } catch (err) { M.textContent = String(err && err.message) === 'input' ? L.bad : L.err; upd(); }
+  });
 })();
 </script>
 </body>
