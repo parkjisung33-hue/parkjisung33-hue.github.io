@@ -17,7 +17,7 @@
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="stylesheet" href="fonts/google/gf.css?v=1"><!-- 11/24 Inter Tight·Zen Kaku Gothic New 자체 호스팅(구글 서버로 IP 안 감, OFL) -->
 <script src="inapp.js?v=1"></script>
-<script src="i18n-en-auto.js?v=e2ca6712"></script><script src="i18n-en.js?v=e2ca6712"></script><script src="i18n.js?v=e2ca6712"></script><!-- 11/20 W5 언어 틀 (영어판 = /en/, 사전 i18n-en.js는 배포 때 en/에만 붙음) -->
+<script src="i18n-en-auto.js?v=e8d9d271"></script><script src="i18n-en.js?v=e8d9d271"></script><script src="i18n.js?v=e8d9d271"></script><!-- 11/20 W5 언어 틀 (영어판 = /en/, 사전 i18n-en.js는 배포 때 en/에만 붙음) -->
 <link rel="stylesheet" href="fonts/vztr-fonts.css?v=2"><!-- 11/19 글꼴: 굵은 한글 IBM Plex Sans KR · 보통 한글 Pretendard · 영문·숫자 IBM Plex Sans -->
 <style>
 /* Pretendard 1.3.9 (SIL OFL 1.1) — 공식 배포본(orioncactus/pretendard)을 fonts/에 함께 올림 */
@@ -370,6 +370,8 @@ details.sec > summary + * { margin-top: 0.375rem; }
 .rec span { font-size: 0.6875rem; color: var(--sub); }
 .off { color: var(--red) !important; }
 #addPick { display: flex; flex-direction: column; gap: 0.75rem; }
+.pick .nml { font-size: 0.75rem; font-weight: 600; color: var(--sub); margin-bottom: -0.375rem; }
+.pick .nmin { height: 2.75rem; border-radius: var(--r-sm); border: 1px solid var(--hair); background: var(--card, #fff); color: var(--ink); padding: 0 0.75rem; font: inherit; font-size: max(16px, 1rem); font-weight: 700; width: 100%; box-sizing: border-box; }
 .pick { border-radius: var(--r-md); padding: 0.875rem; background: var(--field); border: 1px solid var(--hair); display: flex; flex-direction: column; gap: 0.625rem; }
 .pick > b { font-size: 1rem; }
 
@@ -668,6 +670,11 @@ body { letter-spacing: 0; }
 .days::-webkit-scrollbar { display: none; }
 .days button { padding: 0 0.5rem; line-height: 1; }
 .days button span { position: relative; top: 0.04em; }
+/* 11/26 #17: 5일 이상 = 날짜만 · 넘치면 밀 수 있다는 걸 가장자리 흐림으로 */
+.days.many { gap: 0.25rem; }
+.days.fl { -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 1.5rem); mask-image: linear-gradient(90deg, transparent 0, #000 1.5rem); }
+.days.fr { -webkit-mask-image: linear-gradient(270deg, transparent 0, #000 1.5rem); mask-image: linear-gradient(270deg, transparent 0, #000 1.5rem); }
+.days.fl.fr { -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 1.5rem, #000 calc(100% - 1.5rem), transparent 100%); mask-image: linear-gradient(90deg, transparent 0, #000 1.5rem, #000 calc(100% - 1.5rem), transparent 100%); }
 .tabs button { line-height: 1.2; }
 .btn, .seg button, .chips button, .rec .off { line-height: 1.2; }
 /* 11/13 추가: 차 카드 · 시각 미정 · 변경됨 · 카드 편집 · 일찍 출발 · 이전 · 문 닫았어요 · 오늘 일정 끝 축하 (기존 탑승권 카드·시트·토스트 틀 그대로) */
@@ -2125,8 +2132,9 @@ function liveTop() {
   else h = '<div class="stateline"><span class="stc end">여행 끝</span><span class="tx">' + tripDates() + ' · 기록에 저장됨</span></div>';
   // 11/14 #17: 탑승권은 그 비행기 타는 날(출발일·돌아오는 날)을 볼 때만 맨 위에. 다른 날엔 상태 줄만
   // 11/21 동우님 #11: 시각 미정인 날 = 탑승권을 늘 맨 위(가는 날·오는 날 같은 자리). 몸통 타임라인에선 뺌
-  const vd = DAYS[st.day], top = vd && vd.tbd ? vd.list.filter(c => c.fly && !(lf && lf.c === c)).map(c => flyCard(vd, c, '', true)).join('') : '';
-  return h + (lf && DAYS.indexOf(lf.d) === st.day ? flyCard(lf.d, lf.c, ' live', true) : '') + top;
+  // 11/26 동우님 폰 확인: 탑승권·승차권·운전 카드는 어느 날이든 그날 맨 위(가는 날·오는 날·도시 옮기는 날 같은 자리) · 목록·블록엔 글자 한 줄만
+  const vd = DAYS[st.day], lv = lf && DAYS.indexOf(lf.d) === st.day ? lf.c : null;
+  return h + (vd ? vd.list.filter(c => c.fly).map(c => flyCard(vd, c, c === lv ? ' live' : '', true)).join('') : '');
 }
 function subOf(tab) {   // 11/18 피드백7: 날짜 글자 + 작은 칩(박수 · D-n · 여행 중) — HTML로 돌려줌
   const n = nowRef(), chip = t => '<small class="tchip">' + t + '</small>';
@@ -2273,7 +2281,7 @@ function blocks(d) {
     if (!b.length) return;
     h += '<div class="band"><div class="bh"><b>' + (d.tbd ? '가는 순서' : PIECE[bi]) + '</b><span>' + (d.tbd ? '' : b[0].s) + '</span>' + (hint ? '<em class="dhint">' + DRAG_IC + (d.tbd ? '꾹 눌러 끌면 순서 이동' : '꾹 눌러 끌면 시간 이동') + '</em>' : '') + '</div><div class="tiles">'; hint = false;
     b.forEach(c => {
-      if (c.fly && isPinned(c)) { h += '<button class="tile flyref fix wide" data-key="' + c.id + '" data-fixed="1" style="flex-grow:' + c.du + '"><span class="t">' + (d.tbd ? '<span class="ord">' + (b.indexOf(c) + 1) + '번째</span>' : c.s) + '<span class="sp"></span>' + rideTi(c) + '</span><span class="n one">' + flyHtml(c, 0, 2) + '</span></button>'; return; }
+      if (c.fly) { h += '<button class="tile flyref fix wide" data-key="' + c.id + '" data-fixed="1" style="flex-grow:' + c.du + '"><span class="t">' + (d.tbd ? '<span class="ord">' + (b.indexOf(c) + 1) + '번째</span>' : c.s) + '<span class="sp"></span>' + rideTi(c) + '</span><span class="n one">' + flyHtml(c, 0, 2) + '</span></button>'; return; }
       if (c.fly) { h += flyCard(d, c, nw && c === nw.cur ? ' now-on' : pastOf(nw, c) ? ' past-on' : ''); return; }
       const fx = fixedOf(c), isNow = nw && c === nw.cur, pills = (isNow ? '<span class="now-pill">지금</span>' : '') + memoBadge(c);
       h += '<button class="tile ' + c.k + (fx ? ' fix' : '') + (pills ? ' wide' : '') + (isNow ? ' now-on' : pastOf(nw, c) ? ' past-on' : '') + '" data-key="' + c.id + '"' + (fx ? ' data-fixed="1"' : '') + ' style="flex-grow:' + Math.max(30, c.du) + '">'
@@ -2317,7 +2325,7 @@ function list(d) {
       h += '<div class="li m' + nowCls(c) + '" data-key="' + c.id + '" data-fixed="1" style="--h:' + mh + 'rem"><span class="tm">' + tmx(d, c) + '</span>' + RL('<i class="mvb">' + mvIc(c) + '</i>') + '<span class="c one" aria-label="' + esc(c.mv) + '">' + mvLab(c) + '</span><span></span></div>';
       return;
     }
-    if (c.fly && isPinned(c)) { h += '<div class="li m fy" data-key="' + c.id + '" data-fixed="1"><span class="tm">' + tmx(d, c) + '</span>' + RL('<i class="mvb">' + mvIc(c) + '</i>') + '<span class="c one" style="color:var(--blue);font-weight:600">' + flyHtml(c, 1, 3) + (window.VZTR_LANG === 'en' ? '' : ' · 위 ' + (c.ride === 'train' ? '승차권' : '탑승권')) + '</span><span></span></div>'; return; }
+    if (c.fly) { h += '<div class="li m fy' + nowCls(c) + '" data-key="' + c.id + '" data-fixed="1"><span class="tm">' + tmx(d, c) + '</span>' + RL('<i class="mvb">' + mvIc(c) + '</i>') + '<span class="c one" style="color:var(--blue);font-weight:600">' + (c.bus ? flyHtml(c, 0, 2) : flyHtml(c, 1, 3)) + (window.VZTR_LANG === 'en' || isCar(c) ? '' : ' · 위 ' + (c.ride === 'train' ? '승차권' : '탑승권')) + '</span><span></span></div>'; return; }
     if (c.fly) { h += flyCard(d, c, nowCls(c)); return; }
     const parts = c.n.split(' — '), main = parts[1] || parts[0], ti = timeIssue(c);   /* 11/18 D-4 ②: 설명 줄 없음(장소 상세에서 봄) · 시간 문제만 작은 글자로 남김 */
     const fx = fixedOf(c), mu = mapUrl(d, c), P = window.GABOJA_DATA && GABOJA_DATA.places, ev = !!(c.pid && P && P[c.pid] && P[c.pid].kind === 'event');
@@ -2332,9 +2340,15 @@ function list(d) {
 }
 function renderDays() {
   const n = DAYS.length, db = $('#dayBtns'); db.style.gridTemplateColumns = 'repeat(' + n + ', minmax(max-content, 1fr))';
-  $('#dayBtns').innerHTML = DAYS.map((d,i) => '<button aria-pressed="' + (i===st.day) + '" data-day="' + i + '"><b>DAY ' + d.no + '</b><span>' + d.date.replace('. ', '.') + '</span></button>').join('');
-  const on = db.querySelector('[aria-pressed="true"]'); if (on && db.scrollWidth > db.clientWidth) db.scrollLeft = on.offsetLeft - db.offsetLeft - (db.clientWidth - on.offsetWidth) / 2;
+  /* 11/26 동우님 폰 확인 #17: 5일 넘으면 마지막 DAY가 잘림 → 5일부터 날짜만(요일 뺌)으로 좁혀 한 화면에 · 그래도 넘치면(6일~) 가로로 밀기 + 가장자리 흐림 · 고른 날은 늘 칸 안 가운데로 */
+  const many = n >= 5, dl = d => { if (!many) return d.date.replace('. ', '.'); const m = String(d.date).match(/(\d+)\.\s*(\d+)/); return m ? (window.VZTR_LANG === 'en' ? m[1] + '/' + m[2] : m[1] + '.' + m[2]) : d.date; };
+  db.classList.toggle('many', many);
+  $('#dayBtns').innerHTML = DAYS.map((d,i) => '<button aria-pressed="' + (i===st.day) + '" data-day="' + i + '"><b>DAY ' + d.no + '</b><span>' + dl(d) + '</span></button>').join('');
+  const on = db.querySelector('[aria-pressed="true"]');
+  if (on && db.scrollWidth > db.clientWidth) { const r0 = db.getBoundingClientRect(), r1 = on.getBoundingClientRect(); db.scrollLeft = Math.max(0, Math.min(db.scrollWidth - db.clientWidth, db.scrollLeft + (r1.left - r0.left) - (db.clientWidth - r1.width) / 2)); }
+  dayFade();
 }
+function dayFade() { const db = $('#dayBtns'); if (!db) return; const ov = db.scrollWidth - db.clientWidth > 2; db.classList.toggle('fl', ov && db.scrollLeft > 2); db.classList.toggle('fr', ov && db.scrollLeft < db.scrollWidth - db.clientWidth - 2); }
 // 다시 그릴 때 일정들이 새 자리로 미끄러져 감 (옮김·보관·복원·추가 → 밀려나고 당겨짐). 날짜·보기 바꿀 땐 안 함
 const calm = () => { try { return matchMedia('(prefers-reduced-motion: reduce)').matches; } catch (_) { return false; } };
 function snapRects(root) { const m = new Map(); root.querySelectorAll('[data-key]').forEach(el => m.set(el.dataset.key, el.getBoundingClientRect())); return m; }
@@ -2589,11 +2603,11 @@ function navProg() {   // 이동 진행 0~1 (출발 누른 시각 기준, 없으
   let r = st.cur && st.cur.id === c.id && st.cur.t ? (now - st.cur.t) / (du * 60000) : (!d.tbd && c.s ? (clock().getHours() * 60 + clock().getMinutes() - toMin(c.s)) / du : .5);
   return { r: Math.min(.92, Math.max(.06, isFinite(r) ? r : .5)), c, left: st.cur && st.cur.t ? Math.max(0, Math.round(du - (now - st.cur.t) / 60000)) : null };
 }
-function navFlow() {
+function navFlow(noFx) {   // noFx = 크기만 바뀌어 선만 다시 그릴 때(도착·출발 고리 애니는 다시 안 틂)
   const v = $('#v-now'); if (!v) return; v.querySelectorAll('.vzfl,.vzrt').forEach(e => e.remove()); v.querySelectorAll('.stop.flc').forEach(e => { e.classList.remove('flc'); e.style.removeProperty('--flc'); });
   const nw = v.querySelector('.nextwrap'), on = !v.hidden && nw && nw.classList.contains('moving'), fx = st._fx && Date.now() - st._fx.t < 2500 ? st._fx : null; v.classList.toggle('vzfl-on', !!on);
   const vr = v.getBoundingClientRect(), vis = e => e.offsetWidth > 0 && e.offsetHeight > 0, pts = [...v.querySelectorAll('#trackPast:not([hidden]) .stop .pt')].filter(vis), p0 = pts[pts.length - 1];
-  if (fx && p0 && !calm()) { const s0 = p0.closest('.stop'); s0.classList.remove('land', 'lift'); void s0.offsetWidth; s0.classList.add(fx.k === 'arr' ? 'land' : 'lift'); }   // ② 도착 = 도착한 점 / 출발 = 떠난 점
+  if (fx && p0 && !calm() && !noFx) { const s0 = p0.closest('.stop'); s0.classList.remove('land', 'lift'); void s0.offsetWidth; s0.classList.add(fx.k === 'arr' ? 'land' : 'lift'); }   // ② 도착 = 도착한 점 / 출발 = 떠난 점
   if (!on) return;
   const nb = nw.getBoundingClientRect(), p1 = [...v.querySelectorAll('#track .stop .pt')].find(vis);
   const ref = p0 || p1; if (!ref) return; const rr = ref.getBoundingClientRect(), x = rr.left + rr.width / 2 - vr.left;
@@ -2610,6 +2624,7 @@ function navFlow() {
       else if (rr.bottom <= mid + 1) { s0.classList.add('flc'); s0.style.setProperty('--flc', '100%'); } }); }
 }
 addEventListener('resize', () => { try { fitNow(); } catch (_) {} });
+try { new ResizeObserver(() => { if (!$('#v-now').hidden) navFlow(true); }).observe($('#v-now .nextwrap')); } catch (_) {}   /* 11/26 #13: 카드 높이가 늦게 바뀌어도(영어 번역·알림 줄) 선이 바로 따라감 */
 const roTx = w => { const c = String(w).replace(/[^가-힣]+$/, '').slice(-1).charCodeAt(0) - 0xAC00; return c >= 0 && c < 11172 ? (c % 28 && c % 28 !== 8 ? '으로' : '로') : '(으)로'; };   // 받침 없거나 ㄹ이면 '로', 있으면 '으로', 한글 아니면 '(으)로'
 function renderNow() {
   const di = navDay(), d = DAYS[di], n = nowRef(), p = posOf(di), L = d.list, tb = !!d.tbd;
@@ -2672,10 +2687,10 @@ function renderNow() {
     b.hidden = false;
     const after = L.slice(p.i + 1), moved = after.filter(c => toMin(c.s) > c.b), early = after.filter(c => toMin(c.s) < c.b), maxSh = moved.reduce((a, c) => Math.max(a, toMin(c.s) - c.b), 0);
     const risk = moved.find(c => c.k === 'x' && !c.fly), clash = !!d.clash;
+    /* 11/26 동우님 폰 확인 #13: 한 줄 요약 — 가장 중요한 것 하나만 (비행기 겹침 > 시간 고정 일정 > 밀림) · '먼저 빼기'는 아래 주의 칸에 이미 있음 */
     $('#bannerTx').textContent = net > 0
-      ? durTx(net) + ' 늦어짐 → ' + (moved.length ? '뒤 일정 ' + moved.length + '개 최대 ' + durTx(maxSh) + ' 밀림' : '뒤 일정은 그대로예요 (여유 시간 안에 들어가요)')
-        + (risk ? ' · ' + (risk.sh || risk.n) + ' 예정 ' + toT(risk.b) + ' → 확인' : '') + (clash ? ' · 비행기 시각과 겹침' : '') + (moved.length && dropOf(d) ? ' · 줄이려면 ' + dropOf(d) : '')
-      : durTx(-net) + ' 일찍 → ' + (early.length ? '뒤 일정 ' + early.length + '개 당김' : '뒤 일정 그대로 (영업 시작·시간 고정)');
+      ? durTx(net) + ' 늦어짐 · ' + (clash ? '비행기 시각과 겹쳐요' : risk ? (risk.sh || risk.n) + ' 시각 확인' : moved.length ? '뒤 일정 최대 ' + durTx(maxSh) + ' 밀림' : '뒤 일정은 그대로')
+      : durTx(-net) + ' 일찍 · ' + (early.length ? '뒤 일정 당김' : '뒤 일정은 그대로');
   }
   const cur0 = L[p.i], curLate = cur0 && d.lates ? d.lates[cur0.id] || 0 : 0, off = p.i < 0 || p.i >= L.length;
   document.querySelectorAll('.late [data-late]').forEach(x => { x.disabled = off || totLate >= 180; });   // 11/18 D-4 ④: 6버튼 → 시간 조정 − 지금대로 + (5분 단위)
@@ -2690,6 +2705,7 @@ function renderNow() {
     $('#navNote').innerHTML = over ? '' :   /* V-26: 위 '오늘 일정 끝'과 겹쳐서 뺌 */ (!tb && L[0] ? cell(L[0].s, '시작') : '') + (rest.length ? cell(rest.length + '곳', '남음') : '') + (endT && !tb ? cell(endT, '마무리') : '');
     $('#navNote').hidden = over;
   }
+  navFlow();   /* 11/26 동우님 폰 확인 #13: 늦어짐 알림 줄(카드 안)은 위 fitNow 뒤에 생겨서 선이 한 박자 늦게 따라왔음 → 알림까지 그린 뒤 선을 다시 잼 */
   if (!$('#v-now').hidden) setSub('v-now');
   saveEdits();
 }
@@ -3559,8 +3575,8 @@ function updAddBar() {
 function addSheet() {
   const d = DAYS[st.day]; addPick = null; addSess = newSess();
   if (d.tbd) { const rc = d.list.find(x => x.fly); toast((rc ? rideWord(rc) : '이동') + ' 시각을 넣으면 일정을 추가할 수 있어요'); return; }
-  openSheet('<div class="shd"><div><h3 id="sheetTitle">일정 추가</h3><p class="sub one">장소 이름 · 주소 · 구글 지도 링크</p></div>' + X_BTN + '</div><div class="body">'
-    + '<div class="field"><input id="addName" placeholder="예: 구로몬 시장 · 주소 · 지도 링크" autocomplete="off" enterkeyhint="search" aria-label="장소 이름 · 주소 · 구글 지도 링크"><span class="err" id="addErr"></span></div>'
+  openSheet('<div class="shd"><div><h3 id="sheetTitle">일정 추가</h3><p class="sub one">주소 · 구글 지도 링크</p></div>' + X_BTN + '</div><div class="body">'
+    + '<div class="field"><input id="addName" placeholder="주소나 구글 지도 링크를 붙여 넣어요" autocomplete="off" enterkeyhint="search" aria-label="주소 · 구글 지도 링크"><span class="err" id="addErr"></span></div>'
     + '<div class="sugg" id="addSug"></div><div id="addPick" class="body0"></div>'
     + '<div class="memos" id="addRecs"><span class="mh">이 시간에 갈 만한 곳 · 골라서 한 번에 추가</span><div class="recs" id="recList">' + recsHtml(d) + '</div><div class="addbar" id="addBar" hidden><button class="btn pri" id="addMultiGo">0곳 추가</button></div></div></div>');
 }
@@ -3607,6 +3623,7 @@ function onAddInput() {
     } catch (_) {}
   }, 350);
 }
+const looksAddrQ = s => /[都道府県]\s|丁目|番地|[0-9０-９]+番|\d+(-\d+)+|[로길]\s?\d|(동|읍|면|리)\s?\d/.test(String(s || ''));
 function pickPlace(id, exObj) {   // 리뷰 11/25: 구글 위치를 받아 온 뒤엔 그 후보(exObj)를 그대로 씀 — 그사이 목록이 바뀌어도 엉뚱한 곳이 안 들어가게
   const ex0 = exObj || (/^x\d+$/.test(id) ? addExt[+id.slice(1)] : null);
   if (ex0 && ex0.gid && !ex0.ll) {   // 구글 후보 = 고를 때 위치·주소만 받아 옴(장소 상세 Essentials)
@@ -3616,7 +3633,7 @@ function pickPlace(id, exObj) {   // 리뷰 11/25: 구글 위치를 받아 온 �
     return;
   }
   const d = DAYS[st.day], ex = ex0, p = id === 'raw' || ex ? null : PLACES.find(x => x.id === id);
-  const name = p ? p.n : ex ? ex.name : linkName($('#addName').value.trim()).name; if (!name) return;
+  const q0 = $('#addName').value.trim(), name = p ? p.n : ex ? (looksAddrQ(q0) && ex.addr && ex.addr !== '주소로 찾은 위치' ? ex.addr : ex.name) : linkName(q0).name; if (!name) return;   // 11/26 #16: 주소로 찾으면 그 건물 가게 이름 대신 주소 → 아래 '일정 이름'에서 고침
   const du = p ? Math.min(120, Math.max(30, Math.round(p.st / 30) * 30)) : 60;
   addPick = { p, name, du, when: 'sug', tw: p ? twOfPlace(p) : TW_NAME.test(name) ? 'night' : '', ll: ex ? ex.ll : null, addr: ex ? ex.addr : '' };
   $('#addSug').innerHTML = ''; $('#addName').value = name; $('#addRecs').hidden = true; drawPick();
@@ -3631,7 +3648,8 @@ function drawPick() {
   else if (a.ll) info.push(['위치', a.addr ? esc(a.addr) : '지도 링크 위치']);
   info.push(['영업', p && p.x.includes(wd) ? '<span class="off">' + WDK[wd] + '요일 휴무</span>' : p && p.o ? hoursTx(p) : '<span class="muted">정보 없음 · 직접 확인</span>']);
   if (p && p.say) info.push(['소개', esc(p.say)]);
-  $('#addPick').innerHTML = '<div class="pick"><b class="one">' + esc(a.name) + '</b><dl class="kv">' + info.map(x => '<dt>' + x[0] + '</dt><dd>' + x[1] + '</dd>').join('') + '</dl>'
+  /* 11/26 동우님 폰 확인 #16: 우리 목록에 없는 곳(주소·지도 링크·그대로)은 이름이 주소 그대로일 수 있음 → 가이드북에 나올 이름을 여기서 고침 */
+  $('#addPick').innerHTML = '<div class="pick">' + (p ? '<b class="one">' + esc(a.name) + '</b>' : '<label class="nml" for="addNm">일정 이름</label><input id="addNm" class="nmin" maxlength="24" value="' + esc(a.name) + '" autocomplete="off">') + '<dl class="kv">' + info.map(x => '<dt>' + x[0] + '</dt><dd>' + x[1] + '</dd>').join('') + '</dl>'
     + '<div class="row2 wl"><span>시작</span><div class="chips" id="addWhen"><button aria-pressed="' + (a.when === 'sug') + '" data-v="sug">추천 ' + toT(a.sug.s) + '</button>'
     + PIECE.map((t, i) => '<button aria-pressed="' + (a.when === String(i)) + '" data-v="' + i + '">' + t + '</button>').join('') + '</div></div>'
     + '<div class="row2 wl"><span>머무는 시간</span><div class="chips" id="addDur">' + [30, 60, 90, 120].map(v => '<button aria-pressed="' + (a.du === v) + '" data-v="' + v + '">' + durTx(v) + '</button>').join('') + '</div></div>'
@@ -3646,7 +3664,7 @@ function addStart(d, a) {
 }
 function doAdd() {
   const d = DAYS[st.day], a = addPick;
-  if (!a) { const v = $('#addName').value.trim(); if (!v) { $('#addErr').textContent = '장소 이름을 적어 주세요'; $('#addName').focus(); return; } const f = $('#addSug [data-pk]'); f && pickPlace(f.dataset.pk); return; }
+  if (!a) { const v = $('#addName').value.trim(); if (!v) { $('#addErr').textContent = '주소나 지도 링크를 넣어 주세요'; $('#addName').focus(); return; } const f = $('#addSug [data-pk]'); f && pickPlace(f.dataset.pk); return; }
   const start = addStart(d, a), p = a.p;
   // 시간대 제약: 밤 전용(야경 등)을 낮에·아침 전용을 오후에 넣으려 하면 막고 추천 시간으로 돌림
   const pre = timeIssue({ s: toT(start), e: toT(start + a.du), du: a.du, tw: a.tw, oh: p && p.o, k: 'u', n: a.name, sh: a.name });
@@ -3890,6 +3908,7 @@ let installEv = null; window.addEventListener('beforeinstallprompt', e => { e.pr
 function setMode(m) { st.mode = m; $('#modeSimple').setAttribute('aria-pressed', m === 'simple'); $('#modeDetail').setAttribute('aria-pressed', m === 'detail'); renderPlan(); }
 $('#modeSimple').onclick = () => setMode('simple');
 $('#modeDetail').onclick = () => setMode('detail');
+$('#dayBtns').addEventListener('scroll', dayFade, { passive: true });
 $('#dayBtns').onclick = e => {
   const b = e.target.closest('[data-day]'); if (!b) return;
   st.day = +b.dataset.day; renderDays(); renderPlan();
@@ -4001,7 +4020,8 @@ setInterval(() => {
 setSub('v-plan');
 document.addEventListener('input', e => {
   if (e.target.dataset && e.target.dataset.rf === 'dep') { const c = findIt(DAYS[st.day], sheetId), el = $('#rfArr'); if (c && isCar(c) && el && /^\d{1,2}:\d{2}$/.test(e.target.value)) { const dp = toMin(e.target.value); el.textContent = toT(dp + carDurAt(c, dp)).replace(/\(.*/, '') + ' · 자동 계산 (추정) · 약 ' + durTx(carDurAt(c, dp)); } }
-  if (e.target.id === 'addName') { addPick = null; $('#addPick').innerHTML = ''; $('#addRecs').hidden = false; onAddInput(); } });
+  if (e.target.id === 'addName') { addPick = null; $('#addPick').innerHTML = ''; $('#addRecs').hidden = false; onAddInput(); }
+  if (e.target.id === 'addNm' && addPick) { const v = e.target.value.trim(); if (v) addPick.name = v; } });   // 11/26 #16: 일정 이름 고치기 (비우면 원래 이름)
 loadEdits();
 DAYS.forEach(d => { if (!d.slots) d.slots = d.list.map(c => toMin(c.s)); });
 { const n = nowRef(); if (n.phase === 'during') st.day = n.day; }
