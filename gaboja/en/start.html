@@ -26,7 +26,7 @@
 <link rel="stylesheet" href="fonts/google/gf.css?v=1"><!-- 11/24 Inter Tight·Zen Kaku Gothic New 자체 호스팅(구글 서버로 IP 안 감, OFL) -->
 <script src="inapp.js?v=1"></script>
 <script src="hit.js?v=1"></script><!-- 11/26 2주차: 유입 숫자 세기(합계만) -->
-<script src="i18n-en-auto.js?v=1125e352"></script><script src="i18n-en.js?v=1125e352"></script><script src="i18n.js?v=1125e352"></script><!-- 11/20 W5 언어 틀 (영어판 = /en/, 사전 i18n-en.js는 배포 때 en/에만 붙음) -->
+<script src="i18n-en-auto.js?v=866a3984"></script><script src="i18n-en.js?v=866a3984"></script><script src="i18n.js?v=866a3984"></script><!-- 11/20 W5 언어 틀 (영어판 = /en/, 사전 i18n-en.js는 배포 때 en/에만 붙음) -->
 <link rel="stylesheet" href="fonts/vztr-fonts.css?v=2"><!-- 11/19 글꼴: 굵은 한글 IBM Plex Sans KR · 보통 한글 Pretendard · 영문·숫자 IBM Plex Sans -->
 <link rel="icon" href="icons/favicon-32.png">
 <link rel="apple-touch-icon" href="icons/icon-180.png">
@@ -532,6 +532,7 @@ html.ios26 .foot, html.ios26 .board { bottom: calc(max(0.75rem, env(safe-area-in
 .rx .shp img { height: 100%; width: auto; max-width: 100%; object-fit: contain; border-radius: 0.75rem; box-shadow: 0 2px 12px rgba(22,23,26,.14); }
 .rx .shp img:not([src]) { visibility: hidden; }
 .rx .shrow { grid-template-columns: 1fr 1fr; }
+.rx .shrow.sh3 { grid-template-columns: repeat(auto-fit, minmax(0, 1fr)); margin-bottom: .5rem; }   /* 11/26 B 중국어판 공유 앱 줄 */
 .rx #shGo { display: flex; align-items: center; justify-content: center; gap: 0.375rem; }
 .rx #shGo svg { width: 1.125rem; height: 1.125rem; stroke: currentColor; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
 /* ── E1: 왜 이 유형인지 막대 ── */
@@ -1215,8 +1216,14 @@ const HALF = 5; // 앞 묶음(여행 취향) 문항 수 = 뒤 묶음(여행 스�
 /* E1 코드 칸 (10문항): 앞 묶음 5문항 동안 1·2칸(1번 → 1칸, 2번 → 2칸, 3~4번 다듬는 중, 5번 → 앞 두 칸 확정) · 뒤 묶음 5문항 동안 3·4칸(6번 → 3칸, 7번 → 4칸, 8~9번 다듬는 중, 10번 → 완성) */
 const SHOWN = [1, 2, 2, 2, 2, 3, 4, 4, 4, 4], LOCKED = [0, 0, 0, 0, 2, 2, 2, 2, 2, 4];
 const STEP_TX = ['첫 글자가 나왔어요', '두 번째 글자가 나왔어요', '앞 두 글자는 아직 바뀔 수 있어요', '앞 두 글자는 아직 바뀔 수 있어요', '앞 두 글자가 정해졌어요', '세 번째 글자가 나왔어요', '네 번째 글자가 나왔어요', '뒤 두 글자는 아직 바뀔 수 있어요', '뒤 두 글자는 아직 바뀔 수 있어요', '코드가 완성됐어요'];   // 11/18 T9·T12
-const W5 = window.VZTR_LANG === 'en';
-const TRIP_KEY = W5 ? 'gaboja-trip-en' : 'gaboja-trip';   /* 리뷰 #6: 영어판 신청 중 여행은 따로 저장(한국어판 오사카 여행 등과 안 섞임) */   /* 11/20 W5 영어판(/en/) = 방한 외국인: 서울·부산만 · 집(출발지) 대신 한국 공항 도착 · 엔진 input.inbound */
+const W5 = !!window.VZTR_FX && (window.VZTR_LANG || 'ko') !== 'ko';   // 11/26 다국어: W5 = 번역판(영어·일본어·중국어) = 방한 외국인 흐름 · 영어만의 글 = W5EN
+const W5EN = window.VZTR_LANG === 'en', W5KR = W5 && !W5EN;   // W5KR = 일본어·중국어판 = 한국 도시만(일본 도시 숨김)
+/* 코드 속 글: TX('한국어', 'English') = 한국어판 그대로 · 영어판 = 써 둔 영어 · 그 밖 = 한국어를 사전으로 / TXO(묶음) = 표 안 글 전부 / FMT(틀, {x}) */
+const TX = (ko, en) => (window.VZTR_I18N && VZTR_I18N.tx ? VZTR_I18N.tx(ko, en) : ko);
+const TXO = o => { const t = W5KR && window.VZTR_I18N && VZTR_I18N.t; if (!t) return o; const m = v => typeof v === 'string' ? t(v) : Array.isArray(v) ? v.map(m) : v && typeof v === 'object' ? Object.fromEntries(Object.entries(v).map(([k, x]) => [k, m(x)])) : v; return m(o); };
+const FMT = (k, o, en) => (window.VZTR_I18N && VZTR_I18N.fmt ? VZTR_I18N.fmt(k, o, en) : k.replace(/\{(\w+)\}/g, (_, n) => o[n]));
+const GLANG = W5 ? ({ ja: 'ja', 'zh-hans': 'zh-CN', 'zh-hant': 'zh-TW' })[window.VZTR_LANG] || 'en' : 'ko';   // 구글 장소 검색 결과 언어(서버 /gac·/gdet lang)
+const TRIP_KEY = W5 ? 'gaboja-trip-' + window.VZTR_LANG : 'gaboja-trip';   /* 리뷰 #6: 영어판 신청 중 여행은 따로 저장(한국어판 오사카 여행 등과 안 섞임) */   /* 11/20 W5 영어판(/en/) = 방한 외국인: 서울·부산만 · 집(출발지) 대신 한국 공항 도착 · 엔진 input.inbound */
 // 자동 일정이 되는 곳 → 엔진 도시 키 (gen.js cfg)
 const DEST = { '오사카·교토': 'kix', '도쿄': 'tyo', '후쿠오카': 'fuk', '삿포로': 'spk', '서울': 'sel', '부산': 'bsn',
   '나라': 'nar', '고베': 'kob', '제주': 'jej', '경주': 'gyj', '강릉': 'gng', '속초': 'sch', '전주': 'jnj', '여수': 'ysu', '통영': 'tyg', '대구': 'dgu', '인천': 'icn', '수원': 'swn' };   // 11/23 새 도시 12곳 (도시추가 세션)
@@ -1285,14 +1292,14 @@ async function linkLL(s) {   // 구글 지도 링크 → { ll, name } (못 읽�
 const jpOnly = s => /[\u3040-\u30ff\u4e00-\u9fff]/.test(s) && !/[\uac00-\ud7a3]/.test(s);
 const gSess = () => (crypto.randomUUID ? crypto.randomUUID() : String(Math.random()).slice(2) + Date.now());
 async function placeFind(v, cc, sess) {   // → { list: [{ name, sub, ll? , gid? }], src: 'kakao'|'csis'|'google', off }
-  const lang = W5 ? 'en' : 'ko', A = a => ({ name: a.name || a.road || a.jibun, sub: a.name ? (a.road || a.jibun) : '', ll: [a.lat, a.lng] });
+  const lang = GLANG, A = a => ({ name: a.name || a.road || a.jibun, sub: a.name ? (a.road || a.jibun) : '', ll: [a.lat, a.lng] });
   if (cc === 'kr' || jpOnly(v)) { const j = await fetch(VZTR_API + '/addr?q=' + encodeURIComponent(v)).then(r => r.json()); const L = ((j && j.list) || []).map(A); if (L.length) return { list: L, src: j.jp ? 'csis' : 'kakao' }; }
   const g = await fetch(VZTR_API + '/gac?q=' + encodeURIComponent(v) + GDEV + '&s=' + sess + '&cc=' + cc + '&lang=' + lang).then(r => r.json());
   if (g && g.off) return { list: [], off: 1 };
   return { list: ((g && g.list) || []).map(x => ({ name: x.name, sub: x.sub, gid: x.id })), src: 'google' };
 }
 async function placeLL(x, sess) {   // 구글 후보 → 좌표 (세션 끝)
-  if (x.ll) return x.ll; const j = await fetch(VZTR_API + '/gdet?id=' + encodeURIComponent(x.gid) + GDEV + '&s=' + sess + '&lang=' + (W5 ? 'en' : 'ko')).then(r => r.json());
+  if (x.ll) return x.ll; const j = await fetch(VZTR_API + '/gdet?id=' + encodeURIComponent(x.gid) + GDEV + '&s=' + sess + '&lang=' + GLANG).then(r => r.json());
   return j && isFinite(j.lat) ? [j.lat, j.lng] : null;
 }
 const srcNote = s => s === 'csis' ? '<p class="cr"><a href="https://geocode.csis.u-tokyo.ac.jp/" target="_blank" rel="noopener">CSISシンプルジオコーディング実験を利用</a></p>' : s === 'google' ? '<p class="cr">Google Maps</p>' : '';
@@ -1377,7 +1384,7 @@ function refPoint(tr) { // 출발 지역의 대표 지점 (자동차 경로 기�
   const A = [].concat(((M.air || {}).regions || {})[tr.region] || []); if (A[0]) return A[0].from + '공항';
   return null;
 }
-const CITIES = W5 ? [['오사카·교토', '일본'], ['도쿄', '일본'], ['후쿠오카', '일본'], ['삿포로', '일본'], ['서울', '한국'], ['부산', '한국'], ['제주', '한국']] : [['오사카·교토', '고베·나라까지 · 일본'], ['도쿄', '신주쿠·시부야·아사쿠사 · 일본'], ['후쿠오카', '일본 규슈'], ['삿포로', '오타루까지 · 일본'], ['서울', '국내'], ['부산', '국내'], ['제주', '국내'], ['다른 곳', '직접 입력']];
+const CITIES = W5 ? [['오사카·교토', '일본'], ['도쿄', '일본'], ['후쿠오카', '일본'], ['삿포로', '일본'], ['서울', '한국'], ['부산', '한국'], ['제주', '한국']].filter(c => !W5KR || c[1] === '한국') : [['오사카·교토', '고베·나라까지 · 일본'], ['도쿄', '신주쿠·시부야·아사쿠사 · 일본'], ['후쿠오카', '일본 규슈'], ['삿포로', '오타루까지 · 일본'], ['서울', '국내'], ['부산', '국내'], ['제주', '국내'], ['다른 곳', '직접 입력']];
 const WHO = [['혼자', '내 속도대로'], ['연인', '둘이서'], ['친구', '여럿이'], ['가족 (아이 포함)', '쉬는 시간 넉넉히'], ['가족 (어른만)', '이동은 편하게']];
 const NIGHTS = [[0, '당일치기'], [1, '1박 2일'], [2, '2박 3일'], [3, '3박 4일'], [4, '4박 5일'], [5, '5박 6일'], [6, '6박 7일']];   // V-09: 당일치기 ~ 일주일
 // 취향 칩 -> 장소 DB 태그 (gen.js는 장소 tags와 글자 그대로 맞춤). 칩 하나 = 태그 여러 개. 태그가 없는 칩은 빈 배열(일정에는 영향 없음, 신청서에만 기록)
@@ -1424,6 +1431,7 @@ const CGRP = W5 ? [['일본', [['오사카', 'kix', 'kx'], ['교토', 'kix', 'kx
   ['한국', [['서울', 'sel', 'kr'], ['부산', 'bsn', 'kr'], ['제주', 'jej', 'jj'], ['대구', 'dgu', 'kr'], ['경주', 'gyj', 'kr'], ['강릉', 'gng', 'kr'], ['속초', 'sch', 'kr'], ['전주', 'jnj', 'kr'], ['여수', 'ysu', 'kr'], ['통영', 'tyg', 'kr'], ['인천', '', 'ic'], ['수원', 'swn', 'kr']]]] : [
   ['일본', [['오사카', 'kix', 'kx'], ['교토', 'kix', 'kx'], ['나라', 'nar', 'kx'], ['고베', 'kob', 'kx'], ['도쿄', 'tyo', 'tyo'], ['후쿠오카', 'fuk', 'fuk'], ['삿포로', 'spk', 'hk'], ['오타루', '', 'hk']]],
   ['한국', [['서울', 'sel', 'sel'], ['부산', 'bsn', 'bsn'], ['제주', 'jej', 'jj'], ['경주', 'gyj', 'gj'], ['강릉', 'gng', 'gn'], ['속초', 'sch', 'sc'], ['전주', 'jnj', 'jn'], ['여수', 'ysu', 'ys'], ['통영', 'tyg', 'ty'], ['대구', 'dgu', 'dg'], ['인천', 'icn', 'ic'], ['수원', 'swn', 'sw']]]];
+if (W5KR) CGRP.splice(0, CGRP.length, ...CGRP.filter(g => g[0] === '한국'));   // 11/26 다국어: 일본어·중국어판 = 한국 도시만(일본 도시 숨김 — 저장값·주소로 와도 CPK에 없어 안 골라짐)
 const CPK = Object.fromEntries(CGRP.flatMap(g => g[1].map(c => [c[0], c])));
 function picksOf(tr) {   // 예전 저장값(city·part)에서 고른 도시 되살리기
   if (Array.isArray(tr.picks)) return tr.picks.filter(x => CPK[x]);
@@ -1472,7 +1480,8 @@ const INFO = W5 ? ['city', 'date', 'who', 'book', 'likes', 'theme', 'send'] : ['
 /* 11/22 3축 엔진: 'theme' 단계 = 이번 여행 주제(도시마다, 여러 개) + 이 도시 몇 번째(레벨). 엔진 input.themes · level · seen */
 const JPT = [['anime', '🎬', '애니·만화'], ['vintage', '🧥', '빈티지·구제'], ['luxury', '👜', '명품·백화점'], ['jbrand', '🛍️', '일본 브랜드']];
 const THEMES = { sel: [['kpop', '🎤', 'K-팝'], ['kfood', '🍲', 'K-푸드'], ['kbeauty', '💄', 'K-뷰티']],
-  kix: JPT, tyo: JPT, fuk: JPT, spk: JPT, kob: JPT.slice(1), nar: [] };   /* 11/24 동우님 #5: 일본 = 애니만 있어 빈약 → 엔저 쇼핑 테마 3개(빈티지·명품·일본 브랜드) */
+  kix: JPT, tyo: JPT, fuk: JPT, spk: JPT, kob: JPT.slice(1), nar: [],
+  ...Object.fromEntries(['bsn', 'jej', 'dgu', 'gyj', 'gng', 'swn', 'ysu', 'icn', 'sch', 'tyg', 'jnj'].map(k => [k, [['kfood', '🍲', 'K-푸드']]])) };   /* 11/26 작업 세션 D: 부산·새 한국 도시 = K-푸드(한식 식당·먹거리 시장 10~28곳씩, places.theme). K-팝·K-뷰티 장소는 없어 안 띄움 */   /* 11/24 동우님 #5: 일본 = 애니만 있어 빈약 → 엔저 쇼핑 테마 3개(빈티지·명품·일본 브랜드) */
 const VISITS = [[1, '처음이에요'], [2, '두 번째'], [3, '3~4번째'], [4, '5번 이상']];
 const visBars = n => '<svg class="vb" viewBox="0 0 16 14" aria-hidden="true">' + [0, 1, 2, 3].map(k => `<rect x="${k * 4.25}" y="${10 - k * 3}" width="2.75" height="${4 + k * 3}" rx="1.1"${k < n ? ' class="on"' : ''}/>`).join('') + '</svg>';   // 11/22 레퍼런스(Duolingo 'How much do you know?'): 다녀온 횟수 = 늘어나는 신호 막대
 const themeOf = tr => (THEMES[DEST[tr.city]] || []).filter(o => (tr.themes || []).includes(o[0]));
@@ -1504,7 +1513,7 @@ function letters(v) { return AX.map(x => { const A = v[x.a[0]], B = v[x.b[0]]; r
 
 /* ── 화면 그리기 ── */
 /* 11/24 약관·처리방침 스위치·버전 (legal/flags.js) — 동의 기록에 버전을 남김 */
-const LEGAL = Object.assign({ flags: {}, v: { terms: '', privacy: '' } }, window.VZTR_LEGAL || {}, { url: d => (window.VZTR_LANG === 'en' ? '../' + d + '#en' : d) });
+const LEGAL = Object.assign({ flags: {}, v: { terms: '', privacy: '' } }, window.VZTR_LEGAL || {}, { url: d => (W5 ? '../' + d + '#' + window.VZTR_LANG : d) });
 const PV_IC = {   // 11/18 M39: 개인정보 안내 줄 아이콘
   use: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 3.5h7l4 4V19a1.5 1.5 0 0 1-1.5 1.5h-9A1.5 1.5 0 0 1 6 19V5a1.5 1.5 0 0 1 1-1.5zM14 3.5V8h4M9 12.5h6M9 16h4"/></svg>',
   clock: '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/></svg>',
@@ -1735,7 +1744,8 @@ function rQ(i) {
     </div>`, 'qs');
   el.querySelectorAll('.opt').forEach(b => b.onclick = () => choose(i, +b.dataset.oi, b));
 }
-function boardSub(ls) { if (W5) { const k = [3, 2, 1, 0].find(j => ls[j]); return k == null ? '' : 'Leaning ' + LEN[ls[k]]; }   /* 11/24 영어판: 네 낱말을 다 쓰면 좁은 칸에서 두 줄 → 마지막에 고른 쪽 하나만(한 줄) */
+function boardSub(ls) { if (W5EN) { const k = [3, 2, 1, 0].find(j => ls[j]); return k == null ? '' : 'Leaning ' + LEN[ls[k]]; }
+  if (W5) { const k = [3, 2, 1, 0].find(j => ls[j]); if (k == null) return ''; const x = AX[k]; return TR((ls[k] === x.a[0] ? x.a[1] : x.b[1]) + ' 쪽'); }   /* 11/27 일본어·중국어: 넷 다 쓰면 360px에서 두 줄(qa_lines) → 영어판처럼 마지막에 고른 쪽 하나만 ('ローカル寄り') */   /* 11/24 영어판: 네 낱말을 다 쓰면 좁은 칸에서 두 줄 → 마지막에 고른 쪽 하나만(한 줄) */
   return AX.map((x, k) => ls[k] ? (ls[k] === x.a[0] ? x.a[1] : x.b[1]) : null).filter(Boolean).join(', ') + ' 쪽'; }
 // 11/18 T16: 보기 줄바꿈 — 쉼표·마침표 뒤에서 끊음(앞 덩어리가 4자 이상일 때만). 나머지는 keep-all + balance
 const brk = t => W5 ? esc(String(VZTR_I18N.t(t)).replace(/\s*\|\s*/g, ' ')) : t.includes('|') ? t.split('|').map(esc).join('<br>') : esc(t).replace(/^(.{4,}?[,.]) /, '$1<br>');   // '|' = 정해 둔 줄바꿈 자리
@@ -1855,7 +1865,7 @@ function nameGap(root) {
 function fitChar(svg, k) { if (window.GABOJA_FIT) GABOJA_FIT(svg, k == null ? 1.45 : k); }
 const AVnb = (c, k, fx) => window.GABOJA_CHAR ? `<div class="av${fx ? ' gfx' : ''} ${k || ''}"${fx ? ` data-c="${c}" data-fxd="650"` : ''}>${GABOJA_CHAR(c, { bg: false })}</div>` : '';
 const grpIcon = c => `<svg viewBox="0 0 24 24" aria-hidden="true">${GI[c.slice(0, 2)]}</svg>`;
-const LMEAN = W5 ? { L: 'Local', H: 'Hotspot', S: 'Sightseeing', E: 'Experience', F: 'Fast-paced', R: 'Relaxed', J: 'Organized', P: 'Unscripted' } : { L: '로컬', H: '핫플', S: '구경', E: '즐기기', F: '알차게', R: '여유', J: '계획', P: '즉흥' };   // W5: 글자 칸 아래라 짧게 · 11/21 한국어도 3·4번째 칸은 두 글자(칸 36px라 '여유롭게즉흥형'이 붙어 보였음, 전체 이름은 아래 '내 유형 글자 뜻')
+const LMEAN = W5EN ? { L: 'Local', H: 'Hotspot', S: 'Sightseeing', E: 'Experience', F: 'Fast-paced', R: 'Relaxed', J: 'Organized', P: 'Unscripted' } : TXO({ L: '로컬', H: '핫플', S: '구경', E: '즐기기', F: '알차게', R: '여유', J: '계획', P: '즉흥' });   // W5: 글자 칸 아래라 짧게 · 11/21 한국어도 3·4번째 칸은 두 글자(칸 36px라 '여유롭게즉흥형'이 붙어 보였음, 전체 이름은 아래 '내 유형 글자 뜻')
 function lflapsHtml(c) { return `<div class="flaps big lfl">${c.split('').map(l => `<span class="lcol"><span class="fl">${DL(l)}</span><span class="lb">${LMEAN[l]}</span></span>`).join('')}</div>`; }
 // 11/15 #4 → 11/18 D-2: '내가 고른 답 10개' = 처음부터 펼친 목록 (접기 없음) · 두 묶음 소제목 · 오른쪽 축 글자 칩(내 유형 글자와 같으면 진하게) — 남의 유형 보기에선 안 보임
 const LEN = { L: 'Local', H: 'Hotspot', S: 'Sightseeing', E: 'Experience', F: 'Fast-paced', R: 'Relaxed', J: 'Organized', P: 'Unscripted' };   // 11/23 동우님: 영어판 축 이름과 같은 낱말(글자 = 첫 글자)   // 11/22 #2 글자 뜻(영어 앞 글자)
@@ -1944,6 +1954,7 @@ function copyLink(c) {
    1080×1350(4:5, 인스타 피드·스토리·카톡 사진에 맞는 세로) PNG를 캔버스로 그려 폰 공유창(navigator.share files)으로.
    파일 공유가 안 되는 브라우저(PC 등) = PNG 저장 + 링크 복사. 움직이는 카드(영상)는 확인만 함 — 세션요약 참고 */
 const TR = s => (W5 && window.VZTR_I18N && VZTR_I18N.t ? VZTR_I18N.t(s) : s);
+const CVKR = () => (W5KR && getComputedStyle(document.documentElement).getPropertyValue('--kr').trim()) || '"VZTR KR", "Pretendard Variable", "Apple SD Gothic Neo", sans-serif';   // 11/26 다국어: 그림 카드 글꼴 — 일본어·중국어판은 i18n.js가 정한 그 언어 기기 글꼴
 const INK = { LS: '#2F6B73', LE: '#9A4A62', HS: '#2F557A', HE: '#8E3A63' };
 function charImg(c, px) {   // 화면과 같은 캐릭터(스타일 3)를 그림으로: 전역 그라디언트·필터(#gbjFx)를 SVG 안에 넣고, 몸통 기준 정사각형으로 맞춤
   return new Promise(res => {
@@ -1964,7 +1975,7 @@ function charImg(c, px) {   // 화면과 같은 캐릭터(스타일 3)를 그림
 const CF = { s: [1080, 1920], q: [1080, 1080] };
 async function cardPng(c, f = 's') {
   const t = T(c), g = c.slice(0, 2), bg = GRPC[g].bg, ink = INK[g], [W, H] = CF[f] || CF.s;
-  const LAT = '"Inter Tight", "VZTR EN", "VZTR KR", "Pretendard Variable", sans-serif', KR = '"VZTR KR", "Pretendard Variable", "Apple SD Gothic Neo", sans-serif', NMF = W5 ? LAT : KR;
+  const LAT = '"Inter Tight", "VZTR EN", "VZTR KR", "Pretendard Variable", sans-serif', KR = CVKR(), NMF = W5EN ? LAT : KR;
   try { await Promise.all([`800 80px "Inter Tight"`, `600 30px "Inter Tight"`, `700 80px "VZTR KR"`, `500 40px "VZTR KR"`, `600 30px "VZTR KR"`].map(q => document.fonts.load(q, '가A'))); } catch (_) {}
   const cv = document.createElement('canvas'); cv.width = W; cv.height = H; const x = cv.getContext('2d');
   const rr = (X, Y, w, h, r) => { x.beginPath(); x.roundRect ? x.roundRect(X, Y, w, h, r) : x.rect(X, Y, w, h); };
@@ -1980,7 +1991,7 @@ async function cardPng(c, f = 's') {
     return [[s], fmin]; };
   const logo = (RX, BY, S) => { const k = S / 76, dr = 11 * k, DX = RX - 2 * dr - 6 * k; x.textAlign = 'right'; x.textBaseline = 'alphabetic'; x.font = `800 ${S}px ${LAT}`; x.fillStyle = '#0F1F33';
     ls((-3 * k) + 'px'); x.fillText('vztr', DX, BY); ls('0px'); x.fillStyle = '#3D63F5'; x.beginPath(); x.arc(DX + 17 * k, BY - 9 * k, dr, 0, Math.PI * 2); x.fill(); };
-  const flaps = (X0, Y, FW, FH, GAP, mean) => { const MF = W5 ? LAT : KR; let mz = mean; c.split('').forEach(l => { mz = Math.min(mz, fit(LMEAN[l], 600, mean, 18, MF, FW + GAP - 8, 1)); });   // 뜻 네 칸 = 같은 크기(가장 긴 낱말에 맞춤, 영어 'Sightseeing')
+  const flaps = (X0, Y, FW, FH, GAP, mean) => { const MF = W5EN ? LAT : KR; let mz = mean; c.split('').forEach(l => { mz = Math.min(mz, fit(LMEAN[l], 600, mean, 18, MF, FW + GAP - 8, 1)); });   // 뜻 네 칸 = 같은 크기(가장 긴 낱말에 맞춤, 영어 'Sightseeing')
     c.split('').forEach((l, k) => { const X = X0 + k * (FW + GAP);   // 11/25 UI 규칙 확정 7: 흰 판 + dk 글자 + 가운데 줄 dk 18%
     rr(X, Y, FW, FH, Math.round(FW * .12)); x.save(); x.shadowColor = 'rgba(22,23,26,.10)'; x.shadowBlur = 8; x.shadowOffsetY = 3; x.fillStyle = '#FFFFFF'; x.fill(); x.restore();
     x.strokeStyle = ink + '2E'; x.lineWidth = 2; x.beginPath(); x.moveTo(X + 1, Y + FH / 2); x.lineTo(X + FW - 1, Y + FH / 2); x.stroke();
@@ -2031,41 +2042,41 @@ const PAIR_KEY = 'vztr-pair', PAIR_TTL = 3 * 864e5;
 try { const me = JSON.parse(localStorage.getItem('gaboja-type') || 'null'); if (window.VZTR_SHARED && /^[LH][SE][FR][JP]$/.test(VZTR_SHARED.c) && !(me && me.code === VZTR_SHARED.c)) localStorage.setItem(PAIR_KEY, JSON.stringify({ c: VZTR_SHARED.c, t: Date.now() })); } catch (_) {}   // 내가 보낸 링크를 내가 열면 저장 안 함(서버가 넣는 스크립트도 같은 규칙)
 function pairOf() { try { const o = JSON.parse(localStorage.getItem(PAIR_KEY)); return o && /^[LH][SE][FR][JP]$/.test(o.c) && Date.now() - o.t < PAIR_TTL ? o.c : ''; } catch (_) { return ''; } }
 /* 11/26 밤 문구 다듬음(동우님 '문법·어색함 없이'): 같은 점 = [제목, 설명] · 다른 점 = 축마다 [글자별 낱말, 맞추는 법] · 한 줄 요약 = 같은 축 수(0~4) */
-const PAIR_SAME = W5 ? { L: ['You both love local spots', 'Back streets come before famous sights'], H: ['You both love what’s trending', 'New and buzzing places come first'], S: ['You both love seeing and walking', 'Views and streets are the fun part'], E: ['You both love eating and shopping', 'Food, shops and trying things are the fun part'], F: ['You both like a full day', 'You see a lot and go a lot'], R: ['You both like it slow', 'Plenty of downtime matters to you'], J: ['You both plan ahead', 'Routes and times are set before you go'], P: ['You both go with the flow', 'You decide on the spot'] }
-  : { L: ['둘 다 동네 가게를 좋아해요', '유명한 곳보다 골목을 먼저 찾아요'], H: ['둘 다 요즘 뜨는 곳을 좋아해요', '새로 생긴 곳, 화제인 곳부터 가 봐요'], S: ['둘 다 보고 걷는 걸 좋아해요', '풍경과 거리 구경이 여행의 재미예요'], E: ['둘 다 먹고 사는 걸 좋아해요', '맛집과 쇼핑, 체험이 여행의 재미예요'], F: ['둘 다 일정을 꽉 채워요', '하루에 많이 보고 많이 다녀요'], R: ['둘 다 느긋한 여행을 좋아해요', '쉬는 시간이 넉넉해야 좋아요'], J: ['둘 다 미리 계획해요', '동선과 시간을 정해 두고 움직여요'], P: ['둘 다 그때그때 정해요', '가서 마음 가는 대로 골라요'] };
-const PAIR_DIFF = W5 ? [[{ L: 'local spots', H: 'hotspots' }, 'Take turns picking the day'], [{ S: 'sights', E: 'food & shops' }, 'Sights in the morning, food and shops after'], [{ F: 'full days', R: 'slow days' }, 'Pack the morning, take the afternoon easy'], [{ J: 'planning', P: 'winging it' }, 'Set the outline and decide the rest there']]
-  : [[{ L: '동네 가게', H: '뜨는 곳' }, '하루씩 번갈아 골라요'], [{ S: '구경', E: '맛집·쇼핑' }, '오전엔 구경하고, 오후엔 먹고 사요'], [{ F: '꽉 찬 하루', R: '느긋한 하루' }, '오전은 꽉 채우고, 오후는 쉬엄쉬엄 다녀요'], [{ J: '미리 계획', P: '그때그때' }, '큰 틀만 정하고, 나머지는 가서 골라요']];
-const PAIR_HEAD = W5 ? ['Opposites who keep it fun', 'Plenty to show each other', 'Half alike, half new', 'Almost perfectly in sync', 'Two of a kind']
-  : ['정반대라서 더 재밌는 사이', '서로 새로운 걸 알려 주는 사이', '반은 같고, 반은 서로 채워 주는 사이', '척하면 척, 잘 맞는 사이', '거울처럼 똑 닮은 사이'];
+const PAIR_SAME = W5EN ? { L: ['You both love local spots', 'Back streets come before famous sights'], H: ['You both love what’s trending', 'New and buzzing places come first'], S: ['You both love seeing and walking', 'Views and streets are the fun part'], E: ['You both love eating and shopping', 'Food, shops and trying things are the fun part'], F: ['You both like a full day', 'You see a lot and go a lot'], R: ['You both like it slow', 'Plenty of downtime matters to you'], J: ['You both plan ahead', 'Routes and times are set before you go'], P: ['You both go with the flow', 'You decide on the spot'] }
+  : TXO({ L: ['둘 다 동네 가게를 좋아해요', '유명한 곳보다 골목을 먼저 찾아요'], H: ['둘 다 요즘 뜨는 곳을 좋아해요', '새로 생긴 곳, 화제인 곳부터 가 봐요'], S: ['둘 다 보고 걷는 걸 좋아해요', '풍경과 거리 구경이 여행의 재미예요'], E: ['둘 다 먹고 사는 걸 좋아해요', '맛집과 쇼핑, 체험이 여행의 재미예요'], F: ['둘 다 일정을 꽉 채워요', '하루에 많이 보고 많이 다녀요'], R: ['둘 다 느긋한 여행을 좋아해요', '쉬는 시간이 넉넉해야 좋아요'], J: ['둘 다 미리 계획해요', '동선과 시간을 정해 두고 움직여요'], P: ['둘 다 그때그때 정해요', '가서 마음 가는 대로 골라요'] });
+const PAIR_DIFF = W5EN ? [[{ L: 'local spots', H: 'hotspots' }, 'Take turns picking the day'], [{ S: 'sights', E: 'food & shops' }, 'Sights in the morning, food and shops after'], [{ F: 'full days', R: 'slow days' }, 'Pack the morning, take the afternoon easy'], [{ J: 'planning', P: 'winging it' }, 'Set the outline and decide the rest there']]
+  : TXO([[{ L: '동네 가게', H: '뜨는 곳' }, '하루씩 번갈아 골라요'], [{ S: '구경', E: '맛집·쇼핑' }, '오전엔 구경하고, 오후엔 먹고 사요'], [{ F: '꽉 찬 하루', R: '느긋한 하루' }, '오전은 꽉 채우고, 오후는 쉬엄쉬엄 다녀요'], [{ J: '미리 계획', P: '그때그때' }, '큰 틀만 정하고, 나머지는 가서 골라요']]);
+const PAIR_HEAD = W5EN ? ['Opposites who keep it fun', 'Plenty to show each other', 'Half alike, half new', 'Almost perfectly in sync', 'Two of a kind']
+  : TXO(['정반대라서 더 재밌는 사이', '서로 새로운 걸 알려 주는 사이', '반은 같고, 반은 서로 채워 주는 사이', '척하면 척, 잘 맞는 사이', '거울처럼 똑 닮은 사이']);
 function pairCalc(a, b) { const same = [0, 1, 2, 3].filter(k => a[k] === b[k]).length, ta = T(a), tb = T(b);
   const best = ta.best === b || tb.best === a, clash = !best && (ta.clash === b || tb.clash === a), why = best ? (ta.best === b ? ta.bestWhy : tb.bestWhy) : clash ? (ta.clash === b ? ta.clashWhy : tb.clashWhy) : '';
   return { same, best, clash, why, lines: [0, 1, 2, 3].map(k => { if (a[k] === b[k]) return { ok: 1, t: PAIR_SAME[a[k]][0], d: PAIR_SAME[a[k]][1] };
-    const [w, d] = PAIR_DIFF[k]; return { ok: 0, t: W5 ? `Friend: ${w[a[k]]} · You: ${w[b[k]]}` : `친구는 ${w[a[k]]}, 나는 ${w[b[k]]}`, d }; }) }; }
+    const [w, d] = PAIR_DIFF[k]; return { ok: 0, t: W5EN ? `Friend: ${w[a[k]]} · You: ${w[b[k]]}` : W5 ? FMT('친구는 {x}, 나는 {y}', { x: w[a[k]], y: w[b[k]] }) : `친구는 ${w[a[k]]}, 나는 ${w[b[k]]}`, d }; }) }; }
 function pairBox(me) { const f = pairOf(); if (!f) return ''; const r = pairCalc(f, me), tf = T(f), tm = T(me);
   if (window.vztrHit) vztrHit('pair');
   const who = (c, t, lab) => `<div class="pw"><span class="pl">${lab}</span><span class="pch">${window.GABOJA_CHAR ? GABOJA_CHAR(c, { bg: false }) : ''}</span><b>${esc(TR(t.name))}</b><span class="cd">${DC(c)}</span></div>`;
   const row = x => `<div class="hw"><div><b>${esc(x.t)}</b><span>${esc(x.d)}</span></div></div>`;
   const ok = r.lines.filter(x => x.ok), no = r.lines.filter(x => !x.ok);
   return `<div class="sec pairx" data-noi18n><div class="card pzc"><p class="ph">${esc(PAIR_HEAD[r.same])}</p>
-    ${r.best ? `<p class="pt"><em>${W5 ? 'Recommended match' : '추천 짝'}</em>${W5 ? 'You’re each other’s recommended travel mate' : '서로에게 추천하는 여행 메이트예요'}</p>` : r.clash ? `<p class="pt"><em>${W5 ? 'Might clash' : '부딪힐 수 있는 짝'}</em>${W5 ? 'Follow the tips below and you’ll be fine' : '아래 맞추는 법대로 다니면 괜찮아요'}</p>` : ''}
-    <div class="pp">${who(f, tf, W5 ? 'Friend' : '친구')}${who(me, tm, W5 ? 'Me' : '나')}</div></div>
-    ${ok.length ? `<div class="plab ok">${W5 ? 'You click on' : '잘 맞아요'}</div><div class="card how">${ok.map(row).join('')}</div>` : ''}
-    ${no.length ? `<div class="plab no">${W5 ? 'Might clash' : '부딪힐 수 있어요'}</div><div class="card how">${no.map(row).join('')}</div>` : ''}
-    <button type="button" class="cta2" id="pairShare">${ICON.share}${W5 ? 'Share our match card' : '궁합 카드 공유하기'}</button></div>`; }
+    ${r.best ? `<p class="pt"><em>${TX('추천 짝', 'Recommended match')}</em>${TX('서로에게 추천하는 여행 메이트예요', 'You’re each other’s recommended travel mate')}</p>` : r.clash ? `<p class="pt"><em>${TX('부딪힐 수 있는 짝', 'Might clash')}</em>${TX('아래 맞추는 법대로 다니면 괜찮아요', 'Follow the tips below and you’ll be fine')}</p>` : ''}
+    <div class="pp">${who(f, tf, TX('친구', 'Friend'))}${who(me, tm, TX('나', 'Me'))}</div></div>
+    ${ok.length ? `<div class="plab ok">${TX('잘 맞아요', 'You click on')}</div><div class="card how">${ok.map(row).join('')}</div>` : ''}
+    ${no.length ? `<div class="plab no">${TX('부딪힐 수 있어요', 'Might clash')}</div><div class="card how">${no.map(row).join('')}</div>` : ''}
+    <button type="button" class="cta2" id="pairShare">${ICON.share}${TX('궁합 카드 공유하기', 'Share our match card')}</button></div>`; }
 async function pairInvite(c) {   // 내 결과 → '나랑 여행 궁합 볼래?' 링크(받은 친구가 테스트를 끝내면 궁합이 나옴)
-  const url = shareUrlOf(c, true), txt = W5 ? 'Travel match with me?' : '나랑 여행 궁합 볼래?';
+  const url = shareUrlOf(c, true), txt = TX('나랑 여행 궁합 볼래?', 'Travel match with me?');
   if (window.vztrHit) vztrHit('share');
   if (navigator.share) { try { await navigator.share({ title: 'VZTR', text: txt, url }); return; } catch (e) { if (e && e.name === 'AbortError') return; } }
-  try { await navigator.clipboard.writeText(txt + ' ' + url); toast(W5 ? 'Link copied. Send it to a friend' : '궁합 링크를 복사했어요 · 친구에게 보내 보세요'); } catch (_) { toast(W5 ? 'Couldn’t copy the link' : '복사할 수 없어요'); }
+  try { await navigator.clipboard.writeText(txt + ' ' + url); toast(TX('궁합 링크를 복사했어요 · 친구에게 보내 보세요', 'Link copied. Send it to a friend')); } catch (_) { toast(TX('복사할 수 없어요', 'Couldn’t copy the link')); }
 }
 async function pairPng(a, b) {   // 궁합 카드 1:1 1080 — 결과 카드(cardPng)와 같은 글꼴·캐릭터
-  const W = 1080, H = 1080, r = pairCalc(a, b), LAT = '"Inter Tight", "VZTR EN", "VZTR KR", "Pretendard Variable", sans-serif', KR = '"VZTR KR", "Pretendard Variable", "Apple SD Gothic Neo", sans-serif', NMF = W5 ? LAT : KR;
+  const W = 1080, H = 1080, r = pairCalc(a, b), LAT = '"Inter Tight", "VZTR EN", "VZTR KR", "Pretendard Variable", sans-serif', KR = CVKR(), NMF = W5EN ? LAT : KR;
   try { await Promise.all([`800 80px "Inter Tight"`, `700 80px "VZTR KR"`, `500 40px "VZTR KR"`].map(q => document.fonts.load(q, '가A'))); } catch (_) {}
   const cv = document.createElement('canvas'); cv.width = W; cv.height = H; const x = cv.getContext('2d');
   const rr = (X, Y, w, h, rad) => { x.beginPath(); x.roundRect ? x.roundRect(X, Y, w, h, rad) : x.rect(X, Y, w, h); };
   const fit = (s, wt, f0, fmin, fam, w) => { let z = f0; do { x.font = `${wt} ${z}px ${fam}`; if (x.measureText(s).width <= w) break; z -= 2; } while (z > fmin); return z; };
   const gd = x.createLinearGradient(0, 0, 0, H); gd.addColorStop(0, '#EEF0F6'); gd.addColorStop(1, '#FFFFFF'); x.fillStyle = gd; x.fillRect(0, 0, W, H);
-  x.textBaseline = 'alphabetic'; x.textAlign = 'left'; x.fillStyle = '#16181D'; x.font = `700 40px ${KR}`; x.fillText(W5 ? 'Our travel match' : '우리 둘의 여행 궁합', 80, 124);
+  x.textBaseline = 'alphabetic'; x.textAlign = 'left'; x.fillStyle = '#16181D'; x.font = `700 40px ${KR}`; x.fillText(TX('우리 둘의 여행 궁합', 'Our travel match'), 80, 124);
   { const S0 = 50, k = S0 / 76, dr = 11 * k, RX = W - 80, DX = RX - 2 * dr - 6 * k; x.textAlign = 'right'; x.font = `800 ${S0}px ${LAT}`; x.fillStyle = '#0F1F33'; try { x.letterSpacing = (-3 * k) + 'px'; } catch (_) {} x.fillText('vztr', DX, 124); try { x.letterSpacing = '0px'; } catch (_) {} x.fillStyle = '#3D63F5'; x.beginPath(); x.arc(DX + 17 * k, 124 - 9 * k, dr, 0, Math.PI * 2); x.fill(); }
   for (const [c, X] of [[a, 100], [b, 580]]) {   // 11/26 밤: 캐릭터 네모 배경 없앰(앱 궁합 칸과 같게)
     const im = await charImg(c, 600); if (im) x.drawImage(im, X + 40, 270, 320, 320);
@@ -2073,17 +2084,17 @@ async function pairPng(a, b) {   // 궁합 카드 1:1 1080 — 결과 카드(car
     x.fillStyle = '#6B6E75'; x.font = `600 28px ${LAT}`; x.fillText(DC(c), X + 200, 706);
   }
   x.fillStyle = '#16181D'; fit(PAIR_HEAD[r.same], 700, 52, 32, KR, W - 160); x.fillText(PAIR_HEAD[r.same], W / 2, 820);
-  const inv = W5 ? 'Try it with a friend' : '너도 친구랑 해 봐'; x.font = `700 32px ${KR}`; const aw = x.measureText(inv).width, PW = aw + 80, PH = 72, PX = (W - PW) / 2, PY = 900;
+  const inv = TX('너도 친구랑 해 봐', 'Try it with a friend'); x.font = `700 32px ${KR}`; const aw = x.measureText(inv).width, PW = aw + 80, PH = 72, PX = (W - PW) / 2, PY = 900;
   rr(PX, PY, PW, PH, PH / 2); x.fillStyle = 'rgba(255,255,255,.9)'; x.fill(); x.textBaseline = 'middle'; x.fillStyle = '#16181D'; x.fillText(inv, W / 2, PY + PH / 2 + 1);
   return new Promise(res => cv.toBlob(bl => res(bl), 'image/png'));
 }
 async function pairShare(me) { const f = pairOf(); if (!f) return; const btn = $('#pairShare'); if (btn) btn.disabled = true;
   try { if (window.vztrHit) vztrHit('share');
-    const b = await pairPng(f, me).catch(() => null), url = shareUrlOf(me, true), txt = W5 ? 'Our travel match, try it with yours:' : '우리 둘의 여행 궁합, 너도 해 봐';
+    const b = await pairPng(f, me).catch(() => null), url = shareUrlOf(me, true), txt = TX('우리 둘의 여행 궁합, 너도 해 봐', 'Our travel match, try it with yours:');
     const file = b && new File([b], `vztr-match-${DC(f)}-${DC(me)}.png`, { type: 'image/png' });
     if (file && navigator.canShare && navigator.canShare({ files: [file] })) { try { await navigator.share({ files: [file], title: 'VZTR', text: txt + ' ' + url }); return; } catch (e) { if (e && e.name === 'AbortError') return; } }
     if (b) { const a = document.createElement('a'); a.href = URL.createObjectURL(b); a.download = file.name; document.body.appendChild(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(a.href), 4000); }
-    try { await navigator.clipboard.writeText(txt + ' ' + url); toast(W5 ? 'Card saved and link copied' : '궁합 카드를 저장하고 링크를 복사했어요'); } catch (_) { if (b) toast(W5 ? 'Card saved' : '궁합 카드를 저장했어요'); }
+    try { await navigator.clipboard.writeText(txt + ' ' + url); toast(TX('궁합 카드를 저장하고 링크를 복사했어요', 'Card saved and link copied')); } catch (_) { if (b) toast(TX('궁합 카드를 저장했어요', 'Card saved')); }
   } finally { if (btn) btn.disabled = false; } }
 const CARD = {}; function cardBlob(c, f = 's') { const k = c + f; return CARD[k] || (CARD[k] = cardPng(c, f).catch(() => null)); }
 /* 카톡(두 번째): 카카오 JS SDK — 키·SRI는 가이드북(index.html)과 같음. 1:1 카드를 시트 열 때 미리 카카오 서버에 올려 둠(5MB 이하·최대 100일 보관, 카카오 문서)
@@ -2099,12 +2110,26 @@ function kakaoImg(c) { return KKIMG[c] || (KKIMG[c] = (async () => { if (!KK_HOS
   const b = await cardBlob(c, 'q'); if (!b) return ''; const dt = new DataTransfer(); dt.items.add(new File([b], `vztr-${DC(c)}.png`, { type: 'image/png' }));
   const r = await Kakao.Share.uploadImage({ file: dt.files });   // 카카오 문서 예제: response.infos.original.url (레퍼런스는 감싸는 infos 없이 적혀 있어 둘 다 봄)
   return (r && ((r.infos && r.infos.original && r.infos.original.url) || (r.original && r.original.url))) || ''; })().catch(() => '')); }
-function shareTxt(c) { const t0 = T(c), n = TR(t0.name); return W5 ? `I'm ${/^[AEIOU]/i.test(n) ? 'an' : 'a'} ‘${n}’ traveler, what about you?` : `내 여행 유형은 ${t0.name}, 너는?`; }   // 11/26 동우님: 공유 문구는 짧게 한 문장 · 11/26 밤 '나는 ‘…’ 여행자래' 어색 → 이 문장('호캉스 여행자 여행자' 겹침도 없앰)
+function shareTxt(c) { const t0 = T(c), n = TR(t0.name); return W5EN ? `I'm ${/^[AEIOU]/i.test(n) ? 'an' : 'a'} ‘${n}’ traveler, what about you?` : W5 ? FMT('내 여행 유형은 {x}, 너는?', { x: n }) : `내 여행 유형은 ${t0.name}, 너는?`; }   // 11/26 동우님: 공유 문구는 짧게 한 문장 · 11/26 밤 '나는 ‘…’ 여행자래' 어색 → 이 문장('호캉스 여행자 여행자' 겹침도 없앰)
 /* 11/26 2주차: 공유 링크 = vztr.app/r/코드 — 서버가 그 유형의 미리보기(제목·카드 그림)를 넣어 줌(# 뒤는 서버로 안 가서 예전 주소는 16유형이 다 같은 미리보기). p = 궁합 초대. localhost 미리보기는 예전 주소 */
-function shareUrlOf(c, p) { return /^(www\.)?(vztr\.app|larchive\.page)$/.test(location.hostname) ? 'https://vztr.app/' + (W5 ? 'en/' : '') + 'r/' + c + (p ? '?p=1' : '') : location.origin + location.pathname + '#r-' + c; }
+function shareUrlOf(c, p) { return /^(www\.)?(vztr\.app|larchive\.page)$/.test(location.hostname) ? 'https://vztr.app/' + (W5 ? window.VZTR_LANG + '/' : '') + 'r/' + c + (p ? '?p=1' : '') : location.origin + location.pathname + '#r-' + c; }
 async function saveCard(c, f) { const b = await cardBlob(c, f); if (!b) { toast('카드를 만들지 못했어요'); return; }
   const a = document.createElement('a'); a.href = URL.createObjectURL(b); a.download = `vztr-${DC(c)}${f === 'q' ? '-1x1' : ''}.png`; document.body.appendChild(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(a.href), 4000); }
 /* S2 공유 시트: 미리보기 · 모양(스토리 9:16 / 정사각 1:1) · 공유하기(폰 공유창) · 카카오톡(영어판 = 링크 복사) · 이미지 저장 */
+/* 11/26 B 중국어판 공유 앱 (조사 = 문서/여행앱/2026-11-26_VZTR_중국어판_이용자사정·반영방안_v1.md 3-1절)
+   간체: 위챗 = 웹 공유 URL 없음·카드는 JS-SDK+ICP 등록 필요(위챗 공식 문서) → 문구+링크 복사 후 '위챗에 붙여 넣기' 안내 · 웨이보 share.php · QQ空间 공유 URL (둘 다 비공식, appkey 없이 열림)
+   번체: LINE 공식 공유 URL(social-plugins.line.me/lineit/share). 카카오톡은 중국어판에서 숨김(이용 근거 없음) */
+const ZHL = window.VZTR_LANG, ZHSH = ZHL === 'zh-hans' ? [['shWx', '위챗'], ['shWb', '웨이보'], ['shQz', 'QQ 공간']] : ZHL === 'zh-hant' ? [['shLine', 'LINE']] : null;
+function zhShare(c) {
+  const url = shareUrlOf(c), txt = shareTxt(c), pic = 'https://vztr.app/og/en-' + c + '.png', E = encodeURIComponent, hit = () => { if (window.vztrHit) vztrHit('share'); };
+  const open = u => { hit(); window.open(u, '_blank', 'noopener'); };
+  const b = (id, f) => { const el = $('#' + id); if (el) el.onclick = f; };
+  b('shWx', () => { hit(); const t = txt + ' ' + url; const ok = () => toast(TX('링크를 복사했어요 · 위챗에 붙여 넣어 보내 주세요', 'Link copied · paste it in WeChat'));
+    try { navigator.clipboard.writeText(t).then(ok, () => copyLink(c)); } catch (_) { copyLink(c); } });   // 복사가 막히면 폰 공유창(copyLink)
+  b('shWb', () => open('https://service.weibo.com/share/share.php?url=' + E(url) + '&title=' + E(txt) + '&pic=' + E(pic)));
+  b('shQz', () => open('https://sns.qzone.qq.com/cgi-bin/qzshare/cgi_qzshare_onekey?url=' + E(url) + '&title=' + E('VZTR') + '&summary=' + E(txt) + '&pics=' + E(pic)));
+  b('shLine', () => open('https://social-plugins.line.me/lineit/share?url=' + E(url) + '&text=' + E(txt)));
+}
 function shareCard(c) {
   if (!W5) kakaoLoad();
   const rx = $('#rx'), sc = $('#rxScrim'); rx.style.removeProperty('--auto'); let f = 's', url0 = '';
@@ -2112,6 +2137,7 @@ function shareCard(c) {
     <div class="shp" id="shBox"><img id="shImg" alt="${esc(T(c).name)} 카드 미리보기"></div>
     <div class="seg" id="shSeg" role="group" aria-label="카드 모양"><button type="button" data-f="s" aria-pressed="true">스토리 9:16</button><button type="button" data-f="q" aria-pressed="false">정사각 1:1</button></div>
     <button class="cta" id="shGo">${ICON.share}공유하기</button>
+    ${ZHSH ? `<div class="acts shrow sh3">${ZHSH.map(([id, nm]) => `<button type="button" id="${id}">${nm}</button>`).join('')}</div>` : ''}
     <div class="acts shrow">${W5 ? '<button type="button" id="shLink">링크 복사</button>' : '<button type="button" id="shKk">카카오톡</button>'}<button type="button" id="shSave">이미지 저장</button></div>`;
   sc.hidden = false; void rx.offsetWidth; void sc.offsetWidth; sc.classList.add('on'); rx.classList.add('on');
   const img = $('#shImg'), box = $('#shBox');
@@ -2126,7 +2152,7 @@ function shareCard(c) {
       try { await navigator.clipboard.writeText(txt + ' ' + url); toast(b ? '카드 이미지를 저장하고 링크를 복사했어요' : '공유 문구를 복사했어요 · 친구에게 붙여 넣어 보내 보세요'); } catch (_) { if (b) toast('카드 이미지를 저장했어요'); else copyLink(c); }
     } finally { btn.disabled = false; } };
   $('#shSave').onclick = () => { if (window.vztrHit) vztrHit('share'); saveCard(c, f); };
-  if (W5) $('#shLink').onclick = () => { if (window.vztrHit) vztrHit('share'); const t = shareTxt(c) + ' ' + shareUrlOf(c); try { navigator.clipboard.writeText(t).then(() => toast('Link copied'), () => toast('Couldn’t copy the link')); } catch (_) { toast('Couldn’t copy the link'); } };
+  if (W5) $('#shLink').onclick = () => { if (window.vztrHit) vztrHit('share'); const t = shareTxt(c) + ' ' + shareUrlOf(c); try { navigator.clipboard.writeText(t).then(() => toast(TX('링크를 복사했어요', 'Link copied')), () => toast(TX('복사할 수 없어요', 'Couldn’t copy the link'))); } catch (_) { toast(TX('복사할 수 없어요', 'Couldn’t copy the link')); } };
   else $('#shKk').onclick = () => { if (window.vztrHit) vztrHit('share');
     if (!KK_HOST()) { toast('카카오톡 공유는 vztr.app에서만 돼요'); return; }
     const send = im => { const url = shareUrlOf(c), lk = { mobileWebUrl: url, webUrl: url };
@@ -2135,6 +2161,7 @@ function shareCard(c) {
     const p = kakaoImg(c);   // 보통 시트 열 때 이미 올라가 있음 → 누른 순간 바로 보냄. 아직이면 기다렸다 보냄(카드 없이 아이콘으로라도)
     Promise.race([p, new Promise(r => setTimeout(() => r(null), 50))]).then(u => { if (u !== null) send(u); else { toast('카톡 준비 중…'); p.then(send); } });
   };
+  if (ZHSH) zhShare(c);
   rx.tabIndex = -1; setTimeout(() => rx.focus({ preventScroll: true }), 60);
 }
 
@@ -2343,11 +2370,11 @@ function rInfo(s) {
       <div class="blk"><div class="sub2">약관 동의</div>
       <div class="agrees" role="group" aria-label="약관 동의">
         <label class="ag all"><input type="checkbox" id="agAll"><i class="ck" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M6 12.5l4 4 8-8.5"/></svg></i><b>전체 동의</b></label>
-        <div class="ag-row"><label class="ag"><input type="checkbox" id="tmIn" ${tr.terms ? 'checked' : ''}><i class="ck" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M6 12.5l4 4 8-8.5"/></svg></i><span class="t"><em>${window.VZTR_LANG === 'en' ? 'Required' : '필수'}</em>이용약관 동의</span></label><a class="ag-go" href="${LEGAL.url('terms')}" target="_blank" rel="noopener" aria-label="이용약관 보기"><svg class="go" viewBox="0 0 24 24" aria-hidden="true"><path d="M9.5 6l6 6-6 6"/></svg></a></div>
-        <div class="ag-row"><label class="ag" id="agBox"><input type="checkbox" id="agIn" ${tr.agree ? 'checked' : ''}><i class="ck" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M6 12.5l4 4 8-8.5"/></svg></i><span class="t"><em>${window.VZTR_LANG === 'en' ? 'Required' : '필수'}</em>개인정보 수집·이용 동의</span></label><a class="ag-go" href="${LEGAL.url('privacy')}" target="_blank" rel="noopener" aria-label="개인정보처리방침 보기"><svg class="go" viewBox="0 0 24 24" aria-hidden="true"><path d="M9.5 6l6 6-6 6"/></svg></a></div>
+        <div class="ag-row"><label class="ag"><input type="checkbox" id="tmIn" ${tr.terms ? 'checked' : ''}><i class="ck" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M6 12.5l4 4 8-8.5"/></svg></i><span class="t"><em>${TX('필수', 'Required')}</em>이용약관 동의</span></label><a class="ag-go" href="${LEGAL.url('terms')}" target="_blank" rel="noopener" aria-label="이용약관 보기"><svg class="go" viewBox="0 0 24 24" aria-hidden="true"><path d="M9.5 6l6 6-6 6"/></svg></a></div>
+        <div class="ag-row"><label class="ag" id="agBox"><input type="checkbox" id="agIn" ${tr.agree ? 'checked' : ''}><i class="ck" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M6 12.5l4 4 8-8.5"/></svg></i><span class="t"><em>${TX('필수', 'Required')}</em>개인정보 수집·이용 동의</span></label><a class="ag-go" href="${LEGAL.url('privacy')}" target="_blank" rel="noopener" aria-label="개인정보처리방침 보기"><svg class="go" viewBox="0 0 24 24" aria-hidden="true"><path d="M9.5 6l6 6-6 6"/></svg></a></div>
         <ul class="pv"><li>${PV_IC.use}<span>닉네임·이메일·여행 정보는 가이드북에만 써요</span></li><li>${PV_IC.clock}<span>출발지는 7일, 나머지는 1년 뒤 지워요</span></li><li>${PV_IC.globe}<span>해외(미국) 서버에 맡겨 보관해요</span></li><li>${PV_IC.mail}<span>‘삭제해 주세요’ 답장 한 번이면 바로 지워요</span></li><li>${PV_IC.no}<span>동의하지 않으면 신청할 수 없어요</span></li></ul>
-        <div class="ag-row"><label class="ag" id="ageBox"><input type="checkbox" id="ageIn" ${tr.age ? 'checked' : ''}><i class="ck" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M6 12.5l4 4 8-8.5"/></svg></i><span class="t"><em>${window.VZTR_LANG === 'en' ? 'Required' : '필수'}</em>만 14세 이상입니다</span></label></div>
-        ${LEGAL.flags.newsletter ? `<div class="ag-row"><label class="ag"><input type="checkbox" id="mkIn" ${tr.mkt ? 'checked' : ''}><i class="ck" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M6 12.5l4 4 8-8.5"/></svg></i><span class="t"><em class="op">${window.VZTR_LANG === 'en' ? 'Optional' : '선택'}</em>여행 소식·혜택 메일 받기</span></label></div><p class="ag-note">동의하지 않아도 가이드북은 받을 수 있어요 · 2년마다 다시 여쭤봐요</p>` : ''}
+        <div class="ag-row"><label class="ag" id="ageBox"><input type="checkbox" id="ageIn" ${tr.age ? 'checked' : ''}><i class="ck" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M6 12.5l4 4 8-8.5"/></svg></i><span class="t"><em>${TX('필수', 'Required')}</em>만 14세 이상입니다</span></label></div>
+        ${LEGAL.flags.newsletter ? `<div class="ag-row"><label class="ag"><input type="checkbox" id="mkIn" ${tr.mkt ? 'checked' : ''}><i class="ck" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M6 12.5l4 4 8-8.5"/></svg></i><span class="t"><em class="op">${TX('선택', 'Optional')}</em>여행 소식·혜택 메일 받기</span></label></div><p class="ag-note">동의하지 않아도 가이드북은 받을 수 있어요 · 2년마다 다시 여쭤봐요</p>` : ''}
       </div></div>
       <div class="foot"><button class="cta" id="sNext" disabled>가이드북 신청하기 ${ICON.arrow}</button></div>`);
     function syncAll() { const al = $('#agAll'), bx = ['#tmIn', '#agIn', '#ageIn', '#mkIn'].map(x => $(x)).filter(Boolean); if (al) al.checked = bx.every(b => b.checked); }   // 11/24 전체 동의 표시 맞춤(upd보다 먼저 정의)
@@ -2554,7 +2581,8 @@ const GDEV = (() => { try { if (/[?&]dev=1/.test(location.search)) localStorage
 const PH_KEY_G = () => /^(https:\/\/(www\.)?(larchive\.page|vztr\.app)|https:\/\/vztr-api\.d-chive33-a29\.workers\.dev|http:\/\/(localhost|127\.0\.0\.1)(:\d+)?)$/.test(location.origin), PH_KEY_M = () => window.GABOJA_MAPS_KEY || '';
 // 11/24 오사카관광국 사진(license 'OCTB'): 일본어 외 표기 = '©Osaka Convention & Tourism Bureau' 그대로(관광국 회신 11/24, 한·영 같은 문구)
 // 11/24 도쿄관광재단 사진(license 'TCVB'): '©Tokyo Convention & Visitors Bureau' 그대로(재단 회신 11/24)
-const phCredit = (a, l) => /^OCTB$/i.test(String(l || '').trim()) ? '©Osaka Convention & Tourism Bureau' : /^TCVB$/i.test(String(l || '').trim()) ? '©Tokyo Convention & Visitors Bureau' :'사진 © ' + String(a || '').replace(/저작권자\s*[:：]\s*/g, '').replace(/\s*공동저작자\s*[:：]\s*/g, ' · ').trim().slice(0, 60) + ' · ' + String(l || '').trim();   // 11/20 검수: 긴 저작권 문구 줄임(라벨만 뺌, 이름은 그대로)
+// 11/27 후쿠오카현관광연맹 포토다운로드(license 'FPTA'): 신청 없이 무료·크레디트 필수(영어 공식 표기 '©Fukuoka Prefecture Tourism Association', 오사카·도쿄처럼 한·영 같은 문구)·직링크 금지(우리 서버 /gaboja/ph/fpta/)·큰 색보정·대폭 트리밍 금지·太宰府天満宮 사진(※)은 신사 별도 허가라 안 씀
+const phCredit = (a, l) => /^OCTB$/i.test(String(l || '').trim()) ? '©Osaka Convention & Tourism Bureau' : /^TCVB$/i.test(String(l || '').trim()) ? '©Tokyo Convention & Visitors Bureau' : /^FPTA$/i.test(String(l || '').trim()) ? '©Fukuoka Prefecture Tourism Association' :'사진 © ' + String(a || '').replace(/저작권자\s*[:：]\s*/g, '').replace(/\s*공동저작자\s*[:：]\s*/g, ' · ').trim().slice(0, 60) + ' · ' + String(l || '').trim();   // 11/20 검수: 긴 저작권 문구 줄임(라벨만 뺌, 이름은 그대로)
 function phGoogle(p, cb) {   // ② 구글 장소 사진 1장 — 서버 /photo가 키로 찾아 키 없는 사진 주소만 돌려줌. 결과는 세션 동안만(sessionStorage)
   const ck = 'gaboja-gph2:' + (p.n || '');
   if (!PH_KEY_G()) { cb(null); return; }
@@ -2598,7 +2626,7 @@ function phMount(host, p, o) {
     const s = steps.shift();
     if (s === 'ph') show(p.ph.u, phCredit(p.ph.a, p.ph.l), o.link ? p.ph.p : '');
     else if (s === 'g') phGoogle(p, r => { if (r) show(r.u, '사진 · Google · ' + r.a, '', 1); else next(); });
-    else if (s === 'sv') sv();
+    else if (s === 'sv' && window.VZTR_LANG !== 'zh-hans') sv();   // 11/26 B: 간체판은 구글 스트리트뷰 안 띄움(중국 본토 구글 차단)
     else none();
   };
   next();
@@ -2612,7 +2640,7 @@ function swPoints(sw, d, id, l1) {
     ? [pop && B(p.kind === 'cafe' ? '인기' : p.kind === 'bar' ? '대표' : '인기 메뉴', pop), p.say2 && !SW_LOC.test(p.say2) && esc(p.say2), p.best && !SW_LOC.test(p.best) && esc(p.best)]
     : [p.kf && esc(ro ? `${p.kf}${ro} 유명해요` : `대표 ${p.kf}`), p.say2 && esc(p.say2), p.best && esc(p.best)];
   const out = [...new Set(L.filter(x => x && !l1.some(t => esc(t) === x)))];
-  if (th) out.push(W5 ? `Picked for <b>${esc(VZTR_I18N.t(th[2]))}</b>` : `<b>‘${esc(th[2])}’</b> 주제로 골랐어요`);   // 11/23 영어판: 어순이 달라 통째로
+  if (th) out.push(W5EN ? `Picked for <b>${esc(VZTR_I18N.t(th[2]))}</b>` : W5 ? FMT('‘{x}’ 주제로 골랐어요', { x: '<b>' + esc(VZTR_I18N.t(th[2])) + '</b>' }) : `<b>‘${esc(th[2])}’</b> 주제로 골랐어요`);   // 11/23 영어판: 어순이 달라 통째로
   if (!out.length) { const kd = [KIND_LB[p.kind]].concat((p.tg || []).filter(t => t !== KIND_LB[p.kind]).slice(0, 2)).filter(Boolean).join(' · '); if (kd && !l1.includes(kd)) out.push(esc(kd)); else if (p.oTx && !/^거리/.test(p.oTx)) out.push(B('영업', p.oTx.split(' · ')[0])); }   // 리뷰: 이름 아래 늘 2줄
   return out;
 }
@@ -2810,8 +2838,10 @@ function payload() {
 const E1_NOSEND = false; // 11/14 #18: E1이 정본(start.html). 시험할 땐 true
 function sendNow() {
   if (E1_NOSEND) { SEND = { st: 'off' }; return Promise.resolve(); } // 시안: 전송 안 함
-  SEND = { st: 'wait' }; const ctl = new AbortController(), to = setTimeout(() => ctl.abort(), 15000);
-  return fetch(INTAKE, { method: 'POST', body: JSON.stringify(payload()), signal: ctl.signal }) // text/plain → 사전 요청 없이 감
+  SEND = { st: 'wait' }; const ctl = new AbortController(), to = setTimeout(() => ctl.abort(), 15000), body = JSON.stringify(payload());
+  /* 11/26 B(중국어판): 구글 Apps Script는 중국 본토 망에서 막힘(구글 차단) → 우리 서버(Worker /intake)가 대신 시트로 넘김. 서버가 안 되면 예전처럼 직접 */
+  const direct = () => fetch(INTAKE, { method: 'POST', body, signal: ctl.signal });   // text/plain → 사전 요청 없이 감
+  return fetch(VZTR_API + '/intake', { method: 'POST', body, signal: ctl.signal }).then(r => r.ok ? r : direct(), e => e.name === 'AbortError' ? Promise.reject(e) : direct())
     .then(r => r.json()).then(j => { SEND = j.ok ? { st: 'ok', row: j.row } : { st: 'bad', err: j.err || '저장 실패' }; })
     .catch(e => { SEND = { st: 'bad', err: e.name === 'AbortError' ? '응답이 늦어요' : (/larchive\.page|vztr\.app|workers\.dev|localhost/.test(location.hostname) ? '인터넷 연결을 확인해 주세요' : '이 미리보기에선 막혀 있어요 · vztr.app 주소에서 신청') }; })
     .finally(() => clearTimeout(to));
@@ -2833,7 +2863,7 @@ function mailNow() {
     .then(r => r.json()).then(j => {
       if (!j.id) throw new Error(j.e || 'save');
       try { const c = JSON.parse(localStorage.getItem('vztr-cloud')) || {}; c[p.made] = { id: j.id, key: j.key, at: Date.now() }; localStorage.setItem('vztr-cloud', JSON.stringify(c)); } catch (_) {}   // 가이드북(index)이 같은 id로 이어서 고침
-      return fetch(VZTR_API + '/send', { method: 'POST', headers: J, body: JSON.stringify({ id: j.id, key: j.key, to, nick: (tr.nick || '').trim(), lang: W5 ? 'en' : 'ko' }), signal: ctl.signal });   // 11/21 영어판 = 영어 메일·/en/ 링크
+      return fetch(VZTR_API + '/send', { method: 'POST', headers: J, body: JSON.stringify({ id: j.id, key: j.key, to, nick: (tr.nick || '').trim(), lang: W5 ? window.VZTR_LANG : 'ko' }), signal: ctl.signal });   // 11/21 영어판 = 영어 메일·/en/ 링크
     })
     .then(r => r.json()).then(j => { MAIL = j.ok ? { st: 'ok' } : { st: 'bad', err: j.e || 'mail' }; })
     .catch(e => { MAIL = { st: 'bad', err: e.name === 'AbortError' ? 'slow' : String(e.message || e).slice(0, 40) }; })
@@ -3018,7 +3048,7 @@ function rDone() {
     ${SEND && SEND.st === 'off' ? `<div class="sent ok" style="background:var(--hair);color:var(--sub)">${ICON.lock}<span>시험판이라 신청은 보내지 않았어요</span></div>`
       : MAIL && MAIL.st === 'ok' ? `<div class="sent ok">${ICON.check}<span>${esc(tr.to || '')}(으)로 가이드북 링크를 보냈어요</span></div>`   /* 11/20 E6 */
       : SEND && SEND.st === 'ok' ? `<div class="sent ok">${ICON.check}<span>신청 완료! ${esc(tr.to || '')}(으)로 보내 드릴게요</span></div>`
-      : `<div class="sent bad"><span>신청을 못 보냈어요 (${esc((SEND && SEND.err) || '연결 실패')})</span><button id="reSend">다시 보내기</button></div>`}
+      : `<div class="sent bad"><span>${PLANNED ? '일정은 이 폰에 그대로 있어요 · 신청 기록만 못 보냈어요' : '신청을 못 보냈어요'} (${esc((SEND && SEND.err) || '연결 실패')})</span><button id="reSend">다시 보내기</button></div>`}
     <div class="note">${ICON.info}<span>${PLANNED ? `방금 만든 ${esc(PLANNED.title)} 일정이 열려요. ${MAIL && MAIL.st === 'ok' ? '메일 속 링크로 다른 폰에서도 열고 고칠 수 있어요.' : '시험판이라 아키가 한 번 더 확인한 가이드북을 따로 보내 드려요.'}` : '이 도시는 일정 자동 만들기 준비 중이에요. 가이드북은 아키가 만들어 보내 드리고, 지금은 오사카·교토 샘플 일정이 열려요.'}</span></div>
     <div class="foot">
       <a class="cta" href="${PLANNED ? 'trip' : 'trip#sample'}" style="text-decoration:none">${PLANNED ? '내 일정 보기' : '샘플 일정 보기'} ${ICON.arrow}</a>

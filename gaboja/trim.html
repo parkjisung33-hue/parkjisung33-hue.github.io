@@ -1759,7 +1759,7 @@ input::placeholder, textarea::placeholder, .rideedit .rfno::placeholder, .rideed
 <script src="kr-stn.js?v=1"></script>
 <script src="types.js"></script>
 <script src="chars.js?v=fit3"></script>
-<script>/* 공유용 샘플(#sample=키): 엔진·장소 DB·샘플 입력을 바로 불러와 그 자리에서 일정을 만듦 (저장 안 함) */ if (window.VZTR_LANG === 'en' || /#sample=[\w-]+|#v=\w{12}/.test(location.hash)) document.write('<script src="gen-data.js?v=15"><\/script><script src="gen.js?v=20"><\/script><script src="samples.js?v=8"><\/script>');</script>
+<script>/* 공유용 샘플(#sample=키): 엔진·장소 DB·샘플 입력을 바로 불러와 그 자리에서 일정을 만듦 (저장 안 함) */ if (window.VZTR_FX || /#sample=[\w-]+|#v=\w{12}/.test(location.hash)) document.write('<script src="gen-data.js?v=15"><\/script><script src="gen.js?v=20"><\/script><script src="samples.js?v=8"><\/script>');</script>
 <script>/* 11/19 W8 보기 전용 공유 링크(#v=id): 서버에 보관된 가이드북을 샘플처럼 띄움 — 이 기기엔 저장 안 함(made 없음). 편집 반영은 VZTR_VIEW_EDITS */
 (function () { var m = location.hash.match(/^#v=([A-Za-z0-9]{12})$/); if (!m) return;
   try { var x = new XMLHttpRequest(); x.open('GET', 'https://vztr-api.d-chive33-a29.workers.dev/plan/' + m[1], false); x.send();
@@ -1871,7 +1871,7 @@ function renderTips(L) {
 //   일본 = 외무성 Foreign Missions in Japan · 한국 = 외교부 Foreign Missions in ROK. 나중에 랜딩에서 국적을 고르면 그 나라 공관 하나로
 const EMB = { jp: ['일본 외무성 공식 목록', 'https://www.mofa.go.jp/about/emb_cons/protocol/index.html'], kr: ['한국 외교부 공식 목록', 'https://www.mofa.go.kr/eng/pgm/m_5789/uss/cnsrshp/inKoEmblgbdAdres.do'] };
 function fixEmb() {
-  if (window.VZTR_LANG !== 'en') return; const el = document.getElementById('tips'); if (!el || el.querySelector('[data-emb]')) return;
+  if (!window.VZTR_FX) return; const el = document.getElementById('tips'); if (!el || el.querySelector('[data-emb]')) return;
   const rows = [...el.querySelectorAll('.crow')], jp = rows.some(r => /일본/.test(r.textContent)) || /오사카|교토|도쿄|후쿠오카|삿포로/.test(TRIP_TITLE || '');
   rows.filter(r => /영사|대사관|영사안전콜센터/.test((r.querySelector('b') || r).textContent)).forEach(r => r.remove());
   const e = EMB[jp ? 'jp' : 'kr'], last = [...el.querySelectorAll('.crow')].pop();
@@ -1910,12 +1910,16 @@ else if (PLAN && !PLAN.local && (PLAN.dest || 'kix') !== 'kix') { const tp = doc
 const toMin = t => { const [h,m] = String(t).split(':'); return (+h)*60 + (parseInt(m,10)||0) + (/다음/.test(t) ? 1440 : 0); };
 const toT = m => { m = Math.max(0, Math.round(m)); const nx = m >= 1440; m %= 1440; return String(Math.floor(m/60)).padStart(2,'0') + ':' + String(m%60).padStart(2,'0') + (nx ? '(다음 날)' : ''); };
 const durTx = m => m >= 60 ? Math.floor(m/60) + '시간' + (m%60 ? ' ' + m%60 + '분' : '') : m + '분';
-const gmap = q => 'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(q);
-const gdir = (q, mode) => 'https://www.google.com/maps/dir/?api=1&destination=' + encodeURIComponent(q) + '&travelmode=' + (mode === 'walk' ? 'walking' : mode === 'car' ? 'driving' : 'transit');
+/* 11/26 B 중국어 간체판: 중국 본토 망은 구글이 막힘 → 구글 지도 링크 대신 카카오맵 웹 검색(map.kakao.com/link/search), 거리 풍경(구글 스트리트뷰 Embed)도 안 띄움 */
+const NOG = window.VZTR_LANG === 'zh-hans', KKS = q => 'https://map.kakao.com/link/search/' + encodeURIComponent(q);
+const gmap = q => NOG ? KKS(q) : 'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(q);
+const gdir = (q, mode) => NOG ? KKS(q) : 'https://www.google.com/maps/dir/?api=1&destination=' + encodeURIComponent(q) + '&travelmode=' + (mode === 'walk' ? 'walking' : mode === 'car' ? 'driving' : 'transit');
 // 차 구간 길찾기: 한국 = 카카오맵 자동차 길찾기, 일본 = 구글 지도 (점 = [이름, 위도, 경도])
 const drvLink = v => v.kr ? 'https://map.kakao.com/link/by/car/' + [v.a, v.b].map(p => encodeURIComponent(p[0]) + ',' + p[1] + ',' + p[2]).join('/') : 'https://www.google.com/maps/dir/?api=1&origin=' + v.a[1] + ',' + v.a[2] + '&destination=' + v.b[1] + ',' + v.b[2] + '&travelmode=driving';
 /* 11/20 W5 영어판(F2·F3): 장소 한글 원문 · 지도 버튼 순서 = 네이버지도 앱(nmap://, appname 필수 — 네이버 클라우드 URL Scheme 문서) → 카카오맵 웹(/link/to/이름,위도,경도) → 구글 */
-const W5 = window.VZTR_LANG === 'en';
+const W5 = !!window.VZTR_FX;   // 11/26 다국어: W5 = 번역판(영어·일본어·중국어) · 영어만의 글·규칙 = W5EN
+const W5EN = window.VZTR_LANG === 'en', TRIPK = W5 ? 'gaboja-trip-' + window.VZTR_LANG : 'gaboja-trip';   // 신청 중 여행 저장 칸(언어마다 따로 — 영어 = 예전 gaboja-trip-en 그대로)
+const GLANG = W5 ? ({ ja: 'ja', 'zh-hans': 'zh-CN', 'zh-hant': 'zh-TW' })[window.VZTR_LANG] || 'en' : 'ko';   // 구글 장소 검색 결과 언어
 function koOf(d, c) {   // 이 일정의 한글 이름·좌표 (이동 = 다음 장소)
   const L = d.list || [], t = c.k === 'm' ? L.slice(L.indexOf(c) + 1).find(x => x.k !== 'm') || null : c; if (!t) return null;
   const P = window.GABOJA_DATA && GABOJA_DATA.places, p = t.pid && P && P[t.pid];
@@ -2239,11 +2243,14 @@ const carDurAt = (c, depMin) => c.car && c.car.d ? c.car.d[Math.min(23, Math.max
 // 11/15: 시각이 비면(시각 미정) 이름만 — 가운데에 '시각 미정'이 이미 있어 이름이 잘리지 않게
 /* 11/23 동우님 보드 답 E3: 영어판 탑승권 장소 줄 = 'Seoul Station 06:00'(가운뎃점 없음, 넘치면 시각만 다음 줄) */
 /* 11/25 영어판 기차표: 큰 글자(코드) = 'Dongdaegu' 밑 칸에 'Dongdaegu Station'을 또 쓰면 두 줄 → 'Station'만 (한국어판·비행기는 그대로) */
-const lnS = l => window.VZTR_LANG === 'en' ? l : String(l).replace(/^(KTX|ITX)-(?=[가-힣])/, '');   // 11/25 한국어 승차권 '열차' 칸: 'KTX-이음 752' → '이음 752'(칸이 좁음 · 영어판은 사전이 번역)
+const lnS = l => window.VZTR_FX ? l : String(l).replace(/^(KTX|ITX)-(?=[가-힣])/, '');   // 11/25 한국어 승차권 '열차' 칸: 'KTX-이음 752' → '이음 752'(칸이 좁음 · 영어판은 사전이 번역)
 const pnOf = (c, k) => { const nm = c.fly[k], I = window.VZTR_I18N, cd0 = c.fly[k - 1];
-  if (c.bus && window.VZTR_LANG !== 'en') return esc((nm.indexOf(cd0) === 0 && nm.length > cd0.length ? nm.slice(cd0.length) : nm).replace(/^(고속|시외)버스터미널$/, '$1버스').replace(/^종합버스터미널$/, '터미널').replace(/터미널$/, (x, i, w) => w.length > 4 ? '' : x) || '터미널');   /* 11/25 버스 작은 글씨(4자 칸): '속초시외버스터미널' → '시외버스' · 동서울터미널 → '동서울' */
+  if (c.bus && !window.VZTR_FX) return esc((nm.indexOf(cd0) === 0 && nm.length > cd0.length ? nm.slice(cd0.length) : nm).replace(/^(고속|시외)버스터미널$/, '$1버스').replace(/^종합버스터미널$/, '터미널').replace(/터미널$/, (x, i, w) => w.length > 4 ? '' : x) || '터미널');   /* 11/25 버스 작은 글씨(4자 칸): '속초시외버스터미널' → '시외버스' · 동서울터미널 → '동서울' */
   if (c.ride === 'train' && window.VZTR_LANG === 'en' && I && I.t) { const f = I.t(nm), cd = I.t(cd0); if (f && cd && f === cd + ' Station') return 'Station';
     if (c.bus && f) return esc((cd && f.indexOf(cd + ' ') === 0 ? f.slice(cd.length + 1) : f).replace(/ Bus Terminal$| Terminal$|^Bus Terminal$/, '') || 'Terminal'); }   /* 영어: 'Sokcho Intercity Terminal' → 'Intercity' · 'Dong Seoul Terminal' → 'Dong Seoul' */
+  if (window.VZTR_FX && window.VZTR_LANG !== 'en' && (c.bus || c.ride === 'train') && I && I.t) { const f = I.t(nm), cd = I.t(cd0);   /* 11/27 일본어·중국어: 작은 칸(4~5자) — 한국어판처럼 도시 이름 빼고 '市外バス'·'高速バス'·'ターミナル' · 역은 '駅' */
+    if (c.ride === 'train' && f && cd && (f === cd + '駅' || f === cd + '站')) return esc(f.slice(cd.length));
+    if (c.bus && f && !/[가-힣]/.test(f)) { const g = (cd && f.indexOf(cd) === 0 && f.length > cd.length ? f.slice(cd.length) : f).trim(); return esc(g.replace(/^(高速|市外)バスターミナル$/, '$1バス').replace(/^総合バスターミナル$/, 'ターミナル').replace(/^(高速|市外|长途|長途)(巴士|客运|客運)?(总站|總站|客运站|客運站)$/, '$1$2').replace(/(バス)?ターミナル$/, (x, b, i, w) => w.length > 6 ? '' : x) || 'ターミナル'); } }
   return esc(nm); };
 const plLine = (name, tx) => '<div class="place pl1">' + (name ? '<span class="pn">' + name + '</span>' + (tx ? '<span class="tt">' + (window.VZTR_LANG === 'en' ? '' : '· ') : '') : '<span class="tt">') + (tx || !name ? String(tx).replace(/\(다음 날\)/, '<sup>+1</sup>') + '</span>' : '') + '</div>';
 function flyCard(d, c, cls, top) {
@@ -2379,13 +2386,13 @@ function list(d) {
       h += '<div class="li m' + nowCls(c) + '" data-key="' + c.id + '" data-fixed="1" style="--h:' + mh + 'rem"><span class="tm">' + tmx(d, c) + '</span>' + RL('<i class="mvb">' + mvIc(c) + '</i>') + '<span class="c one" aria-label="' + esc(c.mv) + '">' + mvLab(c) + '</span><span></span></div>';
       return;
     }
-    if (c.fly) { h += '<div class="li m fy' + nowCls(c) + '" data-key="' + c.id + '" data-fixed="1"><span class="tm">' + tmx(d, c) + '</span>' + RL('<i class="mvb">' + mvIc(c) + '</i>') + '<span class="c one" style="color:var(--blue);font-weight:600">' + (c.bus ? flyHtml(c, 0, 2) : flyHtml(c, 1, 3)) + (window.VZTR_LANG === 'en' || isCar(c) ? '' : ' · 위 ' + (c.ride === 'train' ? '승차권' : '탑승권')) + '</span><span></span></div>'; return; }
+    if (c.fly) { h += '<div class="li m fy' + nowCls(c) + '" data-key="' + c.id + '" data-fixed="1"><span class="tm">' + tmx(d, c) + '</span>' + RL('<i class="mvb">' + mvIc(c) + '</i>') + '<span class="c one" style="color:var(--blue);font-weight:600">' + (c.bus ? flyHtml(c, 0, 2) : flyHtml(c, 1, 3)) + (window.VZTR_FX || isCar(c) ? '' : ' · 위 ' + (c.ride === 'train' ? '승차권' : '탑승권')) + '</span><span></span></div>'; return; }
     if (c.fly) { h += flyCard(d, c, nowCls(c)); return; }
     const parts = c.n.split(' — '), main = parts[1] || parts[0], ti = timeIssue(c);   /* 11/18 D-4 ②: 설명 줄 없음(장소 상세에서 봄) · 시간 문제만 작은 글자로 남김 */
     const fx = fixedOf(c), mu = mapUrl(d, c), P = window.GABOJA_DATA && GABOJA_DATA.places, ev = !!(c.pid && P && P[c.pid] && P[c.pid].kind === 'event');
     h += '<div class="li ' + c.k + (ev ? ' ev' : '') + nowCls(c) + '" data-key="' + c.id + '"' + (fx ? ' data-fixed="1"' : '') + ' role="button" tabindex="0">'
       + '<span class="tm">' + tmx(d, c) + '</span>' + RL(d.tbd ? '<i class="dt n">' + (++no) + '</i>' : '')
-      + '<span class="c"><span class="nm">' + (ev ? EV_STAR : dotHtml(d, c)) + '<span class="one"' + ((x => x && x !== main ? ' data-sh="' + esc(x) + '"' : '')(c.sh && c.sh !== main && !/^(점심|저녁|브런치|간식)$/.test(c.sh) ? c.sh : window.VZTR_LANG === 'en' ? '' : String(main).replace(/\s+(본점|본관|[^\s]{1,5}점)$/, ''))   /* 11/25 지점명 뺀 짧은 이름은 한국어판만(영어판은 이 글자가 번역 안 됨) */) + '>' + esc(main) + '</span>' + (nw && c === nw.cur ? '<span class="now-pill">지금</span>' : '') + memoBadge(c) + (c.ck ? '<i class="ckd' + (c.ck === 'ok' ? '' : ' no') + '" role="img" aria-label="' + (c.ck === 'ok' ? '영업시간 확인' : '확인 필요') + '"></i>' : '') + '</span>'
+      + '<span class="c"><span class="nm">' + (ev ? EV_STAR : dotHtml(d, c)) + '<span class="one"' + ((x => x && x !== main ? ' data-sh="' + esc(x) + '"' : '')(c.sh && c.sh !== main && !/^(점심|저녁|브런치|간식)$/.test(c.sh) ? c.sh : window.VZTR_FX ? '' : String(main).replace(/\s+(본점|본관|[^\s]{1,5}점)$/, ''))   /* 11/25 지점명 뺀 짧은 이름은 한국어판만(영어판은 이 글자가 번역 안 됨) */) + '>' + esc(main) + '</span>' + (nw && c === nw.cur ? '<span class="now-pill">지금</span>' : '') + memoBadge(c) + (c.ck ? '<i class="ckd' + (c.ck === 'ok' ? '' : ' no') + '" role="img" aria-label="' + (c.ck === 'ok' ? '영업시간 확인' : '확인 필요') + '"></i>' : '') + '</span>'
       + (ti.hard || ti.soft ? '<span class="s one"><span class="off">' + (ti.hard ? '시간대 안 맞음' : '영업시간 밖') + '</span></span>' : '') + '</span>'
       + (mu ? '<a class="pin" href="' + mu + '" target="_blank" rel="noopener" aria-label="' + esc(main) + ' 지도">' + PIN_SVG + '</a>' : '<span></span>') + '</div>';
   });
@@ -2395,7 +2402,7 @@ function list(d) {
 function renderDays() {
   const n = DAYS.length, db = $('#dayBtns'); db.style.gridTemplateColumns = 'repeat(' + n + ', minmax(max-content, 1fr))';
   /* 11/26 동우님 폰 확인 #17: 5일 넘으면 마지막 DAY가 잘림 → 5일부터 날짜만(요일 뺌)으로 좁혀 한 화면에 · 그래도 넘치면(6일~) 가로로 밀기 + 가장자리 흐림 · 고른 날은 늘 칸 안 가운데로 */
-  const many = n >= 5, dl = d => { if (!many) return d.date.replace('. ', '.'); const m = String(d.date).match(/(\d+)\.\s*(\d+)/); return m ? (window.VZTR_LANG === 'en' ? m[1] + '/' + m[2] : m[1] + '.' + m[2]) : d.date; };
+  const many = n >= 5, dl = d => { if (!many) return d.date.replace('. ', '.'); const m = String(d.date).match(/(\d+)\.\s*(\d+)/); return m ? (window.VZTR_FX ? m[1] + '/' + m[2] : m[1] + '.' + m[2]) : d.date; };
   db.classList.toggle('many', many);
   $('#dayBtns').innerHTML = DAYS.map((d,i) => '<button aria-pressed="' + (i===st.day) + '" data-day="' + i + '"><b>DAY ' + d.no + '</b><span>' + dl(d) + '</span></button>').join('');
   const on = db.querySelector('[aria-pressed="true"]');
@@ -2639,7 +2646,7 @@ function fitNow() {
   document.querySelectorAll('#nextCard .nm, #track .stop b, #trackPast .stop b').forEach(n => { n.style.fontSize = ''; if (n.dataset.full && n.textContent !== n.dataset.full) n.textContent = n.dataset.full; if (!n.clientWidth) return; let fs = parseFloat(getComputedStyle(n).fontSize);
     const shrink = () => { while (n.scrollWidth > n.clientWidth + 1 && fs > 11) { fs -= 0.5; n.style.fontSize = fs + 'px'; } }; shrink();
     /* 11/25 삿포로 '175°DENO 탄탄멘 삿포로 기타구치점'(S25 360) 3px 넘침: 11px에서도 넘치면 한국어판은 지점명 뺀 짧은 이름(일정 목록 .li .nm 과 같은 규칙) */
-    if (n.scrollWidth > n.clientWidth + 1 && window.VZTR_LANG !== 'en' && !n.children.length) { const full = n.dataset.full || n.textContent, sh = full.replace(/\s+(본점|본관|[^\s]{1,5}점)$/, ''); if (sh !== full) { n.dataset.full = full; n.title = full; n.textContent = sh; n.style.fontSize = ''; fs = parseFloat(getComputedStyle(n).fontSize); shrink(); } } });
+    if (n.scrollWidth > n.clientWidth + 1 && !window.VZTR_FX && !n.children.length) { const full = n.dataset.full || n.textContent, sh = full.replace(/\s+(본점|본관|[^\s]{1,5}점)$/, ''); if (sh !== full) { n.dataset.full = full; n.title = full; n.textContent = sh; n.style.fontSize = ''; fs = parseFloat(getComputedStyle(n).fontSize); shrink(); } } });
   navFlow();
 }
 /* 11/23 동우님: 길안내 이동 중 흐르는 점 = 실제 점(.pt) 위치를 재서 그 위에 점 줄을 그림 (전엔 가상 요소 배경 위치 애니 + 고정 숫자 → 아이폰에서 안 움직이고 선과 1~2px 어긋남)
@@ -2966,7 +2973,8 @@ const GDEV = (() => { try { if (/[?&]dev=1/.test(location.search)) localStorage
 const PH_KEY_G = () => /^(https:\/\/(www\.)?(larchive\.page|vztr\.app)|https:\/\/vztr-api\.d-chive33-a29\.workers\.dev|http:\/\/(localhost|127\.0\.0\.1)(:\d+)?)$/.test(location.origin), PH_KEY_M = () => window.GABOJA_MAPS_KEY || '';
 // 11/24 오사카관광국 사진(license 'OCTB'): 일본어 외 표기 = '©Osaka Convention & Tourism Bureau' 그대로(관광국 회신 11/24, 한·영 같은 문구)
 // 11/24 도쿄관광재단 사진(license 'TCVB'): '©Tokyo Convention & Visitors Bureau' 그대로(재단 회신 11/24)
-const phCredit = (a, l) => /^OCTB$/i.test(String(l || '').trim()) ? '©Osaka Convention & Tourism Bureau' : /^TCVB$/i.test(String(l || '').trim()) ? '©Tokyo Convention & Visitors Bureau' :'사진 © ' + String(a || '').replace(/저작권자\s*[:：]\s*/g, '').replace(/\s*공동저작자\s*[:：]\s*/g, ' · ').trim().slice(0, 60) + ' · ' + String(l || '').trim();   // 11/20 검수: 긴 저작권 문구 줄임(라벨만 뺌, 이름은 그대로)
+// 11/27 후쿠오카현관광연맹 포토다운로드(license 'FPTA'): 신청 없이 무료·크레디트 필수(영어 공식 표기 '©Fukuoka Prefecture Tourism Association', 오사카·도쿄처럼 한·영 같은 문구)·직링크 금지(우리 서버 /gaboja/ph/fpta/)·큰 색보정·대폭 트리밍 금지·太宰府天満宮 사진(※)은 신사 별도 허가라 안 씀
+const phCredit = (a, l) => /^OCTB$/i.test(String(l || '').trim()) ? '©Osaka Convention & Tourism Bureau' : /^TCVB$/i.test(String(l || '').trim()) ? '©Tokyo Convention & Visitors Bureau' : /^FPTA$/i.test(String(l || '').trim()) ? '©Fukuoka Prefecture Tourism Association' :'사진 © ' + String(a || '').replace(/저작권자\s*[:：]\s*/g, '').replace(/\s*공동저작자\s*[:：]\s*/g, ' · ').trim().slice(0, 60) + ' · ' + String(l || '').trim();   // 11/20 검수: 긴 저작권 문구 줄임(라벨만 뺌, 이름은 그대로)
 /* 11/24 구글 약관: Places 사진(photo name·주소)은 저장·캐시 허용 근거 없음 → 서버 캐시 끔 · 브라우저도 sessionStorage에 안 두고 이 페이지 메모리에서만(새로 열면 다시 물음)
    표기 = 작가 이름(링크) + 'Google Maps' 텍스트(번역·줄바꿈 금지) — developers.google.com/maps/documentation/places/web-service/policies */
 const GPH = new Map();
@@ -2997,7 +3005,7 @@ async function cloudPush() {
   if (cloudBusy) { cloudAgain = true; return; }
   const p = rawPlan(); if (!p || !p.made) return;
   let ed = null, tr = null; try { ed = (JSON.parse(localStorage.getItem(EDIT_KEY)) || {})[p.made] || null; } catch (_) {}
-  try { tr = JSON.parse(localStorage.getItem(window.VZTR_LANG === 'en' ? 'gaboja-trip-en' : 'gaboja-trip')); } catch (_) {}
+  try { tr = JSON.parse(localStorage.getItem(TRIPK)); } catch (_) {}
   if (tr) { tr = { ...tr }; ['home', 'homeName', 'homeLL', 'to', 'hp', 'door'].forEach(k => delete tr[k]); }   // 11/19 M34: 집 주소·연락처는 서버에 안 올림
   const body = JSON.stringify({ data: { plan: p, edits: ed, trip: tr } }), h = cloudHash(body), all = cloudGet(), m = all[p.made];
   if (m && m.h === h) return;
@@ -3073,7 +3081,7 @@ function cloudOpen() {   // #g=id.key 로 열면 서버 가이드북을 이 기�
     if (!same && cur && !archiveCurrent()) { toast('불러오지 못했어요 · 저장 공간이 부족해요'); return; }
     if (!same) localStorage.setItem('gaboja-plan', JSON.stringify(d.plan));
     if (d.edits && d.plan.made && (!same || (j.updated || 0) > localAt)) { let all = {}; try { all = JSON.parse(localStorage.getItem(EDIT_KEY)) || {}; } catch (_) {} all[d.plan.made] = { ...d.edits, at: Date.now() }; localStorage.setItem(EDIT_KEY, JSON.stringify(all)); }
-    if (d.trip && !same) localStorage.setItem(window.VZTR_LANG === 'en' ? 'gaboja-trip-en' : 'gaboja-trip', JSON.stringify(d.trip));
+    if (d.trip && !same) localStorage.setItem(TRIPK, JSON.stringify(d.trip));
     const all = cloudGet(); all[d.plan.made] = { id: g[1], key: g[2], at: Date.now() }; cloudSet(all);
     try { sessionStorage.setItem('gaboja-flash', '‘' + planCity(d.plan) + '’ 가이드북을 불러왔어요'); } catch (_) {}
     location.replace(location.pathname + location.search);
@@ -3108,7 +3116,7 @@ function phMount(host, p, o) {
     const s = steps.shift();
     if (s === 'ph') show(p.ph.u, phCredit(p.ph.a, p.ph.l), o.link ? p.ph.p : '');
     else if (s === 'g') phGoogle(p, r => { if (r) show(r.u, '사진 · Google Maps' + (r.a ? ' · ' + r.a : ''), o.link ? r.l : '', 1); else next(); });   // 11/24 표기 = Google Maps(앞에 둬서 말줄임에 안 잘림) · 작가(링크)
-    else if (s === 'sv') sv();
+    else if (s === 'sv' && !NOG) sv();   // 11/26 B: 간체판은 구글 스트리트뷰 안 띄움
     else none();
   };
   next();
@@ -3617,7 +3625,7 @@ function recsFor(d) {
   return L.slice(0, 6);
 }
 function recsHtml(d) {
-  const L = recsFor(d), EN = window.VZTR_LANG === 'en';   // 11/25 반 칸 카드 영어: 'Recommended' 빼고 시각만 · 동네는 앞 이름만(Jongno/Gwanghwamun → Jongno)
+  const L = recsFor(d), EN = !!window.VZTR_FX;   // 11/25 반 칸 카드 영어: 'Recommended' 빼고 시각만 · 동네는 앞 이름만(Jongno/Gwanghwamun → Jongno)
   if (!L.length) return '<p class="sub" style="grid-column:1/-1">' + '이 시간에 맞는 곳이 없어요 · 위에서 검색해 보세요' + '</p>';
   return L.map(r => '<button class="rec2" role="checkbox" aria-checked="false" data-rc="' + r.p.id + '"><i class="box"><svg viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></i>'
     + '<b class="one" data-one="9.5">' + esc(r.p.sh || r.p.n) + '</b><span class="one"><span class="nw">' + esc(EN ? String(r.p.a).split(/[\/·]/)[0].trim() : r.p.a) + '</span> · <span class="nw">' + (r.p.o ? '<span class="on">영업 중</span>' : '확인 필요') + '</span></span>'
@@ -3667,7 +3675,7 @@ function onAddInput() {
         else $('#addErr').textContent = '지도 링크에서 위치를 못 읽었어요 · 장소 이름이나 주소로 적어 주세요';
       }
       if (srch && sq.length >= 2 && hits.length < 3) {   /* 11/25: 한국 = 카카오 먼저 · 일본어 주소 = CSIS 먼저 · 그 밖엔 구글(서버가 무료 한도 9,000건에서 멈추면 off → 주소·링크 안내) */
-        const cc = ccNow(), lang = window.VZTR_LANG === 'en' ? 'en' : 'ko';
+        const cc = ccNow(), lang = GLANG;
         if (cc === 'kr' || jpOnlyTx(sq)) { const j = await fetch(VZTR_API + '/addr?q=' + encodeURIComponent(sq)).then(x => x.json()); if (my !== addN) return;
           addExt = ((j && j.list) || []).slice(0, 4).map(a => ({ name: a.name || a.road || a.jibun, ll: [a.lat, a.lng], addr: a.name ? a.road || a.jibun : '주소로 찾은 위치' })); addExt.jp = !!(j && j.jp); }
         if (!addExt.length) { const g = await fetch(VZTR_API + '/gac?q=' + encodeURIComponent(sq) + GDEV + '&s=' + addSess + '&cc=' + cc + '&lang=' + lang).then(x => x.json()); if (my !== addN) return;
@@ -3682,7 +3690,7 @@ const looksAddrQ = s => /[都道府県]\s|丁目|番地|[0-9０-９]+番|\d+(-\d
 function pickPlace(id, exObj) {   // 리뷰 11/25: 구글 위치를 받아 온 뒤엔 그 후보(exObj)를 그대로 씀 — 그사이 목록이 바뀌어도 엉뚱한 곳이 안 들어가게
   const ex0 = exObj || (/^x\d+$/.test(id) ? addExt[+id.slice(1)] : null);
   if (ex0 && ex0.gid && !ex0.ll) {   // 구글 후보 = 고를 때 위치·주소만 받아 옴(장소 상세 Essentials)
-    fetch(VZTR_API + '/gdet?id=' + encodeURIComponent(ex0.gid) + GDEV + '&s=' + addSess + '&lang=' + (window.VZTR_LANG === 'en' ? 'en' : 'ko')).then(r => r.json()).then(j => {
+    fetch(VZTR_API + '/gdet?id=' + encodeURIComponent(ex0.gid) + GDEV + '&s=' + addSess + '&lang=' + GLANG).then(r => r.json()).then(j => {
       addSess = newSess(); if (j && isFinite(j.lat)) { ex0.ll = [j.lat, j.lng]; ex0.addr = j.addr || ex0.addr; pickPlace(id, ex0); } else $('#addErr').textContent = j && j.off ? '이름 검색을 잠시 쉬어요 · 주소나 구글 지도 링크를 넣어 주세요' : '위치를 못 찾았어요 · 주소나 구글 지도 링크를 넣어 주세요';
     }).catch(() => { $('#addErr').textContent = '위치를 못 찾았어요 · 주소나 구글 지도 링크를 넣어 주세요'; });
     return;
@@ -3775,7 +3783,7 @@ function snapshotCurrent() {
   const p = rawPlan(); if (!p) return null;
   if (PLAN && PLAN.made === p.made) saveEdits(true);   // 방금 고친 것까지
   let ed = null, tr = null; try { const all = JSON.parse(localStorage.getItem(EDIT_KEY)) || {}; ed = all[p.made] || null; } catch (_) {}
-  try { tr = JSON.parse(localStorage.getItem(window.VZTR_LANG === 'en' ? 'gaboja-trip-en' : 'gaboja-trip')); } catch (_) {}
+  try { tr = JSON.parse(localStorage.getItem(TRIPK)); } catch (_) {}
   return { id: planId(p), title: p.myTitle || p.title || '여행', dates: planDates(p), at: new Date().toISOString(), data: { plan: p, edits: ed, trip: tr } };
 }
 function archiveCurrent() {   // 지금 여행을 목록에 보관 (같은 여행이면 갱신). 저장 공간이 모자라면 false
@@ -3803,7 +3811,7 @@ function swapTrip(id) {
   try {
     localStorage.setItem('gaboja-plan', JSON.stringify(e.data.plan));
     if (e.data.edits && e.data.plan.made) { let all = {}; try { all = JSON.parse(localStorage.getItem(EDIT_KEY)) || {}; } catch (_) {} all[e.data.plan.made] = { ...e.data.edits, at: Date.now() }; localStorage.setItem(EDIT_KEY, JSON.stringify(all)); }
-    if (e.data.trip) localStorage.setItem(window.VZTR_LANG === 'en' ? 'gaboja-trip-en' : 'gaboja-trip', JSON.stringify(e.data.trip));
+    if (e.data.trip) localStorage.setItem(TRIPK, JSON.stringify(e.data.trip));
     try { sessionStorage.setItem('gaboja-flash', '‘' + planCity(e.data.plan) + '’ 여행으로 바꿈'); } catch (_) {}
   } catch (_) { toast('바꾸지 못했어요'); return; }
   layerOn = false; try { history.replaceState(null, ''); } catch (_) {}
@@ -3827,7 +3835,7 @@ function menuSheet(k) {
     const nPlace = DAYS.reduce((a, d) => a + d.list.filter(stop).length, 0), mv = DAYS.reduce((a, d) => a + d.list.filter(c => c.k === 'm').reduce((b, c) => b + c.du, 0), 0);
     const nChk = DAYS.reduce((a, d) => a + d.list.filter(c => !c.fly && ((c.ck === 'no' && !c.ackd) || dotOf(d, c) === 'amber')).length, 0);
     let h = '<div class="shd"><div><h3 id="sheetTitle" class="one">' + esc(TRIP_TITLE) + '</h3></div>' + X_BTN + '</div><div class="body">'
-      + '<div class="sgrid"><div><small>여행</small><b>' + (window.VZTR_LANG === 'en' ? DAYS.length + (DAYS.length > 1 ? ' days' : ' day') : DAYS.length + '일') + '</b></div><div><small>장소</small><b>' + nPlace + '곳</b></div><div><small>총 이동</small><b>' + durTx(mv) + '</b></div><div><small>확인 필요</small><b' + (nChk ? ' class="warn"' : '') + '>' + nChk + '곳</b></div></div><div class="dcards">';
+      + '<div class="sgrid"><div><small>여행</small><b>' + (W5EN ? DAYS.length + (DAYS.length > 1 ? ' days' : ' day') : DAYS.length + '일') + '</b></div><div><small>장소</small><b>' + nPlace + '곳</b></div><div><small>총 이동</small><b>' + durTx(mv) + '</b></div><div><small>확인 필요</small><b' + (nChk ? ' class="warn"' : '') + '>' + nChk + '곳</b></div></div><div class="dcards">';
     DAYS.forEach(d => {
       let nm = routeOf(d).filter(x => x !== '집' && x !== baseOf(d)); if (!nm.length) nm = routeOf(d);
       // F-14 (11/21): 동선 = 장소마다 끊어 읽히게(작은 › 로 잇기) + 남은 수는 '+N곳' 알약
@@ -4035,7 +4043,7 @@ $('#menuBtn').addEventListener('click', () => setTimeout(() => { try { fitLines(
 $('#drawer').onclick = e => { const b = e.target.closest('[data-m]'); if (!b) return;
   if (b.tagName === 'A') { e.preventDefault(); const href = b.getAttribute('href'); layerOn = false; try { history.replaceState(null, ''); } catch (_) {} location.href = href; return; } $('#drawer').classList.remove('on'); menuSheet(b.dataset.m); };
 $('#scrim').onclick = closeAll;
-if (window.VZTR_LANG === 'en') document.querySelectorAll('.dlegal a[href$=".html"]').forEach(a => { a.href = '../' + a.getAttribute('href') + '#en'; });   // 11/24 영어판 = 상위 폴더의 문서 영어 부분
+if (window.VZTR_FX) document.querySelectorAll('.dlegal a[href$=".html"]').forEach(a => { a.href = '../' + a.getAttribute('href') + '#' + window.VZTR_LANG; });   // 11/24 영어판 = 상위 폴더의 문서 영어 부분 · 11/26 다국어 #ja 등
 document.addEventListener('keydown', e => {
   if (e.key === 'Escape') { if (!$('#cele').hidden) closeCele(); else closeAll(); }
   if (e.key === 'Enter' && e.target.id === 'addName') doAdd();

@@ -47,7 +47,7 @@
 :root[data-theme="dark"] { color-scheme: dark;
   --ink: #F2F1F7; --sb: #A29DB6; --bb: #F2F1F7; --bf: #0E0C15; --pill: rgba(255,255,255,.08); --pillon: rgba(255,255,255,.16); --ac: #8AB0FF;
   --bg: linear-gradient(180deg, #100D16 0%, #211B2B 18%, #2A2433 46%, #251F2D 64%, #120F18 100%); --cl: rgba(180,160,235,.28); --sd: rgba(0,0,0,.38); --fd: rgba(0,0,0,.3); --base: #1B1622; }
-html[lang="en"] { --krb: var(--kr); }   /* 영어판: i18n.js가 --kr을 기기 글꼴로 바꿈 → 굵은 글자도 같이 */
+html[lang="en"], html[lang="ja"], html[lang="zh-Hans"], html[lang="zh-Hant"] { --krb: var(--kr); }   /* 번역판: i18n.js가 --kr을 그 언어 기기 글꼴로 바꿈 → 굵은 글자도 같이 */
 * { box-sizing: border-box; }
 html, body { height: 100%; }
 body { margin: 0; background: var(--base); color: var(--ink); font-family: var(--kr); letter-spacing: -.01em; word-break: keep-all; -webkit-font-smoothing: antialiased; overflow: hidden; }
@@ -76,6 +76,11 @@ html.ph .lg .vz { font-size: 26px; }
 .lang b { background: var(--pillon); color: var(--ink); font-weight: 700; box-shadow: 0 1px 2px rgba(0,0,0,.08); }
 .lang a:hover { color: var(--ink); }
 html.ph .lang { height: 26px; font-size: 11px; padding: 2px; } html.ph .lang > * { padding: 0 11px; }   /* 11/26: 32 → 29 → 26 (폰만) */
+/* 11/26 다국어: 언어 셋 이상 = 알약 하나(지구본 + 지금 언어 + ⌄) → 누르면 목록(i18n.js VZTR_I18N.menu, 그 자리에서 바뀜) */
+.lang .lsel { all: unset; box-sizing: border-box; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; padding: 0 12px 0 10px; border-radius: 999px; background: var(--pillon); color: var(--ink); font-weight: 700; box-shadow: 0 1px 2px rgba(0,0,0,.08); -webkit-tap-highlight-color: transparent; }
+.lang .lsel svg { width: 15px; height: 15px; flex: none; stroke: currentColor; fill: none; stroke-width: 1.8; } .lang .lsel svg.cv { width: 11px; height: 11px; stroke-width: 2.4; opacity: .55; }
+html.ph .lang .lsel { gap: 4px; padding: 0 9px 0 7px; } html.ph .lang .lsel svg { width: 12px; height: 12px; } html.ph .lang .lsel svg.cv { width: 9px; height: 9px; }
+.lang .lsel:focus-visible { outline: 2px solid var(--ac); outline-offset: 3px; }
 .legal { position: absolute; left: 50%; bottom: var(--lgb, 47px); margin: 0; transform: translateX(-50%); display: flex; gap: 14px; font: 300 12px/1 var(--kr); color: var(--sb); }   /* 얇게 · 아래선 = 로고 기준선(JS가 실측해 --lgb 맞춤) */
 html.pc .legal { left: 143px; transform: none; gap: 10px; }   /* 11/26 B안: PC도 로고 바로 옆(로고 오른쪽 끝 129 + 14), 사이 선 없음 — 폰과 같은 방식 */
 html.ph .legal { left: 82px; transform: none; font-size: 10.5px; gap: 7px; }   /* 폰: 로고 바로 오른쪽(가운데 두면 토글과 겹침) */
@@ -221,7 +226,9 @@ html.pc .alsh { bottom: 50%; border-radius: 24px; transform: translate(-50%, 50%
 <script src="chars.js?v=fit3"></script>
 <script>
 (() => {
-let EN = window.VZTR_LANG === 'en';
+/* 11/26 다국어: LG = 지금 언어('ko'·'en'·'ja'·'zh-hans'·'zh-hant') — 그 자리에서 바뀜. I = i18n.js(언어 표·주소·목록) */
+const I = window.VZTR_I18N || { live: ['ko', 'en'], langs: { ko: { h: 'ko', nm: '한국어' }, en: { h: 'en', nm: 'English' } }, url: l => location.pathname, langFont: () => {} };
+let LG = I.langs[window.VZTR_LANG] ? window.VZTR_LANG : 'ko';
 /* 테마: 기기 시스템 모드를 따름(바뀌면 바로 따라감) · ?theme= 미리보기 */
 const setTheme = t => { if (t === 'dark') document.documentElement.setAttribute('data-theme', 'dark'); else document.documentElement.removeAttribute('data-theme');
   const m = document.querySelector('meta[name="theme-color"]'); if (m) m.content = t === 'dark' ? '#1B1622' : '#F8F8FA'; };
@@ -232,37 +239,53 @@ setTheme(DK ? 'dark' : 'light');
 /* 언어 — 11/26 밤 동우님 '누르자마자 바뀌게': 페이지를 다시 불러오지 않고 그 자리에서 글자만 바꿈 + 주소(/ ↔ /en/)는 history로.
    이 페이지 글은 여기 표(LD)로 직접 바꿈(.shell = data-noi18n, 영어판도 큰 번역 사전 i18n-en*.js를 안 불러옴 → 첫 로딩도 가벼움).
    영어 글꼴(i18n.js enFont)은 한가할 때 미리 불러 둠 → 바꿀 때 글꼴이 늦게 바뀌는 깜빡임 없음 */
-const LD = { '이번 여행, 나답게.': 'Pack your personality.', '내 자리는 어디일까?': 'Which seat is yours?', '내 유형 알아보기': 'Find your type', '여행 성향들 둘러보기': 'Browse travel types',
+/* 언어별 표 — 키 = 한국어. B(중국어) 세션은 'zh-hans'·'zh-hant' 묶음을 en과 같은 키로 더함(빠진 키는 영어) · TITLE = 탭 제목 */
+const LD = { en: { '이번 여행, 나답게.': 'Pack your personality.', '내 자리는 어디일까?': 'Which seat is yours?', '내 유형 알아보기': 'Find your type', '여행 성향들 둘러보기': 'Browse travel types',
   '내 일정 이어보기 ›': 'Back to my trip ›', '개인정보처리방침': 'Privacy Policy', '이용약관': 'Terms of Use', '언어': 'Language',
-  '로컬 탐험형': 'Explorers', '취향 수집형': 'Curators', '명소 정복형': 'Sightseers', '힐링 충전형': 'Rechargers' };
-const tr = k => (EN ? LD[k] || k : k);
+  '로컬 탐험형': 'Explorers', '취향 수집형': 'Curators', '명소 정복형': 'Sightseers', '힐링 충전형': 'Rechargers', TITLE: 'VZTR — Pack your personality.' },
+  ja: { '이번 여행, 나답게.': '旅は、自分らしく。', '내 자리는 어디일까?': 'あなたの席は、どこ？', '내 유형 알아보기': '自分のタイプを見る', '여행 성향들 둘러보기': '旅のタイプを見てみる',
+  '내 일정 이어보기 ›': '自分のプランに戻る ›', '개인정보처리방침': 'プライバシーポリシー', '이용약관': '利用規約', '언어': '言語',
+  '로컬 탐험형': 'ローカル探検派', '취향 수집형': 'こだわり収集派', '명소 정복형': '名所制覇派', '힐링 충전형': 'まったり充電派', TITLE: 'VZTR — 旅は、自分らしく。' },
+  /* 11/26 B 중국어 — 문체 = 문서/여행앱/2026-11-26_VZTR_중국어문체가이드_v1.md */
+  'zh-hans': { '이번 여행, 나답게.': '这次旅行，做自己。', '내 자리는 어디일까?': '我的座位在哪？', '내 유형 알아보기': '测测我的类型', '여행 성향들 둘러보기': '看看所有类型',
+  '내 일정 이어보기 ›': '回到我的行程 ›', '개인정보처리방침': '隐私政策', '이용약관': '使用条款', '언어': '语言',
+  '로컬 탐험형': '在地探索派', '취향 수집형': '品味收集派', '명소 정복형': '景点征服派', '힐링 충전형': '疗愈充电派', TITLE: 'VZTR — 这次旅行，做自己。' },
+  'zh-hant': { '이번 여행, 나답게.': '這次旅行，做自己。', '내 자리는 어디일까?': '我的座位在哪？', '내 유형 알아보기': '測測我的類型', '여행 성향들 둘러보기': '看看所有類型',
+  '내 일정 이어보기 ›': '回到我的行程 ›', '개인정보처리방침': '隱私權政策', '이용약관': '使用條款', '언어': '語言',
+  '로컬 탐험형': '在地探索派', '취향 수집형': '品味收集派', '명소 정복형': '景點征服派', '힐링 충전형': '療癒充電派', TITLE: 'VZTR — 這次旅行，做自己。' } };
+const tr = k => (LG === 'ko' ? k : (LD[LG] || {})[k] || LD.en[k] || k);
 const TXT = [...document.querySelectorAll('.tx .hl, .tx .q, .ctas .cta, .ctas .gh, #myTrip, #legal a')].map(el => [el, el.textContent]);
 const lang = document.getElementById('lang');
-const pathFor = en => { const p = location.pathname; if (!en) return p.replace(/\/en\//, '/'); if (/\/en\//.test(p)) return p; const i = p.lastIndexOf('/'); return p.slice(0, i + 1) + 'en/' + p.slice(i + 1); };
+const pathFor = l => I.url(l).replace(/[?#].*$/, '');   // 그 언어의 이 페이지 주소(언어 폴더만 바꿈)
+const MANY = I.live.length > 2, GLOBE = '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c3 3.2 3 14.8 0 18M12 3c-3 3.2-3 14.8 0 18"/></svg>';
 const paintLang = () => {
-  document.documentElement.lang = EN ? 'en' : 'ko'; window.VZTR_LANG = EN ? 'en' : 'ko';
-  document.title = EN ? 'VZTR — Pack your personality.' : 'VZTR — 이번 여행, 나답게.';
+  const H = (I.langs[LG] || {}).h || 'ko', FX = LG !== 'ko';
+  document.documentElement.lang = H; window.VZTR_LANG = LG; window.VZTR_FX = FX;
+  document.title = FX ? tr('TITLE') : 'VZTR — 이번 여행, 나답게.';
   TXT.forEach(([el, ko]) => { el.textContent = tr(ko); });
-  document.querySelectorAll('#legal a').forEach(a => { const d = /terms/.test(a.getAttribute('href')) ? 'terms' : 'privacy'; a.href = EN ? '../' + d + '#en' : d; });   // 영어판 = 한 단계 위 문서 + #en
+  document.querySelectorAll('#legal a').forEach(a => { const d = /terms/.test(a.getAttribute('href')) ? 'terms' : 'privacy'; a.href = FX ? '../' + d + '#' + LG : d; });   // 번역판 = 한 단계 위 문서 + #언어
   lang.setAttribute('aria-label', tr('언어'));
-  lang.innerHTML = EN ? `<a href="${pathFor(false)}" hreflang="ko" lang="ko">한국어</a><b aria-current="true">English</b>` : `<b aria-current="true">한국어</b><a href="${pathFor(true)}" hreflang="en" lang="en">English</a>`;
+  if (MANY) lang.innerHTML = `<button type="button" class="lsel" aria-haspopup="menu" aria-label="Language · 언어" lang="${H}">${GLOBE}<span>${I.langs[LG].nm}</span><svg class="cv" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9.5l6 6 6-6"/></svg></button>`;
+  else { const o = LG === 'ko' ? I.live[1] || 'en' : 'ko', ob = l => `<b aria-current="true" lang="${I.langs[l].h}">${I.langs[l].nm}</b>`, oa = l => `<a href="${pathFor(l)}" data-l="${l}" hreflang="${I.langs[l].h}" lang="${I.langs[l].h}">${I.langs[l].nm}</a>`;
+    lang.innerHTML = LG === 'ko' ? ob('ko') + oa(o) : oa('ko') + ob(LG); }
   document.querySelectorAll('.seat > b, .lbl > b').forEach((b, i) => { b.textContent = tr(SEATS[i % SEATS.length][1]); });
   document.dispatchEvent(new Event('vztr-lang'));
 };
 const FADE = [...document.querySelectorAll('.tx, #legal, #lang')];
-const switchLang = () => {
-  EN = !EN; try { localStorage.setItem('vztr-lang', EN ? 'en' : 'ko'); } catch (_) {}
-  if (EN && window.VZTR_I18N && VZTR_I18N.enFont) VZTR_I18N.enFont();
-  try { history.replaceState(history.state, '', pathFor(EN) + location.search + location.hash); } catch (_) {}
+const switchLang = l => {
+  if (!I.langs[l] || l === LG) return;
+  LG = l; try { localStorage.setItem('vztr-lang', l); } catch (_) {}
+  if (l !== 'ko' && I.langFont) I.langFont(l);
+  try { history.replaceState(history.state, '', pathFor(l) + location.search + location.hash); } catch (_) {}
   const run = () => { paintLang(); fitHl(); alignLang(); alignText(); alignLegal(); };
   if (REDUCED || !FADE[0].animate) { run(); return; }
   FADE.forEach(el => el.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 90, easing: 'ease-in', fill: 'forwards' }));
   setTimeout(() => { run(); FADE.forEach(el => { el.getAnimations().forEach(x => x.cancel()); el.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 160, easing: 'ease-out' }); }); }, 90);
 };
-lang.addEventListener('click', e => { const a = e.target.closest('a'); if (!a) return; e.preventDefault(); switchLang(); });
-/* 영어 글꼴 미리: 한국어로 보는 중이면 한가할 때 CSS + (애플 기기가 아니면) Mona Sans를 받아 둠 */
+lang.addEventListener('click', e => { const b = e.target.closest('.lsel'); if (b && I.menu) { e.preventDefault(); I.menu(b, LG, switchLang); return; } const a = e.target.closest('a[data-l]'); if (!a) return; e.preventDefault(); switchLang(a.dataset.l); });
+/* 영어 글꼴 미리: 영어가 아닌 언어로 보는 중이면 한가할 때 CSS + (애플 기기가 아니면) Mona Sans를 받아 둠 · 일본어·중국어 글꼴은 기기 글꼴이라 미리 받을 것 없음 */
 const warm = () => { if (!window.VZTR_I18N || !VZTR_I18N.enFont) return; VZTR_I18N.enFont(); if (document.fonts && !/iPhone|iPad|iPod|Macintosh/.test(navigator.userAgent)) setTimeout(() => { document.fonts.load('600 16px "Mona Sans"').catch(() => {}); document.fonts.load('700 16px "Mona Sans"').catch(() => {}); }, 300); };
-if (!EN) (window.requestIdleCallback || (f => setTimeout(f, 1200)))(warm);
+if (LG !== 'en' && I.live.indexOf('en') >= 0) (window.requestIdleCallback || (f => setTimeout(f, 1200)))(warm);
 /* 창 그림 */
 const rr = (x, y, w, h, rx, ry) => `M${x + rx},${y} H${x + w - rx} A${rx},${ry} 0 0 1 ${x + w},${y + ry} V${y + h - ry} A${rx},${ry} 0 0 1 ${x + w - rx},${y + h} H${x + rx} A${rx},${ry} 0 0 1 ${x},${y + h - ry} V${y + ry} A${rx},${ry} 0 0 1 ${x + rx},${y} Z`;
 const OP = rr(0, 0, 300, 420, 150, 134), GL = rr(24, 22, 252, 364, 126, 116), LP = rr(19, 17, 262, 375, 131, 121);
@@ -352,7 +375,7 @@ if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => { fi
 <script>
 /* ===== 11/26 2주차 출시 알림 신청 (동우님 보드 q6 L1 · q7 확인 메일) — 이메일만 받음 · 동의 두 칸 · 서버 /alert(D1) ===== */
 (() => {
-  const OPEN = Date.UTC(2026, 11, 24, 15), isEN = () => window.VZTR_LANG === 'en';   // 11/26 밤 언어는 그 자리에서 바뀜 → 늘 지금 언어로   // 2026-12-25 00:00 KST부터 숨김
+  const OPEN = Date.UTC(2026, 11, 24, 15), lg = () => window.VZTR_LANG || 'ko', isEN = () => lg() !== 'ko';   // 11/26 다국어: isEN = 번역판(글은 LS[언어] → 없으면 영어)   // 11/26 밤 언어는 그 자리에서 바뀜 → 늘 지금 언어로   // 2026-12-25 00:00 KST부터 숨김
   if (window.vztrHit) vztrHit('land');
   /* 11/26 밤 이 기기에 만든 일정이 있으면(써 본 사람) 알림 줄 자리에 '내 일정 이어보기' → /trip */
   try { const pl = JSON.parse(localStorage.getItem('gaboja-plan') || 'null'); if (pl && Array.isArray(pl.days) && pl.days.length) { document.getElementById('myTrip').hidden = false; return; } } catch (_) {}
@@ -364,8 +387,21 @@ if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => { fi
     ko: { b: '12월 25일 정식 오픈 알림 받기 ›', h: '12월 25일 정식 오픈 알림', s: '문을 여는 날 메일 한 통만 보내 드려요.', ph: '이메일 주소',
       a1: '개인정보 수집·이용 동의', a1s: '이메일 주소 · 오픈 알림 발송 · 보낸 뒤 7일 안에 삭제', a1n: '동의하지 않으면 알림을 받을 수 없어요. ', pv: '처리방침 보기',
       a2: '오픈 알림(광고성 정보) 메일 받기', a2s: 'VZTR 정식 오픈 소식 1통 · 수신 거부는 메일 아래 링크로', go: '알림 받기', req: '필수', bad: '이메일 주소를 확인해 주세요.', err: '신청하지 못했어요. 잠시 후 다시 시도해 주세요.', off: '신청은 vztr.app에서만 돼요.',
-      ok: '신청됐어요', okS: '확인 메일을 보냈어요. 12월 25일에 만나요.', close: '닫기' } };
-  let L = LS[isEN() ? 'en' : 'ko'];
+      ok: '신청됐어요', okS: '확인 메일을 보냈어요. 12월 25일에 만나요.', close: '닫기' },
+    ja: { b: '12月25日の正式オープン通知を受け取る ›', h: '12月25日 正式オープンのお知らせ', s: 'オープン当日に、メールを1通だけお送りします。', ph: 'メールアドレス',
+      a1: '個人情報の収集・利用への同意', a1s: 'メールアドレス · オープンのお知らせ送信 · 送信後7日以内に削除', a1n: '同意いただけない場合、お知らせは届きません。', pv: 'プライバシーポリシーを見る',
+      a2: 'オープンのお知らせ（広告）メールを受け取る', a2s: 'VZTR正式オープンのお知らせ1通 · 配信停止はメール下部のリンクから', go: 'お知らせを受け取る', req: '必須', bad: 'メールアドレスをご確認ください。', err: '申し込めませんでした。しばらくしてからもう一度お試しください。', off: 'お申し込みはvztr.appでのみできます。',
+      ok: 'お申し込みが完了しました', okS: '確認メールをお送りしました。12月25日にお会いしましょう。', close: '閉じる' },
+    'zh-hans': { b: '12月25日正式上线，提醒我 ›', h: '12月25日正式上线提醒', s: '上线当天只发一封邮件。', ph: '邮箱地址',
+      a1: '同意收集和使用个人信息', a1s: '邮箱地址 · 用于发送上线提醒 · 发送后7天内删除', a1n: '不同意就无法收到提醒。', pv: '查看隐私政策',
+      a2: '接收上线提醒邮件（广告信息）', a2s: 'VZTR正式上线消息1封 · 可通过邮件底部链接退订', go: '提醒我', req: '必选', bad: '请检查邮箱地址。', err: '没能提交，请稍后再试。', off: '只能在vztr.app提交。',
+      ok: '已登记', okS: '确认邮件已发送。12月25日见。', close: '关闭' },
+    'zh-hant': { b: '12月25日正式上線，提醒我 ›', h: '12月25日正式上線提醒', s: '上線當天只寄一封信。', ph: '電子郵件地址',
+      a1: '同意蒐集及使用個人資料', a1s: '電子郵件地址 · 用於寄送上線提醒 · 寄出後7天內刪除', a1n: '不同意就無法收到提醒。', pv: '查看隱私權政策',
+      a2: '接收上線提醒信（廣告資訊）', a2s: 'VZTR正式上線消息1封 · 可從信件底部連結取消訂閱', go: '提醒我', req: '必填', bad: '請確認電子郵件地址。', err: '沒能送出，請稍後再試。', off: '只能在vztr.app送出。',
+      ok: '已登記', okS: '確認信已寄出。12月25日見。', close: '關閉' } };
+  const LSof = () => LS[lg()] || (isEN() ? LS.en : LS.ko);
+  let L = LSof();
   btn.textContent = L.b; btn.hidden = false;
   const RE = /^[^\s@<>"',;]+@[^\s@<>"',;]+\.[^\s@<>"',;]{2,}$/, PV = ((window.VZTR_LEGAL || {}).v || {}).privacy || '';
   const ck = '<span class="ck" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M6 12.5l4 4 8-8.5"/></svg></span>';
@@ -375,7 +411,7 @@ if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => { fi
   const $ = id => document.getElementById(id);
   let E, A1, A2, GO, M;
   const valid = () => RE.test(E.value.trim()) && A1.checked && A2.checked, upd = () => { GO.disabled = !valid(); };
-  const mk = () => { mkLang = isEN() ? 'en' : 'ko'; const priv = isEN() ? '../privacy#en' : 'privacy';
+  const mk = () => { mkLang = lg(); const priv = isEN() ? '../privacy#' + mkLang : 'privacy';
     sh.innerHTML = `<button type="button" class="x" id="alX" aria-label="${L.close}">×</button><form id="alF" novalidate><h2 id="alH">${L.h}</h2><p class="s">${L.s}</p>
       <input type="email" id="alE" name="email" autocomplete="email" inputmode="email" placeholder="${L.ph}" aria-label="${L.ph}" maxlength="120" required>
       <label class="ag"><input type="checkbox" id="alA1">${ck}<div><em>${L.req}</em>${L.a1}<small>${L.a1s}<br>${L.a1n}<a href="${priv}" target="_blank" rel="noopener">${L.pv}</a></small></div></label>
@@ -387,10 +423,10 @@ if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => { fi
   document.body.append(sc, sh);
   let last = null, hideT = 0;
   const shell = document.querySelector('.shell');
-  const open = () => { if (!done && mkLang !== (isEN() ? 'en' : 'ko')) mk(); clearTimeout(hideT); last = document.activeElement; if (shell) shell.inert = true; sc.hidden = sh.hidden = false; void sh.offsetWidth; sc.classList.add('on'); sh.classList.add('on'); setTimeout(() => E.focus({ preventScroll: true }), 280); };
+  const open = () => { if (!done && mkLang !== lg()) mk(); clearTimeout(hideT); last = document.activeElement; if (shell) shell.inert = true; sc.hidden = sh.hidden = false; void sh.offsetWidth; sc.classList.add('on'); sh.classList.add('on'); setTimeout(() => E.focus({ preventScroll: true }), 280); };
   const close = () => { if (sh.hidden) return; sc.classList.remove('on'); sh.classList.remove('on'); if (shell) shell.inert = false; hideT = setTimeout(() => { sc.hidden = sh.hidden = true; }, 300); if (last) last.focus({ preventScroll: true }); };
   btn.addEventListener('click', open); sc.addEventListener('click', close);
-  document.addEventListener('vztr-lang', () => { L = LS[isEN() ? 'en' : 'ko']; btn.textContent = L.b; });
+  document.addEventListener('vztr-lang', () => { L = LSof(); btn.textContent = L.b; });
   document.addEventListener('keydown', e => { if (sh.hidden || !sh.classList.contains('on')) return; if (e.key === 'Escape') close();
     if (e.key === 'Tab') { const f = [...sh.querySelectorAll('button:not([disabled]),input,a[href]')].filter(x => x.offsetParent); const a = f[0], z = f[f.length - 1];
       if (e.shiftKey && document.activeElement === a) { e.preventDefault(); z.focus(); } else if (!e.shiftKey && document.activeElement === z) { e.preventDefault(); a.focus(); } } });

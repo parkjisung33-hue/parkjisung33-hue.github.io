@@ -1,0 +1,447 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<script src="migrate.js?v=2"></script>
+<script>/* 11/26 밤 vztr.app/ = 늘 첫 페이지. 주소 뒤 #가 있는 링크(메일 #g= · 공유 #v= · #sample)는 가이드북(/trip)으로 그대로 넘김 — migrate.js(#mig=)가 먼저 돎 */
+(function () { try { var h = location.hash; if (h && h !== '#') { document.documentElement.style.visibility = 'hidden'; location.replace('trip' + location.search + h); } } catch (e) {} })();</script>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#F8F8FA">
+<title>VZTR — 這次旅行，做自己。</title>
+<meta name="description" content="10道題測出你的旅行類型，再給你一份合拍的韓國行程。">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="VZTR">
+<meta property="og:title" content="VZTR — 這次旅行，做自己。">
+<meta property="og:description" content="10道題測出你的旅行類型，再給你一份合拍的韓國行程。">
+<meta property="og:url" content="https://vztr.app/zh-hant/">
+<meta property="og:locale" content="zh_TW">
+<meta property="og:image" content="https://vztr.app/og/en-main.png?v=2">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="VZTR — 這次旅行，做自己。">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="VZTR — 這次旅行，做自己。">
+<meta name="twitter:description" content="10道題測出你的旅行類型，再給你一份合拍的韓國行程。">
+<meta name="twitter:image" content="https://vztr.app/og/en-main.png?v=2">
+<link rel="icon" href="icons/favicon-32.png">
+<link rel="apple-touch-icon" href="icons/icon-180.png">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="stylesheet" href="fonts/google/gf.css?v=1">
+<script src="inapp.js?v=1"></script>
+<script src="hit.js?v=1"></script><!-- 11/26 2주차: 유입 숫자 세기(합계만) -->
+<script src="legal/flags.js?v=1"></script>
+<script src="i18n.js?v=eb6c34c7"></script>
+<link rel="stylesheet" href="fonts/vztr-fonts.css?v=2">
+<script>/* 11/26: 기기(브라우저) 시스템 모드를 따름 — 다크 = 밤 객실 · 라이트 = 밝은 객실. ?theme=dark|light = 미리보기 */
+(function () { try { var q = new URLSearchParams(location.search).get('theme'), d = q === 'dark' || q === 'light' ? q === 'dark' : matchMedia('(prefers-color-scheme: dark)').matches; if (d) document.documentElement.setAttribute('data-theme', 'dark'); } catch (e) {} })();</script>
+<!-- 2026-11-25 새 첫 페이지(랜딩) — 시안 10차 확정본(디자인/2026-11-25_VZTR_첫페이지시안/board_v10_src.html)을 그대로 옮김.
+     화면 = 설계 크기(PC 1440×900 / 폰 390×844)로 그리고 브라우저 크기에 맞춰 통째로 비율 유지(반응형 등비 스케일).
+     버튼: 내 유형 알아보기 → test · 여행 성향들 둘러보기 → types (11/26 밤 깔끔한 주소) · 언어 = i18n.js(영어판 /en/landing.html) -->
+<style>
+:root { color-scheme: light; padding-top: env(safe-area-inset-top, 0px); padding-bottom: env(safe-area-inset-bottom, 0px);
+  --kr: "VZTR KR", "Pretendard Variable", Pretendard, -apple-system, "Apple SD Gothic Neo", "Malgun Gothic", system-ui, sans-serif;
+  --krb: var(--kr); --lat: "Inter Tight", var(--kr);
+  --ink: #16171A; --sb: #6B6E75; --bb: #16171A; --bf: #FFFFFF; --pill: rgba(22,23,26,.06); --pillon: #FFFFFF; --ac: #1F5FE0;
+  --bg: linear-gradient(180deg, #EEEEF2 0%, #F8F8FA 15%, #FFFFFF 42%, #FEFEFF 62%, #F3F3F6 100%); --cl: #FFFFFF; --sd: rgba(22,23,26,.035); --fd: rgba(22,23,26,.025); --base: #F8F8FA; }
+:root[data-theme="dark"] { color-scheme: dark;
+  --ink: #F2F1F7; --sb: #A29DB6; --bb: #F2F1F7; --bf: #0E0C15; --pill: rgba(255,255,255,.08); --pillon: rgba(255,255,255,.16); --ac: #8AB0FF;
+  --bg: linear-gradient(180deg, #100D16 0%, #211B2B 18%, #2A2433 46%, #251F2D 64%, #120F18 100%); --cl: rgba(180,160,235,.28); --sd: rgba(0,0,0,.38); --fd: rgba(0,0,0,.3); --base: #1B1622; }
+html[lang="en"], html[lang="ja"], html[lang="zh-Hans"], html[lang="zh-Hant"] { --krb: var(--kr); }   /* 번역판: i18n.js가 --kr을 그 언어 기기 글꼴로 바꿈 → 굵은 글자도 같이 */
+* { box-sizing: border-box; }
+html, body { height: 100%; }
+body { margin: 0; background: var(--base); color: var(--ink); font-family: var(--kr); letter-spacing: -.01em; word-break: keep-all; -webkit-font-smoothing: antialiased; overflow: hidden; }
+[hidden] { display: none !important; }
+a { color: inherit; text-decoration: none; }
+/* 화면 전체 = 둥근 동체 + 천장 빛 (브라우저 크기 전체를 채움) */
+.vp { position: fixed; inset: 0; background: var(--bg); overflow: hidden; }
+.vp .ceil { position: absolute; left: -14%; right: -14%; top: -170px; height: 380px; border-radius: 50%; background: radial-gradient(closest-side, var(--cl), transparent); pointer-events: none; }
+.vp .side { position: absolute; inset: 0; background: linear-gradient(90deg, var(--sd), transparent 22%, transparent 78%, var(--sd)); pointer-events: none; }
+.vp .flr { position: absolute; left: 0; right: 0; bottom: 0; height: 30%; background: linear-gradient(180deg, transparent, var(--fd)); pointer-events: none; }
+html.ph .vp .ceil { top: -120px; height: 250px; }
+/* 무대 = 설계 크기 그대로, JS가 화면에 맞춰 비율 유지해 키우고 줄임 */
+.shell { position: fixed; inset: 0; overflow: hidden; }   /* 설계 크기 무대가 레이아웃 폭을 넓히지 않게(360px 폰에서 화면이 390으로 잡히던 것) */
+.stage { position: absolute; left: 0; top: 0; transform-origin: 0 0; }
+html.pc .stage { width: 1440px; height: 900px; } html.ph .stage { width: 390px; height: 844px; }
+/* 아래 줄: 로고 · (약관) · 언어 */
+.top { position: absolute; left: 0; right: 0; bottom: 0; display: flex; justify-content: space-between; align-items: center; z-index: 20; }
+html.pc .top { padding: 0 64px 40px; } html.ph .top { padding: 0 22px 42px; }   /* 11/26: 아래 줄 18px 위로 */
+.lg .vz { display: block; font: 800 34px/1 var(--lat); font-family: "Inter Tight", var(--kr); letter-spacing: -.05em; color: var(--ink); }
+.vz i { font-style: normal; color: var(--ac); }
+html.pc .lg { transform: translateY(-1px); }
+html.pc .lang { transform: translateY(var(--lgy, 0px)); }   /* 11/26: 토글 아래선 = 로고 아래선(JS 실측) */
+html.ph .lg .vz { font-size: 26px; }
+.lang { display: flex; gap: 2px; background: var(--pill); border-radius: 999px; padding: 3px; align-items: stretch; font: 600 14px/1 var(--kr); height: 36px; }   /* 11/26: 40 → 36 (로고에 더 가깝게) */
+.lang > * { display: grid; place-items: center; padding: 0 16px; border-radius: 999px; color: var(--sb); font-weight: 600; }
+.lang b { background: var(--pillon); color: var(--ink); font-weight: 700; box-shadow: 0 1px 2px rgba(0,0,0,.08); }
+.lang a:hover { color: var(--ink); }
+html.ph .lang { height: 26px; font-size: 11px; padding: 2px; } html.ph .lang > * { padding: 0 11px; }   /* 11/26: 32 → 29 → 26 (폰만) */
+/* 11/26 다국어: 언어 셋 이상 = 알약 하나(지구본 + 지금 언어 + ⌄) → 누르면 목록(i18n.js VZTR_I18N.menu, 그 자리에서 바뀜) */
+.lang .lsel { all: unset; box-sizing: border-box; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; padding: 0 12px 0 10px; border-radius: 999px; background: var(--pillon); color: var(--ink); font-weight: 700; box-shadow: 0 1px 2px rgba(0,0,0,.08); -webkit-tap-highlight-color: transparent; }
+.lang .lsel svg { width: 15px; height: 15px; flex: none; stroke: currentColor; fill: none; stroke-width: 1.8; } .lang .lsel svg.cv { width: 11px; height: 11px; stroke-width: 2.4; opacity: .55; }
+html.ph .lang .lsel { gap: 4px; padding: 0 9px 0 7px; } html.ph .lang .lsel svg { width: 12px; height: 12px; } html.ph .lang .lsel svg.cv { width: 9px; height: 9px; }
+.lang .lsel:focus-visible { outline: 2px solid var(--ac); outline-offset: 3px; }
+.legal { position: absolute; left: 50%; bottom: var(--lgb, 47px); margin: 0; transform: translateX(-50%); display: flex; gap: 14px; font: 300 12px/1 var(--kr); color: var(--sb); }   /* 얇게 · 아래선 = 로고 기준선(JS가 실측해 --lgb 맞춤) */
+html.pc .legal { left: 143px; transform: none; gap: 10px; }   /* 11/26 B안: PC도 로고 바로 옆(로고 오른쪽 끝 129 + 14), 사이 선 없음 — 폰과 같은 방식 */
+html.ph .legal { left: 82px; transform: none; font-size: 10.5px; gap: 7px; }   /* 폰: 로고 바로 오른쪽(가운데 두면 토글과 겹침) */
+.legal a:hover { color: var(--ink); }
+/* 글 */
+.tx { position: absolute; text-align: center; z-index: 5; }
+html.pc .tx { left: 0; right: 0; bottom: 80px; } html.ph .tx { left: 22px; right: 22px; top: 524px; }   /* 11/26: 폰 전체 위로(566 → 524) */
+.hl { margin: 0; font: 700 56px/1.12 var(--krb); letter-spacing: -.045em; color: var(--ink); text-wrap: balance; }
+html.ph .hl { font-size: 34px; letter-spacing: -.04em; }
+.q { margin: 12px 0 0; font: 500 24px/1.3 var(--kr); color: var(--sb); letter-spacing: -.02em; }
+html.ph .q { font-size: 17px; margin-top: 8px; }
+.ctas { display: flex; flex-direction: column; align-items: center; gap: 4px; margin-top: 26px; }
+.cta { display: inline-grid; place-items: center; height: 56px; padding: 0 36px; border-radius: 12px; background: var(--bb); color: var(--bf); font: 700 17px/1 var(--krb); letter-spacing: -.02em; }
+.cta:hover { filter: brightness(1.12); }
+.gh { font: 600 15px/1 var(--krb); color: var(--sb); padding: 14px 2px; letter-spacing: -.01em; }
+.gh:hover { color: var(--ink); }
+html.pc .gh { padding-bottom: 0; }
+html.ph .ctas { align-items: stretch; } html.ph .cta { width: 100%; } html.ph .gh { text-align: center; font-size: 14px; }
+.cta:focus-visible, .gh:focus-visible, .lang a:focus-visible, .legal a:focus-visible { outline: 2px solid var(--ac); outline-offset: 3px; border-radius: 12px; }
+/* 창 줄(PC) · 창 하나(폰) */
+.seats { position: absolute; left: 0; right: 0; top: 100px; display: flex; justify-content: center; gap: 48px; }
+.seat { display: grid; justify-items: center; gap: 14px; }
+.seat .win { position: relative; width: 280px; }
+.seat b, .solo b { font: 700 16px/1 var(--krb); color: var(--ink); } .seat small, .solo small { font: 600 12px/1 var(--lat); color: var(--sb); letter-spacing: .08em; }
+.solo { position: absolute; left: 0; right: 0; top: 30px; display: grid; justify-items: center; gap: 14px; }
+/* 11/26 밤 번쩍임 고침(동우님 실기기: 닫힌 뒤·다 열렸을 때·글자까지 번쩍) — 원인 = 바꾸는 순간마다 그림 층이 새로 생기고 없어짐
+   (창 앞뒤 바꾸기 · 캐릭터 통째로 다시 그리기 · 이름 글 바꾸기 · 빛 전환이 끝날 때 층 해제) → 겹친 글자 층까지 다시 그려짐.
+   → 창 하나 · 캐릭터 넷과 이름 넷을 처음에 다 그려 두고 '보이기'만 바꿈 · 움직이는 것은 처음부터 끝까지 자기 층 유지(will-change) */
+.solo .stack { position: relative; width: 290px; aspect-ratio: 300 / 420; }
+.solo .stack .win { position: absolute; inset: 0; width: 100%; }
+.solo .lbls { display: grid; }
+.solo .lbl { grid-area: 1 / 1; display: grid; justify-items: center; gap: 6px; opacity: 0; transition: opacity .6s ease; will-change: opacity; }
+.solo .lbl.on { opacity: 1; transition: opacity 1.2s ease 1.2s; }
+.solo b { font-size: 18px; }
+html.ph .stage, html.ph .tx, html.ph .top { will-change: transform; }   /* 글자 묶음 = 늘 자기 층(옆 층이 생기고 없어져도 다시 안 그려짐) */
+html.ph .win > .halo { will-change: opacity; }
+.chw > div { grid-area: 1 / 1; visibility: hidden; } .chw > div.on { visibility: visible; }
+
+/* ===== 비행기 창: 벽에 번진 빛 → 창 가장자리 선 → 안쪽 몰딩 → 얇은 선 → 유리 · 위 = 가리개 상자 + 가리개(손잡이 홈). 창 폭 : 높이 = 300 : 420 ===== */
+.win { position: absolute; aspect-ratio: 300 / 420; container-type: inline-size;
+  --sh: .16; --edge: #A9ADB7; --lin: #E4E6EB; --lin2: #D7DAE1; --lin-hi: #FBFBFD; --lip: #B7BBC4; --glow: rgba(200,205,215,.55);
+  --shd: #E7E8EC; --shd2: #DDDFE4; --band: #D9DBE1; --cap: #C9CCD3; --hdl: #C4C7CF; --hdl2: #B5B8C1; --sky1: #9DC3E2; --sky2: #E8F1F8; }
+.win > .halo { position: absolute; inset: 0; border-radius: 50% / 32%;
+  box-shadow: 0 0 10cqw 0 color-mix(in srgb, var(--glow) 82%, transparent), 0 0 32cqw 3cqw color-mix(in srgb, var(--glow) 42%, transparent);
+  opacity: .999; will-change: opacity; transition: opacity 2.8s cubic-bezier(.4,0,.2,1) .7s; }
+/* 11/26 밤 동우님 S24 울트라 크롬 다크: 빛 끔(?fx=1~3)·여닫기 멈춤(?fx=4) 둘 다 번쩍임 없음 → 원인 = 창 빛이 꺼지고 켜지는 전환.
+   빛 안에서 펄스(::after)가 계속 움직이는데, 바깥 빛의 투명도가 정확히 0·1에 닿는 순간 크롬이 그 겹을 통째로 새로 만들며 한 번 비는 것으로 봄
+   → 0·1에 안 닿게(.001 ~ .999): 겹이 처음부터 끝까지 그대로라 다시 만드는 순간이 없음. 눈으로는 차이 없음 */
+.win.dk > .halo { box-shadow: 0 0 12cqw 2cqw var(--glow), 0 0 38cqw 9cqw color-mix(in srgb, var(--glow) 56%, transparent); }
+html.ph .win:not(.dk) > .halo { box-shadow: 0 0 12cqw 0 color-mix(in srgb, var(--glow) 85%, transparent), 0 0 26cqw 0 color-mix(in srgb, var(--glow) 30%, transparent); }
+.win.dim > .halo { opacity: .001; transition: opacity 1.5s ease; }   /* 닫힐 땐 빛이 스르르 꺼지고, 열릴 땐 늦게 천천히 들어옴 */
+/* 빛 가장 바깥 = 숨 쉬듯 은은하게, 창마다 박자 엇갈림 */
+.win > .halo::after { content: ""; position: absolute; inset: 0; border-radius: inherit; pointer-events: none;
+  box-shadow: 0 0 46cqw 12cqw color-mix(in srgb, var(--glow) 40%, transparent); animation: gpulse 5.2s ease-in-out infinite; }
+.win.dk > .halo::after { box-shadow: 0 0 50cqw 14cqw color-mix(in srgb, var(--glow) 45%, transparent); }
+html.ph .win:not(.dk) > .halo::after { box-shadow: 0 0 30cqw 2cqw color-mix(in srgb, var(--glow) 22%, transparent); }
+.seat:nth-child(2) .halo::after { animation-delay: -1.3s; } .seat:nth-child(3) .halo::after { animation-delay: -2.6s; } .seat:nth-child(4) .halo::after { animation-delay: -3.9s; }
+/* 11/26 밤 동우님 S24 울트라 크롬 시험 결과(?fx=1~8): 빛 끔·여닫기 멈춤·**펄스만 끔(5)** = 번쩍임 없음 · 빛 4장(6~8) = 번쩍임+렉
+   → 원인 = 꺼지고 켜지는 빛 안에서 펄스가 계속 움직이는 것. 폰(창이 여닫힘)은 펄스 없음. PC는 안 여닫혀서 그대로 */
+html.ph .win > .halo::after { display: none; }
+@keyframes gpulse { 0%, 100% { opacity: .25; scale: 1; } 50% { opacity: .999; scale: 1.035; } }
+.win > .glass { position: absolute; left: 8%; top: 5.238%; width: 84%; height: 86.67%; border-radius: 50% / 31.9%; overflow: hidden; background: linear-gradient(180deg, var(--sky1), var(--sky2)); z-index: 0; }
+.win > svg.fr { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; z-index: 1; }
+.fr .hi { fill: none; stroke: var(--lin-hi); stroke-width: 9; }
+.fr .lip { fill: none; stroke: var(--lip); stroke-width: 1.4; }
+.fr .ol { fill: none; stroke: var(--edge); stroke-width: 3; }
+.fr .shg { transform: translateY(calc(var(--sh) * 430px)); transition: transform 1s cubic-bezier(.65,0,.35,1); }
+.solo .win .fr .shg { transition-duration: 1.9s; }
+.fr .shd { fill: var(--shd); } .fr .shl { fill: var(--shd2); }
+.fr .hdl { fill: var(--hdl); } .fr .hdl2 { fill: var(--hdl2); }
+.fr .band { fill: var(--band); } .fr .cap { fill: var(--cap); }
+.win.dk { --edge: #120D18; --shd: #2A2131; --shd2: #241C2B; --band: #4A3446; --cap: #231A2B; --hdl: #1B1420; --hdl2: #140F18; }
+/* 성향 묶음 4색: 로컬 탐험 = 민트 · 취향 수집 = 복숭아 · 명소 정복 = 페리윙클 · 힐링 충전 = 라일락 */
+.win.ls { --sky1: #79C6C2; --sky2: #E3F6F1; --lin: #CDECE8; --lin2: #B7E0DB; --lin-hi: #F2FBF9; --lip: #8DC6C0; --glow: rgba(121,198,194,.5); }
+.win.le { --sky1: #F4AEBB; --sky2: #FFF0E8; --lin: #F9D8D9; --lin2: #F2C3C6; --lin-hi: #FFF6F2; --lip: #E2A1AC; --glow: rgba(244,174,187,.5); }
+.win.hs { --sky1: #8AA5EA; --sky2: #E6ECFC; --lin: #D5DEF8; --lin2: #C1CEF3; --lin-hi: #F4F7FF; --lip: #9BB0E4; --glow: rgba(138,165,234,.5); }
+.win.he { --sky1: #C99BDC; --sky2: #F7E5F3; --lin: #EAD2F0; --lin2: #DDBCE8; --lin-hi: #FBF2FC; --lip: #BE95CE; --glow: rgba(201,155,220,.5); }
+.win.dk.ls { --sky1: #1F2E5A; --sky2: #74CDC4; --lin: #4FA7A1; --lin2: #3C8C87; --lin-hi: #BDEDE5; --lip: #2A6763; --glow: rgba(98,200,190,.55); }
+.win.dk.le { --sky1: #33254F; --sky2: #F6AFB9; --lin: #D88893; --lin2: #BF6F7C; --lin-hi: #FFE0E1; --lip: #8E4655; --glow: rgba(240,150,165,.55); }
+.win.dk.hs { --sky1: #1C2660; --sky2: #8EADF2; --lin: #6B86D6; --lin2: #566FBE; --lin-hi: #D6E1FF; --lip: #39509A; --glow: rgba(130,160,240,.55); }
+.win.dk.he { --sky1: #31205A; --sky2: #DE9CD6; --lin: #B479C7; --lin2: #9A61AF; --lin-hi: #F3D9FA; --lip: #6B3D82; --glow: rgba(210,140,215,.55); }
+.glass .stars { position: absolute; inset: 0; }
+.glass .stars i { position: absolute; width: 1.2cqw; height: 1.2cqw; border-radius: 50%; background: #fff; opacity: .75; }
+.glass .sky-cl { position: absolute; left: 0; top: 0; height: 100%; will-change: transform; }
+.glass .sky-cl svg { display: block; height: 100%; }
+.chw { position: absolute; left: 19%; bottom: 13%; width: 62%; display: grid; align-items: end; animation: bob 3.4s ease-in-out infinite; z-index: 2; will-change: translate; }   /* 가운데 = (100 - 62) / 2. transform을 쓰면 chars.js 반복 이펙트가 덮어써 오른쪽으로 밀림(실측 48px) */
+.chw svg { width: 100%; height: auto; display: block; overflow: visible; }
+.win.dk .chw { filter: drop-shadow(0 0 3cqw rgba(255,255,255,.25)); }
+@keyframes bob { 0%, 100% { translate: 0 0; } 50% { translate: 0 -4%; } }
+/* 11/26 2주차 출시 알림(동우님 보드 q6 = L1): 버튼 아래 글자 줄 → 아래에서 올라오는 시트. 12/25 00시(KST)부터 자동으로 숨김 */
+.al1 { appearance: none; border: 0; background: none; cursor: pointer; font: 600 14px/1 var(--krb); color: var(--ac); padding: 8px 2px 4px; letter-spacing: -.01em; }
+html.pc .al1 { padding-top: 10px; }
+html.ph .ctas .gh { padding-bottom: 6px; }
+.al1#myTrip { display: inline-block; text-align: center; text-decoration: none; } .al1#myTrip[hidden] { display: none; }
+.al1:focus-visible { outline: 2px solid var(--ac); outline-offset: 3px; border-radius: 8px; }
+.alsc { position: fixed; inset: 0; z-index: 60; background: rgba(10,12,16,.38); opacity: 0; transition: opacity .22s; }
+.alsc.on { opacity: 1; }
+.alsh { position: fixed; left: 50%; bottom: 0; z-index: 61; width: min(100%, 460px); transform: translate(-50%, 104%); transition: transform .28s cubic-bezier(.2,.8,.2,1);
+  background: var(--sh-bg); color: var(--sh-ink); border-radius: 24px 24px 0 0; padding: 26px 22px calc(26px + env(safe-area-inset-bottom, 0px)); font-family: var(--kr); text-align: left; box-shadow: 0 -8px 30px rgba(0,0,0,.12); }
+html.pc .alsh { bottom: 50%; border-radius: 24px; transform: translate(-50%, 50%) scale(.98); opacity: 0; transition: opacity .2s, transform .2s; padding-bottom: 26px; }
+.alsh.on { transform: translate(-50%, 0); } html.pc .alsh.on { transform: translate(-50%, 50%); opacity: 1; }
+:root { --sh-bg: #FFFFFF; --sh-ink: #16171A; --sh-sub: #6B6E75; --sh-in: #F2F2F4; --sh-btn: #16171A; --sh-btx: #FFFFFF; --sh-off: #ECECEF; --sh-offtx: #A3A6AD; --sh-err: #D2463C; }
+:root[data-theme="dark"] { --sh-bg: #1E1A26; --sh-ink: #F2F1F7; --sh-sub: #A29DB6; --sh-in: rgba(255,255,255,.08); --sh-btn: #F2F1F7; --sh-btx: #0E0C15; --sh-off: rgba(255,255,255,.08); --sh-offtx: #6E6880; --sh-err: #FF8A80; }
+.alsh h2 { margin: 0; font: 700 21px/1.3 var(--krb); letter-spacing: -.03em; }
+.alsh .s { margin: 6px 0 18px; font: 500 14px/1.45 var(--kr); color: var(--sh-sub); }
+.alsh input[type=email] { width: 100%; height: 52px; border-radius: 12px; border: 0; background: var(--sh-in); color: var(--sh-ink); padding: 0 16px; font: 500 16px var(--kr); outline: none; }
+.alsh input[type=email]:focus-visible { box-shadow: 0 0 0 2px var(--ac); }
+.alsh input[type=email].bad { box-shadow: 0 0 0 2px var(--sh-err); }
+.alsh .ag { display: flex; gap: 10px; align-items: flex-start; margin-top: 14px; font: 600 14px/1.4 var(--kr); cursor: pointer; }
+.alsh .ag input { position: absolute; opacity: 0; width: 1px; height: 1px; }
+.alsh .ag .ck { flex: none; width: 22px; height: 22px; border-radius: 6px; background: var(--sh-off); display: grid; place-items: center; margin-top: -1px; }
+.alsh .ag .ck svg { width: 14px; height: 14px; stroke: transparent; fill: none; stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; }
+.alsh .ag input:checked + .ck { background: var(--sh-btn); } .alsh .ag input:checked + .ck svg { stroke: var(--sh-btx); }
+.alsh .ag input:focus-visible + .ck { box-shadow: 0 0 0 2px var(--ac); }
+.alsh .ag em { font-style: normal; color: var(--ac); margin-right: 4px; }
+.alsh .ag small { display: block; font: 500 12.5px/1.5 var(--kr); color: var(--sh-sub); margin-top: 3px; }
+.alsh .ag small a { text-decoration: underline; text-underline-offset: 2px; }
+.alsh .go { display: block; width: 100%; margin-top: 20px; height: 54px; border: 0; border-radius: 12px; background: var(--sh-btn); color: var(--sh-btx); font: 700 16px/1 var(--krb); cursor: pointer; }
+.alsh .go:disabled { background: var(--sh-off); color: var(--sh-offtx); cursor: default; }
+.alsh .msg { margin: 12px 0 0; min-height: 1.2em; font: 500 13px/1.45 var(--kr); color: var(--sh-err); text-align: center; }
+.alsh .msg.ok { color: var(--sh-sub); }
+.alsh .x { position: absolute; right: 12px; top: 12px; width: 40px; height: 40px; border: 0; background: none; color: var(--sh-sub); cursor: pointer; border-radius: 50%; font-size: 22px; line-height: 1; }
+.alsh .done { text-align: center; padding: 18px 0 6px; } .alsh .done b { display: block; font: 700 20px/1.35 var(--krb); margin-bottom: 8px; } .alsh .done span { color: var(--sh-sub); font-size: 14px; line-height: 1.5; }
+@media (prefers-reduced-motion: reduce) { .alsc, .alsh { transition: none; } }
+@media (prefers-reduced-motion: reduce) { .chw, .win > .halo::after { animation: none !important; } .win > .halo::after { opacity: .6; } }
+</style>
+</head>
+<body>
+<div class="vp" aria-hidden="true"><i class="ceil"></i><i class="side"></i><i class="flr"></i></div>
+<div class="shell" data-noi18n><main class="stage" id="stage">
+  <div id="wins" aria-hidden="true"></div>
+  <div class="tx">
+    <h1 class="hl">이번 여행, 나답게.</h1>
+    <p class="q">내 자리는 어디일까?</p>
+    <div class="ctas"><a class="cta" href="test">내 유형 알아보기</a><a class="gh" href="types">여행 성향들 둘러보기</a><button type="button" class="al1" id="alBtn" hidden data-noi18n></button><a class="al1" id="myTrip" href="trip" hidden>내 일정 이어보기 ›</a></div>
+  </div>
+  <div class="top">
+    <div class="lg"><b class="vz" data-noi18n>vztr<i>.</i></b></div>
+    <p class="legal" id="legal"><a href="privacy" target="_blank" rel="noopener">개인정보처리방침</a><a href="terms" target="_blank" rel="noopener">이용약관</a></p>
+    <nav class="lang" id="lang" aria-label="언어" data-noi18n></nav>
+  </div>
+</main></div>
+<script src="chars.js?v=fit3"></script>
+<script>
+(() => {
+/* 11/26 다국어: LG = 지금 언어('ko'·'en'·'ja'·'zh-hans'·'zh-hant') — 그 자리에서 바뀜. I = i18n.js(언어 표·주소·목록) */
+const I = window.VZTR_I18N || { live: ['ko', 'en'], langs: { ko: { h: 'ko', nm: '한국어' }, en: { h: 'en', nm: 'English' } }, url: l => location.pathname, langFont: () => {} };
+let LG = I.langs[window.VZTR_LANG] ? window.VZTR_LANG : 'ko';
+/* 테마: 기기 시스템 모드를 따름(바뀌면 바로 따라감) · ?theme= 미리보기 */
+const setTheme = t => { if (t === 'dark') document.documentElement.setAttribute('data-theme', 'dark'); else document.documentElement.removeAttribute('data-theme');
+  const m = document.querySelector('meta[name="theme-color"]'); if (m) m.content = t === 'dark' ? '#1B1622' : '#F8F8FA'; };
+const MQ = matchMedia('(prefers-color-scheme: dark)');
+let QT = ''; try { QT = new URLSearchParams(location.search).get('theme') || ''; } catch (_) {}
+let DK = QT === 'dark' || QT === 'light' ? QT === 'dark' : MQ.matches;
+setTheme(DK ? 'dark' : 'light');
+/* 언어 — 11/26 밤 동우님 '누르자마자 바뀌게': 페이지를 다시 불러오지 않고 그 자리에서 글자만 바꿈 + 주소(/ ↔ /en/)는 history로.
+   이 페이지 글은 여기 표(LD)로 직접 바꿈(.shell = data-noi18n, 영어판도 큰 번역 사전 i18n-en*.js를 안 불러옴 → 첫 로딩도 가벼움).
+   영어 글꼴(i18n.js enFont)은 한가할 때 미리 불러 둠 → 바꿀 때 글꼴이 늦게 바뀌는 깜빡임 없음 */
+/* 언어별 표 — 키 = 한국어. B(중국어) 세션은 'zh-hans'·'zh-hant' 묶음을 en과 같은 키로 더함(빠진 키는 영어) · TITLE = 탭 제목 */
+const LD = { en: { '이번 여행, 나답게.': 'Pack your personality.', '내 자리는 어디일까?': 'Which seat is yours?', '내 유형 알아보기': 'Find your type', '여행 성향들 둘러보기': 'Browse travel types',
+  '내 일정 이어보기 ›': 'Back to my trip ›', '개인정보처리방침': 'Privacy Policy', '이용약관': 'Terms of Use', '언어': 'Language',
+  '로컬 탐험형': 'Explorers', '취향 수집형': 'Curators', '명소 정복형': 'Sightseers', '힐링 충전형': 'Rechargers', TITLE: 'VZTR — Pack your personality.' },
+  ja: { '이번 여행, 나답게.': '旅は、自分らしく。', '내 자리는 어디일까?': 'あなたの席は、どこ？', '내 유형 알아보기': '自分のタイプを見る', '여행 성향들 둘러보기': '旅のタイプを見てみる',
+  '내 일정 이어보기 ›': '自分のプランに戻る ›', '개인정보처리방침': 'プライバシーポリシー', '이용약관': '利用規約', '언어': '言語',
+  '로컬 탐험형': 'ローカル探検派', '취향 수집형': 'こだわり収集派', '명소 정복형': '名所制覇派', '힐링 충전형': 'まったり充電派', TITLE: 'VZTR — 旅は、自分らしく。' },
+  /* 11/26 B 중국어 — 문체 = 문서/여행앱/2026-11-26_VZTR_중국어문체가이드_v1.md */
+  'zh-hans': { '이번 여행, 나답게.': '这次旅行，做自己。', '내 자리는 어디일까?': '我的座位在哪？', '내 유형 알아보기': '测测我的类型', '여행 성향들 둘러보기': '看看所有类型',
+  '내 일정 이어보기 ›': '回到我的行程 ›', '개인정보처리방침': '隐私政策', '이용약관': '使用条款', '언어': '语言',
+  '로컬 탐험형': '在地探索派', '취향 수집형': '品味收集派', '명소 정복형': '景点征服派', '힐링 충전형': '疗愈充电派', TITLE: 'VZTR — 这次旅行，做自己。' },
+  'zh-hant': { '이번 여행, 나답게.': '這次旅行，做自己。', '내 자리는 어디일까?': '我的座位在哪？', '내 유형 알아보기': '測測我的類型', '여행 성향들 둘러보기': '看看所有類型',
+  '내 일정 이어보기 ›': '回到我的行程 ›', '개인정보처리방침': '隱私權政策', '이용약관': '使用條款', '언어': '語言',
+  '로컬 탐험형': '在地探索派', '취향 수집형': '品味收集派', '명소 정복형': '景點征服派', '힐링 충전형': '療癒充電派', TITLE: 'VZTR — 這次旅行，做自己。' } };
+const tr = k => (LG === 'ko' ? k : (LD[LG] || {})[k] || LD.en[k] || k);
+const TXT = [...document.querySelectorAll('.tx .hl, .tx .q, .ctas .cta, .ctas .gh, #myTrip, #legal a')].map(el => [el, el.textContent]);
+const lang = document.getElementById('lang');
+const pathFor = l => I.url(l).replace(/[?#].*$/, '');   // 그 언어의 이 페이지 주소(언어 폴더만 바꿈)
+const MANY = I.live.length > 2, GLOBE = '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c3 3.2 3 14.8 0 18M12 3c-3 3.2-3 14.8 0 18"/></svg>';
+const paintLang = () => {
+  const H = (I.langs[LG] || {}).h || 'ko', FX = LG !== 'ko';
+  document.documentElement.lang = H; window.VZTR_LANG = LG; window.VZTR_FX = FX;
+  document.title = FX ? tr('TITLE') : 'VZTR — 이번 여행, 나답게.';
+  TXT.forEach(([el, ko]) => { el.textContent = tr(ko); });
+  document.querySelectorAll('#legal a').forEach(a => { const d = /terms/.test(a.getAttribute('href')) ? 'terms' : 'privacy'; a.href = FX ? '../' + d + '#' + LG : d; });   // 번역판 = 한 단계 위 문서 + #언어
+  lang.setAttribute('aria-label', tr('언어'));
+  if (MANY) lang.innerHTML = `<button type="button" class="lsel" aria-haspopup="menu" aria-label="Language · 언어" lang="${H}">${GLOBE}<span>${I.langs[LG].nm}</span><svg class="cv" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9.5l6 6 6-6"/></svg></button>`;
+  else { const o = LG === 'ko' ? I.live[1] || 'en' : 'ko', ob = l => `<b aria-current="true" lang="${I.langs[l].h}">${I.langs[l].nm}</b>`, oa = l => `<a href="${pathFor(l)}" data-l="${l}" hreflang="${I.langs[l].h}" lang="${I.langs[l].h}">${I.langs[l].nm}</a>`;
+    lang.innerHTML = LG === 'ko' ? ob('ko') + oa(o) : oa('ko') + ob(LG); }
+  document.querySelectorAll('.seat > b, .lbl > b').forEach((b, i) => { b.textContent = tr(SEATS[i % SEATS.length][1]); });
+  document.dispatchEvent(new Event('vztr-lang'));
+};
+const FADE = [...document.querySelectorAll('.tx, #legal, #lang')];
+const switchLang = l => {
+  if (!I.langs[l] || l === LG) return;
+  LG = l; try { localStorage.setItem('vztr-lang', l); } catch (_) {}
+  if (l !== 'ko' && I.langFont) I.langFont(l);
+  try { history.replaceState(history.state, '', pathFor(l) + location.search + location.hash); } catch (_) {}
+  const run = () => { paintLang(); fitHl(); alignLang(); alignText(); alignLegal(); };
+  if (REDUCED || !FADE[0].animate) { run(); return; }
+  FADE.forEach(el => el.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 90, easing: 'ease-in', fill: 'forwards' }));
+  setTimeout(() => { run(); FADE.forEach(el => { el.getAnimations().forEach(x => x.cancel()); el.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 160, easing: 'ease-out' }); }); }, 90);
+};
+lang.addEventListener('click', e => { const b = e.target.closest('.lsel'); if (b && I.menu) { e.preventDefault(); I.menu(b, LG, switchLang); return; } const a = e.target.closest('a[data-l]'); if (!a) return; e.preventDefault(); switchLang(a.dataset.l); });
+/* 영어 글꼴 미리: 영어가 아닌 언어로 보는 중이면 한가할 때 CSS + (애플 기기가 아니면) Mona Sans를 받아 둠 · 일본어·중국어 글꼴은 기기 글꼴이라 미리 받을 것 없음 */
+const warm = () => { if (!window.VZTR_I18N || !VZTR_I18N.enFont) return; VZTR_I18N.enFont(); if (document.fonts && !/iPhone|iPad|iPod|Macintosh/.test(navigator.userAgent)) setTimeout(() => { document.fonts.load('600 16px "Mona Sans"').catch(() => {}); document.fonts.load('700 16px "Mona Sans"').catch(() => {}); }, 300); };
+if (LG !== 'en' && I.live.indexOf('en') >= 0) (window.requestIdleCallback || (f => setTimeout(f, 1200)))(warm);
+/* 창 그림 */
+const rr = (x, y, w, h, rx, ry) => `M${x + rx},${y} H${x + w - rx} A${rx},${ry} 0 0 1 ${x + w},${y + ry} V${y + h - ry} A${rx},${ry} 0 0 1 ${x + w - rx},${y + h} H${x + rx} A${rx},${ry} 0 0 1 ${x},${y + h - ry} V${y + ry} A${rx},${ry} 0 0 1 ${x + rx},${y} Z`;
+const OP = rr(0, 0, 300, 420, 150, 134), GL = rr(24, 22, 252, 364, 126, 116), LP = rr(19, 17, 262, 375, 131, 121);
+let WID = 0;
+const WIN = (o = {}) => { const id = 'w' + (++WID);
+  return `<div class="win ${o.cls || ''}" style="--sh:${o.sh ?? .16}">${o.halo || '<i class="halo"></i>'}<div class="glass">${o.inner || ''}</div>
+  <svg class="fr" viewBox="0 0 300 420" aria-hidden="true" focusable="false"><defs><clipPath id="${id}c"><path d="${OP}"/></clipPath>
+    <linearGradient id="${id}g" x1="0" y1="0" x2="0" y2="1"><stop offset="0" style="stop-color:var(--lin2)"/><stop offset=".55" style="stop-color:var(--lin)"/><stop offset="1" style="stop-color:var(--lin2)"/></linearGradient></defs>
+    <path d="${OP} ${GL}" fill-rule="evenodd" fill="url(#${id}g)"/><path class="lip" d="${LP}"/><path class="hi" d="${GL}" clip-path="url(#${id}c)"/>
+    <g clip-path="url(#${id}c)"><g class="shg"><rect class="shd" x="-10" y="-440" width="320" height="440"/><rect class="shl" x="-10" y="-5" width="320" height="5"/>
+      <rect class="hdl" x="108" y="-40" width="84" height="20" rx="10"/><rect class="hdl2" x="113" y="-36" width="74" height="9" rx="4.5"/></g>
+      <ellipse class="band" cx="150" cy="14" rx="112" ry="30"/><ellipse class="cap" cx="150" cy="4" rx="106" ry="24"/></g>
+    <path class="ol" d="${OP}"/></svg></div>`; };
+/* 구름: 모양·크기 제각각, 창 여러 개가 한 하늘을 같이 봄(오른쪽 창의 구름이 왼쪽 창으로 넘어감) */
+const rng = s => () => (s = (s + 0x6D2B79F5) | 0, s = Math.imul(s ^ (s >>> 15), s | 1), s ^= s + Math.imul(s ^ (s >>> 7), s | 61), ((s ^ (s >>> 14)) >>> 0) / 4294967296);
+const cloudPath = (r, x, y, w) => { const n = 3 + Math.floor(r() * 4), h = w * (.2 + r() * .12); let d = '';
+  for (let i = 0; i < n; i++) { const cx = x + w * (.16 + .68 * i / Math.max(1, n - 1)) + (r() - .5) * w * .07, rad = h * (.45 + r() * .45) * (i === 0 || i === n - 1 ? .68 : 1); d += `<circle cx="${cx.toFixed(1)}" cy="${(y - rad).toFixed(1)}" r="${rad.toFixed(1)}"/>`; }
+  return d + `<rect x="${x.toFixed(1)}" y="${(y - h * .5).toFixed(1)}" width="${w.toFixed(1)}" height="${(h * .5).toFixed(1)}" rx="${(h * .25).toFixed(1)}"/>`; };
+const CLOUDS = (seed, L, H, far, dark) => { const r = rng(seed); let out = ''; const n = Math.round(L / (far ? 115 : 180));
+  const fill = dark ? (far ? '#B9A9CF' : '#F1E2EE') : '#FFFFFF', sh = dark ? '#2A2142' : '#C7CEE0';
+  for (let i = 0; i < n; i++) { const w = far ? H * (.07 + r() * .12) : H * (.2 + r() * .32), x = (i + r() * .6) * L / n, y = far ? H * (.18 + r() * .3) : H * (.5 + r() * .46), op = far ? (dark ? .3 + r() * .25 : .55 + r() * .3) : (dark ? .62 + r() * .25 : .9 + r() * .1);
+    const c = cloudPath(r, x, y, w); out += `<g fill="${sh}" opacity="${(op * .2).toFixed(2)}" transform="translate(0 ${(w * .03).toFixed(1)})">${c}</g><g fill="${fill}" opacity="${op.toFixed(2)}">${c}</g>`; }
+  return `<svg viewBox="0 0 ${L * 2} ${H}" width="${L * 2}" height="${H}" preserveAspectRatio="none">${out}<g transform="translate(${L} 0)">${out}</g></svg>`; };
+const SKYL = dk => `${dk ? '<div class="stars">' + Array.from({ length: 14 }, (_, i) => `<i style="left:${(i * 41) % 92 + 4}%;top:${(i * 29) % 34 + 6}%;opacity:${.4 + (i % 3) * .2}"></i>`).join('') + '</div>' : ''}<div class="sky-cl far" data-v="14"></div><div class="sky-cl near" data-v="34"></div>`;
+const SEATS = [['LSRP', '로컬 탐험형', 'L · S', 'ls'], ['LEFJ', '취향 수집형', 'L · E', 'le'], ['HSRJ', '명소 정복형', 'H · S', 'hs'], ['HERP', '힐링 충전형', 'H · E', 'he']];
+/* 캐릭터 칸: .chw(둥실 움직임) 안에 .gfx(chars.js 등장·반복 이펙트). 폰은 넷을 다 넣어 두고 .on 하나만 보임 */
+const GFX = (k, i, on) => `<div class="gfx${on ? ' on' : ''}" data-c="${k}" data-fxd="${i * 500}">${window.GABOJA_CHAR ? GABOJA_CHAR(k, { bg: false }) : ''}</div>`;
+const CH = (k, i) => `<div class="chw" style="animation-delay:${-i * .85}s">${GFX(k, i, true)}</div>`;
+const SEATWIN = (s, i) => WIN({ cls: (DK ? 'dk ' : '') + s[3], inner: SKYL(DK) + CH(s[0], i) });
+const SOLOWIN = () => WIN({ cls: (DK ? 'dk ' : '') + SEATS[0][3], inner: SKYL(DK) + `<div class="chw">${SEATS.map((s, i) => GFX(s[0], 0, i === 0)).join('')}</div>` });
+/* 화면: PC(가로가 넓을 때) = 창 넷 · 폰(좁거나 세로로 길 때) = 창 하나가 닫혔다 열리며 성향이 바뀜 */
+const stage = document.getElementById('stage'), wins = document.getElementById('wins');
+let MODE = '', cycleT = 0;
+const pick = () => (innerWidth < 760 || innerWidth / innerHeight < .78 ? 'ph' : 'pc');
+const build = () => { MODE = pick(); document.documentElement.classList.toggle('pc', MODE === 'pc'); document.documentElement.classList.toggle('ph', MODE === 'ph');
+  clearTimeout(cycleT);
+  wins.innerHTML = MODE === 'pc'
+    ? `<div class="seats" data-sky>${SEATS.map((s, i) => `<div class="seat">${SEATWIN(s, i)}<b>${tr(s[1])}</b><small>${s[2]}</small></div>`).join('')}</div>`
+    : `<div class="solo" data-sky><div class="stack">${SOLOWIN()}</div><div class="lbls">${SEATS.map((s, i) => `<div class="lbl${i === 0 ? ' on' : ''}"><b>${tr(s[1])}</b><small>${s[2]}</small></div>`).join('')}</div></div>`;
+  if (MODE === 'ph') startCycle(); };
+const fit = () => { const vw = innerWidth, vh = innerHeight;
+  if (MODE === 'pc') { const s = Math.min(vw / 1440, vh / 900); stage.style.transform = `translate(${((vw - 1440 * s) / 2).toFixed(1)}px, ${((vh - 900 * s) / 2).toFixed(1)}px) scale(${s})`; return; }
+  /* 폰: 내용 = 창 윗선(30) ~ 토글 아랫선(802) → 보이는 높이(크롬 위 주소창·사파리 아래 주소창 뺀 innerHeight) 안에서 위아래 여백 같게, 최소 여백 34 */
+  const C0 = 30, C1 = 802, s = Math.min(vw / 390, vh / (C1 - C0 + 68)), y = (vh - (C1 - C0) * s) / 2 - C0 * s;
+  stage.style.transform = `translate(${((vw - 390 * s) / 2).toFixed(1)}px, ${y.toFixed(1)}px) scale(${s})`; };
+/* 구름 깔기 */
+const REDUCED = matchMedia('(prefers-reduced-motion: reduce)').matches;
+const LAYERS = [];
+const layout = () => { LAYERS.length = 0; const grp = wins.querySelector('[data-sky]'); if (!grp) return;
+  const sc = stage.getBoundingClientRect().width / (stage.offsetWidth || 1) || 1, gr = grp.getBoundingClientRect(), glasses = [...grp.querySelectorAll('.glass')]; if (!glasses.length) return;
+  const H = Math.round(glasses[0].getBoundingClientRect().height / sc), L = Math.max(1400, Math.round(gr.width / sc) * 2);
+  glasses.forEach(g => { const gx = (g.getBoundingClientRect().left - gr.left) / sc;
+    g.querySelectorAll('.sky-cl').forEach(el => { const far = el.classList.contains('far'); if (el.dataset.h !== String(H)) { el.innerHTML = CLOUDS(far ? 11 : 29, L, H, far, DK); el.dataset.h = H; } LAYERS.push({ el, gx, L, v: +el.dataset.v }); }); }); };
+const T0 = performance.now();
+const tick = now => { const t = (now - T0) / 1000; LAYERS.forEach(o => { o.el.style.transform = `translateX(${(-((o.gx + t * o.v) % o.L)).toFixed(1)}px)`; }); if (!REDUCED) requestAnimationFrame(tick); };
+/* 폰: 열린 채 4초 → 닫힘 1.9초(빛 꺼짐, 이름은 거의 닫혔을 때 사라짐) → 닫힌 채 1.2초 → 다음 성향으로 바꿔 열림(빛은 늦게 차오름)
+   11/26 밤: 창 하나. 다 닫혀 가리개가 창 전체를 덮은 동안(빛도 꺼진 뒤)에만 색 이름표·캐릭터 '보이기'를 바꿈 — 새로 그리는 것 없음 */
+function startCycle() { const box = wins.querySelector('.solo'), win = box.querySelector('.win'), gfx = [...win.querySelectorAll('.chw > div')], lbls = [...box.querySelectorAll('.lbl')]; let k = 0;
+  if (REDUCED) return;
+  const close = () => { win.classList.add('dim'); win.style.setProperty('--sh', 1.02); setTimeout(() => lbls[k].classList.remove('on'), 1300); cycleT = setTimeout(swap, 3100); };
+  const swap = () => { const p = k; k = (k + 1) % SEATS.length;
+    win.classList.remove(SEATS[p][3]); win.classList.add(SEATS[k][3]); gfx[p].classList.remove('on'); gfx[k].classList.add('on');
+    if (window.GABOJA_CHAR_PLAY) GABOJA_CHAR_PLAY(gfx[k]);   // 열리기 전에 등장 동작을 미리 끝내 둠(열릴 때 캐릭터는 이미 보임)
+    requestAnimationFrame(() => requestAnimationFrame(() => { win.style.setProperty('--sh', .16); win.classList.remove('dim'); lbls[k].classList.add('on'); cycleT = setTimeout(close, 5900); })); };
+  cycleT = setTimeout(close, 4000); }
+/* 제목 한 줄: 넘치면 글자만 줄임(영어판 넓은 글꼴 대비, 최소 26px) */
+const hl = document.querySelector('.hl');
+const fitHl = () => { hl.style.whiteSpace = 'nowrap'; hl.style.fontSize = ''; let f = parseFloat(getComputedStyle(hl).fontSize); while (hl.scrollWidth > hl.clientWidth + 1 && f > 26) { f -= 1; hl.style.fontSize = f + 'px'; } };
+const legal = document.getElementById('legal'), topRow = document.querySelector('.top');
+const baseOf = el => { const m = document.createElement('span'); m.style.cssText = 'display:inline-block;width:0;height:0;vertical-align:baseline'; el.appendChild(m); const y = m.getBoundingClientRect().top; m.remove(); return y; };
+const alignLegal = () => { const sc = stage.getBoundingClientRect().width / (stage.offsetWidth || 1) || 1, a = legal.querySelector('a'); legal.style.removeProperty('--lgb');
+  const d = (baseOf(document.querySelector('.top .vz')) - baseOf(a)) / sc; const cur = parseFloat(getComputedStyle(legal).bottom) || 0; legal.style.setProperty('--lgb', (cur - d).toFixed(1) + 'px'); };
+const alignLang = () => { const l = document.getElementById('lang'); l.style.removeProperty('--lgy'); if (MODE !== 'pc') return; const sc = stage.getBoundingClientRect().width / (stage.offsetWidth || 1) || 1;
+  const dy = (baseOf(document.querySelector('.top .vz')) - l.getBoundingClientRect().bottom) / sc; l.style.setProperty('--lgy', dy.toFixed(1) + 'px'); };
+/* PC: 글 묶음 아래 끝 = 언어 토글 윗선 (토글 크기·위치가 바뀌면 같이 따라감) */
+const tx = document.querySelector('.tx');
+const alignText = () => { tx.style.bottom = ''; if (MODE !== 'pc') return; const sc = stage.getBoundingClientRect().width / (stage.offsetWidth || 1) || 1, st = stage.getBoundingClientRect();
+  const top = (document.getElementById('lang').getBoundingClientRect().top - st.top) / sc; tx.style.bottom = (900 - top).toFixed(1) + 'px'; };
+const all = () => { if (pick() !== MODE) build(); fit(); fitHl(); alignLang(); alignText(); alignLegal(); layout(); tick(performance.now()); };
+paintLang(); build(); all(); if (!REDUCED) requestAnimationFrame(tick);
+let rq = 0; addEventListener('resize', () => { cancelAnimationFrame(rq); rq = requestAnimationFrame(all); });
+const onScheme = e => { if (QT === 'dark' || QT === 'light') return; DK = e.matches; setTheme(DK ? 'dark' : 'light'); build(); all(); };
+if (MQ.addEventListener) MQ.addEventListener('change', onScheme); else if (MQ.addListener) MQ.addListener(onScheme);
+if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => { fitHl(); alignLang(); alignText(); alignLegal(); layout(); });
+})();
+</script>
+<script>
+/* ===== 11/26 2주차 출시 알림 신청 (동우님 보드 q6 L1 · q7 확인 메일) — 이메일만 받음 · 동의 두 칸 · 서버 /alert(D1) ===== */
+(() => {
+  const OPEN = Date.UTC(2026, 11, 24, 15), lg = () => window.VZTR_LANG || 'ko', isEN = () => lg() !== 'ko';   // 11/26 다국어: isEN = 번역판(글은 LS[언어] → 없으면 영어)   // 11/26 밤 언어는 그 자리에서 바뀜 → 늘 지금 언어로   // 2026-12-25 00:00 KST부터 숨김
+  if (window.vztrHit) vztrHit('land');
+  /* 11/26 밤 이 기기에 만든 일정이 있으면(써 본 사람) 알림 줄 자리에 '내 일정 이어보기' → /trip */
+  try { const pl = JSON.parse(localStorage.getItem('gaboja-plan') || 'null'); if (pl && Array.isArray(pl.days) && pl.days.length) { document.getElementById('myTrip').hidden = false; return; } } catch (_) {}
+  const btn = document.getElementById('alBtn'); if (!btn || Date.now() >= OPEN) return;
+  const LS = { en: { b: 'Get notified when we launch Dec 25 ›', h: 'Launch alert for Dec 25', s: 'We’ll send you one email on the day we open.', ph: 'Email address',
+      a1: 'Consent to collect and use personal information', a1s: 'Email address · to send the launch alert · deleted within 7 days after sending', a1n: 'Without consent we can’t send the alert. ', pv: 'Privacy policy',
+      a2: 'Receive the launch alert email (advertising)', a2s: 'One email about the VZTR launch · unsubscribe from the link in the email', go: 'Notify me', req: 'Required', bad: 'Check your email address.', err: 'Couldn’t sign you up. Please try again shortly.', off: 'Sign-up works on vztr.app only.',
+      ok: 'You’re on the list', okS: 'We sent a confirmation email. See you on December 25.', close: 'Close' },
+    ko: { b: '12월 25일 정식 오픈 알림 받기 ›', h: '12월 25일 정식 오픈 알림', s: '문을 여는 날 메일 한 통만 보내 드려요.', ph: '이메일 주소',
+      a1: '개인정보 수집·이용 동의', a1s: '이메일 주소 · 오픈 알림 발송 · 보낸 뒤 7일 안에 삭제', a1n: '동의하지 않으면 알림을 받을 수 없어요. ', pv: '처리방침 보기',
+      a2: '오픈 알림(광고성 정보) 메일 받기', a2s: 'VZTR 정식 오픈 소식 1통 · 수신 거부는 메일 아래 링크로', go: '알림 받기', req: '필수', bad: '이메일 주소를 확인해 주세요.', err: '신청하지 못했어요. 잠시 후 다시 시도해 주세요.', off: '신청은 vztr.app에서만 돼요.',
+      ok: '신청됐어요', okS: '확인 메일을 보냈어요. 12월 25일에 만나요.', close: '닫기' },
+    ja: { b: '12月25日の正式オープン通知を受け取る ›', h: '12月25日 正式オープンのお知らせ', s: 'オープン当日に、メールを1通だけお送りします。', ph: 'メールアドレス',
+      a1: '個人情報の収集・利用への同意', a1s: 'メールアドレス · オープンのお知らせ送信 · 送信後7日以内に削除', a1n: '同意いただけない場合、お知らせは届きません。', pv: 'プライバシーポリシーを見る',
+      a2: 'オープンのお知らせ（広告）メールを受け取る', a2s: 'VZTR正式オープンのお知らせ1通 · 配信停止はメール下部のリンクから', go: 'お知らせを受け取る', req: '必須', bad: 'メールアドレスをご確認ください。', err: '申し込めませんでした。しばらくしてからもう一度お試しください。', off: 'お申し込みはvztr.appでのみできます。',
+      ok: 'お申し込みが完了しました', okS: '確認メールをお送りしました。12月25日にお会いしましょう。', close: '閉じる' },
+    'zh-hans': { b: '12月25日正式上线，提醒我 ›', h: '12月25日正式上线提醒', s: '上线当天只发一封邮件。', ph: '邮箱地址',
+      a1: '同意收集和使用个人信息', a1s: '邮箱地址 · 用于发送上线提醒 · 发送后7天内删除', a1n: '不同意就无法收到提醒。', pv: '查看隐私政策',
+      a2: '接收上线提醒邮件（广告信息）', a2s: 'VZTR正式上线消息1封 · 可通过邮件底部链接退订', go: '提醒我', req: '必选', bad: '请检查邮箱地址。', err: '没能提交，请稍后再试。', off: '只能在vztr.app提交。',
+      ok: '已登记', okS: '确认邮件已发送。12月25日见。', close: '关闭' },
+    'zh-hant': { b: '12月25日正式上線，提醒我 ›', h: '12月25日正式上線提醒', s: '上線當天只寄一封信。', ph: '電子郵件地址',
+      a1: '同意蒐集及使用個人資料', a1s: '電子郵件地址 · 用於寄送上線提醒 · 寄出後7天內刪除', a1n: '不同意就無法收到提醒。', pv: '查看隱私權政策',
+      a2: '接收上線提醒信（廣告資訊）', a2s: 'VZTR正式上線消息1封 · 可從信件底部連結取消訂閱', go: '提醒我', req: '必填', bad: '請確認電子郵件地址。', err: '沒能送出，請稍後再試。', off: '只能在vztr.app送出。',
+      ok: '已登記', okS: '確認信已寄出。12月25日見。', close: '關閉' } };
+  const LSof = () => LS[lg()] || (isEN() ? LS.en : LS.ko);
+  let L = LSof();
+  btn.textContent = L.b; btn.hidden = false;
+  const RE = /^[^\s@<>"',;]+@[^\s@<>"',;]+\.[^\s@<>"',;]{2,}$/, PV = ((window.VZTR_LEGAL || {}).v || {}).privacy || '';
+  const ck = '<span class="ck" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M6 12.5l4 4 8-8.5"/></svg></span>';
+  const sc = document.createElement('div'); sc.className = 'alsc'; sc.hidden = true;
+  const sh = document.createElement('div'); sh.className = 'alsh'; sh.hidden = true; sh.setAttribute('role', 'dialog'); sh.setAttribute('aria-modal', 'true'); sh.setAttribute('aria-labelledby', 'alH'); sh.setAttribute('data-noi18n', '');
+  let mkLang = '', done = false;
+  const $ = id => document.getElementById(id);
+  let E, A1, A2, GO, M;
+  const valid = () => RE.test(E.value.trim()) && A1.checked && A2.checked, upd = () => { GO.disabled = !valid(); };
+  const mk = () => { mkLang = lg(); const priv = isEN() ? '../privacy#' + mkLang : 'privacy';
+    sh.innerHTML = `<button type="button" class="x" id="alX" aria-label="${L.close}">×</button><form id="alF" novalidate><h2 id="alH">${L.h}</h2><p class="s">${L.s}</p>
+      <input type="email" id="alE" name="email" autocomplete="email" inputmode="email" placeholder="${L.ph}" aria-label="${L.ph}" maxlength="120" required>
+      <label class="ag"><input type="checkbox" id="alA1">${ck}<div><em>${L.req}</em>${L.a1}<small>${L.a1s}<br>${L.a1n}<a href="${priv}" target="_blank" rel="noopener">${L.pv}</a></small></div></label>
+      <label class="ag"><input type="checkbox" id="alA2">${ck}<div><em>${L.req}</em>${L.a2}<small>${L.a2s}</small></div></label>
+      <button type="submit" class="go" id="alGo" disabled>${L.go}</button><p class="msg" id="alM" aria-live="polite"></p></form>`;
+    E = $('alE'); A1 = $('alA1'); A2 = $('alA2'); GO = $('alGo'); M = $('alM');
+    [E, A1, A2].forEach(el => el.addEventListener('input', () => { E.classList.remove('bad'); M.textContent = ''; upd(); }));
+    $('alX').addEventListener('click', close); $('alF').addEventListener('submit', submit); };
+  document.body.append(sc, sh);
+  let last = null, hideT = 0;
+  const shell = document.querySelector('.shell');
+  const open = () => { if (!done && mkLang !== lg()) mk(); clearTimeout(hideT); last = document.activeElement; if (shell) shell.inert = true; sc.hidden = sh.hidden = false; void sh.offsetWidth; sc.classList.add('on'); sh.classList.add('on'); setTimeout(() => E.focus({ preventScroll: true }), 280); };
+  const close = () => { if (sh.hidden) return; sc.classList.remove('on'); sh.classList.remove('on'); if (shell) shell.inert = false; hideT = setTimeout(() => { sc.hidden = sh.hidden = true; }, 300); if (last) last.focus({ preventScroll: true }); };
+  btn.addEventListener('click', open); sc.addEventListener('click', close);
+  document.addEventListener('vztr-lang', () => { L = LSof(); btn.textContent = L.b; });
+  document.addEventListener('keydown', e => { if (sh.hidden || !sh.classList.contains('on')) return; if (e.key === 'Escape') close();
+    if (e.key === 'Tab') { const f = [...sh.querySelectorAll('button:not([disabled]),input,a[href]')].filter(x => x.offsetParent); const a = f[0], z = f[f.length - 1];
+      if (e.shiftKey && document.activeElement === a) { e.preventDefault(); z.focus(); } else if (!e.shiftKey && document.activeElement === z) { e.preventDefault(); a.focus(); } } });
+  async function submit(e) { e.preventDefault();
+    if (!RE.test(E.value.trim())) { E.classList.add('bad'); M.textContent = L.bad; return; }
+    if (!valid()) return;
+    if (!/^(www\.)?vztr\.app$/.test(location.hostname)) { M.textContent = L.off; return; }   // 미리보기·검수(localhost)는 실제 신청 안 함
+    GO.disabled = true; M.className = 'msg'; M.textContent = '';
+    try { const r = await fetch('/alert', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ email: E.value.trim(), lang: mkLang, pv: PV, ok: 1 }) }), j = await r.json();
+      if (!j.ok) throw new Error(j.e || 'x');
+      if (window.vztrHit) vztrHit('alert');
+      $('alF').innerHTML = `<div class="done" tabindex="-1" id="alOk"><b>${L.ok}</b><span>${L.okS}</span></div>`; $('alOk').focus(); btn.hidden = true; done = true;
+    } catch (err) { M.textContent = String(err && err.message) === 'input' ? L.bad : L.err; upd(); }
+  }
+})();
+</script>
+</body>
+</html>
