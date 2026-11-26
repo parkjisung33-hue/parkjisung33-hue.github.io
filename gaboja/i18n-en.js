@@ -249,7 +249,7 @@ Object.assign(window.VZTR_EN, {
   '공항 도착': 'At airport', '역 도착': 'At station',
   '출발 {n}. {m}': 'Dep {n}/{m}',
   '여권·지갑·충전기 확인': 'Passport · wallet · charger', '신분증·지갑·충전기 확인': 'ID · wallet · charger', '승차권·지갑·충전기 확인': 'Ticket · wallet · charger',
-  '와나카 영업시간이 자료마다 달라요 · 전날 전화로 확인': 'Wanaka hours vary · call ahead', '영업시간이 자료마다 달라요 · 전날 전화로 확인': 'Hours vary by source · call ahead',
+  '와나카 영업시간이 자료마다 달라요 · 전날 전화로 확인': 'Wanaka hours vary · call ahead', '와나카 영업시간은 전날 전화로 확인': 'Call Wanaka ahead to confirm hours', '영업시간이 자료마다 달라요 · 전날 전화로 확인': 'Hours vary by source · call ahead',
   '비행기 시각을 넣으면 그날 시간이 정해져요': 'Add flight time to set the day', '비행기 시각을 넣으면 시간표가 완성돼요': 'Add flight time to finish the plan',
   '비행기 시각을 넣으면 일정을 추가할 수 있어요': 'Add flight time to add stops', '이동 시각을 넣으면 일정을 추가할 수 있어요': 'Add travel time to add stops',
 });

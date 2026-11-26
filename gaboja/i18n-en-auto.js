@@ -8638,6 +8638,11 @@ window.VZTR_EN_PLACES = {
 "short": "Mandarake Fukuoka",
 "conf": "manual"
 },
+"fuk-mandaudon-yakuin": {
+"en": "Manda Udon Yakuin",
+"short": "Manda Udon",
+"conf": "manual"
+},
 "fuk-megane": {
 "en": "megane coffee & spirits",
 "short": "megane coffee & spirits",
