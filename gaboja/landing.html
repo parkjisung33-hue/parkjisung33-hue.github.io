@@ -83,12 +83,18 @@ html.ph .ctas { align-items: stretch; } html.ph .cta { width: 100%; } html.ph .g
 .seat .win { position: relative; width: 280px; }
 .seat b, .solo b { font: 700 16px/1 var(--krb); color: var(--ink); } .seat small, .solo small { font: 600 12px/1 var(--lat); color: var(--sb); letter-spacing: .08em; }
 .solo { position: absolute; left: 0; right: 0; top: 30px; display: grid; justify-items: center; gap: 14px; }
-.solo .stack { position: relative; width: 290px; aspect-ratio: 300 / 420; }   /* 11/26: 창 두 장 겹침 — 다음 성향은 뒤 창에서 닫힌 채 미리 준비 */
+/* 11/26 밤 번쩍임 고침(동우님 실기기: 닫힌 뒤·다 열렸을 때·글자까지 번쩍) — 원인 = 바꾸는 순간마다 그림 층이 새로 생기고 없어짐
+   (창 앞뒤 바꾸기 · 캐릭터 통째로 다시 그리기 · 이름 글 바꾸기 · 빛 전환이 끝날 때 층 해제) → 겹친 글자 층까지 다시 그려짐.
+   → 창 하나 · 캐릭터 넷과 이름 넷을 처음에 다 그려 두고 '보이기'만 바꿈 · 움직이는 것은 처음부터 끝까지 자기 층 유지(will-change) */
+.solo .stack { position: relative; width: 290px; aspect-ratio: 300 / 420; }
 .solo .stack .win { position: absolute; inset: 0; width: 100%; }
-.win.nofx, .win.nofx * { transition: none !important; }
-.solo .lbl { display: grid; justify-items: center; gap: 6px; transition: opacity 1.2s ease 1.2s; }
-.solo .lbl.fade { opacity: 0; transition: opacity .6s ease; }
+.solo .lbls { display: grid; }
+.solo .lbl { grid-area: 1 / 1; display: grid; justify-items: center; gap: 6px; opacity: 0; transition: opacity .6s ease; will-change: opacity; }
+.solo .lbl.on { opacity: 1; transition: opacity 1.2s ease 1.2s; }
 .solo b { font-size: 18px; }
+html.ph .stage, html.ph .tx, html.ph .top { will-change: transform; }   /* 글자 묶음 = 늘 자기 층(옆 층이 생기고 없어져도 다시 안 그려짐) */
+html.ph .win > .halo { will-change: opacity; }
+.chw .gfx { grid-area: 1 / 1; visibility: hidden; } .chw .gfx.on { visibility: visible; }
 
 /* ===== 비행기 창: 벽에 번진 빛 → 창 가장자리 선 → 안쪽 몰딩 → 얇은 선 → 유리 · 위 = 가리개 상자 + 가리개(손잡이 홈). 창 폭 : 높이 = 300 : 420 ===== */
 .win { position: absolute; aspect-ratio: 300 / 420; container-type: inline-size;
@@ -131,7 +137,7 @@ html.ph .win:not(.dk) > .halo::after { box-shadow: 0 0 30cqw 2cqw color-mix(in s
 .glass .stars i { position: absolute; width: 1.2cqw; height: 1.2cqw; border-radius: 50%; background: #fff; opacity: .75; }
 .glass .sky-cl { position: absolute; left: 0; top: 0; height: 100%; will-change: transform; }
 .glass .sky-cl svg { display: block; height: 100%; }
-.chw { position: absolute; left: 19%; bottom: 13%; width: 62%; animation: bob 3.4s ease-in-out infinite; z-index: 2; }   /* 가운데 = (100 - 62) / 2. transform을 쓰면 chars.js 반복 이펙트가 덮어써 오른쪽으로 밀림(실측 48px) */
+.chw { position: absolute; left: 19%; bottom: 13%; width: 62%; display: grid; align-items: end; animation: bob 3.4s ease-in-out infinite; z-index: 2; will-change: translate; }   /* 가운데 = (100 - 62) / 2. transform을 쓰면 chars.js 반복 이펙트가 덮어써 오른쪽으로 밀림(실측 48px) */
 .chw svg { width: 100%; height: auto; display: block; overflow: visible; }
 .win.dk .chw { filter: drop-shadow(0 0 3cqw rgba(255,255,255,.25)); }
 @keyframes bob { 0%, 100% { translate: 0 0; } 50% { translate: 0 -4%; } }
@@ -194,8 +200,11 @@ const CLOUDS = (seed, L, H, far, dark) => { const r = rng(seed); let out = ''; c
   return `<svg viewBox="0 0 ${L * 2} ${H}" width="${L * 2}" height="${H}" preserveAspectRatio="none">${out}<g transform="translate(${L} 0)">${out}</g></svg>`; };
 const SKYL = dk => `${dk ? '<div class="stars">' + Array.from({ length: 14 }, (_, i) => `<i style="left:${(i * 41) % 92 + 4}%;top:${(i * 29) % 34 + 6}%;opacity:${.4 + (i % 3) * .2}"></i>`).join('') + '</div>' : ''}<div class="sky-cl far" data-v="14"></div><div class="sky-cl near" data-v="34"></div>`;
 const SEATS = [['LSRP', '로컬 탐험형', 'L · S', 'ls'], ['LEFJ', '취향 수집형', 'L · E', 'le'], ['HSRJ', '명소 정복형', 'H · S', 'hs'], ['HERP', '힐링 충전형', 'H · E', 'he']];
-const CH = (k, i) => `<div class="chw gfx" data-c="${k}" data-fxd="${i * 500}" style="animation-delay:${-i * .85}s">${window.GABOJA_CHAR ? GABOJA_CHAR(k, { bg: false }) : ''}</div>`;
+/* 캐릭터 칸: .chw(둥실 움직임) 안에 .gfx(chars.js 등장·반복 이펙트). 폰은 넷을 다 넣어 두고 .on 하나만 보임 */
+const GFX = (k, i, on) => `<div class="gfx${on ? ' on' : ''}" data-c="${k}" data-fxd="${i * 500}">${window.GABOJA_CHAR ? GABOJA_CHAR(k, { bg: false }) : ''}</div>`;
+const CH = (k, i) => `<div class="chw" style="animation-delay:${-i * .85}s">${GFX(k, i, true)}</div>`;
 const SEATWIN = (s, i) => WIN({ cls: (DK ? 'dk ' : '') + s[3], inner: SKYL(DK) + CH(s[0], i) });
+const SOLOWIN = () => WIN({ cls: (DK ? 'dk ' : '') + SEATS[0][3], inner: SKYL(DK) + `<div class="chw">${SEATS.map((s, i) => GFX(s[0], 0, i === 0)).join('')}</div>` });
 /* 화면: PC(가로가 넓을 때) = 창 넷 · 폰(좁거나 세로로 길 때) = 창 하나가 닫혔다 열리며 성향이 바뀜 */
 const stage = document.getElementById('stage'), wins = document.getElementById('wins');
 let MODE = '', cycleT = 0;
@@ -204,7 +213,7 @@ const build = () => { MODE = pick(); document.documentElement.classList.toggle('
   clearTimeout(cycleT);
   wins.innerHTML = MODE === 'pc'
     ? `<div class="seats" data-sky>${SEATS.map((s, i) => `<div class="seat">${SEATWIN(s, i)}<b>${s[1]}</b><small>${s[2]}</small></div>`).join('')}</div>`
-    : `<div class="solo" data-sky><div class="stack">${SEATWIN(SEATS[0], 0)}${SEATWIN(SEATS[1], 1)}</div><div class="lbl"><b>${SEATS[0][1]}</b><small>${SEATS[0][2]}</small></div></div>`;
+    : `<div class="solo" data-sky><div class="stack">${SOLOWIN()}</div><div class="lbls">${SEATS.map((s, i) => `<div class="lbl${i === 0 ? ' on' : ''}"><b>${s[1]}</b><small>${s[2]}</small></div>`).join('')}</div></div>`;
   if (MODE === 'ph') startCycle(); };
 const fit = () => { const vw = innerWidth, vh = innerHeight;
   if (MODE === 'pc') { const s = Math.min(vw / 1440, vh / 900); stage.style.transform = `translate(${((vw - 1440 * s) / 2).toFixed(1)}px, ${((vh - 900 * s) / 2).toFixed(1)}px) scale(${s})`; return; }
@@ -221,22 +230,15 @@ const layout = () => { LAYERS.length = 0; const grp = wins.querySelector('[data-
     g.querySelectorAll('.sky-cl').forEach(el => { const far = el.classList.contains('far'); if (el.dataset.h !== String(H)) { el.innerHTML = CLOUDS(far ? 11 : 29, L, H, far, DK); el.dataset.h = H; } LAYERS.push({ el, gx, L, v: +el.dataset.v }); }); }); };
 const T0 = performance.now();
 const tick = now => { const t = (now - T0) / 1000; LAYERS.forEach(o => { o.el.style.transform = `translateX(${(-((o.gx + t * o.v) % o.L)).toFixed(1)}px)`; }); if (!REDUCED) requestAnimationFrame(tick); };
-/* 폰: 열린 채 4초 → 닫힘 1.9초(빛 꺼짐, 이름은 거의 닫혔을 때 사라짐) → 닫힌 채 1.2초 → 다음 성향으로 바꿔 열림(빛은 늦게 차오름) */
-function startCycle() { const box = wins.querySelector('.solo'), [wa, wb] = box.querySelectorAll('.win'), lbl = box.querySelector('.lbl'); let k = 0;
-  /* 11/26 글리치 없애기: 보이는 창은 닫힌 동안 아무것도 안 바꿈. 다음 성향은 뒤 창에 미리(닫힘·빛 꺼짐) 그려 두고,
-     두 창이 똑같이 닫혔을 때 앞뒤 순서만 바꾼 뒤 연다 → 색·캐릭터가 바뀌는 순간이 화면에 나올 일이 없음 */
-  let front = wa, back = wb;
-  back.classList.add('nofx', 'dim'); back.style.setProperty('--sh', 1.02); front.style.zIndex = 2; back.style.zIndex = 1;
-  requestAnimationFrame(() => requestAnimationFrame(() => back.classList.remove('nofx')));
+/* 폰: 열린 채 4초 → 닫힘 1.9초(빛 꺼짐, 이름은 거의 닫혔을 때 사라짐) → 닫힌 채 1.2초 → 다음 성향으로 바꿔 열림(빛은 늦게 차오름)
+   11/26 밤: 창 하나. 다 닫혀 가리개가 창 전체를 덮은 동안(빛도 꺼진 뒤)에만 색 이름표·캐릭터 '보이기'를 바꿈 — 새로 그리는 것 없음 */
+function startCycle() { const box = wins.querySelector('.solo'), win = box.querySelector('.win'), gfx = [...win.querySelectorAll('.chw .gfx')], lbls = [...box.querySelectorAll('.lbl')]; let k = 0;
   if (REDUCED) return;
-  const prep = (w, s) => { w.classList.add('nofx'); ['ls', 'le', 'hs', 'he'].forEach(c => w.classList.remove(c)); w.classList.add(s[3]); w.querySelector('.chw').outerHTML = CH(s[0], 0);
-    requestAnimationFrame(() => requestAnimationFrame(() => w.classList.remove('nofx'))); };
-  const close = () => { front.classList.add('dim'); front.style.setProperty('--sh', 1.02); setTimeout(() => lbl.classList.add('fade'), 1300); cycleT = setTimeout(swap, 3100); };
-  const swap = () => { k = (k + 1) % SEATS.length; const s = SEATS[k];
-    back.style.zIndex = 2; front.style.zIndex = 1; lbl.innerHTML = `<b>${s[1]}</b><small>${s[2]}</small>`;
-    const opened = back, hidden = front; front = opened; back = hidden;
-    requestAnimationFrame(() => requestAnimationFrame(() => { opened.style.setProperty('--sh', .16); opened.classList.remove('dim'); lbl.classList.remove('fade');
-      setTimeout(() => prep(hidden, SEATS[(k + 1) % SEATS.length]), 600); cycleT = setTimeout(close, 5900); })); };
+  const close = () => { win.classList.add('dim'); win.style.setProperty('--sh', 1.02); setTimeout(() => lbls[k].classList.remove('on'), 1300); cycleT = setTimeout(swap, 3100); };
+  const swap = () => { const p = k; k = (k + 1) % SEATS.length;
+    win.classList.remove(SEATS[p][3]); win.classList.add(SEATS[k][3]); gfx[p].classList.remove('on'); gfx[k].classList.add('on');
+    if (window.GABOJA_CHAR_PLAY) GABOJA_CHAR_PLAY(gfx[k]);   // 열리기 전에 등장 동작을 미리 끝내 둠(열릴 때 캐릭터는 이미 보임)
+    requestAnimationFrame(() => requestAnimationFrame(() => { win.style.setProperty('--sh', .16); win.classList.remove('dim'); lbls[k].classList.add('on'); cycleT = setTimeout(close, 5900); })); };
   cycleT = setTimeout(close, 4000); }
 /* 제목 한 줄: 넘치면 글자만 줄임(영어판 넓은 글꼴 대비, 최소 26px) */
 const hl = document.querySelector('.hl');
