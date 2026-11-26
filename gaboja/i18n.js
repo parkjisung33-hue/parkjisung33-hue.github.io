@@ -11,11 +11,12 @@
   window.VZTR_LANG = L; document.documentElement.lang = L;
   /* 11/23 동우님 '시스템 글꼴' 확정(시안 v2 fonts4.html 1순위): 영어판 영문 = 기기 글꼴(아이폰 SF Pro · 안드로이드는 기기 기본). 한글 원문 칸은 Pretendard 그대로. 로고 .vz(Inter Tight)는 안 바뀜 */
   /* 11/23 저녁: 아이폰·맥 = SF Pro(-apple-system·BlinkMacSystemFont는 Apple 기기만 알아들음) · 갤럭시·PC = Mona Sans(OFL, 시안 v3 fonts5.html 1순위). system-ui는 갤럭시도 알아들어 뺌. Mona는 쓰는 기기에서만 내려받음 */
-  if (EN) { var KRF = '"VZTR KR", "Pretendard Variable", Pretendard, "Apple SD Gothic Neo", "Malgun Gothic", sans-serif', SYS = '-apple-system, BlinkMacSystemFont, "Mona Sans", "Segoe UI", Roboto, Arial, ' + KRF;
+  function enFont() { if (document.getElementById('vztr-en-font')) return; var KRF = '"VZTR KR", "Pretendard Variable", Pretendard, "Apple SD Gothic Neo", "Malgun Gothic", sans-serif', SYS = '-apple-system, BlinkMacSystemFont, "Mona Sans", "Segoe UI", Roboto, Arial, ' + KRF;
     var mf = document.createElement('link'); mf.rel = 'stylesheet'; mf.href = 'fonts/google/mona.css?v=1';   /* 11/24 자체 호스팅 */ (document.head || document.documentElement).appendChild(mf);
     /* Mona Sans는 고정폭 숫자(tnum)의 0에 빗금 → Apple 기기가 아니면(= Mona를 쓰면) 숫자만 일반 숫자로. Apple은 SF Pro라 그대로 */
     if (!/iPhone|iPad|iPod|Macintosh/.test(navigator.userAgent)) document.documentElement.classList.add('vz-mona');
     var fs = document.createElement('style'); fs.id = 'vztr-en-font'; fs.textContent = 'html[lang="en"]{--kr:' + SYS + ';--kr-plain:' + SYS + ';--lat:' + SYS + ';--mono:' + SYS + '}html[lang="en"] .vzko,html[lang="en"] [lang="ko"]{font-family:' + KRF + '}html[lang="en"] .lfl .lb{display:none}html[lang="en"] #bdS{white-space:nowrap!important;overflow:hidden!important;text-overflow:clip!important;-webkit-line-clamp:unset!important}html[lang="en"] .code.k{white-space:normal!important;overflow:visible!important;text-overflow:clip!important;word-break:normal!important;overflow-wrap:normal!important;text-wrap:balance}html[lang="en"] .pass .place.pl1{flex-wrap:wrap;white-space:normal;column-gap:.25rem;row-gap:0}html[lang="en"] .pass .place.pl1 .pn{overflow:visible;text-overflow:clip}html[lang="en"] .nmc b{font-size:.9375rem}html[lang="en"] .ticket .nm,html[lang="en"] .pass .city,html[lang="en"] .rec2 b,html[lang="en"] .tile .n.one,html[lang="en"] .li .nm .one{overflow-wrap:normal;word-break:normal}html.vz-mona[lang="en"] body,html.vz-mona[lang="en"] body *{font-variant-numeric:lining-nums proportional-nums!important}'; (document.head || document.documentElement).appendChild(fs); }
+  if (EN) enFont();   // 11/27 함수로 뺌: 첫 페이지 언어 바로 바꾸기(landing.html)가 미리 불러 둠
   var bot = navigator.webdriver || /HeadlessChrome/.test(navigator.userAgent);
   function other() {   // 같은 화면의 다른 언어 주소
     var p = location.pathname;
@@ -30,7 +31,7 @@
   } catch (_) {}
   function go() { try { localStorage.setItem(KEY, EN ? 'ko' : 'en'); } catch (_) {} location.href = other(); }
 
-  var API = window.VZTR_I18N = { lang: L, en: EN, other: other, go: go, miss: new Map(), log: /[?&]vzlog=1/.test(location.search) ? {} : null, list: function () { return Array.from(API.miss.keys()); } };
+  var API = window.VZTR_I18N = { lang: L, en: EN, other: other, go: go, enFont: enFont, miss: new Map(), log: /[?&]vzlog=1/.test(location.search) ? {} : null, list: function () { return Array.from(API.miss.keys()); } };
   window.T = function (s) { return s; };   // 코드에서 쓰는 번역(한국어판 = 그대로)
 
   /* 머리 언어 전환 — start.html: header.bar 오른쪽 / index.html: 맨 위 상자(.pill) 메뉴 옆 */

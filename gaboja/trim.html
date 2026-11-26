@@ -3758,7 +3758,7 @@ function swapTrip(id) {
   layerOn = false; try { history.replaceState(null, ''); } catch (_) {}
   location.reload();
 }
-function goNewTrip() { layerOn = false; try { history.replaceState(null, ''); } catch (_) {} location.href = 'test?from=app'; }
+function goNewTrip() { layerOn = false; try { history.replaceState(null, ''); } catch (_) {} location.href = 'test?from=app&go=new'; }   // 11/27 옛 첫 화면 대신 바로 새 여행(유형 있으면 일정 방식부터)
 function newTripSheet() {   // 바로 이동하지 않고: 지금 여행은 목록에 보관된다고 알린 뒤 [새로 만들기] [취소]
   const p = rawPlan(); if (!p) { goNewTrip(); return; }
   openSheet('<div class="shd"><div><h3 id="sheetTitle">새 여행을 만들까요?</h3></div>' + X_BTN + '</div><div class="body"><div><p class="sub one">지금 여행은 내 여행 목록에 보관돼요</p><p class="cfm one">' + esc(planCity(p) + ' · ' + planDates(p)) + '</p></div>'

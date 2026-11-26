@@ -205,7 +205,7 @@ html.pc .alsh { bottom: 50%; border-radius: 24px; transform: translate(-50%, 50%
 </head>
 <body>
 <div class="vp" aria-hidden="true"><i class="ceil"></i><i class="side"></i><i class="flr"></i></div>
-<div class="shell"><main class="stage" id="stage">
+<div class="shell" data-noi18n><main class="stage" id="stage">
   <div id="wins" aria-hidden="true"></div>
   <div class="tx">
     <h1 class="hl">이번 여행, 나답게.</h1>
@@ -221,7 +221,7 @@ html.pc .alsh { bottom: 50%; border-radius: 24px; transform: translate(-50%, 50%
 <script src="chars.js?v=fit3"></script>
 <script>
 (() => {
-const EN = window.VZTR_LANG === 'en';
+let EN = window.VZTR_LANG === 'en';
 /* 테마: 기기 시스템 모드를 따름(바뀌면 바로 따라감) · ?theme= 미리보기 */
 const setTheme = t => { if (t === 'dark') document.documentElement.setAttribute('data-theme', 'dark'); else document.documentElement.removeAttribute('data-theme');
   const m = document.querySelector('meta[name="theme-color"]'); if (m) m.content = t === 'dark' ? '#1B1622' : '#F8F8FA'; };
@@ -229,11 +229,40 @@ const MQ = matchMedia('(prefers-color-scheme: dark)');
 let QT = ''; try { QT = new URLSearchParams(location.search).get('theme') || ''; } catch (_) {}
 let DK = QT === 'dark' || QT === 'light' ? QT === 'dark' : MQ.matches;
 setTheme(DK ? 'dark' : 'light');
-/* 언어 토글 · 약관(영어판은 한 단계 위의 문서 + #en) */
-const lang = document.getElementById('lang'), other = () => (window.VZTR_I18N ? VZTR_I18N.other() : (EN ? '../' : 'en/'));
-lang.innerHTML = EN ? `<a href="${other()}" hreflang="ko" lang="ko">한국어</a><b aria-current="true">English</b>` : `<b aria-current="true">한국어</b><a href="${other()}" hreflang="en" lang="en">English</a>`;
-lang.querySelector('a').addEventListener('click', e => { if (window.VZTR_I18N) { e.preventDefault(); VZTR_I18N.go(); } });
-if (EN) document.querySelectorAll('#legal a').forEach(a => { a.href = '../' + a.getAttribute('href') + '#en'; });
+/* 언어 — 11/27 동우님 '누르자마자 바뀌게': 페이지를 다시 불러오지 않고 그 자리에서 글자만 바꿈 + 주소(/ ↔ /en/)는 history로.
+   이 페이지 글은 여기 표(LD)로 직접 바꿈(.shell = data-noi18n, 영어판도 큰 번역 사전 i18n-en*.js를 안 불러옴 → 첫 로딩도 가벼움).
+   영어 글꼴(i18n.js enFont)은 한가할 때 미리 불러 둠 → 바꿀 때 글꼴이 늦게 바뀌는 깜빡임 없음 */
+const LD = { '이번 여행, 나답게.': 'Pack your personality.', '내 자리는 어디일까?': 'Which seat is yours?', '내 유형 알아보기': 'Find your type', '여행 성향들 둘러보기': 'Browse travel types',
+  '내 일정 이어보기 ›': 'Back to my trip ›', '개인정보처리방침': 'Privacy Policy', '이용약관': 'Terms of Use', '언어': 'Language',
+  '로컬 탐험형': 'Explorers', '취향 수집형': 'Curators', '명소 정복형': 'Sightseers', '힐링 충전형': 'Rechargers' };
+const tr = k => (EN ? LD[k] || k : k);
+const TXT = [...document.querySelectorAll('.tx .hl, .tx .q, .ctas .cta, .ctas .gh, #myTrip, #legal a')].map(el => [el, el.textContent]);
+const lang = document.getElementById('lang');
+const pathFor = en => { const p = location.pathname; if (!en) return p.replace(/\/en\//, '/'); if (/\/en\//.test(p)) return p; const i = p.lastIndexOf('/'); return p.slice(0, i + 1) + 'en/' + p.slice(i + 1); };
+const paintLang = () => {
+  document.documentElement.lang = EN ? 'en' : 'ko'; window.VZTR_LANG = EN ? 'en' : 'ko';
+  document.title = EN ? 'VZTR — Pack your personality.' : 'VZTR — 이번 여행, 나답게.';
+  TXT.forEach(([el, ko]) => { el.textContent = tr(ko); });
+  document.querySelectorAll('#legal a').forEach(a => { const d = /terms/.test(a.getAttribute('href')) ? 'terms' : 'privacy'; a.href = EN ? '../' + d + '#en' : d; });   // 영어판 = 한 단계 위 문서 + #en
+  lang.setAttribute('aria-label', tr('언어'));
+  lang.innerHTML = EN ? `<a href="${pathFor(false)}" hreflang="ko" lang="ko">한국어</a><b aria-current="true">English</b>` : `<b aria-current="true">한국어</b><a href="${pathFor(true)}" hreflang="en" lang="en">English</a>`;
+  document.querySelectorAll('.seat > b, .lbl > b').forEach((b, i) => { b.textContent = tr(SEATS[i % SEATS.length][1]); });
+  document.dispatchEvent(new Event('vztr-lang'));
+};
+const FADE = [...document.querySelectorAll('.tx, #legal, #lang')];
+const switchLang = () => {
+  EN = !EN; try { localStorage.setItem('vztr-lang', EN ? 'en' : 'ko'); } catch (_) {}
+  if (EN && window.VZTR_I18N && VZTR_I18N.enFont) VZTR_I18N.enFont();
+  try { history.replaceState(history.state, '', pathFor(EN) + location.search + location.hash); } catch (_) {}
+  const run = () => { paintLang(); fitHl(); alignLang(); alignText(); alignLegal(); };
+  if (REDUCED || !FADE[0].animate) { run(); return; }
+  FADE.forEach(el => el.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 90, easing: 'ease-in', fill: 'forwards' }));
+  setTimeout(() => { run(); FADE.forEach(el => { el.getAnimations().forEach(x => x.cancel()); el.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 160, easing: 'ease-out' }); }); }, 90);
+};
+lang.addEventListener('click', e => { const a = e.target.closest('a'); if (!a) return; e.preventDefault(); switchLang(); });
+/* 영어 글꼴 미리: 한국어로 보는 중이면 한가할 때 CSS + (애플 기기가 아니면) Mona Sans를 받아 둠 */
+const warm = () => { if (!window.VZTR_I18N || !VZTR_I18N.enFont) return; VZTR_I18N.enFont(); if (document.fonts && !/iPhone|iPad|iPod|Macintosh/.test(navigator.userAgent)) setTimeout(() => { document.fonts.load('600 16px "Mona Sans"').catch(() => {}); document.fonts.load('700 16px "Mona Sans"').catch(() => {}); }, 300); };
+if (!EN) (window.requestIdleCallback || (f => setTimeout(f, 1200)))(warm);
 /* 창 그림 */
 const rr = (x, y, w, h, rx, ry) => `M${x + rx},${y} H${x + w - rx} A${rx},${ry} 0 0 1 ${x + w},${y + ry} V${y + h - ry} A${rx},${ry} 0 0 1 ${x + w - rx},${y + h} H${x + rx} A${rx},${ry} 0 0 1 ${x},${y + h - ry} V${y + ry} A${rx},${ry} 0 0 1 ${x + rx},${y} Z`;
 const OP = rr(0, 0, 300, 420, 150, 134), GL = rr(24, 22, 252, 364, 126, 116), LP = rr(19, 17, 262, 375, 131, 121);
@@ -271,8 +300,8 @@ const pick = () => (innerWidth < 760 || innerWidth / innerHeight < .78 ? 'ph' : 
 const build = () => { MODE = pick(); document.documentElement.classList.toggle('pc', MODE === 'pc'); document.documentElement.classList.toggle('ph', MODE === 'ph');
   clearTimeout(cycleT);
   wins.innerHTML = MODE === 'pc'
-    ? `<div class="seats" data-sky>${SEATS.map((s, i) => `<div class="seat">${SEATWIN(s, i)}<b>${s[1]}</b><small>${s[2]}</small></div>`).join('')}</div>`
-    : `<div class="solo" data-sky><div class="stack">${SOLOWIN()}</div><div class="lbls">${SEATS.map((s, i) => `<div class="lbl${i === 0 ? ' on' : ''}"><b>${s[1]}</b><small>${s[2]}</small></div>`).join('')}</div></div>`;
+    ? `<div class="seats" data-sky>${SEATS.map((s, i) => `<div class="seat">${SEATWIN(s, i)}<b>${tr(s[1])}</b><small>${s[2]}</small></div>`).join('')}</div>`
+    : `<div class="solo" data-sky><div class="stack">${SOLOWIN()}</div><div class="lbls">${SEATS.map((s, i) => `<div class="lbl${i === 0 ? ' on' : ''}"><b>${tr(s[1])}</b><small>${s[2]}</small></div>`).join('')}</div></div>`;
   if (MODE === 'ph') startCycle(); };
 const fit = () => { const vw = innerWidth, vh = innerHeight;
   if (MODE === 'pc') { const s = Math.min(vw / 1440, vh / 900); stage.style.transform = `translate(${((vw - 1440 * s) / 2).toFixed(1)}px, ${((vh - 900 * s) / 2).toFixed(1)}px) scale(${s})`; return; }
@@ -313,7 +342,7 @@ const tx = document.querySelector('.tx');
 const alignText = () => { tx.style.bottom = ''; if (MODE !== 'pc') return; const sc = stage.getBoundingClientRect().width / (stage.offsetWidth || 1) || 1, st = stage.getBoundingClientRect();
   const top = (document.getElementById('lang').getBoundingClientRect().top - st.top) / sc; tx.style.bottom = (900 - top).toFixed(1) + 'px'; };
 const all = () => { if (pick() !== MODE) build(); fit(); fitHl(); alignLang(); alignText(); alignLegal(); layout(); tick(performance.now()); };
-build(); all(); if (!REDUCED) requestAnimationFrame(tick);
+paintLang(); build(); all(); if (!REDUCED) requestAnimationFrame(tick);
 let rq = 0; addEventListener('resize', () => { cancelAnimationFrame(rq); rq = requestAnimationFrame(all); });
 const onScheme = e => { if (QT === 'dark' || QT === 'light') return; DK = e.matches; setTheme(DK ? 'dark' : 'light'); build(); all(); };
 if (MQ.addEventListener) MQ.addEventListener('change', onScheme); else if (MQ.addListener) MQ.addListener(onScheme);
@@ -323,52 +352,59 @@ if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => { fi
 <script>
 /* ===== 11/26 2주차 출시 알림 신청 (동우님 보드 q6 L1 · q7 확인 메일) — 이메일만 받음 · 동의 두 칸 · 서버 /alert(D1) ===== */
 (() => {
-  const EN = window.VZTR_LANG === 'en', OPEN = Date.UTC(2026, 11, 24, 15);   // 2026-12-25 00:00 KST부터 숨김
+  const OPEN = Date.UTC(2026, 11, 24, 15), isEN = () => window.VZTR_LANG === 'en';   // 11/27 언어는 그 자리에서 바뀜 → 늘 지금 언어로   // 2026-12-25 00:00 KST부터 숨김
   if (window.vztrHit) vztrHit('land');
   /* 11/27 이 기기에 만든 일정이 있으면(써 본 사람) 알림 줄 자리에 '내 일정 이어보기' → /trip */
   try { const pl = JSON.parse(localStorage.getItem('gaboja-plan') || 'null'); if (pl && Array.isArray(pl.days) && pl.days.length) { document.getElementById('myTrip').hidden = false; return; } } catch (_) {}
   const btn = document.getElementById('alBtn'); if (!btn || Date.now() >= OPEN) return;
-  const L = EN ? { b: 'Get notified when we launch Dec 25 ›', h: 'Launch alert for Dec 25', s: 'We’ll send you one email on the day we open.', ph: 'Email address',
+  const LS = { en: { b: 'Get notified when we launch Dec 25 ›', h: 'Launch alert for Dec 25', s: 'We’ll send you one email on the day we open.', ph: 'Email address',
       a1: 'Consent to collect and use personal information', a1s: 'Email address · to send the launch alert · deleted within 7 days after sending', a1n: 'Without consent we can’t send the alert. ', pv: 'Privacy policy',
       a2: 'Receive the launch alert email (advertising)', a2s: 'One email about the VZTR launch · unsubscribe from the link in the email', go: 'Notify me', req: 'Required', bad: 'Check your email address.', err: 'Couldn’t sign you up. Please try again shortly.', off: 'Sign-up works on vztr.app only.',
-      ok: 'You’re on the list', okS: 'We sent a confirmation email. See you on December 25.', close: 'Close' }
-    : { b: '12월 25일 정식 오픈 알림 받기 ›', h: '12월 25일 정식 오픈 알림', s: '문을 여는 날 메일 한 통만 보내 드려요.', ph: '이메일 주소',
+      ok: 'You’re on the list', okS: 'We sent a confirmation email. See you on December 25.', close: 'Close' },
+    ko: { b: '12월 25일 정식 오픈 알림 받기 ›', h: '12월 25일 정식 오픈 알림', s: '문을 여는 날 메일 한 통만 보내 드려요.', ph: '이메일 주소',
       a1: '개인정보 수집·이용 동의', a1s: '이메일 주소 · 오픈 알림 발송 · 보낸 뒤 7일 안에 삭제', a1n: '동의하지 않으면 알림을 받을 수 없어요. ', pv: '처리방침 보기',
       a2: '오픈 알림(광고성 정보) 메일 받기', a2s: 'VZTR 정식 오픈 소식 1통 · 수신 거부는 메일 아래 링크로', go: '알림 받기', req: '필수', bad: '이메일 주소를 확인해 주세요.', err: '신청하지 못했어요. 잠시 후 다시 시도해 주세요.', off: '신청은 vztr.app에서만 돼요.',
-      ok: '신청됐어요', okS: '확인 메일을 보냈어요. 12월 25일에 만나요.', close: '닫기' };
+      ok: '신청됐어요', okS: '확인 메일을 보냈어요. 12월 25일에 만나요.', close: '닫기' } };
+  let L = LS[isEN() ? 'en' : 'ko'];
   btn.textContent = L.b; btn.hidden = false;
-  const RE = /^[^\s@<>"',;]+@[^\s@<>"',;]+\.[^\s@<>"',;]{2,}$/, PV = ((window.VZTR_LEGAL || {}).v || {}).privacy || '', priv = EN ? '../privacy#en' : 'privacy';
+  const RE = /^[^\s@<>"',;]+@[^\s@<>"',;]+\.[^\s@<>"',;]{2,}$/, PV = ((window.VZTR_LEGAL || {}).v || {}).privacy || '';
   const ck = '<span class="ck" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M6 12.5l4 4 8-8.5"/></svg></span>';
   const sc = document.createElement('div'); sc.className = 'alsc'; sc.hidden = true;
   const sh = document.createElement('div'); sh.className = 'alsh'; sh.hidden = true; sh.setAttribute('role', 'dialog'); sh.setAttribute('aria-modal', 'true'); sh.setAttribute('aria-labelledby', 'alH'); sh.setAttribute('data-noi18n', '');
-  sh.innerHTML = `<button type="button" class="x" id="alX" aria-label="${L.close}">×</button><form id="alF" novalidate><h2 id="alH">${L.h}</h2><p class="s">${L.s}</p>
-    <input type="email" id="alE" name="email" autocomplete="email" inputmode="email" placeholder="${L.ph}" aria-label="${L.ph}" maxlength="120" required>
-    <label class="ag"><input type="checkbox" id="alA1">${ck}<div><em>${L.req}</em>${L.a1}<small>${L.a1s}<br>${L.a1n}<a href="${priv}" target="_blank" rel="noopener">${L.pv}</a></small></div></label>
-    <label class="ag"><input type="checkbox" id="alA2">${ck}<div><em>${L.req}</em>${L.a2}<small>${L.a2s}</small></div></label>
-    <button type="submit" class="go" id="alGo" disabled>${L.go}</button><p class="msg" id="alM" aria-live="polite"></p></form>`;
-  document.body.append(sc, sh);
-  const $ = id => document.getElementById(id), E = $('alE'), A1 = $('alA1'), A2 = $('alA2'), GO = $('alGo'), M = $('alM');
+  let mkLang = '', done = false;
+  const $ = id => document.getElementById(id);
+  let E, A1, A2, GO, M;
   const valid = () => RE.test(E.value.trim()) && A1.checked && A2.checked, upd = () => { GO.disabled = !valid(); };
-  [E, A1, A2].forEach(el => el.addEventListener('input', () => { E.classList.remove('bad'); M.textContent = ''; upd(); }));
+  const mk = () => { mkLang = isEN() ? 'en' : 'ko'; const priv = isEN() ? '../privacy#en' : 'privacy';
+    sh.innerHTML = `<button type="button" class="x" id="alX" aria-label="${L.close}">×</button><form id="alF" novalidate><h2 id="alH">${L.h}</h2><p class="s">${L.s}</p>
+      <input type="email" id="alE" name="email" autocomplete="email" inputmode="email" placeholder="${L.ph}" aria-label="${L.ph}" maxlength="120" required>
+      <label class="ag"><input type="checkbox" id="alA1">${ck}<div><em>${L.req}</em>${L.a1}<small>${L.a1s}<br>${L.a1n}<a href="${priv}" target="_blank" rel="noopener">${L.pv}</a></small></div></label>
+      <label class="ag"><input type="checkbox" id="alA2">${ck}<div><em>${L.req}</em>${L.a2}<small>${L.a2s}</small></div></label>
+      <button type="submit" class="go" id="alGo" disabled>${L.go}</button><p class="msg" id="alM" aria-live="polite"></p></form>`;
+    E = $('alE'); A1 = $('alA1'); A2 = $('alA2'); GO = $('alGo'); M = $('alM');
+    [E, A1, A2].forEach(el => el.addEventListener('input', () => { E.classList.remove('bad'); M.textContent = ''; upd(); }));
+    $('alX').addEventListener('click', close); $('alF').addEventListener('submit', submit); };
+  document.body.append(sc, sh);
   let last = null, hideT = 0;
   const shell = document.querySelector('.shell');
-  const open = () => { clearTimeout(hideT); last = document.activeElement; if (shell) shell.inert = true; sc.hidden = sh.hidden = false; void sh.offsetWidth; sc.classList.add('on'); sh.classList.add('on'); setTimeout(() => E.focus({ preventScroll: true }), 280); };
+  const open = () => { if (!done && mkLang !== (isEN() ? 'en' : 'ko')) mk(); clearTimeout(hideT); last = document.activeElement; if (shell) shell.inert = true; sc.hidden = sh.hidden = false; void sh.offsetWidth; sc.classList.add('on'); sh.classList.add('on'); setTimeout(() => E.focus({ preventScroll: true }), 280); };
   const close = () => { if (sh.hidden) return; sc.classList.remove('on'); sh.classList.remove('on'); if (shell) shell.inert = false; hideT = setTimeout(() => { sc.hidden = sh.hidden = true; }, 300); if (last) last.focus({ preventScroll: true }); };
-  btn.addEventListener('click', open); sc.addEventListener('click', close); $('alX').addEventListener('click', close);
+  btn.addEventListener('click', open); sc.addEventListener('click', close);
+  document.addEventListener('vztr-lang', () => { L = LS[isEN() ? 'en' : 'ko']; btn.textContent = L.b; });
   document.addEventListener('keydown', e => { if (sh.hidden || !sh.classList.contains('on')) return; if (e.key === 'Escape') close();
     if (e.key === 'Tab') { const f = [...sh.querySelectorAll('button:not([disabled]),input,a[href]')].filter(x => x.offsetParent); const a = f[0], z = f[f.length - 1];
       if (e.shiftKey && document.activeElement === a) { e.preventDefault(); z.focus(); } else if (!e.shiftKey && document.activeElement === z) { e.preventDefault(); a.focus(); } } });
-  $('alF').addEventListener('submit', async e => { e.preventDefault();
+  async function submit(e) { e.preventDefault();
     if (!RE.test(E.value.trim())) { E.classList.add('bad'); M.textContent = L.bad; return; }
     if (!valid()) return;
     if (!/^(www\.)?vztr\.app$/.test(location.hostname)) { M.textContent = L.off; return; }   // 미리보기·검수(localhost)는 실제 신청 안 함
     GO.disabled = true; M.className = 'msg'; M.textContent = '';
-    try { const r = await fetch('/alert', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ email: E.value.trim(), lang: EN ? 'en' : 'ko', pv: PV, ok: 1 }) }), j = await r.json();
+    try { const r = await fetch('/alert', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ email: E.value.trim(), lang: mkLang, pv: PV, ok: 1 }) }), j = await r.json();
       if (!j.ok) throw new Error(j.e || 'x');
       if (window.vztrHit) vztrHit('alert');
-      $('alF').innerHTML = `<div class="done" tabindex="-1" id="alOk"><b>${L.ok}</b><span>${L.okS}</span></div>`; $('alOk').focus(); btn.hidden = true;
+      $('alF').innerHTML = `<div class="done" tabindex="-1" id="alOk"><b>${L.ok}</b><span>${L.okS}</span></div>`; $('alOk').focus(); btn.hidden = true; done = true;
     } catch (err) { M.textContent = String(err && err.message) === 'input' ? L.bad : L.err; upd(); }
-  });
+  }
 })();
 </script>
 </body>

@@ -1650,7 +1650,8 @@ function miniHtml(c, sub, extra = '') { const t = T(c); return `<button class="m
 
 function rIntro() {
   /* 11/25 새 첫 페이지: 앱 밖에서 들어온 첫 화면은 첫 페이지(vztr.app/)로 (앱 메뉴 '새 여행'·?intro=1 은 예전 첫 화면 그대로) */
-  try { if (!FROM_APP && !new URLSearchParams(location.search).has('intro')) { location.replace('./'); return; } } catch (_) {}
+  /* 11/27 옛 첫 화면은 안 씀: 앱 밖 → 첫 페이지(vztr.app/) · 앱에서 온 경우(뒤로 끝까지 등) → 가이드북(/trip). ?intro=1 = 검수용으로만 */
+  try { if (!new URLSearchParams(location.search).has('intro')) { location.replace(FROM_APP ? 'trip' : './'); return; } } catch (_) {}
   setBar(null);
   const pick = shuffled(ORDER.slice());
   const me = S.type ? T(S.type) : null;
@@ -3039,7 +3040,7 @@ function route() {
 window.addEventListener('hashchange', route);
 /* 시안 점검용: ?s=q3 · ?s=date 처럼 화면 하나를 바로 열기 (?type=LSRP로 유형 지정) */
 const QS = new URLSearchParams(location.search), qsS = QS.get('s'), qsT = QS.get('type');
-const GO_TO = QS.get('go') || (FROM_APP || location.hash ? '' : /\/types$/.test(location.pathname) ? 'types' : /\/test$/.test(location.pathname) ? 'q0' : '');   // 11/27 깔끔한 주소
+const GO_TO = (FROM_APP && QS.get('go') === 'new' ? (S.type ? 'method' : 'q0') : QS.get('go')) || (FROM_APP || location.hash ? '' : /\/types$/.test(location.pathname) ? 'types' : /\/test$/.test(location.pathname) ? 'q0' : '');   // 11/27 깔끔한 주소
 if (qsT && BASE[qsT]) { S.type = qsT; S.votes = S.votes && S.type === saved?.code ? S.votes : (() => { const v = { L: 0, H: 0, S: 0, E: 0, F: 0, R: 0, J: 0, P: 0 }; qsT.split('').forEach((l, k) => { v[l] = [4, 3, 5, 3][k]; const x = AX[k], o = x.a[0] === l ? x.b[0] : x.a[0]; v[o] = 5 - v[l]; }); return v; })(); }
 if (EDIT) startEdit();
 else if (qsS && (/^q[0-9]$/.test(qsS) || ['intro', 'result', 'types', 'method', 'done', 'calc', 'build', 'swipe'].concat(INFO).includes(qsS))) {
@@ -3067,9 +3068,9 @@ else if (qsS && (/^q[0-9]$/.test(qsS) || ['intro', 'result', 'types', 'method', 
     const au = QS.get('auto'); if (au === 'heart') { const f = () => { if (S.sw.busy) return; swDecide(1); if (!$('#swOv').hidden) return; setTimeout(f, 380); }; setTimeout(f, 300); } else if (au === 'pass') setTimeout(() => swDecide(-1), 300);
   }
   if (qsS[0] === 'q' && QS.get('rx')) { const i = +qsS[1], oi = S.shuffle[i][0]; S.ans[i] = oi; const b = document.querySelector(`.opt[data-oi="${oi}"]`); b.classList.add('chosen'); document.querySelector('#opts').classList.add('done'); busy = true; openRx(i, oi); NAV++; } // 점검용: 반응 시트 열어 둔 채
-} else if (/^(q0|types)$/.test(GO_TO)) {   // 11/25 새 첫 페이지 버튼: 내 유형 알아보기 = ?go=q0 · 여행 성향들 둘러보기 = ?go=types · 11/27~ 주소 /test · /types (앱에서 온 것·# 있는 주소는 아님)
+} else if (/^(q0|types|method)$/.test(GO_TO)) {   // 11/27 가이드북 '새 여행' = test?from=app&go=new → 유형 있으면 일정 방식부터, 없으면 질문부터 (뒤로 = 가이드북)   // 11/25 새 첫 페이지 버튼: 내 유형 알아보기 = ?go=q0 · 여행 성향들 둘러보기 = ?go=types · 11/27~ 주소 /test · /types (앱에서 온 것·# 있는 주소는 아님)
   if (GO_TO === 'q0') { S.ans = []; S.shuffle = Q.map(q => shuffled(q.o.map((_, i) => i))); }
-  S.hist = ['intro']; S.step = GO_TO; render();
+  S.hist = FROM_APP ? [] : ['intro']; S.step = GO_TO; render();
 } else if (location.hash) route(); else render();
 S.booted = true;
 </script>

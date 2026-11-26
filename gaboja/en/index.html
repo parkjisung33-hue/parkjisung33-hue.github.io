@@ -37,7 +37,7 @@
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="stylesheet" href="fonts/google/gf.css?v=1"><!-- 11/24 Inter Tight·Zen Kaku Gothic New 자체 호스팅(구글 서버로 IP 안 감, OFL) -->
 <script src="inapp.js?v=1"></script>
-<script src="i18n-en-auto.js?v=a4669a34"></script><script src="i18n-en.js?v=a4669a34"></script><script src="i18n.js?v=a4669a34"></script><!-- 11/20 W5 언어 틀 (영어판 = /en/, 사전 i18n-en.js는 배포 때 en/에만 붙음) -->
+<script src="i18n-en-auto.js?v=ff773d53"></script><script src="i18n-en.js?v=ff773d53"></script><script src="i18n.js?v=ff773d53"></script><!-- 11/20 W5 언어 틀 (영어판 = /en/, 사전 i18n-en.js는 배포 때 en/에만 붙음) -->
 <link rel="stylesheet" href="fonts/vztr-fonts.css?v=2"><!-- 11/19 글꼴: 굵은 한글 IBM Plex Sans KR · 보통 한글 Pretendard · 영문·숫자 IBM Plex Sans -->
 <style>
 /* Pretendard 1.3.9 (SIL OFL 1.1) — 공식 배포본(orioncactus/pretendard)을 fonts/에 함께 올림 */
@@ -3774,7 +3774,7 @@ function swapTrip(id) {
   layerOn = false; try { history.replaceState(null, ''); } catch (_) {}
   location.reload();
 }
-function goNewTrip() { layerOn = false; try { history.replaceState(null, ''); } catch (_) {} location.href = 'test?from=app'; }
+function goNewTrip() { layerOn = false; try { history.replaceState(null, ''); } catch (_) {} location.href = 'test?from=app&go=new'; }   // 11/27 옛 첫 화면 대신 바로 새 여행(유형 있으면 일정 방식부터)
 function newTripSheet() {   // 바로 이동하지 않고: 지금 여행은 목록에 보관된다고 알린 뒤 [새로 만들기] [취소]
   const p = rawPlan(); if (!p) { goNewTrip(); return; }
   openSheet('<div class="shd"><div><h3 id="sheetTitle">새 여행을 만들까요?</h3></div>' + X_BTN + '</div><div class="body"><div><p class="sub one">지금 여행은 내 여행 목록에 보관돼요</p><p class="cfm one">' + esc(planCity(p) + ' · ' + planDates(p)) + '</p></div>'
