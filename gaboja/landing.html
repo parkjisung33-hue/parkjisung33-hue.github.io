@@ -94,7 +94,10 @@ html.ph .ctas { align-items: stretch; } html.ph .cta { width: 100%; } html.ph .g
 .solo b { font-size: 18px; }
 html.ph .stage, html.ph .tx, html.ph .top { will-change: transform; }   /* 글자 묶음 = 늘 자기 층(옆 층이 생기고 없어져도 다시 안 그려짐) */
 html.ph .win > .halo { will-change: opacity; }
-.chw .gfx { grid-area: 1 / 1; visibility: hidden; } .chw .gfx.on { visibility: visible; }
+.chw > div { grid-area: 1 / 1; visibility: hidden; } .chw > div.on { visibility: visible; }
+/* 11/26 밤 번쩍임 찾기용 시험 스위치(?fx=1~4) — 기본(없음)은 그대로. 1 = 창 빛 끔 · 2 = 1 + 캐릭터 움직임 끔 · 3 = 2 + 구름 멈춤 · 4 = 창 안 여닫음 */
+html.fx-noglow .win > .halo { display: none; }
+.fxbadge { position: fixed; left: 8px; top: calc(8px + env(safe-area-inset-top, 0px)); z-index: 50; font: 700 12px/1 var(--lat); padding: 6px 8px; border-radius: 6px; background: var(--ink); color: var(--base); }
 
 /* ===== 비행기 창: 벽에 번진 빛 → 창 가장자리 선 → 안쪽 몰딩 → 얇은 선 → 유리 · 위 = 가리개 상자 + 가리개(손잡이 홈). 창 폭 : 높이 = 300 : 420 ===== */
 .win { position: absolute; aspect-ratio: 300 / 420; container-type: inline-size;
@@ -163,6 +166,8 @@ html.ph .win:not(.dk) > .halo::after { box-shadow: 0 0 30cqw 2cqw color-mix(in s
 <script>
 (() => {
 const EN = window.VZTR_LANG === 'en';
+const FX = (() => { try { const n = +(new URLSearchParams(location.search).get('fx') || 0); return n >= 1 && n <= 4 ? n : 0; } catch (_) { return 0; } })();   // 번쩍임 찾기 시험 스위치
+if (FX) { if (FX <= 3) document.documentElement.classList.add('fx-noglow'); document.body.insertAdjacentHTML('beforeend', `<span class="fxbadge">TEST ${FX}</span>`); }
 /* 테마: 기기 시스템 모드를 따름(바뀌면 바로 따라감) · ?theme= 미리보기 */
 const setTheme = t => { if (t === 'dark') document.documentElement.setAttribute('data-theme', 'dark'); else document.documentElement.removeAttribute('data-theme');
   const m = document.querySelector('meta[name="theme-color"]'); if (m) m.content = t === 'dark' ? '#1B1622' : '#F8F8FA'; };
@@ -201,7 +206,7 @@ const CLOUDS = (seed, L, H, far, dark) => { const r = rng(seed); let out = ''; c
 const SKYL = dk => `${dk ? '<div class="stars">' + Array.from({ length: 14 }, (_, i) => `<i style="left:${(i * 41) % 92 + 4}%;top:${(i * 29) % 34 + 6}%;opacity:${.4 + (i % 3) * .2}"></i>`).join('') + '</div>' : ''}<div class="sky-cl far" data-v="14"></div><div class="sky-cl near" data-v="34"></div>`;
 const SEATS = [['LSRP', '로컬 탐험형', 'L · S', 'ls'], ['LEFJ', '취향 수집형', 'L · E', 'le'], ['HSRJ', '명소 정복형', 'H · S', 'hs'], ['HERP', '힐링 충전형', 'H · E', 'he']];
 /* 캐릭터 칸: .chw(둥실 움직임) 안에 .gfx(chars.js 등장·반복 이펙트). 폰은 넷을 다 넣어 두고 .on 하나만 보임 */
-const GFX = (k, i, on) => `<div class="gfx${on ? ' on' : ''}" data-c="${k}" data-fxd="${i * 500}">${window.GABOJA_CHAR ? GABOJA_CHAR(k, { bg: false }) : ''}</div>`;
+const GFX = (k, i, on) => `<div class="${FX === 2 || FX === 3 ? 'gfx0' : 'gfx'}${on ? ' on' : ''}" data-c="${k}" data-fxd="${i * 500}">${window.GABOJA_CHAR ? GABOJA_CHAR(k, { bg: false }) : ''}</div>`;
 const CH = (k, i) => `<div class="chw" style="animation-delay:${-i * .85}s">${GFX(k, i, true)}</div>`;
 const SEATWIN = (s, i) => WIN({ cls: (DK ? 'dk ' : '') + s[3], inner: SKYL(DK) + CH(s[0], i) });
 const SOLOWIN = () => WIN({ cls: (DK ? 'dk ' : '') + SEATS[0][3], inner: SKYL(DK) + `<div class="chw">${SEATS.map((s, i) => GFX(s[0], 0, i === 0)).join('')}</div>` });
@@ -229,15 +234,15 @@ const layout = () => { LAYERS.length = 0; const grp = wins.querySelector('[data-
   glasses.forEach(g => { const gx = (g.getBoundingClientRect().left - gr.left) / sc;
     g.querySelectorAll('.sky-cl').forEach(el => { const far = el.classList.contains('far'); if (el.dataset.h !== String(H)) { el.innerHTML = CLOUDS(far ? 11 : 29, L, H, far, DK); el.dataset.h = H; } LAYERS.push({ el, gx, L, v: +el.dataset.v }); }); }); };
 const T0 = performance.now();
-const tick = now => { const t = (now - T0) / 1000; LAYERS.forEach(o => { o.el.style.transform = `translateX(${(-((o.gx + t * o.v) % o.L)).toFixed(1)}px)`; }); if (!REDUCED) requestAnimationFrame(tick); };
+const tick = now => { const t = (now - T0) / 1000; LAYERS.forEach(o => { o.el.style.transform = `translateX(${(-((o.gx + t * o.v) % o.L)).toFixed(1)}px)`; }); if (!REDUCED && FX !== 3) requestAnimationFrame(tick); };
 /* 폰: 열린 채 4초 → 닫힘 1.9초(빛 꺼짐, 이름은 거의 닫혔을 때 사라짐) → 닫힌 채 1.2초 → 다음 성향으로 바꿔 열림(빛은 늦게 차오름)
    11/26 밤: 창 하나. 다 닫혀 가리개가 창 전체를 덮은 동안(빛도 꺼진 뒤)에만 색 이름표·캐릭터 '보이기'를 바꿈 — 새로 그리는 것 없음 */
-function startCycle() { const box = wins.querySelector('.solo'), win = box.querySelector('.win'), gfx = [...win.querySelectorAll('.chw .gfx')], lbls = [...box.querySelectorAll('.lbl')]; let k = 0;
-  if (REDUCED) return;
+function startCycle() { const box = wins.querySelector('.solo'), win = box.querySelector('.win'), gfx = [...win.querySelectorAll('.chw > div')], lbls = [...box.querySelectorAll('.lbl')]; let k = 0;
+  if (REDUCED || FX === 4) return;
   const close = () => { win.classList.add('dim'); win.style.setProperty('--sh', 1.02); setTimeout(() => lbls[k].classList.remove('on'), 1300); cycleT = setTimeout(swap, 3100); };
   const swap = () => { const p = k; k = (k + 1) % SEATS.length;
     win.classList.remove(SEATS[p][3]); win.classList.add(SEATS[k][3]); gfx[p].classList.remove('on'); gfx[k].classList.add('on');
-    if (window.GABOJA_CHAR_PLAY) GABOJA_CHAR_PLAY(gfx[k]);   // 열리기 전에 등장 동작을 미리 끝내 둠(열릴 때 캐릭터는 이미 보임)
+    if (window.GABOJA_CHAR_PLAY && gfx[k].classList.contains('gfx')) GABOJA_CHAR_PLAY(gfx[k]);   // 열리기 전에 등장 동작을 미리 끝내 둠(열릴 때 캐릭터는 이미 보임)
     requestAnimationFrame(() => requestAnimationFrame(() => { win.style.setProperty('--sh', .16); win.classList.remove('dim'); lbls[k].classList.add('on'); cycleT = setTimeout(close, 5900); })); };
   cycleT = setTimeout(close, 4000); }
 /* 제목 한 줄: 넘치면 글자만 줄임(영어판 넓은 글꼴 대비, 최소 26px) */
