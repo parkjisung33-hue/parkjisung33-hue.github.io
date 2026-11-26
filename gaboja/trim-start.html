@@ -1085,22 +1085,20 @@ html.typed[data-grp] .flaps:not(.dr .flaps) .fl:not(.empty)::after, .pass .flaps
 
 /* 11/26 궁합 S안 */
 .acts .pairb { grid-column: 1 / -1; }
-.pairx .card { display: grid; gap: 0.875rem; }
-.pairx .pp { display: grid; grid-template-columns: minmax(0,1fr) auto minmax(0,1fr); align-items: center; gap: 0.5rem; }
-.pairx .pw { display: grid; justify-items: center; gap: 0.25rem; text-align: center; min-width: 0; }
-.pairx .pw .av { width: 4.5rem; height: 4.5rem; }
-.pairx .pw b { font-size: 0.9375rem; font-weight: 700; line-height: 1.25; word-break: keep-all; }
-.pairx .pw .cd, .pairx .pl { font-size: 0.75rem; color: var(--tx-2, #6B6E75); font-weight: 600; }
-.pairx .ps { display: grid; justify-items: center; gap: 0.125rem; padding: 0 0.25rem; }
-.pairx .ps b { font: 800 1.75rem/1 "Inter Tight", var(--kr, sans-serif); } .pairx .ps b i { font-style: normal; font-size: 1rem; color: var(--tx-3, #A3A6AD); }
-.pairx .ps span { font-size: 0.6875rem; color: var(--tx-2, #6B6E75); white-space: nowrap; }
-.pairx .ph { margin: 0; text-align: center; font-size: 1.0625rem; font-weight: 700; word-break: keep-all; }
-.pairx .pt { margin: 0; font-size: 0.8125rem; line-height: 1.5; color: var(--tx-2, #6B6E75); text-align: center; } .pairx .pt em { font-style: normal; font-weight: 700; margin-right: 0.375rem; } .pairx .pt.ok em { color: var(--blue); } .pairx .pt.no em { color: var(--red); }
-.pairx .pli { margin: 0; padding: 0; list-style: none; display: grid; gap: 0.375rem; }
-.pairx .pli li { font-size: 0.8125rem; line-height: 1.45; padding-left: 1.125rem; position: relative; color: var(--tx-2, #6B6E75); word-break: keep-all; }
-.pairx .pli li::before { content: ''; position: absolute; left: 0.25rem; top: 0.5em; width: 0.375rem; height: 0.375rem; border-radius: 50%; background: var(--tx-3, #A3A6AD); }
-.pairx .pli li.ok { color: var(--ink, #16171A); } .pairx .pli li.ok::before { background: var(--blue); }
-.pairx .cta2 { height: 2.75rem; border-radius: 12px; background: #ECECEF; color: #16171A; font-weight: 700; font-size: 0.875rem; display: flex; align-items: center; justify-content: center; gap: 0.375rem; }
+/* 11/26 밤 궁합 칸 2안(동우님 보드 7차 ②): 맨 위 카드 = 한 줄 요약 → (추천·부딪힐 짝 설명) → 친구·나 캐릭터(배경 없이 크게) · 아래 '잘 맞아요'·'부딪힐 수 있어요' 라벨 + 카드(.card.how 줄 그대로) · 칸 제목 없음
+   값은 같은 화면 '나와 맞는 여행 메이트' 라벨(12/700)·'이렇게 짜 드려요' 줄(.how .hw)·'다시 하기' 보조 버튼(44·12·15/700)과 같게 */
+.pairx .pzc { padding: 1.125rem 1.125rem 1rem; display: flex; flex-direction: column; gap: 0.875rem; }
+.pairx .ph { margin: 0; text-align: center; font-size: 1.3125rem; font-weight: 800; letter-spacing: -.03em; line-height: 1.35; text-wrap: balance; word-break: keep-all; padding-bottom: 0.25rem; }
+.pairx .pt { margin: -0.375rem 0 0; text-align: center; font-size: 0.8125rem; line-height: 1.5; color: var(--sub); word-break: keep-all; } .pairx .pt em { font-style: normal; font-weight: 700; color: var(--ink); margin-right: 0.375rem; }
+.pairx .pp { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; }
+.pairx .pw { display: flex; flex-direction: column; align-items: center; gap: 0.25rem; text-align: center; min-width: 0; }
+.pairx .pw .pl { font-size: 0.8125rem; font-weight: 600; color: var(--sub); }
+.pairx .pw .pch { height: 6.75rem; display: flex; align-items: flex-end; justify-content: center; margin: 0.25rem 0 0.375rem; }
+.pairx .pw .pch svg { height: 100%; width: auto; display: block; overflow: visible; }
+.pairx .pw b { font-size: 1.0625rem; font-weight: 800; letter-spacing: -.02em; line-height: 1.3; word-break: keep-all; }
+.pairx .pw .cd { font-family: var(--lat); font-size: 0.75rem; font-weight: 700; color: var(--sub); letter-spacing: .04em; }
+.pairx .plab { font-size: 0.75rem; font-weight: 700; padding: 0 0.25rem 0.375rem; margin-bottom: -0.25rem; } .pairx .plab.ok { color: var(--blue); } .pairx .plab.no { color: var(--red); }
+.pairx .cta2 { height: 2.75rem; border-radius: 12px; background: #ECECEF; color: #16171A; font-weight: 700; font-size: 0.9375rem; display: flex; align-items: center; justify-content: center; gap: 0.375rem; }
 .pairx .cta2 svg { width: 1rem; height: 1rem; stroke: currentColor; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
 :root[data-theme="dark"] .pairx .cta2 { background: rgba(255,255,255,.1); color: #F1F1F4; }
 </style>
@@ -2016,24 +2014,28 @@ async function cardPng(c, f = 's') {
 const PAIR_KEY = 'vztr-pair', PAIR_TTL = 3 * 864e5;
 try { const me = JSON.parse(localStorage.getItem('gaboja-type') || 'null'); if (window.VZTR_SHARED && /^[LH][SE][FR][JP]$/.test(VZTR_SHARED.c) && !(me && me.code === VZTR_SHARED.c)) localStorage.setItem(PAIR_KEY, JSON.stringify({ c: VZTR_SHARED.c, t: Date.now() })); } catch (_) {}   // 내가 보낸 링크를 내가 열면 저장 안 함(서버가 넣는 스크립트도 같은 규칙)
 function pairOf() { try { const o = JSON.parse(localStorage.getItem(PAIR_KEY)); return o && /^[LH][SE][FR][JP]$/.test(o.c) && Date.now() - o.t < PAIR_TTL ? o.c : ''; } catch (_) { return ''; } }
-const PAIR_SAME = W5 ? { L: 'Both local-first: you hunt for neighborhood spots', H: 'Both hotspot fans: you go where it’s buzzing', S: 'Both sightseers: seeing and walking is the trip', E: 'Both doers: eating, shopping and trying things is the trip', F: 'Both fast-paced: a packed day suits you', R: 'Both relaxed: slow days win', J: 'Both planners: routes are set ahead', P: 'Both spontaneous: you decide on the spot' }
-  : { L: '둘 다 로컬파 · 동네 가게부터 찾아요', H: '둘 다 핫플파 · 지금 뜨는 곳부터 가요', S: '둘 다 구경파 · 보고 걷는 게 여행이에요', E: '둘 다 즐기기파 · 먹고 사고 해 보는 게 여행이에요', F: '둘 다 알차게 · 하루를 꽉 채워도 좋아요', R: '둘 다 여유롭게 · 느긋한 하루가 좋아요', J: '둘 다 계획파 · 동선은 미리 짜 둬요', P: '둘 다 즉흥파 · 가서 정해도 괜찮아요' };
-const PAIR_DIFF = W5 ? ['Local vs. hotspot: take turns picking the day', 'Seeing vs. doing: sights in the morning, food and shops after', 'Packed vs. relaxed: full mornings, easy afternoons', 'Planner vs. free spirit: set the outline, wing the rest']
-  : ['로컬 vs 핫플 · 하루씩 번갈아 골라요', '구경 vs 즐기기 · 오전엔 구경, 오후엔 먹고 사기', '알차게 vs 여유 · 오전은 꽉, 오후는 쉬엄쉬엄', '계획 vs 즉흥 · 큰 틀만 짜고 나머지는 그때그때'];
-const PAIR_HEAD = W5 ? ['Total opposites. Split the days and it works', 'More different than alike, which keeps it fresh', 'Half alike, half each other’s missing piece', 'You click on almost everything', 'Mirror-image travel buddies']
-  : ['정반대 · 하루씩 나눠 고르면 최고예요', '다른 게 더 많아서 새로운 사이', '반은 같고 반은 채워 주는 사이', '척하면 척, 잘 맞는 사이', '거울 같은 여행 메이트'];
+/* 11/26 밤 문구 다듬음(동우님 '문법·어색함 없이'): 같은 점 = [제목, 설명] · 다른 점 = 축마다 [글자별 낱말, 맞추는 법] · 한 줄 요약 = 같은 축 수(0~4) */
+const PAIR_SAME = W5 ? { L: ['You both love local spots', 'Back streets come before famous sights'], H: ['You both love what’s trending', 'New and buzzing places come first'], S: ['You both love seeing and walking', 'Views and streets are the fun part'], E: ['You both love eating and shopping', 'Food, shops and trying things are the fun part'], F: ['You both like a full day', 'You see a lot and go a lot'], R: ['You both like it slow', 'Plenty of downtime matters to you'], J: ['You both plan ahead', 'Routes and times are set before you go'], P: ['You both go with the flow', 'You decide on the spot'] }
+  : { L: ['둘 다 동네 가게를 좋아해요', '유명한 곳보다 골목을 먼저 찾아요'], H: ['둘 다 요즘 뜨는 곳을 좋아해요', '새로 생긴 곳, 화제인 곳부터 가 봐요'], S: ['둘 다 보고 걷는 걸 좋아해요', '풍경과 거리 구경이 여행의 재미예요'], E: ['둘 다 먹고 사는 걸 좋아해요', '맛집과 쇼핑, 체험이 여행의 재미예요'], F: ['둘 다 일정을 꽉 채워요', '하루에 많이 보고 많이 다녀요'], R: ['둘 다 느긋한 여행을 좋아해요', '쉬는 시간이 넉넉해야 좋아요'], J: ['둘 다 미리 계획해요', '동선과 시간을 정해 두고 움직여요'], P: ['둘 다 그때그때 정해요', '가서 마음 가는 대로 골라요'] };
+const PAIR_DIFF = W5 ? [[{ L: 'local spots', H: 'hotspots' }, 'Take turns picking the day'], [{ S: 'sights', E: 'food & shops' }, 'Sights in the morning, food and shops after'], [{ F: 'full days', R: 'slow days' }, 'Pack the morning, take the afternoon easy'], [{ J: 'planning', P: 'winging it' }, 'Set the outline and decide the rest there']]
+  : [[{ L: '동네 가게', H: '뜨는 곳' }, '하루씩 번갈아 골라요'], [{ S: '구경', E: '맛집·쇼핑' }, '오전엔 구경하고, 오후엔 먹고 사요'], [{ F: '꽉 찬 하루', R: '느긋한 하루' }, '오전은 꽉 채우고, 오후는 쉬엄쉬엄 다녀요'], [{ J: '미리 계획', P: '그때그때' }, '큰 틀만 정하고, 나머지는 가서 골라요']];
+const PAIR_HEAD = W5 ? ['Opposites who keep it fun', 'Plenty to show each other', 'Half alike, half new', 'Almost perfectly in sync', 'Two of a kind']
+  : ['정반대라서 더 재밌는 사이', '서로 새로운 걸 알려 주는 사이', '반은 같고, 반은 서로 채워 주는 사이', '척하면 척, 잘 맞는 사이', '거울처럼 똑 닮은 사이'];
 function pairCalc(a, b) { const same = [0, 1, 2, 3].filter(k => a[k] === b[k]).length, ta = T(a), tb = T(b);
   const best = ta.best === b || tb.best === a, clash = !best && (ta.clash === b || tb.clash === a), why = best ? (ta.best === b ? ta.bestWhy : tb.bestWhy) : clash ? (ta.clash === b ? ta.clashWhy : tb.clashWhy) : '';
-  return { same, best, clash, why, lines: [0, 1, 2, 3].map(k => a[k] === b[k] ? { ok: 1, t: PAIR_SAME[a[k]] } : { ok: 0, t: PAIR_DIFF[k] }) }; }
+  return { same, best, clash, why, lines: [0, 1, 2, 3].map(k => { if (a[k] === b[k]) return { ok: 1, t: PAIR_SAME[a[k]][0], d: PAIR_SAME[a[k]][1] };
+    const [w, d] = PAIR_DIFF[k]; return { ok: 0, t: W5 ? `Friend: ${w[a[k]]} · You: ${w[b[k]]}` : `친구는 ${w[a[k]]}, 나는 ${w[b[k]]}`, d }; }) }; }
 function pairBox(me) { const f = pairOf(); if (!f) return ''; const r = pairCalc(f, me), tf = T(f), tm = T(me);
   if (window.vztrHit) vztrHit('pair');
-  const who = (c, t, lab) => `<div class="pw"><span class="pl">${lab}</span>${AV(c)}<b>${esc(TR(t.name))}</b><span class="cd">${DC(c)}</span></div>`;
-  return `<div class="sec pairx" data-noi18n><h3>${W5 ? 'You & the friend who sent this link' : '링크를 보낸 친구와 나의 여행 궁합'}</h3><div class="card">
-    <div class="pp">${who(f, tf, W5 ? 'Friend' : '친구')}<div class="ps"><b>${r.same}<i>/4</i></b><span>${W5 ? 'in common' : '같은 축'}</span></div>${who(me, tm, W5 ? 'Me' : '나')}</div>
-    <p class="ph">${esc(PAIR_HEAD[r.same])}</p>
-    ${r.best || r.clash ? `<p class="pt ${r.best ? 'ok' : 'no'}"><em>${r.best ? (W5 ? 'Recommended match' : '추천 짝') : (W5 ? 'Might clash' : '부딪힐 수 있는 짝')}</em>${esc(TR(r.why))}</p>` : ''}
-    <ul class="pli">${r.lines.map(x => `<li class="${x.ok ? 'ok' : ''}">${esc(x.t)}</li>`).join('')}</ul>
-    <button type="button" class="cta2" id="pairShare">${ICON.share}${W5 ? 'Share our match card' : '궁합 카드 공유하기'}</button></div></div>`; }
+  const who = (c, t, lab) => `<div class="pw"><span class="pl">${lab}</span><span class="pch">${window.GABOJA_CHAR ? GABOJA_CHAR(c, { bg: false }) : ''}</span><b>${esc(TR(t.name))}</b><span class="cd">${DC(c)}</span></div>`;
+  const row = x => `<div class="hw"><div><b>${esc(x.t)}</b><span>${esc(x.d)}</span></div></div>`;
+  const ok = r.lines.filter(x => x.ok), no = r.lines.filter(x => !x.ok);
+  return `<div class="sec pairx" data-noi18n><div class="card pzc"><p class="ph">${esc(PAIR_HEAD[r.same])}</p>
+    ${r.best ? `<p class="pt"><em>${W5 ? 'Recommended match' : '추천 짝'}</em>${W5 ? 'You’re each other’s recommended travel mate' : '서로에게 추천하는 여행 메이트예요'}</p>` : r.clash ? `<p class="pt"><em>${W5 ? 'Might clash' : '부딪힐 수 있는 짝'}</em>${W5 ? 'Follow the tips below and you’ll be fine' : '아래 맞추는 법대로 다니면 괜찮아요'}</p>` : ''}
+    <div class="pp">${who(f, tf, W5 ? 'Friend' : '친구')}${who(me, tm, W5 ? 'Me' : '나')}</div></div>
+    ${ok.length ? `<div class="plab ok">${W5 ? 'You click on' : '잘 맞아요'}</div><div class="card how">${ok.map(row).join('')}</div>` : ''}
+    ${no.length ? `<div class="plab no">${W5 ? 'Might clash' : '부딪힐 수 있어요'}</div><div class="card how">${no.map(row).join('')}</div>` : ''}
+    <button type="button" class="cta2" id="pairShare">${ICON.share}${W5 ? 'Share our match card' : '궁합 카드 공유하기'}</button></div>`; }
 async function pairInvite(c) {   // 내 결과 → '나랑 여행 궁합 볼래?' 링크(받은 친구가 테스트를 끝내면 궁합이 나옴)
   const url = shareUrlOf(c, true), txt = W5 ? 'Travel match with me?' : '나랑 여행 궁합 볼래?';
   if (window.vztrHit) vztrHit('share');
@@ -2049,13 +2051,11 @@ async function pairPng(a, b) {   // 궁합 카드 1:1 1080 — 결과 카드(car
   const gd = x.createLinearGradient(0, 0, 0, H); gd.addColorStop(0, '#EEF0F6'); gd.addColorStop(1, '#FFFFFF'); x.fillStyle = gd; x.fillRect(0, 0, W, H);
   x.textBaseline = 'alphabetic'; x.textAlign = 'left'; x.fillStyle = '#16181D'; x.font = `700 40px ${KR}`; x.fillText(W5 ? 'Our travel match' : '우리 둘의 여행 궁합', 80, 124);
   { const S0 = 50, k = S0 / 76, dr = 11 * k, RX = W - 80, DX = RX - 2 * dr - 6 * k; x.textAlign = 'right'; x.font = `800 ${S0}px ${LAT}`; x.fillStyle = '#0F1F33'; try { x.letterSpacing = (-3 * k) + 'px'; } catch (_) {} x.fillText('vztr', DX, 124); try { x.letterSpacing = '0px'; } catch (_) {} x.fillStyle = '#3D63F5'; x.beginPath(); x.arc(DX + 17 * k, 124 - 9 * k, dr, 0, Math.PI * 2); x.fill(); }
-  for (const [c, X] of [[a, 100], [b, 580]]) {
-    rr(X, 190, 400, 400, 48); x.fillStyle = GRPC[c.slice(0, 2)].bg; x.fill();
-    const im = await charImg(c, 600); if (im) x.drawImage(im, X + 70, 260, 260, 260);
+  for (const [c, X] of [[a, 100], [b, 580]]) {   // 11/26 밤: 캐릭터 네모 배경 없앰(앱 궁합 칸과 같게)
+    const im = await charImg(c, 600); if (im) x.drawImage(im, X + 40, 270, 320, 320);
     x.textAlign = 'center'; x.fillStyle = '#16181D'; fit(TR(T(c).name), 700, 46, 28, NMF, 400); x.fillText(TR(T(c).name), X + 200, 660);
     x.fillStyle = '#6B6E75'; x.font = `600 28px ${LAT}`; x.fillText(DC(c), X + 200, 706);
   }
-  x.fillStyle = '#16181D'; x.textAlign = 'center'; x.font = `800 30px ${LAT}`; x.fillText(r.same + ' / 4', W / 2, 400);
   x.fillStyle = '#16181D'; fit(PAIR_HEAD[r.same], 700, 52, 32, KR, W - 160); x.fillText(PAIR_HEAD[r.same], W / 2, 820);
   const inv = W5 ? 'Try it with a friend' : '너도 친구랑 해 봐'; x.font = `700 32px ${KR}`; const aw = x.measureText(inv).width, PW = aw + 80, PH = 72, PX = (W - PW) / 2, PY = 900;
   rr(PX, PY, PW, PH, PH / 2); x.fillStyle = 'rgba(255,255,255,.9)'; x.fill(); x.textBaseline = 'middle'; x.fillStyle = '#16181D'; x.fillText(inv, W / 2, PY + PH / 2 + 1);
