@@ -1646,6 +1646,24 @@ details.sec > summary .cnt { min-width: 0; overflow: hidden; text-overflow: elli
 input::placeholder, textarea::placeholder, .rideedit .rfno::placeholder, .rideedit .tmw .tm::placeholder { color: var(--sub3); opacity: 1; }
 #tips .cattr.srcall, .cattr { color: var(--sub3); }
 #tips .cattr.srcall { opacity: 1; }
+/* 11/26 C: '한국 여행 준비'(#kinfo, 한국 여행 + 한국어판 아닐 때만) = 현지 정보와 같은 상자·아이콘 색 · 줄 = 아이콘 | 제목+설명(설명은 두 줄까지 허용, 사실 문장이라 자르지 않음) | 오른쪽 공식 안내 링크·전화 */
+#tips + #kinfo { margin-top: calc(0.4375rem - 1.5rem); }
+#kinfo summary > svg:first-child, #kinfo .ic { color: var(--green); }
+#kinfo .kgrp { font-size: 0.75rem; font-weight: 700; color: var(--sub); padding: 0.875rem 0 0.125rem; }
+#kinfo summary + .kgrp { padding-top: 0.5rem; }
+#kinfo .krow { display: grid; grid-template-columns: 1.375rem minmax(0,1fr) auto; gap: 0.5rem; align-items: start; padding: 0.5625rem 0; border-top: 1px solid var(--hair); font-size: 0.84375rem; }
+#kinfo .kgrp + .krow { border-top: 0; }
+#kinfo .krow .ic { width: 1.375rem; height: 1.375rem; display: grid; place-items: center; margin-top: 0.0625rem; }
+#kinfo .krow .ic svg { width: 1.1875rem; height: 1.1875rem; stroke: currentColor; fill: none; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
+#kinfo .kt { display: flex; flex-direction: column; min-width: 0; line-height: 1.4; }
+#kinfo .kt b { font-weight: 700; }
+#kinfo .kx { font-size: 0.8125rem; color: var(--sub); word-break: keep-all; overflow-wrap: anywhere; }
+#kinfo .tel, #kinfo .klk { color: var(--blue); font-weight: 700; text-decoration: none; white-space: nowrap; font-size: 0.8125rem; padding: 0.125rem 0.125rem 0.5rem 0.25rem; }
+#kinfo .klk::after { content: ' ↗'; }
+.kv dd .kst { white-space: nowrap; }   /* 가까운 역: 'Line 3 (327) Gyeongbokgung' 줄은 한 덩어리로, 한글 역명·걷는 분은 옆에 이어서 */
+.kv dd .kst + .vzko { display: inline; margin-left: 0.25rem; }
+.kv dd .kst ~ .muted { white-space: nowrap; }
+#kinfo .cattr.kchk { font-size: 0.75rem !important; color: var(--sub3); white-space: normal; padding-top: 0.5rem; }
 .w5alt { margin-top: 0.75rem; }
 </style>
 
@@ -1753,6 +1771,8 @@ input::placeholder, textarea::placeholder, .rideedit .rfno::placeholder, .rideed
 <div class="toast" id="toast" role="status" aria-live="polite"><span id="toastTx"></span><button id="toastBtn" hidden>되돌리기</button></div>
 
 <script src="weather.js"></script>
+<script src="kr-info.js?v=2"></script><!-- 11/26 C: 외국인 필수 정보(한국 여행 준비 카드 · 가까운 역) — 출처는 파일 안 -->
+<script src="kr-stn.js?v=1"></script>
 <script src="types.js"></script>
 <script src="chars.js?v=fit3"></script>
 <script>/* 공유용 샘플(#sample=키): 엔진·장소 DB·샘플 입력을 바로 불러와 그 자리에서 일정을 만듦 (저장 안 함) */ if (window.VZTR_LANG === 'en' || /#sample=[\w-]+|#v=\w{12}/.test(location.hash)) document.write('<script src="gen-data.js?v=15"><\/script><script src="gen.js?v=20"><\/script><script src="samples.js?v=8"><\/script>');</script>
@@ -1878,10 +1898,30 @@ function fixEmb() {
 }
 if (PLAN && PLAN.local) { try { renderTips(PLAN.local); } catch (_) {} }
 try { fixEmb(); } catch (_) {}
+/* 11/26 C(외국인 필수 정보): 한국 여행 + 한국어판이 아닐 때(영어·일본어·중국어) = '한국 여행 준비' 카드(도착 전·결제·교통·택시·지도·도움 번호).
+   내용·출처 = kr-info.js(VZTR_KRINFO, 항목마다 출처 URL·확인일) · 모양 = 현지 정보(#tips)와 같은 접는 상자 · 문구 = 한국어 키 → 언어별 사전 */
+const KR_DEST = new Set(['sel', 'bsn', 'jej', 'gyj', 'gng', 'sch', 'jnj', 'ysu', 'tyg', 'dgu', 'icn', 'swn']);
+const KR_CITY = /^(서울|부산|제주|경주|강릉|속초|전주|여수|통영|대구|인천|수원)$/;
+const isKrTrip = () => !!PLAN && (KR_DEST.has(PLAN.dest) || (PLAN.days || []).some(d => KR_CITY.test(d.city || '')));
+function renderKinfo() {
+  const K = window.VZTR_KRINFO; if (!K || window.VZTR_LANG === 'ko' || !isKrTrip() || document.getElementById('kinfo')) return;
+  const tp = document.getElementById('tips'); if (!tp) return;
+  const ic = k => '<span class="ic"><svg viewBox="0 0 24 24">' + (TIP_IC[k] || K.ic[k] || TIP_IC.doc) + '</svg></span>';
+  let n = 0, h = '<summary><svg viewBox="0 0 24 24">' + K.ic.check + '</svg>한국 여행 준비<span class="cnt"></span><svg class="chev" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg></summary>';
+  K.groups.forEach(g => {
+    h += '<div class="kgrp">' + esc(g.h) + '</div>';
+    const rows = g.rows.filter(r => !r.only || (PLAN.dest === r.only || (PLAN.days || []).some(d => d.city === '서울'))); if (!rows.length) return;
+    rows.forEach(r => { n++; h += '<div class="krow">' + ic(r.ic) + '<span class="kt"><b>' + esc(r.b) + '</b><span class="kx">' + esc(r.t) + '</span></span>' + (r.tel ? '<a class="tel" href="tel:' + esc(r.tel) + '">' + esc(r.telTx || r.tel) + '</a>' : r.url ? '<a class="klk" href="' + esc(r.url) + '" target="_blank" rel="noopener">' + esc(r.lk || '공식 안내') + '</a>' : '<span></span>') + '</div>'; });
+  });
+  h += '<div class="cattr kchk"><span>' + esc(K.chkTx) + '</span></div>';
+  tp.insertAdjacentHTML('afterend', '<details class="sec glass" id="kinfo">' + h + '</details>');
+  const c = document.querySelector('#kinfo summary .cnt'); if (c) c.textContent = '확인할 것 ' + n;
+}
+try { renderKinfo(); } catch (_) {}
 { const tp = document.getElementById('tips'); if (tp) tp.addEventListener('toggle', () => requestAnimationFrame(() => { try { fitSrc(); } catch (_) {} })); }   // 현지 정보를 펼칠 때 출처 한 줄 맞춤
 if (!PLAN) { const tp0 = document.getElementById('tips'); if (tp0) tp0.insertAdjacentHTML('beforeend', '<div class="cattr srcall"><span>출처 외교부·JNTO</span> · <span>사진 Commons 외</span> · <span>날씨 Open-Meteo</span></div>'); }   // 샘플
 // 내 일정인데 현지 정보가 없으면(옛 저장 일정) 샘플의 오사카 긴급 연락처를 그대로 보여 주지 않음 (11/13)
-else if (PLAN && (PLAN.dest || 'kix') !== 'kix') { const tp = document.getElementById('tips'); if (tp) tp.style.display = 'none'; }
+else if (PLAN && !PLAN.local && (PLAN.dest || 'kix') !== 'kix') { const tp = document.getElementById('tips'); if (tp) tp.style.display = 'none'; }
 // 24:00 넘는 시각 = '01:40(다음 날)' 로 표시, 읽을 때 다시 +1440 (옛 저장 일정의 '25:40'도 그대로 읽힘)
 const toMin = t => { const [h,m] = String(t).split(':'); return (+h)*60 + (parseInt(m,10)||0) + (/다음/.test(t) ? 1440 : 0); };
 const toT = m => { m = Math.max(0, Math.round(m)); const nx = m >= 1440; m %= 1440; return String(Math.floor(m/60)).padStart(2,'0') + ':' + String(m%60).padStart(2,'0') + (nx ? '(다음 날)' : ''); };
@@ -2326,9 +2366,19 @@ const WALK_SVG = '<svg viewBox="0 0 24 24"><circle cx="13" cy="4.5" r="1.8"/><pa
 const EV_STAR = '<svg class="evs" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l2.6 5.6 6 .7-4.5 4.1 1.2 6L12 16.4 6.7 19.4l1.2-6L3.4 9.3l6-.7z"/></svg>';
 const mvIc = c => '<i class="mic">' + (c.mode === 'walk' || (!c.mode && /걸어서|도보/.test(c.mv || '')) ? WALK_SVG : c.mode === 'car' ? CAR_SVG : /비행기/.test(c.mv || '') ? PLANE_SVG : TRAIN_SVG) + '</i>';
 /* 11/24 보드 15: 이동 줄 글 = '걸어서 10분' · '대중교통 17분' (수단 + 분만, '약'·'·' 없앰 — 아이콘이 수단을 이미 보여 줌) */
+/* 11/26 C(F4): 한국 장소의 가까운 지하철역 = kr-stn.js(VZTR_STN, 공식 역 데이터 · 장소에서 걸어서 약 12분 안만).
+   표기 = 'Line 2 (239) Hongik Univ.'(호선 · 역 번호 · 공식 영문 역명) · 한국어판 = '2호선 홍대입구역 (239)' */
+const stnOf = pid => { const S = window.VZTR_STN; return pid && S && S.p && S.p[pid] ? S.p[pid] : null; };   // [역 열쇠, 걷는 분]
+const stnTx = (pid, ko) => { const a = stnOf(pid), s = a && window.VZTR_STN.s[a[0]]; if (!s) return ''; const l = s.ln[0], no = l[1] ? ' (' + l[1] + ')' : ''; return ko ? l[2] + ' ' + s.ko + (/역$/.test(s.ko) ? '' : '역') + no : l[0] + no + ' ' + s.en; };   // s.ln = [[영어 노선, 역 번호, 한국어 노선], …] — 갈아타는 역은 장소에 가까운 출구 쪽 노선 하나만
+function mvStn(c) {   // 이동 줄: 대중교통으로 가는 다음 장소의 가까운 역(한국어판 제외)
+  if (window.VZTR_LANG === 'ko' || c.mode !== 'train' || !window.VZTR_STN) return '';
+  const d = DAYS.find(x => (x.list || []).includes(c)); if (!d) return '';
+  const L = d.list, t = L.slice(L.indexOf(c) + 1).find(x => x.k !== 'm'); return t && t.pid ? stnTx(t.pid) : '';
+}
 function mvLab(c) {
   const mv = String(c.mv || ''), p0 = mv.split(' · ')[0].replace(/\s*\([^)]*\)\s*$/, '').trim(), est = /추정|가정/.test(mv);
-  const w = c.mode === 'walk' || /걸어서|도보/.test(mv) ? '걸어서' : /^약\s*\d/.test(p0) ? (c.mode === 'car' ? '차로' : '이동') : p0;
+  let w = c.mode === 'walk' || /걸어서|도보/.test(mv) ? '걸어서' : /^약\s*\d/.test(p0) ? (c.mode === 'car' ? '차로' : '이동') : p0;
+  if (w === '대중교통') { const sx = mvStn(c); if (sx) return '<span class="mw mst" data-noi18n>' + esc(sx) + '</span> <b class="mm">' + esc(c.du ? durTx(c.du) : (mv.match(/(\d+시간\s*)?\d+분/) || [''])[0]) + '</b>' + (est ? '<small class="me">추정</small>' : ''); }   // 아이콘이 '대중교통'을 보여 주니 글자 자리에 내릴 역
   const m = c.du ? durTx(c.du) : (mv.match(/(\d+시간\s*)?\d+분/) || [''])[0];
   return m ? '<span class="mw">' + esc(w) + '</span> <b class="mm">' + esc(m) + '</b>' + (est ? '<small class="me">추정</small>' : '') : esc(mv);
 }
@@ -3135,6 +3185,7 @@ function sheetHtml(d, c) {
   if (parts[1] && !c.fly) kv.push(['종류', esc(parts[0])]);
   if (!c.est && c.k !== 'm' && !ed && !isCar(c) && !tb) kv.push([c.fly ? '소요' : '머무는 시간', durTx(c.du)]);
   if (c.l) kv.push(['현지어', '<span class="jp">' + esc(c.l) + '</span> <span class="muted">' + esc(c.r || '') + '</span>']);
+  if (c.pid && !c.fly && c.k !== 'm' && stnOf(c.pid)) { const W = window.VZTR_LANG === 'ko', a = stnOf(c.pid), s = VZTR_STN.s[a[0]]; kv.push(['가까운 역', '<span class="kst"' + (W ? '' : ' data-noi18n') + '>' + esc(stnTx(c.pid, W)) + '</span>' + (W ? '' : ' <span class="vzko" lang="ko">' + esc(s.ko) + '</span>') + ' <span class="muted">' + esc('걸어서 약 ' + a[1] + '분') + '</span>']); }   // 11/26 C(F4) 출처 kr-stn.js
   if (c.mv && !c.fly) kv.push(['이동', esc(c.mv)]);   // 11/15 #19: 탑승권 시트엔 '이동 · 비행기' 줄 없음 → 바로 메모
   (c.info || []).forEach(x => { if (x[0] === '영업' && !c.fly && c.k !== 'm') return; kv.push([x[0], esc(x[1])]); });   // 영업시간은 위 칩으로
   if (kv.length) h += '<dl class="kv">' + kv.map(x => '<dt>' + x[0] + '</dt><dd>' + x[1] + '</dd>').join('') + '</dl>';
