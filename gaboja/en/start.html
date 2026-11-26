@@ -2129,7 +2129,7 @@ function shareCard(c) {
   else $('#shKk').onclick = () => { if (window.vztrHit) vztrHit('share');
     if (!KK_HOST()) { toast('카카오톡 공유는 vztr.app에서만 돼요'); return; }
     const send = im => { const url = shareUrlOf(c), lk = { mobileWebUrl: url, webUrl: url };
-      try { Kakao.Share.sendDefault({ objectType: 'feed', content: { title: `내 여행 유형은 ${T(c).name}`, description: `${Q.length}번 골라 내 여행 유형 찾기`, imageUrl: im || 'https://vztr.app/icons/icon-512.png', imageWidth: im ? 1080 : 512, imageHeight: im ? 1080 : 512, link: lk },
+      try { Kakao.Share.sendDefault({ objectType: 'feed', content: { title: `내 여행 유형은 ${T(c).name}`, description: '내 여행 유형도 찾아보기', imageUrl: im || 'https://vztr.app/icons/icon-512.png', imageWidth: im ? 1080 : 512, imageHeight: im ? 1080 : 512, link: lk },
         buttons: [{ title: '내 유형 알아보기', link: lk }] }); } catch (_) { toast('카카오톡을 열지 못했어요 · 링크 복사를 이용해 주세요'); } };
     const p = kakaoImg(c);   // 보통 시트 열 때 이미 올라가 있음 → 누른 순간 바로 보냄. 아직이면 기다렸다 보냄(카드 없이 아이콘으로라도)
     Promise.race([p, new Promise(r => setTimeout(() => r(null), 50))]).then(u => { if (u !== null) send(u); else { toast('카톡 준비 중…'); p.then(send); } });
