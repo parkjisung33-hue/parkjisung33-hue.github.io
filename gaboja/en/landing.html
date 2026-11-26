@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <script src="migrate.js?v=2"></script>
-<script>/* 11/27 vztr.app/ = 늘 첫 페이지. 주소 뒤 #가 있는 링크(메일 #g= · 공유 #v= · #sample)는 가이드북(/trip)으로 그대로 넘김 — migrate.js(#mig=)가 먼저 돎 */
+<script>/* 11/26 밤 vztr.app/ = 늘 첫 페이지. 주소 뒤 #가 있는 링크(메일 #g= · 공유 #v= · #sample)는 가이드북(/trip)으로 그대로 넘김 — migrate.js(#mig=)가 먼저 돎 */
 (function () { try { var h = location.hash; if (h && h !== '#') { document.documentElement.style.visibility = 'hidden'; location.replace('trip' + location.search + h); } } catch (e) {} })();</script>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
@@ -31,13 +31,13 @@
 <script src="inapp.js?v=1"></script>
 <script src="hit.js?v=1"></script><!-- 11/26 2주차: 유입 숫자 세기(합계만) -->
 <script src="legal/flags.js?v=1"></script>
-<script src="i18n.js?v=ff773d53"></script>
+<script src="i18n.js?v=0ebfde07"></script>
 <link rel="stylesheet" href="fonts/vztr-fonts.css?v=2">
 <script>/* 11/26: 기기(브라우저) 시스템 모드를 따름 — 다크 = 밤 객실 · 라이트 = 밝은 객실. ?theme=dark|light = 미리보기 */
 (function () { try { var q = new URLSearchParams(location.search).get('theme'), d = q === 'dark' || q === 'light' ? q === 'dark' : matchMedia('(prefers-color-scheme: dark)').matches; if (d) document.documentElement.setAttribute('data-theme', 'dark'); } catch (e) {} })();</script>
 <!-- 2026-11-25 새 첫 페이지(랜딩) — 시안 10차 확정본(디자인/2026-11-25_VZTR_첫페이지시안/board_v10_src.html)을 그대로 옮김.
      화면 = 설계 크기(PC 1440×900 / 폰 390×844)로 그리고 브라우저 크기에 맞춰 통째로 비율 유지(반응형 등비 스케일).
-     버튼: 내 유형 알아보기 → test · 여행 성향들 둘러보기 → types (11/27 깔끔한 주소) · 언어 = i18n.js(영어판 /en/landing.html) -->
+     버튼: 내 유형 알아보기 → test · 여행 성향들 둘러보기 → types (11/26 밤 깔끔한 주소) · 언어 = i18n.js(영어판 /en/landing.html) -->
 <style>
 :root { color-scheme: light; padding-top: env(safe-area-inset-top, 0px); padding-bottom: env(safe-area-inset-bottom, 0px);
   --kr: "VZTR KR", "Pretendard Variable", Pretendard, -apple-system, "Apple SD Gothic Neo", "Malgun Gothic", system-ui, sans-serif;
@@ -229,7 +229,7 @@ const MQ = matchMedia('(prefers-color-scheme: dark)');
 let QT = ''; try { QT = new URLSearchParams(location.search).get('theme') || ''; } catch (_) {}
 let DK = QT === 'dark' || QT === 'light' ? QT === 'dark' : MQ.matches;
 setTheme(DK ? 'dark' : 'light');
-/* 언어 — 11/27 동우님 '누르자마자 바뀌게': 페이지를 다시 불러오지 않고 그 자리에서 글자만 바꿈 + 주소(/ ↔ /en/)는 history로.
+/* 언어 — 11/26 밤 동우님 '누르자마자 바뀌게': 페이지를 다시 불러오지 않고 그 자리에서 글자만 바꿈 + 주소(/ ↔ /en/)는 history로.
    이 페이지 글은 여기 표(LD)로 직접 바꿈(.shell = data-noi18n, 영어판도 큰 번역 사전 i18n-en*.js를 안 불러옴 → 첫 로딩도 가벼움).
    영어 글꼴(i18n.js enFont)은 한가할 때 미리 불러 둠 → 바꿀 때 글꼴이 늦게 바뀌는 깜빡임 없음 */
 const LD = { '이번 여행, 나답게.': 'Pack your personality.', '내 자리는 어디일까?': 'Which seat is yours?', '내 유형 알아보기': 'Find your type', '여행 성향들 둘러보기': 'Browse travel types',
@@ -352,9 +352,9 @@ if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => { fi
 <script>
 /* ===== 11/26 2주차 출시 알림 신청 (동우님 보드 q6 L1 · q7 확인 메일) — 이메일만 받음 · 동의 두 칸 · 서버 /alert(D1) ===== */
 (() => {
-  const OPEN = Date.UTC(2026, 11, 24, 15), isEN = () => window.VZTR_LANG === 'en';   // 11/27 언어는 그 자리에서 바뀜 → 늘 지금 언어로   // 2026-12-25 00:00 KST부터 숨김
+  const OPEN = Date.UTC(2026, 11, 24, 15), isEN = () => window.VZTR_LANG === 'en';   // 11/26 밤 언어는 그 자리에서 바뀜 → 늘 지금 언어로   // 2026-12-25 00:00 KST부터 숨김
   if (window.vztrHit) vztrHit('land');
-  /* 11/27 이 기기에 만든 일정이 있으면(써 본 사람) 알림 줄 자리에 '내 일정 이어보기' → /trip */
+  /* 11/26 밤 이 기기에 만든 일정이 있으면(써 본 사람) 알림 줄 자리에 '내 일정 이어보기' → /trip */
   try { const pl = JSON.parse(localStorage.getItem('gaboja-plan') || 'null'); if (pl && Array.isArray(pl.days) && pl.days.length) { document.getElementById('myTrip').hidden = false; return; } } catch (_) {}
   const btn = document.getElementById('alBtn'); if (!btn || Date.now() >= OPEN) return;
   const LS = { en: { b: 'Get notified when we launch Dec 25 ›', h: 'Launch alert for Dec 25', s: 'We’ll send you one email on the day we open.', ph: 'Email address',

@@ -13,7 +13,7 @@
 <title>VZTR 덜어내기 — 가이드북</title>
 </head>
 <body>
-<script>/* 11/26 동우님: vztr.app 주소만 치고 처음 온 사람(이 기기에 일정 없음 + 주소 뒤 # 없음) → 첫 페이지(랜딩). 11/27~ 주소만(vztr.app/)은 늘 첫 페이지, 가이드북 = /trip — 여기는 /trip에 일정 없이 온 경우. ?dev=1·utm 등은 그대로 넘김.
+<script>/* 11/26 동우님: vztr.app 주소만 치고 처음 온 사람(이 기기에 일정 없음 + 주소 뒤 # 없음) → 첫 페이지(랜딩). 11/26 밤~ 주소만(vztr.app/)은 늘 첫 페이지, 가이드북 = /trip — 여기는 /trip에 일정 없이 온 경우. ?dev=1·utm 등은 그대로 넘김.
    # 있는 주소(#sample·#v=·#g= 공유/메일 링크)·저장된 일정이 있으면 가이드북 그대로. migrate.js(#mig= 이전)가 먼저 돌고 나서 봄. 검수(localhost)·옛 주소 보드는 대상 아님 */
 (function () { try { if (!/^(www\.)?vztr\.app$/.test(location.hostname) || (location.hash && location.hash !== '#')) return;
   var p = JSON.parse(localStorage.getItem('gaboja-plan') || 'null'); if (p && Array.isArray(p.days) && p.days.length) return;
@@ -1723,7 +1723,7 @@ input::placeholder, textarea::placeholder, .rideedit .rfno::placeholder, .rideed
     </div>
   </div>
   <button data-m="install"><svg viewBox="0 0 24 24"><rect x="7" y="3" width="10" height="18" rx="2"/><path d="M12 8v6M9.5 11.5L12 14l2.5-2.5"/></svg><span>홈 화면에 추가</span></button>
-  <div class="dlegal"><a href="privacy" target="_blank" rel="noopener">개인정보처리방침</a><a href="terms" target="_blank" rel="noopener">이용약관</a><a href="mailto:vztr@larchive.page">문의</a></div><!-- 11/24 법적 고지 링크(개인정보위 작성지침: 서비스 메뉴·설정에서 쉽게 확인) -->
+  <div class="dlegal"><a href="privacy" target="_blank" rel="noopener">개인정보처리방침</a><a href="terms" target="_blank" rel="noopener">이용약관</a><a href="mailto:hello@vztr.app">문의</a></div><!-- 11/24 법적 고지 링크(개인정보위 작성지침: 서비스 메뉴·설정에서 쉽게 확인) -->
 </nav>
 <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs>
   <filter id="gbRough" filterUnits="userSpaceOnUse" x="-6" y="-6" width="112" height="112" color-interpolation-filters="sRGB">
@@ -3758,7 +3758,7 @@ function swapTrip(id) {
   layerOn = false; try { history.replaceState(null, ''); } catch (_) {}
   location.reload();
 }
-function goNewTrip() { layerOn = false; try { history.replaceState(null, ''); } catch (_) {} location.href = 'test?from=app&go=new'; }   // 11/27 옛 첫 화면 대신 바로 새 여행(유형 있으면 일정 방식부터)
+function goNewTrip() { layerOn = false; try { history.replaceState(null, ''); } catch (_) {} location.href = 'test?from=app&go=new'; }   // 11/26 밤 옛 첫 화면 대신 바로 새 여행(유형 있으면 일정 방식부터)
 function newTripSheet() {   // 바로 이동하지 않고: 지금 여행은 목록에 보관된다고 알린 뒤 [새로 만들기] [취소]
   const p = rawPlan(); if (!p) { goNewTrip(); return; }
   openSheet('<div class="shd"><div><h3 id="sheetTitle">새 여행을 만들까요?</h3></div>' + X_BTN + '</div><div class="body"><div><p class="sub one">지금 여행은 내 여행 목록에 보관돼요</p><p class="cfm one">' + esc(planCity(p) + ' · ' + planDates(p)) + '</p></div>'

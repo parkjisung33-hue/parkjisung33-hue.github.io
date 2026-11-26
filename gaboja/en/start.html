@@ -26,7 +26,7 @@
 <link rel="stylesheet" href="fonts/google/gf.css?v=1"><!-- 11/24 Inter Tight·Zen Kaku Gothic New 자체 호스팅(구글 서버로 IP 안 감, OFL) -->
 <script src="inapp.js?v=1"></script>
 <script src="hit.js?v=1"></script><!-- 11/26 2주차: 유입 숫자 세기(합계만) -->
-<script src="i18n-en-auto.js?v=ff773d53"></script><script src="i18n-en.js?v=ff773d53"></script><script src="i18n.js?v=ff773d53"></script><!-- 11/20 W5 언어 틀 (영어판 = /en/, 사전 i18n-en.js는 배포 때 en/에만 붙음) -->
+<script src="i18n-en-auto.js?v=0ebfde07"></script><script src="i18n-en.js?v=0ebfde07"></script><script src="i18n.js?v=0ebfde07"></script><!-- 11/20 W5 언어 틀 (영어판 = /en/, 사전 i18n-en.js는 배포 때 en/에만 붙음) -->
 <link rel="stylesheet" href="fonts/vztr-fonts.css?v=2"><!-- 11/19 글꼴: 굵은 한글 IBM Plex Sans KR · 보통 한글 Pretendard · 영문·숫자 IBM Plex Sans -->
 <link rel="icon" href="icons/favicon-32.png">
 <link rel="apple-touch-icon" href="icons/icon-180.png">
@@ -1666,7 +1666,7 @@ function miniHtml(c, sub, extra = '') { const t = T(c); return `<button class="m
 
 function rIntro() {
   /* 11/25 새 첫 페이지: 앱 밖에서 들어온 첫 화면은 첫 페이지(vztr.app/)로 (앱 메뉴 '새 여행'·?intro=1 은 예전 첫 화면 그대로) */
-  /* 11/27 옛 첫 화면은 안 씀: 앱 밖 → 첫 페이지(vztr.app/) · 앱에서 온 경우(뒤로 끝까지 등) → 가이드북(/trip). ?intro=1 = 검수용으로만 */
+  /* 11/26 밤 옛 첫 화면은 안 씀: 앱 밖 → 첫 페이지(vztr.app/) · 앱에서 온 경우(뒤로 끝까지 등) → 가이드북(/trip). ?intro=1 = 검수용으로만 */
   try { if (!new URLSearchParams(location.search).has('intro')) { location.replace(FROM_APP ? 'trip' : './'); return; } } catch (_) {}
   setBar(null);
   const pick = shuffled(ORDER.slice());
@@ -2819,7 +2819,7 @@ function sendNow() {
 
 /* 11/20 E6·M38 가이드북 메일 — 만든 일정을 서버에 보관(W12와 같은 /plan)하고, 서버가 정해진 틀로 '내 링크'를 메일로 보냄(Resend, server/worker.js /send).
    자동 일정이 없는 도시(PLANNED 없음)는 지금처럼 신청만 → 아키가 만들어 보냄 */
-const MAIL_ON = true;   // 11/21 Resend 연결(mail.larchive.page) · 답장 = vztr@larchive.page → Cloudflare 전달 (README E6 절)
+const MAIL_ON = true;   // 11/21 Resend 연결 · 11/26 밤 보내는 곳 mail.vztr.app · 답장 = hello@vztr.app → Cloudflare 전달 (README E6 절)
 let MAIL = null; // { st: 'wait'|'ok'|'bad'|'off', err }
 function mailNow() {
   const tr = S.trip, p = PLANNED, to = (tr.to || '').trim();
@@ -3056,7 +3056,7 @@ function route() {
 window.addEventListener('hashchange', route);
 /* 시안 점검용: ?s=q3 · ?s=date 처럼 화면 하나를 바로 열기 (?type=LSRP로 유형 지정) */
 const QS = new URLSearchParams(location.search), qsS = QS.get('s'), qsT = QS.get('type');
-const GO_TO = (FROM_APP && QS.get('go') === 'new' ? (S.type ? 'method' : 'q0') : QS.get('go')) || (FROM_APP || location.hash ? '' : /\/types$/.test(location.pathname) ? 'types' : /\/test$/.test(location.pathname) ? 'q0' : '');   // 11/27 깔끔한 주소
+const GO_TO = (FROM_APP && QS.get('go') === 'new' ? (S.type ? 'method' : 'q0') : QS.get('go')) || (FROM_APP || location.hash ? '' : /\/types$/.test(location.pathname) ? 'types' : /\/test$/.test(location.pathname) ? 'q0' : '');   // 11/26 밤 깔끔한 주소
 if (qsT && BASE[qsT]) { S.type = qsT; S.votes = S.votes && S.type === saved?.code ? S.votes : (() => { const v = { L: 0, H: 0, S: 0, E: 0, F: 0, R: 0, J: 0, P: 0 }; qsT.split('').forEach((l, k) => { v[l] = [4, 3, 5, 3][k]; const x = AX[k], o = x.a[0] === l ? x.b[0] : x.a[0]; v[o] = 5 - v[l]; }); return v; })(); }
 if (EDIT) startEdit();
 else if (qsS && (/^q[0-9]$/.test(qsS) || ['intro', 'result', 'types', 'method', 'done', 'calc', 'build', 'swipe'].concat(INFO).includes(qsS))) {
@@ -3084,7 +3084,7 @@ else if (qsS && (/^q[0-9]$/.test(qsS) || ['intro', 'result', 'types', 'method', 
     const au = QS.get('auto'); if (au === 'heart') { const f = () => { if (S.sw.busy) return; swDecide(1); if (!$('#swOv').hidden) return; setTimeout(f, 380); }; setTimeout(f, 300); } else if (au === 'pass') setTimeout(() => swDecide(-1), 300);
   }
   if (qsS[0] === 'q' && QS.get('rx')) { const i = +qsS[1], oi = S.shuffle[i][0]; S.ans[i] = oi; const b = document.querySelector(`.opt[data-oi="${oi}"]`); b.classList.add('chosen'); document.querySelector('#opts').classList.add('done'); busy = true; openRx(i, oi); NAV++; } // 점검용: 반응 시트 열어 둔 채
-} else if (/^(q0|types|method)$/.test(GO_TO)) {   // 11/27 가이드북 '새 여행' = test?from=app&go=new → 유형 있으면 일정 방식부터, 없으면 질문부터 (뒤로 = 가이드북)   // 11/25 새 첫 페이지 버튼: 내 유형 알아보기 = ?go=q0 · 여행 성향들 둘러보기 = ?go=types · 11/27~ 주소 /test · /types (앱에서 온 것·# 있는 주소는 아님)
+} else if (/^(q0|types|method)$/.test(GO_TO)) {   // 11/26 밤 가이드북 '새 여행' = test?from=app&go=new → 유형 있으면 일정 방식부터, 없으면 질문부터 (뒤로 = 가이드북)   // 11/25 새 첫 페이지 버튼: 내 유형 알아보기 = ?go=q0 · 여행 성향들 둘러보기 = ?go=types · 11/26 밤~ 주소 /test · /types (앱에서 온 것·# 있는 주소는 아님)
   if (GO_TO === 'q0') { S.ans = []; S.shuffle = Q.map(q => shuffled(q.o.map((_, i) => i))); }
   S.hist = FROM_APP ? [] : ['intro']; S.step = GO_TO; render();
 } else if (location.hash) route(); else render();

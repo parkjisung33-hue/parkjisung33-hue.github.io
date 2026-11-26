@@ -16,7 +16,7 @@
     /* Mona Sans는 고정폭 숫자(tnum)의 0에 빗금 → Apple 기기가 아니면(= Mona를 쓰면) 숫자만 일반 숫자로. Apple은 SF Pro라 그대로 */
     if (!/iPhone|iPad|iPod|Macintosh/.test(navigator.userAgent)) document.documentElement.classList.add('vz-mona');
     var fs = document.createElement('style'); fs.id = 'vztr-en-font'; fs.textContent = 'html[lang="en"]{--kr:' + SYS + ';--kr-plain:' + SYS + ';--lat:' + SYS + ';--mono:' + SYS + '}html[lang="en"] .vzko,html[lang="en"] [lang="ko"]{font-family:' + KRF + '}html[lang="en"] .lfl .lb{display:none}html[lang="en"] #bdS{white-space:nowrap!important;overflow:hidden!important;text-overflow:clip!important;-webkit-line-clamp:unset!important}html[lang="en"] .code.k{white-space:normal!important;overflow:visible!important;text-overflow:clip!important;word-break:normal!important;overflow-wrap:normal!important;text-wrap:balance}html[lang="en"] .pass .place.pl1{flex-wrap:wrap;white-space:normal;column-gap:.25rem;row-gap:0}html[lang="en"] .pass .place.pl1 .pn{overflow:visible;text-overflow:clip}html[lang="en"] .nmc b{font-size:.9375rem}html[lang="en"] .ticket .nm,html[lang="en"] .pass .city,html[lang="en"] .rec2 b,html[lang="en"] .tile .n.one,html[lang="en"] .li .nm .one{overflow-wrap:normal;word-break:normal}html.vz-mona[lang="en"] body,html.vz-mona[lang="en"] body *{font-variant-numeric:lining-nums proportional-nums!important}'; (document.head || document.documentElement).appendChild(fs); }
-  if (EN) enFont();   // 11/27 함수로 뺌: 첫 페이지 언어 바로 바꾸기(landing.html)가 미리 불러 둠
+  if (EN) enFont();   // 11/26 밤 함수로 뺌: 첫 페이지 언어 바로 바꾸기(landing.html)가 미리 불러 둠
   var bot = navigator.webdriver || /HeadlessChrome/.test(navigator.userAgent);
   function other() {   // 같은 화면의 다른 언어 주소
     var p = location.pathname;
