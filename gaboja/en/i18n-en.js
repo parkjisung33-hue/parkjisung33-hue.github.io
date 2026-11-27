@@ -517,7 +517,7 @@ Object.assign(window.VZTR_EN, {
   "가고 싶던 식당에 줄이 #시간이라면?": "The place you want has a # h wait?",
   "라그탱 삿포로": "Ragtag Sapporo",
   "무인양품 삿포로 스텔라플레이스": "MUJI Sapporo Stellar Place",
-  "MEGA 돈키호테 삿포로 다누키코지 본점": "MEGA Don Quijote Tanukikoji"
+  "MEGA 돈키호테 삿포로 다누키코지 본점": "Donki Tanukikoji"
 });
 /* 11/24 최종 검수(qa_lines 영어) 한 줄 맞추기 — 짧게 */
 Object.assign(window.VZTR_EN, {
@@ -582,7 +582,7 @@ Object.assign(window.VZTR_EN, {
   "라그탱 삿포로": "RAGTAG Sapporo",
   "마루이이마이 삿포로 본점": "Marui Imai Sapporo",
   "무인양품 삿포로 스텔라플레이스": "MUJI Sapporo Stellar Place",
-  "MEGA 돈키호테 삿포로 다누키코지 본점": "MEGA Don Quijote Tanukikoji",
+  "MEGA 돈키호테 삿포로 다누키코지 본점": "Donki Tanukikoji",
   "다이마루 고베점": "Daimaru Kobe",
   "목조 골목 카페·구제": "Wooden alley cafes & vintage",
   "생활용품·가구 거리": "Homewares & furniture street",
