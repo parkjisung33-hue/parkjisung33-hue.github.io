@@ -745,3 +745,4 @@ Object.assign(window.VZTR_EN, {
 /* 11/27 다국어 틀 검수: 신청 화면 동의 칸 '필수'가 코드 TX 밖 경로로 그려질 때 · 장소 영어 이름이 없던 탬버린즈 3곳(로마자 'Taembeorinjeu …'로 나와 길안내 칸 넘침) */
 Object.assign(window.VZTR_EN, { '필수': 'Required', '탬버린즈 한남 플래그십': 'Tamburins Hannam', '탬버린즈 삼청 플래그십': 'Tamburins Samcheong', '탬버린즈 성수 플래그십': 'Tamburins Seongsu' });
 Object.assign(window.VZTR_EN, { '라서 골랐어요': '’s pick', '이라서 골랐어요': '’s pick' });   // 11/27 최종 검수: 스와이프 이유 '«유형 이름»라서 골랐어요'의 이름 뒤 글자
+Object.assign(window.VZTR_EN, { '삿포로시 관광사진 라이브러리 규약': 'Sapporo Tourism Photo Library terms' });   // 11/27 qa_run 작은 크롤(로마자 탐지): 사진 출처 라이선스 이름이 'Satporosi Gwangwangsajin…'로 나오던 것
