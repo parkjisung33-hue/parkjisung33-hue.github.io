@@ -184,7 +184,7 @@
     var P = window.GABOJA_DATA.places || {};
     var names = [];
     var EPL = PLC;
-    Object.keys(P).forEach(function (id) { var p = P[id]; if (!p || !HAN.test(p.n)) return; var x = EPL[id], e = x && (x.en || x.n) || API.placeEn(p), lim = !EN && e && /^[\x00-\x7F]+$/.test(e) ? 20 : NMAX, sh = x && x.short && x.short.length <= lim ? x.short : e; if (e) { if (!(p.n in MAN)) D[p.n] = e.length > lim ? sh : e;   /* 11/27 B: 일·중판에서 공식 이름이 없어 영어 이름을 쓰는 곳 = 라틴 글자만이면 영어판처럼 20자 한도 */ if (p.sh && p.sh !== p.n && !(p.sh in MAN)) D[p.sh] = sh; /* 화면 = 20자 넘으면 짧은 이름(V-28 한 줄) */ names.push(p.n); if (p.sh && p.sh !== p.n) names.push(p.sh); } });
+    Object.keys(P).forEach(function (id) { var p = P[id]; if (!p || !HAN.test(p.n)) return; var x = EPL[id], e = x && (x.en || x.n) || (!EN && p.l && !HAN.test(p.l) ? p.l : '') || API.placeEn(p),   /* 11/27 최종 검수: 일·중판 사전에 없는 일본 장소 = 현지 이름(黒門市場 등) — 한국어 로마자로 떨어지던 것 */ lim = !EN && e && /^[\x00-\x7F]+$/.test(e) ? 20 : NMAX, sh = x && x.short && x.short.length <= lim ? x.short : e; if (e) { if (!(p.n in MAN)) D[p.n] = e.length > lim ? sh : e;   /* 11/27 B: 일·중판에서 공식 이름이 없어 영어 이름을 쓰는 곳 = 라틴 글자만이면 영어판처럼 20자 한도 */ if (p.sh && p.sh !== p.n && !(p.sh in MAN)) D[p.sh] = sh; /* 화면 = 20자 넘으면 짧은 이름(V-28 한 줄) */ names.push(p.n); if (p.sh && p.sh !== p.n) names.push(p.sh); } });
     names = names.filter(function (n) { return n.length >= 3; })   /* 리뷰 #7: 2글자('서면')는 다른 낱말 안에서도 걸려서 '@'로 안 바꿈 */.sort(function (a, b) { return b.length - a.length; });
     if (names.length) PN = new RegExp(names.map(function (n) { return n.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); }).join('|'), 'g');
   }
@@ -194,7 +194,8 @@
     var t = s.trim(); if (!t || !HAN.test(t)) return null;
     places();
     var r = null;
-    for (var i = 0; i < PAT.length; i++) { var m = t.match(PAT[i][0]); if (m) { try { r = PAT[i][2].apply(null, m.slice(1)); } catch (_) { r = null; } if (r != null) break; } }   // 함수 틀 먼저(모르는 말이면 null → 다음)
+    var lm = t.match(/^(·\s+)([\s\S]+)$/); if (lm && HAN.test(lm[2])) { var q0 = tr(lm[2], true); if (q0 != null) r = lm[1] + String(q0).trim(); }   /* 11/27 최종 검수: 앞에 붙은 구분점 '· …로 유명해요'를 함수 틀이 통째로 잡아 '以· …闻名'이 되던 것 → 점 떼고 옮겨 다시 붙임 */
+    if (r == null) for (var i = 0; i < PAT.length; i++) { var m = t.match(PAT[i][0]); if (m) { try { r = PAT[i][2].apply(null, m.slice(1)); } catch (_) { r = null; } if (r != null) break; } }   // 함수 틀 먼저(모르는 말이면 null → 다음)
     var KK = null; if (r == null) { r = D[t]; if (r != null) KK = t; }
     if (r == null && /\d/.test(t)) {   // 숫자만 다른 문장 = 키에서 숫자를 '#'로 (예 '강수확률 #%' → 'Rain #%'), 값의 '#'에 같은 순서로 다시 넣음
       var nums = t.match(/\d+/g), v0 = D[t.replace(/\d+/g, '#')];
