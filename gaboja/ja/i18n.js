@@ -283,7 +283,7 @@
 /* 11/24 동우님 '두 줄 금지': 한 줄이어야 하는 칸 = 줄바꿈 없이(nowrap), 넘치면 글자를 0.5px씩 줄임(최소 11px, 칸에 data-one="12"면 그 값)
    한국어·영어 두 판 공통(이 파일은 두 판 다 불러옴). 칸 목록 = ONE_SEL — 새 한 줄 칸이 생기면 여기에 더하고 tools/qa_lines.py ONE에도 */
 (function () {
-  var ONE_SEL = ['#likeC button', '#avoidC button', '.rlist button.nm', '#bdS', '#rxT', '.swhd h1', '.li .nm .one', '.rhy .rr > span:last-child', '.one:not(.n):not(#sheetTitle)', '.hrow .eyebrow', '.agree b', 'h1.city', '.hero h1', '#cT', '#bdT', '.nowacts + .acts .btn.ghost', '#warn .nt', '.facts span', '.rhy .rr .tm', '.ticks div > span:last-child', '.dayline h2', '.agree .pv li > span', '.bsteps li > span', '.mvp', '.sub2', '.chips .chip', '.tbdrow > span', /* 11/25 Verdana 긴 이름 */ '.hero-chips span', '.gchip', '.tnm', '.ttbl .k', '.ttbl dt', '[data-one]', /* 11/26 영어 긴 유형 이름(Photo Perfectionist) */ '.rx .near b'];
+  var ONE_SEL = ['#likeC button', '#avoidC button', '.rlist button.nm', '#bdS', '#rxT', '.swhd h1', '.li .nm .one', '.rhy .rr > span:last-child', '.one:not(.n):not(#sheetTitle)', '.hrow .eyebrow', '.agree b', 'h1.city', '.hero h1', '#cT', '#bdT', '.nowacts + .acts .btn.ghost', '#warn .nt', '.facts span', '.rhy .rr .tm', '.ticks div > span:last-child', '.dayline h2', '.agree .pv li > span', '.bsteps li > span', '.mvp', '.sub2', '.chips .chip', '.tbdrow > span', /* 11/25 Verdana 긴 이름 */ '.hero-chips span', '.gchip', '.tnm', '.ttbl .k', '.ttbl dt', '[data-one]', /* 11/26 영어 긴 유형 이름(Photo Perfectionist) */ '.rx .near b', /* 11/27 최종 검수: 승차권 칸 'KTX-Eum 752'(중국어 글꼴 라틴 폭) 말줄임 대신 줄임 */ '.pass .fld b'];
   var t = 0;
   function run() {
     t = 0;

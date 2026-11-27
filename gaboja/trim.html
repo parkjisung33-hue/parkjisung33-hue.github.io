@@ -2250,7 +2250,7 @@ const pnOf = (c, k) => { const nm = c.fly[k], I = window.VZTR_I18N, cd0 = c.fly[
     if (c.bus && f) return esc((cd && f.indexOf(cd + ' ') === 0 ? f.slice(cd.length + 1) : f).replace(/ Bus Terminal$| Terminal$|^Bus Terminal$/, '') || 'Terminal'); }   /* 영어: 'Sokcho Intercity Terminal' → 'Intercity' · 'Dong Seoul Terminal' → 'Dong Seoul' */
   if (window.VZTR_FX && window.VZTR_LANG !== 'en' && (c.bus || c.ride === 'train') && I && I.t) { const f = I.t(nm), cd = I.t(cd0);   /* 11/27 일본어·중국어: 작은 칸(4~5자) — 한국어판처럼 도시 이름 빼고 '市外バス'·'高速バス'·'ターミナル' · 역은 '駅' */
     if (c.ride === 'train' && f && cd && (f === cd + '駅' || f === cd + '站')) return esc(f.slice(cd.length));
-    if (c.bus && f && !/[가-힣]/.test(f)) { const g = (cd && f.indexOf(cd) === 0 && f.length > cd.length ? f.slice(cd.length) : f).trim(); return esc(g.replace(/^(高速|市外)バスターミナル$/, '$1バス').replace(/^総合バスターミナル$/, 'ターミナル').replace(/^(高速|市外|长途|長途)(巴士|客运|客運)?(总站|總站|客运站|客運站)$/, '$1$2').replace(/(バス)?ターミナル$/, (x, b, i, w) => w.length > 6 ? '' : x) || 'ターミナル'); } }
+    if (c.bus && f && !/[가-힣]/.test(f)) { const g = (cd && f.indexOf(cd) === 0 && f.length > cd.length ? f.slice(cd.length) : f).trim(); return esc(g.replace(/^(高速|市外)バスターミナル$/, '$1バス').replace(/^総合バスターミナル$/, 'ターミナル').replace(/^(高速|市外|长途|長途)(巴士|客运|客運)?(总站|總站|客运站|客運站)$/, '$1$2').replace(/(バス)?ターミナル$/, (x, b, i, w) => w.length > 6 ? '' : x).replace(/(客运站|客運站)$/, (x, i, w) => w.length > 3 ? '' : x) || (window.VZTR_LANG === 'ja' ? 'ターミナル' : window.VZTR_LANG === 'zh-hant' ? '客運站' : '客运站')); } }   /* 11/27 최종 검수: 중국어 '东首尔客运站' → '东首尔'(예전 '东首尔站'은 기차역으로 읽힘) · 빈 칸 대신 그 언어 말 */
   return esc(nm); };
 const plLine = (name, tx) => '<div class="place pl1">' + (name ? '<span class="pn">' + name + '</span>' + (tx ? '<span class="tt">' + (window.VZTR_LANG === 'en' ? '' : '· ') : '') : '<span class="tt">') + (tx || !name ? String(tx).replace(/\(다음 날\)/, '<sup>+1</sup>') + '</span>' : '') + '</div>';
 function flyCard(d, c, cls, top) {
@@ -2973,8 +2973,10 @@ const GDEV = (() => { try { if (/[?&]dev=1/.test(location.search)) localStorage
 const PH_KEY_G = () => /^(https:\/\/(www\.)?(larchive\.page|vztr\.app)|https:\/\/vztr-api\.d-chive33-a29\.workers\.dev|http:\/\/(localhost|127\.0\.0\.1)(:\d+)?)$/.test(location.origin), PH_KEY_M = () => window.GABOJA_MAPS_KEY || '';
 // 11/24 오사카관광국 사진(license 'OCTB'): 일본어 외 표기 = '©Osaka Convention & Tourism Bureau' 그대로(관광국 회신 11/24, 한·영 같은 문구)
 // 11/24 도쿄관광재단 사진(license 'TCVB'): '©Tokyo Convention & Visitors Bureau' 그대로(재단 회신 11/24)
+// 11/27 고베관광국 FeelPhoto(license 'KCVA'): 허락 회신 = 표기 일본어 '一般財団法人神戸観光局'·그 밖 'KOBE TOURISM BUREAU', 게재 후 URL·캡처 보고(할일.md)
 // 11/27 후쿠오카현관광연맹 포토다운로드(license 'FPTA'): 신청 없이 무료·크레디트 필수(영어 공식 표기 '©Fukuoka Prefecture Tourism Association', 오사카·도쿄처럼 한·영 같은 문구)·직링크 금지(우리 서버 /gaboja/ph/fpta/)·큰 색보정·대폭 트리밍 금지·太宰府天満宮 사진(※)은 신사 별도 허가라 안 씀
-const phCredit = (a, l) => /^OCTB$/i.test(String(l || '').trim()) ? '©Osaka Convention & Tourism Bureau' : /^TCVB$/i.test(String(l || '').trim()) ? '©Tokyo Convention & Visitors Bureau' : /^FPTA$/i.test(String(l || '').trim()) ? '©Fukuoka Prefecture Tourism Association' :'사진 © ' + String(a || '').replace(/저작권자\s*[:：]\s*/g, '').replace(/\s*공동저작자\s*[:：]\s*/g, ' · ').trim().slice(0, 60) + ' · ' + String(l || '').trim();   // 11/20 검수: 긴 저작권 문구 줄임(라벨만 뺌, 이름은 그대로)
+const PHU = u => typeof u === 'string' && u.indexOf('/gaboja/ph/') === 0 && location.pathname.indexOf('/gaboja/') !== 0 ? u.slice(7) : u;   /* 11/27 최종 검수: 우리 서버에 둔 공식 사진(오사카·도쿄·후쿠오카 '/gaboja/ph/…')이 vztr.app(폴더 없이 /ph/…)에서 404로 깨지던 것 */
+const phCredit = (a, l) => /^OCTB$/i.test(String(l || '').trim()) ? '©Osaka Convention & Tourism Bureau' : /^TCVB$/i.test(String(l || '').trim()) ? '©Tokyo Convention & Visitors Bureau' : /^FPTA$/i.test(String(l || '').trim()) ? '©Fukuoka Prefecture Tourism Association' : /^KCVA$/i.test(String(l || '').trim()) ? (window.VZTR_LANG === 'ja' ? '©一般財団法人神戸観光局' : '©KOBE TOURISM BUREAU') :'사진 © ' + String(a || '').replace(/저작권자\s*[:：]\s*/g, '').replace(/\s*공동저작자\s*[:：]\s*/g, ' · ').trim().slice(0, 60) + ' · ' + String(l || '').trim();   // 11/20 검수: 긴 저작권 문구 줄임(라벨만 뺌, 이름은 그대로)
 /* 11/24 구글 약관: Places 사진(photo name·주소)은 저장·캐시 허용 근거 없음 → 서버 캐시 끔 · 브라우저도 sessionStorage에 안 두고 이 페이지 메모리에서만(새로 열면 다시 물음)
    표기 = 작가 이름(링크) + 'Google Maps' 텍스트(번역·줄바꿈 금지) — developers.google.com/maps/documentation/places/web-service/policies */
 const GPH = new Map();
@@ -3114,7 +3116,7 @@ function phMount(host, p, o) {
   };
   const next = () => {
     const s = steps.shift();
-    if (s === 'ph') show(p.ph.u, phCredit(p.ph.a, p.ph.l), o.link ? p.ph.p : '');
+    if (s === 'ph') show(PHU(p.ph.u), phCredit(p.ph.a, p.ph.l), o.link ? p.ph.p : '');
     else if (s === 'g') phGoogle(p, r => { if (r) show(r.u, '사진 · Google Maps' + (r.a ? ' · ' + r.a : ''), o.link ? r.l : '', 1); else next(); });   // 11/24 표기 = Google Maps(앞에 둬서 말줄임에 안 잘림) · 작가(링크)
     else if (s === 'sv' && !NOG) sv();   // 11/26 B: 간체판은 구글 스트리트뷰 안 띄움
     else none();
@@ -3878,7 +3880,8 @@ function menuSheet(k) {
     closeAll();
     if (!navigator.share) { toast('이 브라우저는 공유를 지원하지 않아요 · 링크를 복사해 주세요'); return; }
     shareWait().then(vu => { if (!vu) return;   // 11/19 W8: 보기 전용 링크
-      navigator.share({ title: 'VZTR · ' + TRIP_TITLE, text: TRIP_TITLE + ' 가이드북', url: vu }).catch(e => { if (e && e.name === 'NotAllowedError') copyLater(Promise.resolve(vu), '공유 창 대신 링크를 복사했어요'); else if (e && e.name !== 'AbortError') toast('공유 창을 열지 못했어요 · 링크 복사를 이용해 주세요'); }); });
+      const stt = window.VZTR_FX ? (((document.querySelector('.pill .ttl b') || {}).dataset || {}).vzf || (document.querySelector('.pill .ttl b') || {}).textContent || '').trim() : '';   /* 11/27 최종 검수: 번역판 공유 창 글이 한국어('서울에서 3일 가이드북')로 나가던 것 → 화면에 보이는(번역된) 제목 */
+      navigator.share(window.VZTR_FX ? { title: 'VZTR' + (stt ? ' · ' + stt : ''), text: stt || 'VZTR', url: vu } : { title: 'VZTR · ' + TRIP_TITLE, text: TRIP_TITLE + ' 가이드북', url: vu }).catch(e => { if (e && e.name === 'NotAllowedError') copyLater(Promise.resolve(vu), '공유 창 대신 링크를 복사했어요'); else if (e && e.name !== 'AbortError') toast('공유 창을 열지 못했어요 · 링크 복사를 이용해 주세요'); }); });
   }
   else if (k === 'pdf') { pdfSheet(); }
   else { closeAll(); toast('시험판에서는 아직 준비 중'); }
