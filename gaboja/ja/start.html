@@ -26,7 +26,7 @@
 <link rel="stylesheet" href="fonts/google/gf.css?v=1"><!-- 11/24 Inter Tight·Zen Kaku Gothic New 자체 호스팅(구글 서버로 IP 안 감, OFL) -->
 <script src="inapp.js?v=1"></script>
 <script src="hit.js?v=1"></script><!-- 11/26 2주차: 유입 숫자 세기(합계만) -->
-<script src="i18n-ja-auto.js?v=ccc9acd1"></script><script src="i18n-ja.js?v=ccc9acd1"></script><script src="i18n.js?v=ccc9acd1"></script><!-- 11/20 W5 언어 틀 (영어판 = /en/, 사전 i18n-en.js는 배포 때 en/에만 붙음) -->
+<script src="i18n-ja-auto.js?v=6686ed01"></script><script src="i18n-ja.js?v=6686ed01"></script><script src="i18n.js?v=6686ed01"></script><!-- 11/20 W5 언어 틀 (영어판 = /en/, 사전 i18n-en.js는 배포 때 en/에만 붙음) -->
 <link rel="stylesheet" href="fonts/vztr-fonts.css?v=2"><!-- 11/19 글꼴: 굵은 한글 IBM Plex Sans KR · 보통 한글 Pretendard · 영문·숫자 IBM Plex Sans -->
 <link rel="icon" href="icons/favicon-32.png">
 <link rel="apple-touch-icon" href="icons/icon-180.png">
@@ -2018,12 +2018,12 @@ async function cardPng(c, f = 's') {
     return [[s], fmin]; };
   const logo = (RX, BY, S) => { const k = S / 76, dr = 11 * k, DX = RX - 2 * dr - 6 * k; x.textAlign = 'right'; x.textBaseline = 'alphabetic'; x.font = `800 ${S}px ${LAT}`; x.fillStyle = '#0F1F33';
     ls((-3 * k) + 'px'); x.fillText('vztr', DX, BY); ls('0px'); x.fillStyle = '#3D63F5'; x.beginPath(); x.arc(DX + 17 * k, BY - 9 * k, dr, 0, Math.PI * 2); x.fill(); };
-  const flaps = (X0, Y, FW, FH, GAP, mean) => { const MF = W5EN ? LAT : KR; let mz = mean; c.split('').forEach(l => { mz = Math.min(mz, fit(LMEAN[l], 600, mean, 18, MF, FW + GAP - 8, 1)); });   // 뜻 네 칸 = 같은 크기(가장 긴 낱말에 맞춤, 영어 'Sightseeing')
+  const flaps = (X0, Y, FW, FH, GAP, mean) => { const MF = W5EN ? LAT : KR; let mz = mean, lb = Y + FH; c.split('').forEach(l => { mz = Math.min(mz, fit(LMEAN[l], 600, mean, 18, MF, FW + GAP - 8, 1)); });   // 뜻 네 칸 = 같은 크기(가장 긴 낱말에 맞춤, 영어 'Sightseeing')
     c.split('').forEach((l, k) => { const X = X0 + k * (FW + GAP);   // 11/25 UI 규칙 확정 7: 흰 판 + dk 글자 + 가운데 줄 dk 18%
     rr(X, Y, FW, FH, Math.round(FW * .12)); x.save(); x.shadowColor = 'rgba(22,23,26,.10)'; x.shadowBlur = 8; x.shadowOffsetY = 3; x.fillStyle = '#FFFFFF'; x.fill(); x.restore();
     x.strokeStyle = ink + '2E'; x.lineWidth = 2; x.beginPath(); x.moveTo(X + 1, Y + FH / 2); x.lineTo(X + FW - 1, Y + FH / 2); x.stroke();
     x.fillStyle = ink; x.textAlign = 'center'; x.textBaseline = 'middle'; x.font = `800 ${Math.round(FH * .56)}px ${LAT}`; x.fillText(DL(l), X + FW / 2, Y + FH / 2 + Math.round(FH * .03));
-    x.textBaseline = 'alphabetic'; x.font = `600 ${mz}px ${MF}`; x.fillText(LMEAN[l], X + FW / 2, Y + FH + Math.round(mean * 1.6)); }); };
+    x.textBaseline = 'alphabetic'; x.font = `600 ${mz}px ${MF}`; x.fillText(LMEAN[l], X + FW / 2, Y + FH + Math.round(mean * 1.6)); lb = Math.max(lb, Y + FH + Math.round(mean * 1.6) + (x.measureText(LMEAN[l]).actualBoundingBoxDescent || 0)); }); return lb; };
   /* 11/26 밤 동우님 보드 v2: 캐릭터 크기 통일 — 그림 상자가 아니라 실제로 칠해진 면적(픽셀)으로 맞춤(버스는 납작·지도는 커 보이던 것). 가운데 (cx, cy), 칠해진 면적의 √ = A, 최대 mw×mh */
   const charDraw = async (cx, cy, A, mw, mh) => { const RS = 1000, im = await charImg(c, RS); if (!im) return;
     const oc = document.createElement('canvas'); oc.width = oc.height = RS; const o = oc.getContext('2d'); o.drawImage(im, 0, 0, RS, RS);
@@ -2036,8 +2036,9 @@ async function cardPng(c, f = 's') {
   const name = TR(t.name), line = TR(t.line), grp = TR(t.group), inv = TR('너는 어떤 여행자야?');
   if (f === 'q') {   // ===== 1:1 B 가운데 — 여백 80 · 머리 → 글자판 → 캐릭터 → 이름 → 설명 → 초대 알약
     const M = 80; x.textBaseline = 'alphabetic'; x.textAlign = 'left'; x.fillStyle = ink; x.font = `700 36px ${KR}`; x.fillText(TR('내 여행 유형'), M, M + 40); logo(W - M, M + 40, 50);   // 11/26 밤: 로고 60 → 50
-    const FW = 104, FH = 136, GAP = 20; flaps((W - (FW * 4 + GAP * 3)) / 2, 168, FW, FH, GAP, 30);
-    await charDraw(W / 2, 504, 182, 400, 264);   // 11/26 밤: 캐릭터 크기 통일
+    const FW = 104, FH = 136, GAP = 20, lbq = flaps((W - (FW * 4 + GAP * 3)) / 2, 168, FW, FH, GAP, 30);
+    x.textAlign = 'center'; ls('-2px'); fit(name, 700, 96, 56, NMF, W - M * 2, 4); const ntq = 752 - (x.measureText(name).actualBoundingBoxAscent || 0); ls('0px');
+    await charDraw(W / 2, (lbq + ntq) / 2, 182, 400, 264);   // 11/26 밤: 캐릭터 크기 통일 · 11/27 동우님 보드 답: 보이는 몸통을 (뜻 글자 아래 ~ 유형 이름 위) 세로 가운데에 (전엔 504 고정 → 위로 20~24px)
     x.textAlign = 'center'; ls('-2px'); fit(name, 700, 96, 56, NMF, W - M * 2, 4); x.fillStyle = '#16181D'; x.fillText(name, W / 2, 752); ls('0px');
     const [ln, lz] = two(line, 500, 36, 30, KR, W - M * 2); x.fillStyle = '#6B6E75'; x.font = `500 ${lz}px ${KR}`; ln.forEach((q, i) => x.fillText(q, W / 2, (ln.length > 1 ? 830 : 842) + i * 46));   // 11/26 밤 v3 답: 이름 ↔ 소개 간격 넓힘   // 11/26 밤: 글자 줄이지 않고 두 줄
     x.font = `700 32px ${KR}`; const aw = x.measureText(inv).width;   // 11/26 밤: 주소 빼고 초대 글만 알약 가운데
@@ -2051,8 +2052,8 @@ async function cardPng(c, f = 's') {
     x.strokeStyle = 'rgba(22,23,26,.18)'; x.lineWidth = 4; x.setLineDash([14, 12]); x.beginPath(); x.moveTo(L + 50, CUT); x.lineTo(L + CW - 50, CUT); x.stroke(); x.setLineDash([]);
     x.textBaseline = 'alphabetic'; x.textAlign = 'left'; x.fillStyle = ink; x.font = `700 40px ${KR}`; txL(TR('내 여행 유형'), PX, T0 + 96);
     x.textAlign = 'right'; x.font = `600 26px ${LAT}`; ls('3px'); x.globalAlpha = .6; x.fillText('BOARDING PASS', RX, T0 + 92); x.globalAlpha = 1; ls('0px');
-    const FW = 136, FH = 176, GAP = 24; flaps((W - (FW * 4 + GAP * 3)) / 2, T0 + 136, FW, FH, GAP, 34);
-    await charDraw(W / 2, 860, 250, 560, 380);   // 11/26 밤: 캐릭터 크기 통일
+    const FW = 136, FH = 176, GAP = 24, lbs = flaps((W - (FW * 4 + GAP * 3)) / 2, T0 + 136, FW, FH, GAP, 34);
+    await charDraw(W / 2, (lbs + CUT) / 2, 250, 560, 380);   // 11/27 동우님 보드 답: (뜻 글자 아래 ~ 점선) 세로 가운데 (전엔 860 고정, 1~5px 차이)   // 11/26 밤: 캐릭터 크기 통일
     x.textAlign = 'left'; x.fillStyle = ink; x.font = `700 40px ${KR}`; txL(grp, PX, CUT + 104);
     ls('-2px'); fit(name, 700, 104, 60, NMF, PW, 4); x.fillStyle = '#16181D'; txL(name, PX, CUT + 224); ls('0px');   // 11/26 밤: 120 → 104
     const [ln, lz] = two(line, 500, 42, 32, KR, PW, true); x.fillStyle = '#6B6E75'; x.font = `500 ${lz}px ${KR}`; ln.forEach((q, i) => txL(q, PX, CUT + 318 + i * 60));   // 11/26 밤 v3 답: 이름 ↔ 소개 간격 넓힘(+18)
