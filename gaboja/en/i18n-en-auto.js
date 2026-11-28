@@ -610,6 +610,7 @@ window.VZTR_EN_AUTO = {
 "K향수·핸드케어 브랜드 쇼룸": "K-perfume and hand care showroom",
 "LA 구제를 g당 가격으로 사는 곳": "LA vintage priced by the gram",
 "LA에서 사온 레귤러 구제를 1g당 7엔(세금 별도)에 판매": "Regular vintage bought in LA, sold at ¥7 per gram (tax excluded)",
+"LED 조명 보도교": "LED-lit pedestrian bridge",
 "LP 음악 카페": "LP music café",
 "LP 인테리어 카페": "LP-themed café",
 "LP 틀어주는 바": "A bar that plays LP records",
@@ -1337,6 +1338,7 @@ window.VZTR_EN_AUTO = {
 "공방 골목": "Artists' studio lanes",
 "공방과 전시 공간이 모인 예술인 마을이에요": "Browse studios and galleries in an artists' village",
 "공식 사이트에 markaware·ANCELLM·blurhms 등 26개 브랜드 표기": "Official site lists 26 brands including markaware, ANCELLM and blurhms",
+"공연장·전시장 예술 거리": "Arts street with theaters & galleries",
 "공영주차장이 바로 앞에 있어요": "Public parking right in front",
 "공예 한정품": "Exclusive crafts",
 "공예·잡화": "Crafts, goods",
@@ -1494,6 +1496,7 @@ window.VZTR_EN_AUTO = {
 "구경하며 남쪽으로": "Browsing your way south",
 "구글 지도에서 근처 찾기": "Find nearby in Google Maps",
 "구글맵에 골목 저장 수십 개": "Dozens of alleys saved in Google Maps",
+"구도심 번화가 거리": "Old-downtown shopping street",
 "구라마에 문구와 엿세공": "Kuramae stationery and candy craft",
 "구라마에 초콜릿 카페": "Kuramae chocolate cafe",
 "구라마에 카페와 스미다 강변": "Kuramae cafes and Sumida riverside",
@@ -2382,6 +2385,7 @@ window.VZTR_EN_AUTO = {
 "닿는 곳에서 **저녁 한 끼**": "**Dinner** wherever you land",
 "닿는 곳에서 마무리": "Wrap up wherever you land",
 "대곡 대구 수목원": "Arboretum in Daegok, Daegu",
+"대관람차": "Ferris wheel",
 "대교 사진 명소": "Bridge photo spot",
 "대구": "Daegu",
 "대구 #박 #일": "Daegu # nights # days",
@@ -3825,6 +3829,8 @@ window.VZTR_EN_AUTO = {
 "몬 다카나와": "MoN Takanawa",
 "몬나카 서민 생선 술집": "Casual fish pub in Monnaka",
 "몰운대 화손대": "Molundae Hwasondae",
+"몰입형 미디어아트 전시": "Immersive media art exhibition",
+"몰입형 전시": "Immersive exhibition",
 "몸국": "Momguk",
 "몸국 전문점": "Momguk specialist",
 "못 넣은 곳": "Not added",
@@ -4041,10 +4047,14 @@ window.VZTR_EN_AUTO = {
 "밤 일정(#:# 이후)": "Night plans (after #:#)",
 "밤 전용(#:# 이후)": "Night only (after #:#)",
 "밤 핫플로 마무리": "Wrap up at a night hotspot",
+"밤까지 다니는 갯배": "Gaetbae ferry running into the night",
 "밤마다 어디서 자요?": "Where do you stay each night?",
 "밤마다 연탄불고기 골목": "Briquette bulgogi alley at night",
+"밤바다 미디어아트 거리": "Night-sea media art street",
 "밤바다 포차": "Night-sea food stalls",
+"밤바다 해상 분수 레이저쇼": "Night-sea fountain & laser show",
 "밤새 쉬어갈 수 있는 24시간 온천 시설이에요": "A 24-hour onsen complex you can stay at overnight",
+"밤새 이용하는 #시간 찜질방": "#-hour jjimjilbang open all night",
 "밤에 성터를 걷는 야외 빛 전시": "Outdoor light show to walk through at the castle ruins at night",
 "밤에 여는 아카시야키·무기토로": "Akashiyaki & mugitoro at night",
 "밤에 진가를 드러내는 '다이아몬드 브릿지'예요": "The \"Diamond Bridge\" shines at night",
@@ -4930,7 +4940,9 @@ window.VZTR_EN_AUTO = {
 "소금빵": "Salt bread",
 "소금빵·커피 카페": "Salt bread & coffee cafe",
 "소나무 숲 수목원": "Pine forest arboretum",
+"소나무 숲 야간 미디어아트쇼": "Night media art show in a pine forest",
 "소나무 숲 옆 1.8km 모래 해변이 펼쳐져요": "Stroll a 1.8 km sandy shore beside a pine forest",
+"소나무숲 야시장": "Pine-forest night market",
 "소래·구월": "Sorae & Guwol",
 "소래습지생태공원과 소래포구": "Sorae Wetland Park & Sorae Port",
 "소머리국밥, 9시부터 21시": "Someori-gukbap (ox head soup), 9:00-21:00",
@@ -4989,6 +5001,7 @@ window.VZTR_EN_AUTO = {
 "송도": "Songdo",
 "송도 구름산책로": "Songdo Cloud Walk",
 "송도 바다를 보는 로스터리 카페": "Roastery café with Songdo sea views",
+"송도 전망대": "Songdo observation deck",
 "송도 케이블카와 오션뷰 카페": "Songdo cable car and ocean-view cafe",
 "송도 케이블카와 오션뷰 카페 먼저 빼기": "Skip Songdo Cable Car and ocean-view cafe first",
 "송도반도(암남공원)": "Songdo Peninsula (Amnam Park)",
@@ -5624,7 +5637,12 @@ window.VZTR_EN_AUTO = {
 "앤티크 잡화와 고양이 있는 미부 킷사텐": "Kissaten with antiques and a cat in Mibu",
 "앨범·공식 굿즈 매장": "Albums and official merch",
 "앰배서더서울풀만 호빈": "Ambassador Seoul Pullman Hobin",
+"야간 디지털 미디어아트 테마파크": "Night digital media art theme park",
+"야간 조명 정원": "Garden lit up at night",
+"야간 천문대 별 관측": "Night stargazing observatory",
+"야간경관 조명 공원": "Park with night lighting",
 "야경": "Night view",
+"야경 명소 다리": "Bridge famous for its night view",
 "야경 보며 마무리": "Finish with the night view",
 "야경 속 인증샷": "Night-view photo",
 "야경·다이아몬드 브릿지": "Night view and Diamond Bridge",
@@ -5969,6 +5987,8 @@ window.VZTR_EN_AUTO = {
 "영진항 핸드드립 카페": "Yeongjin Port hand-drip café",
 "영화 핸드프린팅": "Film handprints",
 "영화·문화 시설": "Cinema and culture venues",
+"영화관·기획전시 복합문화공간": "Cinema & exhibition cultural complex",
+"영화관이 모인 번화가": "Busy street full of cinemas",
 "영화의 거리와 블루라인파크": "Film Street and Blueline Park",
 "영화의 거리와 블루라인파크 먼저 빼기": "Skip Film Street and Blueline Park first",
 "영화의전당": "Busan Cinema Center",
@@ -6273,6 +6293,8 @@ window.VZTR_EN_AUTO = {
 "옥상 노천탕과 고농도 탄산천이 있어요": "Rooftop open-air bath and strong carbonated spring",
 "옥상 노천탕이 있는 나카메구로 센토": "Nakameguro sento with a rooftop open-air bath",
 "옥상 스카이 워크": "Rooftop sky walk",
+"온천 스파": "Hot spring spa",
+"온천·찜질 스파": "Hot spring & jjimjilbang spa",
 "올리브영 강남본점": "Olive Young Gangnam Main",
 "올림픽로 #": "Olympic-ro #",
 "올영 체험 특화 성수 4층": "Olive Young 4F experience, Seongsu",
@@ -6569,6 +6591,7 @@ window.VZTR_EN_AUTO = {
 "이노카시라 온시 공원": "Inokashira Park",
 "이니스프리 디아일 성수": "Innisfree Dyle Seongsu",
 "이도림 블로트커피": "Idorim Blot Coffee",
+"이동 너무 김": "Too long a trip",
 "이동 시각을 넣으면 시간표가 완성돼요": "Add travel times to finish the schedule",
 "이동 시각을 넣으면 일정을 추가할 수 있어요": "Add your travel time to add stops",
 "이동 시간은 대략값": "Travel times are approximate",
@@ -6895,6 +6918,7 @@ window.VZTR_EN_AUTO = {
 "재현한 마치야": "Recreated machiya townhouse",
 "저녁 #시 이후 미니포차가 서는 야시장이 돼요": "After #pm, it turns into a night market with mini pojangmacha",
 "저녁 #시경부터 새벽 #시까지 불이 켜져요": "Lit from about #:00 p.m. to #:00 a.m.",
+"저녁 #시까지 여는 도서관": "Library open until # pm",
 "저녁 #시부터 새벽까지 열리는 노점 거리": "Stall street open from #:00 p.m. until dawn",
 "저녁 7시 이후 미니포차가 서는 야시장이 돼요": "Night market with mini pocha (street bars) after 19:00",
 "저녁 — @": "Dinner — @",
@@ -6904,6 +6928,8 @@ window.VZTR_EN_AUTO = {
 "저녁 예약 시간에 출발": "Leave for the dinner reservation",
 "저녁 오코노미야키": "Okonomiyaki dinner",
 "저녁 한 끼": "One dinner",
+"저녁까지 하는 극장": "Theater open into the evening",
+"저녁까지 하는 아쿠아리움": "Aquarium open into the evening",
 "저녁은 초밥으로": "Sushi for dinner",
 "저수지 한 바퀴 산책": "Reservoir loop walk",
 "저작자표시라이센스입니다": "Attribution license",
@@ -6925,9 +6951,12 @@ window.VZTR_EN_AUTO = {
 "전날 확인": "Check the day before",
 "전남": "Jeonnam",
 "전동성당과 남부시장": "Jeondong Cathedral & Nambu Market",
+"전망 스카이타워": "Observation sky tower",
 "전망 자리 잡고 휴식": "Grab a view seat and rest",
 "전망 좋은 자리에 앉으면 끝. 일어날 생각 없음": "Grab a seat with a view and stay. No plans to get up",
+"전망 타워": "Observation tower",
 "전망 탑 사진 명소": "Observation tower photo spot",
+"전망대": "Observatory deck",
 "전망대나": "An observatory or",
 "전망대나 유명 명소 하나 더": "An observatory or one more famous landmark",
 "전망대나|유명 명소 하나 더": "One more|observatory or landmark",
@@ -7371,6 +7400,7 @@ window.VZTR_EN_AUTO = {
 "찐빵·김치왕만두": "Steamed buns · Kimchi king mandu",
 "찐빵·김치왕만두 가게": "Steamed buns & kimchi mandu shop",
 "찜갈비": "Jjimgalbi",
+"찜질 스파": "Jjimjilbang spa",
 "차 · 집 →": "Car · Home →",
 "차 박물관 카페": "Tea museum café",
 "차 시간 =": "Drive time =",
@@ -7439,6 +7469,7 @@ window.VZTR_EN_AUTO = {
 "천년숨결 치유의 길": "Cheonnyeon Sumgyeol healing trail",
 "천마총 내부": "Walk-in Cheonmachong tomb",
 "천마총 안으로 직접 들어가 볼 수 있어요": "Step inside Cheonmachong, a Silla royal tomb",
+"천문과학 체험관": "Astronomy science center",
 "천불동계곡 출발점": "Trailhead for Cheonbuldong Valley",
 "천불동계곡과 공룡능선 산행이 시작돼요": "Start hikes to Cheonbuldong Valley and Gongnyong Ridge",
 "천사벽화골목": "Angel mural alley",
@@ -7827,6 +7858,7 @@ window.VZTR_EN_AUTO = {
 "타코야키로 마무리": "Finish with takoyaki",
 "탄두리 치킨": "Tandoori chicken",
 "탄불 로스팅 커피를 주문마다 핸드드립으로 내려줘요": "Charcoal-roasted coffee, hand-dripped to order",
+"탄산 온천·찜질 스파": "Carbonated hot spring & jjimjilbang spa",
 "탑승 수속": "Airport check-in",
 "탑승 수속·보안 검색 먼저": "Check-in · Security first",
 "탑승권": "Boarding pass",
@@ -8521,6 +8553,7 @@ window.VZTR_EN_AUTO = {
 "호주식 브런치·에그베네딕트 카페": "Australian brunch · eggs Benedict cafe",
 "호캉스 플래너": "Staycation Pro",
 "호텔 뷰·디저트": "Hotel view·dessert",
+"호텔 스파": "Hotel spa",
 "호트케이크·파스타 런치 카페": "Hot cake & pasta lunch café",
 "호피·소힘줄 니코미 술집가": "Hopi & beef tendon nikomi bar street",
 "호피·야키토리": "Hoppy · yakitori",
@@ -9907,6 +9940,12 @@ window.VZTR_EN_PLACES = {
 "en": "Anmokhang Mulhoe",
 "conf": "roman"
 },
+"gng-arte": {
+"en": "ARTE MUSEUM Gangneung",
+"short": "ARTE MUSEUM Gangneun",
+"conf": "manual",
+"src": ""
+},
 "gng-beodeunamubeurueori": {
 "en": "Willow Brewery",
 "conf": "roman"
@@ -9972,6 +10011,12 @@ window.VZTR_EN_PLACES = {
 "gng-hapyeonghaebyeon": {
 "en": "Hapyeong Beach",
 "conf": "roman"
+},
+"gng-hasla-immersive": {
+"en": "Hasla Gangneung Immersive Art Show",
+"short": "Hasla Gangneung Imme",
+"conf": "manual",
+"src": ""
 },
 "gng-haslla": {
 "en": "Haslla Art World",
@@ -10195,6 +10240,12 @@ window.VZTR_EN_PLACES = {
 "en": "1883 Gaehang Salon",
 "conf": "roman"
 },
+"icn-aegwan": {
+"en": "Aegwan Theater",
+"short": "Aegwan Theater",
+"conf": "roman",
+"src": ""
+},
 "icn-artplatform": {
 "en": "Incheon Art Platform",
 "conf": "official"
@@ -10203,6 +10254,12 @@ window.VZTR_EN_PLACES = {
 "en": "Brown Hands Gaehangro",
 "conf": "roman",
 "short": "Brown Hands"
+},
+"icn-cheongna-spalex": {
+"en": "Cheongna Sparex",
+"short": "Cheongna Sparex",
+"conf": "manual",
+"src": ""
 },
 "icn-cheongsilhongsil-sinpo": {
 "en": "Cheongsil Hongsil Sinpo",
@@ -10237,6 +10294,12 @@ window.VZTR_EN_PLACES = {
 "en": "Gongeulgi",
 "conf": "roman"
 },
+"icn-gtower": {
+"en": "G-Tower Observatory",
+"short": "G-Tower Observatory",
+"conf": "manual",
+"src": ""
+},
 "icn-gyeonginmyeonok": {
 "en": "Gyeongin Myeonok",
 "conf": "roman"
@@ -10254,6 +10317,12 @@ window.VZTR_EN_PLACES = {
 "en": "Jayu Park",
 "conf": "official"
 },
+"icn-kiwi-spa": {
+"en": "Kiwi Spa Land",
+"short": "Kiwi Spa Land",
+"conf": "manual",
+"src": ""
+},
 "icn-maetdolsonkalguksu": {
 "en": "Maetdol Kalguksu",
 "conf": "roman"
@@ -10261,6 +10330,12 @@ window.VZTR_EN_PLACES = {
 "icn-manbokbunsik": {
 "en": "Manbok Bunsik",
 "conf": "roman"
+},
+"icn-paradise-spa": {
+"en": "The Spa at Paradise",
+"short": "The Spa at Paradise",
+"conf": "manual",
+"src": ""
 },
 "icn-sinpo": {
 "en": "Sinpo International Market",
@@ -10313,9 +10388,21 @@ window.VZTR_EN_PLACES = {
 "en": "Uri Art Museum",
 "conf": "roman"
 },
+"icn-wolmi-view": {
+"en": "Wolmi Park Observatory",
+"short": "Wolmi Park Observato",
+"conf": "manual",
+"src": ""
+},
 "icn-wolmido": {
 "en": "Wolmido Island",
 "conf": "official"
+},
+"icn-wolmisan-glass": {
+"en": "Wolmisan Glass Observatory",
+"short": "Wolmisan Glass Obser",
+"conf": "manual",
+"src": ""
 },
 "icn-yeonsudongmokrojujeom": {
 "en": "Mokro Jujeom",
@@ -10324,6 +10411,12 @@ window.VZTR_EN_PLACES = {
 "jej-apbaengdisikdang": {
 "en": "Apbaengdi Restaurant",
 "conf": "roman"
+},
+"jej-arte": {
+"en": "ARTE MUSEUM Jeju",
+"short": "ARTE MUSEUM Jeju",
+"conf": "manual",
+"src": ""
 },
 "jej-bijarim": {
 "en": "Bijarim Forest",
@@ -10340,6 +10433,18 @@ window.VZTR_EN_PLACES = {
 "jej-bujikkaengi": {
 "en": "Bujikkaengi",
 "conf": "roman"
+},
+"jej-bulbit": {
+"en": "Jeju Light Garden",
+"short": "Jeju Light Garden",
+"conf": "manual",
+"src": ""
+},
+"jej-byeolbit": {
+"en": "Jeju Byeolbitnuri Park",
+"short": "Jeju Byeolbitnuri Pa",
+"conf": "roman",
+"src": ""
 },
 "jej-camellia": {
 "en": "Camellia Hill",
@@ -10448,6 +10553,12 @@ window.VZTR_EN_PLACES = {
 "en": "Cafe Oreun",
 "conf": "roman"
 },
+"jej-orev": {
+"en": "Oreve Hot Spring & Spa",
+"short": "Oreve Hot Spring & S",
+"conf": "official",
+"src": "TourAPI EngService2 contentid 3346982"
+},
 "jej-osulloc": {
 "en": "Osulloc Tea Museum",
 "conf": "official"
@@ -10460,6 +10571,18 @@ window.VZTR_EN_PLACES = {
 "en": "Saetdori Spring",
 "conf": "roman"
 },
+"jej-saeyeon": {
+"en": "Saeyeongyo Bridge",
+"short": "Saeyeongyo Bridge",
+"conf": "roman",
+"src": ""
+},
+"jej-sanbang-spa": {
+"en": "Sanbangsan Carbonated Hot Spring",
+"short": "Sanbangsan Carbonate",
+"conf": "manual",
+"src": ""
+},
 "jej-sanbangsan": {
 "en": "Sanbangsan Mountain",
 "conf": "official"
@@ -10468,6 +10591,12 @@ window.VZTR_EN_PLACES = {
 "en": "Saryeoni Forest Trail",
 "conf": "official",
 "short": "Saryeoni Trail"
+},
+"jej-seogwipo-astro": {
+"en": "Seogwipo Astronomy and Science Culture Center",
+"short": "Seogwipo Astronomy a",
+"conf": "manual",
+"src": ""
 },
 "jej-seongsan": {
 "en": "Seongsan Ilchulbong",
@@ -10484,6 +10613,15 @@ window.VZTR_EN_PLACES = {
 "jej-soesokkak": {
 "en": "Soesokkak Estuary",
 "conf": "official"
+},
+"jej-suyeongil-night": {
+"en": "Sumokwon Night Market",
+"short": "Sumokwon Night Marke",
+"conf": [
+"off",
+"Sumokwon"
+],
+"src": ""
 },
 "jej-topyeonggol": {
 "en": "Topyeonggol",
@@ -10515,6 +10653,12 @@ window.VZTR_EN_PLACES = {
 "conf": "roman",
 "short": "Chimyeongja Shrine"
 },
+"jnj-cinema-street": {
+"en": "Jeonju Movie Street",
+"short": "Jeonju Movie Street",
+"conf": "official",
+"src": "TourAPI EngService2 contentid 2946556"
+},
 "jnj-dasandwaejiwanakji-bon": {
 "en": "Dasan Pork & Octopus",
 "conf": "roman"
@@ -10523,6 +10667,12 @@ window.VZTR_EN_PLACES = {
 "en": "Deokjin Park",
 "conf": "official"
 },
+"jnj-dongmun-art": {
+"en": "Jeonju Dongmun Art Street",
+"short": "Jeonju Dongmun Art S",
+"conf": "manual",
+"src": ""
+},
 "jnj-eummi": {
 "en": "Eummi",
 "conf": "roman"
@@ -10530,6 +10680,18 @@ window.VZTR_EN_PLACES = {
 "jnj-eunhaengnamugadeun": {
 "en": "Ginkgo Garden",
 "conf": "roman"
+},
+"jnj-film-lab": {
+"en": "Jeonju Film Studio",
+"short": "Jeonju Film Studio",
+"conf": "manual",
+"src": ""
+},
+"jnj-gaeksa-gil": {
+"en": "Gaeksa-gil",
+"short": "Gaeksa-gil",
+"conf": "official",
+"src": "TourAPI EngService2 contentid 2944320"
 },
 "jnj-geomeungit-saundeu": {
 "en": "Black Feather Sound",
@@ -12245,6 +12407,24 @@ window.VZTR_EN_PLACES = {
 "en": "Dongmyeong Port",
 "conf": "roman"
 },
+"sch-expo-tower": {
+"en": "Sokcho Expo Tower",
+"short": "Sokcho Expo Tower",
+"conf": "manual",
+"src": ""
+},
+"sch-ferris": {
+"en": "Sokcho Eye Ferris Wheel",
+"short": "Sokcho Eye Ferris Wh",
+"conf": "manual",
+"src": ""
+},
+"sch-gaetbae": {
+"en": "Abai Village Ferry",
+"short": "Abai Village Ferry",
+"conf": "official",
+"src": "TourAPI EngService2 contentid 2366892"
+},
 "sch-gamjaongsimi": {
 "en": "Gamja Ongsimi",
 "conf": "roman"
@@ -12307,6 +12487,12 @@ window.VZTR_EN_PLACES = {
 "en": "Sokcho City Museum (Refugee Village)",
 "conf": "roman",
 "short": "Sokcho City Museum"
+},
+"sch-spaland": {
+"en": "Sokcho Spa Land",
+"short": "Sokcho Spa Land",
+"conf": "manual",
+"src": ""
 },
 "sch-teilpoteoriseutyudio": {
 "en": "Tail Pottery Studio",
@@ -13934,6 +14120,12 @@ window.VZTR_EN_PLACES = {
 "en": "Al Coffee",
 "conf": "roman"
 },
+"swn-aquaplanet": {
+"en": "Aqua Planet Gwanggyo",
+"short": "Aqua Planet Gwanggyo",
+"conf": "manual",
+"src": ""
+},
 "swn-banghwa": {
 "en": "Banghwasuryujeong Pavilion",
 "conf": "official",
@@ -13943,6 +14135,12 @@ window.VZTR_EN_PLACES = {
 "en": "Bukmun Yuchi Hoegwan",
 "conf": "roman"
 },
+"swn-byeolmadang": {
+"en": "Starfield Library Suwon",
+"short": "Starfield Library Su",
+"conf": "manual",
+"src": ""
+},
 "swn-chicken": {
 "en": "Suwon Fried Chicken Street",
 "conf": "official",
@@ -13951,6 +14149,12 @@ window.VZTR_EN_PLACES = {
 "swn-daewangkalguksu": {
 "en": "Daewang Kalguksu",
 "conf": "roman"
+},
+"swn-freiburg": {
+"en": "Gwanggyo Freiburg Observatory",
+"short": "Gwanggyo Freiburg Ob",
+"conf": "manual",
+"src": ""
 },
 "swn-geujiphaejangguk": {
 "en": "Geujip Haejangguk",
@@ -14075,6 +14279,12 @@ window.VZTR_EN_PLACES = {
 "en": "Chungnyeolsa Shrine",
 "conf": "official"
 },
+"tyg-daegyo": {
+"en": "Tongyeong Bridge",
+"short": "Tongyeong Bridge",
+"conf": "manual",
+"src": ""
+},
 "tyg-dara": {
 "en": "Dalaji Park",
 "conf": "official"
@@ -14088,6 +14298,12 @@ window.VZTR_EN_PLACES = {
 "en": "Dongpirang Mural Village",
 "conf": "official",
 "short": "Dongpirang Village"
+},
+"tyg-dpirang": {
+"en": "DPIRANG",
+"short": "DPIRANG",
+"conf": "manual",
+"src": ""
 },
 "tyg-gangguan": {
 "en": "Gangguan Harbor",
@@ -14127,6 +14343,12 @@ window.VZTR_EN_PLACES = {
 "tyg-manseongbokjip": {
 "en": "Manseong Bokjip",
 "conf": "roman"
+},
+"tyg-marine-park": {
+"en": "Tongyeong Marine Tourism Park",
+"short": "Tongyeong Marine Tou",
+"conf": "manual",
+"src": ""
 },
 "tyg-market": {
 "en": "Tongyeong Central Market",
@@ -15045,6 +15267,18 @@ window.VZTR_EN_PLACES = {
 "en": "Aqua Planet Yeosu",
 "conf": "official"
 },
+"ysu-bamdibul": {
+"en": "Bamdibul Street",
+"short": "Bamdibul Street",
+"conf": "roman",
+"src": ""
+},
+"ysu-bigo-show": {
+"en": "BIG-O Show",
+"short": "BIG-O Show",
+"conf": "manual",
+"src": ""
+},
 "ysu-cablecar": {
 "en": "Yeosu Marine Cable Car",
 "conf": "official",
@@ -15129,6 +15363,12 @@ window.VZTR_EN_PLACES = {
 "conf": "roman",
 "short": "Manseongri Beach"
 },
+"ysu-noctemare": {
+"en": "Yeosu Nocte Mare",
+"short": "Yeosu Nocte Mare",
+"conf": "manual",
+"src": ""
+},
 "ysu-odongdo": {
 "en": "Odongdo Island",
 "conf": "official"
@@ -15144,6 +15384,12 @@ window.VZTR_EN_PLACES = {
 "ysu-sangolsikdang": {
 "en": "Sangol Restaurant",
 "conf": "roman"
+},
+"ysu-skytower": {
+"en": "Yeosu Expo Sky Tower",
+"short": "Yeosu Expo Sky Tower",
+"conf": "manual",
+"src": ""
 },
 "ysu-sohodongdongdari": {
 "en": "Sohodong Dongdari",

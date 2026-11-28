@@ -31,7 +31,7 @@
 <script src="inapp.js?v=1"></script>
 <script src="hit.js?v=1"></script><!-- 11/26 2주차: 유입 숫자 세기(합계만) -->
 <script src="legal/flags.js?v=1"></script>
-<script src="i18n.js?v=14359127"></script>
+<script src="i18n.js?v=1812ef8d"></script>
 <link rel="stylesheet" href="fonts/vztr-fonts.css?v=2">
 <script>/* 11/26: 기기(브라우저) 시스템 모드를 따름 — 다크 = 밤 객실 · 라이트 = 밝은 객실. ?theme=dark|light = 미리보기 */
 (function () { try { var q = new URLSearchParams(location.search).get('theme'), d = q === 'dark' || q === 'light' ? q === 'dark' : matchMedia('(prefers-color-scheme: dark)').matches; if (d) document.documentElement.setAttribute('data-theme', 'dark'); } catch (e) {} })();</script>
@@ -378,7 +378,8 @@ if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => { fi
   const OPEN = Date.UTC(2026, 11, 24, 15), lg = () => window.VZTR_LANG || 'ko', isEN = () => lg() !== 'ko';   // 11/26 다국어: isEN = 번역판(글은 LS[언어] → 없으면 영어)   // 11/26 밤 언어는 그 자리에서 바뀜 → 늘 지금 언어로   // 2026-12-25 00:00 KST부터 숨김
   if (window.vztrHit) vztrHit('land');
   /* 11/26 밤 이 기기에 만든 일정이 있으면(써 본 사람) 알림 줄 자리에 '내 일정 이어보기' → /trip */
-  try { const pl = JSON.parse(localStorage.getItem('gaboja-plan') || 'null'); if (pl && Array.isArray(pl.days) && pl.days.length) { document.getElementById('myTrip').hidden = false; return; } } catch (_) {}
+  const ASK = /[?&]alert=1(&|$)/.test(location.search);   // 11/28 동우님 보드 D12: 가이드북 메뉴 '알림 받기' → ./?alert=1 = 일정이 있어도 신청 시트를 바로 엶
+  try { const pl = JSON.parse(localStorage.getItem('gaboja-plan') || 'null'); if (pl && Array.isArray(pl.days) && pl.days.length) { document.getElementById('myTrip').hidden = false; if (!ASK) return; } } catch (_) {}
   const btn = document.getElementById('alBtn'); if (!btn || Date.now() >= OPEN) return;
   const LS = { en: { b: 'Get notified when we launch Dec 25 ›', h: 'Launch alert for Dec 25', s: 'We’ll send you one email on the day we open.', ph: 'Email address',
       a1: 'Consent to collect and use personal information', a1s: 'Email address · to send the launch alert · deleted within 7 days after sending', a1n: 'Without consent we can’t send the alert. ', pv: 'Privacy policy',
@@ -426,6 +427,7 @@ if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => { fi
   const open = () => { if (!done && mkLang !== lg()) mk(); clearTimeout(hideT); last = document.activeElement; if (shell) shell.inert = true; sc.hidden = sh.hidden = false; void sh.offsetWidth; sc.classList.add('on'); sh.classList.add('on'); setTimeout(() => E.focus({ preventScroll: true }), 280); };
   const close = () => { if (sh.hidden) return; sc.classList.remove('on'); sh.classList.remove('on'); if (shell) shell.inert = false; hideT = setTimeout(() => { sc.hidden = sh.hidden = true; }, 300); if (last) last.focus({ preventScroll: true }); };
   btn.addEventListener('click', open); sc.addEventListener('click', close);
+  if (ASK) setTimeout(open, 450);   // 11/28 D12: 메뉴에서 왔으면 시트 바로
   document.addEventListener('vztr-lang', () => { L = LSof(); btn.textContent = L.b; });
   document.addEventListener('keydown', e => { if (sh.hidden || !sh.classList.contains('on')) return; if (e.key === 'Escape') close();
     if (e.key === 'Tab') { const f = [...sh.querySelectorAll('button:not([disabled]),input,a[href]')].filter(x => x.offsetParent); const a = f[0], z = f[f.length - 1];

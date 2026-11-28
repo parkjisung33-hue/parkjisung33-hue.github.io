@@ -181,7 +181,7 @@
   var placesDone = false;
   function places() {
     if (placesDone || !window.GABOJA_DATA) return; placesDone = true;
-    var P = window.GABOJA_DATA.places || {};
+    var P = Object.assign({}, window.GABOJA_DATA.places || {}, window.VZTR_UN_PLACES || {});   /* 11/28 index.html이 사용자가 적은 이름(숙소 등)을 공유 장소 DB를 안 건드리고 따로 알려 줌(VZTR_UN_PLACES) */
     var names = [];
     var EPL = PLC;
     Object.keys(P).forEach(function (id) { var p = P[id]; if (!p || !HAN.test(p.n)) return; var x = EPL[id], e = x && (x.en || x.n) || (!EN && p.l && !HAN.test(p.l) ? p.l : '') || API.placeEn(p),   /* 11/27 최종 검수: 일·중판 사전에 없는 일본 장소 = 현지 이름(黒門市場 등) — 한국어 로마자로 떨어지던 것 */ lim = !EN && e && /^[\x00-\x7F]+$/.test(e) ? 20 : NMAX, sh = x && x.short && x.short.length <= lim ? x.short : e; if (e) { if (!(p.n in MAN)) D[p.n] = e.length > lim ? sh : e;   /* 11/27 B: 일·중판에서 공식 이름이 없어 영어 이름을 쓰는 곳 = 라틴 글자만이면 영어판처럼 20자 한도 */ if (p.sh && p.sh !== p.n && !(p.sh in MAN)) D[p.sh] = sh; /* 화면 = 20자 넘으면 짧은 이름(V-28 한 줄) */ names.push(p.n); if (p.sh && p.sh !== p.n) names.push(p.sh); } });

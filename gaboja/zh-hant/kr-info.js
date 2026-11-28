@@ -25,8 +25,19 @@ window.VZTR_KRINFO = {
       { ic: 'doc', b: '전자입국신고서', t: '도착 3일 전부터 무료로 제출 · 유효한 K-ETA가 있으면 안 해도 돼요', url: 'https://www.e-arrivalcard.go.kr', lk: '공식 사이트',
         src: ['https://www.airport.kr/ap_en/1448/subview.do'] },
       // 인천공항 T1 통신사 로밍센터(KT·LG U+·SKT) 도착층 24시간 · LG U+ 공식: 여행 eSIM 출국 전 온라인 구매
-      { ic: 'sim', b: 'eSIM·유심', t: '여행용 eSIM은 출발 전 온라인으로 · 인천공항 1터미널 도착층에 통신사 로밍센터(24시간)', url: 'https://www.airport.kr/ap_en/1536/subview.do', lk: '공항 안내',
-        src: ['https://www.airport.kr/ap_en/1536/subview.do', 'https://lguplus.com/korea-sim/eng/pc/support/blog/incheon_airport_arrival_guide'] },
+      // 11/28 I15(B33): 도착 공항 맞춤 — PLAN.inp.inbound(ICN·PUS·GMP·CJU)로 ap 표에서 고름. 공항을 모르면 '출발 전 온라인' 한 줄만(인천 문장을 다른 공항에 붙이지 않음)
+      //   김해·김포·제주 = 한국공항공사 airport.co.kr (2026-11-28 확인: 김해 SKT·KT·LGU+ 국제선 1·3층 / 김포 SKT 국제선 1층 / 제주 SKT 국제선 1층 · 제주 페이지에 '국제선 스케줄에 따라 유동적으로 운영')
+      { ic: 'sim', b: 'eSIM·유심', t: '여행용 eSIM은 출발 전 온라인으로', url: 'https://www.airport.kr/ap_en/1536/subview.do', lk: '공항 안내',
+        src: ['https://www.airport.kr/ap_en/1536/subview.do', 'https://lguplus.com/korea-sim/eng/pc/support/blog/incheon_airport_arrival_guide'],
+        ap: {
+          ICN: { t: '여행용 eSIM은 출발 전 온라인으로 · 인천공항 1터미널 도착층에 통신사 로밍센터(24시간)' },
+          PUS: { t: '여행용 eSIM은 출발 전 온라인으로 · 김해공항 국제선 1·3층에 통신사 로밍센터(SKT·KT·LG U+)', url: 'https://www.airport.co.kr/booking/cms/frCon/index.do?MENU_ID=200&CONTENTS_NO=8', src: ['https://www.airport.co.kr/booking/cms/frCon/index.do?MENU_ID=200&CONTENTS_NO=8'] },
+          GMP: { t: '여행용 eSIM은 출발 전 온라인으로 · 김포공항 국제선 1층에 SKT 로밍센터', url: 'https://www.airport.co.kr/gimpo/cms/frCon/index.do?MENU_ID=2390', src: ['https://www.airport.co.kr/gimpo/cms/frCon/index.do?MENU_ID=2390'] },
+          CJU: { t: '여행용 eSIM은 출발 전 온라인으로 · 제주공항 국제선 1층에 SKT 로밍센터 · 운영 시간은 국제선 일정에 따라 달라요', url: 'https://www.airport.co.kr/booking/cms/frCon/index.do?MENU_ID=200&CONTENTS_NO=7', src: ['https://www.airport.co.kr/booking/cms/frCon/index.do?MENU_ID=200&CONTENTS_NO=7'] }
+        } },
+      // 11/28 I15: 제주 직항 + 간체판(중국 본토 여행자)만. 기간·조건 숫자는 공식 현행 문서로 확인 못 해 안 씀(법무부 2026-11-19 보도자료는 제주 무사증을 유지 전제로 언급 · https://www.immigration.go.kr/bbs/immigration/214/612466/artclView.do). 단체관광 무비자(3인 이상 전담여행사)는 개인 여행자 해당 없음 → 안 넣음
+      { ic: 'pass', b: '제주 무사증', when: { ap: 'CJU', lang: 'zh-hans' }, t: '제주로 바로 들어오면 비자 없이 입국하는 제도(제주 무사증)가 있어요 · 조건이 바뀔 수 있으니 출발 전 하이코리아·1345로 확인', url: 'https://www.hikorea.go.kr', lk: '하이코리아',
+        src: ['https://www.immigration.go.kr/bbs/immigration/214/612466/artclView.do', 'https://www.moj.go.kr/immigration_eng/1862/subview.do'] },
       // 한국관광공사 환전 안내(2026-09-11 갱신): 공항 환전소 보통 06:00~22:00·일부 24시간, 은행 평일 09:00~16:00
       { ic: 'coin', b: '환전', t: '공항 환전소는 보통 06:00–22:00(일부 24시간) · 시내 은행은 평일 09:00–16:00', url: 'https://english.visitkorea.or.kr/svc/contents/contentsView.do?vcontsId=195350', lk: '공식 안내',
         src: ['https://english.visitkorea.or.kr/svc/contents/contentsView.do?vcontsId=195350', 'https://english.visitkorea.or.kr/svc/contents/contentsView.do?menuSn=374&vcontsId=140040'] }

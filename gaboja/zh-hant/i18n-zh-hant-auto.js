@@ -655,6 +655,7 @@ window.VZTR_ZH_HANT_AUTO = {
 "K향수·핸드케어 브랜드 쇼룸": "韓國香水·護手霜品牌展示間",
 "LA 구제를 g당 가격으로 사는 곳": "以克計價的LA古著",
 "LA에서 사온 레귤러 구제를 1g당 7엔(세금 별도)에 판매": "在洛杉磯收來的常規古著，按克賣，每克7日圓（未稅）",
+"LED 조명 보도교": "LED燈光人行橋",
 "LP 음악 카페": "LP音樂咖啡",
 "LP 인테리어 카페": "LP 主題咖啡廳",
 "LP 틀어주는 바": "LP唱片酒吧",
@@ -1421,6 +1422,7 @@ window.VZTR_ZH_HANT_AUTO = {
 "공방 골목": "工坊巷弄",
 "공방과 전시 공간이 모인 예술인 마을이에요": "工坊與展覽空間聚集的藝術家村",
 "공식 사이트에 markaware·ANCELLM·blurhms 등 26개 브랜드 표기": "官網標示markaware·ANCELLM·blurhms等26個品牌",
+"공연장·전시장 예술 거리": "劇場·展廳藝術街",
 "공영주차장이 바로 앞에 있어요": "公共停車場就在門口",
 "공예 한정품": "工藝限定品",
 "공예·잡화": "工藝·雜貨",
@@ -1580,6 +1582,7 @@ window.VZTR_ZH_HANT_AUTO = {
 "구글 지도에서 근처 찾기": "用Google地圖找附近",
 "구글맵에 골목 저장 수십 개": "Google 地圖裡存了幾十條巷弄",
 "구급·소방": "急救·消防",
+"구도심 번화가 거리": "舊城區繁華街",
 "구라마에 문구와 엿세공": "藏前文具與糖藝",
 "구라마에 초콜릿 카페": "藏前巧克力咖啡廳",
 "구라마에 카페와 스미다 강변": "藏前咖啡廳與隅田川畔",
@@ -2456,6 +2459,7 @@ window.VZTR_ZH_HANT_AUTO = {
 "닿는 곳에서 **저녁 한 끼**": "在落腳處吃**一頓晚餐**",
 "닿는 곳에서 마무리": "在落腳處收尾",
 "대곡 대구 수목원": "大谷大邱樹木園",
+"대관람차": "摩天輪",
 "대교 사진 명소": "大橋拍照景點",
 "대구": "大邱",
 "대구 #박 #일": "大邱#晚#天",
@@ -3865,6 +3869,8 @@ window.VZTR_ZH_HANT_AUTO = {
 "목조 골목 카페·구제": "木造巷弄咖啡廳·古著",
 "몬나카 서민 생선 술집": "門前仲町平價魚酒館",
 "몰운대 화손대": "Molundae Hwasondae",
+"몰입형 미디어아트 전시": "沉浸式媒體藝術展",
+"몰입형 전시": "沉浸式展覽",
 "몸국": "馬尾藻湯",
 "몸국 전문점": "馬尾藻湯店",
 "못 넣은 곳": "沒排上的",
@@ -4076,10 +4082,14 @@ window.VZTR_ZH_HANT_AUTO = {
 "밤 일정(#:# 이후)": "夜間行程（#:#後）",
 "밤 전용(#:# 이후)": "夜間專用（#:#後）",
 "밤 핫플로 마무리": "夜間熱點收尾",
+"밤까지 다니는 갯배": "營運到夜晚的「gaetbae」渡船",
 "밤마다 어디서 자요?": "每晚住哪裡？",
 "밤마다 연탄불고기 골목": "夜夜炭火烤肉巷",
+"밤바다 미디어아트 거리": "夜海媒體藝術街",
 "밤바다 포차": "夜海路邊攤",
+"밤바다 해상 분수 레이저쇼": "夜海噴泉雷射秀",
 "밤새 쉬어갈 수 있는 24시간 온천 시설이에요": "可以通宵休息的24小時溫泉設施",
+"밤새 이용하는 #시간 찜질방": "通宵營業的#小時汗蒸幕",
 "밤에 성터를 걷는 야외 빛 전시": "夜晚漫步城堡遺址的戶外燈光展",
 "밤에 여는 아카시야키·무기토로": "夜晚營業的明石燒·麥飯山藥泥",
 "밤에 진가를 드러내는 '다이아몬드 브릿지'예요": "‘鑽石大橋’在夜晚才真正展現魅力",
@@ -4941,7 +4951,9 @@ window.VZTR_ZH_HANT_AUTO = {
 "소금빵": "鹽麵包",
 "소금빵·커피 카페": "鹽麵包·咖啡廳",
 "소나무 숲 수목원": "松林樹木園",
+"소나무 숲 야간 미디어아트쇼": "松林夜間媒體藝術秀",
 "소나무 숲 옆 1.8km 모래 해변이 펼쳐져요": "松林旁展開1.8km沙灘",
+"소나무숲 야시장": "松林夜市",
 "소래": "蘇萊",
 "소래·구월": "蘇萊·九月",
 "소래습지생태공원과 소래포구": "蘇萊濕地生態公園與蘇萊浦口",
@@ -4995,6 +5007,7 @@ window.VZTR_ZH_HANT_AUTO = {
 "송도": "松島",
 "송도 구름산책로": "松島雲上步道",
 "송도 바다를 보는 로스터리 카페": "面朝松島大海的烘焙咖啡廳",
+"송도 전망대": "松島觀景台",
 "송도 케이블카와 오션뷰 카페": "松島纜車與海景咖啡廳",
 "송도 케이블카와 오션뷰 카페 먼저 빼기": "先跳過松島纜車與海景咖啡廳",
 "송도반도(암남공원)": "松島半島(岩南公園)",
@@ -5605,7 +5618,12 @@ window.VZTR_ZH_HANT_AUTO = {
 "앤티크 잡화와 고양이 있는 미부 킷사텐": "有古董雜貨和貓咪的壬生喫茶店",
 "앨범·공식 굿즈 매장": "專輯·官方週邊店",
 "앰배서더서울풀만 호빈": "首爾鉑爾曼 Hobin",
+"야간 디지털 미디어아트 테마파크": "夜間數位媒體藝術主題公園",
+"야간 조명 정원": "夜間燈光花園",
+"야간 천문대 별 관측": "夜間天文台觀星",
+"야간경관 조명 공원": "夜景燈光公園",
 "야경": "夜景",
+"야경 명소 다리": "夜景名勝橋",
 "야경 보며 마무리": "看著夜景收尾",
 "야경 속 인증샷": "夜景打卡",
 "야경·다이아몬드 브릿지": "夜景·鑽石大橋",
@@ -5965,6 +5983,8 @@ window.VZTR_ZH_HANT_AUTO = {
 "영진항 핸드드립 카페": "Yeongjin手沖咖啡",
 "영화 핸드프린팅": "電影手印",
 "영화·문화 시설": "電影·文化設施",
+"영화관·기획전시 복합문화공간": "電影院·策劃展複合文化空間",
+"영화관이 모인 번화가": "電影院雲集的繁華街區",
 "영화의 거리와 블루라인파크": "電影街與Blueline Park",
 "영화의 거리와 블루라인파크 먼저 빼기": "先去掉電影街與Blueline Park",
 "영화의전당": "電影殿堂",
@@ -6226,6 +6246,8 @@ window.VZTR_ZH_HANT_AUTO = {
 "옥상 노천탕과 고농도 탄산천이 있어요": "有頂樓露天浴池與高濃度碳酸泉",
 "옥상 노천탕이 있는 나카메구로 센토": "有頂樓露天浴池的中目黑錢湯",
 "옥상 스카이 워크": "屋頂空中步道",
+"온천 스파": "溫泉水療",
+"온천·찜질 스파": "溫泉·汗蒸幕水療",
 "올리브영 강남본점": "Olive Young 江南本店",
 "올림픽로 #": "奧林匹克路 #",
 "올영 체험 특화 성수 4층": "聖水Olive Young體驗",
@@ -6508,6 +6530,7 @@ window.VZTR_ZH_HANT_AUTO = {
 "이니스프리 디아일 성수": "innisfree Dile 聖水",
 "이도림 블로트커피": "Idorim Blot Coffee",
 "이동": "移動",
+"이동 너무 김": "路程太長",
 "이동 시각을 넣으면 시간표가 완성돼요": "填入移動時刻，時刻表就完成了",
 "이동 시각을 넣으면 일정을 추가할 수 있어요": "填入移動時刻，就能新增行程",
 "이동 시간은 대략값": "移動時間為大致值",
@@ -6854,6 +6877,7 @@ window.VZTR_ZH_HANT_AUTO = {
 "저녁": "晚上",
 "저녁 #시 이후 미니포차가 서는 야시장이 돼요": "晚上#點後會變成擺滿迷你路邊攤的夜市",
 "저녁 #시경부터 새벽 #시까지 불이 켜져요": "晚上#點左右亮到凌晨#點",
+"저녁 #시까지 여는 도서관": "開到晚上#點的圖書館",
 "저녁 #시부터 새벽까지 열리는 노점 거리": "晚上#點起營業到凌晨的攤販街",
 "저녁 7시 이후 미니포차가 서는 야시장이 돼요": "晚上7點後會變成擺滿迷你路邊攤的夜市",
 "저녁 — @": "晚餐——@",
@@ -6864,6 +6888,8 @@ window.VZTR_ZH_HANT_AUTO = {
 "저녁 예약 시간에 출발": "按晚餐預約時間出發",
 "저녁 오코노미야키": "晚上的大阪燒",
 "저녁 한 끼": "一頓晚餐",
+"저녁까지 하는 극장": "營業到晚上的劇場",
+"저녁까지 하는 아쿠아리움": "營業到晚上的水族館",
 "저녁은 초밥으로": "晚餐吃壽司",
 "저수지 한 바퀴 산책": "繞水庫散步",
 "저작자표시라이센스입니다": "本圖片採用姓名標示授權",
@@ -6888,10 +6914,13 @@ window.VZTR_ZH_HANT_AUTO = {
 "전남": "全南",
 "전동성당과 남부시장": "殿洞聖堂與南部市場",
 "전망 감상가": "賞景鑑賞家",
+"전망 스카이타워": "觀景天空塔",
 "전망 자리 잡고 휴식": "找個觀景位休息",
 "전망 좋은 자리에 앉으면 끝. 일어날 생각 없음": "坐到景觀好的位子就夠了，沒打算起身",
 "전망 좋은 자리에 앉으면 일어날 생각이 없어요": "坐到景觀好的位子，就不想起身了",
+"전망 타워": "觀景塔",
 "전망 탑 사진 명소": "觀景塔打卡景點",
+"전망대": "觀景台",
 "전망대나": "觀景台或",
 "전망대나 유명 명소 하나 더": "再去一個觀景台或知名景點",
 "전망대나|유명 명소 하나 더": "觀景台或|再去一個知名景點",
@@ -7355,6 +7384,7 @@ window.VZTR_ZH_HANT_AUTO = {
 "찐빵·김치왕만두": "紅豆包·泡菜水餃",
 "찐빵·김치왕만두 가게": "紅豆包·泡菜水餃店",
 "찜갈비": "蒸排骨",
+"찜질 스파": "汗蒸幕水療",
 "차 · 집 →": "車·家→",
 "차 박물관 카페": "茶博物館咖啡",
 "차 시간 = 도로 기준 × 시간대 혼잡 + 휴게소 쉼(#시간마다 #분)": "車程＝按道路×時段壅塞＋休息站休息（每#小時#分鐘）",
@@ -7426,6 +7456,7 @@ window.VZTR_ZH_HANT_AUTO = {
 "천년숨결 치유의 길": "千年氣息療癒之路",
 "천마총 내부": "天馬塚內部",
 "천마총 안으로 직접 들어가 볼 수 있어요": "可以親自走進天馬塚",
+"천문과학 체험관": "天文科學體驗館",
 "천불동계곡 출발점": "千佛洞溪谷起點",
 "천불동계곡과 공룡능선 산행이 시작돼요": "千佛洞溪谷和恐龍稜線健行從這裡開始",
 "천사벽화골목": "天使壁畫巷",
@@ -7790,6 +7821,7 @@ window.VZTR_ZH_HANT_AUTO = {
 "타코야키로 마무리": "以章魚燒收尾",
 "탄두리 치킨": "坦都里烤雞",
 "탄불 로스팅 커피를 주문마다 핸드드립으로 내려줘요": "炭火烘焙咖啡，每杯點單後現場手沖",
+"탄산 온천·찜질 스파": "碳酸溫泉·汗蒸幕水療",
 "탑승 수속": "辦理登機",
 "탑승 수속·보안 검색 먼저": "先辦理登機·過安檢",
 "탑승권": "登機證",
@@ -8474,6 +8506,7 @@ window.VZTR_ZH_HANT_AUTO = {
 "호캉스 여행자": "飯店度假派",
 "호캉스 플래너": "飯店度假達人",
 "호텔 뷰·디저트": "飯店景觀·甜點",
+"호텔 스파": "酒店水療",
 "호트케이크·파스타 런치 카페": "鬆餅·義大利麵午餐咖啡廳",
 "호피·소힘줄 니코미 술집가": "Hoppy·燉牛筋酒館街",
 "호피·야키토리": "Hoppy·烤雞串",
@@ -9860,6 +9893,11 @@ window.VZTR_ZH_HANT_PLACES = {
 "short": "",
 "src": "en"
 },
+"gng-arte": {
+"n": "江陵ARTE MUSEUM",
+"short": "江陵ARTE MUSEU",
+"src": "TourAPI ChtService2 contentid 2822706"
+},
 "gng-beodeunamubeurueori": {
 "n": "Willow Brewery",
 "short": "",
@@ -9939,6 +9977,11 @@ window.VZTR_ZH_HANT_PLACES = {
 "n": "Hapyeong海灘",
 "short": "",
 "src": "뜻 옮김·한자 표기(공식 중문 확인 못 함, 11/27 동우님 기준 ②)"
+},
+"gng-hasla-immersive": {
+"n": "HASLA江陵沉浸式藝術秀",
+"short": "HASLA江陵沉浸式藝術",
+"src": "ko"
 },
 "gng-haslla": {
 "n": "何瑟羅藝術世界",
@@ -10200,6 +10243,11 @@ window.VZTR_ZH_HANT_PLACES = {
 "short": "",
 "src": "en"
 },
+"icn-aegwan": {
+"n": "愛館劇場",
+"short": "愛館劇場",
+"src": "ko"
+},
 "icn-artplatform": {
 "n": "仁川藝術平臺",
 "short": "",
@@ -10209,6 +10257,11 @@ window.VZTR_ZH_HANT_PLACES = {
 "n": "Brown Hands Gaehangro",
 "short": "Brown Hands",
 "src": "en"
+},
+"icn-cheongna-spalex": {
+"n": "青羅Sparex",
+"short": "青羅Sparex",
+"src": "TourAPI ChtService2 contentid 3495723"
 },
 "icn-cheongsilhongsil-sinpo": {
 "n": "Cheongsil Hongsil Sinpo",
@@ -10250,6 +10303,11 @@ window.VZTR_ZH_HANT_PLACES = {
 "short": "",
 "src": "en"
 },
+"icn-gtower": {
+"n": "G-Tower觀景臺",
+"short": "G-Tower觀景臺",
+"src": "ko"
+},
 "icn-gyeonginmyeonok": {
 "n": "Gyeongin Myeonok",
 "short": "",
@@ -10270,6 +10328,11 @@ window.VZTR_ZH_HANT_PLACES = {
 "short": "",
 "src": "한국관광공사 TourAPI ChtService2 contentid 332876"
 },
+"icn-kiwi-spa": {
+"n": "Kiwi Spa Land",
+"short": "Kiwi Spa Lan",
+"src": "ko"
+},
 "icn-maetdolsonkalguksu": {
 "n": "Maetdol Kalguksu",
 "short": "",
@@ -10279,6 +10342,11 @@ window.VZTR_ZH_HANT_PLACES = {
 "n": "Manbok Bunsik",
 "short": "",
 "src": "en"
+},
+"icn-paradise-spa": {
+"n": "百樂達斯城 The Spa",
+"short": "百樂達斯城 The Sp",
+"src": "ko"
 },
 "icn-sinpo": {
 "n": "新浦國際市場",
@@ -10335,10 +10403,20 @@ window.VZTR_ZH_HANT_PLACES = {
 "short": "",
 "src": "en"
 },
+"icn-wolmi-view": {
+"n": "月尾公園月尾觀景臺",
+"short": "月尾公園月尾觀景臺",
+"src": "TourAPI ChtService2 contentid 3514772"
+},
 "icn-wolmido": {
 "n": "月尾島",
 "short": "",
 "src": "https://zh.wikipedia.org/wiki/%E6%9C%88%E5%B0%BE%E5%B3%B6"
+},
+"icn-wolmisan-glass": {
+"n": "月尾山玻璃觀景臺",
+"short": "月尾山玻璃觀景臺",
+"src": "ko"
 },
 "icn-yeonsudongmokrojujeom": {
 "n": "Mokro Jujeom",
@@ -10349,6 +10427,11 @@ window.VZTR_ZH_HANT_PLACES = {
 "n": "Apbaengdi Restaurant",
 "short": "",
 "src": "en"
+},
+"jej-arte": {
+"n": "濟州ARTE MUSEUM",
+"short": "濟州ARTE MUSEU",
+"src": "TourAPI ChtService2 contentid 2950190"
 },
 "jej-bijarim": {
 "n": "榧子林",
@@ -10369,6 +10452,16 @@ window.VZTR_ZH_HANT_PLACES = {
 "n": "Bujikkaengi",
 "short": "",
 "src": "en"
+},
+"jej-bulbit": {
+"n": "濟州燈光花園",
+"short": "濟州燈光花園",
+"src": "ko"
+},
+"jej-byeolbit": {
+"n": "濟州星光世界公園",
+"short": "濟州星光世界公園",
+"src": "TourAPI ChtService2 contentid 1557954"
 },
 "jej-camellia": {
 "n": "山茶花之丘(Camellia Hill)",
@@ -10500,6 +10593,11 @@ window.VZTR_ZH_HANT_PLACES = {
 "short": "",
 "src": "en"
 },
+"jej-orev": {
+"n": "O'REVE溫泉&SPA",
+"short": "O'REVE溫泉&SPA",
+"src": "TourAPI ChtService2 contentid 3346158"
+},
 "jej-osulloc": {
 "n": "Osulloc茶博物館",
 "short": "",
@@ -10515,6 +10613,16 @@ window.VZTR_ZH_HANT_PLACES = {
 "short": "",
 "src": "뜻 옮김·한자 표기(공식 중문 확인 못 함, 11/27 동우님 기준 ②)"
 },
+"jej-saeyeon": {
+"n": "新緣橋",
+"short": "新緣橋",
+"src": "ko"
+},
+"jej-sanbang-spa": {
+"n": "濟州山房山碳酸溫泉",
+"short": "濟州山房山碳酸溫泉",
+"src": "TourAPI ChtService2 contentid 1887385"
+},
 "jej-sanbangsan": {
 "n": "山房山",
 "short": "",
@@ -10524,6 +10632,11 @@ window.VZTR_ZH_HANT_PLACES = {
 "n": "思連岳林道",
 "short": "",
 "src": "TourAPI ChtService2 contentid 2504379"
+},
+"jej-seogwipo-astro": {
+"n": "西歸浦天文科學文化館",
+"short": "西歸浦天文科學文化館",
+"src": "ko"
 },
 "jej-seongsan": {
 "n": "城山日出峰",
@@ -10544,6 +10657,11 @@ window.VZTR_ZH_HANT_PLACES = {
 "n": "牛沼河口",
 "short": "",
 "src": "뜻 옮김·한자 표기(공식 중문 확인 못 함, 11/27 동우님 기준 ②)"
+},
+"jej-suyeongil-night": {
+"n": "樹木園路夜市",
+"short": "樹木園路夜市",
+"src": "ko"
 },
 "jej-topyeonggol": {
 "n": "Topyeonggol",
@@ -10580,6 +10698,11 @@ window.VZTR_ZH_HANT_PLACES = {
 "short": "",
 "src": "뜻 옮김·한자 표기(공식 중문 확인 못 함, 11/27 동우님 기준 ②)"
 },
+"jnj-cinema-street": {
+"n": "全州電影街",
+"short": "全州電影街",
+"src": "TourAPI ChtService2 contentid 3330182"
+},
 "jnj-dasandwaejiwanakji-bon": {
 "n": "Dasan Pork & Octopus",
 "short": "",
@@ -10590,6 +10713,11 @@ window.VZTR_ZH_HANT_PLACES = {
 "short": "",
 "src": "뜻 옮김·한자 표기(공식 중문 확인 못 함, 11/27 동우님 기준 ②)"
 },
+"jnj-dongmun-art": {
+"n": "全州東門藝術街",
+"short": "全州東門藝術街",
+"src": "ko"
+},
 "jnj-eummi": {
 "n": "Eummi",
 "short": "",
@@ -10599,6 +10727,16 @@ window.VZTR_ZH_HANT_PLACES = {
 "n": "Ginkgo Garden",
 "short": "",
 "src": "en"
+},
+"jnj-film-lab": {
+"n": "全州電影製作所",
+"short": "全州電影製作所",
+"src": "ko"
+},
+"jnj-gaeksa-gil": {
+"n": "客舍街",
+"short": "客舍街",
+"src": "TourAPI ChtService2 contentid 2950001"
 },
 "jnj-geomeungit-saundeu": {
 "n": "Black Feather Sound",
@@ -12325,6 +12463,21 @@ window.VZTR_ZH_HANT_PLACES = {
 "short": "",
 "src": "뜻 옮김·한자 표기(공식 중문 확인 못 함, 11/27 동우님 기준 ②)"
 },
+"sch-expo-tower": {
+"n": "束草EXPO塔",
+"short": "束草EXPO塔",
+"src": "TourAPI ChtService2 contentid 1957388"
+},
+"sch-ferris": {
+"n": "束草之眼",
+"short": "束草之眼",
+"src": "ko"
+},
+"sch-gaetbae": {
+"n": "阿爸村人力渡船",
+"short": "阿爸村人力渡船",
+"src": "TourAPI ChtService2 contentid 2386570"
+},
 "sch-gamjaongsimi": {
 "n": "Gamja Ongsimi",
 "short": "",
@@ -12394,6 +12547,11 @@ window.VZTR_ZH_HANT_PLACES = {
 "n": "束草市立博物館",
 "short": "",
 "src": "한국관광공사 TourAPI ChtService2 contentid 660614"
+},
+"sch-spaland": {
+"n": "束草Spa Land",
+"short": "束草Spa Land",
+"src": "ko"
 },
 "sch-teilpoteoriseutyudio": {
 "n": "Tail Pottery Studio",
@@ -14095,6 +14253,11 @@ window.VZTR_ZH_HANT_PLACES = {
 "short": "",
 "src": "en"
 },
+"swn-aquaplanet": {
+"n": "光教Aqua Planet",
+"short": "光教Aqua Plane",
+"src": "ko"
+},
 "swn-banghwa": {
 "n": "訪花隨柳亭",
 "short": "",
@@ -14105,6 +14268,11 @@ window.VZTR_ZH_HANT_PLACES = {
 "short": "",
 "src": "en"
 },
+"swn-byeolmadang": {
+"n": "水原Starfield圖書館",
+"short": "水原Starfield圖",
+"src": "TourAPI ChtService2 contentid 3487467"
+},
 "swn-chicken": {
 "n": "水原炸雞街",
 "short": "",
@@ -14114,6 +14282,11 @@ window.VZTR_ZH_HANT_PLACES = {
 "n": "Daewang Kalguksu",
 "short": "",
 "src": "en"
+},
+"swn-freiburg": {
+"n": "光教弗萊堡觀景臺",
+"short": "光教弗萊堡觀景臺",
+"src": "TourAPI ChtService2 contentid 3490644"
 },
 "swn-geujiphaejangguk": {
 "n": "Geujip Haejangguk",
@@ -14260,6 +14433,11 @@ window.VZTR_ZH_HANT_PLACES = {
 "short": "",
 "src": "한국관광공사 TourAPI ChtService2 contentid 1906949"
 },
+"tyg-daegyo": {
+"n": "統營大橋",
+"short": "統營大橋",
+"src": "ko"
+},
 "tyg-dara": {
 "n": "Dara公園",
 "short": "",
@@ -14274,6 +14452,11 @@ window.VZTR_ZH_HANT_PLACES = {
 "n": "東崖村",
 "short": "",
 "src": "TourAPI ChtService2 contentid 1907003"
+},
+"tyg-dpirang": {
+"n": "DPIRANG",
+"short": "DPIRANG",
+"src": "TourAPI ChtService2 contentid 2829576"
 },
 "tyg-gangguan": {
 "n": "江口岸",
@@ -14319,6 +14502,11 @@ window.VZTR_ZH_HANT_PLACES = {
 "n": "Manseong Bokjip",
 "short": "",
 "src": "en"
+},
+"tyg-marine-park": {
+"n": "統營海洋觀光公園",
+"short": "統營海洋觀光公園",
+"src": "ko"
 },
 "tyg-market": {
 "n": "統營中央傳統市場",
@@ -15200,6 +15388,16 @@ window.VZTR_ZH_HANT_PLACES = {
 "short": "Aqua Planet",
 "src": "TourAPI ChtService2 contentid 2376674"
 },
+"ysu-bamdibul": {
+"n": "Bamdibul街",
+"short": "Bamdibul街",
+"src": "ko"
+},
+"ysu-bigo-show": {
+"n": "BIG-O秀",
+"short": "BIG-O秀",
+"src": "ko"
+},
 "ysu-cablecar": {
 "n": "麗水海上纜車",
 "short": "",
@@ -15300,6 +15498,11 @@ window.VZTR_ZH_HANT_PLACES = {
 "short": "",
 "src": "뜻 옮김·한자 표기(공식 중문 확인 못 함, 11/27 동우님 기준 ②)"
 },
+"ysu-noctemare": {
+"n": "麗水NOCTE MARE",
+"short": "麗水NOCTE MARE",
+"src": "ko"
+},
 "ysu-odongdo": {
 "n": "梧桐島",
 "short": "",
@@ -15319,6 +15522,11 @@ window.VZTR_ZH_HANT_PLACES = {
 "n": "Sangol Restaurant",
 "short": "",
 "src": "en"
+},
+"ysu-skytower": {
+"n": "麗水世博會天空塔",
+"short": "麗水世博會天空塔",
+"src": "ko"
 },
 "ysu-sohodongdongdari": {
 "n": "蘇湖動動橋",
