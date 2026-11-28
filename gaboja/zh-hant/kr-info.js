@@ -28,12 +28,12 @@ window.VZTR_KRINFO = {
       // 11/28 I15(B33): 도착 공항 맞춤 — PLAN.inp.inbound(ICN·PUS·GMP·CJU)로 ap 표에서 고름. 공항을 모르면 '출발 전 온라인' 한 줄만(인천 문장을 다른 공항에 붙이지 않음)
       //   김해·김포·제주 = 한국공항공사 airport.co.kr (2026-11-28 확인: 김해 SKT·KT·LGU+ 국제선 1·3층 / 김포 SKT 국제선 1층 / 제주 SKT 국제선 1층 · 제주 페이지에 '국제선 스케줄에 따라 유동적으로 운영')
       { ic: 'sim', b: 'eSIM·유심', t: '여행용 eSIM은 출발 전 온라인으로', url: 'https://www.airport.kr/ap_en/1536/subview.do', lk: '공항 안내',
-        src: ['https://www.airport.kr/ap_en/1536/subview.do', 'https://lguplus.com/korea-sim/eng/pc/support/blog/incheon_airport_arrival_guide'],
+        src: ['https://www.airport.kr/ap_en/1536/subview.do', 'https://www.airport.kr/ap_ko/1008/subview.do', 'https://lguplus.com/korea-sim/eng/pc/support/blog/incheon_airport_arrival_guide'],
         ap: {
-          ICN: { t: '여행용 eSIM은 출발 전 온라인으로 · 인천공항 1터미널 도착층에 통신사 로밍센터(24시간)' },
+          ICN: { t: '여행용 eSIM은 출발 전 온라인으로 · 인천공항 1터미널 도착층에 통신사 로밍센터(F 입국장 쪽은 24시간)' },
           PUS: { t: '여행용 eSIM은 출발 전 온라인으로 · 김해공항 국제선 1·3층에 통신사 로밍센터(SKT·KT·LG U+)', url: 'https://www.airport.co.kr/booking/cms/frCon/index.do?MENU_ID=200&CONTENTS_NO=8', src: ['https://www.airport.co.kr/booking/cms/frCon/index.do?MENU_ID=200&CONTENTS_NO=8'] },
           GMP: { t: '여행용 eSIM은 출발 전 온라인으로 · 김포공항 국제선 1층에 SKT 로밍센터', url: 'https://www.airport.co.kr/gimpo/cms/frCon/index.do?MENU_ID=2390', src: ['https://www.airport.co.kr/gimpo/cms/frCon/index.do?MENU_ID=2390'] },
-          CJU: { t: '여행용 eSIM은 출발 전 온라인으로 · 제주공항 국제선 1층에 SKT 로밍센터 · 운영 시간은 국제선 일정에 따라 달라요', url: 'https://www.airport.co.kr/booking/cms/frCon/index.do?MENU_ID=200&CONTENTS_NO=7', src: ['https://www.airport.co.kr/booking/cms/frCon/index.do?MENU_ID=200&CONTENTS_NO=7'] }
+          CJU: { t: '여행용 eSIM은 출발 전 온라인으로 · 제주공항 국제선 청사에 SKT 로밍센터 · 운영 시간은 국제선 일정에 따라 달라요', url: 'https://www.airport.co.kr/booking/cms/frCon/index.do?MENU_ID=200&CONTENTS_NO=7', src: ['https://www.airport.co.kr/booking/cms/frCon/index.do?MENU_ID=200&CONTENTS_NO=7', 'https://m.tworld.co.kr/product/roaming/info/center'] }
         } },
       // 11/28 I15: 제주 직항 + 간체판(중국 본토 여행자)만. 기간·조건 숫자는 공식 현행 문서로 확인 못 해 안 씀(법무부 2026-11-19 보도자료는 제주 무사증을 유지 전제로 언급 · https://www.immigration.go.kr/bbs/immigration/214/612466/artclView.do). 단체관광 무비자(3인 이상 전담여행사)는 개인 여행자 해당 없음 → 안 넣음
       { ic: 'pass', b: '제주 무사증', when: { ap: 'CJU', lang: 'zh-hans' }, t: '제주로 바로 들어오면 비자 없이 입국하는 제도(제주 무사증)가 있어요 · 조건이 바뀔 수 있으니 출발 전 하이코리아·1345로 확인', url: 'https://www.hikorea.go.kr', lk: '하이코리아',

@@ -37,7 +37,7 @@
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="stylesheet" href="fonts/google/gf.css?v=1"><!-- 11/24 Inter Tight·Zen Kaku Gothic New 자체 호스팅(구글 서버로 IP 안 감, OFL) -->
 <script src="inapp.js?v=1"></script>
-<script src="i18n-zh-hans-auto.js?v=bd22bc86"></script><script src="i18n-zh-hans.js?v=bd22bc86"></script><script src="i18n.js?v=bd22bc86"></script><!-- 11/20 W5 언어 틀 (영어판 = /en/, 사전 i18n-en.js는 배포 때 en/에만 붙음) -->
+<script src="i18n-zh-hans-auto.js?v=118891fc"></script><script src="i18n-zh-hans.js?v=118891fc"></script><script src="i18n.js?v=118891fc"></script><!-- 11/20 W5 언어 틀 (영어판 = /en/, 사전 i18n-en.js는 배포 때 en/에만 붙음) -->
 <link rel="stylesheet" href="fonts/vztr-fonts.css?v=2"><!-- 11/19 글꼴: 굵은 한글 IBM Plex Sans KR · 보통 한글 Pretendard · 영문·숫자 IBM Plex Sans -->
 <style>
 /* Pretendard 1.3.9 (SIL OFL 1.1) — 공식 배포본(orioncactus/pretendard)을 fonts/에 함께 올림 */
@@ -3180,11 +3180,14 @@ function fitSrc() {   // F-11: 출처 한 줄이 넘치면 '사진 Commons 외' 
   const o = e.querySelector('[data-opt]'); if (o) { o.hidden = false; if (o.nextSibling && o.nextSibling.nodeType === 3) o.nextSibling.textContent = ' · '; }
   if (o && lnOver(e)) { o.hidden = true; if (o.nextSibling && o.nextSibling.nodeType === 3) o.nextSibling.textContent = ''; }
 }
+// 11/28 R2: 넘치는 비율(안쪽 폭 ÷ 글자 폭) — 0.5px씩 반복 재던 것을 한 번에 근사한 뒤 아래 루프가 마무리 보정
+function lnRatio(el) { const cs = getComputedStyle(el), inner = el.clientWidth - (parseFloat(cs.paddingLeft) || 0) - (parseFloat(cs.paddingRight) || 0); const r = document.createRange(); r.selectNodeContents(el); const rw = r.getBoundingClientRect().width; let k = 1; if (rw > 0) k = Math.min(k, inner / rw); if (el.scrollWidth > 0) k = Math.min(k, el.clientWidth / el.scrollWidth); return k > 0 ? k : 1; }
 let fitAgain = 0;
 function fitLines() { try { fitSrc(); } catch (_) {} let wrapped = false;
   document.querySelectorAll('.dayline h2, #sheet h3#sheetTitle, #v-log .ttl2.one, .drawer #typeNm, .sgrid b, .dcard .tt .one').forEach(el => {   // 11/21: 기록 탭 하루 제목도 한 줄(넘치면 글자만 줄임, 최소 12px) · 11/28 Q2: 여행 요약 시트 숫자 칸(.sgrid b)·하루 카드 제목(.dcard .tt .one)도
     el.classList.add('fitln'); el.style.removeProperty('font-size'); el.style.removeProperty('white-space'); if (!el.clientWidth) return;
     let f = parseFloat(getComputedStyle(el).fontSize); const min = el.matches('.dayline h2') ? 14 /* 11/28 Q2: 긴 영어 제목(SE-Verdana 'Straight to Naniwa no Yu Hot Spring')은 18px에서도 두 줄 → 14px까지 */ : el.matches('.ttl2') ? 9.5 /* 11/25 Verdana 긴 이름 */ : el.matches('#typeNm, .sgrid b, .dcard .tt .one') ? 12 : el.matches('#sheetTitle') ? 14 : 16;   // 11/24 검수: 시트 제목(영어 'Hongdae·Yeonnam · Drop bags')이 닫기 버튼에 닿던 것 — 14px까지 줄이고 그래도 길면 줄바꿈
+    if (f > min && lnOver(el)) { const f0 = f; f = Math.max(min, f0 - Math.ceil(f0 * (1 - lnRatio(el)) / 0.5) * 0.5); if (f !== f0) el.style.setProperty('font-size', f + 'px', 'important'); }   // 11/28 R2: 한 번에 근사
     while (lnOver(el) && f > min) { f -= 0.5; el.style.setProperty('font-size', f + 'px', 'important'); }
     if (lnOver(el)) { el.classList.remove('fitln'); el.style.removeProperty('font-size'); el.style.setProperty('white-space', 'normal', 'important'); wrapped = true; }   // 최소 크기에서도 넘치면 줄바꿈 (11/25: .one 의 nowrap 이 남아 칸 밖으로 넘치던 것)
   });
@@ -3199,7 +3202,7 @@ try {
   const fl = () => requestAnimationFrame(fitLines);
   new MutationObserver(fl).observe(document.getElementById('sheetIn'), { childList: true, subtree: true, characterData: true });   // 11/25: 영어 번역은 글자만 바꿈(characterData) → 그때도 다시 맞춤
   new MutationObserver(fl).observe(document.getElementById('dayHead'), { childList: true, subtree: true, characterData: true });  { const lg = document.getElementById('v-log'); if (lg) { new MutationObserver(fl).observe(lg, { childList: true, subtree: true, characterData: true, attributes: true, attributeFilter: ['hidden'] }); } }
-  addEventListener('resize', () => { fitTitle(); fitLines(); });
+  let rzT = 0; addEventListener('resize', () => { clearTimeout(rzT); rzT = setTimeout(() => requestAnimationFrame(() => { fitTitle(); fitLines(); }), 100); });   // 11/28 R2: 크기 바뀌는 동안 매번 다시 재지 않게 100ms 디바운스
   document.fonts && document.fonts.ready.then(() => { fitTitle(); fitLines(); });
   fitTitle(); fitLines();
 } catch (_) {}
@@ -3599,7 +3602,8 @@ function twOfPlace(p) {
   if (p.o && toMin(p.o[1]) <= 840) return 'morning';
   return '';
 }
-const inPlan = (d, p) => d.list.some(c => (c.l && p.l && (c.l.includes(p.l) || p.l.includes(c.l))) || (c.q && p.q && c.q === p.q) || (c.n || '').includes(p.n));
+const inPlanC = (c, p) => (c.l && p.l && (c.l.includes(p.l) || p.l.includes(c.l))) || (c.q && p.q && c.q === p.q) || (c.n || '').includes(p.n);
+const inPlan = (d, p) => d.list.some(c => inPlanC(c, p));
 const hoursTx = p => p && p.o ? (toMin(p.o[1]) === 1440 ? (p.o[0] === '00:00' ? '24시간' : p.o[0] + '–24:00') : p.o[0] + '–' + (toMin(p.o[1]) > 1440 ? toT(toMin(p.o[1]) - 1440) + '(다음 날)' : p.o[1])) : '';
 function linkName(v) {   // 구글 지도 링크에서 장소 이름 꺼내기 (긴 링크만. 짧은 공유 링크는 앱 버전에서 서버가 열어 읽음)
   const m0 = String(v).match(/https?:\/\/\S+/); if (m0 && /google\.|goo\.gl|g\.co\//i.test(m0[0])) v = m0[0];   // 11/25: 공유하기로 복사한 글(이름 + 링크)에서 링크만
@@ -3645,6 +3649,7 @@ function detourAt(d, P, i) {
 const nearWhy = (dt, base) => dt && dt.near ? dt.near + ' 근처라 이동 +' + dt.add + '분' : base;
 function suggest(d, p, du, tw) {
   let [o, c] = p && p.o ? [toMin(p.o[0]), toMin(p.o[1])] : [600, 1260];
+  if (c < o) c += 1440;   // 11/28 R2: 자정 넘는 영업시간(02:00 = 120분 < 시작) → 다음 날 새벽으로 셈 (참제철·신림순대볶음 추가 추천이 항상 실패하던 것)
   if (tw === 'night') o = Math.max(o, NIGHT_FROM);   // 밤 전용 = 17:30 이후에서만 추천
   if (tw === 'morning') c = Math.min(c, MORN_TO + du);   // 아침 전용 = 정오 전에 시작
   const nw = nowOf(d), from = nw ? Math.ceil(nw.min / 10) * 10 : 0, L = d.list, P = PLL(p);   // 오늘이면 지금 이후(10분 단위)만
@@ -3673,9 +3678,9 @@ function suggest(d, p, du, tw) {
 const recDur = p => Math.min(120, Math.max(30, Math.round(p.st / 30) * 30));
 // 이 시간에 갈 만한 곳 (최대 6): 그 도시 · 이미 있는 곳 뺌 · 그 요일 휴무 뺌 · 빈 시간+영업시간에 맞는 추천 시각이 있는 곳 먼저
 function recsFor(d) {
-  const wd = WD[d.date.slice(-1)], L = [], end0 = dayEnd(d);   // 리뷰 #1: 귀국편·집으로 이동이 늦은 날도 빈 시간엔 추천
+  const wd = WD[d.date.slice(-1)], L = [], end0 = dayEnd(d), planned = DAYS.flatMap(dd => dd.list);   // 11/28 R2: 모든 날 카드를 한 번만 펼쳐 둠(장소마다 날 단위로 다시 훑지 않게)   // 리뷰 #1: 귀국편·집으로 이동이 늦은 날도 빈 시간엔 추천
   PLACES.forEach(p => {
-    if (p.c !== d.city || DAYS.some(dd => inPlan(dd, p)) || p.x.includes(wd)) return;   // 11/28 I3: 이 여행 어느 날에든 이미 들어 있는 곳은 추천에서 뺌(전엔 그 날만 봄 → 1일차 '일품한우'가 2일차에 또 나옴)
+    if (p.c !== d.city || planned.some(c => inPlanC(c, p)) || p.x.includes(wd)) return;   // 11/28 I3: 이 여행 어느 날에든 이미 들어 있는 곳은 추천에서 뺌(전엔 그 날만 봄 → 1일차 '일품한우'가 2일차에 또 나옴)
     const du = recDur(p), tw = twOfPlace(p), sg = suggest(d, p, du, tw);
     if (sg.why === '영업시간 안에 자리 없음' || sg.s + du > 1380 || (sg.push && Math.max(end0, DAY_CAP - du) + du > DAY_CAP)) return;   // V-01: 밀어서 23:30 넘길 곳은 추천 안 함
     L.push({ p, du, tw, sg });
@@ -3943,14 +3948,16 @@ function menuSheet(k) {
   else if (k === 'line') {   // 11/28 I14: LINE 공식 공유 URL (social-plugins.line.me/lineit/share)
     closeAll();
     const stt = ((document.querySelector('.pill .ttl b') || {}).dataset || {}).vzf || (document.querySelector('.pill .ttl b') || {}).textContent || 'VZTR';
-    const go = u => { if (u) window.open('https://social-plugins.line.me/lineit/share?url=' + encodeURIComponent(u) + '&text=' + encodeURIComponent('VZTR · ' + String(stt).trim()), '_blank', 'noopener'); };
-    const u0 = shareUrl(); if (u0) go(u0); else shareWait().then(go);
+    const u0 = shareUrl(), w = u0 ? null : window.open('', '_blank');   // 11/28 R2: 주소가 없으면 클릭 순간에 빈 창을 먼저 열어 둠(비동기 뒤에 열면 iOS가 팝업으로 막음)
+    const go = u => { const href = u ? 'https://social-plugins.line.me/lineit/share?url=' + encodeURIComponent(u) + '&text=' + encodeURIComponent('VZTR · ' + String(stt).trim()) : ''; if (w) { if (href) { try { w.opener = null; } catch (_) {} w.location.href = href; } else w.close(); } else if (href) window.open(href, '_blank', 'noopener'); };
+    if (u0) go(u0); else shareWait().then(go, () => go(''));
   }
   else if (k === 'wa') {   // 11/28 R4: WhatsApp 공식 공유 링크 wa.me/?text= (문구 + 링크)
     closeAll();
     const stt = ((document.querySelector('.pill .ttl b') || {}).dataset || {}).vzf || (document.querySelector('.pill .ttl b') || {}).textContent || 'VZTR';
-    const go = u => { if (u) window.open('https://wa.me/?text=' + encodeURIComponent('VZTR · ' + String(stt).trim() + ' ' + u), '_blank', 'noopener'); };
-    const u0 = shareUrl(); if (u0) go(u0); else shareWait().then(go);
+    const u0 = shareUrl(), w = u0 ? null : window.open('', '_blank');   // 11/28 R2: 위 LINE과 같은 방식
+    const go = u => { const href = u ? 'https://wa.me/?text=' + encodeURIComponent('VZTR · ' + String(stt).trim() + ' ' + u) : ''; if (w) { if (href) { try { w.opener = null; } catch (_) {} w.location.href = href; } else w.close(); } else if (href) window.open(href, '_blank', 'noopener'); };
+    if (u0) go(u0); else shareWait().then(go, () => go(''));
   }
   else if (k === 'wx') { closeAll(); copyLater(shareWait(), '링크를 복사했어요 · 위챗에 붙여 넣어 보내 주세요'); }   // 11/28 I14: 위챗 = 웹 공유 URL 없음 → 링크 복사
   else if (k === 'share') {

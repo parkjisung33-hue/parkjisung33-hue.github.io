@@ -7,6 +7,7 @@
 <meta name="claude:viewport-fit-sides" content="cover">
 <meta name="robots" content="noindex, nofollow">
 <meta name="theme-color" content="#EFEFF1">
+<meta name="theme-color" content="#18191C" media="(prefers-color-scheme: dark)">
 <link rel="stylesheet" href="fonts/google/gf.css?v=1"><!-- 11/24 Inter Tight·Zen Kaku Gothic New 자체 호스팅(구글 서버로 IP 안 감, OFL) -->
 <script src="inapp.js?v=1"></script>
 <script src="hit.js?v=1"></script><!-- 11/26 2주차: 유입 숫자 세기(합계만) -->
@@ -870,9 +871,9 @@ html { background: #FBFBFD; } body { background: transparent; }
 /* V-23 (11/20 실사용 리뷰): 앞단(시작·질문·결과…) 밝은 배경 = 아주 미세한 오프화이트(아이보리 X, 애플 상세 페이지 정도) · 박스 = 반대로 아주 연한 회색 그라디언트 */
 :root { --canvas: #FBFBFD; --tile: linear-gradient(180deg, #F6F6F8, #F1F1F4); --tile-c: #F3F3F6; --tile-edge: rgba(0,0,0,.035); --glass: rgba(243,243,246,.88); }
 .mine { box-shadow: 0 6px 18px -8px rgba(22,23,26,.22), 0 1px 2px rgba(22,23,26,.06); }   /* V-22: 지난번 내 성향 = 그림자로 띄움 */
-@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --canvas: #1D1E22; --paper: #27282C; --float: #2C2D31; --tile: rgba(42,43,47,.92); --field: #1C1D20; --glass: rgba(39,40,44,.72); background: #18191C; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --canvas: #1D1E22; --glass: #27282C; --paper: #27282C; --float: #27282C; --sheet: #27282C; --tile: rgba(42,43,47,.92); --field: #1C1D20; background: #18191C; }
   :root:not([data-theme="light"]) .bgfx { background: radial-gradient(ellipse at 50% 50%, #18191C, #1D1E22 55%, #232428); } }
-html:root[data-theme="dark"] { --canvas: #1D1E22; --paper: #27282C; --float: #2C2D31; --tile: rgba(42,43,47,.92); --field: #1C1D20; --glass: rgba(39,40,44,.72); background: #18191C; }
+html:root[data-theme="dark"] { --canvas: #1D1E22; --glass: #27282C; --paper: #27282C; --float: #27282C; --sheet: #27282C; --tile: rgba(42,43,47,.92); --field: #1C1D20; background: #18191C; }
 :root[data-theme="dark"] .bgfx { background: radial-gradient(ellipse at 50% 50%, #18191C, #1D1E22 55%, #232428); }
 /* 11/20 동우님: 첫 화면 안내판 성향마다 파스텔(묶음 색) — 글자판 글자·묶음 이름은 파스텔, 글자판 바탕은 아주 연하게 물듦, 유형 이름은 흰색 그대로 */
 .dep .dr[data-r] .fl { color: var(--pc, var(--flap-tx)); background: color-mix(in srgb, var(--pc, #FFFFFF) 14%, rgba(255,255,255,.05)); transition: color .35s, background .35s; }
@@ -1132,9 +1133,7 @@ html:not([lang="ko"]) .ck2 b { font-size: 0.875rem; letter-spacing: -.03em; }   
 #fBox.tmc .tms { display: none; } #fBox .tmTg { margin-top: 0.75rem; height: 2.375rem; }   /* D7 시각 접기 */
 #csBlk .flr { margin-top: 0.75rem; } #csBlk .flr .seg { margin-top: 0.375rem; } #csBlk .flr .in { margin-top: 0.5rem; }   /* D6 도시별 숙소 */
 /* D9 다크(동우님 A) — 가이드북 다크 토큰 재사용(시안 board2/dark_css.txt) */
-@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --canvas: #1D1E22; --glass: #27282C; --paper: #27282C; --float: #27282C; --sheet: #27282C; --tile: rgba(42,43,47,.92); --field: #1C1D20; }
-  :root:not([data-theme="light"]) { background: #18191C; } :root:not([data-theme="light"]) body { background: transparent; }
-  :root:not([data-theme="light"]) .bgfx { display: block; position: fixed; inset: 0; z-index: -1; pointer-events: none; background: radial-gradient(ellipse at 50% 50%, #18191C, #1D1E22 55%, #232428); } }
+/* 11/28 리뷰2: 다크 토큰·배경은 위(875~879줄) 한 곳으로 합침 — 시스템 다크·?theme=dark 같은 값 */
 @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --canvas-top: #232428; --sh-float: 0 1px 2px rgba(0,0,0,.3), 0 0.625rem 1.5rem -0.75rem rgba(0,0,0,.6); } }
 .scr > .note:has(+ .foot), .scr > .cnt:has(+ .foot) { margin-bottom: 1.75rem; }   /* 고정 '다음' 버튼 위 흐린 띠(foot::before)에 마지막 안내문 둘째 줄이 가려지던 것 */
 </style>
@@ -1296,15 +1295,16 @@ const RR_CHO = ['g', 'kk', 'n', 'd', 'tt', 'r', 'm', 'b', 'pp', 's', 'ss', '', '
 const rrKo = w => String(w).replace(/[\uac00-\ud7a3]/g, ch => { const c = ch.charCodeAt(0) - 0xAC00; return RR_CHO[Math.floor(c / 588)] + RR_JU[Math.floor((c % 588) / 28)] + RR_JO[c % 28]; });
 const stayNm = s => String(s).toLowerCase().replace(/[\s\-'’・·.,()（）]/g, '');
 const STAY_WORDS = ['명동', '을지로', '충무로', '연남', '합정', '신촌', '망원', '홍대', '인사동', '북촌', '광화문', '익선동', '삼청', '서울역', '용산', '한남', '해방촌', '이태원', '신사', '압구정', '역삼', '삼성', '청담', '논현', '강남', '혜화', '동대문', '성수', '잠실', '여의도', '해운대', '서면', '광안리', '남포동', '부산역', '동성로', '제주시', '서귀포', '난바', '우메다', '신사이바시', '덴노지', '기온', '교토역', '가와라마치', '신주쿠', '시부야', '아사쿠사', '우에노', '긴자', '하카타', '텐진', '스스키노'];
-let STAY_MAP = null;
+let STAY_MAP = null, SK_RAW = null, SK_OUT = '';   // 마지막 입력·결과 캐시(한 렌더에 여러 번 불림)
 function stayKoNorm(raw) {
   raw = String(raw == null ? '' : raw); if (!W5 || !raw || /[\uac00-\ud7a3]/.test(raw)) return raw;
+  if (raw === SK_RAW) return SK_OUT;
   if (!STAY_MAP) { const D = window.GABOJA_DATA || {}, ws = new Set(STAY_WORDS); Object.values(D.clName || {}).forEach(v => String(v).split('·').forEach(x => { x = x.trim(); if (x.length >= 2) ws.add(x); }));
     Object.values(D.cfg || {}).forEach(c => (c.bases || []).forEach(b => String(b.name || '').split('·').forEach(x => { x = x.trim(); if (x.length >= 2) ws.add(x); })));
     const kn = window.VZTR_JA_FN && VZTR_JA_FN.kana; STAY_MAP = [...ws].map(w => { const t = TI(w), v = [rrKo(w)]; if (!/[\uac00-\ud7a3]/.test(t)) v.push(t); if (kn && window.VZTR_LANG === 'ja') v.push(kn(w)); return [w, v.map(stayNm).filter(x => x.length >= 2)]; }); }
-  const n = stayNm(raw), hit = STAY_MAP.map(m => [m[0], m[1].filter(v => n.includes(v))]).filter(m => m[1].length), longest = x => Math.max(...x[1].map(v => v.length));
+  const n = stayNm(raw), lo = raw.toLowerCase(), hit = STAY_MAP.map(m => [m[0], m[1].filter(v => n.includes(v) && (v.length > 4 || !/^[a-z]+$/.test(v) || new RegExp('(^|[^a-z])' + v + '(?![a-z])').test(lo)))]).filter(m => m[1].length), longest = x => Math.max(...x[1].map(v => v.length));
   const add = hit.filter(m => !hit.some(o => o !== m && longest(o) > longest(m) && o[1].some(v => v.includes(m[1].find(z => z.length === longest(m)))))).map(m => m[0]);   // 'myeongdong' 안의 'yeongdo(영도)'처럼 더 긴 낱말 안에 든 것은 뺌
-  return add.length ? raw + ' ' + add.join(' ') : raw;
+  SK_RAW = raw; SK_OUT = add.length ? raw + ' ' + add.join(' ') : raw; return SK_OUT;   // 4글자 이하 로마자('gion')는 낱말 경계일 때만 — 'Region'의 gion→기온 오탐 방지
 }
 /* 11/22 동우님 #4: 숙소 칸에 적은 동네·숙소 이름 → 일정 출발지(엔진 stayArea와 같은 규칙)를 바로 보여 줌 */
 function stayHint() {
@@ -1387,7 +1387,12 @@ function csDraw() {
   const box = $('#csBlk'), tr = S.trip; if (!box) return;
   const L = csCities(tr), multi = !tr.day && L.length > 1, one = $('#sSeg') && $('#sSeg').closest('.blk');
   if (one) one.style.display = multi ? 'none' : '';
-  if (!multi) { box.hidden = true; box.innerHTML = ''; tr.stays = null; return; }
+  if (!multi) {   /* 11/28 리뷰2: 여러 도시 → 한 도시로 돌아오면 단일 숙소 칸 상태(전에 적은 것)를 복원하고 칸을 상태 기준으로 다시 그림 */
+    const was = !!tr.stays; box.hidden = true; box.innerHTML = ''; tr.stays = null;
+    if (tr._one) { tr.stay = tr._one.stay; tr.stayTx = tr._one.stayTx; tr.stayLL = tr._one.stayLL; delete tr._one; }
+    if (was) { const sg = $('#sSeg'), i = $('#sIn'); if (sg) sg.querySelectorAll('button').forEach(x => x.setAttribute('aria-pressed', x.dataset.s === tr.stay)); if (i) { i.value = tr.stayTx || ''; i.hidden = tr.stay === 'no'; const w = $('#sInNm'); if (w) w.hidden = tr.stay !== 'yes' || !(tr.stayName || looksAddr(i.value)); } stayHint(); if (typeof sw2Draw === 'function') sw2Draw(); }
+    return; }
+  if (!tr.stays && !tr._one) tr._one = { stay: tr.stay, stayTx: tr.stayTx, stayLL: tr.stayLL };   // 단일 칸 상태 보관(도시별 칸이 tr.stay·stayTx를 덮어쓰므로)
   box.hidden = false; const old = {}; (tr.stays || []).forEach(s => { old[s.city] = s; });
   tr.stays = L.map(x => Object.assign({ st: 'no', name: '', ll: null }, old[x.city] || {}, { city: x.city, nights: x.nights }));
   box.innerHTML = `<div class="sub2">도시별 숙소</div>` + tr.stays.map((s, i) => `<div class="flr" data-cs="${i}"><span class="fll">${esc(TI(s.city))} · ${esc(TI(s.nights + '박'))}</span><div class="seg"><button type="button" data-s="no" aria-pressed="${s.st !== 'yes'}">아직</button><button type="button" data-s="yes" aria-pressed="${s.st === 'yes'}">정했어요</button></div><input class="in" ${s.st === 'yes' ? '' : 'hidden'} value="${esc(s.name || '')}" placeholder="${esc(TX('호텔 이름 또는 동네', 'Hotel name or area'))}" autocomplete="off"><div class="adr st" hidden></div></div>`).join('') + `<div class="note">${ICON.info}<span>안 정한 도시는 나중에 가이드북에서 넣어도 돼요</span></div>`;
@@ -1972,12 +1977,7 @@ function lflapsHtml(c) { return `<div class="flaps big lfl">${c.split('').map(l 
 // 11/15 #4 → 11/18 D-2: '내가 고른 답 10개' = 처음부터 펼친 목록 (접기 없음) · 두 묶음 소제목 · 오른쪽 축 글자 칩(내 유형 글자와 같으면 진하게) — 남의 유형 보기에선 안 보임
 const LEN = { L: 'Local', H: 'Hotspot', S: 'Sightseeing', E: 'Experience', F: 'Fast-paced', R: 'Relaxed', J: 'Organized', P: 'Unscripted' };   // 11/23 동우님: 영어판 축 이름과 같은 낱말(글자 = 첫 글자)   // 11/22 #2 글자 뜻(영어 앞 글자)
 const LTX = { L: '현지인 동네·골목 위주', H: '유명한 곳·요즘 뜨는 곳 위주', S: '보고 걷는 게 좋은 편', E: '먹고 사고 체험하는 게 좋은 편', F: '하루를 꽉 채우는 편', R: '쉬는 시간을 넉넉히', J: '동선·시간을 미리 정해 두는 편', P: '그때그때 끌리는 대로' };
-function ansHtml(c) { return '';   // 11/28 D3: 글자 뜻은 막대 아래 한 줄로 합침(gaugeHtml) — 아래는 옛 4줄 칸(안 씀)
-  // V-08: '내가 고른 답 10개' → 내 유형 글자 뜻 4줄 (H·L이 뭐냐는 질문이 많았음)
-  if (!c || c.length < 4) return '';
-  /* 11/22 동우님 #2: 글자가 무슨 말의 앞 글자인지 같이 · 글자 칩 = 위 글자판과 같은 묶음 파스텔 색 */
-  const row = (x, k) => { const l = c[k], nm = l === x.a[0] ? x.a[1] : x.b[1]; return `<div class="qa lm"><span class="q"><span class="lmh"><b>${esc(nm)}</b>${W5 ? '' : `<em>${DL(l)} = ${LEN[l]}</em>`}</span><span class="lmd">${esc(LTX[l] || '')}</span></span><span class="lt m g">${DL(l)}</span></div>`; };
-  return `<div class="ans"><div class="ah">내 유형 글자 뜻</div><div class="ag">${AX.map(row).join('')}</div></div>`;
+function ansHtml(c) { return '';   // 11/28 D3: 글자 뜻은 막대 아래 한 줄로 합침(gaugeHtml) — 옛 4줄 칸 코드는 11/28 리뷰2에서 삭제
 }
 function gaugeHtml(c, v) { // 11/14 v2: 얇은 선 + 위치 점(양 끝이 있는 척도, 가운데 눈금 = 반반 — 16Personalities 방식). 점 위에 %
   return AX.map((x, k) => { const aw = c[k] === x.a[0];
@@ -2501,7 +2501,7 @@ function rInfo(s) {
     ph(); upd(false);
     $('#nkIn').oninput = e => { tr.nick = e.target.value; upd(false); };
     const ttMark = () => { const n = myTitle(tr).length; $('#ttCnt').textContent = n + ' / ' + TITLE_MAX; $('#ttCnt').classList.toggle('max', n >= TITLE_MAX); };   // 11/28 S14: 16자에서 입력이 멈추고 카운터가 강조색
-    $('#ttIn').oninput = e => { if (e.target.value.length > TITLE_MAX) e.target.value = e.target.value.slice(0, TITLE_MAX); tr.ttl = e.target.value; ttMark(); }; ttMark();
+    $('#ttIn').oninput = e => { tr.ttl = e.target.value; ttMark(); }; ttMark();
     toIn.oninput = e => { tr.to = e.target.value; upd(false); }; toIn.onblur = () => upd(true);
     /* 11/24 동의 구분(개인정보보호법 22조①: 동의 사항을 구분해 각각) · 전체 동의 = 아래 칸을 한꺼번에 체크(선택 항목도 개별로 풀 수 있음) */
     const AG = [['#tmIn', 'terms'], ['#agIn', 'agree'], ['#ageIn', 'age'], ['#mkIn', 'mkt']].filter(a => $(a[0]));
@@ -3043,7 +3043,7 @@ let PLANNED = null; // 방금 만든 일정 (DEST에 있는 도시만 — 오사
 function planInput() { // 일정 엔진 입력 (스와이프 미리 만들기·최종 만들기 공통)
   const tr = S.trip, dest = DEST[tr.city];
   const d = n => n ? `${Math.floor(n / 10000)}-${String(Math.floor(n / 100) % 100).padStart(2, '0')}-${String(n % 100).padStart(2, '0')}` : null;
-  return { type: S.type, cond: (tr.cond || []).slice(), start: d(tr.start), nights: nOf(tr), daytrip: !!tr.day || undefined, likes: likeTags(tr.likes), avoid: normAvoid(tr.avoid), flightTx: tr.flight === 'yes' ? tr.flightTx : '', depAp: tr.flight === 'yes' && tr.depAp && tr.depAp !== 'ICN' ? tr.depAp : undefined, fo: tr.flight === 'yes' ? carDep(tr, tr.fo) : null, fb: tr.flight === 'yes' ? carDep(tr, tr.fb) : null, stays: tr.stays && tr.stays.length > 1 ? tr.stays.filter(s => s.st === 'yes' && String(s.name || '').trim()).map(s => ({ city: s.city, name: s.name, ll: s.ll || null, nights: s.nights })) : undefined, stayTx: tr.stay !== 'no' ? stayKoNorm(tr.stayTx) : '', stayName: tr.stay === 'yes' && tr.stayName ? tr.stayName : (W5 && tr.stay !== 'no' && tr.stayTx && stayKoNorm(tr.stayTx) !== String(tr.stayTx).trim() ? String(tr.stayTx).trim() : undefined), stayLL: tr.stay !== 'no' && tr.stayLL ? tr.stayLL : undefined, stay2: tr.stay !== 'no' && tr.stay2 && String(tr.stay2.tx || '').trim() && noMidStay(tr) ? tr.stay2 : undefined, stayKind: tr.stay, cityLabel: kxIn(tr) ? kxPicks(tr).join('·') : tr.city, part: kxIn(tr) ? undefined : partOf(tr) || undefined, kx: kxIn(tr) || undefined, dest, airport: krAp(tr) || tr.airport || ((AIRPORTS[dest] || [[]])[0] || [])[0], region: tr.region, sgg: tr.sgg = effSgg(tr), mode: tr.mode, line: tr.line || 0, door: tr.door && tr.door.ll === String(tr.homeLL) ? tr.door.v : undefined, inbound: W5 ? krAp(tr) || tr.airport || ((AIRPORTS[dest] || [[]])[0] || [])[0] : undefined, outbound: isKR(tr) && kxIn(tr) && tr.outAp && tr.outAp !== krAp(tr) ? tr.outAp : undefined, rt: isKR(tr) && kxIn(tr) && tr.rail && tr.rail.st === tr.start ? tr.rail.v : undefined, themes: themeOf(tr).map(o => o[0]), level: tr.visit || undefined, seen: (tr.visit || 1) >= 2 ? seenOf(tr, dest) : undefined };   // 11/20 W5 F1 한국 도착 공항   // 11/20 문 앞 시간(doorNow)
+  const KI = kxIn(tr); return { type: S.type, cond: (tr.cond || []).slice(), start: d(tr.start), nights: nOf(tr), daytrip: !!tr.day || undefined, likes: likeTags(tr.likes), avoid: normAvoid(tr.avoid), flightTx: tr.flight === 'yes' ? tr.flightTx : '', depAp: tr.flight === 'yes' && tr.depAp && tr.depAp !== 'ICN' ? tr.depAp : undefined, fo: tr.flight === 'yes' ? carDep(tr, tr.fo) : null, fb: tr.flight === 'yes' ? carDep(tr, tr.fb) : null, stays: tr.stays && tr.stays.length > 1 ? tr.stays.filter(s => s.st === 'yes' && String(s.name || '').trim()).map(s => ({ city: s.city, name: stayKoNorm(s.name), label: s.name, ll: s.ll || null, nights: s.nights })) : undefined, stayTx: tr.stay !== 'no' ? stayKoNorm(tr.stayTx) : '', stayName: tr.stay === 'yes' && tr.stayName ? tr.stayName : (W5 && tr.stay !== 'no' && tr.stayTx && stayKoNorm(tr.stayTx) !== String(tr.stayTx).trim() ? String(tr.stayTx).trim() : undefined), stayLL: tr.stay !== 'no' && tr.stayLL ? tr.stayLL : undefined, stay2: tr.stay !== 'no' && tr.stay2 && String(tr.stay2.tx || '').trim() && noMidStay(tr) ? tr.stay2 : undefined, stayKind: tr.stay, cityLabel: KI ? kxPicks(tr).join('·') : tr.city, part: KI ? undefined : partOf(tr) || undefined, kx: KI || undefined, dest, airport: krAp(tr) || tr.airport || ((AIRPORTS[dest] || [[]])[0] || [])[0], region: tr.region, sgg: tr.sgg = effSgg(tr), mode: tr.mode, line: tr.line || 0, door: tr.door && tr.door.ll === String(tr.homeLL) ? tr.door.v : undefined, inbound: W5 ? krAp(tr) || tr.airport || ((AIRPORTS[dest] || [[]])[0] || [])[0] : undefined, outbound: isKR(tr) && KI && tr.outAp && tr.outAp !== krAp(tr) ? tr.outAp : undefined, rt: isKR(tr) && KI && tr.rail && tr.rail.st === tr.start ? tr.rail.v : undefined, themes: themeOf(tr).map(o => o[0]), level: tr.visit || undefined, seen: (tr.visit || 1) >= 2 ? seenOf(tr, dest) : undefined };   // 11/20 W5 F1 한국 도착 공항   // 11/20 문 앞 시간(doorNow)
 }
 function buildPlan() {
   const tr = S.trip; PLANNED = null;
