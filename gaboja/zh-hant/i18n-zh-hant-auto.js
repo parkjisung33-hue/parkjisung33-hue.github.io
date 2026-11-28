@@ -9094,9 +9094,9 @@ window.VZTR_ZH_HANT_PLACES = {
 "src": "en"
 },
 "bsn-pyeongsanok": {
-"n": "Pyeongsanok",
+"n": "釜山平山屋",
 "short": "",
-"src": "en"
+"src": "TourAPI ChtService2 contentid 3061987"
 },
 "bsn-seomyeon": {
 "n": "西面",
@@ -9124,9 +9124,9 @@ window.VZTR_ZH_HANT_PLACES = {
 "src": "뜻 옮김·한자 표기(공식 중문 확인 못 함, 11/27 동우님 기준 ②)"
 },
 "bsn-songjeong3": {
-"n": "Songjeong 3-dae Gukbap",
-"short": "Songjeong 3-dae",
-"src": "en"
+"n": "松亭三代湯飯",
+"short": "",
+"src": "TourAPI ChtService2 contentid 3448306"
 },
 "bsn-taejongdae": {
 "n": "太宗臺",
@@ -13134,9 +13134,9 @@ window.VZTR_ZH_HANT_PLACES = {
 "src": "en"
 },
 "sel-jinokhwa": {
-"n": "Jinokhwa Halmae Wonjo Dakhanmari",
-"short": "Jinokhwa Dakhanmari",
-"src": "en"
+"n": "陳玉華奶奶元祖一隻雞",
+"short": "",
+"src": "TourAPI ChtService2 contentid 1356266"
 },
 "sel-jongmyo": {
 "n": "宗廟石牆路",
@@ -13154,9 +13154,9 @@ window.VZTR_ZH_HANT_PLACES = {
 "src": "뜻 옮김·한자 표기(공식 중문 확인 못 함, 11/27 동우님 기준 ②)"
 },
 "sel-kb-amore-yongsan": {
-"n": "Amore Yongsan",
+"n": "AMORE龍山",
 "short": "",
-"src": "en"
+"src": "TourAPI ChtService2 contentid 4038607"
 },
 "sel-kb-anillo-seongsu": {
 "n": "ANILLO Seongsu",
@@ -13164,9 +13164,9 @@ window.VZTR_ZH_HANT_PLACES = {
 "src": "en"
 },
 "sel-kb-banila-seongsu": {
-"n": "BANILA CO Seongsu Flagship Store",
-"short": "BANILA CO Seongsu",
-"src": "en"
+"n": "banila co聖水旗艦店",
+"short": "",
+"src": "TourAPI ChtService2 contentid 4037616"
 },
 "sel-kb-bbia-seongsu": {
 "n": "BBIA IN SEONGSU",
@@ -13224,9 +13224,9 @@ window.VZTR_ZH_HANT_PLACES = {
 "src": "en"
 },
 "sel-kb-nonfiction-hannam": {
-"n": "NONFICTION Hannam",
+"n": "Nonfiction漢南",
 "short": "",
-"src": "en"
+"src": "TourAPI ChtService2 contentid 4037697"
 },
 "sel-kb-note-seongsu": {
 "n": ".NOTE Perfume Studio Seongsu",
@@ -13299,9 +13299,9 @@ window.VZTR_ZH_HANT_PLACES = {
 "src": "TourAPI ChtService2 contentid 333028"
 },
 "sel-kpop-square-hongdae": {
-"n": "K-Pop Square Hongdae",
+"n": "K-POP Square弘大",
 "short": "",
-"src": "en"
+"src": "TourAPI ChtService2 contentid 3328549"
 },
 "sel-kstar-road": {
 "n": "K-Star Road",
@@ -13469,9 +13469,9 @@ window.VZTR_ZH_HANT_PLACES = {
 "src": "en"
 },
 "sel-osulloc-bukchon": {
-"n": "Osulloc Tea House Bukchon",
-"short": "Osulloc Bukchon",
-"src": "en"
+"n": "OSULLOC Tea House北村店",
+"short": "",
+"src": "TourAPI ChtService2 contentid 4038629"
 },
 "sel-oy-gangnam-main": {
 "n": "Olive Young Gangnam Main",
@@ -13594,9 +13594,9 @@ window.VZTR_ZH_HANT_PLACES = {
 "src": "brand"
 },
 "sel-sulwhasoo-dosan": {
-"n": "Sulwhasoo Dosan Flagship Store",
-"short": "Sulwhasoo Dosan",
-"src": "en"
+"n": "Sulwhasoo島山旗艦店",
+"short": "",
+"src": "TourAPI ChtService2 contentid 2983612"
 },
 "sel-superstar-tteokbokki": {
 "n": "Superstar Tteokbokki Sinyongsan",
@@ -13624,9 +13624,9 @@ window.VZTR_ZH_HANT_PLACES = {
 "src": "TourAPI ChtService2 contentid 1610811"
 },
 "sel-tosokchon": {
-"n": "Tosokchon Samgyetang",
-"short": "Tosokchon",
-"src": "en"
+"n": "土俗村蔘雞湯",
+"short": "",
+"src": "TourAPI ChtService2 contentid 576924"
 },
 "sel-tteok-museum": {
 "n": "年糕博物館",

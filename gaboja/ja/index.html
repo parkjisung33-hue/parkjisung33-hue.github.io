@@ -1661,14 +1661,14 @@ input::placeholder, textarea::placeholder, .rideedit .rfno::placeholder, .rideed
 #kinfo summary > svg:first-child, #kinfo .ic { color: var(--green); }
 #kinfo .kgrp { font-size: 0.75rem; font-weight: 700; color: var(--sub); padding: 0.875rem 0 0.125rem; }
 #kinfo summary + .kgrp { padding-top: 0.5rem; }
-#kinfo .krow { display: grid; grid-template-columns: 1.375rem minmax(0,1fr) auto; gap: 0.5rem; align-items: start; padding: 0.5625rem 0; border-top: 1px solid var(--hair); font-size: 0.84375rem; }
+#kinfo .krow { display: grid; grid-template-columns: 1.375rem minmax(0,1fr); gap: 0.5rem; align-items: start; padding: 0.5625rem 0; border-top: 1px solid var(--hair); font-size: 0.84375rem; }
 #kinfo .kgrp + .krow { border-top: 0; }
 #kinfo .krow .ic { width: 1.375rem; height: 1.375rem; display: grid; place-items: center; margin-top: 0.0625rem; }
 #kinfo .krow .ic svg { width: 1.1875rem; height: 1.1875rem; stroke: currentColor; fill: none; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
 #kinfo .kt { display: flex; flex-direction: column; min-width: 0; line-height: 1.4; }
 #kinfo .kt b { font-weight: 700; }
 #kinfo .kx { font-size: 0.8125rem; color: var(--sub); word-break: keep-all; overflow-wrap: anywhere; }
-#kinfo .tel, #kinfo .klk { color: var(--blue); font-weight: 700; text-decoration: none; white-space: nowrap; font-size: 0.8125rem; padding: 0.125rem 0.125rem 0.5rem 0.25rem; }
+#kinfo .tel, #kinfo .klk { color: var(--blue); font-weight: 700; text-decoration: none; white-space: nowrap; font-size: 0.8125rem; align-self: flex-start; padding: 0.1875rem 0 0.0625rem; }
 #kinfo .klk::after { content: ' ↗'; }
 .kv dd .kst { white-space: nowrap; }   /* 가까운 역: 'Line 3 (327) Gyeongbokgung' 줄은 한 덩어리로, 한글 역명·걷는 분은 옆에 이어서 */
 .kv dd .kst + .vzko { display: inline; margin-left: 0.25rem; }
@@ -1925,7 +1925,7 @@ function renderKinfo() {
     h += '<div class="kgrp">' + esc(g.h) + '</div>';
     const apc = (PLAN.inp && PLAN.inp.inbound) || '';   // 11/28 I15: 도착 공항(ICN·PUS·GMP·CJU)에 맞는 줄
     const rows = g.rows.filter(r => (!r.only || (PLAN.dest === r.only || (PLAN.days || []).some(d => d.city === '서울'))) && (!r.when || ((!r.when.ap || r.when.ap === apc) && (!r.when.lang || r.when.lang === window.VZTR_LANG)))).map(r => r.ap && r.ap[apc] ? Object.assign({}, r, r.ap[apc]) : r); if (!rows.length) return;
-    rows.forEach(r => { n++; h += '<div class="krow">' + ic(r.ic) + '<span class="kt"><b>' + esc(r.b) + '</b><span class="kx">' + esc(r.t) + '</span></span>' + (r.tel ? '<a class="tel" href="tel:' + esc(r.tel) + '">' + esc(r.telTx || r.tel) + '</a>' : r.url ? '<a class="klk" href="' + esc(r.url) + '" target="_blank" rel="noopener">' + esc(r.lk || '공식 안내') + '</a>' : '<span></span>') + '</div>'; });
+    rows.forEach(r => { n++; h += '<div class="krow">' + ic(r.ic) + '<span class="kt"><b>' + esc(r.b) + '</b><span class="kx">' + esc(r.t) + '</span>' + (r.tel ? '<a class="tel" href="tel:' + esc(r.tel) + '">' + esc(r.telTx || r.tel) + '</a>' : r.url ? '<a class="klk" href="' + esc(r.url) + '" target="_blank" rel="noopener">' + esc(r.lk || '공식 안내') + '</a>' : '') + '</span></div>'; });   /* 11/29 동우님 OK: 링크·전화를 설명 아래로 — 설명이 칸 폭을 다 써서 두 줄 안에 들어감 */
   });
   h += '<div class="cattr kchk"><span>' + esc(K.chkTx) + '</span></div>';
   tp.insertAdjacentHTML('afterend', '<details class="sec glass" id="kinfo">' + h + '</details>');
