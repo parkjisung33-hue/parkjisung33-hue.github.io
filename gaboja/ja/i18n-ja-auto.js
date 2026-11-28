@@ -9093,8 +9093,8 @@ window.VZTR_JA_PLACES = {
 "src": "ko"
 },
 "gng-arte": {
-"n": "ARTE MUSEUM 江陵",
-"short": "ARTE MUSEUM",
+"n": "アルテミュージアム 江陵",
+"short": "アルテミュージアム",
 "src": "ko"
 },
 "gng-beodeunamubeurueori": {
@@ -9550,8 +9550,8 @@ window.VZTR_JA_PLACES = {
 "src": "ko"
 },
 "jej-arte": {
-"n": "ARTE MUSEUM 済州",
-"short": "ARTE MUSEUM",
+"n": "アルテミュージアム 済州",
+"short": "アルテミュージアム",
 "src": "ko"
 },
 "jej-bijarim": {
@@ -12016,7 +12016,7 @@ window.VZTR_JA_PLACES = {
 "src": "ko"
 },
 "sel-kwangya": {
-"n": "KWANGYA@ソウル",
+"n": "KWANGYA@SEOUL",
 "short": "KWANGYA",
 "src": "ko"
 },

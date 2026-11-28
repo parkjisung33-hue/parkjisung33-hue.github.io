@@ -27,7 +27,7 @@
 <link rel="stylesheet" href="fonts/google/gf.css?v=1"><!-- 11/24 Inter Tight·Zen Kaku Gothic New 자체 호스팅(구글 서버로 IP 안 감, OFL) -->
 <script src="inapp.js?v=1"></script>
 <script src="hit.js?v=1"></script><!-- 11/26 2주차: 유입 숫자 세기(합계만) -->
-<script src="i18n-zh-hant-auto.js?v=5b22280b"></script><script src="i18n-zh-hant.js?v=5b22280b"></script><script src="i18n.js?v=5b22280b"></script><!-- 11/20 W5 언어 틀 (영어판 = /en/, 사전 i18n-en.js는 배포 때 en/에만 붙음) -->
+<script src="i18n-zh-hant-auto.js?v=3db525c3"></script><script src="i18n-zh-hant.js?v=3db525c3"></script><script src="i18n.js?v=3db525c3"></script><!-- 11/20 W5 언어 틀 (영어판 = /en/, 사전 i18n-en.js는 배포 때 en/에만 붙음) -->
 <link rel="stylesheet" href="fonts/vztr-fonts.css?v=2"><!-- 11/19 글꼴: 굵은 한글 IBM Plex Sans KR · 보통 한글 Pretendard · 영문·숫자 IBM Plex Sans -->
 <link rel="icon" href="icons/favicon-32.png">
 <link rel="apple-touch-icon" href="icons/icon-180.png">
@@ -228,6 +228,7 @@ html.ios26 .foot, html.ios26 .board { bottom: calc(max(0.75rem, env(safe-area-in
 /* 시작 화면: 펼쳐지는 탑승권 세 장 */
 .hero { display: flex; flex-direction: column; gap: 0.75rem; padding-top: 0.5rem; }
 .hero h1 { margin: 0; word-break: keep-all; font-size: 2.125rem; font-weight: 800; letter-spacing: -.045em; line-height: 1.18; text-wrap: balance; }
+.desc { text-wrap: balance; } .scr p { text-wrap: pretty; } /* 11/28 Z: 고아 줄(마지막 줄에 짧은 조각만) 방지 — 설명 글은 줄 길이를 고르게 */
 .hero p { text-wrap: pretty; margin: 0; color: var(--sub); font-size: 0.9375rem; }
 .facts { display: flex; gap: 0.375rem; flex-wrap: wrap; }
 .hero p.hl span { white-space: nowrap; }   /* 11/18 2: 두 줄 각각 한 줄로 (11/25 문구 = 계획파일까, 즉흥파일까? / 답하다 보면 내 여행이 보여요.) */
@@ -474,6 +475,7 @@ html.ios26 .foot, html.ios26 .board { bottom: calc(max(0.75rem, env(safe-area-in
 .cal .gd { isolation: isolate; }
 .sum { font-size: 0.9375rem; font-weight: 700; text-align: center; min-height: 1.5rem; }
 .sum span { color: var(--blue); }
+.sum span.muted { color: var(--sub); }   /* 11/28 P2: 도착일 기다리는 안내는 회색 */
 
 .toast { position: fixed; left: 50%; bottom: calc(6rem + env(safe-area-inset-bottom, 0px)); transform: translate(-50%, 1rem); background: var(--toast-bg); color: var(--toast-fg); padding: 0.75rem 1.125rem; border-radius: 0.625rem; font-size: 0.875rem; font-weight: 600; opacity: 0; transition: opacity .2s, transform .2s; pointer-events: none; z-index: 30; max-width: calc(100vw - 2rem); width: max-content; text-align: center; border-radius: 0.5312rem; }
 .toast.on { opacity: 1; transform: translate(-50%, 0); }
@@ -587,7 +589,7 @@ html.ios26 .foot, html.ios26 .board { bottom: calc(max(0.75rem, env(safe-area-in
 .how .hw:first-child { border-top: 0; }
 .how .ic { width: 2.25rem; height: 2.25rem; border-radius: 0.3812rem; background: var(--blue-soft); color: var(--blue); display: grid; place-items: center; flex: none; }
 .how .ic svg { width: 1.25rem; height: 1.25rem; stroke: currentColor; fill: none; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
-.how b { display: block; font-size: 0.9375rem; font-weight: 700; } .how .hw span:not(.ic) { display: block; font-size: 0.8125rem; color: var(--sub); }
+.how b { display: block; font-size: 0.9375rem; font-weight: 700; text-wrap: balance; } .how .hw span:not(.ic) { display: block; font-size: 0.8125rem; color: var(--sub); text-wrap: pretty; }   /* 11/28 P2: 두 줄이 되면 한 글자만 다음 줄로 떨어지지 않게 */
 
 /* ── 11/14 시작 A안 (#4): 출발 안내판 ── */
 .intro-mid { flex: 1 1 0; min-height: 0; display: flex; flex-direction: column; justify-content: center; gap: 0.75rem; padding-block: 1rem; }
@@ -2065,7 +2067,7 @@ function copyLink(c) {
   const url0 = shareUrlOf(c);
   if (navigator.share) { navigator.share({ title: 'VZTR', text: shareTxt(c), url: url0 }).catch(() => {}); return; }
   const url = url0, txt = shareTxt(c) + ' ' + url;
-  const ok = () => toast('공유 문구를 복사했어요 · 친구에게 붙여 넣어 보내 보세요'), bad = () => { toast('복사할 수 없어요. 주소창 링크를 길게 눌러 복사해 주세요.'); };
+  const ok = () => toast(TX('공유 문구를 복사했어요 · 친구에게 붙여 넣어 보내 보세요', 'Share text copied · paste it to a friend')), bad = () => { toast(TX('복사할 수 없어요. 주소창 링크를 길게 눌러 복사해 주세요.', 'Couldn’t copy · long-press the link in the address bar to copy it')); };
   try { navigator.clipboard.writeText(txt).then(ok, bad); } catch (_) { bad(); }
 }
 
@@ -2233,7 +2235,7 @@ function kakaoImg(c) { return KKIMG[c] || (KKIMG[c] = (async () => { if (!KK_HOS
 function shareTxt(c) { const t0 = T(c), n = TR(t0.name); return W5EN ? `I'm ${/^[AEIOU]/i.test(n) ? 'an' : 'a'} ${n}! What's your travel type?` : W5 ? FMT('내 여행 유형은 {x}, 너는?', { x: n }) : `내 여행 유형은 ${t0.name}, 너는?`; }   // 11/26 동우님: 공유 문구는 짧게 한 문장 · 11/26 밤 '나는 ‘…’ 여행자래' 어색 → 이 문장('호캉스 여행자 여행자' 겹침도 없앰)
 /* 11/26 2주차: 공유 링크 = vztr.app/r/코드 — 서버가 그 유형의 미리보기(제목·카드 그림)를 넣어 줌(# 뒤는 서버로 안 가서 예전 주소는 16유형이 다 같은 미리보기). p = 궁합 초대. localhost 미리보기는 예전 주소 */
 function shareUrlOf(c, p) { return /^(www\.)?(vztr\.app|larchive\.page)$/.test(location.hostname) ? 'https://vztr.app/' + (W5 ? window.VZTR_LANG + '/' : '') + 'r/' + DC(c) + (p ? '?p=1' : '') : location.origin + location.pathname + '#r-' + DC(c); }
-async function saveCard(c, f) { const b = await cardBlob(c, f); if (!b) { toast('카드를 만들지 못했어요'); return; }
+async function saveCard(c, f) { const b = await cardBlob(c, f); if (!b) { toast(TX('카드를 만들지 못했어요', 'Couldn’t make the card')); return; }
   const a = document.createElement('a'); a.href = URL.createObjectURL(b); a.download = `vztr-${DC(c)}${f === 'q' ? '-1x1' : ''}.png`; document.body.appendChild(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(a.href), 4000); }
 /* S2 공유 시트: 미리보기 · 모양(스토리 9:16 / 정사각 1:1) · 공유하기(폰 공유창) · 카카오톡(영어판 = 링크 복사) · 이미지 저장 */
 /* 11/26 B 중국어판 공유 앱 (조사 = 문서/여행앱/2026-11-26_VZTR_중국어판_이용자사정·반영방안_v1.md 3-1절)
@@ -2255,8 +2257,8 @@ function shareCard(c) {
   if (!W5) kakaoLoad();
   const rx = $('#rx'), sc = $('#rxScrim'); rx.style.removeProperty('--auto'); let f = 's', url0 = '';
   rx.innerHTML = `<h2 id="rxT">내 카드 공유</h2>
-    <div class="shp" id="shBox"><img id="shImg" alt="${esc(T(c).name)} 카드 미리보기"></div>
-    <div class="seg" id="shSeg" role="group" aria-label="카드 모양"><button type="button" data-f="s" aria-pressed="true">스토리 9:16</button><button type="button" data-f="q" aria-pressed="false">정사각 1:1</button></div>
+    <div class="shp" id="shBox"><img id="shImg" alt="${esc(FMT('{x} 카드 미리보기', { x: TI(T(c).name) }))}"></div>
+    <div class="seg" id="shSeg" role="group" aria-label="${TX('카드 모양', 'Card shape')}"><button type="button" data-f="s" aria-pressed="true">스토리 9:16</button><button type="button" data-f="q" aria-pressed="false">정사각 1:1</button></div>
     <button class="cta" id="shGo">${ICON.share}공유하기</button>
     ${ZHSH ? `<div class="acts shrow sh3">${ZHSH.map(([id, nm]) => `<button type="button" id="${id}">${nm}</button>`).join('')}</div>` : ''}
     <div class="acts shrow">${W5 ? '<button type="button" id="shLink">링크 복사</button>' : '<button type="button" id="shKk">카카오톡</button>'}<button type="button" id="shSave">이미지 저장</button></div>`;
@@ -2270,17 +2272,17 @@ function shareCard(c) {
     try { const b = await cardBlob(c, f), file = b && new File([b], `vztr-${DC(c)}.png`, { type: 'image/png' }), txt = shareTxt(c), url = shareUrlOf(c);
       if (file && navigator.canShare && navigator.canShare({ files: [file] })) { try { await navigator.share({ files: [file], title: 'VZTR', text: txt + ' ' + url }); return; } catch (e) { if (e && e.name === 'AbortError') return; } }
       if (b) await saveCard(c, f);   // 파일 공유가 안 되는 브라우저(PC 등) = 저장 + 링크 복사 (예전과 같음)
-      try { await navigator.clipboard.writeText(txt + ' ' + url); toast(b ? '카드 이미지를 저장하고 링크를 복사했어요' : '공유 문구를 복사했어요 · 친구에게 붙여 넣어 보내 보세요'); } catch (_) { if (b) toast('카드 이미지를 저장했어요'); else copyLink(c); }
+      try { await navigator.clipboard.writeText(txt + ' ' + url); toast(b ? TX('카드 이미지를 저장하고 링크를 복사했어요', 'Card image saved and link copied') : TX('공유 문구를 복사했어요 · 친구에게 붙여 넣어 보내 보세요', 'Share text copied · paste it to a friend')); } catch (_) { if (b) toast(TX('카드 이미지를 저장했어요', 'Card image saved')); else copyLink(c); }
     } finally { btn.disabled = false; } };
   $('#shSave').onclick = () => { if (window.vztrHit) vztrHit('share'); saveCard(c, f); };
   if (W5) $('#shLink').onclick = () => { if (window.vztrHit) vztrHit('share'); const t = shareTxt(c) + ' ' + shareUrlOf(c); try { navigator.clipboard.writeText(t).then(() => toast(TX('링크를 복사했어요', 'Link copied')), () => toast(TX('복사할 수 없어요', 'Couldn’t copy the link'))); } catch (_) { toast(TX('복사할 수 없어요', 'Couldn’t copy the link')); } };
   else $('#shKk').onclick = () => { if (window.vztrHit) vztrHit('share');
-    if (!KK_HOST()) { toast('카카오톡 공유는 vztr.app에서만 돼요'); return; }
+    if (!KK_HOST()) { toast(TX('카카오톡 공유는 vztr.app에서만 돼요', 'KakaoTalk sharing only works on vztr.app')); return; }
     const send = im => { const url = shareUrlOf(c), lk = { mobileWebUrl: url, webUrl: url };
       try { Kakao.Share.sendDefault({ objectType: 'feed', content: { title: `내 여행 유형은 ${T(c).name}`, description: '내 여행 유형도 찾아보기', imageUrl: im || 'https://vztr.app/icons/icon-512.png', imageWidth: im ? 1080 : 512, imageHeight: im ? 1080 : 512, link: lk },
-        buttons: [{ title: '내 유형 알아보기', link: lk }] }); } catch (_) { toast('카카오톡을 열지 못했어요 · 링크 복사를 이용해 주세요'); } };
+        buttons: [{ title: '내 유형 알아보기', link: lk }] }); } catch (_) { toast(TX('카카오톡을 열지 못했어요 · 링크 복사를 이용해 주세요', 'Couldn’t open KakaoTalk · please copy the link instead')); } };
     const p = kakaoImg(c);   // 보통 시트 열 때 이미 올라가 있음 → 누른 순간 바로 보냄. 아직이면 기다렸다 보냄(카드 없이 아이콘으로라도)
-    Promise.race([p, new Promise(r => setTimeout(() => r(null), 50))]).then(u => { if (u !== null) send(u); else { toast('카톡 준비 중…'); p.then(send); } });
+    Promise.race([p, new Promise(r => setTimeout(() => r(null), 50))]).then(u => { if (u !== null) send(u); else { toast(TX('카톡 준비 중…', 'Getting KakaoTalk ready…')); p.then(send); } });
   };
   if (ZHSH) zhShare(c);
   rx.tabIndex = -1; setTimeout(() => rx.focus({ preventScroll: true }), 60);
@@ -2348,7 +2350,7 @@ function rInfo(s) {
     drawCal(); dateSum();
     $('#nights').onclick = e => { const b = e.target.closest('.ns'); if (!b || b.disabled || !tr.start) return;   /* V-09: 날짜 미정 없앰 · − 몇 박 + 가 달력 구간을 늘리고 줄임 */
       const cur = tr.end ? tr.nights || 0 : 0, n = Math.max(0, Math.min(6, cur + +b.dataset.d)); if (n === cur) return;
-      tr.nights = n; tr.day = n === 0; tr.end = n ? ymdAdd(tr.start, n) : null; tap(); drawCal(); dateSum(); };
+      tr.nights = n; tr.day = n === 0; tr.end = n ? ymdAdd(tr.start, n) : null; tap(); paintSel(); dateSum(); };
     $('#dNext').onclick = () => next(s);
   }
   if (s === 'who') {
@@ -2482,7 +2484,7 @@ function rInfo(s) {
     el.querySelectorAll('[data-kn]').forEach(sg => sg.onclick = e => { const b = e.target.closest('[data-kc]'); if (!b) return; const st = kxStays(tr); st[+sg.dataset.kn] = b.dataset.kc; tr.kxStays = st; sg.querySelectorAll('button').forEach(x => x.setAttribute('aria-pressed', x === b)); tap(); csDraw(); });   // 11/23 밤마다 숙소 도시
     $('#fSeg').onclick = e => { const b = e.target.closest('[data-f]'); if (!b) return; tr.flight = b.dataset.f; $('#fSeg').querySelectorAll('button').forEach(x => x.setAttribute('aria-pressed', x === b)); $('#fBox').hidden = tr.flight !== 'yes'; if (tr.flight === 'yes') $('#fBox input').focus(); blankHint(); };
     $('#sSeg').onclick = e => { const b = e.target.closest('[data-s]'); if (!b) return; tr.stay = b.dataset.s; $('#sSeg').querySelectorAll('button').forEach(x => x.setAttribute('aria-pressed', x === b)); const i = $('#sIn'); i.hidden = tr.stay === 'no'; { const w = $('#sInNm'); if (w) w.hidden = tr.stay !== 'yes' || !(tr.stayName || looksAddr(i.value)); }   /* 리뷰 11/26: 이름 칸도 같이 */ i.placeholder = stayPh(partOf(tr) === 'side' ? '가와라마치' : '난바'); if (!i.hidden) i.focus(); stayHint(); sw2Draw(); };
-    const dps = $('#depSeg'); if (dps) dps.onclick = e => { const b = e.target.closest('[data-dep]'); if (!b) return; { const nd = b.dataset.dep, bad = ['fo', 'fb'].filter(k => tr[k] && tr[k].no && (tr[k].ap ? tr[k].ap !== nd : nd !== (tr.depAp || 'ICN'))); if (bad.length) { bad.forEach(k => { el.querySelectorAll('[data-fk="' + k + '"]').forEach(x => { x.value = ''; }); const row = el.querySelector('.fno[data-fk="' + k + '"]'); const fr = row && row.closest('.flr'); if (fr) { fr.querySelectorAll('.tm').forEach(x => { x.value = ''; }); fr.querySelectorAll('.fnh').forEach(x => { x.textContent = ''; }); } if (row) row.dispatchEvent(new Event('input')); tr[k] = {}; }); toast('출발 공항을 바꿔서 편명·시각을 지웠어요'); } }   /* 리뷰 #4: 찾은 공항과 다른 편만 지움 */   /* 늦게 온 편명 조회 결과도 버림(input 이벤트 = 조회 번호 올림) */   /* V-05: 편명과 출발 공항이 어긋난 채 남지 않게 */ tr.depAp = b.dataset.dep; dps.querySelectorAll('button').forEach(x => x.setAttribute('aria-pressed', x === b)); el.querySelectorAll('.flr .fll').forEach(l => { if (/가는 편/.test(l.textContent)) l.textContent = '가는 편 · ' + depName(tr) + ' → ' + apName(tr); else if (/오는 편/.test(l.textContent)) l.textContent = '오는 편 · ' + apName(tr) + ' → ' + depName(tr); }); tr.flightTx = flightText(tr); };
+    const dps = $('#depSeg'); if (dps) dps.onclick = e => { const b = e.target.closest('[data-dep]'); if (!b) return; { const nd = b.dataset.dep, bad = ['fo', 'fb'].filter(k => tr[k] && tr[k].no && (tr[k].ap ? tr[k].ap !== nd : nd !== (tr.depAp || 'ICN'))); if (bad.length) { bad.forEach(k => { el.querySelectorAll('[data-fk="' + k + '"]').forEach(x => { x.value = ''; }); const row = el.querySelector('.fno[data-fk="' + k + '"]'); const fr = row && row.closest('.flr'); if (fr) { fr.querySelectorAll('.tm').forEach(x => { x.value = ''; }); fr.querySelectorAll('.fnh').forEach(x => { x.textContent = ''; }); } if (row) row.dispatchEvent(new Event('input')); tr[k] = {}; }); toast(TX('출발 공항을 바꿔서 편명·시각을 지웠어요', 'Departure airport changed · flight number and times cleared')); } }   /* 리뷰 #4: 찾은 공항과 다른 편만 지움 */   /* 늦게 온 편명 조회 결과도 버림(input 이벤트 = 조회 번호 올림) */   /* V-05: 편명과 출발 공항이 어긋난 채 남지 않게 */ tr.depAp = b.dataset.dep; dps.querySelectorAll('button').forEach(x => x.setAttribute('aria-pressed', x === b)); el.querySelectorAll('.flr .fll').forEach(l => { if (/가는 편/.test(l.textContent)) l.textContent = '가는 편 · ' + depName(tr) + ' → ' + apName(tr); else if (/오는 편/.test(l.textContent)) l.textContent = '오는 편 · ' + apName(tr) + ' → ' + depName(tr); }); tr.flightTx = flightText(tr); };
     const aps = $('#apSeg'); if (aps) aps.onclick = e => { const b = e.target.closest('[data-ap]'); if (!b) return; tr.airport = b.dataset.ap; aps.querySelectorAll('button').forEach(x => x.setAttribute('aria-pressed', x === b)); el.querySelectorAll('.flr .fll').forEach((l, i) => { if (/가는 편/.test(l.textContent)) l.textContent = '가는 편 · ' + depName(tr) + ' → ' + apName(tr); else if (/오는 편/.test(l.textContent)) l.textContent = '오는 편 · ' + apName(tr) + ' → ' + depName(tr); }); tr.flightTx = flightText(tr); };
     el.querySelectorAll('[data-fk]').forEach(i => i.oninput = () => { const k = i.dataset.fk; tr[k] = tr[k] || {}; tr[k][i.dataset.ff] = i.dataset.ff === 'no' ? i.value.toUpperCase().replace(/\s+/g, '') : i.value; tr.flightTx = flightText(tr); blankHint(); });
     wireTm(el); autoRide(el); tmFold(el);
@@ -2533,9 +2535,9 @@ function rInfo(s) {
       <p class="likes-cnt" id="likeCnt"></p>
       <div class="blk"><div class="sub2">이건 빼 주세요<span>여러 개 가능</span></div><div class="two no" id="avoidC">${AVOID.map(x => `<button data-v="${x}" aria-pressed="${tr.avoid.includes(x)}">${x}</button>`).join('')}</div></div>
       <div class="foot"><button class="cta" id="lNext">다음</button></div>`);
-    const lcnt = () => { $('#likeCnt').textContent = '선택 ' + tr.likes.length + ' / ' + LIKE_MAX; }; lcnt();
+    const lcnt = () => { $('#likeCnt').textContent = FMT('선택 {n} / {m}', { n: tr.likes.length, m: LIKE_MAX }); }; lcnt();
     $('#likeC').onclick = e => { const b = e.target.closest('[data-v]'); if (!b) return; const v = b.dataset.v, i = tr.likes.indexOf(v);
-      if (i >= 0) tr.likes.splice(i, 1); else { if (tr.likes.length >= LIKE_MAX) { toast('최대 ' + LIKE_MAX + '개까지 고를 수 있어요 · 하나를 먼저 해제해 주세요'); return; } tr.likes.push(v); }
+      if (i >= 0) tr.likes.splice(i, 1); else { if (tr.likes.length >= LIKE_MAX) { toast(FMT('최대 {n}개까지 고를 수 있어요 · 하나를 먼저 해제해 주세요', { n: LIKE_MAX }, 'Up to ' + LIKE_MAX + ' · deselect one first')); return; } tr.likes.push(v); }
       b.setAttribute('aria-pressed', i < 0); lcnt(); tap(); };
     $('#avoidC').onclick = e => { const b = e.target.closest('[data-v]'); if (!b) return; const v = b.dataset.v, i = tr.avoid.indexOf(v); if (i >= 0) tr.avoid.splice(i, 1); else tr.avoid.push(v); b.setAttribute('aria-pressed', i < 0); tap(); };
     $('#lNext').onclick = () => next(s);
@@ -2585,7 +2587,7 @@ function autoRide(root) {
         fetch(u).then(r => r.json()).then(j => {
           if (my !== n) return;
           const x = train ? (j.list || [])[0] : (j && j.dep && j.dep.t ? j : null);
-          if (!x) { hint.textContent = j && j.e === 'nokey' ? '' : (train ? '그날 이 열차를 못 찾았어요' : '그날 이 편을 못 찾았어요') + ' · 시각을 직접 넣어 주세요'; return; }
+          if (!x) { hint.textContent = j && j.e === 'nokey' ? '' : (train ? TX('그날 이 열차를 못 찾았어요', 'Couldn’t find this train on that day') : TX('그날 이 편을 못 찾았어요', 'Couldn’t find this flight on that day')) + ' · ' + TX('시각을 직접 넣어 주세요', 'Please enter the times yourself'); return; }
           const dep = train ? x.dep : x.dep.t, arr = train ? x.arr : x.arr.t;
           if (!train && !W5) { const ap = k === 'fo' ? x.dep.iata : x.arr.iata, seg = root.querySelector('#depSeg'); T[k] = T[k] || {}; T[k].ap = ap; if (k === 'fo' && seg && ['ICN', 'GMP', 'PUS'].includes(ap) && ap !== (T.depAp || 'ICN')) { T.depAp = ap; seg.querySelectorAll('[data-dep]').forEach(b => b.setAttribute('aria-pressed', b.dataset.dep === ap)); root.querySelectorAll('.flr .fll').forEach(l => { if (/가는 편/.test(l.textContent)) l.textContent = '가는 편 · ' + depName(T) + ' → ' + apName(T); else if (/오는 편/.test(l.textContent)) l.textContent = '오는 편 · ' + apName(T) + ' → ' + depName(T); }); } }   // V-05: 편명의 실제 출발 공항으로 토글 맞춤
           setTm(root, k, 'dep', dep); setTm(root, k, 'arr', arr); T.flightTx = flightText(T); blankHint();
@@ -2830,14 +2832,15 @@ function swDay() {
 function swToast(t) { const r = $('#swRx'); if (!r) return; r.textContent = t; r.classList.add('on'); clearTimeout(swToast.k); swToast.k = setTimeout(() => r.classList.remove('on'), 1800); }
 function swTaste(sw) { // 지금까지의 ♥/✕ 가중치를 한 줄로
   const L = Object.keys(sw.w).filter(k => k.startsWith('k:')).map(k => [KIND_LB[k.slice(2)], sw.w[k]]).filter(x => x[0] && x[1]);
-  const up = L.filter(x => x[1] > 0).sort((a, b) => b[1] - a[1]).slice(0, 2).map(x => '[' + x[0] + ']'), dn = L.filter(x => x[1] < 0).sort((a, b) => a[1] - b[1]).slice(0, 1).map(x => '[' + x[0] + ']');
+  const up = L.filter(x => x[1] > 0).sort((a, b) => b[1] - a[1]).slice(0, 2).map(x => '[' + TI(x[0]) + ']'), dn = L.filter(x => x[1] < 0).sort((a, b) => a[1] - b[1]).slice(0, 1).map(x => '[' + TI(x[0]) + ']');   // 11/28 P2: [명소] 자리 말도 번역
   if (!up.length && !dn.length) return '오른쪽으로 밀면 ♥ · 왼쪽으로 밀면 패스예요';
-  return '지금까지 고른 것 반영: ' + [up.length ? '♥ ' + up.join(' ') : '', dn.length ? '패스 ' + dn.join(' ') : ''].filter(Boolean).join(' · ');
+  const body = [up.length ? '♥ ' + up.join(' ') : '', dn.length ? TX('패스', 'Pass') + ' ' + dn.join(' ') : ''].filter(Boolean).join(' · ');
+  return FMT('지금까지 고른 것 반영: {x}', { x: body }, 'Based on your picks so far: ' + body);
 }
 function swMeta() {   // 11/18 D-1: 하트 아이콘 cap개(채운 것 = blue) + '3곳 중 1곳'
   const sw = S.sw, d = sw.days[sw.di]; if (!$('#swHs')) return;
   $('#swHs').innerHTML = Array.from({ length: d.cap }, (_, i) => HEART.replace('<svg', `<svg class="${i < sw.hearts.length ? 'on' : ''}"`)).join('');
-  $('#swCap').textContent = `${d.cap}곳 중 ${sw.hearts.length}곳`;
+  $('#swCap').textContent = FMT('{n}곳 중 {m}곳', { n: d.cap, m: sw.hearts.length });
 }
 function swShow(first) {
   const sw = S.sw, d = sw.days[sw.di], box = $('#swStack'); box.querySelectorAll('.swc').forEach(e => e.remove());
@@ -2878,7 +2881,7 @@ function swDecide(dir, dragged) {
     const left = sw.cands.filter(x => !sw.seen.includes(x)), other = dir < 0 ? left.filter(x => PL[x].kind !== p.kind) : [];
     sw.cur = swPick(sw, d, other.length ? other : left);   // 패스 직후엔 같은 종류를 바로 다시 안 보여 줌 (반영이 눈에 보이게)
     if (!sw.cur) { swEndDay('done'); return; }
-    const nl = KIND_LB[PL[sw.cur].kind] || '장소', rx = dir > 0 ? `방금 ♥한 [${lb}]처럼 비슷한 곳을 먼저 보여 드려요` : (nl !== lb ? `방금 패스한 [${lb}] 대신 [${nl}] 쪽으로 보여 드려요` : `방금 패스한 [${lb}] 같은 곳은 줄여서 보여 드려요`);
+    const nl = KIND_LB[PL[sw.cur].kind] || '장소', rx = dir > 0 ? FMT('방금 ♥한 [{x}]처럼 비슷한 곳을 먼저 보여 드려요', { x: TI(lb) }, 'Showing more places like the [' + TI(lb) + '] you just ♥’d') : (nl !== lb ? FMT('방금 패스한 [{x}] 대신 [{y}] 쪽으로 보여 드려요', { x: TI(lb), y: TI(nl) }, 'Passed on [' + TI(lb) + '] · showing [' + TI(nl) + '] next') : FMT('방금 패스한 [{x}] 같은 곳은 줄여서 보여 드려요', { x: TI(lb) }, 'Showing fewer places like the [' + TI(lb) + '] you passed'));   // 11/28 P2: [명소] 자리에 끼우는 말도 번역
     swShow(false); swToast(rx);
   }, REDUCED ? 30 : 200);
 }
@@ -2892,7 +2895,7 @@ function dstampSvg(no, md, done, total) {
   for (let i = 0; i < N; i++) { const a0 = -90 + i * step + 1.5, a1 = -90 + (i + 1) * step - 1.5, lg = a1 - a0 > 180 ? 1 : 0;
     h += `<path class="${i < done ? 'f' : 'gh'}" d="M${pt(37, a0)}A37 37 0 ${lg} 1 ${pt(37, a1)}L${pt(23, a1)}A23 23 0 ${lg} 0 ${pt(23, a0)}Z"/>`; }
   h += `<text class="tx" x="50" y="48" font-size="14">DAY ${no}</text><text class="tx" x="50" y="63" font-size="12">${md}</text>`;
-  return `<div class="dstamp" role="img" aria-label="DAY ${no} 완성"><svg viewBox="0 0 100 100"><g filter="url(#gbRough)">${h}</g></svg></div>`;
+  return `<div class="dstamp" role="img" aria-label="${esc(FMT('DAY {n} 완성', { n: no }, 'DAY ' + no + ' done'))}"><svg viewBox="0 0 100 100"><g filter="url(#gbRough)">${h}</g></svg></div>`;
 }
 /* 11/18 D-1: 도장 '쾅' — 자동으로 안 넘어감(버튼으로만). 순서: 오버레이 페이드 → 0.45초 뒤 도장 → 닿는 순간 흔들림 + 진동 + 잉크 링 → 0.5초 뒤 문구 */
 function swBuzz(ov) {
@@ -2905,8 +2908,8 @@ function swEndDay(how) {
   if (how === 'auto' && !n) { swNextDay(); return; }
   const nx = last ? null : sw.days[sw.di + 1];
   ov.innerHTML = `<div class="dstamp-in"><div class="dstamp-st">${dstampSvg(d.no, d.md, Math.min(n, d.cap), d.cap)}</div>
-    <div class="dmsg"><b>${n ? `DAY ${d.no} 완성` : '이 날은 추천으로'}</b><p>${n ? `고른 ${n}곳을 중심으로, 남은 시간은 가까운 곳으로 채울게요` : '취향에 맞는 곳으로 알아서 채워 둘게요'}</p>
-    <button class="dnx" id="swNx">${last ? '가이드북 만들기 →' : `DAY ${nx.no} · ${esc(nx.area)} 고르기 →`}</button></div></div>
+    <div class="dmsg"><b>${n ? esc(FMT('DAY {n} 완성', { n: d.no }, 'DAY ' + d.no + ' done')) : TX('이 날은 추천으로', 'Picked for you')}</b><p>${n ? esc(FMT('고른 {n}곳을 중심으로, 남은 시간은 가까운 곳으로 채울게요', { n: n }, 'Built around your ' + n + ' picks · nearby spots fill the rest')) : TX('취향에 맞는 곳으로 알아서 채워 둘게요', 'We’ll fill it with places that fit your taste')}</p>
+    <button class="dnx" id="swNx">${last ? TX('가이드북 만들기 →', 'Make my guidebook →') : esc(FMT('DAY {n} · {x} 고르기 →', { n: nx.no, x: CD(nx.area) }, 'DAY ' + nx.no + ' · pick for ' + CD(nx.area) + ' →'))}</button></div></div>
     <label class="hap"><input type="checkbox" switch tabindex="-1" aria-hidden="true"></label>`;
   ov.classList.remove('on', 'hit'); ov.hidden = false; void ov.offsetWidth; ov.classList.add('on');
   const wrap = document.querySelector('.wrap'); let gone = false;
@@ -2949,7 +2952,7 @@ function drawCal() {
     if (kh) { c.push('hol'); hl.push(`<span><b class="r">${mo + 1}/${d}</b> ${esc(TI(kh))}</span>`); } if (jh) { c.push('jph'); hl.push(`<span><b class="j">${mo + 1}/${d}</b> ${W5 ? esc(TI(jh)) : '일본 ' + jh}</span>`); }   // 11/28 S2: 번역판은 '일본' 접두어 없이 이름만(범례가 설명)
     if (tr.start && n === tr.start) c.push('s'); if (tr.start && !tr.end && n === tr.start) c.push('solo'); if (tr.end && n === tr.end) c.push('e'); if (tr.start && tr.end && n > tr.start && n < tr.end) c.push('in-r');
     const hn = W5 ? '' : kh ? hshort(kh) : jh ? hshort(jh) : ''; if (hn) lab = true;
-    g += `<button data-d="${n}" class="${c.join(' ')}" ${n < today ? 'disabled' : ''} aria-pressed="${c.includes('s') || c.includes('e')}" aria-label="${y}년 ${mo + 1}월 ${d}일${kh && !W5 ? ' 공휴일 ' + kh : ''}${jh && !W5 ? ' 일본 공휴일 ' + jh : ''}${c.includes('s') ? ' 출발' : c.includes('e') ? ' 도착' : ''}">${d}${kh ? '<i class="hd" aria-hidden="true"></i>' : ''}${hn ? `<i class="hn" aria-hidden="true">${esc(hn)}</i>` : ''}</button>`; }
+    g += `<button data-d="${n}" class="${c.join(' ')}" ${n < today ? 'disabled' : ''} aria-pressed="${c.includes('s') || c.includes('e')}" data-al="${y}년 ${mo + 1}월 ${d}일${kh && !W5 ? ' 공휴일 ' + kh : ''}${jh && !W5 ? ' 일본 공휴일 ' + jh : ''}" aria-label="${dAria(`${y}년 ${mo + 1}월 ${d}일${kh && !W5 ? ' 공휴일 ' + kh : ''}${jh && !W5 ? ' 일본 공휴일 ' + jh : ''}`, c.includes('s') ? 's' : c.includes('e') ? 'e' : '')}">${d}${kh ? '<i class="hd" aria-hidden="true"></i>' : ''}${hn ? `<i class="hn" aria-hidden="true">${esc(hn)}</i>` : ''}</button>`; }
   $('#cal').innerHTML = `<div class="ch"><button class="ib" id="cPrev" aria-label="이전 달" ${isNow ? 'disabled' : ''}>${ICON.l}</button><b>${y}년 ${mo + 1}월</b><button class="ib" id="cNext" aria-label="다음 달">${ICON.r}</button></div>
     <div class="wk">${WD.map(w => `<span>${w}</span>`).join('')}</div><div class="gd">${g}</div>
     <div class="hl"><span class="lg"><i class="r"></i>한국 공휴일${jp ? '<i class="j"></i>일본 공휴일 · 현지 붐빔' : ''}</span>${hl.join('')}</div>`;
@@ -2957,17 +2960,26 @@ function drawCal() {
   $('#cPrev').onclick = () => { S.calM = new Date(y, mo - 1, 1); drawCal(); $('#cal .gd').classList.add('swap'); };
   $('#cNext').onclick = () => { S.calM = new Date(y, mo + 1, 1); drawCal(); $('#cal .gd').classList.add('swap'); };
   $('#cal .gd').onclick = e => { const b = e.target.closest('[data-d]'); if (!b || b.disabled) return; const n = +b.dataset.d; tap();
-    if (!tr.start || n < tr.start || n > ymdAdd(tr.start, 6)) { const k = tr.start && tr.day ? 0 : Math.min(6, tr.nights || 3); tr.start = n; tr.nights = k; tr.day = !k; tr.end = k ? ymdAdd(n, k) : null; }   // 11/28 S3: 첫 탭 = 시작일 + 지금 스테퍼 박 수만큼 끝날 자동 (당일치기는 스테퍼를 0으로 내렸을 때만)
-    else if (n === tr.start) { tr.start = null; tr.end = null; tr.day = false; }
+    const pend = !!tr.start && !tr.end && !tr.day;   // 11/28 P2: 출발일만 눌린 상태(도착일 기다림) — 첫 탭은 날짜 하나만, 박 수는 둘째 탭 뒤에 정해짐
+    if (!tr.start || !pend || n < tr.start || n > ymdAdd(tr.start, 6)) { tr.start = n; tr.nights = 0; tr.day = false; tr.end = null; }   // 첫 탭 · 범위가 잡힌 뒤 다시 누름 · 출발일보다 앞 날 · 최대 6박 밖 → 새 출발일
+    else if (n === tr.start) { tr.day = true; tr.nights = 0; }   // 같은 날 두 번 = 당일치기
     else { tr.end = n; tr.day = false; const a = new Date(Math.floor(tr.start / 10000), Math.floor(tr.start / 100) % 100 - 1, tr.start % 100), b2 = new Date(Math.floor(n / 10000), Math.floor(n / 100) % 100 - 1, n % 100); tr.nights = Math.round((b2 - a) / 864e5); }
-    drawCal(); dateSum(); const f = document.querySelector(`#cal [data-d="${n}"]`); if (f) f.focus({ preventScroll: true }); };
+    paintSel(); dateSum(); };   // 11/28 P2: 달력을 다시 그리지 않고 눌린 날 모양만 바꿈(전체 다시 그리며 한 프레임 번쩍이던 것 · 누른 칸이 그대로 있어 포커스도 유지)
+}
+const dAria = (al, k) => k === 's' ? FMT('{x} · 출발일', { x: al }) : k === 'e' ? FMT('{x} · 도착일', { x: al }) : al;   // 달력 칸 읽어 주는 글(출발·도착 표시)
+function paintSel() {   // 고른 날짜(출발·도착·사이)를 이미 그려진 달력 칸에 바로 입힘 — drawCal과 같은 규칙
+  const tr = S.trip;
+  document.querySelectorAll('#cal .gd [data-d]').forEach(b => { const n = +b.dataset.d, s = !!tr.start && n === tr.start, e = !!tr.end && n === tr.end;
+    b.classList.toggle('s', s); b.classList.toggle('solo', s && !tr.end); b.classList.toggle('e', e); b.classList.toggle('in-r', !!(tr.start && tr.end && n > tr.start && n < tr.end));
+    b.setAttribute('aria-pressed', s || e); const al = dAria(b.dataset.al || '', s ? 's' : e ? 'e' : ''); if (b.dataset.al && b.dataset.cur !== al) { b.dataset.cur = al; b.setAttribute('aria-label', al); } });
 }
 function dateSum() {
   const tr = S.trip, el = $('#dSum'); if (!el) return;
-  { const nv = $('#nVal'); if (nv) { const on = !!tr.start, n = on ? (tr.end ? Math.min(6, tr.nights || 0) : 0) : Math.min(6, tr.nights || 3); nv.textContent = NIGHTS[n][1]; nv.setAttribute('aria-pressed', on); $('#nights').classList.toggle('on', on);   // V-09: 달력에서 고른 구간 = 몇 박 (양쪽이 같이 움직임)
+  { const nv = $('#nVal'); if (nv) { const on = !!(tr.start && (tr.end || tr.day)), n = on ? (tr.end ? Math.min(6, tr.nights || 0) : 0) : 0; nv.textContent = on ? NIGHTS[n][1] : '–'; nv.setAttribute('aria-pressed', on); $('#nights').classList.toggle('on', on);   // 11/28 P2: 도착일을 고르기 전엔 박 수 칸을 비활성('–') — 3박 4일이 미리 잡혀 보이던 것   // V-09: 달력에서 고른 구간 = 몇 박 (양쪽이 같이 움직임)
     document.querySelectorAll('#nights .ns').forEach(b => b.disabled = !on || (+b.dataset.d < 0 && n === 0) || (+b.dataset.d > 0 && n === 6)); } }
   if (tr.start && tr.end) el.innerHTML = `${fmt(tr.start)} → ${fmt(tr.end)} · <span>${nTx(tr)}</span>`;
-  else if (tr.start) el.innerHTML = `${fmt(tr.start)} · <span>당일치기</span>`;
+  else if (tr.start && tr.day) el.innerHTML = `${fmt(tr.start)} · <span>당일치기</span>`;
+  else if (tr.start) el.innerHTML = `${fmt(tr.start)} · <span class="muted">오는 날을 눌러 주세요</span>`;   // 11/28 P2: 출발일만 눌린 상태
   else el.innerHTML = '<span class="muted">가는 날을 눌러 주세요</span>';
   $('#dNext').disabled = !(tr.start && (tr.end || tr.day));   // V-09: 날짜를 골라야 다음
 }
@@ -3141,7 +3153,7 @@ function titleRx() {
     tr.ttl = inp.value.trim().slice(0, TITLE_MAX);
     const P = store.get('gaboja-plan'); if (P && P.days) { if (tr.ttl) P.myTitle = tr.ttl; else delete P.myTitle; store.set('gaboja-plan', P); }
     const T0 = store.get(TRIP_KEY); if (T0) { T0.ttl = tr.ttl; store.set(TRIP_KEY, T0); }   // 다른 고친 항목은 '일정 다시 만들기' 때만 저장
-    closeRx(); toast(tr.ttl ? '제목을 바꿨어요' : '자동 제목으로 돌려놨어요'); rEdit();
+    closeRx(); toast(tr.ttl ? TX('제목을 바꿨어요', 'Title changed') : TX('자동 제목으로 돌려놨어요', 'Back to the automatic title')); rEdit();
   };
   setTimeout(() => inp.focus({ preventScroll: true }), 60);
 }
@@ -3156,8 +3168,8 @@ function confirmRebuild() {
 }
 function rebuildNow() {
   store.set(TRIP_KEY, S.trip);
-  if (!buildPlan()) { toast('이 도시는 아직 자동 일정이 없어요 · 기존 일정은 그대로예요'); return; }
-  toast('일정을 다시 만들었어요'); setTimeout(() => { location.href = 'trip'; }, 500);
+  if (!buildPlan()) { toast(TX('이 도시는 아직 자동 일정이 없어요 · 기존 일정은 그대로예요', 'No automatic plan for this city yet · your current plan is unchanged')); return; }
+  toast(TX('일정을 다시 만들었어요', 'Plan rebuilt')); setTimeout(() => { location.href = 'trip'; }, 500);
 }
 
 function rDone() {
